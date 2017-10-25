@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using CommandDotNet.Attributes;
 using FluentAssertions;
 using Microsoft.Extensions.CommandLineUtils;
 using Xunit;
@@ -10,12 +11,13 @@ namespace CommandDotNet.Tests
     public class CommandInfoTests
     {
         [Fact]
-        public void CanIdentifyCommandInfo()
+        public void CanIdentifyCommandInfoWithoutDescription()
         {
-            MethodInfo methodInfo = typeof(CommandInfoTestsApplication).GetMethod("Execute");
+            MethodInfo methodInfo = typeof(CommandInfoTestsApplication).GetMethod("CommandWithNoDescription");
             CommandInfo commandInfo = new CommandInfo(methodInfo);
 
-            commandInfo.MethodName.Should().Be("Execute");
+            commandInfo.MethodName.Should().Be("CommandWithNoDescription");
+            commandInfo.Description.Should().BeNull();
             commandInfo.Parameters.ShouldBeEquivalentTo(new List<CommandParameterInfo>()
             {
                 new CommandParameterInfo
@@ -28,11 +30,40 @@ namespace CommandDotNet.Tests
                 }
             });
         }
+        
+        
+        [Fact]
+        public void CanIdentifyCommandInfoWithDescription()
+        {
+            MethodInfo methodInfo = typeof(CommandInfoTestsApplication).GetMethod("CommandWithDescription");
+            CommandInfo commandInfo = new CommandInfo(methodInfo);
+
+            commandInfo.MethodName.Should().Be("CommandWithDescription");
+            commandInfo.Description.ShouldBeEquivalentTo("some command description");
+            commandInfo.Parameters.ShouldBeEquivalentTo(new List<CommandParameterInfo>()
+            {
+                new CommandParameterInfo
+                {
+                    CommandOptionType = CommandOptionType.SingleValue,
+                    DefaultValue = DBNull.Value,
+                    ParameterName = "value",
+                    ParameterType = typeof(int),
+                    Required = true,
+                    Description = "some parameter description"
+                }
+            });
+        }
     }
     
     public class CommandInfoTestsApplication
     {
-        public void Execute(int value)
+        public void CommandWithNoDescription(int value)
+        {
+            
+        }
+        
+        [Command(Description = "some command description")]
+        public void CommandWithDescription([Parameter(Description = "some parameter description")]int value)
         {
             
         }

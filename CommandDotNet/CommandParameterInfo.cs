@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Reflection;
+using CommandDotNet.Attributes;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace CommandDotNet
@@ -19,6 +20,7 @@ namespace CommandDotNet
             CommandOptionType = getCommandOptionType(parameterInfo);
             Required = getIsRequired(parameterInfo);
             DefaultValue = parameterInfo.DefaultValue;
+            Description = GetDescription(parameterInfo);
         }
         
         public string ParameterName { get; set; }
@@ -26,6 +28,7 @@ namespace CommandDotNet
         public CommandOptionType CommandOptionType { get; set;}
         public bool Required { get; set;}
         public object DefaultValue { get; set;}
+        public string Description { get; set;}
 
         private CommandOptionType getCommandOptionType(ParameterInfo parameterInfo)
         {
@@ -47,6 +50,12 @@ namespace CommandDotNet
             return parameterInfo.ParameterType.IsValueType
                    && parameterInfo.ParameterType.IsPrimitive
                    && !parameterInfo.HasDefaultValue;
+        }
+        
+        private string GetDescription(ParameterInfo parameterInfo)
+        {
+            ParameterAttribute descriptionAttribute = parameterInfo.GetCustomAttribute<ParameterAttribute>(false);
+            return descriptionAttribute?.Description;
         }
     }
 }

@@ -25,13 +25,13 @@ namespace CommandDotNet
                 
                 var commandOption = _app.Command(method.MethodName, command =>
                 {
-                    command.Description = "command description";
+                    command.Description = method.Description;
                     
                     command.HelpOption("-h | -? | --help");
 
                     foreach (var parameter in method.Parameters)
                     {
-                        parameterValues.Add(parameter.ParameterName, command.Option($"--{parameter.ParameterName}", "parameter description",
+                        parameterValues.Add(parameter.ParameterName, command.Option($"--{parameter.ParameterName}", parameter.Description,
                             parameter.CommandOptionType));
                     }
                 });
