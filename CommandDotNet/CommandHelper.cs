@@ -31,8 +31,7 @@ namespace CommandDotNet
                 return CommandOptionType.SingleValue;
             });
             
-            var methods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(mi => !(new [] {"Equals", "GetHashCode", "GetType", "ToString"}.Contains(mi.Name)))
+            var methods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Select(mi => new
                 {
                     MethodName = mi.Name,
