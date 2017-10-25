@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace CommandDotNet.Example
 {
@@ -14,9 +16,15 @@ namespace CommandDotNet.Example
 
     public class MyApplication
     {
-        public void Jump(string level)
+        public void Jump(bool jumped, string level, int feets, IEnumerable<string> friends)
         {
-            Console.WriteLine($"I just jumped {level}, and I felt awesome!");
+            Console.WriteLine(JsonConvert.SerializeObject(new
+            {
+                jumped,
+                level,
+                feets,
+                friends
+            }));
         }
     }
 }
