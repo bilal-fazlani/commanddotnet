@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -13,35 +14,49 @@ namespace CommandDotNet
         
         public CommandHelper()
         {
-            var methods = new[]
+            app.HelpOption("-h | -? | --help");
+            
+            var getCommandOptionType = new Func<ParameterInfo, CommandOptionType>((ParameterInfo pi) =>
             {
-                new
+                if (pi.ParameterType.IsAssignableFrom(typeof(IEnumerable)))
                 {
-                    MethodName = "Paint",
-                    Parameters = new[]
-                    {
-                        new
-                        {
-                            ParameterName = "color",
-                            //ParameterType = "string",
-                            CommandOptionType = CommandOptionType.SingleValue
-                        }
-                    }
+                    return CommandOptionType.MultipleValue;
                 }
-            };
+                
+                if(pi.ParameterType.IsAssignableFrom(typeof(bool)))
+                {
+                    return CommandOptionType.NoValue;
+                }
+
+                return CommandOptionType.SingleValue;
+            });
+            
+            var methods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(mi => !(new [] {"Equals", "GetHashCode", "GetType", "ToString"}.Contains(mi.Name)))
+                .Select(mi => new
+                {
+                    MethodName = mi.Name,
+                    Parameters = mi.GetParameters().Select(pi => new
+                    {
+                        ParameterName = pi.Name,
+                        ParameterType = pi.ParameterType,
+                        CommandOptionType = getCommandOptionType(pi)
+                    })
+                });
 
             foreach (var method in methods)
             {
-                
                 Dictionary<string, CommandOption> parameterValues = new Dictionary<string, CommandOption>();
                 
                 var commandOption = app.Command(method.MethodName, command =>
                 {
-                    command.Description = "sample description";
+                    command.Description = "command description";
+                    
+                    command.HelpOption("-h | -? | --help");
 
                     foreach (var parameter in method.Parameters)
                     {
-                        parameterValues.Add(parameter.ParameterName, command.Option($"--{parameter.ParameterName}", "sample description",
+                        parameterValues.Add(parameter.ParameterName, command.Option($"--{parameter.ParameterName}", "parameter description",
                             parameter.CommandOptionType));
                     }
                 });
