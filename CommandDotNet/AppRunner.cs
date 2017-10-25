@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -7,47 +6,24 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace CommandDotNet
 {
-    public class CommandHelper<T> where T:new()
+    public class AppRunner<T> where T : new()
     {
         private readonly T _instance = new T();
-        CommandLineApplication app = new CommandLineApplication();
+        private readonly CommandLineApplication _app = new CommandLineApplication();
         
-        public CommandHelper()
+        public AppRunner()
         {
-            app.HelpOption("-h | -? | --help");
+            _app.HelpOption("-h | -? | --help");
             
-            var getCommandOptionType = new Func<ParameterInfo, CommandOptionType>((ParameterInfo pi) =>
-            {
-                if (pi.ParameterType.IsAssignableFrom(typeof(IEnumerable)))
-                {
-                    return CommandOptionType.MultipleValue;
-                }
-                
-                if(pi.ParameterType.IsAssignableFrom(typeof(bool)))
-                {
-                    return CommandOptionType.NoValue;
-                }
-
-                return CommandOptionType.SingleValue;
-            });
             
             var methods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                .Select(mi => new
-                {
-                    MethodName = mi.Name,
-                    Parameters = mi.GetParameters().Select(pi => new
-                    {
-                        ParameterName = pi.Name,
-                        ParameterType = pi.ParameterType,
-                        CommandOptionType = getCommandOptionType(pi)
-                    })
-                });
+                .Select(mi => new CommandInfo(mi));
 
             foreach (var method in methods)
             {
                 Dictionary<string, CommandOption> parameterValues = new Dictionary<string, CommandOption>();
                 
-                var commandOption = app.Command(method.MethodName, command =>
+                var commandOption = _app.Command(method.MethodName, command =>
                 {
                     command.Description = "command description";
                     
@@ -73,13 +49,13 @@ namespace CommandDotNet
         {
             try
             {
-                int result = app.Execute(args);
+                int result = _app.Execute(args);
                 return result;
             }
             catch (CommandParsingException e)
             {
                 Console.WriteLine(e.Message);
-                app.ShowHelp();
+                _app.ShowHelp();
                 return 1;
             }
         }
