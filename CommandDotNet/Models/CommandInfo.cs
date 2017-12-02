@@ -13,11 +13,17 @@ namespace CommandDotNet.Models
             Parameters = methodInfo.GetParameters().Select(pi => new ArguementInfo(pi, settings));
             Description = GetDescription(methodInfo);
             MethodName = methodInfo.Name;
+            ExtendedHelpText = GetExtendedHelpText(methodInfo);
         }
-        
+
         public string Name { get; }
+
         public string MethodName { get; }
+
         public string Description { get; }
+
+        public string ExtendedHelpText { get; }
+
         public IEnumerable<ArguementInfo> Parameters { get; }
 
 
@@ -26,11 +32,16 @@ namespace CommandDotNet.Models
             ApplicationMetadataAttribute applicationMetadataAttribute = methodInfo.GetCustomAttribute<ApplicationMetadataAttribute>(false);
             return applicationMetadataAttribute?.Name ?? methodInfo.Name;
         }
-        
+
         private string GetDescription(MethodInfo methodInfo)
         {
             ApplicationMetadataAttribute descriptionAttribute = methodInfo.GetCustomAttribute<ApplicationMetadataAttribute>(false);
             return descriptionAttribute?.Description;
+        }
+
+        private string GetExtendedHelpText(MethodInfo methodInfo)
+        {
+            return methodInfo.GetCustomAttribute<ApplicationMetadataAttribute>(false)?.ExtendedHelpText;
         }
     }
 }

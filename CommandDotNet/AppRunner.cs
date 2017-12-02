@@ -23,7 +23,10 @@ namespace CommandDotNet
 
             ApplicationMetadataAttribute consoleApplicationAttribute = typeof(T).GetCustomAttribute<ApplicationMetadataAttribute>(false);
             _app.Name = $"dotnet {Assembly.GetCallingAssembly().GetName().Name}.dll";
+            
             _app.FullName = consoleApplicationAttribute?.Description;
+            
+            _app.ExtendedHelpText = consoleApplicationAttribute?.ExtendedHelpText;
 
             IEnumerable<ArguementInfo> options = typeof(T)
                 .GetConstructors()
@@ -50,6 +53,8 @@ namespace CommandDotNet
                 var commandOption = _app.Command(commandInfo.Name, command =>
                 {
                     command.Description = commandInfo.Description;
+
+                    command.ExtendedHelpText = commandInfo.ExtendedHelpText;
                     
                     command.HelpOption(Constants.HelpTemplate);
 

@@ -52,6 +52,7 @@ namespace CommandDotNet.Tests
             });
 
             commandInfo.Name.Should().Be("somecommand");
+            commandInfo.ExtendedHelpText.Should().Be("extended help");
             commandInfo.Description.ShouldBeEquivalentTo("some command description and name");
             commandInfo.Parameters.ShouldBeEquivalentTo(new List<ArguementInfo>()
             {
@@ -72,7 +73,6 @@ namespace CommandDotNet.Tests
         }
     }
     
-    
     public class CommandInfoTestsApplication
     {        
         public void CommandWithNoDescription(int value)
@@ -80,7 +80,10 @@ namespace CommandDotNet.Tests
             
         }
         
-        [ApplicationMetadata(Description = "some command description and name", Name = "somecommand")]
+        [ApplicationMetadata(
+            Description = "some command description and name", 
+            Name = "somecommand", 
+            ExtendedHelpText = "extended help")]
         public void CommandWithDescriptionAndName([Arguement(Description = "some parameter description")]int value)
         {
             
