@@ -37,7 +37,7 @@ namespace CommandDotNet.Models
             DefaultValue = parameterInfo.DefaultValue;
             Required = GetIsParameterRequired(parameterInfo);
             Details = GetDetails();
-            Description = GetEffectiveDescription();
+            EffectiveDescription = GetEffectiveDescription();
         }
         
         public ArguementInfo(PropertyInfo propertyInfo, AppSettings settings) 
@@ -46,7 +46,7 @@ namespace CommandDotNet.Models
             DefaultValue = DBNull.Value;
             Required = GetIsOptionRequired(propertyInfo);
             Details = GetDetails();
-            Description = GetEffectiveDescription();
+            EffectiveDescription = GetEffectiveDescription();
         }
 
         public string Name { get; set; }
@@ -57,7 +57,7 @@ namespace CommandDotNet.Models
         public string TypeDisplayName { get; set;}
         public string Details { get;  set;}
         public string AnnotatedDescription { get;  set;}
-        public string Description { get;  set;}
+        public string EffectiveDescription { get;  set;}
         public string Template { get;  set;}
         
         private bool GetIsParameterRequired(ParameterInfo parameterInfo)
@@ -138,7 +138,7 @@ namespace CommandDotNet.Models
         
         private CommandOptionType GetCommandOptionType()
         {
-            if (typeof(IEnumerable<>).IsAssignableFrom(Type) && Type != typeof(string))
+            if (typeof(IEnumerable).IsAssignableFrom(Type) && Type != typeof(string))
             {
                 return CommandOptionType.MultipleValue;
             }
