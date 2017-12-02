@@ -24,6 +24,9 @@ namespace CommandDotNet.Example
             
             bool? log,
             
+            [Parameter(RequiredString = true)]
+            string password,
+            
             int times = 0, 
             
             string author = "john")

@@ -10,14 +10,18 @@ namespace CommandDotNet
     {
         private readonly T _instance = new T();
         private readonly CommandLineApplication _app = new CommandLineApplication();
+
+        private readonly AppSettings _settings;
         
-        public AppRunner()
+        public AppRunner(AppSettings settings = null)
         {
+            _settings = settings ?? new AppSettings();
+            
             _app.HelpOption("-h | -? | --help");
             
             
             var methods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                .Select(mi => new CommandInfo(mi));
+                .Select(mi => new CommandInfo(mi, _settings));
 
             foreach (var method in methods)
             {

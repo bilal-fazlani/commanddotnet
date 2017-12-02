@@ -14,19 +14,23 @@ namespace CommandDotNet.Tests
         public void CanIdentifyCommandInfoWithoutDescription()
         {
             MethodInfo methodInfo = typeof(CommandInfoTestsApplication).GetMethod("CommandWithNoDescription");
-            CommandInfo commandInfo = new CommandInfo(methodInfo);
+            CommandInfo commandInfo = new CommandInfo(methodInfo, new AppSettings
+            {
+                ShowParameterInfo = false
+            });
 
             commandInfo.MethodName.Should().Be("CommandWithNoDescription");
             commandInfo.Description.Should().BeNull();
             commandInfo.Parameters.ShouldBeEquivalentTo(new List<CommandParameterInfo>()
             {
-                new CommandParameterInfo
+                new CommandParameterInfo(new AppSettings())
                 {
                     CommandOptionType = CommandOptionType.SingleValue,
                     DefaultValue = DBNull.Value,
                     ParameterName = "value",
                     ParameterType = typeof(int),
-                    Required = true
+                    Required = true,
+                    Description = null
                 }
             });
         }
@@ -36,13 +40,16 @@ namespace CommandDotNet.Tests
         public void CanIdentifyCommandInfoWithDescription()
         {
             MethodInfo methodInfo = typeof(CommandInfoTestsApplication).GetMethod("CommandWithDescription");
-            CommandInfo commandInfo = new CommandInfo(methodInfo);
+            CommandInfo commandInfo = new CommandInfo(methodInfo,new AppSettings
+            {
+                ShowParameterInfo = false
+            });
 
             commandInfo.MethodName.Should().Be("CommandWithDescription");
             commandInfo.Description.ShouldBeEquivalentTo("some command description");
             commandInfo.Parameters.ShouldBeEquivalentTo(new List<CommandParameterInfo>()
             {
-                new CommandParameterInfo
+                new CommandParameterInfo(new AppSettings())
                 {
                     CommandOptionType = CommandOptionType.SingleValue,
                     DefaultValue = DBNull.Value,

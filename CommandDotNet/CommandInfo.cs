@@ -7,10 +7,10 @@ namespace CommandDotNet
 {
     public class CommandInfo
     {
-        public CommandInfo(MethodInfo methodInfo)
+        public CommandInfo(MethodInfo methodInfo, AppSettings settings)
         {
             MethodName = methodInfo.Name;
-            Parameters = methodInfo.GetParameters().Select(pi => new CommandParameterInfo(pi));
+            Parameters = methodInfo.GetParameters().Select(pi => new CommandParameterInfo(pi, settings));
             Description = GetDescription(methodInfo);
         }
         
