@@ -17,19 +17,19 @@ namespace CommandDotNet.Tests
             MethodInfo methodInfo = typeof(CommandInfoTestsApplication).GetMethod("CommandWithNoDescription");
             CommandInfo commandInfo = new CommandInfo(methodInfo, new AppSettings
             {
-                ShowParameterInfo = false
+                ShowParameterDetails = false
             });
 
-            commandInfo.MethodName.Should().Be("CommandWithNoDescription");
+            commandInfo.Name.Should().Be("CommandWithNoDescription");
             commandInfo.Description.Should().BeNull();
-            commandInfo.Parameters.ShouldBeEquivalentTo(new List<CommandParameterInfo>()
+            commandInfo.Parameters.ShouldBeEquivalentTo(new List<ArguementInfo>()
             {
-                new CommandParameterInfo(new AppSettings())
+                new ArguementInfo(new AppSettings())
                 {
                     CommandOptionType = CommandOptionType.SingleValue,
                     DefaultValue = DBNull.Value,
-                    ParameterName = "value",
-                    ParameterType = typeof(int),
+                    Name = "value",
+                    Type = typeof(int),
                     Required = true,
                     Description = null
                 }
@@ -43,19 +43,19 @@ namespace CommandDotNet.Tests
             MethodInfo methodInfo = typeof(CommandInfoTestsApplication).GetMethod("CommandWithDescription");
             CommandInfo commandInfo = new CommandInfo(methodInfo,new AppSettings
             {
-                ShowParameterInfo = false
+                ShowParameterDetails = false
             });
 
-            commandInfo.MethodName.Should().Be("CommandWithDescription");
+            commandInfo.Name.Should().Be("CommandWithDescription");
             commandInfo.Description.ShouldBeEquivalentTo("some command description");
-            commandInfo.Parameters.ShouldBeEquivalentTo(new List<CommandParameterInfo>()
+            commandInfo.Parameters.ShouldBeEquivalentTo(new List<ArguementInfo>()
             {
-                new CommandParameterInfo(new AppSettings())
+                new ArguementInfo(new AppSettings())
                 {
                     CommandOptionType = CommandOptionType.SingleValue,
                     DefaultValue = DBNull.Value,
-                    ParameterName = "value",
-                    ParameterType = typeof(int),
+                    Name = "value",
+                    Type = typeof(int),
                     Required = true,
                     Description = "some parameter description"
                 }
@@ -70,8 +70,8 @@ namespace CommandDotNet.Tests
             
         }
         
-        [Command(Description = "some command description")]
-        public void CommandWithDescription([Parameter(Description = "some parameter description")]int value)
+        [ApplicationMetadata(Description = "some command description")]
+        public void CommandWithDescription([Arguement(Description = "some parameter description")]int value)
         {
             
         }

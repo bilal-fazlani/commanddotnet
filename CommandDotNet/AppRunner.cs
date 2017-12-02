@@ -19,37 +19,46 @@ namespace CommandDotNet
         {
             _settings = settings ?? new AppSettings();
             
-            _app.HelpOption("-h | -? | --help");
+            _app.HelpOption(Constants.HelpTemplate);
 
-            ConsoleApplicationAttribute consoleApplicationAttribute = typeof(T).GetCustomAttribute<ConsoleApplicationAttribute>(false);
+            ApplicationMetadataAttribute consoleApplicationAttribute = typeof(T).GetCustomAttribute<ApplicationMetadataAttribute>(false);
             _app.Name = $"dotnet {Assembly.GetCallingAssembly().GetName().Name}.dll";
             _app.FullName = consoleApplicationAttribute?.Description;
+
+            IEnumerable<ArguementInfo> options = typeof(T)
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .Select(p => new ArguementInfo(p, _settings));
+
+            foreach (ArguementInfo optionInfo in options)
+            {
+                _app.Option(optionInfo.Template, optionInfo.Description, optionInfo.CommandOptionType);
+            }
             
-            var commands = typeof(T)
+            IEnumerable<CommandInfo> commands = typeof(T)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(m => !m.IsSpecialName)
                 .Select(mi => new CommandInfo(mi, _settings));
 
-            foreach (var method in commands)
+            foreach (CommandInfo commandInfo in commands)
             {
                 Dictionary<string, CommandOption> parameterValues = new Dictionary<string, CommandOption>();
                 
-                var commandOption = _app.Command(method.MethodName, command =>
+                var commandOption = _app.Command(commandInfo.Name, command =>
                 {
-                    command.Description = method.Description;
+                    command.Description = commandInfo.Description;
                     
-                    command.HelpOption("-h | -? | --help");
+                    command.HelpOption(Constants.HelpTemplate);
 
-                    foreach (var parameter in method.Parameters)
+                    foreach (var parameter in commandInfo.Parameters)
                     {
-                        parameterValues.Add(parameter.ParameterName, command.Option($"--{parameter.ParameterName}", parameter.Description,
+                        parameterValues.Add(parameter.Name, command.Option(parameter.Template, parameter.Description,
                             parameter.CommandOptionType));
                     }
                 });
                 
                 commandOption.OnExecute(() =>
                 {
-                    MethodInfo theMethod = typeof(T).GetMethod(method.MethodName);
+                    MethodInfo theMethod = typeof(T).GetMethod(commandInfo.Name);
                     theMethod.Invoke(_instance, parameterValues.Select(x => x.Value.Value()).ToArray());
                     return 0;
                 });

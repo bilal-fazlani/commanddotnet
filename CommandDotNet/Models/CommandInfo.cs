@@ -9,19 +9,19 @@ namespace CommandDotNet.Models
     {
         public CommandInfo(MethodInfo methodInfo, AppSettings settings)
         {
-            MethodName = methodInfo.Name;
-            Parameters = methodInfo.GetParameters().Select(pi => new CommandParameterInfo(pi, settings));
+            Name = methodInfo.Name;
+            Parameters = methodInfo.GetParameters().Select(pi => new ArguementInfo(pi, settings));
             Description = GetDescription(methodInfo);
         }
         
-        public string MethodName { get; }
+        public string Name { get; }
         public string Description { get; }
-        public IEnumerable<CommandParameterInfo> Parameters { get; }
+        public IEnumerable<ArguementInfo> Parameters { get; }
 
 
         private string GetDescription(MethodInfo methodInfo)
         {
-            CommandAttribute descriptionAttribute = methodInfo.GetCustomAttribute<CommandAttribute>(false);
+            ApplicationMetadataAttribute descriptionAttribute = methodInfo.GetCustomAttribute<ApplicationMetadataAttribute>(false);
             return descriptionAttribute?.Description;
         }
     }

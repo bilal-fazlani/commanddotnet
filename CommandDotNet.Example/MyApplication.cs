@@ -7,14 +7,17 @@ using Newtonsoft.Json;
 
 namespace CommandDotNet.Example
 {
-    [ConsoleApplication(Description = "Sample application for demonstation")]
+    [ApplicationMetadata(Description = "Sample application for demonstation")]
     public class MyApplication
     {
+        [Arguement(Description = "Appends the given text at the end of line", Template = "-t | --text")]
         public string AppendText { get; set; }
         
-        [Command(Description = "makes someone jump")]
+        public int Timeout { get; set; }
+        
+        [ApplicationMetadata(Description = "makes someone jump")]
         public void Jump(
-            [Parameter(Description = "did someone jump?")]
+            [Arguement(Description = "did someone jump?")]
             bool jumped, 
             
             string level, 
@@ -27,7 +30,7 @@ namespace CommandDotNet.Example
             
             bool? log,
             
-            [Parameter(RequiredString = true)]
+            [Arguement(RequiredString = true)]
             string password,
             
             int times = 0, 
@@ -45,6 +48,8 @@ namespace CommandDotNet.Example
                 author,
                 times
             }));
+            
+            Console.WriteLine(AppendText);
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿namespace CommandDotNet
+﻿namespace CommandDotNet.Models
 {
     public class AppSettings
     {
-        public bool ShowParameterInfo { get; set; } = true;
+        public bool ShowParameterDetails { get; set; } = true;
     }
 }

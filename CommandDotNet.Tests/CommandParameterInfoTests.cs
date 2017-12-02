@@ -39,14 +39,14 @@ namespace CommandDotNet.Tests
             MethodInfo methodInfo = typeof(TestApplication).GetMethod("Execute");
             var parameters = methodInfo.GetParameters();
             var parameter = parameters.Single(p => p.Name == parameterName);
-            CommandParameterInfo commandParameterInfo = new CommandParameterInfo(parameter, 
-                new AppSettings{ ShowParameterInfo = true });
+            ArguementInfo commandParameterInfo = new ArguementInfo(parameter, 
+                new AppSettings{ ShowParameterDetails = true });
 
             commandParameterInfo.CommandOptionType.Should().Be(commandOptionType);
             commandParameterInfo.DefaultValue.Should().Be(defaultValue);
             commandParameterInfo.Required.Should().Be(required);
             commandParameterInfo.TypeDisplayName.Should().Be(typeDisplayName);
-            commandParameterInfo.ParameterDetails.Should().Be(parameterDetails);
+            commandParameterInfo.Details.Should().Be(parameterDetails);
             commandParameterInfo.AnnotatedDescription.ShouldBeEquivalentTo(annotatedDescription);
         }
     }
@@ -55,9 +55,9 @@ namespace CommandDotNet.Tests
     {
         public void Execute(bool jumped, string level, int? feets, 
             IEnumerable<string> friends, double height, bool? log,
-            [Parameter(RequiredString = true)]string password,
+            [Arguement(RequiredString = true)]string password,
             int index = 1,
-            [Parameter(Description = "name of person")] string name = "john")
+            [Arguement(Description = "name of person")] string name = "john")
         {
             
         }
