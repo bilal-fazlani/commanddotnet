@@ -15,6 +15,7 @@ namespace CommandDotNet.Tests
         public void CanIdentifyCommandInfoWithoutDescription()
         {
             MethodInfo methodInfo = typeof(CommandInfoTestsApplication).GetMethod("CommandWithNoDescription");
+            
             CommandInfo commandInfo = new CommandInfo(methodInfo, new AppSettings
             {
                 ShowParameterDetails = false
@@ -31,7 +32,11 @@ namespace CommandDotNet.Tests
                     Name = "value",
                     Type = typeof(int),
                     Required = true,
-                    Description = null
+                    EffectiveDescription = null,
+                    TypeDisplayName = "Int32",
+                    AnnotatedDescription = null,
+                    Details = "Int32 | Required",
+                    Template = "--value"
                 }
             });
         }
@@ -43,7 +48,7 @@ namespace CommandDotNet.Tests
             MethodInfo methodInfo = typeof(CommandInfoTestsApplication).GetMethod("CommandWithDescription");
             CommandInfo commandInfo = new CommandInfo(methodInfo,new AppSettings
             {
-                ShowParameterDetails = false
+                ShowParameterDetails = true
             });
 
             commandInfo.Name.Should().Be("CommandWithDescription");
@@ -57,14 +62,19 @@ namespace CommandDotNet.Tests
                     Name = "value",
                     Type = typeof(int),
                     Required = true,
-                    Description = "some parameter description"
+                    EffectiveDescription = "Int32 | Required                                  some parameter description",
+                    TypeDisplayName = "Int32",
+                    AnnotatedDescription = "some parameter description",
+                    Details = "Int32 | Required",
+                    Template = "--value"
                 }
             });
         }
     }
     
+    
     public class CommandInfoTestsApplication
-    {
+    {        
         public void CommandWithNoDescription(int value)
         {
             
