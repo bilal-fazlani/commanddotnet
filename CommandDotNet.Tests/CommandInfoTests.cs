@@ -43,16 +43,16 @@ namespace CommandDotNet.Tests
         
         
         [Fact]
-        public void CanIdentifyCommandInfoWithDescription()
+        public void CanIdentifyCommandInfoWithDescriptionAndName()
         {
-            MethodInfo methodInfo = typeof(CommandInfoTestsApplication).GetMethod("CommandWithDescription");
+            MethodInfo methodInfo = typeof(CommandInfoTestsApplication).GetMethod("CommandWithDescriptionAndName");
             CommandInfo commandInfo = new CommandInfo(methodInfo,new AppSettings
             {
                 ShowParameterDetails = true
             });
 
-            commandInfo.Name.Should().Be("CommandWithDescription");
-            commandInfo.Description.ShouldBeEquivalentTo("some command description");
+            commandInfo.Name.Should().Be("somecommand");
+            commandInfo.Description.ShouldBeEquivalentTo("some command description and name");
             commandInfo.Parameters.ShouldBeEquivalentTo(new List<ArguementInfo>()
             {
                 new ArguementInfo(new AppSettings())
@@ -80,8 +80,8 @@ namespace CommandDotNet.Tests
             
         }
         
-        [ApplicationMetadata(Description = "some command description")]
-        public void CommandWithDescription([Arguement(Description = "some parameter description")]int value)
+        [ApplicationMetadata(Description = "some command description and name", Name = "somecommand")]
+        public void CommandWithDescriptionAndName([Arguement(Description = "some parameter description")]int value)
         {
             
         }

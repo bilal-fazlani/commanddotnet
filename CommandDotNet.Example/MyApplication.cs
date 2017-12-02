@@ -52,7 +52,7 @@ namespace CommandDotNet.Example
             _cauthor = cauthor;
         }
         
-        [ApplicationMetadata(Description = "m makes someone jump")]
+        [ApplicationMetadata(Description = "m makes someone jump", Name = "JUMP")]
         public void Jump(
             [Arguement(Description = "m did someone jump?")]
             bool mjumped, 

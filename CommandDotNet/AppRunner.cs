@@ -66,7 +66,7 @@ namespace CommandDotNet
                     {
                         T instance = AppFactory.CreateApp<T>(optionValues);
                     
-                        MethodInfo theMethod = typeof(T).GetMethod(commandInfo.Name);
+                        MethodInfo theMethod = typeof(T).GetMethod(commandInfo.MethodName);
                     
                         theMethod.Invoke(instance, parameterValues.Select(ValueMachine.GetValue).ToArray());
                         return 0;
@@ -95,6 +95,9 @@ namespace CommandDotNet
             catch (Exception e)
             {
                 Console.Error.WriteLine(e.Message + "\n");
+#if DEBUG
+         Console.Error.WriteLine(e.StackTrace);       
+#endif
                 return 1;
             }
         }
