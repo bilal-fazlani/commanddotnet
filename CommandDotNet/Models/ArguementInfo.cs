@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using CommandDotNet.Attributes;
@@ -10,7 +9,7 @@ namespace CommandDotNet.Models
 {
     public class ArguementInfo
     {
-        private readonly ICustomAttributeProvider _attributeProvider;
+        private readonly ParameterInfo _parameterInfo;
         private readonly AppSettings _settings;
 
         public ArguementInfo(AppSettings settings)
@@ -18,33 +17,19 @@ namespace CommandDotNet.Models
             _settings = settings;
         }
         
-        private ArguementInfo(string longName, Type type, ICustomAttributeProvider attributeProvider, AppSettings settings) : this(settings)
+        public ArguementInfo(ParameterInfo parameterInfo, AppSettings settings) 
+            : this(settings)
         {
-            _attributeProvider = attributeProvider;
+            _parameterInfo = parameterInfo;
             
-            LongName = longName;
-            Type = type;
+            LongName = parameterInfo.Name;
+            Type = parameterInfo.ParameterType;
             CommandOptionType = GetCommandOptionType();
             TypeDisplayName = GetTypeDisplayName();
             AnnotatedDescription = GetAnnotatedDescription();
-            
-            Template = GetTemplate(longName);
-        }
-        
-        public ArguementInfo(ParameterInfo parameterInfo, AppSettings settings) 
-            : this(parameterInfo.Name, parameterInfo.ParameterType, parameterInfo, settings)
-        {
+            Template = GetTemplate(LongName);
             DefaultValue = parameterInfo.DefaultValue;
             Required = GetIsParameterRequired(parameterInfo);
-            Details = GetDetails();
-            EffectiveDescription = GetEffectiveDescription();
-        }
-        
-        public ArguementInfo(PropertyInfo propertyInfo, AppSettings settings) 
-            : this(propertyInfo.Name, propertyInfo.PropertyType, propertyInfo, settings)
-        {
-            DefaultValue = DBNull.Value;
-            Required = GetIsOptionRequired(propertyInfo);
             Details = GetDetails();
             EffectiveDescription = GetEffectiveDescription();
         }
@@ -102,7 +87,7 @@ namespace CommandDotNet.Models
         
         private string GetAnnotatedDescription()
         {
-            ArguementAttribute descriptionAttribute = _attributeProvider.GetCustomAttribute<ArguementAttribute>();
+            ArguementAttribute descriptionAttribute = _parameterInfo.GetCustomAttribute<ArguementAttribute>();
             return descriptionAttribute?.Description;
         }
         
@@ -153,7 +138,7 @@ namespace CommandDotNet.Models
         
         private string GetTemplate(string name)
         {
-            return _attributeProvider.GetCustomAttribute<ArguementAttribute>()?.Template ??
+            return _parameterInfo.GetCustomAttribute<ArguementAttribute>()?.Template ??
                    $"--{name}";
         }
 
