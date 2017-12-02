@@ -6,7 +6,7 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace CommandDotNet
 {
-    public class AppFactory
+    public static class AppFactory
     {        
         public static T CreateApp<T>(Dictionary<ArguementInfo, CommandOption> construcitonParams)
         {

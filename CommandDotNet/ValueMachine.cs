@@ -7,7 +7,7 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace CommandDotNet
 {
-    public class ValueMachine
+    public static class ValueMachine
     {
         public static object GetValue(KeyValuePair<ArguementInfo, CommandOption> data)
         {
@@ -51,7 +51,7 @@ namespace CommandDotNet
                     return stringValue;
                 }
                 
-                throw new ValueParsingException($"Unsupported parameter type: {argType.FullName} for parameter {data.Key.LongName}");
+                throw new ValueParsingException($"Unsupported parameter type: {argType.FullName} for parameter {data.Key.Name}");
             }
             
             //when value not present but method parameter has a default value defined

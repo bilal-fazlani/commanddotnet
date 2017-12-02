@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using CommandDotNet.Attributes;
 using Microsoft.Extensions.CommandLineUtils;
 
@@ -22,19 +23,19 @@ namespace CommandDotNet.Models
         {
             _parameterInfo = parameterInfo;
             
-            LongName = parameterInfo.Name;
+            Name = parameterInfo.Name;
             Type = parameterInfo.ParameterType;
             CommandOptionType = GetCommandOptionType();
             TypeDisplayName = GetTypeDisplayName();
             AnnotatedDescription = GetAnnotatedDescription();
-            Template = GetTemplate(LongName);
+            Template = GetTemplate(parameterInfo);
             DefaultValue = parameterInfo.DefaultValue;
             Required = GetIsParameterRequired(parameterInfo);
             Details = GetDetails();
             EffectiveDescription = GetEffectiveDescription();
         }
 
-        public string LongName { get; set; }
+        public string Name { get; set; }
         public Type Type { get; set;}
         public CommandOptionType CommandOptionType { get; set;}
         public bool Required { get; set;}
@@ -52,7 +53,7 @@ namespace CommandDotNet.Models
             if(descriptionAttribute != null && Type == typeof(string))
             {
                 if(parameterInfo.HasDefaultValue & descriptionAttribute.RequiredString) 
-                    throw new Exception($"String parameter '{LongName}' can't be 'Required' and have a default value at the same time");
+                    throw new Exception($"String parameter '{Name}' can't be 'Required' and have a default value at the same time");
                 
                 return descriptionAttribute.RequiredString;
             }
@@ -65,24 +66,6 @@ namespace CommandDotNet.Models
             return parameterInfo.ParameterType.IsValueType
                    && parameterInfo.ParameterType.IsPrimitive
                    && !parameterInfo.HasDefaultValue;
-        }
-        
-        private bool GetIsOptionRequired(PropertyInfo propertyInfo)
-        {
-            ArguementAttribute descriptionAttribute = propertyInfo.GetCustomAttribute<ArguementAttribute>(false);
-            
-            if(descriptionAttribute != null && Type == typeof(string))
-            {
-                return descriptionAttribute.RequiredString;
-            }
-            
-            if (descriptionAttribute != null && Type != typeof(string) && descriptionAttribute.RequiredString)
-            {
-                throw new Exception("RequiredString can only me used with a string type parameter");
-            }
-
-            return propertyInfo.PropertyType.IsValueType
-                   && propertyInfo.PropertyType.IsPrimitive;
         }
         
         private string GetAnnotatedDescription()
@@ -136,10 +119,34 @@ namespace CommandDotNet.Models
             return CommandOptionType.SingleValue;
         }
         
-        private string GetTemplate(string name)
+        private string GetTemplate(ParameterInfo parameterInfo)
         {
-            return _parameterInfo.GetCustomAttribute<ArguementAttribute>()?.Template ??
-                   $"--{name}";
+            ArguementAttribute attribute = parameterInfo.GetCustomAttribute<ArguementAttribute>(false);
+
+            if (!string.IsNullOrWhiteSpace(attribute?.LongName) || !string.IsNullOrWhiteSpace(attribute?.ShortName))
+            {
+                StringBuilder sb = new StringBuilder();
+                bool longNameAdded = false;
+
+                if (!string.IsNullOrWhiteSpace(attribute.LongName))
+                {
+                    sb.Append($"--{attribute.LongName}");
+                    longNameAdded = true;
+                }
+                
+                if (!string.IsNullOrWhiteSpace(attribute.ShortName))
+                {
+                    if (longNameAdded)
+                    {
+                        sb.Append(" | ");
+                    }
+                    sb.Append($"-{attribute.ShortName}");
+                }
+
+                return sb.ToString();
+            }
+
+            return $"--{Name}";
         }
 
         public override bool Equals(object obj)
