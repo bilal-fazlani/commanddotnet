@@ -10,46 +10,97 @@ namespace CommandDotNet.Example
     [ApplicationMetadata(Description = "Sample application for demonstation")]
     public class MyApplication
     {
-        [Arguement(Description = "Appends the given text at the end of line", Template = "-t | --text")]
-        public string AppendText { get; set; }
-        
-        public int Timeout { get; set; }
-        
-        [ApplicationMetadata(Description = "makes someone jump")]
-        public void Jump(
-            [Arguement(Description = "did someone jump?")]
-            bool jumped, 
+        private readonly bool _cjumped;
+        private readonly string _clevel;
+        private readonly int? _cfeets;
+        private readonly IEnumerable<string> _cfriends;
+        private readonly double _cheight;
+        private readonly bool? _clog;
+        private readonly string _cpassword;
+        private readonly int _ctimes;
+        private readonly string _cauthor;
+
+        public MyApplication(
+            [Arguement(Description = "c did someone jump?")]
+            bool cjumped, 
             
-            string level, 
+            string clevel, 
             
-            int? feets, 
+            int? cfeets, 
             
-            IEnumerable<string> friends, 
+            IEnumerable<string> cfriends, 
             
-            double height, 
+            double cheight, 
             
-            bool? log,
+            bool? clog,
             
             [Arguement(RequiredString = true)]
-            string password,
+            string cpassword,
             
-            int times = 0, 
+            int ctimes = 0, 
             
-            string author = "john")
+            string cauthor = "c john")
         {
+            _cjumped = cjumped;
+            _clevel = clevel;
+            _cfeets = cfeets;
+            _cfriends = cfriends;
+            _cheight = cheight;
+            _clog = clog;
+            _cpassword = cpassword;
+            _ctimes = ctimes;
+            _cauthor = cauthor;
+        }
+        
+        [ApplicationMetadata(Description = "m makes someone jump")]
+        public void Jump(
+            [Arguement(Description = "m did someone jump?")]
+            bool mjumped, 
+            
+            string mlevel, 
+            
+            int? mfeets, 
+            
+            IEnumerable<string> mfriends, 
+            
+            double mheight, 
+            
+            bool? mlog,
+            
+            [Arguement(RequiredString = true)]
+            string mpassword,
+            
+            int mtimes = 0, 
+            
+            string mauthor = "m john")
+        {
+
+            Console.WriteLine("Constructor params");
             Console.WriteLine(JsonConvert.SerializeObject(new
             {
-                jumped,
-                level,
-                feets,
-                friends,
-                height,
-                log,
-                author,
-                times
-            }));
+                cjumped = _cjumped,
+                clevel = _clevel,
+                cfeets = _cfeets,
+                cfriends = _cfriends,
+                cheight = _cheight,
+                clog = _clog,
+                cauthor = _cauthor,
+                ctimes = _ctimes
+            }, Formatting.Indented));
             
-            Console.WriteLine(AppendText);
+            
+            Console.WriteLine("Method params");
+            Console.WriteLine(JsonConvert.SerializeObject(new
+            {
+                mjumped = mjumped,
+                mlevel = mlevel,
+                mfeets = mfeets,
+                mfriends = mfriends,
+                mheight = mheight,
+                mlog = mlog,
+                mauthor = mauthor,
+                mtimes = mtimes
+            }, Formatting.Indented));
         }
     }
 }

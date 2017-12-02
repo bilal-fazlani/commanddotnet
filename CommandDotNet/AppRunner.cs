@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using CommandDotNet.Attributes;
+using CommandDotNet.Exceptions;
 using CommandDotNet.Models;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace CommandDotNet
 {
-    public class AppRunner<T> where T : new()
-    {
-        private readonly T _instance = new T();
+    public class AppRunner<T> where T: class
+    {        
         private readonly CommandLineApplication _app = new CommandLineApplication();
 
         private readonly AppSettings _settings;
@@ -26,12 +26,16 @@ namespace CommandDotNet
             _app.FullName = consoleApplicationAttribute?.Description;
 
             IEnumerable<ArguementInfo> options = typeof(T)
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .GetConstructors()
+                .SingleOrDefault()
+                .GetParameters()
                 .Select(p => new ArguementInfo(p, _settings));
-
+            
+            Dictionary<ArguementInfo, CommandOption> optionValues = new Dictionary<ArguementInfo, CommandOption>();
+            
             foreach (ArguementInfo optionInfo in options)
             {
-                _app.Option(optionInfo.Template, optionInfo.Description, optionInfo.CommandOptionType);
+                optionValues.Add(optionInfo, _app.Option(optionInfo.Template, optionInfo.EffectiveDescription, optionInfo.CommandOptionType));
             }
             
             IEnumerable<CommandInfo> commands = typeof(T)
@@ -41,7 +45,7 @@ namespace CommandDotNet
 
             foreach (CommandInfo commandInfo in commands)
             {
-                Dictionary<string, CommandOption> parameterValues = new Dictionary<string, CommandOption>();
+                Dictionary<ArguementInfo, CommandOption> parameterValues = new Dictionary<ArguementInfo, CommandOption>();
                 
                 var commandOption = _app.Command(commandInfo.Name, command =>
                 {
@@ -49,22 +53,32 @@ namespace CommandDotNet
                     
                     command.HelpOption(Constants.HelpTemplate);
 
-                    foreach (var parameter in commandInfo.Parameters)
+                    foreach (ArguementInfo parameter in commandInfo.Parameters)
                     {
-                        parameterValues.Add(parameter.Name, command.Option(parameter.Template, parameter.Description,
+                        parameterValues.Add(parameter, command.Option(parameter.Template, parameter.EffectiveDescription,
                             parameter.CommandOptionType));
                     }
                 });
                 
                 commandOption.OnExecute(() =>
                 {
-                    MethodInfo theMethod = typeof(T).GetMethod(commandInfo.Name);
-                    theMethod.Invoke(_instance, parameterValues.Select(x => x.Value.Value()).ToArray());
-                    return 0;
+                    try
+                    {
+                        T instance = AppFactory.CreateApp<T>(optionValues);
+                    
+                        MethodInfo theMethod = typeof(T).GetMethod(commandInfo.Name);
+                    
+                        theMethod.Invoke(instance, parameterValues.Select(ValueMachine.GetValue).ToArray());
+                        return 0;
+                    }
+                    catch (ValueParsingException e)
+                    {
+                        throw new CommandParsingException(_app, e.Message);
+                    }
                 });
             }
         }
-        
+
         public int Run(string[] args)
         {
             try
@@ -74,8 +88,13 @@ namespace CommandDotNet
             }
             catch (CommandParsingException e)
             {
-                Console.WriteLine(e.Message);
+                Console.Error.WriteLine(e.Message + "\n");
                 _app.ShowHelp();
+                return 1;
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e.Message + "\n");
                 return 1;
             }
         }

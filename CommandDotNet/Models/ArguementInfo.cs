@@ -18,17 +18,17 @@ namespace CommandDotNet.Models
             _settings = settings;
         }
         
-        private ArguementInfo(string name, Type type, ICustomAttributeProvider attributeProvider, AppSettings settings) : this(settings)
+        private ArguementInfo(string longName, Type type, ICustomAttributeProvider attributeProvider, AppSettings settings) : this(settings)
         {
             _attributeProvider = attributeProvider;
             
-            Name = name;
+            LongName = longName;
             Type = type;
             CommandOptionType = GetCommandOptionType();
             TypeDisplayName = GetTypeDisplayName();
             AnnotatedDescription = GetAnnotatedDescription();
             
-            Template = GetTemplate(name);
+            Template = GetTemplate(longName);
         }
         
         public ArguementInfo(ParameterInfo parameterInfo, AppSettings settings) 
@@ -49,7 +49,7 @@ namespace CommandDotNet.Models
             EffectiveDescription = GetEffectiveDescription();
         }
 
-        public string Name { get; set; }
+        public string LongName { get; set; }
         public Type Type { get; set;}
         public CommandOptionType CommandOptionType { get; set;}
         public bool Required { get; set;}
@@ -67,7 +67,7 @@ namespace CommandDotNet.Models
             if(descriptionAttribute != null && Type == typeof(string))
             {
                 if(parameterInfo.HasDefaultValue & descriptionAttribute.RequiredString) 
-                    throw new Exception($"String parameter '{Name}' can't be 'Required' and have a default value at the same time");
+                    throw new Exception($"String parameter '{LongName}' can't be 'Required' and have a default value at the same time");
                 
                 return descriptionAttribute.RequiredString;
             }
@@ -155,6 +155,24 @@ namespace CommandDotNet.Models
         {
             return _attributeProvider.GetCustomAttribute<ArguementAttribute>()?.Template ??
                    $"--{name}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            switch (obj)
+            {
+                case ArguementInfo arguementInfo:
+                    return arguementInfo.Template == this.Template;
+                case CommandOption commandOption:
+                    return commandOption.Template == this.Template;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Template.GetHashCode();
         }
     }
 }

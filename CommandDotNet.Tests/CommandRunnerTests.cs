@@ -18,6 +18,11 @@ namespace CommandDotNet.Tests
     
     public class BasciApp
     {
+        public BasciApp(int value)
+        {
+            
+        }
+        
         public void Paint(string color)
         {
             
