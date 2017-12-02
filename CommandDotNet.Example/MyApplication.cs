@@ -10,6 +10,8 @@ namespace CommandDotNet.Example
     [ConsoleApplication(Description = "Sample application for demonstation")]
     public class MyApplication
     {
+        public string AppendText { get; set; }
+        
         [Command(Description = "makes someone jump")]
         public void Jump(
             [Parameter(Description = "did someone jump?")]

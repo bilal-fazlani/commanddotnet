@@ -25,10 +25,12 @@ namespace CommandDotNet
             _app.Name = $"dotnet {Assembly.GetCallingAssembly().GetName().Name}.dll";
             _app.FullName = consoleApplicationAttribute?.Description;
             
-            var methods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+            var commands = typeof(T)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .Where(m => !m.IsSpecialName)
                 .Select(mi => new CommandInfo(mi, _settings));
 
-            foreach (var method in methods)
+            foreach (var method in commands)
             {
                 Dictionary<string, CommandOption> parameterValues = new Dictionary<string, CommandOption>();
                 
