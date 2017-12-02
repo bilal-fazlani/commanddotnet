@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using CommandDotNet.Attributes;
 
-namespace CommandDotNet
+namespace CommandDotNet.Models
 {
     public class CommandInfo
     {

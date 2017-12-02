@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using CommandDotNet.Attributes;
+using CommandDotNet.Models;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace CommandDotNet
@@ -18,7 +20,10 @@ namespace CommandDotNet
             _settings = settings ?? new AppSettings();
             
             _app.HelpOption("-h | -? | --help");
-            
+
+            ConsoleApplicationAttribute consoleApplicationAttribute = typeof(T).GetCustomAttribute<ConsoleApplicationAttribute>(false);
+            _app.Name = $"dotnet {Assembly.GetCallingAssembly().GetName().Name}.dll";
+            _app.FullName = consoleApplicationAttribute?.Description;
             
             var methods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Select(mi => new CommandInfo(mi, _settings));

@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 
 namespace CommandDotNet.Example
 {
+    [ConsoleApplication(Description = "Sample application for demonstation")]
     public class MyApplication
     {
         [Command(Description = "makes someone jump")]

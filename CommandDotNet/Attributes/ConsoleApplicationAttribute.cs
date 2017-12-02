@@ -2,7 +2,7 @@
 
 namespace CommandDotNet.Attributes
 {
-    public class CommandAttribute : Attribute
+    public class ConsoleApplicationAttribute : Attribute
     {
         public string Description { get; set; }
     }

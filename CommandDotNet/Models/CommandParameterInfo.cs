@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using CommandDotNet.Attributes;
 using Microsoft.Extensions.CommandLineUtils;
 
-namespace CommandDotNet
+namespace CommandDotNet.Models
 {
     public class CommandParameterInfo
     {

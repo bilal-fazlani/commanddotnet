@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using CommandDotNet.Attributes;
+using CommandDotNet.Models;
 using FluentAssertions;
 using Microsoft.Extensions.CommandLineUtils;
 using Xunit;
