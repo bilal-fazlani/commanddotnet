@@ -19,33 +19,33 @@ It prints the results on console.
 Let's begin with creating the class
 
 ```c#
-    public class Calculator
+public class Calculator
+{
+    public void Add(int value1, int value2)
     {
-        public void Add(int value1, int value2)
-        {
-            Console.WriteLine($"Answer:  {value1 + value2}");
-        }
-
-        public void Subtract(int value1, int value2)
-        {
-            Console.WriteLine($"Answer:  {value1 - value2}");
-        }
+        Console.WriteLine($"Answer:  {value1 + value2}");
     }
+
+    public void Subtract(int value1, int value2)
+    {
+        Console.WriteLine($"Answer:  {value1 - value2}");
+    }
+}
 ```
 
 Now that we have our calculator ready, let's see about how we can call it from command line.
 
 
 ```c#
-    class Program
+class Program
+{
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            AppRunner<Calculator> appRunner = new AppRunner<Calculator>();
-            int exitCode = appRunner.Run(args);
-            Environment.Exit(exitCode);
-        }
+        AppRunner<Calculator> appRunner = new AppRunner<Calculator>();
+        int exitCode = appRunner.Run(args);
+        Environment.Exit(exitCode);
     }
+}
 ```
 
 Assuming our application's name is `example.dll`
@@ -79,11 +79,11 @@ Voila!
 So, as you might have already guessed, it is detecting methods of the calculator class. How about adding some helpful description.
 
 ```c#
-        [ApplicationMetadata(Description = "Adds two numbers. duh!")]
-        public void Add(int value1, int value2)
-        {
-            Console.WriteLine($"Answer: {value1 + value2}");
-        }
+[ApplicationMetadata(Description = "Adds two numbers. duh!")]
+public void Add(int value1, int value2)
+{
+    Console.WriteLine($"Answer: {value1 + value2}");
+}
 ```
 
 This should do it.
@@ -150,34 +150,34 @@ Cool. You get the gist of this library. Let's move on.
 Let's say we want to add a class level field which is useful in both Addtion and Subtraction. So now the class looks something like this-
 
 ```c#
-    public class Calculator
+public class Calculator
+{
+    private readonly bool _printValues;
+
+    public Calculator(bool printValues)
     {
-        private readonly bool _printValues;
-
-        public Calculator(bool printValues)
-        {
-            _printValues = printValues;
-        }
-        
-        [ApplicationMetadata(Description = "Adds two numbers. duh!")]
-        public void Add(int value1, int value2)
-        {
-            if (_printValues)
-            {
-                Console.WriteLine($"value1 : {value1}, value2: {value2}");
-            }
-            Console.WriteLine($"Answer:  {value1 + value2}");
-        }
-
-        public void Subtract(int value1, int value2)
-        {
-            if (_printValues)
-            {
-                Console.WriteLine($"value1 : {value1}, value2: {value2}");
-            }
-            Console.WriteLine($"Answer: {value1 - value2}");
-        }
+        _printValues = printValues;
     }
+    
+    [ApplicationMetadata(Description = "Adds two numbers. duh!")]
+    public void Add(int value1, int value2)
+    {
+        if (_printValues)
+        {
+            Console.WriteLine($"value1 : {value1}, value2: {value2}");
+        }
+        Console.WriteLine($"Answer:  {value1 + value2}");
+    }
+
+    public void Subtract(int value1, int value2)
+    {
+        if (_printValues)
+        {
+            Console.WriteLine($"value1 : {value1}, value2: {value2}");
+        }
+        Console.WriteLine($"Answer: {value1 - value2}");
+    }
+}
 ```
 
 Let's see what the help command output looks like now
@@ -222,3 +222,36 @@ Answer: 25
 **Note that you can skip to pass any parameter. It will then fallback to the default value of parameter type**
 
 In this case, for `--printValues` it will fallback to `false` & if you dont pass either `--value1` or `--value2`, it will fallback to `0`.
+
+## Default values
+
+C# supports default values for parameters and so does this library.
+
+Let's make some changes to Calculator to add a new Command - `Divide`. And let's default value2 to 1 when user doesn't provide a value.
+This will prevent the calculator from crahsing because of `DivideByZeroException`
+
+```c#
+public void Divide(int value1, int value2 = 1)
+{
+    Console.WriteLine($"Answer: {value1 / value2}");
+}
+```
+
+Here's how help looks like:
+
+INPUT 
+```bash
+dotnet example.dll Divide --help 
+```
+
+OUTPUT
+
+```bash
+Usage: dotnet example.dll Divide [options]
+
+Options:
+  -h | -? | --help  Show help information
+  --value1          Int32 | Required
+  --value2          Int32 | Default value: 1
+```
+
