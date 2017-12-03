@@ -12,6 +12,12 @@ Table of contents:
 - [Command arguments](#command-arguments)
 - [Collections](#collections)
 - [Supported parameter types](#supported-parameter-types)
+- Validations
+- Settings
+- Default command
+- Version option
+- Flags
+- Auto case correction
 
 ## Installation
 
