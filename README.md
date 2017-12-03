@@ -306,3 +306,33 @@ Commands:
 Use "dotnet example.dll [command] --help" for more information about a command.
 Some more help text that appears at the bottom
 ```
+
+## Command arguments
+
+By default, the parameter names declared in method are the argument names. However you can change that.
+By convention, an argument can have a short name and/or a longname.
+
+Let's see an example-
+
+```c#
+public void LaunchRocket([Argument(
+    LongName = "planet", 
+    ShortName = "p", 
+    Description = "Name of the planet you wish the rocket to go. Sorry for bad example :(")] string planetName)
+{
+    return;
+}
+```
+
+This is what help looks like-
+
+```bash
+Usage: dotnet example.dll LaunchRocket [options]
+
+Options:
+  -h | -? | --help  Show help information
+  --planet | -p     String                         Name of the planet you wish the rocket to go. Sorry for bad example :(
+```
+
+So planet name can now be passed either with `--planet` or `-p`. Specifying both is not required. 
+You can specify either long name or short name or both. When none is specified, it will use parameter name by default. Description is also optional.
