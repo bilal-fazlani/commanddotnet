@@ -10,7 +10,7 @@ namespace CommandDotNet.Models
         public CommandInfo(MethodInfo methodInfo, AppSettings settings)
         {
             Name = GetName(methodInfo);
-            Parameters = methodInfo.GetParameters().Select(pi => new ArguementInfo(pi, settings));
+            Parameters = methodInfo.GetParameters().Select(pi => new ArgumentInfo(pi, settings));
             Description = GetDescription(methodInfo);
             MethodName = methodInfo.Name;
             ExtendedHelpText = GetExtendedHelpText(methodInfo);
@@ -24,7 +24,7 @@ namespace CommandDotNet.Models
 
         public string ExtendedHelpText { get; }
 
-        public IEnumerable<ArguementInfo> Parameters { get; }
+        public IEnumerable<ArgumentInfo> Parameters { get; }
 
 
         private string GetName(MethodInfo methodInfo)

@@ -8,17 +8,17 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace CommandDotNet.Models
 {
-    public class ArguementInfo
+    public class ArgumentInfo
     {
         private readonly ParameterInfo _parameterInfo;
         private readonly AppSettings _settings;
 
-        public ArguementInfo(AppSettings settings)
+        public ArgumentInfo(AppSettings settings)
         {
             _settings = settings;
         }
         
-        public ArguementInfo(ParameterInfo parameterInfo, AppSettings settings) 
+        public ArgumentInfo(ParameterInfo parameterInfo, AppSettings settings) 
             : this(settings)
         {
             _parameterInfo = parameterInfo;
@@ -48,7 +48,7 @@ namespace CommandDotNet.Models
         
         private bool GetIsParameterRequired(ParameterInfo parameterInfo)
         {
-            ArguementAttribute descriptionAttribute = parameterInfo.GetCustomAttribute<ArguementAttribute>(false);
+            ArgumentAttribute descriptionAttribute = parameterInfo.GetCustomAttribute<ArgumentAttribute>(false);
             
             if(descriptionAttribute != null && Type == typeof(string))
             {
@@ -70,7 +70,7 @@ namespace CommandDotNet.Models
         
         private string GetAnnotatedDescription()
         {
-            ArguementAttribute descriptionAttribute = _parameterInfo.GetCustomAttribute<ArguementAttribute>();
+            ArgumentAttribute descriptionAttribute = _parameterInfo.GetCustomAttribute<ArgumentAttribute>();
             return descriptionAttribute?.Description;
         }
         
@@ -121,7 +121,7 @@ namespace CommandDotNet.Models
         
         private string GetTemplate(ParameterInfo parameterInfo)
         {
-            ArguementAttribute attribute = parameterInfo.GetCustomAttribute<ArguementAttribute>(false);
+            ArgumentAttribute attribute = parameterInfo.GetCustomAttribute<ArgumentAttribute>(false);
 
             if (!string.IsNullOrWhiteSpace(attribute?.LongName) || !string.IsNullOrWhiteSpace(attribute?.ShortName))
             {
@@ -153,8 +153,8 @@ namespace CommandDotNet.Models
         {
             switch (obj)
             {
-                case ArguementInfo arguementInfo:
-                    return arguementInfo.Template == this.Template;
+                case ArgumentInfo argumentInfo:
+                    return argumentInfo.Template == this.Template;
                 case CommandOption commandOption:
                     return commandOption.Template == this.Template;
             }

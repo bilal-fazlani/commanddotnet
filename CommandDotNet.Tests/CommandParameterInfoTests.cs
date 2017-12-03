@@ -69,7 +69,7 @@ namespace CommandDotNet.Tests
         
         [Theory]
         [MemberData(nameof(TestCases))]
-        public void CanIdentifyArguementInfoFromMethods(
+        public void CanIdentifyArgumentInfoFromMethods(
             string parameterName,
             CommandOptionType commandOptionType, 
             object defaultValue, 
@@ -86,7 +86,7 @@ namespace CommandDotNet.Tests
             MethodInfo methodInfo = typeof(TestApplication).GetMethod("Execute");
             var parameters = methodInfo.GetParameters();
             var parameter = parameters.Single(p => p.Name == parameterName);
-            ArguementInfo commandParameterInfo = new ArguementInfo(parameter, 
+            ArgumentInfo commandParameterInfo = new ArgumentInfo(parameter, 
                 new AppSettings{ ShowParameterDetails = showParameterDetails });
 
             commandParameterInfo.CommandOptionType.Should().Be(commandOptionType);
@@ -103,7 +103,7 @@ namespace CommandDotNet.Tests
         
         [Theory]
         [MemberData(nameof(TestCases))]
-        public void CanIdentifyArguementInfoFromConstructor(
+        public void CanIdentifyArgumentInfoFromConstructor(
             string parameterName,
             CommandOptionType commandOptionType, 
             object defaultValue, 
@@ -125,7 +125,7 @@ namespace CommandDotNet.Tests
             
             var parameters = constructorInfo.GetParameters();
             var parameter = parameters.Single(p => p.Name == parameterName);
-            ArguementInfo commandParameterInfo = new ArguementInfo(parameter, 
+            ArgumentInfo commandParameterInfo = new ArgumentInfo(parameter, 
                 new AppSettings{ ShowParameterDetails = showParameterDetails });
 
             commandParameterInfo.CommandOptionType.Should().Be(commandOptionType);
@@ -146,13 +146,13 @@ namespace CommandDotNet.Tests
         public TestApplication(
             bool jumped, 
             
-            [Arguement(ShortName = "i", LongName = "id", Description = "Id of person")]
+            [Argument(ShortName = "i", LongName = "id", Description = "Id of person")]
             long id, 
             
-            [Arguement(ShortName = "l")]
+            [Argument(ShortName = "l")]
             string level, 
             
-            [Arguement(LongName = "feet")]
+            [Argument(LongName = "feet")]
             int? feets, 
             
             IEnumerable<string> friends, 
@@ -160,13 +160,13 @@ namespace CommandDotNet.Tests
             double height, 
             
             bool? log,
-            [Arguement(RequiredString = true)]
+            [Argument(RequiredString = true)]
             
             string password,
             
             int index = 1,
             
-            [Arguement(Description = "name of person")]
+            [Argument(Description = "name of person")]
             string name = "john")
         {
             
@@ -175,13 +175,13 @@ namespace CommandDotNet.Tests
         public void Execute(
             bool jumped, 
             
-            [Arguement(ShortName = "i", LongName = "id", Description = "Id of person")]
+            [Argument(ShortName = "i", LongName = "id", Description = "Id of person")]
             long id, 
             
-            [Arguement(ShortName = "l")]
+            [Argument(ShortName = "l")]
             string level, 
             
-            [Arguement(LongName = "feet")]
+            [Argument(LongName = "feet")]
             int? feets,
             
             IEnumerable<string> friends, 
@@ -189,13 +189,13 @@ namespace CommandDotNet.Tests
             double height, 
             
             bool? log,
-            [Arguement(RequiredString = true)]
+            [Argument(RequiredString = true)]
             
             string password,
             
             int index = 1,
             
-            [Arguement(Description = "name of person")]
+            [Argument(Description = "name of person")]
             string name = "john")
         {
             

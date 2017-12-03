@@ -33,7 +33,7 @@ namespace CommandDotNet.Tests
         private readonly string _justAnotherParameter1;
         private readonly int _justAnotherParameter2;
 
-        public MyTestApp(string justAnotherParameter1, [Arguement(ShortName = "j")]int justAnotherParameter2)
+        public MyTestApp(string justAnotherParameter1, [Argument(ShortName = "j")]int justAnotherParameter2)
         {
             _justAnotherParameter1 = justAnotherParameter1;
             _justAnotherParameter2 = justAnotherParameter2;
@@ -41,15 +41,15 @@ namespace CommandDotNet.Tests
         
         public void TestMethodParams(
             int id,
-            [Arguement(LongName = "tag", ShortName = "t")]
+            [Argument(LongName = "tag", ShortName = "t")]
             List<string> tags,
             string name,
             double height,
             string city,
             bool nri,
-            [Arguement(LongName = "role")]
+            [Argument(LongName = "role")]
             List<int> roles,
-            [Arguement(LongName = "rank")]
+            [Argument(LongName = "rank")]
             List<double> ranks
             )
         {

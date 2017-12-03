@@ -2,7 +2,7 @@
 
 namespace CommandDotNet.Attributes
 {
-    public class ArguementAttribute : Attribute
+    public class ArgumentAttribute : Attribute
     {
         public string ShortName { get; set; }
         

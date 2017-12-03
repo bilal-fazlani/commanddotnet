@@ -10,7 +10,7 @@ namespace CommandDotNet
 {
     public static class ValueMachine
     {
-        public static object GetValue(KeyValuePair<ArguementInfo, CommandOption> data)
+        public static object GetValue(KeyValuePair<ArgumentInfo, CommandOption> data)
         {
             Type argType = data.Key.Type;
             
@@ -80,14 +80,14 @@ namespace CommandDotNet
             return GetDefault(argType);
         }
 
-        private static bool GetBoolean(KeyValuePair<ArguementInfo, CommandOption> data)
+        private static bool GetBoolean(KeyValuePair<ArgumentInfo, CommandOption> data)
         {
             bool isBool = bool.TryParse(data.Value.Value(), out bool boolValue);
             if (isBool) return boolValue;
             return ThrowParsingException<bool>(data);
         }
 
-        private static double GetDouble(KeyValuePair<ArguementInfo, CommandOption> data)
+        private static double GetDouble(KeyValuePair<ArgumentInfo, CommandOption> data)
         {
             bool isDouble = double.TryParse(data.Value.Value(), NumberStyles.AllowDecimalPoint, new NumberFormatInfo(),
                 out double doubleValue);
@@ -95,21 +95,21 @@ namespace CommandDotNet
             return ThrowParsingException<double>(data);
         }
 
-        private static long GetLong(KeyValuePair<ArguementInfo, CommandOption> data)
+        private static long GetLong(KeyValuePair<ArgumentInfo, CommandOption> data)
         {
             bool isLong = long.TryParse(data.Value.Value(), NumberStyles.Integer, new NumberFormatInfo(), out long longValue);
             if (isLong) return longValue;
             return ThrowParsingException<long>(data);
         }
 
-        private static int GetInt(KeyValuePair<ArguementInfo, CommandOption> data)
+        private static int GetInt(KeyValuePair<ArgumentInfo, CommandOption> data)
         {
             bool isInt = int.TryParse(data.Value.Value(), NumberStyles.Integer, new NumberFormatInfo(), out int integerValue);
             if (isInt) return integerValue;
             return ThrowParsingException<int>(data);
         }
 
-        private static T ThrowParsingException<T>(KeyValuePair<ArguementInfo, CommandOption> data)
+        private static T ThrowParsingException<T>(KeyValuePair<ArgumentInfo, CommandOption> data)
         {
             throw new ValueParsingException($"'{data.Value.Value()}' is not a valid {data.Key.TypeDisplayName}");
         }

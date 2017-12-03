@@ -8,7 +8,7 @@ namespace CommandDotNet
 {
     public static class AppFactory
     {        
-        public static T CreateApp<T>(Dictionary<ArguementInfo, CommandOption> construcitonParams)
+        public static T CreateApp<T>(Dictionary<ArgumentInfo, CommandOption> construcitonParams)
         {
             object[] values = construcitonParams.Select(ValueMachine.GetValue).ToArray();   
             return (T)Activator.CreateInstance(typeof(T), values);

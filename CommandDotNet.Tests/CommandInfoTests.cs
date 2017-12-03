@@ -23,9 +23,9 @@ namespace CommandDotNet.Tests
 
             commandInfo.Name.Should().Be("CommandWithNoDescription");
             commandInfo.Description.Should().BeNull();
-            commandInfo.Parameters.ShouldBeEquivalentTo(new List<ArguementInfo>()
+            commandInfo.Parameters.ShouldBeEquivalentTo(new List<ArgumentInfo>()
             {
-                new ArguementInfo(new AppSettings())
+                new ArgumentInfo(new AppSettings())
                 {
                     CommandOptionType = CommandOptionType.SingleValue,
                     DefaultValue = DBNull.Value,
@@ -54,9 +54,9 @@ namespace CommandDotNet.Tests
             commandInfo.Name.Should().Be("somecommand");
             commandInfo.ExtendedHelpText.Should().Be("extended help");
             commandInfo.Description.ShouldBeEquivalentTo("some command description and name");
-            commandInfo.Parameters.ShouldBeEquivalentTo(new List<ArguementInfo>()
+            commandInfo.Parameters.ShouldBeEquivalentTo(new List<ArgumentInfo>()
             {
-                new ArguementInfo(new AppSettings())
+                new ArgumentInfo(new AppSettings())
                 {
                     CommandOptionType = CommandOptionType.SingleValue,
                     DefaultValue = DBNull.Value,
@@ -84,7 +84,7 @@ namespace CommandDotNet.Tests
             Description = "some command description and name", 
             Name = "somecommand", 
             ExtendedHelpText = "extended help")]
-        public void CommandWithDescriptionAndName([Arguement(Description = "some parameter description")]int value)
+        public void CommandWithDescriptionAndName([Argument(Description = "some parameter description")]int value)
         {
             
         }

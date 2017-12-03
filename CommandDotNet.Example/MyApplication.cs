@@ -21,7 +21,7 @@ namespace CommandDotNet.Example
         private readonly string _cauthor;
 
         public MyApplication(
-            [Arguement(Description = "c did someone jump?")]
+            [Argument(Description = "c did someone jump?")]
             bool cjumped, 
             
             string clevel, 
@@ -34,7 +34,7 @@ namespace CommandDotNet.Example
             
             bool? clog,
             
-            [Arguement(RequiredString = true)]
+            [Argument(RequiredString = true)]
             string cpassword,
             
             int ctimes = 0, 
@@ -54,7 +54,7 @@ namespace CommandDotNet.Example
         
         [ApplicationMetadata(Description = "m makes someone jump", Name = "JUMP")]
         public void Jump(
-            [Arguement(Description = "m did someone jump?")]
+            [Argument(Description = "m did someone jump?")]
             bool mjumped, 
             
             string mlevel, 
@@ -67,7 +67,7 @@ namespace CommandDotNet.Example
             
             bool? mlog,
             
-            [Arguement(RequiredString = true)]
+            [Argument(RequiredString = true)]
             string mpassword,
             
             int mtimes = 0, 

@@ -31,15 +31,15 @@ namespace CommandDotNet
             
             App.ExtendedHelpText = consoleApplicationAttribute?.ExtendedHelpText;
             
-            IEnumerable<ArguementInfo> options = typeof(T)
+            IEnumerable<ArgumentInfo> options = typeof(T)
                 .GetConstructors()
                 .FirstOrDefault()
                 .GetParameters()
-                .Select(p => new ArguementInfo(p, _settings));
+                .Select(p => new ArgumentInfo(p, _settings));
             
-            Dictionary<ArguementInfo, CommandOption> optionValues = new Dictionary<ArguementInfo, CommandOption>();
+            Dictionary<ArgumentInfo, CommandOption> optionValues = new Dictionary<ArgumentInfo, CommandOption>();
             
-            foreach (ArguementInfo optionInfo in options)
+            foreach (ArgumentInfo optionInfo in options)
             {
                 optionValues.Add(optionInfo, App.Option(optionInfo.Template, optionInfo.EffectiveDescription, optionInfo.CommandOptionType));
             }
@@ -51,7 +51,7 @@ namespace CommandDotNet
 
             foreach (CommandInfo commandInfo in commands)
             {
-                Dictionary<ArguementInfo, CommandOption> parameterValues = new Dictionary<ArguementInfo, CommandOption>();
+                Dictionary<ArgumentInfo, CommandOption> parameterValues = new Dictionary<ArgumentInfo, CommandOption>();
                 
                 var commandOption = App.Command(commandInfo.Name, command =>
                 {
@@ -61,7 +61,7 @@ namespace CommandDotNet
                     
                     command.HelpOption(Constants.HelpTemplate);
 
-                    foreach (ArguementInfo parameter in commandInfo.Parameters)
+                    foreach (ArgumentInfo parameter in commandInfo.Parameters)
                     {
                         parameterValues.Add(parameter, command.Option(parameter.Template, parameter.EffectiveDescription,
                             parameter.CommandOptionType));
