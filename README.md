@@ -4,14 +4,14 @@
 
 Table of contents:
 
-- [Installation](#Installation)
-- [Introduction](#Introduction)
-- [Constructor parameters](#Constructor parameters)
-- [Default values](#Default values)
-- [Application and Command metadata](#Application and Command metadata)
-- [Command arguments](#Command arguments)
-- [Collections](#Collections)
-- [Supported parameter types](#Supported parameter types)
+- [Installation](#installation)
+- [Introduction](#introduction)
+- [Constructor parameters](#constructor-parameters)
+- [Default values](#default-values)
+- [Application and Command metadata](#application-and-command-metadata)
+- [Command arguments](#command-arguments)
+- [Collections](#collections)
+- [Supported parameter types](#supported-parameter-types)
 
 ## Installation
 
