@@ -166,5 +166,10 @@ namespace CommandDotNet.Models
         {
             return Template.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return $"{Name} : {Details} : {Template}";
+        }
     }
 }

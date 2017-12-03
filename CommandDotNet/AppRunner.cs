@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using CommandDotNet.Attributes;
 using CommandDotNet.Exceptions;
 using CommandDotNet.Models;
 using Microsoft.Extensions.CommandLineUtils;
 
+[assembly:InternalsVisibleTo("CommandDotNet.Tests")]
+
 namespace CommandDotNet
 {
     public class AppRunner<T> where T: class
     {        
-        private readonly CommandLineApplication _app = new CommandLineApplication();
+        internal readonly CommandLineApplication App = new CommandLineApplication();
 
         private readonly AppSettings _settings;
         
@@ -19,18 +22,18 @@ namespace CommandDotNet
         {
             _settings = settings ?? new AppSettings();
             
-            _app.HelpOption(Constants.HelpTemplate);
+            App.HelpOption(Constants.HelpTemplate);
 
             ApplicationMetadataAttribute consoleApplicationAttribute = typeof(T).GetCustomAttribute<ApplicationMetadataAttribute>(false);
-            _app.Name = $"dotnet {Assembly.GetCallingAssembly().GetName().Name}.dll";
+            App.Name = $"dotnet {Assembly.GetCallingAssembly().GetName().Name}.dll";
             
-            _app.FullName = consoleApplicationAttribute?.Description;
+            App.FullName = consoleApplicationAttribute?.Description;
             
-            _app.ExtendedHelpText = consoleApplicationAttribute?.ExtendedHelpText;
-
+            App.ExtendedHelpText = consoleApplicationAttribute?.ExtendedHelpText;
+            
             IEnumerable<ArguementInfo> options = typeof(T)
                 .GetConstructors()
-                .SingleOrDefault()
+                .FirstOrDefault()
                 .GetParameters()
                 .Select(p => new ArguementInfo(p, _settings));
             
@@ -38,7 +41,7 @@ namespace CommandDotNet
             
             foreach (ArguementInfo optionInfo in options)
             {
-                optionValues.Add(optionInfo, _app.Option(optionInfo.Template, optionInfo.EffectiveDescription, optionInfo.CommandOptionType));
+                optionValues.Add(optionInfo, App.Option(optionInfo.Template, optionInfo.EffectiveDescription, optionInfo.CommandOptionType));
             }
             
             IEnumerable<CommandInfo> commands = typeof(T)
@@ -50,7 +53,7 @@ namespace CommandDotNet
             {
                 Dictionary<ArguementInfo, CommandOption> parameterValues = new Dictionary<ArguementInfo, CommandOption>();
                 
-                var commandOption = _app.Command(commandInfo.Name, command =>
+                var commandOption = App.Command(commandInfo.Name, command =>
                 {
                     command.Description = commandInfo.Description;
 
@@ -78,7 +81,7 @@ namespace CommandDotNet
                     }
                     catch (ValueParsingException e)
                     {
-                        throw new CommandParsingException(_app, e.Message);
+                        throw new CommandParsingException(App, e.Message);
                     }
                 });
             }
@@ -88,13 +91,18 @@ namespace CommandDotNet
         {
             try
             {
-                int result = _app.Execute(args);
+                int result = App.Execute(args);
                 return result;
             }
             catch (CommandParsingException e)
             {
                 Console.Error.WriteLine(e.Message + "\n");
-                _app.ShowHelp();
+                App.ShowHelp();
+                
+#if DEBUG
+                Console.Error.WriteLine(e.StackTrace);       
+#endif
+                
                 return 1;
             }
             catch (Exception e)
