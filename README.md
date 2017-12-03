@@ -223,6 +223,8 @@ Answer: 25
 
 In this case, for `--printValues` it will fallback to `false` & if you dont pass either `--value1` or `--value2`, it will fallback to `0`.
 
+**NOTE: Only one constructor is supported. If there are multiple, it will pick up first defined constructor**
+
 ## Default values
 
 C# supports default values for parameters and so does this library.
@@ -371,3 +373,21 @@ And this is how you pass multiple parameters:
 ```bash
 dotnet example.dll LaunchRocket -p mars -p earth -p jupiter
 ```
+
+## Supported parameter types
+
+As of now, these are supported parameter types:
+
+- `int`
+- `int?`
+- `long`
+- `long?`
+- `string`
+- `bool`
+- `bool?`
+- `List<string>`
+- `List<int>`
+- `List<long>`
+- `List<bool>`
+
+These are applicable for both - methods and constructor
