@@ -2,6 +2,17 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/0q3laab22dy66sm7/branch/master?svg=true)](https://ci.appveyor.com/project/bilal-fazlani/commanddotnet/branch/master)
 
+Table of contents:
+
+- [Installation](#Installation)
+- [Introduction](#Introduction)
+- [Constructor parameters](#Constructor parameters)
+- [Default values](#Default values)
+- [Application and Command metadata](#Application and Command metadata)
+- [Command arguments](#Command arguments)
+- [Collections](#Collections)
+- [Supported parameter types](#Supported parameter types)
+
 ## Installation
 
 From nuget: https://www.nuget.org/packages/CommandDotNet
@@ -257,7 +268,7 @@ Options:
   --value2          Int32 | Default value: 1
 ```
 
-## Application & Command metadata
+## Application and Command metadata
 
 You can use the `[ApplicationMetadata]` attribute on the class level like this to provide details when application is called with `help` switch.
 
@@ -391,3 +402,4 @@ As of now, these are supported parameter types:
 - `List<bool>`
 
 These are applicable for both - methods and constructor
+
