@@ -1,0 +1,31 @@
+﻿{
+    "testCases": [
+        {
+            "testCaseName": "can recognise partial constructor parameters",
+            "params" : [
+                "--justAnotherParameter1", "param1",
+                "TestConstructorParams",
+                "--flag", "true"
+            ],
+            "expectedOutput": {
+                "justAnotherParameter1" : "param1",
+                "flag" : true,
+                "justAnotherParameter2" : 0
+            }
+        },
+        {
+            "testCaseName": "can recognise all constructor parameters",
+            "params" : [
+                "--justAnotherParameter1", "param1",
+                "-j", "8",
+                "TestConstructorParams",
+                "--flag", "true"
+            ],
+            "expectedOutput": {
+                "justAnotherParameter1" : "param1",
+                "flag" : true,
+                "justAnotherParameter2" : 8
+            }
+        }
+    ]
+}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using CommandDotNet.Exceptions;
 using CommandDotNet.Models;
 using Microsoft.Extensions.CommandLineUtils;
@@ -18,37 +19,52 @@ namespace CommandDotNet
             {
                 if (argType == typeof(int) || argType == typeof(int?))
                 {
-                    bool isInt = int.TryParse(data.Value.Value(), NumberStyles.Integer, new NumberFormatInfo(), out int integerValue);
-                    if (isInt) return integerValue;
-                    ThrowParsingException<int>(data, argType);
+                    return GetInt(data);
                 }
 
+                if (typeof(List<int>).IsAssignableFrom(argType))
+                {
+                    return data.Value.Values.Select(value => GetInt(data)).ToList();
+                }
+                
                 if (argType == typeof(long) || argType == typeof(long?))
                 {
-                    bool isLong = long.TryParse(data.Value.Value(), NumberStyles.Integer, new NumberFormatInfo(), out long longValue);
-                    if (isLong) return longValue;
-                    ThrowParsingException<long>(data, argType);
+                    return GetLong(data);
+                }
+                
+                if (typeof(List<long>).IsAssignableFrom(argType))
+                {
+                    return data.Value.Values.Select(value => GetLong(data)).ToList();
                 }
 
                 if (argType == typeof(double) || argType == typeof(double?))
                 {
-                    bool isDouble = double.TryParse(data.Value.Value(), NumberStyles.AllowDecimalPoint, new NumberFormatInfo(), out double doubleValue);
-                    if (isDouble) return doubleValue;
-                    ThrowParsingException<double>(data, argType);
+                    return GetDouble(data);
                 }
 
+                if (typeof(List<double>).IsAssignableFrom(argType))
+                {
+                    return data.Value.Values.Select(value => GetDouble(data)).ToList();
+                }
 
                 if (argType == typeof(bool) || argType == typeof(bool?))
                 {
-                    bool isBool = bool.TryParse(data.Value.Value(), out bool boolValue);
-                    if (isBool) return boolValue;
-                    ThrowParsingException<bool>(data, argType);
+                    return GetBoolean(data);
+                }
+                
+                if (typeof(List<bool>).IsAssignableFrom(argType))
+                {
+                    return data.Value.Values.Select(value => GetBoolean(data)).ToList();
                 }
 
                 if (argType == typeof(string))
                 {
-                    string stringValue = data.Value.Value();
-                    return stringValue;
+                    return data.Value.Value();
+                }
+
+                if (typeof(List<string>).IsAssignableFrom(argType))
+                {
+                    return data.Value.Values;
                 }
                 
                 throw new ValueParsingException($"Unsupported parameter type: {argType.FullName} for parameter {data.Key.Name}");
@@ -64,7 +80,36 @@ namespace CommandDotNet
             return GetDefault(argType);
         }
 
-        private static void ThrowParsingException<T>(KeyValuePair<ArguementInfo, CommandOption> data, Type argType)
+        private static bool GetBoolean(KeyValuePair<ArguementInfo, CommandOption> data)
+        {
+            bool isBool = bool.TryParse(data.Value.Value(), out bool boolValue);
+            if (isBool) return boolValue;
+            return ThrowParsingException<bool>(data);
+        }
+
+        private static double GetDouble(KeyValuePair<ArguementInfo, CommandOption> data)
+        {
+            bool isDouble = double.TryParse(data.Value.Value(), NumberStyles.AllowDecimalPoint, new NumberFormatInfo(),
+                out double doubleValue);
+            if (isDouble) return doubleValue;
+            return ThrowParsingException<double>(data);
+        }
+
+        private static long GetLong(KeyValuePair<ArguementInfo, CommandOption> data)
+        {
+            bool isLong = long.TryParse(data.Value.Value(), NumberStyles.Integer, new NumberFormatInfo(), out long longValue);
+            if (isLong) return longValue;
+            return ThrowParsingException<long>(data);
+        }
+
+        private static int GetInt(KeyValuePair<ArguementInfo, CommandOption> data)
+        {
+            bool isInt = int.TryParse(data.Value.Value(), NumberStyles.Integer, new NumberFormatInfo(), out int integerValue);
+            if (isInt) return integerValue;
+            return ThrowParsingException<int>(data);
+        }
+
+        private static T ThrowParsingException<T>(KeyValuePair<ArguementInfo, CommandOption> data)
         {
             throw new ValueParsingException($"'{data.Value.Value()}' is not a valid {data.Key.TypeDisplayName}");
         }

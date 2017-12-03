@@ -1,0 +1,42 @@
+﻿{
+    "testCases": [
+        {
+            "testCaseName": "can recognise string, int, string array, double & few null entries",
+            "params" : [
+                "TestMethodParams",
+                "--name", "bilal",
+                "--id", "4",
+                "--tag", "human",
+                "-t", "male",
+                "--tag", "4",
+                "--height", "5.2"
+            ],
+            "expectedOutput": {
+                "name" : "bilal",
+                "id" : 4,
+                "tags" : ["human", "male", "4"],
+                "height" : 5.2,
+                "city" : null,
+                "nri" : false,
+                "roles" : null,
+                "ranks" : null
+            }
+        },
+        {
+            "testCaseName": "can recognise all default values",
+            "params" : [
+                "TestMethodParams"
+            ],
+            "expectedOutput": {
+                "name" : null,
+                "id" : 0,
+                "tags" : null,
+                "height" : 0.0,
+                "city" : null,
+                "nri" : false,
+                "roles" : null,
+                "ranks" : null
+            }
+        }
+    ]
+}
