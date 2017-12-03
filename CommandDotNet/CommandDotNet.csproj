@@ -7,7 +7,7 @@
     <AssemblyTitle>CommandDotNet</AssemblyTitle>
     <Description>Model your command line application interface in a class</Description>
     <PackageTags>dotnet core; console; argument parse;</PackageTags>
-    <PackageProjectUrl>hhttps://github.com/bilal-fazlani/CommandDotNet</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/bilal-fazlani/CommandDotNet</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/bilal-fazlani/CommandDotNet</RepositoryUrl>
     <NetStandardImplicitPackageVersion>2.0.1</NetStandardImplicitPackageVersion>
