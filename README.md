@@ -336,3 +336,38 @@ Options:
 
 So planet name can now be passed either with `--planet` or `-p`. Specifying both is not required. 
 You can specify either long name or short name or both. When none is specified, it will use parameter name by default. Description is also optional.
+
+## Collections
+
+Let's enhance our rocket launcher to support multiple planets.
+
+```c#
+public void LaunchRocket([Argument(ShortName = "p")] List<string> planets)
+{
+    return;
+}
+```
+
+This is what help information looks like-
+
+INPUT
+
+```bash
+dotnet example.dll LaunchRocket --help
+```
+
+OUTPUT
+
+```bash
+Usage: dotnet example.dll LaunchRocket [options]
+
+Options:
+  -h | -? | --help  Show help information
+  -p                String (Multiple)
+```
+
+And this is how you pass multiple parameters:
+
+```bash
+dotnet example.dll LaunchRocket -p mars -p earth -p jupiter
+```
