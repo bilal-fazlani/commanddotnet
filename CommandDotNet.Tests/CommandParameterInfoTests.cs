@@ -17,52 +17,52 @@ namespace CommandDotNet.Tests
             new object[]
             {
                 "jumped", CommandOptionType.SingleValue, DBNull.Value, true, "Boolean", "Boolean | Required", null, 
-                null, null, null, "--jumped", typeof(bool), false
+                null, "--jumped", typeof(bool), false
             },
             new object[]
             {
                 "id", CommandOptionType.SingleValue, DBNull.Value, true, "Int64", "Int64 | Required", "Id of person", 
-                "Int64 | Required                                  Id of person", "id", "i", "--id | -i", typeof(long), true
+                "Int64 | Required                                  Id of person", "--id | -i", typeof(long), true
             },
             new object[]
             {
                 "level", CommandOptionType.SingleValue, DBNull.Value, false, "String",  "String", null,
-                null,  null, "l", "-l", typeof(string), false
+                null, "-l", typeof(string), false
             },
             new object[]
             {
                 "feets", CommandOptionType.SingleValue, DBNull.Value, false, "Int32" , "Int32", null,
-                null, "feet", "", "--feet", typeof(int?), false
+                null, "--feet", typeof(int?), false
             },
             new object[]
             {
                 "friends", CommandOptionType.MultipleValue, DBNull.Value, false, "String (Multiple)", "String (Multiple)" ,null,
-                null, null, null, "--friends", typeof(IEnumerable<string>), false
+                null, "--friends", typeof(IEnumerable<string>), false
             },
             new object[]
             {
                 "height", CommandOptionType.SingleValue, DBNull.Value, true, "Double",  "Double | Required", null,
-                null, null, null, "--height", typeof(double), false
+                null, "--height", typeof(double), false
             },
             new object[]
             {
                 "log", CommandOptionType.NoValue, DBNull.Value, false, "Flag" , "Flag", null,
-                null, null, null, "--log", typeof(bool?), false
+                null, "--log", typeof(bool?), false
             },
             new object[]
             {
                 "password", CommandOptionType.SingleValue, DBNull.Value, true, "String" , "String | Required", null,
-                null, null, null, "--password", typeof(string), false
+                null, "--password", typeof(string), false
             },
             new object[]
             {
                 "index", CommandOptionType.SingleValue, 1, false, "Int32",  "Int32 | Default value: 1", null,
-                null, null, null, "--index", typeof(int), false
+                null, "--index", typeof(int), false
             },
             new object[]
             {
                 "name", CommandOptionType.SingleValue, "john", false, "String", "String | Default value: john", "name of person",
-                "name of person", null, null, "--name", typeof(string), false
+                "name of person", "--name", typeof(string), false
             },
         };
 
@@ -79,8 +79,6 @@ namespace CommandDotNet.Tests
             string annotatedDescription,
             
             string effectiveDescription,
-            string longname,
-            string shortname,
             string template,
             Type type,
             bool showParameterDetails)
@@ -115,8 +113,6 @@ namespace CommandDotNet.Tests
             string annotatedDescription,
             
             string effectiveDescription,
-            string longname,
-            string shortname,
             string template,
             Type type,
             bool showParameterDetails)
