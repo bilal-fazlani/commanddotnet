@@ -255,3 +255,54 @@ Options:
   --value2          Int32 | Default value: 1
 ```
 
+## Application & Command metadata
+
+You can use the `[ApplicationMetadata]` attribute on the class level like this to provide details when application is called with `help` switch.
+
+Example: 
+
+```c#
+[ApplicationMetadata(Description = "This is a crappy calculator", ExtendedHelpText = "Some more help text that appears at the bottom")]
+public class Calculator
+{
+}
+```
+
+This attribute can also be used on a Method as shown below.
+
+```c#
+[ApplicationMetadata(Description = "Subtracts value2 from value1 and prints output", 
+    ExtendedHelpText = "Again, some more detailed help text which has no meaning I still have to write to demostrate this feature",
+    Name = "subtractValues")]
+public void Subtract(int value1, int value2)
+{
+}
+```
+
+Note that when you use ApplicationMetadata attribute on a method, you can change the name of the command that is different from method name.
+
+INPUT
+
+```bash
+dotnet example.dll --help
+```
+
+OUTPUT
+
+```bash
+This is a crappy calculator
+
+Usage: dotnet example.dll [options] [command]
+
+Options:
+  -h | -? | --help  Show help information
+  --printValues     Boolean | Required
+
+Commands:
+  Add             Adds two numbers. duh!
+  Divide
+  subtractValues  Subtracts value2 from value1 and prints output
+
+Use "dotnet example.dll [command] --help" for more information about a command.
+Some more help text that appears at the bottom
+```
