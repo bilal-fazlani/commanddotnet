@@ -16,6 +16,7 @@ Table of contents:
 - [Command arguments](#command-arguments)
 - [Collections](#collections)
 - [Supported parameter types](#supported-parameter-types)
+- Custom return codes
 - Validations
 - Settings
 - Default command

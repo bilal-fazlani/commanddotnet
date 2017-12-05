@@ -75,9 +75,10 @@ namespace CommandDotNet
                         T instance = AppFactory.CreateApp<T>(optionValues);
                     
                         MethodInfo theMethod = typeof(T).GetMethod(commandInfo.MethodName);
-                    
-                        theMethod.Invoke(instance, parameterValues.Select(ValueMachine.GetValue).ToArray());
-                        return 0;
+                        
+                        object returnedObject = theMethod.Invoke(instance, parameterValues.Select(ValueMachine.GetValue).ToArray());
+                        
+                        return (int) (returnedObject ?? 0);
                     }
                     catch (ValueParsingException e)
                     {
