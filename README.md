@@ -17,7 +17,7 @@ Table of contents:
 - [Collections](#collections)
 - [Supported parameter types](#supported-parameter-types)
 - [Custom return codes](#custom-return-codes)
-- [Default command](#default-command)
+- [Default method](#default-method)
 - Validations
 - Settings
 - Version option
@@ -435,7 +435,7 @@ So now when I call this method from console `dotnet example.dll return`, the com
 
 **Note that your main method's return type should be int for this to work**
 
-## Default command
+## Default method
 
 Right now, when you just execute the dll, without any commands, it shows help. If you want to call a method when application is executed without any 
 commands, you can do that with the help of `[DefaultMethod]` attribute.
