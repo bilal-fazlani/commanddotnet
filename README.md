@@ -16,7 +16,7 @@ Table of contents:
 - [Command arguments](#command-arguments)
 - [Collections](#collections)
 - [Supported parameter types](#supported-parameter-types)
-- Custom return codes
+- [Custom return codes](#custom-return-codes)
 - Validations
 - Settings
 - Default command
@@ -61,11 +61,10 @@ Now that we have our calculator ready, let's see about how we can call it from c
 ```c#
 class Program
 {
-    static void Main(string[] args)
+    static int Main(string[] args)
     {
         AppRunner<Calculator> appRunner = new AppRunner<Calculator>();
-        int exitCode = appRunner.Run(args);
-        Environment.Exit(exitCode);
+        return appRunner.Run(args);
     }
 }
 ```
@@ -414,3 +413,24 @@ As of now, these are supported parameter types:
 
 These are applicable for both - methods and constructor
 
+## Custom return codes
+
+Typically when a console app exits with no erros, it returns `0` exit code. If there there was an error, it return `1`. 
+But there are many possiblities and developers use this exit code to convey details about what exactly happenned. For example,
+https://msdn.microsoft.com/en-us/library/ms681381.aspx 
+
+When you write a command line application you can return a custom return code.
+
+I added a new method in my Calculator to accept a number as input and exit the application with that number as exit code.
+
+```c#
+[ApplicationMetadata(Description = "Return with code 5", Name = "return")]
+public int ReturnCode()
+{
+    return 5;
+}
+```
+
+So now when I call this method from console `dotnet example.dll return`, the command ends with an exit code of 5.
+
+**Note that your main method's return type should be int for this to work**
