@@ -17,9 +17,9 @@ Table of contents:
 - [Collections](#collections)
 - [Supported parameter types](#supported-parameter-types)
 - [Custom return codes](#custom-return-codes)
+- [Default command](#default-command)
 - Validations
 - Settings
-- Default command
 - Version option
 - Flags
 - Auto case correction
@@ -434,3 +434,23 @@ public int ReturnCode()
 So now when I call this method from console `dotnet example.dll return`, the command ends with an exit code of 5.
 
 **Note that your main method's return type should be int for this to work**
+
+## Default command
+
+Right now, when you just execute the dll, without any commands, it shows help. If you want to call a method when application is executed without any 
+commands, you can do that with the help of `[DefaultMethod]` attribute.
+
+```c#
+        [DefaultMethod]
+        public void SomeMethod()
+        {
+            
+        }
+```
+
+Some points to note about default method:
+
+- It won't show up in help and can't be called explicitely with method name. The only way to execute it is not passing any command name.
+- It does not support any parameters. 
+- It will have access to class level fields which are passed via constructor
+- It can have a return type of int or void

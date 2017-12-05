@@ -47,8 +47,48 @@ namespace CommandDotNet
             IEnumerable<CommandInfo> commands = typeof(T)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(m => !m.IsSpecialName)
+                .Where(m => m.GetCustomAttribute<DefaultMethodAttribute>() == null)
                 .Select(mi => new CommandInfo(mi, _settings));
 
+            
+            CommandInfo defaultCommand = typeof(T)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .Where(m => !m.IsSpecialName)
+                .Where(m => m.GetCustomAttribute<DefaultMethodAttribute>() != null)
+                .Select(mi => new CommandInfo(mi, _settings))
+                .FirstOrDefault();
+            
+            Dictionary<ArgumentInfo, CommandOption> defaultCommandParameterValues = new Dictionary<ArgumentInfo, CommandOption>();
+            
+            App.OnExecute(() =>
+            {
+                if (defaultCommand != null)
+                {
+                    if (defaultCommand.Parameters.Any())
+                    {
+                        throw new Exception("Method with [DefaultMethod] attribute does not support parameters");
+                    }
+                
+                    try
+                    {
+                        T instance = AppFactory.CreateApp<T>(optionValues);
+                    
+                        MethodInfo theMethod = typeof(T).GetMethod(defaultCommand.MethodName);
+                        
+                        object returnedObject = theMethod.Invoke(instance, defaultCommandParameterValues.Select(ValueMachine.GetValue).ToArray());
+                        
+                        return (int) (returnedObject ?? 0);
+                    }
+                    catch (ValueParsingException e)
+                    {
+                        throw new CommandParsingException(App, e.Message);
+                    }
+                }
+                
+                App.ShowHelp();
+                return 0;
+            });
+            
             foreach (CommandInfo commandInfo in commands)
             {
                 Dictionary<ArgumentInfo, CommandOption> parameterValues = new Dictionary<ArgumentInfo, CommandOption>();
@@ -92,8 +132,7 @@ namespace CommandDotNet
         {
             try
             {
-                int result = App.Execute(args);
-                return result;
+                return App.Execute(args);
             }
             catch (CommandParsingException e)
             {
@@ -101,7 +140,7 @@ namespace CommandDotNet
                 App.ShowHelp();
                 
 #if DEBUG
-                Console.Error.WriteLine(e.StackTrace);       
+                Console.Error.WriteLine(e.StackTrace);
 #endif
                 
                 return 1;
