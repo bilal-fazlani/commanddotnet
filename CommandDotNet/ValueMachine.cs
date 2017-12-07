@@ -82,9 +82,16 @@ namespace CommandDotNet
 
         private static bool GetBoolean(KeyValuePair<ArgumentInfo, CommandOption> data)
         {
-            bool isBool = bool.TryParse(data.Value.Value(), out bool boolValue);
-            if (isBool) return boolValue;
-            return ThrowParsingException<bool>(data);
+            if (data.Key.Implicit)
+            {
+                return data.Value.HasValue();
+            }
+            else
+            {
+                bool isBool = bool.TryParse(data.Value.Value(), out bool boolValue);
+                if (isBool) return boolValue;
+                return ThrowParsingException<bool>(data);
+            }
         }
 
         private static double GetDouble(KeyValuePair<ArgumentInfo, CommandOption> data)

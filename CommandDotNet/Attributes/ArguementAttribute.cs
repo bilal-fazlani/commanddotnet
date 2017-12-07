@@ -12,5 +12,7 @@ namespace CommandDotNet.Attributes
         public string Description { get; set; }
 
         public bool RequiredString { get; set; }
+        
+        public bool ImplicitBoolean { get; set; }
     }
 }

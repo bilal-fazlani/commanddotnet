@@ -5,7 +5,6 @@ using System.Reflection;
 using CommandDotNet.Attributes;
 using CommandDotNet.Models;
 using FluentAssertions;
-using FluentAssertions.Common;
 using Microsoft.Extensions.CommandLineUtils;
 using Xunit;
 
@@ -46,8 +45,18 @@ namespace CommandDotNet.Tests
             },
             new object[]
             {
-                "log", CommandOptionType.NoValue, DBNull.Value, false, "Flag" , "Flag", null,
+                "log", CommandOptionType.SingleValue, DBNull.Value, false, "Boolean" , "Boolean", null,
                 null, "--log", typeof(bool?), false
+            },
+            new object[]
+            {
+                "isVerified", CommandOptionType.SingleValue, DBNull.Value, true, "Boolean" , "Boolean | Required", null,
+                null, "--isVerified", typeof(bool), false
+            },
+            new object[]
+            {
+                "email", CommandOptionType.NoValue, DBNull.Value, false, "Flag" , "Flag", null,
+                null, "--email", typeof(bool), false
             },
             new object[]
             {
@@ -160,8 +169,13 @@ namespace CommandDotNet.Tests
             double height, 
             
             bool? log,
-            [Argument(RequiredString = true)]
             
+            bool isVerified,
+            
+            [Argument(ImplicitBoolean = true)]
+            bool email,
+            
+            [Argument(RequiredString = true)]
             string password,
             
             int index = 1,
@@ -189,8 +203,13 @@ namespace CommandDotNet.Tests
             double height, 
             
             bool? log,
-            [Argument(RequiredString = true)]
             
+            bool isVerified,
+            
+            [Argument(ImplicitBoolean = true)]
+            bool email,
+            
+            [Argument(RequiredString = true)]
             string password,
             
             int index = 1,

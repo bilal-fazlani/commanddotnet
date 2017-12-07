@@ -25,6 +25,7 @@ namespace CommandDotNet.Models
             
             Name = parameterInfo.Name;
             Type = parameterInfo.ParameterType;
+            Implicit = GetImplicit();
             CommandOptionType = GetCommandOptionType();
             TypeDisplayName = GetTypeDisplayName();
             AnnotatedDescription = GetAnnotatedDescription();
@@ -45,9 +46,17 @@ namespace CommandDotNet.Models
         public string AnnotatedDescription { get;  set;}
         public string EffectiveDescription { get;  set;}
         public string Template { get;  set;}
-        
+        public bool Implicit { get; set; }
+
+        private bool GetImplicit()
+        {
+            return (_parameterInfo.GetCustomAttribute<ArgumentAttribute>()?.ImplicitBoolean) ?? false;
+        }
+
         private bool GetIsParameterRequired(ParameterInfo parameterInfo)
         {
+            if (Implicit) return false;
+            
             ArgumentAttribute descriptionAttribute = parameterInfo.GetCustomAttribute<ArgumentAttribute>(false);
             
             if(descriptionAttribute != null && Type == typeof(string))
@@ -77,12 +86,12 @@ namespace CommandDotNet.Models
         private string GetTypeDisplayName()
         {
             if (Type.Name == "String") return Type.Name;
-            
-            if (Nullable.GetUnderlyingType(Type) == typeof(bool))
+
+            if (Implicit)
             {
                 return "Flag";
             }
-
+            
             if (typeof(IEnumerable).IsAssignableFrom(Type))
             {
                 return $"{Type.GetGenericArguments().SingleOrDefault()?.Name} (Multiple)";
@@ -111,12 +120,7 @@ namespace CommandDotNet.Models
                 return CommandOptionType.MultipleValue;
             }
                 
-            if(Type.IsAssignableFrom(typeof(bool?)))
-            {
-                return CommandOptionType.NoValue;
-            }
-
-            return CommandOptionType.SingleValue;
+            return Implicit ? CommandOptionType.NoValue : CommandOptionType.SingleValue;
         }
         
         private string GetTemplate(ParameterInfo parameterInfo)

@@ -1,5 +1,4 @@
-﻿using System;
-using CommandDotNet.Attributes;
+﻿using CommandDotNet.Attributes;
 using FluentAssertions;
 using Xunit;
 

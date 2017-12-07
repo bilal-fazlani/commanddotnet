@@ -44,6 +44,8 @@ namespace CommandDotNet.Tests
             [Argument(LongName = "tag", ShortName = "t")]
             List<string> tags,
             string name,
+            [Argument(ImplicitBoolean = true)]
+            bool email,
             double height,
             string city,
             bool nri,
@@ -58,6 +60,7 @@ namespace CommandDotNet.Tests
                 id,
                 tags,
                 name,
+                email,
                 height,
                 city,
                 nri,
