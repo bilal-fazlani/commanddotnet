@@ -9,7 +9,8 @@
                 "--tag", "human",
                 "-t", "male",
                 "--tag", "4",
-                "--height", "5.2"
+                "--height", "5.2",
+                "--category", "b"
             ],
             "expectedOutput": {
                 "name" : "bilal",
@@ -20,7 +21,8 @@
                 "nri" : false,
                 "roles" : null,
                 "ranks" : null,
-                "email" : false
+                "email" : false,
+                "category" : "b"
             }
         },
         {
@@ -37,7 +39,8 @@
                 "nri" : false,
                 "roles" : null,
                 "ranks" : null,
-                "email" : false
+                "email" : false,
+                "category" : "\u0000"
             }
         },
         {
@@ -55,7 +58,8 @@
                 "nri" : false,
                 "roles" : null,
                 "ranks" : null,
-                "email" : true
+                "email" : true,
+                "category" : "\u0000"
             }
         }
     ]

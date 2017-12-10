@@ -406,10 +406,13 @@ As of now, these are supported parameter types:
 - `string`
 - `bool`
 - `bool?`
+- `char`
+- `char?`
 - `List<string>`
 - `List<int>`
 - `List<long>`
 - `List<bool>`
+- `List<char>`
 
 These are applicable for both - methods and constructor
 

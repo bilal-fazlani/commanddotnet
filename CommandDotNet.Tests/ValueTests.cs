@@ -48,6 +48,7 @@ namespace CommandDotNet.Tests
             bool email,
             double height,
             string city,
+            char category,
             bool nri,
             [Argument(LongName = "role")]
             List<int> roles,
@@ -63,6 +64,7 @@ namespace CommandDotNet.Tests
                 email,
                 height,
                 city,
+                category,
                 nri,
                 roles,
                 ranks

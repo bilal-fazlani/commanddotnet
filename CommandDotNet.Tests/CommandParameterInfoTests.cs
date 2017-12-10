@@ -73,6 +73,21 @@ namespace CommandDotNet.Tests
                 "name", CommandOptionType.SingleValue, "john", false, "String", "String | Default value: john", "name of person",
                 "name of person", "--name", typeof(string), false
             },
+            new object[]
+            {
+                "category1", CommandOptionType.SingleValue, DBNull.Value, true, "Char", "Char | Required", null,
+                "Char | Required".PadRight(Constants.PadLength), "--category1", typeof(char), true
+            },
+            new object[]
+            {
+                "category2", CommandOptionType.SingleValue, DBNull.Value, false, "Char", "Char", null,
+                "Char".PadRight(Constants.PadLength), "--category2", typeof(char?), true
+            },
+            new object[]
+            {
+                "category3", CommandOptionType.SingleValue, 'b', false, "Char", "Char | Default value: b", null,
+                "Char | Default value: b".PadRight(Constants.PadLength), "--category3", typeof(char), true
+            },
         };
 
         
@@ -98,94 +113,21 @@ namespace CommandDotNet.Tests
             ArgumentInfo commandParameterInfo = new ArgumentInfo(parameter, 
                 new AppSettings{ ShowParameterDetails = showParameterDetails });
 
-            commandParameterInfo.CommandOptionType.Should().Be(commandOptionType);
-            commandParameterInfo.DefaultValue.Should().Be(defaultValue);
-            commandParameterInfo.Required.Should().Be(required);
-            commandParameterInfo.TypeDisplayName.Should().Be(typeDisplayName);
-            commandParameterInfo.Details.Should().Be(parameterDetails);
-            commandParameterInfo.AnnotatedDescription.Should().Be(annotatedDescription);
+            commandParameterInfo.CommandOptionType.Should().Be(commandOptionType, nameof(commandOptionType));
+            commandParameterInfo.DefaultValue.Should().Be(defaultValue, nameof(defaultValue));
+            commandParameterInfo.Required.Should().Be(required, nameof(required));
+            commandParameterInfo.TypeDisplayName.Should().Be(typeDisplayName, nameof(typeDisplayName));
+            commandParameterInfo.Details.Should().Be(parameterDetails, nameof(parameterDetails));
+            commandParameterInfo.AnnotatedDescription.Should().Be(annotatedDescription, nameof(annotatedDescription));
 
-            commandParameterInfo.EffectiveDescription.Should().Be(effectiveDescription);
-            commandParameterInfo.Template.Should().Be(template);
-            commandParameterInfo.Type.Should().Be(type);
-        }
-        
-        [Theory]
-        [MemberData(nameof(TestCases))]
-        public void CanIdentifyArgumentInfoFromConstructor(
-            string parameterName,
-            CommandOptionType commandOptionType, 
-            object defaultValue, 
-            bool required,
-            string typeDisplayName,
-            string parameterDetails,
-            string annotatedDescription,
-            
-            string effectiveDescription,
-            string template,
-            Type type,
-            bool showParameterDetails)
-        {
-            ConstructorInfo constructorInfo = typeof(TestApplication)
-                .GetConstructors()
-                .FirstOrDefault();
-
-            constructorInfo.Should().NotBeNull();
-            
-            var parameters = constructorInfo.GetParameters();
-            var parameter = parameters.Single(p => p.Name == parameterName);
-            ArgumentInfo commandParameterInfo = new ArgumentInfo(parameter, 
-                new AppSettings{ ShowParameterDetails = showParameterDetails });
-
-            commandParameterInfo.CommandOptionType.Should().Be(commandOptionType);
-            commandParameterInfo.DefaultValue.Should().Be(defaultValue);
-            commandParameterInfo.Required.Should().Be(required);
-            commandParameterInfo.TypeDisplayName.Should().Be(typeDisplayName);
-            commandParameterInfo.Details.Should().Be(parameterDetails);
-            commandParameterInfo.AnnotatedDescription.Should().Be(annotatedDescription);
-
-            commandParameterInfo.EffectiveDescription.Should().Be(effectiveDescription);
-            commandParameterInfo.Template.Should().Be(template);
-            commandParameterInfo.Type.Should().Be(type);
+            commandParameterInfo.EffectiveDescription.Should().Be(effectiveDescription, nameof(effectiveDescription));
+            commandParameterInfo.Template.Should().Be(template, nameof(template));
+            commandParameterInfo.Type.Should().Be(type, nameof(type));
         }
     }
     
     public class TestApplication
     {
-        public TestApplication(
-            bool jumped, 
-            
-            [Argument(ShortName = "i", LongName = "id", Description = "Id of person")]
-            long id, 
-            
-            [Argument(ShortName = "l")]
-            string level, 
-            
-            [Argument(LongName = "feet")]
-            int? feets, 
-            
-            IEnumerable<string> friends, 
-            
-            double height, 
-            
-            bool? log,
-            
-            bool isVerified,
-            
-            [Argument(Flag = true)]
-            bool email,
-            
-            [Argument(RequiredString = true)]
-            string password,
-            
-            int index = 1,
-            
-            [Argument(Description = "name of person")]
-            string name = "john")
-        {
-            
-        }
-        
         public void Execute(
             bool jumped, 
             
@@ -211,6 +153,12 @@ namespace CommandDotNet.Tests
             
             [Argument(RequiredString = true)]
             string password,
+            
+            char category1,
+            
+            char? category2,
+            
+            char category3 = 'b',
             
             int index = 1,
             

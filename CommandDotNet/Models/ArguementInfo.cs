@@ -125,7 +125,7 @@ namespace CommandDotNet.Models
         private string GetEffectiveDescription()
         {
             return _settings.ShowParameterDetails
-                ? string.Format("{0}{1}", Details.PadRight(50) , AnnotatedDescription)
+                ? string.Format("{0}{1}", Details.PadRight(Constants.PadLength) , AnnotatedDescription)
                 : AnnotatedDescription;
         }
         
