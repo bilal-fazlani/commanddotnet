@@ -50,7 +50,23 @@ namespace CommandDotNet.Models
 
         private bool GetImplicit()
         {
-            return (_parameterInfo.GetCustomAttribute<ArgumentAttribute>()?.Flag) ?? false;
+            var attribute = _parameterInfo.GetCustomAttribute<ArgumentAttribute>();
+
+            if (attribute == null) return false;
+
+            if (!attribute.Flag)
+            {
+                return false;
+            }
+            
+            if (attribute.Flag && (Type == typeof(bool) || Type == typeof(bool?)))
+            {
+                return true;
+            }
+            
+            throw new Exception("Flag property is marked true for a non boolean parameter type. " +
+                                $"Property name: {_parameterInfo.Name}" +
+                                $"Type : {Type.Name}");
         }
 
         private bool GetIsParameterRequired(ParameterInfo parameterInfo)
