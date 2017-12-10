@@ -50,7 +50,7 @@ namespace CommandDotNet.Models
 
         private bool GetImplicit()
         {
-            return (_parameterInfo.GetCustomAttribute<ArgumentAttribute>()?.ImplicitBoolean) ?? false;
+            return (_parameterInfo.GetCustomAttribute<ArgumentAttribute>()?.Flag) ?? false;
         }
 
         private bool GetIsParameterRequired(ParameterInfo parameterInfo)

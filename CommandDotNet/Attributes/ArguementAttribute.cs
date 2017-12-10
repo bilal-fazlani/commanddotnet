@@ -13,6 +13,6 @@ namespace CommandDotNet.Attributes
 
         public bool RequiredString { get; set; }
         
-        public bool ImplicitBoolean { get; set; }
+        public bool Flag { get; set; }
     }
 }

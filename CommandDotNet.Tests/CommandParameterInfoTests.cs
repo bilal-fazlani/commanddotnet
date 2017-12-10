@@ -172,7 +172,7 @@ namespace CommandDotNet.Tests
             
             bool isVerified,
             
-            [Argument(ImplicitBoolean = true)]
+            [Argument(Flag = true)]
             bool email,
             
             [Argument(RequiredString = true)]
@@ -206,7 +206,7 @@ namespace CommandDotNet.Tests
             
             bool isVerified,
             
-            [Argument(ImplicitBoolean = true)]
+            [Argument(Flag = true)]
             bool email,
             
             [Argument(RequiredString = true)]
