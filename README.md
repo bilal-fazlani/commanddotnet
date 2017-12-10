@@ -18,11 +18,11 @@ Table of contents:
 - [Supported parameter types](#supported-parameter-types)
 - [Custom return codes](#custom-return-codes)
 - [Default method](#default-method)
-- Validations
+- [Flags](#flags)
 - Settings
 - Version option
-- Flags
 - Auto case correction
+- Validations
 
 ## Installation
 
@@ -454,3 +454,18 @@ Some points to note about default method:
 - It does not support any parameters. 
 - It will have access to class level fields which are passed via constructor
 - It can have a return type of int or void
+
+## Flags
+
+You sometimes don't want users to type `dotnet example.dll --capturelogs true`. Instead just `dotnet example.dll --capturelogs`
+should be fine. In order to do that, you use `[Argument]` attribute as shown below:
+
+```c#
+public void MyCommand([Argument(Flag = true)]bool capturelogs)
+{
+    
+}
+```
+
+Note that you can only set `Flag = true` for boolean parameters
+
