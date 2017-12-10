@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using CommandDotNet.Attributes;
+using CommandDotNet.Exceptions;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace CommandDotNet.Models
@@ -64,8 +65,8 @@ namespace CommandDotNet.Models
                 return true;
             }
             
-            throw new Exception("Flag property is marked true for a non boolean parameter type. " +
-                                $"Property name: {_parameterInfo.Name}" +
+            throw new AppRunnerException("Flag property is marked true for a non boolean parameter type. " +
+                                $"Property name: {_parameterInfo.Name} " +
                                 $"Type : {Type.Name}");
         }
 
@@ -78,14 +79,14 @@ namespace CommandDotNet.Models
             if(descriptionAttribute != null && Type == typeof(string))
             {
                 if(parameterInfo.HasDefaultValue & descriptionAttribute.RequiredString) 
-                    throw new Exception($"String parameter '{Name}' can't be 'Required' and have a default value at the same time");
+                    throw new AppRunnerException($"String parameter '{Name}' can't be 'Required' and have a default value at the same time");
                 
                 return descriptionAttribute.RequiredString;
             }
             
             if (descriptionAttribute != null && Type != typeof(string) && descriptionAttribute.RequiredString)
             {
-                throw new Exception("RequiredString can only me used with a string type parameter");
+                throw new AppRunnerException("RequiredString can only me used with a string type parameter");
             }
             
             return parameterInfo.ParameterType.IsValueType

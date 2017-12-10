@@ -8,58 +8,61 @@ using CommandDotNet.Exceptions;
 using CommandDotNet.Models;
 using Microsoft.Extensions.CommandLineUtils;
 
-[assembly:InternalsVisibleTo("CommandDotNet.Tests")]
+[assembly: InternalsVisibleTo("CommandDotNet.Tests")]
 
 namespace CommandDotNet
 {
-    public class AppRunner<T> where T: class
-    {        
+    public class AppRunner<T> where T : class
+    {
         internal readonly CommandLineApplication App = new CommandLineApplication();
 
         private readonly AppSettings _settings;
-        
+
         public AppRunner(AppSettings settings = null)
         {
             _settings = settings ?? new AppSettings();
-            
+
             App.HelpOption(Constants.HelpTemplate);
 
-            ApplicationMetadataAttribute consoleApplicationAttribute = typeof(T).GetCustomAttribute<ApplicationMetadataAttribute>(false);
+            ApplicationMetadataAttribute consoleApplicationAttribute =
+                typeof(T).GetCustomAttribute<ApplicationMetadataAttribute>(false);
             App.Name = $"dotnet {Assembly.GetCallingAssembly().GetName().Name}.dll";
-            
+
             App.FullName = consoleApplicationAttribute?.Description;
-            
+
             App.ExtendedHelpText = consoleApplicationAttribute?.ExtendedHelpText;
-            
+
             IEnumerable<ArgumentInfo> options = typeof(T)
                 .GetConstructors()
                 .FirstOrDefault()
                 .GetParameters()
                 .Select(p => new ArgumentInfo(p, _settings));
-            
+
             Dictionary<ArgumentInfo, CommandOption> optionValues = new Dictionary<ArgumentInfo, CommandOption>();
-            
+
             foreach (ArgumentInfo optionInfo in options)
             {
-                optionValues.Add(optionInfo, App.Option(optionInfo.Template, optionInfo.EffectiveDescription, optionInfo.CommandOptionType));
+                optionValues.Add(optionInfo,
+                    App.Option(optionInfo.Template, optionInfo.EffectiveDescription, optionInfo.CommandOptionType));
             }
-            
+
             IEnumerable<CommandInfo> commands = typeof(T)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(m => !m.IsSpecialName)
                 .Where(m => m.GetCustomAttribute<DefaultMethodAttribute>() == null)
                 .Select(mi => new CommandInfo(mi, _settings));
 
-            
+
             CommandInfo defaultCommand = typeof(T)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(m => !m.IsSpecialName)
                 .Where(m => m.GetCustomAttribute<DefaultMethodAttribute>() != null)
                 .Select(mi => new CommandInfo(mi, _settings))
                 .FirstOrDefault();
-            
-            Dictionary<ArgumentInfo, CommandOption> defaultCommandParameterValues = new Dictionary<ArgumentInfo, CommandOption>();
-            
+
+            Dictionary<ArgumentInfo, CommandOption> defaultCommandParameterValues =
+                new Dictionary<ArgumentInfo, CommandOption>();
+
             App.OnExecute(() =>
             {
                 if (defaultCommand != null)
@@ -68,15 +71,16 @@ namespace CommandDotNet
                     {
                         throw new Exception("Method with [DefaultMethod] attribute does not support parameters");
                     }
-                
+
                     try
                     {
                         T instance = AppFactory.CreateApp<T>(optionValues);
-                    
+
                         MethodInfo theMethod = typeof(T).GetMethod(defaultCommand.MethodName);
-                        
-                        object returnedObject = theMethod.Invoke(instance, defaultCommandParameterValues.Select(ValueMachine.GetValue).ToArray());
-                        
+
+                        object returnedObject = theMethod.Invoke(instance,
+                            defaultCommandParameterValues.Select(ValueMachine.GetValue).ToArray());
+
                         return (int) (returnedObject ?? 0);
                     }
                     catch (ValueParsingException e)
@@ -84,40 +88,42 @@ namespace CommandDotNet
                         throw new CommandParsingException(App, e.Message);
                     }
                 }
-                
+
                 App.ShowHelp();
                 return 0;
             });
-            
+
             foreach (CommandInfo commandInfo in commands)
             {
                 Dictionary<ArgumentInfo, CommandOption> parameterValues = new Dictionary<ArgumentInfo, CommandOption>();
-                
+
                 var commandOption = App.Command(commandInfo.Name, command =>
                 {
                     command.Description = commandInfo.Description;
 
                     command.ExtendedHelpText = commandInfo.ExtendedHelpText;
-                    
+
                     command.HelpOption(Constants.HelpTemplate);
 
                     foreach (ArgumentInfo parameter in commandInfo.Parameters)
                     {
-                        parameterValues.Add(parameter, command.Option(parameter.Template, parameter.EffectiveDescription,
+                        parameterValues.Add(parameter, command.Option(parameter.Template,
+                            parameter.EffectiveDescription,
                             parameter.CommandOptionType));
                     }
                 });
-                
+
                 commandOption.OnExecute(() =>
                 {
                     try
                     {
                         T instance = AppFactory.CreateApp<T>(optionValues);
-                    
+
                         MethodInfo theMethod = typeof(T).GetMethod(commandInfo.MethodName);
-                        
-                        object returnedObject = theMethod.Invoke(instance, parameterValues.Select(ValueMachine.GetValue).ToArray());
-                        
+
+                        object returnedObject = theMethod.Invoke(instance,
+                            parameterValues.Select(ValueMachine.GetValue).ToArray());
+
                         return (int) (returnedObject ?? 0);
                     }
                     catch (ValueParsingException e)
@@ -138,18 +144,18 @@ namespace CommandDotNet
             {
                 Console.Error.WriteLine(e.Message + "\n");
                 App.ShowHelp();
-                
+
 #if DEBUG
                 Console.Error.WriteLine(e.StackTrace);
 #endif
-                
+
                 return 1;
             }
             catch (Exception e)
             {
                 Console.Error.WriteLine(e.Message + "\n");
 #if DEBUG
-         Console.Error.WriteLine(e.StackTrace);       
+                Console.Error.WriteLine(e.StackTrace);
 #endif
                 return 1;
             }
