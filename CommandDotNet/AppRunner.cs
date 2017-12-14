@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Security.Permissions;
+using System.Threading.Tasks;
 using CommandDotNet.Attributes;
 using CommandDotNet.Exceptions;
 using CommandDotNet.Models;
@@ -122,7 +124,7 @@ namespace CommandDotNet
                         }
                     });
 
-                    commandOption.OnExecute(() =>
+                    commandOption.OnExecute(async () =>
                     {
                         try
                         {
@@ -133,7 +135,22 @@ namespace CommandDotNet
                             object returnedObject = theMethod.Invoke(instance,
                                 parameterValues.Select(ValueMachine.GetValue).ToArray());
 
-                            return (int) (returnedObject ?? 0);
+                            int returnCode = 0;
+                            
+                            switch (returnedObject)
+                            {
+                                case Task<int> intPromise:
+                                    returnCode = await intPromise;
+                                    break;
+                                case Task promise:
+                                    await promise;
+                                    break;
+                                case int intValue:
+                                    returnCode = intValue;
+                                    break;
+                                //for void and every other return type, the value is already set to 0
+                            }
+                            return returnCode;
                         }
                         catch (ValueParsingException e)
                         {

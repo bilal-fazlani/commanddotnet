@@ -19,6 +19,7 @@ Table of contents:
 - [Custom return codes](#custom-return-codes)
 - [Default method](#default-method)
 - [Boolean flags](#boolean-flags)
+- [Async methods](#async-methods)
 - Settings
 - Version option
 - Auto case correction
@@ -511,3 +512,15 @@ When you use this library, there are two ways to parse boolean parameters.
 
 When you check the help of a command, you if you see `Boolean` or `Boolean | Required` it means if you wan't to make it true, you need to pass an explit value. If you don't pass one, it will default to `false` automatically. Implicit and explicit are just ways to pass the value, under the hood they are just boolean parameters.
  
+## Async methods
+
+The following types of methods are supported :
+
+1. `void` 
+1. `int`
+1. `Task`
+1. `Task<int>`
+1. `async Task`
+1. `async Task<int>`
+
+Task result types will be awaited automatically

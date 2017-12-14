@@ -29,4 +29,7 @@
   <ItemGroup>
     <None Remove="output\**" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="CommandDotNet.csproj.DotSettings" />
+  </ItemGroup>
 </Project>
