@@ -497,17 +497,17 @@ When you use this library, there are two ways to parse boolean parameters.
     }
     ```
 
-    Note that you can only set `BooleanMode = BooleanMode.Explicit` or even `BooleanMode = BooleanMode.Explicit` for bool / bool? type parameters.
+    Note that you can only set `BooleanMode = BooleanMode.Explicit` or even `BooleanMode = BooleanMode.Explicit` for `bool` / `bool?` type parameters.
 
     When you use explicit boolean mode, these scenarios are valid:
 
     ```bash
-    dotnet example.dll
-    dotnet example.dll --printValues false
-    dotnet example.dll --printValues true
+    dotnet example.dll MyCommand
+    dotnet example.dll MyCommand --capturelogs false
+    dotnet example.dll MyCommand --capturelogs true
     ```
 
-    but `dotnet example.dll --printValues` is not valid and will result into error. It will only work in Implicit boolean mode.
+    but `dotnet example.dll MyCommand --capturelogs` is not valid and will result into error. It will only work in Implicit boolean mode.
 
 When you check the help of a command, you if you see `Boolean` or `Boolean | Required` it means if you wan't to make it true, you need to pass an explit value. If you don't pass one, it will default to `false` automatically. Implicit and explicit are just ways to pass the value, under the hood they are just boolean parameters.
  
