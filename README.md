@@ -18,7 +18,7 @@ Table of contents:
 - [Supported parameter types](#supported-parameter-types)
 - [Custom return codes](#custom-return-codes)
 - [Default method](#default-method)
-- [Flags](#flags)
+- [Boolean flags](#boolean-flags)
 - Settings
 - Version option
 - Auto case correction
@@ -216,7 +216,7 @@ Usage: dotnet example.dll [options] [command]
 
 Options:
   -h | -? | --help  Show help information
-  --printValues     Boolean | Required
+  --printValues     Flag
 
 Commands:
   Add        Adds two numbers. duh!
@@ -230,7 +230,7 @@ Let's try and invoke it
 INPUT 
 
 ```bash
-dotnet example.dll --printValues true Subtract --value1 30 --value2 5
+dotnet example.dll --printValues Subtract --value1 30 --value2 5
 ```
 
 OUTPUT
@@ -242,7 +242,7 @@ Answer: 25
 
 **Note that you can skip to pass any parameter. It will then fallback to the default value of parameter type**
 
-In this case, for `--printValues` it will fallback to `false` & if you dont pass either `--value1` or `--value2`, it will fallback to `0`.
+In this case, for `--printValues` it will fallback to `false` & if you don't pass either `--value1` or `--value2`, it will fallback to `0`.
 
 **NOTE: Only one constructor is supported. If there are multiple, it will pick up first defined constructor**
 
@@ -319,7 +319,7 @@ Usage: dotnet example.dll [options] [command]
 
 Options:
   -h | -? | --help  Show help information
-  --printValues     Boolean | Required
+  --printValues     Flag
 
 Commands:
   Add             Adds two numbers. duh!
@@ -458,17 +458,56 @@ Some points to note about default method:
 - It will have access to class level fields which are passed via constructor
 - It can have a return type of int or void
 
-## Flags
+## Boolean flags
 
-You sometimes don't want users to type `dotnet example.dll --capturelogs true`. Instead just `dotnet example.dll --capturelogs`
-should be fine. In order to do that, you use `[Argument]` attribute as shown below:
+When you use this library, there are two ways to parse boolean parameters.
 
-```c#
-public void MyCommand([Argument(Flag = true)]bool capturelogs)
-{
+1.  **Implicit**
+
+    This is the default mode.
+    In this mode, you don't pass the value `true` or `false` in the command line. These parameters are treated as flags. They are considered `true` if they are present and `false` when they are not.
+
+    For exampple: 
+    ```bash
+    dotnet example.dll --printValues
+    ```
+
+    In this case, value of parameter `printValues` will be true
+
+    and in the following exampplem,
+
+    ```bash
+    dotnet example.dll
+    ```
+
+    value of parameter `printValues` will be false.
+
+    Note that, when using implicit boolean mode, it will result in an error, if the user tries to explicitly enter a value for parameter. In this instance, `dotnet example.dll --printValues true` will result into an error.
+
+    When you check the help of a command, you if you see `Flag` for a parameter, it means value is implit and does not requre an explict one.
+
+2.  **Explicit**
+
+    If you want users to explicitly enter true or false, you need to set the boolean mode explicit. You can do that, by using the `[Argument]` attribute as shown below:
+
+    ```c#
+    public void MyCommand([Argument(BooleanMode = BooleanMode.Explicit)]bool capturelogs)
+    {
     
-}
-```
+    }
+    ```
 
-Note that you can only set `Flag = true` for boolean parameters
+    Note that you can only set `BooleanMode = BooleanMode.Explicit` or even `BooleanMode = BooleanMode.Explicit` for bool / bool? type parameters.
 
+    When you use explicit boolean mode, these scenarios are valid:
+
+    ```bash
+    dotnet example.dll
+    dotnet example.dll --printValues false
+    dotnet example.dll --printValues true
+    ```
+
+    but `dotnet example.dll --printValues` is not valid and will result into error. It will only work in Implicit boolean mode.
+
+When you check the help of a command, you if you see `Boolean` or `Boolean | Required` it means if you wan't to make it true, you need to pass an explit value. If you don't pass one, it will default to `false` automatically. Implicit and explicit are just ways to pass the value, under the hood they are just boolean parameters.
+ 
