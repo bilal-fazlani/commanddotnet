@@ -54,76 +54,17 @@ namespace CommandDotNet
             return arguments;
         }
 
-        public static List<ArgumentInfo> CreateDefaultSubCommand( 
-            this Type type,
-            CommandLineApplication command,
-            AppSettings settings,
-            List<ArgumentInfo> optionValues)
-        {
-            CommandInfo defaultCommandInfo = type.GetDefaultCommandInfo(settings);
-            
-            List<ArgumentInfo> defaultCommandParameterValues =
-                new List<ArgumentInfo>();
-
-            command.OnExecute(async () =>
-            {
-                if (defaultCommandInfo != null)
-                {
-                    if (defaultCommandInfo.Parameters.Any())
-                    {
-                        throw new Exception("Method with [DefaultMethod] attribute does not support parameters");
-                    }
-
-                    return await type.InvokeMethod(command, defaultCommandInfo, defaultCommandParameterValues, optionValues);
-                }
-
-                command.ShowHelp();
-                return 0;
-            });
-
-            return defaultCommandParameterValues;
-        }
-
-        public static void CreateSubCommands(this Type type, CommandLineApplication command, 
-            AppSettings settings, List<ArgumentInfo> optionValues)
-        {            
-            foreach (CommandInfo commandInfo in type.GetCommandInfos(settings))
-            {
-                List<ArgumentInfo> parameterValues =
-                    new List<ArgumentInfo>();
-
-                CommandLineApplication subCommandOption = command.Command(commandInfo.Name, subCommand =>
-                {
-                    subCommand.Description = commandInfo.Description;
-
-                    subCommand.ExtendedHelpText = commandInfo.ExtendedHelpText;
-
-                    subCommand.HelpOption(Constants.HelpTemplate);
-                      
-                    foreach (ArgumentInfo parameter in commandInfo.Parameters)
-                    {
-                        parameterValues.Add(parameter);
-                    }
-
-                    foreach (var parameter in parameterValues)
-                    {
-                        parameter.SetValue(subCommand.Option(parameter.Template,
-                            parameter.EffectiveDescription,
-                            parameter.CommandOptionType));
-                    }
-                });
-
-                subCommandOption.OnExecute(async () => await type.InvokeMethod(subCommandOption, commandInfo, parameterValues, optionValues));
-            }
-        }
-        
-        private static async Task<int> InvokeMethod(
+        public static async Task<int> InvokeMethod(
             this Type type,
             CommandLineApplication command,
             CommandInfo commandInfo, 
-            List<ArgumentInfo> parameterValues,
-            List<ArgumentInfo> optionValues)
+            List<ArgumentInfo> parameterValues = null,
+            List<ArgumentInfo> optionValues = null)
         {
+            parameterValues = parameterValues ?? new List<ArgumentInfo>();
+
+            optionValues = optionValues ?? new List<ArgumentInfo>();
+            
             try
             {
                 object instance = AppInstanceCreator.CreateInstance(type, optionValues);
