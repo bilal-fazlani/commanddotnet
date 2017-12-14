@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -49,6 +50,12 @@ namespace CommandDotNet.Models
         public string Template { get; set; }
         public BooleanMode BooleanMode { get; set; }
 
+        internal ValueInfo ValueInfo { get; set; }
+
+        internal void SetValue(CommandOption commandOption)
+        {
+            this.ValueInfo = new ValueInfo(commandOption);
+        }
 
         private BooleanMode GetBooleanMode()
         {
@@ -198,4 +205,20 @@ namespace CommandDotNet.Models
             return $"{Name} : {Details} : {Template}";
         }
     }
+    
+    internal class ValueInfo
+    {
+        private readonly CommandOption _commandOption;
+
+        public ValueInfo(CommandOption commandOption)
+        {
+            _commandOption = commandOption;
+        }
+
+        internal bool HasValue => _commandOption.HasValue();
+
+        internal List<string> Values => _commandOption.Values;
+
+        internal string Value => _commandOption.Value();
+    } 
 }

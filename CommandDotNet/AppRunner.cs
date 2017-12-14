@@ -34,8 +34,10 @@ namespace CommandDotNet
             {                
                 string name = $"dotnet {Assembly.GetCallingAssembly().GetName().Name}.dll";
                 
-                CommandLineApplication app = typeof(T).CreateApp(_settings, name);
-                
+                CommandCreator commandCreator = new CommandCreator(typeof(T));
+
+                CommandLineApplication app = commandCreator.CreateCommand(_settings, name);
+                                
                 return app.Execute(args);
             }
             catch (AppRunnerException e)

@@ -32,34 +32,38 @@ namespace CommandDotNet
             return defaultCommandInfo;
         }
         
-        public static Dictionary<ArgumentInfo, CommandOption> GetOptionValues(this Type type, CommandLineApplication command, AppSettings settings)
+        public static List<ArgumentInfo> GetOptionValues(this Type type, 
+            CommandLineApplication command, 
+            AppSettings settings)
         {
-            IEnumerable<ArgumentInfo> options = type
+            List<ArgumentInfo> arguments = type
                 .GetConstructors()
                 .FirstOrDefault()
                 .GetParameters()
-                .Select(p => new ArgumentInfo(p, settings));
+                .Select(p => new ArgumentInfo(p, settings))
+                .ToList();
 
-            Dictionary<ArgumentInfo, CommandOption> optionValues = new Dictionary<ArgumentInfo, CommandOption>();
-
-            foreach (ArgumentInfo optionInfo in options)
+            foreach (var argumentInfo in arguments)
             {
-                optionValues.Add(optionInfo,
-                    command.Option(optionInfo.Template, optionInfo.EffectiveDescription, optionInfo.CommandOptionType));
+                argumentInfo.SetValue(command.Option(
+                    argumentInfo.Template, 
+                    argumentInfo.EffectiveDescription, 
+                    argumentInfo.CommandOptionType));
             }
-            return optionValues;
+            
+            return arguments;
         }
 
-        public static Dictionary<ArgumentInfo, CommandOption> CreateDefaultCommand( 
+        public static List<ArgumentInfo> CreateDefaultSubCommand( 
             this Type type,
             CommandLineApplication command,
             AppSettings settings,
-            Dictionary<ArgumentInfo, CommandOption> optionValues)
+            List<ArgumentInfo> optionValues)
         {
             CommandInfo defaultCommandInfo = type.GetDefaultCommandInfo(settings);
             
-            Dictionary<ArgumentInfo, CommandOption> defaultCommandParameterValues =
-                new Dictionary<ArgumentInfo, CommandOption>();
+            List<ArgumentInfo> defaultCommandParameterValues =
+                new List<ArgumentInfo>();
 
             command.OnExecute(async () =>
             {
@@ -80,13 +84,13 @@ namespace CommandDotNet
             return defaultCommandParameterValues;
         }
 
-        public static void CreateCommands(this Type type, CommandLineApplication command, 
-            AppSettings settings, Dictionary<ArgumentInfo, CommandOption> optionValues)
+        public static void CreateSubCommands(this Type type, CommandLineApplication command, 
+            AppSettings settings, List<ArgumentInfo> optionValues)
         {            
             foreach (CommandInfo commandInfo in type.GetCommandInfos(settings))
             {
-                Dictionary<ArgumentInfo, CommandOption> parameterValues =
-                    new Dictionary<ArgumentInfo, CommandOption>();
+                List<ArgumentInfo> parameterValues =
+                    new List<ArgumentInfo>();
 
                 CommandLineApplication subCommandOption = command.Command(commandInfo.Name, subCommand =>
                 {
@@ -95,10 +99,15 @@ namespace CommandDotNet
                     subCommand.ExtendedHelpText = commandInfo.ExtendedHelpText;
 
                     subCommand.HelpOption(Constants.HelpTemplate);
-                        
+                      
                     foreach (ArgumentInfo parameter in commandInfo.Parameters)
                     {
-                        parameterValues.Add(parameter, subCommand.Option(parameter.Template,
+                        parameterValues.Add(parameter);
+                    }
+
+                    foreach (var parameter in parameterValues)
+                    {
+                        parameter.SetValue(subCommand.Option(parameter.Template,
                             parameter.EffectiveDescription,
                             parameter.CommandOptionType));
                     }
@@ -107,46 +116,17 @@ namespace CommandDotNet
                 subCommandOption.OnExecute(async () => await type.InvokeMethod(subCommandOption, commandInfo, parameterValues, optionValues));
             }
         }
-
-        public static void AddDetails(this Type type, CommandLineApplication command, string name = null)
-        {
-            ApplicationMetadataAttribute consoleApplicationAttribute =
-                type.GetCustomAttribute<ApplicationMetadataAttribute>(false);
-
-            command.Name = name ?? consoleApplicationAttribute?.Name;
-            
-            command.HelpOption(Constants.HelpTemplate);
-
-            command.FullName = consoleApplicationAttribute?.Description;
-
-            command.ExtendedHelpText = consoleApplicationAttribute?.ExtendedHelpText;
-        }
-
-        public static CommandLineApplication CreateApp(this Type type, AppSettings settings, string name = null)
-        {
-            CommandLineApplication command = new CommandLineApplication();
-            
-            Dictionary<ArgumentInfo, CommandOption> optionValues = type.GetOptionValues(command, settings);
-            
-            type.AddDetails(command, name);
-                
-            type.CreateDefaultCommand(command, settings, optionValues);
-                
-            type.CreateCommands(command, settings, optionValues);
-
-            return command;
-        }
         
         private static async Task<int> InvokeMethod(
             this Type type,
             CommandLineApplication command,
             CommandInfo commandInfo, 
-            Dictionary<ArgumentInfo, CommandOption> parameterValues,
-            Dictionary<ArgumentInfo, CommandOption> optionValues)
+            List<ArgumentInfo> parameterValues,
+            List<ArgumentInfo> optionValues)
         {
             try
             {
-                object instance = AppFactory.CreateApp(type, optionValues);
+                object instance = AppInstanceCreator.CreateInstance(type, optionValues);
                 
                 MethodInfo theMethod = type.GetMethod(commandInfo.MethodName);
 

@@ -6,12 +6,11 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace CommandDotNet
 {
-    public static class AppFactory
+    public static class AppInstanceCreator
     {                
-        public static object CreateApp(Type type, Dictionary<ArgumentInfo, CommandOption> construcitonParams = null)
+        public static object CreateInstance(Type type, List<ArgumentInfo> construcitonParams = null)
         {
-
-            construcitonParams = construcitonParams ?? new Dictionary<ArgumentInfo, CommandOption>();
+            construcitonParams = construcitonParams ?? new List<ArgumentInfo>();
             
             object[] values = construcitonParams.Select(ValueMachine.GetValue).ToArray();   
             return Activator.CreateInstance(type, values);
