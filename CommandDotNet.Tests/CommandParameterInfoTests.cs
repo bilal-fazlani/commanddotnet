@@ -7,11 +7,16 @@ using CommandDotNet.Models;
 using FluentAssertions;
 using Microsoft.Extensions.CommandLineUtils;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
 {
-    public class CommandParameterInfoTests
-    {        
+    public class CommandParameterInfoTests : TestBase
+    {
+        public CommandParameterInfoTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        {
+        }
+
         public static IEnumerable<object[]> TestCases = new[] {
             new object[]
             {
@@ -90,7 +95,6 @@ namespace CommandDotNet.Tests
             },
         };
 
-        
         [Theory]
         [MemberData(nameof(TestCases))]
         public void CanIdentifyArgumentInfoFromMethods(

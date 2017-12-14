@@ -1,11 +1,16 @@
 ﻿using CommandDotNet.Attributes;
 using FluentAssertions;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
 {
-    public class DefaultMethodTests
+    public class DefaultMethodTests : TestBase
     {
+        public DefaultMethodTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        {
+        }
+
         [Fact]
         public void CanExecuteDefaultMethodWithoutConstructor()
         {
@@ -13,7 +18,7 @@ namespace CommandDotNet.Tests
             int result = appRunner.Run(new string[]{});
             result.Should().Be(10, "return value of default method is 10");
         }
-        
+
         [Fact]
         public void CanExecuteDefaultMethodWithConstructor()
         {
@@ -21,7 +26,7 @@ namespace CommandDotNet.Tests
             int result = appRunner.Run(new []{"--exitCode", "20"});
             result.Should().Be(20, "return value of default method is 20");
         }
-        
+
         [Fact]
         public void ShouldThrowErrorWhenDefaultMethodHasParameters()
         {

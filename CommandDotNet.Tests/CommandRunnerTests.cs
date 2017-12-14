@@ -1,10 +1,15 @@
 ﻿using FluentAssertions;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
 {
-    public class CommandRunnerTests
+    public class CommandRunnerTests : TestBase
     {
+        public CommandRunnerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        {
+        }
+
         [Fact]
         public void CanInvokeCommand()
         {

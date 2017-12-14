@@ -7,19 +7,16 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
 {
-    public class FlagTests
+    public class FlagTests : TestBase
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        public FlagTests(ITestOutputHelper testOutputHelper)
+        public FlagTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
-            _testOutputHelper = testOutputHelper;
         }
         
         [Fact]
         public void TestValidFlagsWithDefaultSettings()
         {
-            TestCaseRunner<ValidFlagsApplication> testCaseRunner = new TestCaseRunner<ValidFlagsApplication>(_testOutputHelper);
+            TestCaseRunner<ValidFlagsApplication> testCaseRunner = new TestCaseRunner<ValidFlagsApplication>(TestOutputHelper);
             testCaseRunner.Run("TestCases/FlagTests.TestValidFlagsWithDefaultSettings.Input.json",
                 "TestCases/FlagTests.TestValidFlagsWithDefaultSettings.Output.json");
         }
@@ -28,7 +25,7 @@ namespace CommandDotNet.Tests
         public void TestValidFlagsWithExplicitBooleanMode()
         {
             TestCaseRunner<FlagAppForExplicitBooleanTest> testCaseRunner = 
-                new TestCaseRunner<FlagAppForExplicitBooleanTest>(_testOutputHelper, new AppSettings
+                new TestCaseRunner<FlagAppForExplicitBooleanTest>(TestOutputHelper, new AppSettings
                 {
                     BooleanMode = BooleanMode.Explicit
                 });

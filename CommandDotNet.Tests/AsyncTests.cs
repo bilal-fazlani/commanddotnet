@@ -2,11 +2,16 @@
 using CommandDotNet.Attributes;
 using FluentAssertions;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
 {
-    public class AsyncTests
+    public class AsyncTests : TestBase
     {
+        public AsyncTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        {
+        }
+
         [Theory]
         [InlineData("get2", 2)]
         [InlineData("get00", 0)]

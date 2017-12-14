@@ -1,11 +1,16 @@
 ﻿using System;
 using FluentAssertions;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
 {
-    public class CustomReturnCodeTests
+    public class CustomReturnCodeTests : TestBase
     {
+        public CustomReturnCodeTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        {
+        }
+
         [Theory]
         [InlineData("VoidMethodThatHasNoException", 0)]
         [InlineData("VoidMethodWithException", 1)]

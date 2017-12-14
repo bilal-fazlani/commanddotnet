@@ -6,11 +6,16 @@ using CommandDotNet.Models;
 using FluentAssertions;
 using Microsoft.Extensions.CommandLineUtils;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
 {
-    public class CommandInfoTests
+    public class CommandInfoTests : TestBase
     {
+        public CommandInfoTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        {
+        }
+
         [Fact]
         public void CanIdentifyCommandInfoWithoutDescription()
         {

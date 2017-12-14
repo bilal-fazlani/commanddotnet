@@ -7,13 +7,10 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
 {
-    public class ValueTests
+    public class ValueTests: TestBase
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        public ValueTests(ITestOutputHelper testOutputHelper)
+        public ValueTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
-            _testOutputHelper = testOutputHelper;
         }
 
         [Theory]
@@ -21,7 +18,7 @@ namespace CommandDotNet.Tests
         [InlineData("TestConstructorParams")]
         public void ReadValueTest(string testCaseName)
         {
-            TestCaseRunner<MyTestApp> testCaseRunner = new TestCaseRunner<MyTestApp>(_testOutputHelper);
+            TestCaseRunner<MyTestApp> testCaseRunner = new TestCaseRunner<MyTestApp>(TestOutputHelper);
             testCaseRunner.Run($"TestCases/MyTestApp.{testCaseName}.Input.json", 
                 $"TestCases/MyTestApp.{testCaseName}.Output.json");
         }
