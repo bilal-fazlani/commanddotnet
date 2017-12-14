@@ -7,11 +7,14 @@ using Microsoft.Extensions.CommandLineUtils;
 namespace CommandDotNet
 {
     public static class AppFactory
-    {        
-        public static T CreateApp<T>(Dictionary<ArgumentInfo, CommandOption> construcitonParams)
+    {                
+        public static object CreateApp(Type type, Dictionary<ArgumentInfo, CommandOption> construcitonParams = null)
         {
+
+            construcitonParams = construcitonParams ?? new Dictionary<ArgumentInfo, CommandOption>();
+            
             object[] values = construcitonParams.Select(ValueMachine.GetValue).ToArray();   
-            return (T)Activator.CreateInstance(typeof(T), values);
+            return Activator.CreateInstance(type, values);
         }
     }
 }

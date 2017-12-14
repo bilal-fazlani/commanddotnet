@@ -52,7 +52,7 @@ namespace CommandDotNet.Models
 
         private BooleanMode GetBooleanMode()
         {
-            var attribute = _parameterInfo.GetCustomAttribute<ArgumentAttribute>();
+            ArgumentAttribute attribute = _parameterInfo.GetCustomAttribute<ArgumentAttribute>();
 
             if (attribute == null || attribute.BooleanMode == BooleanMode.Unknown)
                 return _settings.BooleanMode;
@@ -110,7 +110,7 @@ namespace CommandDotNet.Models
 
             if (typeof(IEnumerable).IsAssignableFrom(Type))
             {
-                return $"{Type.GetGenericArguments().SingleOrDefault()?.Name} (Multiple)";
+                return $"{Type.GetGenericArguments().FirstOrDefault()?.Name} (Multiple)";
             }
 
             return Nullable.GetUnderlyingType(Type)?.Name ?? Type.Name;

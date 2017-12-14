@@ -2,8 +2,7 @@
 {
     public enum MultiValueType
     {
-        Unknown = 0,
-        MultipleArguments = 1,
-        CommaSeparated = 2
+        MultipleArguments = 0,
+        CommaSeparated = 1
     }
 }

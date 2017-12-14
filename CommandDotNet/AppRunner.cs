@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Security.Permissions;
-using System.Threading.Tasks;
-using CommandDotNet.Attributes;
 using CommandDotNet.Exceptions;
 using CommandDotNet.Models;
 using Microsoft.Extensions.CommandLineUtils;
@@ -20,107 +15,11 @@ namespace CommandDotNet
     /// <typeparam name="T">Type of the application</typeparam>
     public class AppRunner<T> where T : class
     {
-        internal readonly CommandLineApplication App = new CommandLineApplication();
-
-        private readonly AppSettings _settings;
-
-        private readonly bool _error = false;
+        private AppSettings _settings;
 
         public AppRunner(AppSettings settings = null)
         {
-            try
-            {
-                _settings = settings ?? new AppSettings();
-
-                App.HelpOption(Constants.HelpTemplate);
-
-                ApplicationMetadataAttribute consoleApplicationAttribute =
-                    typeof(T).GetCustomAttribute<ApplicationMetadataAttribute>(false);
-                App.Name = $"dotnet {Assembly.GetCallingAssembly().GetName().Name}.dll";
-
-                App.FullName = consoleApplicationAttribute?.Description;
-
-                App.ExtendedHelpText = consoleApplicationAttribute?.ExtendedHelpText;
-
-                IEnumerable<ArgumentInfo> options = typeof(T)
-                    .GetConstructors()
-                    .FirstOrDefault()
-                    .GetParameters()
-                    .Select(p => new ArgumentInfo(p, _settings));
-
-                Dictionary<ArgumentInfo, CommandOption> optionValues = new Dictionary<ArgumentInfo, CommandOption>();
-
-                foreach (ArgumentInfo optionInfo in options)
-                {
-                    optionValues.Add(optionInfo,
-                        App.Option(optionInfo.Template, optionInfo.EffectiveDescription, optionInfo.CommandOptionType));
-                }
-
-                IEnumerable<CommandInfo> commands = typeof(T)
-                    .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                    .Where(m => !m.IsSpecialName)
-                    .Where(m => m.GetCustomAttribute<DefaultMethodAttribute>() == null)
-                    .Select(mi => new CommandInfo(mi, _settings));
-
-
-                CommandInfo defaultCommand = typeof(T)
-                    .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                    .Where(m => !m.IsSpecialName)
-                    .Where(m => m.GetCustomAttribute<DefaultMethodAttribute>() != null)
-                    .Select(mi => new CommandInfo(mi, _settings))
-                    .FirstOrDefault();
-
-                Dictionary<ArgumentInfo, CommandOption> defaultCommandParameterValues =
-                    new Dictionary<ArgumentInfo, CommandOption>();
-
-                App.OnExecute(async () =>
-                {
-                    if (defaultCommand != null)
-                    {
-                        if (defaultCommand.Parameters.Any())
-                        {
-                            throw new Exception("Method with [DefaultMethod] attribute does not support parameters");
-                        }
-
-                        return await InvokeMethod(optionValues, defaultCommand, defaultCommandParameterValues);
-                    }
-
-                    App.ShowHelp();
-                    return 0;
-                });
-
-                foreach (CommandInfo commandInfo in commands)
-                {
-                    Dictionary<ArgumentInfo, CommandOption> parameterValues =
-                        new Dictionary<ArgumentInfo, CommandOption>();
-
-                    var commandOption = App.Command(commandInfo.Name, command =>
-                    {
-                        command.Description = commandInfo.Description;
-
-                        command.ExtendedHelpText = commandInfo.ExtendedHelpText;
-
-                        command.HelpOption(Constants.HelpTemplate);
-
-                        foreach (ArgumentInfo parameter in commandInfo.Parameters)
-                        {
-                            parameterValues.Add(parameter, command.Option(parameter.Template,
-                                parameter.EffectiveDescription,
-                                parameter.CommandOptionType));
-                        }
-                    });
-
-                    commandOption.OnExecute(async () => await InvokeMethod(optionValues, commandInfo, parameterValues));
-                }
-            }
-            catch (AppRunnerException e)
-            {
-                _error = true;
-                Console.Error.WriteLine(e.Message + "\n");
-#if DEBUG
-                Console.Error.WriteLine(e.StackTrace);
-#endif
-            }
+            _settings = settings ?? new AppSettings();
         }
 
         /// <summary>
@@ -131,16 +30,26 @@ namespace CommandDotNet
         /// it will return 0 in case of successs and 1 in case of unhandled exception</returns>
         public int Run(string[] args)
         {
-            if (_error) return 1;
-
             try
+            {                
+                string name = $"dotnet {Assembly.GetCallingAssembly().GetName().Name}.dll";
+                
+                CommandLineApplication app = typeof(T).CreateApp(_settings, name);
+                
+                return app.Execute(args);
+            }
+            catch (AppRunnerException e)
             {
-                return App.Execute(args);
+                Console.Error.WriteLine(e.Message + "\n");
+#if DEBUG
+                Console.Error.WriteLine(e.StackTrace);
+#endif
+                return 1;
             }
             catch (CommandParsingException e)
             {
                 Console.Error.WriteLine(e.Message + "\n");
-                App.ShowHelp();
+                e.Command.ShowHelp();
 
 #if DEBUG
                 Console.Error.WriteLine(e.StackTrace);
@@ -155,40 +64,6 @@ namespace CommandDotNet
                 Console.Error.WriteLine(e.StackTrace);
 #endif
                 return 1;
-            }
-        }
-
-        private async Task<int> InvokeMethod(Dictionary<ArgumentInfo, CommandOption> optionValues, CommandInfo commandInfo, Dictionary<ArgumentInfo, CommandOption> parameterValues)
-        {
-            try
-            {
-                T instance = AppFactory.CreateApp<T>(optionValues);
-
-                MethodInfo theMethod = typeof(T).GetMethod(commandInfo.MethodName);
-
-                object returnedObject = theMethod.Invoke(instance,
-                    parameterValues.Select(ValueMachine.GetValue).ToArray());
-
-                var returnCode = 0;
-
-                switch (returnedObject)
-                {
-                    case Task<int> intPromise:
-                        returnCode = await intPromise;
-                        break;
-                    case Task promise:
-                        await promise;
-                        break;
-                    case int intValue:
-                        returnCode = intValue;
-                        break;
-                    //for void and every other return type, the value is already set to 0
-                }
-                return returnCode;
-            }
-            catch (ValueParsingException e)
-            {
-                throw new CommandParsingException(App, e.Message);
             }
         }
     }
