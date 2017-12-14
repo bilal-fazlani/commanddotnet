@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CommandDotNet.Attributes;
 using FluentAssertions;
 using Xunit;
@@ -17,19 +18,43 @@ namespace CommandDotNet.Tests
         public void CanRecogniseListWhenPassedInWithMultipleArguments()
         {
             AppRunner<MultiValueApp> appRunner = new AppRunner<MultiValueApp>();
-            int exitCode = appRunner.Run(new[] {"accept", "-n", "bilal", "-n", "fazlani"});
+            int exitCode = appRunner.Run(new[] {"names", "-n", "bilal", "-n", "fazlani"});
             exitCode.Should().Be(2, "length of parameters passed is 2");
+        }
+        
+        [Fact(Skip = "Not ready yet")]
+        public void CanRecogniseListWhenPassedInWithCommaSeparatedValues()
+        {
+            AppRunner<MultiValueApp> appRunner = new AppRunner<MultiValueApp>();
+            int exitCode = appRunner.Run(new[] {"cities", "-c", "mumbai, pune, bangalore"});
+            exitCode.Should().Be(3, "length of parameters passed is 3");
         }
     }
 
     public class MultiValueApp
     {
-        [ApplicationMetadata(Name = "accept")]
-        public int AcceptList(
-            [Argument(ShortName = "n", LongName = "name", Description = "name of person")]
+        [ApplicationMetadata(Name = "names")]
+        public int NamesList(
+            [Argument(ShortName = "n", LongName = "name", Description = "names of people")]
             List<string> names)
         {
+            foreach (var name in names)
+            {
+                Console.WriteLine(name);
+            }
             return names.Count;
+        }
+        
+        [ApplicationMetadata(Name = "cities")]
+        public int CitiesList(
+            [Argument(ShortName = "c", LongName = "city", Description = "nams of cities")]
+            List<string> cities)
+        {
+            foreach (var city in cities)
+            {
+                Console.WriteLine(city);
+            }
+            return cities.Count;
         }
     }
 }

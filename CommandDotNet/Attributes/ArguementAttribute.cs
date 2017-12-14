@@ -14,5 +14,7 @@ namespace CommandDotNet.Attributes
         public bool RequiredString { get; set; }
 
         public BooleanMode BooleanMode { get; set; }
+        
+        public MultiValueType MultiValueType { get; set; }
     }
 }
