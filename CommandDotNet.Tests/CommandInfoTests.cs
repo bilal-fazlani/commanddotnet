@@ -36,7 +36,8 @@ namespace CommandDotNet.Tests
                     TypeDisplayName = "Int32",
                     AnnotatedDescription = null,
                     Details = "Int32 | Required",
-                    Template = "--value"
+                    Template = "--value",
+                    BooleanMode = BooleanMode.Implicit
                 }
             });
         }
@@ -67,7 +68,8 @@ namespace CommandDotNet.Tests
                     TypeDisplayName = "Int32",
                     AnnotatedDescription = "some parameter description",
                     Details = "Int32 | Required",
-                    Template = "--value"
+                    Template = "--value",
+                    BooleanMode = BooleanMode.Implicit
                 }
             });
         }

@@ -1,0 +1,13 @@
+﻿{
+    "testCases": [
+        {
+            "testCaseName": "can recognise CommandWithoutFlagOverride",
+            "params" : [
+                "CommandWithoutFlagOverride", "--flag", "true"
+            ],
+            "expectedOutput": {
+                "flag" : true
+            }
+        }
+    ]
+}

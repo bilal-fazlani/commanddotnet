@@ -100,7 +100,7 @@ namespace CommandDotNet
 
         private static bool GetBoolean(KeyValuePair<ArgumentInfo, CommandOption> data)
         {
-            if (data.Key.Implicit)
+            if (data.Key.BooleanMode == BooleanMode.Implicit)
             {
                 return data.Value.HasValue();
             }

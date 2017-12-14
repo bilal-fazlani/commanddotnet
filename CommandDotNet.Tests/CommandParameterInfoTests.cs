@@ -45,12 +45,12 @@ namespace CommandDotNet.Tests
             },
             new object[]
             {
-                "log", CommandOptionType.SingleValue, DBNull.Value, false, "Boolean" , "Boolean", null,
+                "log", CommandOptionType.NoValue, DBNull.Value, false, "Flag" , "Flag", null,
                 null, "--log", typeof(bool?), false
             },
             new object[]
             {
-                "isVerified", CommandOptionType.SingleValue, DBNull.Value, true, "Boolean" , "Boolean | Required", null,
+                "isVerified", CommandOptionType.NoValue, DBNull.Value, false, "Flag" , "Flag", null,
                 null, "--isVerified", typeof(bool), false
             },
             new object[]
@@ -129,6 +129,7 @@ namespace CommandDotNet.Tests
     public class TestApplication
     {
         public void Execute(
+            [Argument(BooleanMode = BooleanMode.Explicit)]
             bool jumped, 
             
             [Argument(ShortName = "i", LongName = "id", Description = "Id of person")]
@@ -146,9 +147,9 @@ namespace CommandDotNet.Tests
             
             bool? log,
             
+            [Argument(BooleanMode = BooleanMode.Implicit)]
             bool isVerified,
             
-            [Argument(Flag = true)]
             bool email,
             
             [Argument(RequiredString = true)]

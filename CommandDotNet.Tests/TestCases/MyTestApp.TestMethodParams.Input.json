@@ -10,6 +10,7 @@
                 "-t", "male",
                 "--tag", "4",
                 "--height", "5.2",
+                "--email", "true",
                 "--category", "b"
             ],
             "expectedOutput": {
@@ -21,7 +22,8 @@
                 "nri" : false,
                 "roles" : null,
                 "ranks" : null,
-                "email" : false,
+                "email" : true,
+                "sms": false,
                 "category" : "b"
             }
         },
@@ -40,6 +42,7 @@
                 "roles" : null,
                 "ranks" : null,
                 "email" : false,
+                "sms" : false,
                 "category" : "\u0000"
             }
         },
@@ -47,7 +50,7 @@
             "testCaseName": "can recognise flags",
             "params" : [
                 "TestMethodParams",
-                "--email"
+                "--sms"
             ],
             "expectedOutput": {
                 "name" : null,
@@ -58,7 +61,8 @@
                 "nri" : false,
                 "roles" : null,
                 "ranks" : null,
-                "email" : true,
+                "email" : false,
+                "sms" : true,
                 "category" : "\u0000"
             }
         }

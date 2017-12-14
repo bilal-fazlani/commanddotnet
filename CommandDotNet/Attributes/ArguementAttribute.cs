@@ -12,7 +12,7 @@ namespace CommandDotNet.Attributes
         public string Description { get; set; }
 
         public bool RequiredString { get; set; }
-        
-        public bool Flag { get; set; }
+
+        public BooleanMode BooleanMode { get; set; }
     }
 }

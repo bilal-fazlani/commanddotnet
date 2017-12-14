@@ -18,15 +18,15 @@ namespace CommandDotNet.Models
         {
             _settings = settings;
         }
-        
-        public ArgumentInfo(ParameterInfo parameterInfo, AppSettings settings) 
+
+        public ArgumentInfo(ParameterInfo parameterInfo, AppSettings settings)
             : this(settings)
         {
             _parameterInfo = parameterInfo;
-            
+
             Name = parameterInfo.Name;
             Type = parameterInfo.ParameterType;
-            Implicit = GetImplicit();
+            BooleanMode = GetBooleanMode();
             CommandOptionType = GetCommandOptionType();
             TypeDisplayName = GetTypeDisplayName();
             AnnotatedDescription = GetAnnotatedDescription();
@@ -38,108 +38,112 @@ namespace CommandDotNet.Models
         }
 
         public string Name { get; set; }
-        public Type Type { get; set;}
-        public CommandOptionType CommandOptionType { get; set;}
-        public bool Required { get; set;}
-        public object DefaultValue { get; set;}
-        public string TypeDisplayName { get; set;}
-        public string Details { get;  set;}
-        public string AnnotatedDescription { get;  set;}
-        public string EffectiveDescription { get;  set;}
-        public string Template { get;  set;}
-        public bool Implicit { get; set; }
+        public Type Type { get; set; }
+        public CommandOptionType CommandOptionType { get; set; }
+        public bool Required { get; set; }
+        public object DefaultValue { get; set; }
+        public string TypeDisplayName { get; set; }
+        public string Details { get; set; }
+        public string AnnotatedDescription { get; set; }
+        public string EffectiveDescription { get; set; }
+        public string Template { get; set; }
+        public BooleanMode BooleanMode { get; set; }
 
-        private bool GetImplicit()
+
+        private BooleanMode GetBooleanMode()
         {
             var attribute = _parameterInfo.GetCustomAttribute<ArgumentAttribute>();
 
-            if (attribute == null) return false;
+            if (attribute == null || attribute.BooleanMode == BooleanMode.Unknown)
+                return _settings.BooleanMode;
 
-            if (!attribute.Flag)
+            if (Type == typeof(bool) || Type == typeof(bool?))
             {
-                return false;
+                return attribute.BooleanMode;
             }
-            
-            if (attribute.Flag && (Type == typeof(bool) || Type == typeof(bool?)))
-            {
-                return true;
-            }
-            
-            throw new AppRunnerException("Flag property is marked true for a non boolean parameter type. " +
-                                $"Property name: {_parameterInfo.Name} " +
-                                $"Type : {Type.Name}");
+
+            throw new AppRunnerException(
+                $"BooleanMode property is set to `{attribute.BooleanMode}` for a non boolean parameter type. " +
+                $"Property name: {_parameterInfo.Name} " +
+                $"Type : {Type.Name}");
         }
 
         private bool GetIsParameterRequired(ParameterInfo parameterInfo)
         {
-            if (Implicit) return false;
-            
+            if (BooleanMode == BooleanMode.Implicit && (Type == typeof(bool) || Type == typeof(bool?))) return false;
+
             ArgumentAttribute descriptionAttribute = parameterInfo.GetCustomAttribute<ArgumentAttribute>(false);
-            
-            if(descriptionAttribute != null && Type == typeof(string))
+
+            if (descriptionAttribute != null && Type == typeof(string))
             {
-                if(parameterInfo.HasDefaultValue & descriptionAttribute.RequiredString) 
-                    throw new AppRunnerException($"String parameter '{Name}' can't be 'Required' and have a default value at the same time");
-                
+                if (parameterInfo.HasDefaultValue & descriptionAttribute.RequiredString)
+                    throw new AppRunnerException(
+                        $"String parameter '{Name}' can't be 'Required' and have a default value at the same time");
+
                 return descriptionAttribute.RequiredString;
             }
-            
+
             if (descriptionAttribute != null && Type != typeof(string) && descriptionAttribute.RequiredString)
             {
                 throw new AppRunnerException("RequiredString can only me used with a string type parameter");
             }
-            
+
             return parameterInfo.ParameterType.IsValueType
                    && parameterInfo.ParameterType.IsPrimitive
                    && !parameterInfo.HasDefaultValue;
         }
-        
+
         private string GetAnnotatedDescription()
         {
             ArgumentAttribute descriptionAttribute = _parameterInfo.GetCustomAttribute<ArgumentAttribute>();
             return descriptionAttribute?.Description;
         }
-        
+
         private string GetTypeDisplayName()
         {
             if (Type.Name == "String") return Type.Name;
 
-            if (Implicit)
+            if (BooleanMode == BooleanMode.Implicit && (Type == typeof(bool) || Type == typeof(bool?)))
             {
                 return "Flag";
             }
-            
+
             if (typeof(IEnumerable).IsAssignableFrom(Type))
             {
                 return $"{Type.GetGenericArguments().SingleOrDefault()?.Name} (Multiple)";
             }
-            
+
             return Nullable.GetUnderlyingType(Type)?.Name ?? Type.Name;
         }
 
         private string GetDetails()
         {
             return $"{this.GetTypeDisplayName()}{(this.Required ? " | Required" : null)}" +
-                   $"{(this.DefaultValue != DBNull.Value ? " | Default value: "+ DefaultValue : null)}";
+                   $"{(this.DefaultValue != DBNull.Value ? " | Default value: " + DefaultValue : null)}";
         }
 
         private string GetEffectiveDescription()
         {
             return _settings.ShowParameterDetails
-                ? string.Format("{0}{1}", Details.PadRight(Constants.PadLength) , AnnotatedDescription)
+                ? string.Format("{0}{1}", Details.PadRight(Constants.PadLength), AnnotatedDescription)
                 : AnnotatedDescription;
         }
-        
+
         private CommandOptionType GetCommandOptionType()
         {
             if (typeof(IEnumerable).IsAssignableFrom(Type) && Type != typeof(string))
             {
                 return CommandOptionType.MultipleValue;
             }
-                
-            return Implicit ? CommandOptionType.NoValue : CommandOptionType.SingleValue;
+
+            if ((Type == typeof(bool) || Type == typeof(bool?)) && BooleanMode == BooleanMode.Implicit)
+            {
+                return CommandOptionType.NoValue;
+            }
+            
+            return CommandOptionType.SingleValue;
         }
-        
+
         private string GetTemplate(ParameterInfo parameterInfo)
         {
             ArgumentAttribute attribute = parameterInfo.GetCustomAttribute<ArgumentAttribute>(false);
@@ -154,13 +158,14 @@ namespace CommandDotNet.Models
                     sb.Append($"--{attribute.LongName}");
                     longNameAdded = true;
                 }
-                
+
                 if (!string.IsNullOrWhiteSpace(attribute.ShortName))
                 {
                     if (longNameAdded)
                     {
                         sb.Append(" | ");
                     }
+
                     sb.Append($"-{attribute.ShortName}");
                 }
 

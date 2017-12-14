@@ -30,13 +30,11 @@ namespace CommandDotNet.Tests
     
     public class MyTestApp
     {
-        private readonly string _justAnotherParameter1;
-        private readonly int _justAnotherParameter2;
+        private readonly string _justAnotherParameter;
 
-        public MyTestApp(string justAnotherParameter1, [Argument(ShortName = "j")]int justAnotherParameter2)
+        public MyTestApp(string justAnotherParameter)
         {
-            _justAnotherParameter1 = justAnotherParameter1;
-            _justAnotherParameter2 = justAnotherParameter2;
+            _justAnotherParameter = justAnotherParameter;
         }
         
         public void TestMethodParams(
@@ -44,8 +42,9 @@ namespace CommandDotNet.Tests
             [Argument(LongName = "tag", ShortName = "t")]
             List<string> tags,
             string name,
-            [Argument(Flag = true)]
+            [Argument(BooleanMode = BooleanMode.Explicit)]
             bool email,
+            bool sms,
             double height,
             string city,
             char category,
@@ -62,6 +61,7 @@ namespace CommandDotNet.Tests
                 tags,
                 name,
                 email,
+                sms,
                 height,
                 city,
                 category,
@@ -70,19 +70,17 @@ namespace CommandDotNet.Tests
                 ranks
             };
             
-            File.WriteAllText("TestCases/MyTestApp.TestMethodParams.Output.json" ,JsonConvert.SerializeObject(output, Formatting.Indented));
+            File.WriteAllText("TestCases/MyTestApp.TestMethodParams.Output.json", JsonConvert.SerializeObject(output, Formatting.Indented));
         }
 
-        public void TestConstructorParams(bool flag)
+        public void TestConstructorParams()
         {
             var output = new
             {
-                justAnotherParameter1 = _justAnotherParameter1,
-                flag,
-                justAnotherParameter2 = _justAnotherParameter2
+                justAnotherParameter = _justAnotherParameter,
             };
             
-            File.WriteAllText("TestCases/MyTestApp.TestConstructorParams.Output.json" , JsonConvert.SerializeObject(output, Formatting.Indented));
+            File.WriteAllText("TestCases/MyTestApp.TestConstructorParams.Output.json", JsonConvert.SerializeObject(output, Formatting.Indented));
         }
     }
 }

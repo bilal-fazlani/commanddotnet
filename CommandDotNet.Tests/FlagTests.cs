@@ -1,52 +1,103 @@
-﻿using System;
+﻿using System.IO;
 using CommandDotNet.Attributes;
-using CommandDotNet.Exceptions;
+using CommandDotNet.Models;
 using FluentAssertions;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
 {
     public class FlagTests
     {
-        [Theory]
-        [InlineData(new object[] {new[] {"CommandWithFlagTrue"}, 0})]
-        [InlineData(new object[] {new[] {"CommandWithFlagFalse"}, 0})]
-        [InlineData(new object[] {new[] {"CommandWithoutFlag"}, 0})]
-        public void TestValidFlags(string[] inputArguments, int expectedExitCode)
+        private readonly ITestOutputHelper _testOutputHelper;
+
+        public FlagTests(ITestOutputHelper testOutputHelper)
         {
-            AppRunner<ValidFlagsApplication> appRunner = new AppRunner<ValidFlagsApplication>();
-            int exitCode = appRunner.Run(inputArguments);
-            exitCode.Should().Be(expectedExitCode);
+            _testOutputHelper = testOutputHelper;
+        }
+        
+        [Fact]
+        public void TestValidFlagsWithDefaultSettings()
+        {
+            TestCaseRunner<ValidFlagsApplication> testCaseRunner = new TestCaseRunner<ValidFlagsApplication>(_testOutputHelper);
+            testCaseRunner.Run("TestCases/FlagTests.TestValidFlagsWithDefaultSettings.Input.json",
+                "TestCases/FlagTests.TestValidFlagsWithDefaultSettings.Output.json");
         }
 
-        [Theory]
-        [InlineData(new object[] {new[] {"CommandWithInvalidFlag"}, 1})]
-        public void TestInvalidFlags(string[] inputArguments, int expectedExitCode)
+        [Fact]
+        public void TestValidFlagsWithExplicitBooleanMode()
+        {
+            TestCaseRunner<FlagAppForExplicitBooleanTest> testCaseRunner = 
+                new TestCaseRunner<FlagAppForExplicitBooleanTest>(_testOutputHelper, new AppSettings
+                {
+                    BooleanMode = BooleanMode.Explicit
+                });
+            testCaseRunner.Run("TestCases/FlagTests.TestValidFlagsWithExplicitBooleanMode.Input.json",
+                "TestCases/FlagTests.TestValidFlagsWithExplicitBooleanMode.Output.json");
+        }
+        
+        [Fact]
+        public void TestInvalidFlags()
         {
             AppRunner<ValidFlagsApplication> appRunner = new AppRunner<ValidFlagsApplication>();
-            int exitCode = appRunner.Run(inputArguments);
-            exitCode.Should().Be(expectedExitCode);
+            int exitCode = appRunner.Run(new[] {"CommandWithInvalidFlag"});
+            exitCode.Should().Be(1);
         }
     }
 
     public class ValidFlagsApplication
     {
-        public void CommandWithFlagTrue([Argument(Flag = true)] bool flag)
+        public void CommandWithFlagTrueOverridden([Argument(BooleanMode = BooleanMode.Explicit)]bool flag)
         {
+            string output = new
+            {
+                flag
+            }.ToJson();
+            
+            File.WriteAllText("TestCases/FlagTests.TestValidFlagsWithDefaultSettings.Output.json",
+                output);
+        }
+        
+        public void CommandWithFlagFalseOverridden([Argument(BooleanMode = BooleanMode.Implicit)]bool flag)
+        {
+            string output = new
+            {
+                flag
+            }.ToJson();
+            
+            File.WriteAllText("TestCases/FlagTests.TestValidFlagsWithDefaultSettings.Output.json",
+                output);
         }
 
-        public void CommandWithFlagFalse([Argument(Flag = false)] bool flag)
+        public void CommandWithoutFlagOverride(bool flag)
         {
+            string output = new
+            {
+                flag
+            }.ToJson();
+            
+            File.WriteAllText("TestCases/FlagTests.TestValidFlagsWithDefaultSettings.Output.json",
+                output);
         }
+    }
 
-        public void CommandWithoutFlag(bool flag)
+    public class FlagAppForExplicitBooleanTest
+    {
+        public void CommandWithoutFlagOverride(bool flag)
         {
+            string output = new
+            {
+                flag
+            }.ToJson();
+            
+            File.WriteAllText("TestCases/FlagTests.TestValidFlagsWithExplicitBooleanMode.Output.json",
+                output);
         }
     }
 
     public class InvalidFlagApplication
     {
-        public void CommandWithInvalidFlag([Argument(Flag = true)] string flag)
+        public void CommandWithInvalidFlag(string flag)
         {
         }
     }
