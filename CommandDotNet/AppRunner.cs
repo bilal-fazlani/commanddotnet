@@ -73,7 +73,7 @@ namespace CommandDotNet
                 Dictionary<ArgumentInfo, CommandOption> defaultCommandParameterValues =
                     new Dictionary<ArgumentInfo, CommandOption>();
 
-                App.OnExecute(() =>
+                App.OnExecute(async () =>
                 {
                     if (defaultCommand != null)
                     {
@@ -82,21 +82,7 @@ namespace CommandDotNet
                             throw new Exception("Method with [DefaultMethod] attribute does not support parameters");
                         }
 
-                        try
-                        {
-                            T instance = AppFactory.CreateApp<T>(optionValues);
-
-                            MethodInfo theMethod = typeof(T).GetMethod(defaultCommand.MethodName);
-
-                            object returnedObject = theMethod.Invoke(instance,
-                                defaultCommandParameterValues.Select(ValueMachine.GetValue).ToArray());
-
-                            return (int) (returnedObject ?? 0);
-                        }
-                        catch (ValueParsingException e)
-                        {
-                            throw new CommandParsingException(App, e.Message);
-                        }
+                        return await InvokeMethod(optionValues, defaultCommand, defaultCommandParameterValues);
                     }
 
                     App.ShowHelp();
@@ -124,39 +110,7 @@ namespace CommandDotNet
                         }
                     });
 
-                    commandOption.OnExecute(async () =>
-                    {
-                        try
-                        {
-                            T instance = AppFactory.CreateApp<T>(optionValues);
-
-                            MethodInfo theMethod = typeof(T).GetMethod(commandInfo.MethodName);
-
-                            object returnedObject = theMethod.Invoke(instance,
-                                parameterValues.Select(ValueMachine.GetValue).ToArray());
-
-                            int returnCode = 0;
-                            
-                            switch (returnedObject)
-                            {
-                                case Task<int> intPromise:
-                                    returnCode = await intPromise;
-                                    break;
-                                case Task promise:
-                                    await promise;
-                                    break;
-                                case int intValue:
-                                    returnCode = intValue;
-                                    break;
-                                //for void and every other return type, the value is already set to 0
-                            }
-                            return returnCode;
-                        }
-                        catch (ValueParsingException e)
-                        {
-                            throw new CommandParsingException(App, e.Message);
-                        }
-                    });
+                    commandOption.OnExecute(async () => await InvokeMethod(optionValues, commandInfo, parameterValues));
                 }
             }
             catch (AppRunnerException e)
@@ -201,6 +155,40 @@ namespace CommandDotNet
                 Console.Error.WriteLine(e.StackTrace);
 #endif
                 return 1;
+            }
+        }
+
+        private async Task<int> InvokeMethod(Dictionary<ArgumentInfo, CommandOption> optionValues, CommandInfo commandInfo, Dictionary<ArgumentInfo, CommandOption> parameterValues)
+        {
+            try
+            {
+                T instance = AppFactory.CreateApp<T>(optionValues);
+
+                MethodInfo theMethod = typeof(T).GetMethod(commandInfo.MethodName);
+
+                object returnedObject = theMethod.Invoke(instance,
+                    parameterValues.Select(ValueMachine.GetValue).ToArray());
+
+                var returnCode = 0;
+
+                switch (returnedObject)
+                {
+                    case Task<int> intPromise:
+                        returnCode = await intPromise;
+                        break;
+                    case Task promise:
+                        await promise;
+                        break;
+                    case int intValue:
+                        returnCode = intValue;
+                        break;
+                    //for void and every other return type, the value is already set to 0
+                }
+                return returnCode;
+            }
+            catch (ValueParsingException e)
+            {
+                throw new CommandParsingException(App, e.Message);
             }
         }
     }
