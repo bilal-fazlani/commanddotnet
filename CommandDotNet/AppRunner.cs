@@ -28,7 +28,7 @@ namespace CommandDotNet
         /// <param name="args">Command line arguments</param>
         /// <returns>If target method returns int, this method will return that value. Else, 
         /// it will return 0 in case of successs and 1 in case of unhandled exception</returns>
-        public int Run(string[] args)
+        public int Run(params string[] args)
         {
             try
             {                
