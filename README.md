@@ -359,8 +359,42 @@ Options:
   --planet | -p     String                         Name of the planet you wish the rocket to go. Sorry for bad example :(
 ```
 
-So planet name can now be passed either with `--planet` or `-p`. Specifying both is not required. 
-You can specify either long name or short name or both. When none is specified, it will use parameter name by default. Description is also optional.
+So planet name can now be passed either with `--planet` or `-p`. 
+LongName, ShortName and Description are optional. 
+
+When you don't specify a long name and a short name for argument, it uses the parameter name by default as long name. In case the parameter name is just one letter, it will be treated as short name.
+
+Here's table of examples:
+
+| Method parameter name | Longname | Shortname | Generated template
+| --- | --- | --- | --- |
+| planet |  |  | --planet |
+| planet | planet |  | --planet |
+| planet |  | p | -p |
+| planet | planet | p | -p \| --planet |
+| p |  |  | -p |
+
+### Argument clubbing
+
+Clubbing of one letter parameters is supported. For example,
+
+If a command has multiple [boolean flag](#boolean-flags) arguments like:
+
+```c#
+public void Print(bool c, bool e, bool x){ }
+```
+
+These can be passed either as
+
+```bash
+dotnet example.dll print -c -e -x
+```
+
+OR
+
+```bash
+dotnet example.dll print -ecx
+```
 
 ## Collections
 
