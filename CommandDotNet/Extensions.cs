@@ -24,15 +24,15 @@ namespace CommandDotNet
         public static void CreateSubApplications(this Type type, AppSettings settings, 
             CommandLineApplication parentApplication)
         {
-            var propertySubmodules = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+            Dictionary<string, Type> propertySubmodules = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(p => !p.PropertyType.IsValueType)
                 .ToDictionary(x => x.Name, x => x.PropertyType);
 
-            var inlineClassSubmodules = type
+            Dictionary<string, Type> inlineClassSubmodules = type
                 .GetNestedTypes(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .ToDictionary(x => x.Name, x => x);
             
-            foreach (var submodule in propertySubmodules.Union(inlineClassSubmodules))
+            foreach (KeyValuePair<string, Type> submodule in propertySubmodules.Union(inlineClassSubmodules))
             {
                 AppCreator appCreator = new AppCreator(settings);
 
