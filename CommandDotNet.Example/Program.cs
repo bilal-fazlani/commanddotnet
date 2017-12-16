@@ -5,11 +5,10 @@ namespace CommandDotNet.Example
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            AppRunner<MyApplication> appRunner = new AppRunner<MyApplication>();
-            int result = appRunner.Run(args);
-            Environment.Exit(result);
+            AppRunner<GitApplication> appRunner = new AppRunner<GitApplication>();
+            return appRunner.Run(args);
         }
     }
 }
