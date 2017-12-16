@@ -16,6 +16,7 @@ namespace CommandDotNet.Tests
         //nested types
         [InlineData(3, new[]{"stash","pop"})] 
         [InlineData(4, new[]{"stash","list"})]
+        [InlineData(5, new[]{"stash", "--additionalFactor", "1", "list"})]
         
         // default command in nested type
         [InlineData(2, new[]{"stash"})] 
@@ -39,9 +40,9 @@ namespace CommandDotNet.Tests
     public class GitApplication
     {
         public class Remote
-        {
+        {            
             public class Origin
-            {
+            {   
                 public int Show()
                 {
                     Console.WriteLine("http://bla bla");
@@ -55,25 +56,32 @@ namespace CommandDotNet.Tests
             Name = "stash")]
         public class Stash
         {
+            private readonly int _additionalFactor;
+
+            public Stash(int additionalFactor)
+            {
+                _additionalFactor = additionalFactor;
+            }
+            
             [DefaultMethod]
             public int DoStash()
             {
                 Console.WriteLine($"changes stashed");
-                return 2;
+                return _additionalFactor + 2;
             }
         
             [ApplicationMetadata(Name = "pop", Description = "Applies last stashed changes")]
             public int Pop()
             {
                 Console.WriteLine($"stash popped");
-                return 3;
+                return _additionalFactor + 3;
             }
 
             [ApplicationMetadata(Name = "list", Description = "Lists all saved stashed changes")]
             public int List()
             {
                 Console.WriteLine($"here's the list of stash");
-                return 4;
+                return _additionalFactor + 4;
             }
         }
         
