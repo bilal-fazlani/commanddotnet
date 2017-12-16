@@ -31,10 +31,10 @@ namespace CommandDotNet.Models
             CommandOptionType = GetCommandOptionType();
             TypeDisplayName = GetTypeDisplayName();
             AnnotatedDescription = GetAnnotatedDescription();
-            Template = GetTemplate(parameterInfo);
             DefaultValue = parameterInfo.DefaultValue;
             Required = GetIsParameterRequired(parameterInfo);
             Details = GetDetails();
+            Template = GetTemplate(parameterInfo);
             EffectiveDescription = GetEffectiveDescription();
         }
 
@@ -155,31 +155,33 @@ namespace CommandDotNet.Models
         {
             ArgumentAttribute attribute = parameterInfo.GetCustomAttribute<ArgumentAttribute>(false);
 
-            if (!string.IsNullOrWhiteSpace(attribute?.LongName) || !string.IsNullOrWhiteSpace(attribute?.ShortName))
+            StringBuilder sb = new StringBuilder();
+            
+            bool longNameAdded = false;
+            bool shortNameAdded = false;
+            
+            if (!string.IsNullOrWhiteSpace(attribute?.LongName))
             {
-                StringBuilder sb = new StringBuilder();
-                bool longNameAdded = false;
-
-                if (!string.IsNullOrWhiteSpace(attribute.LongName))
-                {
-                    sb.Append($"--{attribute.LongName}");
-                    longNameAdded = true;
-                }
-
-                if (!string.IsNullOrWhiteSpace(attribute.ShortName))
-                {
-                    if (longNameAdded)
-                    {
-                        sb.Append(" | ");
-                    }
-
-                    sb.Append($"-{attribute.ShortName}");
-                }
-
-                return sb.ToString();
+                sb.Append($"--{attribute.LongName}");
+                longNameAdded = true;
             }
 
-            return $"--{Name}";
+            if (!string.IsNullOrWhiteSpace(attribute?.ShortName))
+            {
+                if (longNameAdded)
+                {
+                    sb.Append(" | ");
+                }
+
+                sb.Append($"-{attribute?.ShortName}");
+                shortNameAdded = true;
+            }
+
+            if(!longNameAdded & !shortNameAdded) sb.Append($"--{Name}");
+            
+            //if(CommandOptionType != CommandOptionType.NoValue) sb.Append($" <{attribute?.LongName ?? Name}>");
+            
+            return sb.ToString();
         }
 
         public override bool Equals(object obj)
@@ -202,7 +204,7 @@ namespace CommandDotNet.Models
 
         public override string ToString()
         {
-            return $"{Name} : {Details} : {Template}";
+            return $"{Name} | '{ValueInfo?.Value ?? "null"}' | {Details} | {Template}";
         }
     }
     
@@ -220,5 +222,10 @@ namespace CommandDotNet.Models
         internal List<string> Values => _commandOption.Values;
 
         internal string Value => _commandOption.Value();
+
+        public override string ToString()
+        {
+            return _commandOption?.Value();
+        }
     } 
 }

@@ -52,6 +52,8 @@ namespace CommandDotNet
 
                     command.ExtendedHelpText = commandInfo.ExtendedHelpText;
 
+                    command.AllowArgumentSeparator = true;
+
                     command.HelpOption(Constants.HelpTemplate);
                       
                     foreach (ArgumentInfo parameter in commandInfo.Parameters)

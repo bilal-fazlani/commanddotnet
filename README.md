@@ -20,6 +20,7 @@ Table of contents:
 - [Default method](#default-method)
 - [Boolean flags](#boolean-flags)
 - [Async methods](#async-methods)
+- [Nesting commands](#nesting-commands)
 - Settings
 - Version option
 - Auto case correction
@@ -524,3 +525,169 @@ The following types of methods are supported :
 1. `async Task<int>`
 
 Task result types will be awaited automatically
+
+## Nesting commands
+
+You can nest commands. Let's take `git` for example
+
+`git` has a command called stash. When you execute `git stash`, it stashes all the chages. But stash has further commands like, `git stash pop`, `git stash list`, etc.
+
+Let's try and mimic the same behaviour using CommandDotNet:
+
+```c#
+[ApplicationMetadata(Description = "Fake git application")]
+public class Git
+{
+    [ApplicationMetadata(Description = "Commits all staged changes")]
+    public void Commit([Argument(ShortName = "m")]string commitMessage)
+    {
+        Console.WriteLine("Commit successful");
+    }
+
+    [ApplicationMetadata(Description = "Stashes all changes when executed without any arguments")]
+    public class Stash
+    {
+        [DefaultMethod]
+        public void StashDefaultCommand()
+        {
+            Console.WriteLine($"changes stashed");
+        }
+    
+        [ApplicationMetadata(Description = "Applies last stashed changes")]
+        public void Pop()
+        {
+            Console.WriteLine($"stash popped");
+        }
+
+        [ApplicationMetadata(Description = "Lists all saved stashed changes")]
+        public void List()
+        {
+            Console.WriteLine($"here's the list of stash");
+        }
+    }
+}
+```
+
+Here's how the help looks like now:
+
+```bash
+Fake git application
+
+Usage: dotnet CommandDotNet.dll [options] [command]
+
+Options:
+  -h | -? | --help  Show help information
+
+Commands:
+  Commit  Commits all staged changes
+  Stash   Stashes all changes when executed without any arguments
+
+Use "dotnet CommandDotNet.dll [command] --help" for more information about a command.
+```
+
+Here's  how the interaction looks like:
+
+INPUT
+
+```bash
+dotnet example.dll commit -m "some refactoring"
+```
+
+OUTPUT
+
+```bash
+Commit successful
+```
+
+---
+
+INPUT
+
+```bash
+dotnet example.dll stash
+```
+
+OUTPUT
+
+```bash
+changes stashed
+```
+
+---
+
+INPUT
+
+```bash
+dotnet example.dll stash --help
+```
+
+OUTPUT
+
+```bash
+Stashes all changes when executed without any arguments
+
+Usage: dotnet CommandDotNet.dll Stash [options] [command]
+
+Options:
+  -h | -? | --help  Show help information
+
+Commands:
+  List  Lists all saved stashed changes
+  Pop   Applies last stashed changes
+
+Use "Stash [command] --help" for more information about a command.
+```
+
+---
+
+INPUT
+
+```bash
+dotnet example.dll stash pop
+```
+
+OUTPUT
+
+```bash
+stash popped
+```
+---
+Using nested types is one way to nest commands. Another way to do the same thing would be creating the class outside the root class and addding a property to refer nested command.
+
+Here's the same example with using property:
+
+```c#
+[ApplicationMetadata(Description = "Fake git application")]
+public class Git
+{
+    public Stash Stash { get; set; }
+    
+    [ApplicationMetadata(Description = "Commits all staged changes")]
+    public void Commit([Argument(ShortName = "m")]string commitMessage)
+    {
+        Console.WriteLine("Commit successful");
+    }
+}
+
+[ApplicationMetadata(Description = "Stashes all changes when executed without any arguments")]
+public class Stash
+{
+    [DefaultMethod]
+    public void StashDefaultCommand()
+    {
+        Console.WriteLine($"changes stashed");
+    }
+
+    [ApplicationMetadata(Description = "Applies last stashed changes")]
+    public void Pop()
+    {
+        Console.WriteLine($"stash popped");
+    }
+
+    [ApplicationMetadata(Description = "Lists all saved stashed changes")]
+    public void List()
+    {
+        Console.WriteLine($"here's the list of stash");
+    }
+}
+```

@@ -4,7 +4,7 @@
             "testCaseName": "can recognise string, int, string array, double & few null entries",
             "params" : [
                 "TestMethodParams",
-                "--name", "bilal",
+                "--name", "bilal fazlani",
                 "--id", "4",
                 "--tag", "human",
                 "-t", "male",
@@ -14,7 +14,7 @@
                 "--category", "b"
             ],
             "expectedOutput": {
-                "name" : "bilal",
+                "name" : "bilal fazlani",
                 "id" : 4,
                 "tags" : ["human", "male", "4"],
                 "height" : 5.2,
