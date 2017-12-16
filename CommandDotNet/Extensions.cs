@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using CommandDotNet.Attributes;
 using CommandDotNet.Exceptions;
@@ -20,6 +21,25 @@ namespace CommandDotNet
                 .Select(mi => new CommandInfo(mi, settings));
         }
 
+        public static void CreateSubApplications(this Type type, AppSettings settings, 
+            CommandLineApplication parentApplication)
+        {
+            var propertySubmodules = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .Where(p => !p.PropertyType.IsValueType)
+                .ToDictionary(x => x.Name, x => x.PropertyType);
+
+            var inlineClassSubmodules = type
+                .GetNestedTypes(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .ToDictionary(x => x.Name, x => x);
+            
+            foreach (var submodule in propertySubmodules.Union(inlineClassSubmodules))
+            {
+                AppCreator appCreator = new AppCreator(settings);
+
+                appCreator.CreateApplication(submodule.Value, parentApplication, submodule.Key);
+            }
+        }
+        
         public static CommandInfo GetDefaultCommandInfo(this Type type, AppSettings settings)
         {
             CommandInfo defaultCommandInfo = type
@@ -43,7 +63,7 @@ namespace CommandDotNet
                 .Select(p => new ArgumentInfo(p, settings))
                 .ToList();
 
-            foreach (var argumentInfo in arguments)
+            foreach (ArgumentInfo argumentInfo in arguments)
             {
                 argumentInfo.SetValue(command.Option(
                     argumentInfo.Template, 

@@ -32,11 +32,9 @@ namespace CommandDotNet
         {
             try
             {                
-                string name = $"dotnet {Assembly.GetCallingAssembly().GetName().Name}.dll";
-                
-                CommandCreator commandCreator = new CommandCreator(typeof(T), _settings);
+                AppCreator appCreator = new AppCreator(_settings);
 
-                CommandLineApplication app = commandCreator.CreateCommand(name);
+                CommandLineApplication app = appCreator.CreateApplication(typeof(T));
                                 
                 return app.Execute(args);
             }
