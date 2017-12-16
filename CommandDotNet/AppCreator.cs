@@ -45,6 +45,8 @@ namespace CommandDotNet
 
             command.HelpOption(Constants.HelpTemplate);
 
+            command.Description = consoleApplicationAttribute?.Description;
+            
             command.FullName = consoleApplicationAttribute?.Description;
 
             command.ExtendedHelpText = consoleApplicationAttribute?.ExtendedHelpText;
