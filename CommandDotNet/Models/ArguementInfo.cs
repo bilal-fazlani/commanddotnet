@@ -162,7 +162,7 @@ namespace CommandDotNet.Models
             
             if (!string.IsNullOrWhiteSpace(attribute?.LongName))
             {
-                sb.Append($"--{attribute.LongName}");
+                sb.Append($"--{attribute?.LongName}");
                 longNameAdded = true;
             }
 
@@ -177,7 +177,8 @@ namespace CommandDotNet.Models
                 shortNameAdded = true;
             }
 
-            if(!longNameAdded & !shortNameAdded) sb.Append($"--{Name}");
+            string defaultTemplate = Name.Length == 1 ? $"-{Name}" : $"--{Name}";
+            if(!longNameAdded & !shortNameAdded) sb.Append(defaultTemplate);
             
             //if(CommandOptionType != CommandOptionType.NoValue) sb.Append($" <{attribute?.LongName ?? Name}>");
             

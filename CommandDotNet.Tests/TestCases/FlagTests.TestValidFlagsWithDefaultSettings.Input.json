@@ -26,6 +26,16 @@
             "expectedOutput": {
                 "flag" : true
             }
+        },
+        {
+            "testCaseName" : "can recognise 1 letter parameter name flags when passed separately",
+            "params" : [
+                "CommandWithTwo1LetterFlags", "-a", "-b"
+            ],
+            "expectedOutput" : {
+                "a" : true,
+                "b" : true
+            }
         }
     ]
 }

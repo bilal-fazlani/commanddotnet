@@ -76,6 +76,12 @@ namespace CommandDotNet.Tests
             File.WriteAllText("TestCases/FlagTests.TestValidFlagsWithDefaultSettings.Output.json",
                 output);
         }
+
+        public void CommandWithTwo1LetterFlags(bool a, bool b)
+        {
+            string output = new {a, b}.ToJson();
+            File.WriteAllText("TestCases/FlagTests.TestValidFlagsWithDefaultSettings.Output.json", output);
+        }
     }
 
     public class FlagAppForExplicitBooleanTest
