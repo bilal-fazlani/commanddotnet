@@ -36,6 +36,16 @@
                 "a" : true,
                 "b" : true
             }
+        },
+        {
+            "testCaseName" : "can recognise 1 letter parameter name flags when passed together",
+            "params" : [
+                "CommandWithTwo1LetterFlags", "-ab"
+            ],
+            "expectedOutput" : {
+                "a" : true,
+                "b" : true
+            }
         }
     ]
 }

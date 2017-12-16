@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using CommandDotNet.Exceptions;
@@ -31,12 +32,14 @@ namespace CommandDotNet
         public int Run(params string[] args)
         {
             try
-            {                
+            {
                 AppCreator appCreator = new AppCreator(_settings);
 
                 CommandLineApplication app = appCreator.CreateApplication(typeof(T));
-                                
-                return app.Execute(args);
+
+                var parsedArguments = ArgumentParser.SplitFlags(args).ToArray();
+                
+                return app.Execute(parsedArguments);
             }
             catch (AppRunnerException e)
             {
