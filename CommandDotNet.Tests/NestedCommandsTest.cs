@@ -92,7 +92,7 @@ namespace CommandDotNet.Tests
             return 5;
         }
         
-        public Submodule Submodule { get; set; }
+        public Submodule SubmoduleProperty { get; set; }
     }
 
     public class Submodule

@@ -19,25 +19,22 @@ namespace CommandDotNet
 
         public CommandLineApplication CreateApplication(
             Type type,
-            CommandLineApplication parentApplication = null,
-            string appName = null)
+            CommandLineApplication parentApplication = null)
         {
             bool isRootApp = parentApplication == null;
 
             CommandLineApplication command;
 
-            ApplicationMetadataAttribute consoleApplicationAttribute =
-                type.GetCustomAttribute<ApplicationMetadataAttribute>(false);
-
-            string rootName = $"dotnet {Assembly.GetCallingAssembly().GetName().Name}.dll";
+            ApplicationMetadataAttribute consoleApplicationAttribute = type.GetCustomAttribute<ApplicationMetadataAttribute>(false);
             
             if (isRootApp)
             {
+                string rootName = $"dotnet {Assembly.GetCallingAssembly().GetName().Name}.dll";
                 command = new CommandLineApplication { Name = rootName };
             }
             else
             {
-                string subAppName = appName ?? consoleApplicationAttribute?.Name;
+                string subAppName = consoleApplicationAttribute?.Name ?? type.Name; 
                 command = parentApplication.Command(subAppName, application => { });
             }
 

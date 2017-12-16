@@ -21,22 +21,22 @@ namespace CommandDotNet
                 .Select(mi => new CommandInfo(mi, settings));
         }
 
-        public static void CreateSubApplications(this Type type, AppSettings settings, 
+        public static void CreateSubApplications(this Type type, 
+            AppSettings settings, 
             CommandLineApplication parentApplication)
         {
-            Dictionary<string, Type> propertySubmodules = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+            IEnumerable<Type> propertySubmodules = type
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(p => !p.PropertyType.IsValueType)
-                .ToDictionary(x => x.Name, x => x.PropertyType);
+                .Select(p => p.PropertyType);
 
-            Dictionary<string, Type> inlineClassSubmodules = type
-                .GetNestedTypes(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                .ToDictionary(x => x.Name, x => x);
+            IEnumerable<Type> inlineClassSubmodules = type
+                .GetNestedTypes(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);            
             
-            foreach (KeyValuePair<string, Type> submodule in propertySubmodules.Union(inlineClassSubmodules))
+            foreach (Type submoduleType in propertySubmodules.Union(inlineClassSubmodules))
             {
                 AppCreator appCreator = new AppCreator(settings);
-
-                appCreator.CreateApplication(submodule.Value, parentApplication, submodule.Key);
+                appCreator.CreateApplication(submoduleType, parentApplication);
             }
         }
         

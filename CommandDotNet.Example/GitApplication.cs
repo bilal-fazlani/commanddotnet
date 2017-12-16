@@ -4,9 +4,10 @@ using CommandDotNet.Attributes;
 
 namespace CommandDotNet.Example
 {
+    [ApplicationMetadata(Description = "Fake git application", Name = "git")]
     public class GitApplication
     {
-        public Submodule Submodule { get; set; }
+        public Submodule SubmoduleProperty { get; set; }
 
         public class Remote
         {
@@ -19,8 +20,8 @@ namespace CommandDotNet.Example
             }
         }
         
-        [ApplicationMetadata(Description = "Stashes all changes when executed without any arguments\n" +
-                                           "see Stash --help for further information",
+        [ApplicationMetadata(Description = "Stashes all changes when executed without any arguments. " +
+                                           "See stash --help for further information",
             Name = "stash")]
         public class Stash
         {
