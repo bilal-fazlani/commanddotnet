@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using CommandDotNet.Attributes;
 
 namespace CommandDotNet.Example
@@ -7,6 +8,17 @@ namespace CommandDotNet.Example
     {
         public Submodule Submodule { get; set; }
 
+        public class Remote
+        {
+            public class Origin
+            {
+                public void Show()
+                {
+                    Console.WriteLine("remote origin: master");
+                }
+            }
+        }
+        
         [ApplicationMetadata(Description = "Stashes all changes when executed without any arguments\n" +
                                            "see Stash --help for further information",
             Name = "stash")]
@@ -39,7 +51,7 @@ namespace CommandDotNet.Example
     }
     
     public class Submodule
-    {
+    {     
         public void Add(string name)
         {
             Console.WriteLine($"submodule added: {name}");

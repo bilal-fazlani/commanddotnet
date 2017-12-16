@@ -13,12 +13,22 @@ namespace CommandDotNet.Tests
         }
 
         [Theory]
-        [InlineData(2, new[]{"stash"})]
-        [InlineData(3, new[]{"stash","pop"})]
+        //nested types
+        [InlineData(3, new[]{"stash","pop"})] 
         [InlineData(4, new[]{"stash","list"})]
+        
+        // default command in nested type
+        [InlineData(2, new[]{"stash"})] 
+        
+        // typical scenario
         [InlineData(5, new[]{"commit", "-m", "added new feature"})]
+        
+        // external module
         [InlineData(6, new[]{"submodule","add"})]
         [InlineData(7, new[]{"submodule","remove"})]
+        
+        // multi level nesting
+        [InlineData(8, new[]{"remote","origin", "show"})] 
         public void CanExecuteSubModules(int expectedExitCode, string[] args)
         {
             AppRunner<GitApplication> appRunner = new AppRunner<GitApplication>();
@@ -28,6 +38,18 @@ namespace CommandDotNet.Tests
 
     public class GitApplication
     {
+        public class Remote
+        {
+            public class Origin
+            {
+                public int Show()
+                {
+                    Console.WriteLine("http://bla bla");
+                    return 8;
+                }
+            }
+        }
+        
         [ApplicationMetadata(Description = "Stashes all changes when executed without any arguments\n" +
                                            "see Stash --help for further information",
             Name = "stash")]
