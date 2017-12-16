@@ -15,7 +15,7 @@ namespace CommandDotNet
     /// <typeparam name="T">Type of the application</typeparam>
     public class AppRunner<T> where T : class
     {
-        private AppSettings _settings;
+        private readonly AppSettings _settings;
 
         public AppRunner(AppSettings settings = null)
         {
