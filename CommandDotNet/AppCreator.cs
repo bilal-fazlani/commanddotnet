@@ -30,14 +30,14 @@ namespace CommandDotNet
             if (isRootApp)
             {
                 string rootName = $"dotnet {Assembly.GetCallingAssembly().GetName().Name}.dll";
-                command = new CommandLineApplication { Name = rootName };
+                command = new CommandLineApplication(throwOnUnexpectedArg: _appSettings.ThrowOnUnexpectedArgument) { Name = rootName };
             }
             else
             {
                 string subAppName = consoleApplicationAttribute?.Name ?? type.Name; 
                 command = parentApplication.Command(subAppName, application => { });
             }
-
+            
             List<ArgumentInfo> optionValues = type.GetOptionValues(command, _appSettings);
 
             command.HelpOption(Constants.HelpTemplate);
@@ -48,13 +48,13 @@ namespace CommandDotNet
 
             command.ExtendedHelpText = consoleApplicationAttribute?.ExtendedHelpText;
 
-            command.AllowArgumentSeparator = true;
+            command.AllowArgumentSeparator = _appSettings.AllowArgumentSeparator;
 
             CommandCreator commandCreator = new CommandCreator(type, _appSettings);
 
-            commandCreator.CreateDefaultSubCommand(command, optionValues);
+            commandCreator.CreateDefaultCommand(command, optionValues);
 
-            commandCreator.CreateSubCommands(command, optionValues);
+            commandCreator.CreateCommands(command, optionValues);
 
             type.CreateSubApplications(_appSettings, command);
 

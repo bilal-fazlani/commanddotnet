@@ -38,7 +38,7 @@ namespace CommandDotNet
                 CommandLineApplication app = appCreator.CreateApplication(typeof(T));
 
                 var parsedArguments = ArgumentParser.SplitFlags(args).ToArray();
-                
+
                 return app.Execute(parsedArguments);
             }
             catch (AppRunnerException e)
@@ -58,6 +58,18 @@ namespace CommandDotNet
                 Console.Error.WriteLine(e.StackTrace);
 #endif
 
+                return 1;
+            }
+            catch (AggregateException e)
+            {
+                foreach (var innerException in e.InnerExceptions)
+                {
+                    Console.Error.WriteLine(innerException.GetBaseException().Message + "\n");
+#if DEBUG
+                    Console.Error.WriteLine(innerException.GetBaseException().StackTrace);
+#endif
+                    Console.Error.WriteLine("-----------------------------------------------------------------");
+                }
                 return 1;
             }
             catch (Exception e)

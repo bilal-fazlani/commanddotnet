@@ -32,10 +32,11 @@ namespace CommandDotNet.Models
             TypeDisplayName = GetTypeDisplayName();
             AnnotatedDescription = GetAnnotatedDescription();
             DefaultValue = parameterInfo.DefaultValue;
-            Required = GetIsParameterRequired(parameterInfo);
+            Required = GetIsParameterRequired();
             Details = GetDetails();
             Template = GetTemplate(parameterInfo);
             EffectiveDescription = GetEffectiveDescription();
+            IsSubject = GetIsSubject();
         }
 
         public string Name { get; set; }
@@ -49,12 +50,13 @@ namespace CommandDotNet.Models
         public string EffectiveDescription { get; set; }
         public string Template { get; set; }
         public BooleanMode BooleanMode { get; set; }
+        public bool IsSubject { get; set; }
 
         internal ValueInfo ValueInfo { get; set; }
 
-        internal void SetValue(CommandOption commandOption)
+        internal void SetValue(CommandOption commandOption, List<string> remainingArguments)
         {
-            this.ValueInfo = new ValueInfo(commandOption);
+            this.ValueInfo = new ValueInfo(commandOption, remainingArguments);
         }
 
         private BooleanMode GetBooleanMode()
@@ -75,15 +77,20 @@ namespace CommandDotNet.Models
                 $"Type : {Type.Name}");
         }
 
-        private bool GetIsParameterRequired(ParameterInfo parameterInfo)
+        private bool GetIsSubject()
+        {
+            return _parameterInfo.GetCustomAttribute<SubjectAttribute>() != null;
+        }
+        
+        private bool GetIsParameterRequired()
         {
             if (BooleanMode == BooleanMode.Implicit && (Type == typeof(bool) || Type == typeof(bool?))) return false;
 
-            ArgumentAttribute descriptionAttribute = parameterInfo.GetCustomAttribute<ArgumentAttribute>(false);
+            ArgumentAttribute descriptionAttribute = _parameterInfo.GetCustomAttribute<ArgumentAttribute>(false);
 
             if (descriptionAttribute != null && Type == typeof(string))
             {
-                if (parameterInfo.HasDefaultValue & descriptionAttribute.RequiredString)
+                if (_parameterInfo.HasDefaultValue & descriptionAttribute.RequiredString)
                     throw new AppRunnerException(
                         $"String parameter '{Name}' can't be 'Required' and have a default value at the same time");
 
@@ -95,9 +102,9 @@ namespace CommandDotNet.Models
                 throw new AppRunnerException("RequiredString can only me used with a string type parameter");
             }
 
-            return parameterInfo.ParameterType.IsValueType
-                   && parameterInfo.ParameterType.IsPrimitive
-                   && !parameterInfo.HasDefaultValue;
+            return _parameterInfo.ParameterType.IsValueType
+                   && _parameterInfo.ParameterType.IsPrimitive
+                   && !_parameterInfo.HasDefaultValue;
         }
 
         private string GetAnnotatedDescription()
@@ -212,21 +219,23 @@ namespace CommandDotNet.Models
     internal class ValueInfo
     {
         private readonly CommandOption _commandOption;
+        private readonly List<string> _remainingArguments;
 
-        public ValueInfo(CommandOption commandOption)
+        public ValueInfo(CommandOption commandOption, List<string> remainingArguments)
         {
             _commandOption = commandOption;
+            _remainingArguments = remainingArguments = remainingArguments ?? new List<string>();
         }
 
-        internal bool HasValue => _commandOption.HasValue();
+        internal bool HasValue => _remainingArguments.Any() || _commandOption.HasValue();
 
-        internal List<string> Values => _commandOption.Values;
+        internal List<string> Values => _remainingArguments.Any() ? _remainingArguments : _commandOption.Values;
 
-        internal string Value => _commandOption.Value();
+        internal string Value => _remainingArguments.Any() ? _remainingArguments.First() : _commandOption.Value();
 
         public override string ToString()
         {
-            return _commandOption?.Value();
+            return _remainingArguments.Any() ? _remainingArguments.First() : _commandOption?.Value();
         }
     } 
 }

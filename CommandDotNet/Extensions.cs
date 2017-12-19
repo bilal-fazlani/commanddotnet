@@ -62,13 +62,16 @@ namespace CommandDotNet
                 .GetParameters()
                 .Select(p => new ArgumentInfo(p, settings))
                 .ToList();
-
+            
             foreach (ArgumentInfo argumentInfo in arguments)
             {
                 argumentInfo.SetValue(command.Option(
                     argumentInfo.Template, 
                     argumentInfo.EffectiveDescription, 
-                    argumentInfo.CommandOptionType));
+                    argumentInfo.CommandOptionType, option =>
+                    {
+                        option.ShowInHelpText = !argumentInfo.IsSubject;
+                    }), argumentInfo.IsSubject ? command.RemainingArguments : null);
             }
             
             return arguments;
@@ -79,7 +82,8 @@ namespace CommandDotNet
             CommandLineApplication command,
             CommandInfo commandInfo, 
             List<ArgumentInfo> parameterValues = null,
-            List<ArgumentInfo> optionValues = null)
+            List<ArgumentInfo> optionValues = null,
+            ArgumentInfo subjectValue = null)
         {
             parameterValues = parameterValues ?? new List<ArgumentInfo>();
 

@@ -19,7 +19,7 @@ namespace CommandDotNet
             _settings = settings;
         }
 
-        public void CreateDefaultSubCommand(CommandLineApplication command, List<ArgumentInfo> optionValues)
+        public void CreateDefaultCommand(CommandLineApplication command, List<ArgumentInfo> optionValues)
         {
             CommandInfo defaultCommandInfo = _type.GetDefaultCommandInfo(_settings);
             
@@ -40,7 +40,7 @@ namespace CommandDotNet
             });
         }
 
-        public void CreateSubCommands(CommandLineApplication app, List<ArgumentInfo> optionValues)
+        public void CreateCommands(CommandLineApplication app, List<ArgumentInfo> optionValues)
         {            
             foreach (CommandInfo commandInfo in _type.GetCommandInfos(_settings))
             {
@@ -52,7 +52,7 @@ namespace CommandDotNet
 
                     command.ExtendedHelpText = commandInfo.ExtendedHelpText;
 
-                    command.AllowArgumentSeparator = true;
+                    command.AllowArgumentSeparator = _settings.AllowArgumentSeparator;
                     
                     command.HelpOption(Constants.HelpTemplate);
                       
@@ -65,9 +65,12 @@ namespace CommandDotNet
                     {
                         parameter.SetValue(command.Option(parameter.Template,
                             parameter.EffectiveDescription,
-                            parameter.CommandOptionType));
+                            parameter.CommandOptionType, option =>
+                            {
+                                option.ShowInHelpText = !parameter.IsSubject;
+                            }), parameter.IsSubject ? command.RemainingArguments : null);
                     }
-                });
+                }, throwOnUnexpectedArg: _settings.ThrowOnUnexpectedArgument);
 
                 commandOption.OnExecute(async () => await _type.InvokeMethod(commandOption, commandInfo, parameterValues, optionValues));
             }

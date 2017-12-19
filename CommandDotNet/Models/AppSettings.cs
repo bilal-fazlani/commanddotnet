@@ -13,5 +13,9 @@ namespace CommandDotNet.Models
         public bool ShowParameterDetails { get; set; } = true;
 
         public BooleanMode BooleanMode { get; set; } = BooleanMode.Implicit;
+        
+        public bool ThrowOnUnexpectedArgument { get; set; }
+        
+        public bool AllowArgumentSeparator { get; set; }
     }
 }
