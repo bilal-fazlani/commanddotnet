@@ -36,7 +36,7 @@ namespace CommandDotNet.Tests
         [Fact]
         public void TestInvalidFlags()
         {
-            AppRunner<ValidFlagsApplication> appRunner = new AppRunner<ValidFlagsApplication>();
+            AppRunner<InvalidFlagApplication> appRunner = new AppRunner<InvalidFlagApplication>();
             int exitCode = appRunner.Run(new[] {"CommandWithInvalidFlag"});
             exitCode.Should().Be(1);
         }
@@ -100,7 +100,7 @@ namespace CommandDotNet.Tests
 
     public class InvalidFlagApplication
     {
-        public void CommandWithInvalidFlag(string flag)
+        public void CommandWithInvalidFlag([Argument(BooleanMode = BooleanMode.Implicit)]string flag)
         {
         }
     }
