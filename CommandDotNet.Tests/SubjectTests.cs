@@ -45,6 +45,9 @@ namespace CommandDotNet.Tests
             appRunner.Run("RunWithOtherParameters", "dotnet", "--username", "bilal", "-l", "2")
                 .Should().Be(5, "run command is expected to return 5 when passed argument is recognised");
         }
+        
+        //todo: test with lists
+        //todo: test with sub commands
     }
 
     public class FakeDockerApp

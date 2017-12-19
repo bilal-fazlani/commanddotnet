@@ -38,7 +38,7 @@ namespace CommandDotNet
                 command = parentApplication.Command(subAppName, application => { });
             }
             
-            List<ArgumentInfo> optionValues = type.GetOptionValues(command, _appSettings);
+            List<ArgumentInfo> constructorArgumentValues = type.GetOptionValuesForConstructor(command, _appSettings);
 
             command.HelpOption(Constants.HelpTemplate);
 
@@ -52,9 +52,9 @@ namespace CommandDotNet
 
             CommandCreator commandCreator = new CommandCreator(type, _appSettings);
 
-            commandCreator.CreateDefaultCommand(command, optionValues);
+            commandCreator.CreateDefaultCommand(command, constructorArgumentValues);
 
-            commandCreator.CreateCommands(command, optionValues);
+            commandCreator.CreateCommands(command, constructorArgumentValues);
 
             type.CreateSubApplications(_appSettings, command);
 

@@ -52,7 +52,7 @@ namespace CommandDotNet
             return defaultCommandInfo;
         }
         
-        public static List<ArgumentInfo> GetOptionValues(this Type type, 
+        public static List<ArgumentInfo> GetOptionValuesForConstructor(this Type type, 
             CommandLineApplication command, 
             AppSettings settings)
         {
