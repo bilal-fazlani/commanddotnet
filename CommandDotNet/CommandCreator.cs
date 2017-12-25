@@ -75,10 +75,7 @@ namespace CommandDotNet
                     {
                         parameter.SetValue(command.Option(parameter.Template,
                             parameter.EffectiveDescription,
-                            parameter.CommandOptionType, option =>
-                            {
-                                option.ShowInHelpText = !parameter.IsSubject;
-                            }), parameter.IsSubject ? command.RemainingArguments : null);
+                            parameter.CommandOptionType));
                     }
                 }, throwOnUnexpectedArg: _settings.ThrowOnUnexpectedArgument);
 
@@ -100,10 +97,7 @@ namespace CommandDotNet
                 argumentInfo.SetValue(_app.Option(
                     argumentInfo.Template, 
                     argumentInfo.EffectiveDescription, 
-                    argumentInfo.CommandOptionType, option =>
-                    {
-                        option.ShowInHelpText = !argumentInfo.IsSubject;
-                    }), argumentInfo.IsSubject ? _app.RemainingArguments : null);
+                    argumentInfo.CommandOptionType));
             }
             
             return arguments;

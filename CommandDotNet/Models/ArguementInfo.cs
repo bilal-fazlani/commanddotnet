@@ -36,7 +36,6 @@ namespace CommandDotNet.Models
             Details = GetDetails();
             Template = GetTemplate(parameterInfo);
             EffectiveDescription = GetEffectiveDescription();
-            IsSubject = GetIsSubject();
         }
 
         public string Name { get; set; }
@@ -50,13 +49,12 @@ namespace CommandDotNet.Models
         public string EffectiveDescription { get; set; }
         public string Template { get; set; }
         public BooleanMode BooleanMode { get; set; }
-        public bool IsSubject { get; set; }
 
         internal ValueInfo ValueInfo { get; set; }
 
-        internal ArgumentInfo SetValue(CommandOption commandOption, List<string> remainingArguments)
+        internal ArgumentInfo SetValue(CommandOption commandOption)
         {
-            this.ValueInfo = new ValueInfo(commandOption, remainingArguments);
+            this.ValueInfo = new ValueInfo(commandOption);
             return this;
         }
 
@@ -76,11 +74,6 @@ namespace CommandDotNet.Models
                 $"BooleanMode property is set to `{attribute.BooleanMode}` for a non boolean parameter type. " +
                 $"Property name: {_parameterInfo.Name} " +
                 $"Type : {Type.Name}");
-        }
-
-        private bool GetIsSubject()
-        {
-            return _parameterInfo.GetCustomAttribute<SubjectAttribute>() != null;
         }
         
         private bool GetIsParameterRequired()
@@ -220,23 +213,21 @@ namespace CommandDotNet.Models
     internal class ValueInfo
     {
         private readonly CommandOption _commandOption;
-        private readonly List<string> _remainingArguments;
 
-        public ValueInfo(CommandOption commandOption, List<string> remainingArguments)
+        public ValueInfo(CommandOption commandOption)
         {
             _commandOption = commandOption;
-            _remainingArguments = remainingArguments = remainingArguments ?? new List<string>();
         }
 
-        internal bool HasValue => _remainingArguments.Any() || _commandOption.HasValue();
+        internal bool HasValue => _commandOption.HasValue();
 
-        internal List<string> Values => _remainingArguments.Any() ? _remainingArguments : _commandOption.Values;
+        internal List<string> Values => _commandOption.Values;
 
-        internal string Value => _remainingArguments.Any() ? _remainingArguments.First() : _commandOption.Value();
+        internal string Value => _commandOption.Value();
 
         public override string ToString()
         {
-            return _remainingArguments.Any() ? _remainingArguments.First() : _commandOption?.Value();
+            return _commandOption?.Value();
         }
     } 
 }
