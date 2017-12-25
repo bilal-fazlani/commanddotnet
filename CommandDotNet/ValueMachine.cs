@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using CommandDotNet.Exceptions;
 using CommandDotNet.Models;
-using Microsoft.Extensions.CommandLineUtils;
 
 namespace CommandDotNet
 {

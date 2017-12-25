@@ -3,8 +3,8 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using CommandDotNet.Exceptions;
+using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
-using Microsoft.Extensions.CommandLineUtils;
 
 [assembly: InternalsVisibleTo("CommandDotNet.Tests")]
 

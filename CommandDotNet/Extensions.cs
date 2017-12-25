@@ -6,8 +6,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using CommandDotNet.Attributes;
 using CommandDotNet.Exceptions;
+using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
-using Microsoft.Extensions.CommandLineUtils;
 
 namespace CommandDotNet
 {

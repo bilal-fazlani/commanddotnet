@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Security.Cryptography;
 using CommandDotNet.Attributes;
+using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
-using Microsoft.Extensions.CommandLineUtils;
 
 namespace CommandDotNet
 {

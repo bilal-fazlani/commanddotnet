@@ -4,7 +4,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Microsoft.Extensions.CommandLineUtils
+namespace CommandDotNet.MicrosoftCommandLineUtils
 {
     public class CommandArgument
     {

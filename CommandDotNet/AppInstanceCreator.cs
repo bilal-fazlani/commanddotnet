@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using CommandDotNet.Models;
-using Microsoft.Extensions.CommandLineUtils;
 
 namespace CommandDotNet
 {

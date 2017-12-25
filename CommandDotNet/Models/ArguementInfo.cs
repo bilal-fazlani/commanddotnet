@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using CommandDotNet.Attributes;
 using CommandDotNet.Exceptions;
-using Microsoft.Extensions.CommandLineUtils;
+using CommandDotNet.MicrosoftCommandLineUtils;
 
 namespace CommandDotNet.Models
 {

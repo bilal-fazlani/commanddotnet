@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Microsoft.Extensions.CommandLineUtils
+namespace CommandDotNet.MicrosoftCommandLineUtils
 {
     public class CommandLineApplication
     {

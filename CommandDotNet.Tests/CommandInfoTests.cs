@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Reflection;
 using CommandDotNet.Attributes;
+using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 using FluentAssertions;
-using Microsoft.Extensions.CommandLineUtils;
 using Xunit;
 using Xunit.Abstractions;
 
