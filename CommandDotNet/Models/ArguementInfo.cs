@@ -3,231 +3,74 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using CommandDotNet.Attributes;
-using CommandDotNet.Exceptions;
 using CommandDotNet.MicrosoftCommandLineUtils;
 
 namespace CommandDotNet.Models
 {
-    public class ArgumentInfo
+    public abstract class ArgumentInfo
     {
-        private readonly ParameterInfo _parameterInfo;
-        private readonly AppSettings _settings;
+        protected readonly ParameterInfo ParameterInfo;
+        protected readonly AppSettings Settings;
 
-        public ArgumentInfo(AppSettings settings)
+        internal ArgumentInfo(AppSettings settings)
         {
-            _settings = settings;
+            Settings = settings;
         }
 
-        public ArgumentInfo(ParameterInfo parameterInfo, AppSettings settings)
+        internal ArgumentInfo(ParameterInfo parameterInfo, AppSettings settings)
             : this(settings)
         {
-            _parameterInfo = parameterInfo;
+            ParameterInfo = parameterInfo;
 
             Name = parameterInfo.Name;
             Type = parameterInfo.ParameterType;
-            BooleanMode = GetBooleanMode();
-            CommandOptionType = GetCommandOptionType();
+            
             TypeDisplayName = GetTypeDisplayName();
             AnnotatedDescription = GetAnnotatedDescription();
             DefaultValue = parameterInfo.DefaultValue;
-            Required = GetIsParameterRequired();
             Details = GetDetails();
-            Template = GetTemplate(parameterInfo);
             EffectiveDescription = GetEffectiveDescription();
+            IsMultipleType = GetIsMultipleType();
         }
 
         public string Name { get; set; }
         public Type Type { get; set; }
-        public CommandOptionType CommandOptionType { get; set; }
-        public bool Required { get; set; }
+        
         public object DefaultValue { get; set; }
         public string TypeDisplayName { get; set; }
         public string Details { get; set; }
         public string AnnotatedDescription { get; set; }
         public string EffectiveDescription { get; set; }
-        public string Template { get; set; }
-        public BooleanMode BooleanMode { get; set; }
-
+        public bool IsMultipleType { get; }
         internal ValueInfo ValueInfo { get; set; }
 
-        internal ArgumentInfo SetValue(CommandOption commandOption)
+        private bool GetIsMultipleType()
         {
-            this.ValueInfo = new ValueInfo(commandOption);
-            return this;
-        }
-
-        private BooleanMode GetBooleanMode()
-        {
-            ArgumentAttribute attribute = _parameterInfo.GetCustomAttribute<ArgumentAttribute>();
-
-            if (attribute == null || attribute.BooleanMode == BooleanMode.Unknown)
-                return _settings.BooleanMode;
-
-            if (Type == typeof(bool) || Type == typeof(bool?))
-            {
-                return attribute.BooleanMode;
-            }
-
-            throw new AppRunnerException(
-                $"BooleanMode property is set to `{attribute.BooleanMode}` for a non boolean parameter type. " +
-                $"Property name: {_parameterInfo.Name} " +
-                $"Type : {Type.Name}");
+            return Type != typeof(string) && Type.IsCollection();
         }
         
-        private bool GetIsParameterRequired()
+        internal void SetValue(IParameter parameter)
         {
-            if (BooleanMode == BooleanMode.Implicit && (Type == typeof(bool) || Type == typeof(bool?))) return false;
-
-            ArgumentAttribute descriptionAttribute = _parameterInfo.GetCustomAttribute<ArgumentAttribute>(false);
-
-            if (descriptionAttribute != null && Type == typeof(string))
-            {
-                if (_parameterInfo.HasDefaultValue & descriptionAttribute.RequiredString)
-                    throw new AppRunnerException(
-                        $"String parameter '{Name}' can't be 'Required' and have a default value at the same time");
-
-                return descriptionAttribute.RequiredString;
-            }
-
-            if (descriptionAttribute != null && Type != typeof(string) && descriptionAttribute.RequiredString)
-            {
-                throw new AppRunnerException("RequiredString can only me used with a string type parameter");
-            }
-
-            return _parameterInfo.ParameterType.IsValueType
-                   && _parameterInfo.ParameterType.IsPrimitive
-                   && !_parameterInfo.HasDefaultValue;
+            ValueInfo = new ValueInfo(parameter);
         }
 
-        private string GetAnnotatedDescription()
-        {
-            ArgumentAttribute descriptionAttribute = _parameterInfo.GetCustomAttribute<ArgumentAttribute>();
-            return descriptionAttribute?.Description;
-        }
+        protected abstract string GetAnnotatedDescription();
 
-        private string GetTypeDisplayName()
-        {
-            if (Type.Name == "String") return Type.Name;
+        protected abstract string GetTypeDisplayName();
+        
+        protected abstract string GetDetails();
 
-            if (BooleanMode == BooleanMode.Implicit && (Type == typeof(bool) || Type == typeof(bool?)))
-            {
-                return "Flag";
-            }
-
-            if (typeof(IEnumerable).IsAssignableFrom(Type))
-            {
-                return $"{Type.GetGenericArguments().FirstOrDefault()?.Name} (Multiple)";
-            }
-
-            return Nullable.GetUnderlyingType(Type)?.Name ?? Type.Name;
-        }
-
-        private string GetDetails()
-        {
-            return $"{this.GetTypeDisplayName()}{(this.Required ? " | Required" : null)}" +
-                   $"{(this.DefaultValue != DBNull.Value ? " | Default value: " + DefaultValue : null)}";
-        }
-
+        
         private string GetEffectiveDescription()
         {
-            return _settings.ShowParameterDetails
-                ? string.Format("{0}{1}", Details.PadRight(Constants.PadLength), AnnotatedDescription)
+            return Settings.ShowArgumentDetails
+                ? $"{Details.PadRight(Constants.PadLength)}{AnnotatedDescription}"
                 : AnnotatedDescription;
-        }
-
-        private CommandOptionType GetCommandOptionType()
-        {
-            if (typeof(IEnumerable).IsAssignableFrom(Type) && Type != typeof(string))
-            {
-                return CommandOptionType.MultipleValue;
-            }
-
-            if ((Type == typeof(bool) || Type == typeof(bool?)) && BooleanMode == BooleanMode.Implicit)
-            {
-                return CommandOptionType.NoValue;
-            }
-            
-            return CommandOptionType.SingleValue;
-        }
-
-        private string GetTemplate(ParameterInfo parameterInfo)
-        {
-            ArgumentAttribute attribute = parameterInfo.GetCustomAttribute<ArgumentAttribute>(false);
-
-            StringBuilder sb = new StringBuilder();
-            
-            bool longNameAdded = false;
-            bool shortNameAdded = false;
-            
-            if (!string.IsNullOrWhiteSpace(attribute?.LongName))
-            {
-                sb.Append($"--{attribute?.LongName}");
-                longNameAdded = true;
-            }
-
-            if (!string.IsNullOrWhiteSpace(attribute?.ShortName))
-            {
-                if (longNameAdded)
-                {
-                    sb.Append(" | ");
-                }
-
-                sb.Append($"-{attribute?.ShortName}");
-                shortNameAdded = true;
-            }
-
-            string defaultTemplate = Name.Length == 1 ? $"-{Name}" : $"--{Name}";
-            if(!longNameAdded & !shortNameAdded) sb.Append(defaultTemplate);
-            
-            //if(CommandOptionType != CommandOptionType.NoValue) sb.Append($" <{attribute?.LongName ?? Name}>");
-            
-            return sb.ToString();
-        }
-
-        public override bool Equals(object obj)
-        {
-            switch (obj)
-            {
-                case ArgumentInfo argumentInfo:
-                    return argumentInfo.Template == this.Template;
-                case CommandOption commandOption:
-                    return commandOption.Template == this.Template;
-            }
-
-            return false;
         }
 
         public override int GetHashCode()
         {
-            return Template.GetHashCode();
-        }
-
-        public override string ToString()
-        {
-            return $"{Name} | '{ValueInfo?.Value ?? "null"}' | {Details} | {Template}";
+            return Name.GetHashCode();
         }
     }
-    
-    internal class ValueInfo
-    {
-        private readonly CommandOption _commandOption;
-
-        public ValueInfo(CommandOption commandOption)
-        {
-            _commandOption = commandOption;
-        }
-
-        internal bool HasValue => _commandOption.HasValue();
-
-        internal List<string> Values => _commandOption.Values;
-
-        internal string Value => _commandOption.Value();
-
-        public override string ToString()
-        {
-            return _commandOption?.Value();
-        }
-    } 
 }

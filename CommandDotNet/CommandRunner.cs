@@ -13,13 +13,13 @@ namespace CommandDotNet
     {
         private readonly CommandLineApplication _app;
         private readonly Type _type;
-        private readonly List<ArgumentInfo> _constrcutorParamValues;
+        private readonly IEnumerable<ArgumentInfo> _constrcutorParamValues;
         private readonly AppSettings _appSettings;
 
         public CommandRunner(
             CommandLineApplication app,
             Type type,
-            List<ArgumentInfo> constrcutorParamValues, 
+            IEnumerable<ArgumentInfo> constrcutorParamValues, 
             AppSettings appSettings)
         {
             _app = app;

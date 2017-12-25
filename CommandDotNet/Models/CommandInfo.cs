@@ -9,16 +9,36 @@ namespace CommandDotNet.Models
     public class CommandInfo
     {
         private readonly MethodInfo _methodInfo;
-        
+        private readonly AppSettings _settings;
         private readonly ApplicationMetadataAttribute _metadataAttribute;
 
         public CommandInfo(MethodInfo methodInfo, AppSettings settings)
         {
             _methodInfo = methodInfo;
-            
+            _settings = settings;
+
             _metadataAttribute = _methodInfo.GetCustomAttribute<ApplicationMetadataAttribute>(false);
             
-            Parameters = methodInfo.GetParameters().Select(pi => new ArgumentInfo(pi, settings));
+            Arguments = GetArguments();
+        }
+
+        private IEnumerable<ArgumentInfo> GetArguments()
+        {
+            List<ArgumentInfo> arguments = new List<ArgumentInfo>();
+
+            foreach (var parameter in _methodInfo.GetParameters())
+            {
+                if (parameter.HasAttribute<OptionAttribute>())
+                {
+                    arguments.Add(new CommandOptionInfo(parameter, _settings));
+                }
+                else
+                {
+                    arguments.Add(new CommandParameterInfo(parameter, _settings));
+                }
+            }
+
+            return arguments;
         }
 
         public string Name => _metadataAttribute?.Name ?? _methodInfo.Name;
@@ -31,6 +51,6 @@ namespace CommandDotNet.Models
 
         public string Syntax => _metadataAttribute?.Syntax;
 
-        public IEnumerable<ArgumentInfo> Parameters { get; }
+        public IEnumerable<ArgumentInfo> Arguments { get; }
     }
 }

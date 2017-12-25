@@ -99,16 +99,20 @@ namespace CommandDotNet
 
         private static bool GetBoolean(ArgumentInfo data)
         {
-            if (data.BooleanMode == BooleanMode.Implicit)
+            if (data is CommandOptionInfo optionInfo)
             {
-                return data.ValueInfo.HasValue;
+                if (optionInfo.BooleanMode == BooleanMode.Implicit)
+                {
+                    return optionInfo.ValueInfo.HasValue;
+                }
             }
             else
             {
                 bool isBool = bool.TryParse(data.ValueInfo.Value, out bool boolValue);
                 if (isBool) return boolValue;
-                return ThrowParsingException<bool>(data);
             }
+            
+            return ThrowParsingException<bool>(data);
         }
 
         private static double GetDouble(ArgumentInfo data)

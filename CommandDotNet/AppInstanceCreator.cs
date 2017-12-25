@@ -7,7 +7,7 @@ namespace CommandDotNet
 {
     public static class AppInstanceCreator
     {                
-        public static object CreateInstance(Type type, List<ArgumentInfo> construcitonParams)
+        public static object CreateInstance(Type type, IEnumerable<ArgumentInfo> construcitonParams)
         {
             construcitonParams = construcitonParams ?? new List<ArgumentInfo>();
             

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using CommandDotNet.Attributes;
+using CommandDotNet.Exceptions;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 
@@ -35,7 +36,7 @@ namespace CommandDotNet
             {
                 if (defaultCommandInfo != null)
                 {
-                    if (defaultCommandInfo.Parameters.Any())
+                    if (defaultCommandInfo.Arguments.Any())
                     {
                         throw new Exception("Method with [DefaultMethod] attribute does not support parameters");
                     }
@@ -52,7 +53,7 @@ namespace CommandDotNet
         {            
             foreach (CommandInfo commandInfo in _type.GetCommandInfos(_settings))
             {
-                List<ArgumentInfo> parameterValues = new List<ArgumentInfo>();
+                List<ArgumentInfo> argumentValues = new List<ArgumentInfo>();
 
                 CommandLineApplication commandOption = _app.Command(commandInfo.Name, command =>
                 {
@@ -66,40 +67,73 @@ namespace CommandDotNet
                     
                     command.HelpOption(Constants.HelpTemplate);
                       
-                    foreach (ArgumentInfo parameter in commandInfo.Parameters)
+                    foreach (ArgumentInfo argument in commandInfo.Arguments)
                     {
-                        parameterValues.Add(parameter);
+                        argumentValues.Add(argument);
                     }
 
-                    foreach (var parameter in parameterValues)
+                    foreach (var option in argumentValues.OfType<CommandOptionInfo>())
                     {
-                        parameter.SetValue(command.Option(parameter.Template,
-                            parameter.EffectiveDescription,
-                            parameter.CommandOptionType));
+                        option.SetValue(command.Option(option.Template,
+                            option.EffectiveDescription,
+                            option.CommandOptionType));
                     }
+                    
+                    foreach (var parameter in argumentValues.OfType<CommandParameterInfo>())
+                    {
+                        parameter.SetValue(command.Argument(
+                            parameter.Name, 
+                            parameter.EffectiveDescription, 
+                            parameter.IsMultipleType));
+                    }
+                    
                 }, throwOnUnexpectedArg: _settings.ThrowOnUnexpectedArgument);
 
-                commandOption.OnExecute(async () => await _commandRunner.RunCommand(commandInfo, parameterValues));
+                commandOption.OnExecute(async () => await _commandRunner.RunCommand(commandInfo, argumentValues));
             }
         }
         
         private List<ArgumentInfo> GetOptionValuesForConstructor()
         {
-            List<ArgumentInfo> arguments = _type
+            IEnumerable<ParameterInfo> parameterInfos = _type
                 .GetConstructors()
                 .FirstOrDefault()
-                .GetParameters()
-                .Select(p => new ArgumentInfo(p, _settings))
-                .ToList();
+                .GetParameters();
+
+            if(parameterInfos.Any(p => p.HasAttribute<ParameterAttribute>()))
+                throw new AppRunnerException("Constructor arguments can not have [Parameter] attribute. Please use [Option] attribute");
             
-            foreach (ArgumentInfo argumentInfo in arguments)
+            List<ArgumentInfo> arguments = new List<ArgumentInfo>();
+            
+            foreach (var parameterInfo in parameterInfos)
             {
-                argumentInfo.SetValue(_app.Option(
-                    argumentInfo.Template, 
-                    argumentInfo.EffectiveDescription, 
-                    argumentInfo.CommandOptionType));
+                if (parameterInfo.HasAttribute<ParameterAttribute>())
+                {
+                    arguments.Add(new CommandParameterInfo(parameterInfo, _settings));
+                }
+                else
+                {
+                    arguments.Add(new CommandOptionInfo(parameterInfo, _settings));
+                }
             }
-            
+
+            foreach (var argumentInfo in arguments)
+            {
+                switch (argumentInfo)
+                {
+                    case CommandParameterInfo parameterInfo:
+                        parameterInfo.SetValue(_app.Argument(parameterInfo.Name,
+                            parameterInfo.EffectiveDescription, parameterInfo.IsMultipleType));
+                        break;
+                    case CommandOptionInfo optionInfo:
+                        optionInfo.SetValue(_app.Option(
+                            optionInfo.Template,
+                            optionInfo.EffectiveDescription,
+                            optionInfo.CommandOptionType));
+                        break;
+                }
+            }
+
             return arguments;
         }
     }

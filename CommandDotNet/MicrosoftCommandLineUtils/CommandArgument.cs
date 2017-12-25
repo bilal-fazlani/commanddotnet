@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace CommandDotNet.MicrosoftCommandLineUtils
 {
-    public class CommandArgument
+    public class CommandArgument : IParameter
     {
         public CommandArgument()
         {

@@ -10,7 +10,7 @@ namespace CommandDotNet.Models
             if(BooleanMode == BooleanMode.Unknown)
                 throw new AppRunnerException("BooleanMode can not be set to BooleanMode.Unknown explicitly");
         }
-        public bool ShowParameterDetails { get; set; } = true;
+        public bool ShowArgumentDetails { get; set; } = true;
 
         public BooleanMode BooleanMode { get; set; } = BooleanMode.Implicit;
 
