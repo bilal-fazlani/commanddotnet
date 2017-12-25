@@ -54,9 +54,10 @@ namespace CommandDotNet.Models
 
         internal ValueInfo ValueInfo { get; set; }
 
-        internal void SetValue(CommandOption commandOption, List<string> remainingArguments)
+        internal ArgumentInfo SetValue(CommandOption commandOption, List<string> remainingArguments)
         {
             this.ValueInfo = new ValueInfo(commandOption, remainingArguments);
+            return this;
         }
 
         private BooleanMode GetBooleanMode()

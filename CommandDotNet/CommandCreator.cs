@@ -11,19 +11,27 @@ namespace CommandDotNet
     public class CommandCreator
     {
         private readonly Type _type;
+        private readonly CommandLineApplication _app;
         private readonly AppSettings _settings;
+        private readonly CommandRunner _commandRunner;
 
-        public CommandCreator(Type type, AppSettings settings)
+        public CommandCreator(Type type, CommandLineApplication app, AppSettings settings)
         {
             _type = type;
+            _app = app;
             _settings = settings;
+            
+            //get values for construtor params
+            List<ArgumentInfo> constructorValues = GetOptionValuesForConstructor();
+            
+            _commandRunner = new CommandRunner(app, type, constructorValues, settings);
         }
 
-        public void CreateDefaultCommand(CommandLineApplication command, List<ArgumentInfo> optionValues)
+        public void CreateDefaultCommand()
         {
             CommandInfo defaultCommandInfo = _type.GetDefaultCommandInfo(_settings);
             
-            command.OnExecute(async () =>
+            _app.OnExecute(async () =>
             {
                 if (defaultCommandInfo != null)
                 {
@@ -32,21 +40,21 @@ namespace CommandDotNet
                         throw new Exception("Method with [DefaultMethod] attribute does not support parameters");
                     }
 
-                    return await _type.InvokeMethod(command, defaultCommandInfo, null, optionValues);
+                    return await _commandRunner.RunCommand(defaultCommandInfo, null);
                 }
 
-                command.ShowHelp();
+                _app.ShowHelp();
                 return 0;
             });
         }
 
-        public void CreateCommands(CommandLineApplication app, List<ArgumentInfo> optionValues)
+        public void CreateCommands()
         {            
             foreach (CommandInfo commandInfo in _type.GetCommandInfos(_settings))
             {
                 List<ArgumentInfo> parameterValues = new List<ArgumentInfo>();
 
-                CommandLineApplication commandOption = app.Command(commandInfo.Name, command =>
+                CommandLineApplication commandOption = _app.Command(commandInfo.Name, command =>
                 {
                     command.Description = commandInfo.Description;
 
@@ -74,8 +82,31 @@ namespace CommandDotNet
                     }
                 }, throwOnUnexpectedArg: _settings.ThrowOnUnexpectedArgument);
 
-                commandOption.OnExecute(async () => await _type.InvokeMethod(commandOption, commandInfo, parameterValues, optionValues));
+                commandOption.OnExecute(async () => await _commandRunner.RunCommand(commandInfo, parameterValues));
             }
+        }
+        
+        private List<ArgumentInfo> GetOptionValuesForConstructor()
+        {
+            List<ArgumentInfo> arguments = _type
+                .GetConstructors()
+                .FirstOrDefault()
+                .GetParameters()
+                .Select(p => new ArgumentInfo(p, _settings))
+                .ToList();
+            
+            foreach (ArgumentInfo argumentInfo in arguments)
+            {
+                argumentInfo.SetValue(_app.Option(
+                    argumentInfo.Template, 
+                    argumentInfo.EffectiveDescription, 
+                    argumentInfo.CommandOptionType, option =>
+                    {
+                        option.ShowInHelpText = !argumentInfo.IsSubject;
+                    }), argumentInfo.IsSubject ? _app.RemainingArguments : null);
+            }
+            
+            return arguments;
         }
     }
 }
