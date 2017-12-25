@@ -48,6 +48,8 @@ namespace CommandDotNet
 
             command.ExtendedHelpText = consoleApplicationAttribute?.ExtendedHelpText;
 
+            command.Syntax = consoleApplicationAttribute?.Syntax;
+
             command.AllowArgumentSeparator = _appSettings.AllowArgumentSeparator;
 
             CommandCreator commandCreator = new CommandCreator(type, _appSettings);

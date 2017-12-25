@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Reflection;
 using CommandDotNet.Attributes;
 
@@ -7,41 +8,29 @@ namespace CommandDotNet.Models
 {
     public class CommandInfo
     {
+        private readonly MethodInfo _methodInfo;
+        
+        private readonly ApplicationMetadataAttribute _metadataAttribute;
+
         public CommandInfo(MethodInfo methodInfo, AppSettings settings)
         {
-            Name = GetName(methodInfo);
+            _methodInfo = methodInfo;
+            
+            _metadataAttribute = _methodInfo.GetCustomAttribute<ApplicationMetadataAttribute>(false);
+            
             Parameters = methodInfo.GetParameters().Select(pi => new ArgumentInfo(pi, settings));
-            Description = GetDescription(methodInfo);
-            MethodName = methodInfo.Name;
-            ExtendedHelpText = GetExtendedHelpText(methodInfo);
         }
 
-        public string Name { get; }
+        public string Name => _metadataAttribute?.Name ?? _methodInfo.Name;
 
-        public string MethodName { get; }
+        public string MethodName => _methodInfo.Name; 
 
-        public string Description { get; }
+        public string Description => _metadataAttribute?.Description;
 
-        public string ExtendedHelpText { get; }
+        public string ExtendedHelpText => _metadataAttribute?.ExtendedHelpText;
+
+        public string Syntax => _metadataAttribute?.Syntax;
 
         public IEnumerable<ArgumentInfo> Parameters { get; }
-
-
-        private string GetName(MethodInfo methodInfo)
-        {
-            ApplicationMetadataAttribute applicationMetadataAttribute = methodInfo.GetCustomAttribute<ApplicationMetadataAttribute>(false);
-            return applicationMetadataAttribute?.Name ?? methodInfo.Name;
-        }
-
-        private string GetDescription(MethodInfo methodInfo)
-        {
-            ApplicationMetadataAttribute descriptionAttribute = methodInfo.GetCustomAttribute<ApplicationMetadataAttribute>(false);
-            return descriptionAttribute?.Description;
-        }
-
-        private string GetExtendedHelpText(MethodInfo methodInfo)
-        {
-            return methodInfo.GetCustomAttribute<ApplicationMetadataAttribute>(false)?.ExtendedHelpText;
-        }
     }
 }

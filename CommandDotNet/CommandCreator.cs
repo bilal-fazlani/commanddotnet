@@ -53,6 +53,8 @@ namespace CommandDotNet
                     command.ExtendedHelpText = commandInfo.ExtendedHelpText;
 
                     command.AllowArgumentSeparator = _settings.AllowArgumentSeparator;
+
+                    command.Syntax = commandInfo.Syntax;
                     
                     command.HelpOption(Constants.HelpTemplate);
                       
