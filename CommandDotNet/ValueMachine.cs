@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using CommandDotNet.Exceptions;
+using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 
 namespace CommandDotNet
@@ -98,19 +99,14 @@ namespace CommandDotNet
         }
 
         private static bool GetBoolean(ArgumentInfo data)
-        {
-            if (data is CommandOptionInfo optionInfo)
+        {            
+            if (data is CommandOptionInfo optionInfo && optionInfo.BooleanMode == BooleanMode.Implicit)
             {
-                if (optionInfo.BooleanMode == BooleanMode.Implicit)
-                {
-                    return optionInfo.ValueInfo.HasValue;
-                }
+                return optionInfo.ValueInfo.HasValue;
             }
-            else
-            {
-                bool isBool = bool.TryParse(data.ValueInfo.Value, out bool boolValue);
-                if (isBool) return boolValue;
-            }
+            
+            bool isBool = bool.TryParse(data.ValueInfo.Value, out bool boolValue);
+            if (isBool) return boolValue;
             
             return ThrowParsingException<bool>(data);
         }
