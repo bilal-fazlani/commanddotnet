@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using CommandDotNet.Models;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -13,7 +14,10 @@ namespace CommandDotNet.Tests
         [Fact]
         public void CanInvokeCommand()
         {
-            AppRunner<BasciApp> appRunner = new AppRunner<BasciApp>();
+            AppRunner<BasciApp> appRunner = new AppRunner<BasciApp>(new AppSettings
+            {
+                MethodArgumentMode = ArgumentMode.Option
+            });
             string[] args = new[] {"Paint", "--color", "yellow"};
             int returnCode = appRunner.Run(args);
             returnCode.Should().Be(0);

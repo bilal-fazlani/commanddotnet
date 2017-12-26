@@ -86,7 +86,7 @@ namespace CommandDotNet.Tests
         }
         
         [ApplicationMetadata(Name = "commit", Description = "Commits all staged changes")]
-        public int Commit([Argument(ShortName = "m", RequiredString = true)]string message)
+        public int Commit([Option(ShortName = "m")]string message)
         {
             Console.WriteLine($"Commit successful : {message}");
             return 5;

@@ -24,12 +24,7 @@ namespace CommandDotNet.Models
 
             Name = parameterInfo.Name;
             Type = parameterInfo.ParameterType;
-            
-            TypeDisplayName = GetTypeDisplayName();
-            AnnotatedDescription = GetAnnotatedDescription();
             DefaultValue = parameterInfo.DefaultValue;
-            Details = GetDetails();
-            EffectiveDescription = GetEffectiveDescription();
             IsMultipleType = GetIsMultipleType();
         }
 
@@ -59,9 +54,8 @@ namespace CommandDotNet.Models
         protected abstract string GetTypeDisplayName();
         
         protected abstract string GetDetails();
-
         
-        private string GetEffectiveDescription()
+        protected string GetEffectiveDescription()
         {
             return Settings.ShowArgumentDetails
                 ? $"{Details.PadRight(Constants.PadLength)}{AnnotatedDescription}"

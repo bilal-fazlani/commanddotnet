@@ -1,4 +1,5 @@
 ﻿using CommandDotNet.Attributes;
+using CommandDotNet.Models;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
@@ -22,7 +23,10 @@ namespace CommandDotNet.Tests
         [Fact]
         public void CanExecuteDefaultMethodWithConstructor()
         {
-            AppRunner<DefaultMethodTestAppWithContructor> appRunner = new AppRunner<DefaultMethodTestAppWithContructor>();
+            AppRunner<DefaultMethodTestAppWithContructor> appRunner = new AppRunner<DefaultMethodTestAppWithContructor>(new AppSettings
+            {
+                MethodArgumentMode = ArgumentMode.Option
+            });
             int result = appRunner.Run(new []{"--exitCode", "20"});
             result.Should().Be(20, "return value of default method is 20");
         }

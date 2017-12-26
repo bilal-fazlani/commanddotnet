@@ -20,6 +20,11 @@ namespace CommandDotNet.Models
             BooleanMode = GetBooleanMode();
             CommandOptionType = GetCommandOptionType();
             Template = GetTemplate();
+            
+            TypeDisplayName = GetTypeDisplayName();
+            AnnotatedDescription = GetAnnotatedDescription();
+            Details = GetDetails();
+            EffectiveDescription = GetEffectiveDescription();
         }
         
         public CommandOptionType CommandOptionType { get; set; }

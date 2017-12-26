@@ -1,4 +1,5 @@
 ﻿using System;
+using CommandDotNet.Models;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests

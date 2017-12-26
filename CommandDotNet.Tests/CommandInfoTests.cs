@@ -23,24 +23,25 @@ namespace CommandDotNet.Tests
             
             CommandInfo commandInfo = new CommandInfo(methodInfo, new AppSettings
             {
-                ShowParameterDetails = false
+                ShowArgumentDetails = false,
+                MethodArgumentMode = ArgumentMode.Option
             });
 
             commandInfo.Name.Should().Be("CommandWithNoDescription");
             commandInfo.Description.Should().BeNull();
-            commandInfo.Parameters.ShouldBeEquivalentTo(new List<ArgumentInfo>()
+            commandInfo.Arguments.ShouldBeEquivalentTo(new List<ArgumentInfo>()
             {
-                new ArgumentInfo(new AppSettings())
+                new CommandOptionInfo(new AppSettings())
                 {
                     CommandOptionType = CommandOptionType.SingleValue,
                     DefaultValue = DBNull.Value,
                     Name = "value",
                     Type = typeof(int),
-                    Required = true,
+//                    Required = true,
                     EffectiveDescription = null,
                     TypeDisplayName = "Int32",
                     AnnotatedDescription = null,
-                    Details = "Int32 | Required",
+                    Details = "Int32",
                     Template = "--value",
                     BooleanMode = BooleanMode.Implicit
                 }
@@ -54,25 +55,26 @@ namespace CommandDotNet.Tests
             MethodInfo methodInfo = typeof(CommandInfoTestsApplication).GetMethod("CommandWithDescriptionAndName");
             CommandInfo commandInfo = new CommandInfo(methodInfo,new AppSettings
             {
-                ShowParameterDetails = true
+                ShowArgumentDetails = true,
+                MethodArgumentMode = ArgumentMode.Option
             });
 
             commandInfo.Name.Should().Be("somecommand");
             commandInfo.ExtendedHelpText.Should().Be("extended help");
             commandInfo.Description.ShouldBeEquivalentTo("some command description and name");
-            commandInfo.Parameters.ShouldBeEquivalentTo(new List<ArgumentInfo>()
+            commandInfo.Arguments.ShouldBeEquivalentTo(new List<ArgumentInfo>()
             {
-                new ArgumentInfo(new AppSettings())
+                new CommandOptionInfo(new AppSettings())
                 {
                     CommandOptionType = CommandOptionType.SingleValue,
                     DefaultValue = DBNull.Value,
                     Name = "value",
                     Type = typeof(int),
-                    Required = true,
-                    EffectiveDescription = "Int32 | Required                                  some parameter description",
+                    //Required = true,
+                    EffectiveDescription = "Int32                                             some parameter description",
                     TypeDisplayName = "Int32",
                     AnnotatedDescription = "some parameter description",
-                    Details = "Int32 | Required",
+                    Details = "Int32",
                     Template = "--value",
                     BooleanMode = BooleanMode.Implicit
                 }
@@ -91,7 +93,7 @@ namespace CommandDotNet.Tests
             Description = "some command description and name", 
             Name = "somecommand", 
             ExtendedHelpText = "extended help")]
-        public void CommandWithDescriptionAndName([Argument(Description = "some parameter description")]int value)
+        public void CommandWithDescriptionAndName([Option(Description = "some parameter description")]int value)
         {
             
         }

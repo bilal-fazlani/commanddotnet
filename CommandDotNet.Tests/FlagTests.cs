@@ -16,7 +16,10 @@ namespace CommandDotNet.Tests
         [Fact]
         public void TestValidFlagsWithDefaultSettings()
         {
-            TestCaseRunner<ValidFlagsApplication> testCaseRunner = new TestCaseRunner<ValidFlagsApplication>(TestOutputHelper);
+            TestCaseRunner<ValidFlagsApplication> testCaseRunner = new TestCaseRunner<ValidFlagsApplication>(TestOutputHelper, new AppSettings
+            {
+                MethodArgumentMode = ArgumentMode.Option
+            });
             testCaseRunner.Run("TestCases/FlagTests.TestValidFlagsWithDefaultSettings.Input.json",
                 "TestCases/FlagTests.TestValidFlagsWithDefaultSettings.Output.json");
         }
@@ -27,7 +30,8 @@ namespace CommandDotNet.Tests
             TestCaseRunner<FlagAppForExplicitBooleanTest> testCaseRunner = 
                 new TestCaseRunner<FlagAppForExplicitBooleanTest>(TestOutputHelper, new AppSettings
                 {
-                    BooleanMode = BooleanMode.Explicit
+                    BooleanMode = BooleanMode.Explicit,
+                    MethodArgumentMode = ArgumentMode.Option
                 });
             testCaseRunner.Run("TestCases/FlagTests.TestValidFlagsWithExplicitBooleanMode.Input.json",
                 "TestCases/FlagTests.TestValidFlagsWithExplicitBooleanMode.Output.json");
@@ -36,7 +40,10 @@ namespace CommandDotNet.Tests
         [Fact]
         public void TestInvalidFlags()
         {
-            AppRunner<InvalidFlagApplication> appRunner = new AppRunner<InvalidFlagApplication>();
+            AppRunner<InvalidFlagApplication> appRunner = new AppRunner<InvalidFlagApplication>(new AppSettings
+            {
+                MethodArgumentMode = ArgumentMode.Option
+            });
             int exitCode = appRunner.Run(new[] {"CommandWithInvalidFlag"});
             exitCode.Should().Be(1);
         }
@@ -44,7 +51,7 @@ namespace CommandDotNet.Tests
 
     public class ValidFlagsApplication
     {
-        public void CommandWithFlagTrueOverridden([Argument(BooleanMode = BooleanMode.Explicit)]bool flag)
+        public void CommandWithFlagTrueOverridden([Option(BooleanMode = BooleanMode.Explicit)]bool flag)
         {
             string output = new
             {
@@ -55,7 +62,7 @@ namespace CommandDotNet.Tests
                 output);
         }
         
-        public void CommandWithFlagFalseOverridden([Argument(BooleanMode = BooleanMode.Implicit)]bool flag)
+        public void CommandWithFlagFalseOverridden([Option(BooleanMode = BooleanMode.Implicit)]bool flag)
         {
             string output = new
             {
@@ -100,7 +107,7 @@ namespace CommandDotNet.Tests
 
     public class InvalidFlagApplication
     {
-        public void CommandWithInvalidFlag([Argument(BooleanMode = BooleanMode.Implicit)]string flag)
+        public void CommandWithInvalidFlag([Option(BooleanMode = BooleanMode.Implicit)]string flag)
         {
         }
     }

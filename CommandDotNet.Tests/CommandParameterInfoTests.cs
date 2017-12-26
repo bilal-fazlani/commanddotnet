@@ -20,13 +20,13 @@ namespace CommandDotNet.Tests
         public static IEnumerable<object[]> TestCases = new[] {
             new object[]
             {
-                "jumped", CommandOptionType.SingleValue, DBNull.Value, true, "Boolean", "Boolean | Required", null, 
+                "jumped", CommandOptionType.SingleValue, DBNull.Value, true, "Boolean", "Boolean", null, 
                 null, "--jumped", typeof(bool), false
             },
             new object[]
             {
-                "id", CommandOptionType.SingleValue, DBNull.Value, true, "Int64", "Int64 | Required", "Id of person", 
-                "Int64 | Required                                  Id of person", "--id | -i", typeof(long), true
+                "id", CommandOptionType.SingleValue, DBNull.Value, true, "Int64", "Int64", "Id of person", 
+                "Int64".PadRight(Constants.PadLength)+"Id of person", "--id | -i", typeof(long), true
             },
             new object[]
             {
@@ -45,7 +45,7 @@ namespace CommandDotNet.Tests
             },
             new object[]
             {
-                "height", CommandOptionType.SingleValue, DBNull.Value, true, "Double",  "Double | Required", null,
+                "height", CommandOptionType.SingleValue, DBNull.Value, true, "Double",  "Double", null,
                 null, "--height", typeof(double), false
             },
             new object[]
@@ -65,7 +65,7 @@ namespace CommandDotNet.Tests
             },
             new object[]
             {
-                "password", CommandOptionType.SingleValue, DBNull.Value, true, "String" , "String | Required", null,
+                "password", CommandOptionType.SingleValue, DBNull.Value, true, "String" , "String", null,
                 null, "--password", typeof(string), false
             },
             new object[]
@@ -80,8 +80,8 @@ namespace CommandDotNet.Tests
             },
             new object[]
             {
-                "category1", CommandOptionType.SingleValue, DBNull.Value, true, "Char", "Char | Required", null,
-                "Char | Required".PadRight(Constants.PadLength), "--category1", typeof(char), true
+                "category1", CommandOptionType.SingleValue, DBNull.Value, true, "Char", "Char", null,
+                "Char".PadRight(Constants.PadLength), "--category1", typeof(char), true
             },
             new object[]
             {
@@ -114,12 +114,12 @@ namespace CommandDotNet.Tests
             MethodInfo methodInfo = typeof(TestApplication).GetMethod("Execute");
             var parameters = methodInfo.GetParameters();
             var parameter = parameters.Single(p => p.Name == parameterName);
-            ArgumentInfo commandParameterInfo = new ArgumentInfo(parameter, 
-                new AppSettings{ ShowParameterDetails = showParameterDetails });
+            CommandOptionInfo commandParameterInfo = new CommandOptionInfo(parameter, 
+                new AppSettings{ ShowArgumentDetails = showParameterDetails, MethodArgumentMode = ArgumentMode.Option});
 
             commandParameterInfo.CommandOptionType.Should().Be(commandOptionType, nameof(commandOptionType));
             commandParameterInfo.DefaultValue.Should().Be(defaultValue, nameof(defaultValue));
-            commandParameterInfo.Required.Should().Be(required, nameof(required));
+            //commandParameterInfo.Required.Should().Be(required, nameof(required));
             commandParameterInfo.TypeDisplayName.Should().Be(typeDisplayName, nameof(typeDisplayName));
             commandParameterInfo.Details.Should().Be(parameterDetails, nameof(parameterDetails));
             commandParameterInfo.AnnotatedDescription.Should().Be(annotatedDescription, nameof(annotatedDescription));
@@ -133,16 +133,16 @@ namespace CommandDotNet.Tests
     public class TestApplication
     {
         public void Execute(
-            [Argument(BooleanMode = BooleanMode.Explicit)]
+            [Option(BooleanMode = BooleanMode.Explicit)]
             bool jumped, 
             
-            [Argument(ShortName = "i", LongName = "id", Description = "Id of person")]
+            [Option(ShortName = "i", LongName = "id", Description = "Id of person")]
             long id, 
             
-            [Argument(ShortName = "l")]
+            [Option(ShortName = "l")]
             string level, 
             
-            [Argument(LongName = "feet")]
+            [Option(LongName = "feet")]
             int? feets,
             
             IEnumerable<string> friends, 
@@ -151,12 +151,11 @@ namespace CommandDotNet.Tests
             
             bool? log,
             
-            [Argument(BooleanMode = BooleanMode.Implicit)]
+            [Option(BooleanMode = BooleanMode.Implicit)]
             bool isVerified,
             
             bool email,
             
-            [Argument(RequiredString = true)]
             string password,
             
             char category1,
@@ -167,7 +166,7 @@ namespace CommandDotNet.Tests
             
             int index = 1,
             
-            [Argument(Description = "name of person")]
+            [Option(Description = "name of person")]
             string name = "john")
         {
             

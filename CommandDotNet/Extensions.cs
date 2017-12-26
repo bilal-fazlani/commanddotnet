@@ -18,7 +18,7 @@ namespace CommandDotNet
         {
             return type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(m => !m.IsSpecialName)
-                .Where(m => m.GetCustomAttribute<DefaultMethodAttribute>() == null)
+                .Where(m => !m.HasAttribute<DefaultMethodAttribute>())
                 .Select(mi => new CommandInfo(mi, settings));
         }
 
@@ -46,7 +46,7 @@ namespace CommandDotNet
             CommandInfo defaultCommandInfo = type
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(m => !m.IsSpecialName)
-                .Where(m => m.GetCustomAttribute<DefaultMethodAttribute>() != null)
+                .Where(m => m.HasAttribute<DefaultMethodAttribute>())
                 .Select(mi => new CommandInfo(mi, settings))
                 .FirstOrDefault();
             

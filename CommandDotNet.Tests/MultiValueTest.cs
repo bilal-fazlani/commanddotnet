@@ -35,7 +35,7 @@ namespace CommandDotNet.Tests
     {
         [ApplicationMetadata(Name = "names")]
         public int NamesList(
-            [Argument(ShortName = "n", LongName = "name", Description = "names of people")]
+            [Option(ShortName = "n", LongName = "name", Description = "names of people")]
             List<string> names)
         {
             foreach (var name in names)
@@ -47,7 +47,7 @@ namespace CommandDotNet.Tests
         
         [ApplicationMetadata(Name = "cities")]
         public int CitiesList(
-            [Argument(ShortName = "c", LongName = "city", Description = "nams of cities")]
+            [Option(ShortName = "c", LongName = "city", Description = "nams of cities")]
             List<string> cities)
         {
             foreach (var city in cities)

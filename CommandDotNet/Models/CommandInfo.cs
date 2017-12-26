@@ -28,13 +28,27 @@ namespace CommandDotNet.Models
 
             foreach (var parameter in _methodInfo.GetParameters())
             {
-                if (parameter.HasAttribute<OptionAttribute>())
+                if (_settings.MethodArgumentMode == ArgumentMode.Parameter)
                 {
-                    arguments.Add(new CommandOptionInfo(parameter, _settings));
+                    if (parameter.HasAttribute<OptionAttribute>())
+                    {
+                        arguments.Add(new CommandOptionInfo(parameter, _settings));
+                    }
+                    else
+                    {
+                        arguments.Add(new CommandParameterInfo(parameter, _settings));
+                    }
                 }
                 else
                 {
-                    arguments.Add(new CommandParameterInfo(parameter, _settings));
+                    if (parameter.HasAttribute<ParameterAttribute>())
+                    {
+                        arguments.Add(new CommandParameterInfo(parameter, _settings));
+                    }
+                    else
+                    {
+                        arguments.Add(new CommandOptionInfo(parameter, _settings));
+                    }
                 }
             }
 

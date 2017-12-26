@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using CommandDotNet.Attributes;
+using CommandDotNet.Models;
 using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
@@ -18,7 +19,10 @@ namespace CommandDotNet.Tests
         [InlineData("TestConstructorParams")]
         public void ReadValueTest(string testCaseName)
         {
-            TestCaseRunner<MyTestApp> testCaseRunner = new TestCaseRunner<MyTestApp>(TestOutputHelper);
+            TestCaseRunner<MyTestApp> testCaseRunner = new TestCaseRunner<MyTestApp>(TestOutputHelper, new AppSettings
+            {
+                MethodArgumentMode = ArgumentMode.Option
+            });
             testCaseRunner.Run($"TestCases/MyTestApp.{testCaseName}.Input.json", 
                 $"TestCases/MyTestApp.{testCaseName}.Output.json");
         }
@@ -36,19 +40,19 @@ namespace CommandDotNet.Tests
         
         public void TestMethodParams(
             int id,
-            [Argument(LongName = "tag", ShortName = "t")]
+            [Option(LongName = "tag", ShortName = "t")]
             List<string> tags,
             string name,
-            [Argument(BooleanMode = BooleanMode.Explicit)]
+            [Option(BooleanMode = BooleanMode.Explicit)]
             bool email,
             bool sms,
             double height,
             string city,
             char category,
             bool nri,
-            [Argument(LongName = "role")]
+            [Option(LongName = "role")]
             List<int> roles,
-            [Argument(LongName = "rank")]
+            [Option(LongName = "rank")]
             List<double> ranks
             )
         {

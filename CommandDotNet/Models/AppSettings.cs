@@ -17,5 +17,13 @@ namespace CommandDotNet.Models
         public bool ThrowOnUnexpectedArgument { get; set; } = true;
         
         public bool AllowArgumentSeparator { get; set; }
+
+        public ArgumentMode MethodArgumentMode { get; set; } = ArgumentMode.Parameter;
+    }
+
+    public enum ArgumentMode
+    {
+        Parameter = 0,
+        Option = 1
     }
 }
