@@ -699,7 +699,7 @@ Let's try and mimic the same behaviour using CommandDotNet:
 public class Git
 {
     [ApplicationMetadata(Description = "Commits all staged changes")]
-    public void Commit([Argument(ShortName = "m")]string commitMessage)
+    public void Commit([Option(ShortName = "m")]string commitMessage)
     {
         Console.WriteLine("Commit successful");
     }
@@ -719,7 +719,7 @@ public class Git
             Console.WriteLine($"stash popped");
         }
 
-        [ApplicationMetadata(Description = "Lists all saved stashed changes")]
+        [ApplicationMetadata(Description = "Lists all stashed changes")]
         public void List()
         {
             Console.WriteLine($"here's the list of stash");
@@ -823,7 +823,7 @@ public class Git
     public Stash Stash { get; set; }
     
     [ApplicationMetadata(Description = "Commits all staged changes")]
-    public void Commit([Argument(ShortName = "m")]string commitMessage)
+    public void Commit([Option(ShortName = "m")]string commitMessage)
     {
         Console.WriteLine("Commit successful");
     }
