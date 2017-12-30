@@ -3,7 +3,7 @@
 namespace CommandDotNet.Attributes
 {
     [AttributeUsage(AttributeTargets.Parameter)]
-    public class ParameterAttribute : ArgumentBaseAttribute
+    public class ArgumentAttribute : ParameterBaseAttribute
     {
         public bool RequiredString { get; set; }
     }

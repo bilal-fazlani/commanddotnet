@@ -100,14 +100,14 @@ namespace CommandDotNet
                 .FirstOrDefault()
                 .GetParameters();
 
-            if(parameterInfos.Any(p => p.HasAttribute<ParameterAttribute>()))
+            if(parameterInfos.Any(p => p.HasAttribute<ArgumentAttribute>()))
                 throw new AppRunnerException("Constructor arguments can not have [Parameter] attribute. Please use [Option] attribute");
             
             List<ArgumentInfo> arguments = new List<ArgumentInfo>();
             
             foreach (var parameterInfo in parameterInfos)
             {
-                if (parameterInfo.HasAttribute<ParameterAttribute>())
+                if (parameterInfo.HasAttribute<ArgumentAttribute>())
                 {
                     arguments.Add(new CommandParameterInfo(parameterInfo, _settings));
                 }

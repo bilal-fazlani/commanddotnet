@@ -3,7 +3,7 @@
 namespace CommandDotNet.Attributes
 {
     [AttributeUsage(AttributeTargets.Parameter)]
-    public class ArgumentBaseAttribute : Attribute
+    public class ParameterBaseAttribute : Attribute
     {
         public BooleanMode BooleanMode { get; set; }
         

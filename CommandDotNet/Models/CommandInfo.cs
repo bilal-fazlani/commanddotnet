@@ -41,7 +41,7 @@ namespace CommandDotNet.Models
                 }
                 else
                 {
-                    if (parameter.HasAttribute<ParameterAttribute>())
+                    if (parameter.HasAttribute<ArgumentAttribute>())
                     {
                         arguments.Add(new CommandParameterInfo(parameter, _settings));
                     }

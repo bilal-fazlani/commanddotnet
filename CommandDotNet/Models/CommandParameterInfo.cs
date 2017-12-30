@@ -28,7 +28,7 @@ namespace CommandDotNet.Models
         
         protected override string GetAnnotatedDescription()
         {
-            ParameterAttribute descriptionAttribute = ParameterInfo.GetCustomAttribute<ParameterAttribute>();
+            ArgumentAttribute descriptionAttribute = ParameterInfo.GetCustomAttribute<ArgumentAttribute>();
             return descriptionAttribute?.Description;
         }
         

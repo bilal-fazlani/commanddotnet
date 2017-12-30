@@ -3,7 +3,7 @@
 namespace CommandDotNet.Attributes
 {
     [AttributeUsage(AttributeTargets.Parameter)]
-    public class OptionAttribute : ArgumentBaseAttribute
+    public class OptionAttribute : ParameterBaseAttribute
     {        
         public string ShortName { get; set; }
         
