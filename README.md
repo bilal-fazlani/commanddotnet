@@ -10,17 +10,26 @@ Table of contents:
 
 - [Installation](#installation)
 - [Introduction](#introduction)
-- [Constructor parameters](#constructor-parameters)
+- [Parameters](#parameters)
+    - [Arguments](#arguments)
+    - [Options](#options)
+    - [Flags](#flags)
+- [Attributes](#attributes)
+    - [ApplicationMetadata](#applicationmetadata)
+    - [Argument](#argument)
+    - [Option](#option)
+- [Constructor options](#constructor-options)
 - [Default values](#default-values)
-- [Application and Command metadata](#application-and-command-metadata)
-- [Command arguments](#command-arguments)
 - [Collections](#collections)
+    - [Collection of options](#collection-of-options)
+    - [Collection of arguments](#collection-of-arguments)
 - [Supported parameter types](#supported-parameter-types)
 - [Custom return codes](#custom-return-codes)
 - [Default method](#default-method)
 - [Boolean flags](#boolean-flags)
 - [Async methods](#async-methods)
 - [Nesting commands](#nesting-commands)
+- [Subjects](#subjects)
 - Settings
 - Version option
 - Auto case correction
@@ -140,12 +149,14 @@ dotnet example.dll Add --help
 OUTPUT
 
 ```bash
-Usage: dotnet example.dll Add [options]
+Usage: dotnet example.dll Add [arguments] [options]
+
+Arguments:
+  value1  Int32
+  value2  Int32
 
 Options:
   -h | -? | --help  Show help information
-  --value1          Int32 | Required
-  --value2          Int32 | Required
 ```
 
 tada!
@@ -157,7 +168,7 @@ Let's try and add two numbers.
 INPUT
 
 ```bash
-dotnet example.dll Add --value1 40 --value2 20
+dotnet example.dll Add 40 20
 ```
 
 OUTPUT
@@ -168,7 +179,177 @@ Answer: 60
 
 Cool. You get the gist of this library. Let's move on.
 
-## Constructor parameters
+## Parameters
+
+### Arguments
+
+Arguments are simple as we saw already in the [intrduction](#introduction). Arguemnts are the main parameters of the command and should be as less as possible. If you compare them to a english statement, argument is the *Subject* of the sentense. 
+
+Let try an example of an english sentense `Please delete sample.docx file`
+
+Now let's try and remove some extra words we don't need and convert it into command that system can understand. 
+
+Let's say our command name is `delete` and its job is to delete files. We dont need the words `please` and `file`
+
+So we are left with `delete sample.docx`
+
+`delete` here is the name of command and sample.docx is the subject and hence the argument.
+
+C# method for the same would look like
+
+```c#
+public void Delete(string fileName)
+```
+
+We can have multiple subjects for instance, `please delete sample.docx and number.xls`. That would turn into `delete sample.docx number.xls`
+
+C# method for the same would look like
+
+```c#
+public void Delete(List<string> fileNames)
+```
+
+### Options
+
+Options are arguments that :
+ - Are optional
+ - Are named
+ - May change behaviour of command
+
+For instance let's just go with out example from [arguments](#arguments) section.
+
+This time, the sentense is `please delete the file sample.docx tomorrow`.
+In this case, we have extra information about the operation we want to perform i.e. `time`
+The command is still `delete`, the subject(argument) is still `sample.docx` but the `time` has changed from `now` to `tomorrow` 
+
+Let's see how we can translate into a cli command
+
+`delete sample.docx --time tomorrow`
+
+C# method for the same would look like
+
+```c#
+public void Delete(string fileName, [Option]string time = "Now")
+```
+
+### Flags
+
+Flags are very similar to options except for the fact they are aways boolean (& false by default) and don't need an explicity value. If a flag is present, its true, otherwise it's false.
+
+Let's continue with same example as [options](#options),
+
+This time the sentense is `Please delete the file sample.docx safely tomorrow`. 
+Safely here means that delete it only if no process is using it. It's naturally translated to a cli command as `delete sample.docs --safely --time=tomorrow`
+
+Note that `--time tomorrow`, `--time=tomorrow` & `--time:tomorrow` are the same.
+
+Notice that we din't pass any value for `--safely` option. This is flag and it's value will be true since we have passed it.
+
+C# method for the same would look like
+
+```c#
+public void Delete(
+    string fileName, 
+    bool safely, 
+    [Option]string time = "Now")
+```
+
+## Attributes
+
+### ApplicationMetadata
+
+You can use the `[ApplicationMetadata]` attribute on the class level like this to provide details when application is called with `help` switch.
+
+Example: 
+
+```c#
+[ApplicationMetadata(Description = "This is a crappy calculator", ExtendedHelpText = "Some more help text that appears at the bottom")]
+public class Calculator
+{
+}
+```
+
+This attribute can also be used on a Method as shown below.
+
+```c#
+[ApplicationMetadata(Description = "Subtracts value2 from value1 and prints output", 
+    ExtendedHelpText = "Again, some more detailed help text which has no meaning I still have to write to demostrate this feature",
+    Name = "subtractValues")]
+public void Subtract(int value1, int value2)
+{
+}
+```
+
+Note that when you use ApplicationMetadata attribute on a method, you can change the name of the command that is different from method name.
+
+
+### Argument
+
+Every parameter in the method is argument by default. So this this Attribute is optional and should be used only when you need to assign a different name to parameter, or add description to it.
+
+By default, the parameter names declared in method are the argument names that appear in help. However you can change that.
+
+Let's see an example-
+
+```c#
+public void LaunchRocket([Argument(
+    Name = "planet",
+    Description = "Name of the planet you wish the rocket to go)] string planetName)
+```
+This is what help looks like-
+
+```bash
+Usage: dotnet example.dll LaunchRocket [arguments] [options]
+
+Arguments:
+  planetName  String                                            Name of the planet you wish the rocket to go
+
+Options:
+  -h | -? | --help  Show help information
+```
+
+### Option
+
+Every parameter in the method is argument by default. So if you wan't to turn a parameter into option instead of argument, use this attribute. See more info about parameters [here](#parameters)
+
+By default, the parameter names declared in method are the option names that appear in help. However you can change that. By convention, an option can have a short name and/or a longname.
+
+Let's see an example-
+
+```c#
+public void LaunchRocket([Option(
+    LongName = "planet", 
+    ShortName = "p", 
+    Description = "Name of the planet you wish the rocket to go")] string planetName)
+```
+
+This is what help looks like-
+
+```bash
+Usage: dotnet example.dll LaunchRocket [options]
+
+Options:
+  -h | -? | --help  Show help information
+  --planet | -p     String                         Name of the planet you wish the rocket to go
+```
+
+So planet name can now be passed either with `--planet` or `-p`. 
+LongName, ShortName and Description are optional. 
+
+When you don't specify a long name and a short name for an option, it uses the method parameter name by default as long name. In case the method parameter name is just one letter, it will be treated as short name.
+
+Here's table of examples:
+
+| Method parameter name | Longname | Shortname | Generated template
+| --- | --- | --- | --- |
+| planet |  |  | --planet |
+| planet | planet |  | --planet |
+| planet |  | p | -p |
+| planet | planet | p | -p \| --planet |
+| p |  |  | -p |
+
+
+## Constructor options
 
 Let's say we want to add a class level field which is useful in both Addtion and Subtraction. So now the class looks something like this-
 
@@ -232,7 +413,7 @@ Let's try and invoke it
 INPUT 
 
 ```bash
-dotnet example.dll --printValues Subtract --value1 30 --value2 5
+dotnet example.dll --printValues Subtract 30 5
 ```
 
 OUTPUT
@@ -241,12 +422,13 @@ OUTPUT
 value1 : 30, value2: 5
 Answer: 25
 ```
+Notes:
 
-**Note that you can skip to pass any parameter. It will then fallback to the default value of parameter type**
+ - **You can skip to pass any parameter. It will then fallback to the default value of parameter type**
 
-In this case, for `--printValues` it will fallback to `false` & if you don't pass either `--value1` or `--value2`, it will fallback to `0`.
+ - **Any parameters in contrustor are [Options](#option) by default and you can't have [Argument](#argument) attribute in constructor parameters**
 
-**NOTE: Only one constructor is supported. If there are multiple, it will pick up first defined constructor**
+ - **Only one constructor is supported. If there are multiple, it will pick up first defined constructor**
 
 ## Default values
 
@@ -272,139 +454,24 @@ dotnet example.dll Divide --help
 OUTPUT
 
 ```bash
-Usage: dotnet example.dll Divide [options]
+Usage: dotnet example.dll Divide [arguments] [options]
+
+Arguments:
+  value1  Int32
+  value2  Int32 | Default value: 1
 
 Options:
   -h | -? | --help  Show help information
-  --value1          Int32 | Required
-  --value2          Int32 | Default value: 1
-```
-
-## Application and Command metadata
-
-You can use the `[ApplicationMetadata]` attribute on the class level like this to provide details when application is called with `help` switch.
-
-Example: 
-
-```c#
-[ApplicationMetadata(Description = "This is a crappy calculator", ExtendedHelpText = "Some more help text that appears at the bottom")]
-public class Calculator
-{
-}
-```
-
-This attribute can also be used on a Method as shown below.
-
-```c#
-[ApplicationMetadata(Description = "Subtracts value2 from value1 and prints output", 
-    ExtendedHelpText = "Again, some more detailed help text which has no meaning I still have to write to demostrate this feature",
-    Name = "subtractValues")]
-public void Subtract(int value1, int value2)
-{
-}
-```
-
-Note that when you use ApplicationMetadata attribute on a method, you can change the name of the command that is different from method name.
-
-INPUT
-
-```bash
-dotnet example.dll --help
-```
-
-OUTPUT
-
-```bash
-This is a crappy calculator
-
-Usage: dotnet example.dll [options] [command]
-
-Options:
-  -h | -? | --help  Show help information
-  --printValues     Flag
-
-Commands:
-  Add             Adds two numbers. duh!
-  Divide
-  subtractValues  Subtracts value2 from value1 and prints output
-
-Use "dotnet example.dll [command] --help" for more information about a command.
-Some more help text that appears at the bottom
-```
-
-## Command arguments
-
-By default, the parameter names declared in method are the argument names. However you can change that.
-By convention, an argument can have a short name and/or a longname.
-
-Let's see an example-
-
-```c#
-public void LaunchRocket([Argument(
-    LongName = "planet", 
-    ShortName = "p", 
-    Description = "Name of the planet you wish the rocket to go. Sorry for bad example :(")] string planetName)
-{
-    return;
-}
-```
-
-This is what help looks like-
-
-```bash
-Usage: dotnet example.dll LaunchRocket [options]
-
-Options:
-  -h | -? | --help  Show help information
-  --planet | -p     String                         Name of the planet you wish the rocket to go. Sorry for bad example :(
-```
-
-So planet name can now be passed either with `--planet` or `-p`. 
-LongName, ShortName and Description are optional. 
-
-When you don't specify a long name and a short name for argument, it uses the parameter name by default as long name. In case the parameter name is just one letter, it will be treated as short name.
-
-Here's table of examples:
-
-| Method parameter name | Longname | Shortname | Generated template
-| --- | --- | --- | --- |
-| planet |  |  | --planet |
-| planet | planet |  | --planet |
-| planet |  | p | -p |
-| planet | planet | p | -p \| --planet |
-| p |  |  | -p |
-
-### Argument clubbing
-
-Clubbing of one letter parameters is supported. For example,
-
-If a command has multiple [boolean flag](#boolean-flags) arguments like:
-
-```c#
-public void Print(bool c, bool e, bool x){ }
-```
-
-These can be passed either as
-
-```bash
-dotnet example.dll print -c -e -x
-```
-
-OR
-
-```bash
-dotnet example.dll print -ecx
 ```
 
 ## Collections
 
 Let's enhance our rocket launcher to support multiple planets.
 
+### Collection of Options
+
 ```c#
-public void LaunchRocket([Argument(ShortName = "p")] List<string> planets)
-{
-    return;
-}
+public void LaunchRocket([Option(ShortName = "p")] List<string> planets)
 ```
 
 This is what help information looks like-
@@ -425,10 +492,40 @@ Options:
   -p                String (Multiple)
 ```
 
-And this is how you pass multiple parameters:
+And this is how you pass multiple options:
 
 ```bash
 dotnet example.dll LaunchRocket -p mars -p earth -p jupiter
+```
+
+### Collection of Arguments
+
+```c#
+public void LaunchRocket(List<string> planets)
+```
+
+INPUT
+
+```bash
+dotnet example.dll LaunchRocket --help
+```
+
+OUTPUT
+
+```bash
+Usage: dotnet CommandDotNet.Example.dll LaunchRocket [arguments] [options]
+
+Arguments:
+  planets  String (Multiple)
+
+Options:
+  -h | -? | --help  Show help information
+```
+
+And this is how you pass multiple arguments:
+
+```bash
+dotnet example.dll LaunchRocket mars earth jupiter
 ```
 
 ## Supported parameter types
@@ -450,7 +547,11 @@ As of now, these are supported parameter types:
 - `List<bool>`
 - `List<char>`
 
-These are applicable for both - methods and constructor
+These are applicable for both - Options and Arguments
+
+Note for arguments: 
+- There can be only one `List` argument in the method. It can be used with other non `List` type arguments or `List` type options.
+- If the method has a `List` type argument, it should be defined last in the order.
 
 ## Custom return codes
 
@@ -496,7 +597,7 @@ Some points to note about default method:
 
 ## Boolean flags
 
-When you use this library, there are two ways to parse boolean parameters.
+In this library, there are two ways to parse boolean [Options](#options). Note that this is not applicable for [Parameters](#parameters).
 
 1.  **Implicit**
 
@@ -545,7 +646,32 @@ When you use this library, there are two ways to parse boolean parameters.
 
     but `dotnet example.dll MyCommand --capturelogs` is not valid and will result into error. It will only work in Implicit boolean mode.
 
-When you check the help of a command, you if you see `Boolean` or `Boolean | Required` it means if you wan't to make it true, you need to pass an explit value. If you don't pass one, it will default to `false` automatically. Implicit and explicit are just ways to pass the value, under the hood they are just boolean parameters.
+
+    When you check the help of a command, you if you see `Boolean` it means if you wan't to make it true, you need to pass an explit value. If you don't pass one, it will default to `false` automatically. Implicit and explicit are just ways to pass the value, under the hood they are just boolean parameters.
+
+
+### Flag clubbing
+
+Clubbing of one letter [options](#options) is supported. For example,
+
+If a command has multiple [boolean flag](#boolean-flags) [options](#options) like:
+
+```c#
+public void Print([Option(ShortName="c")]bool qwerty, bool e, bool x){ }
+```
+
+These can be passed either as
+
+```bash
+dotnet example.dll print -c -e -x
+```
+
+OR
+
+```bash
+dotnet example.dll print -ecx
+```
+
  
 ## Async methods
 
@@ -725,3 +851,4 @@ public class Stash
     }
 }
 ```
+
