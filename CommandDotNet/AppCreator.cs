@@ -29,7 +29,7 @@ namespace CommandDotNet
             
             if (isRootApp)
             {
-                string rootName = $"dotnet {Assembly.GetCallingAssembly().GetName().Name}.dll";
+                string rootName = $"dotnet {Assembly.GetEntryAssembly().GetName().Name}.dll";
                 app = new CommandLineApplication(throwOnUnexpectedArg: _appSettings.ThrowOnUnexpectedArgument) { Name = rootName };
             }
             else
