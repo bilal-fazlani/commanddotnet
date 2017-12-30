@@ -513,7 +513,7 @@ dotnet example.dll LaunchRocket --help
 OUTPUT
 
 ```bash
-Usage: dotnet CommandDotNet.Example.dll LaunchRocket [arguments] [options]
+Usage: dotnet example.dll LaunchRocket [arguments] [options]
 
 Arguments:
   planets  String (Multiple)
@@ -733,7 +733,7 @@ Here's how the help looks like now:
 ```bash
 Fake git application
 
-Usage: dotnet CommandDotNet.dll [options] [command]
+Usage: dotnet example.dll [options] [command]
 
 Options:
   -h | -? | --help  Show help information
@@ -742,7 +742,7 @@ Commands:
   Commit  Commits all staged changes
   Stash   Stashes all changes when executed without any arguments
 
-Use "dotnet CommandDotNet.dll [command] --help" for more information about a command.
+Use "dotnet example.dll [command] --help" for more information about a command.
 ```
 
 Here's  how the interaction looks like:
@@ -786,7 +786,7 @@ OUTPUT
 ```bash
 Stashes all changes when executed without any arguments
 
-Usage: dotnet CommandDotNet.dll Stash [options] [command]
+Usage: dotnet example.dll Stash [options] [command]
 
 Options:
   -h | -? | --help  Show help information
