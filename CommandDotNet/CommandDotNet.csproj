@@ -30,7 +30,4 @@
   <ItemGroup>
     <None Remove="CommandDotNet.csproj.DotSettings" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CommandLineUtils\CommandLineUtils.csproj" />
-  </ItemGroup>
 </Project>

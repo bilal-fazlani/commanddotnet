@@ -28,16 +28,16 @@ namespace CommandDotNet.Models
             IsMultipleType = GetIsMultipleType();
         }
 
-        public string Name { get; set; }
-        public Type Type { get; set; }
+        public string Name { get; internal set; }
+        public Type Type { get; internal set; }
         
-        public object DefaultValue { get; set; }
-        public string TypeDisplayName { get; set; }
-        public string Details { get; set; }
-        public string AnnotatedDescription { get; set; }
-        public string EffectiveDescription { get; set; }
+        public object DefaultValue { get; internal set; }
+        public string TypeDisplayName { get; internal set; }
+        public string Details { get; internal set; }
+        public string AnnotatedDescription { get; internal set; }
+        public string EffectiveDescription { get; internal set; }
         public bool IsMultipleType { get; }
-        internal ValueInfo ValueInfo { get; set; }
+        internal ValueInfo ValueInfo { get; private set; }
 
         private bool GetIsMultipleType()
         {
@@ -64,6 +64,7 @@ namespace CommandDotNet.Models
 
         public override int GetHashCode()
         {
+            // ReSharper disable once NonReadonlyMemberInGetHashCode
             return Name.GetHashCode();
         }
     }

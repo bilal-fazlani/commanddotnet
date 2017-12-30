@@ -129,17 +129,6 @@ namespace CommandDotNet.Models
             return descriptionAttribute?.Description;
         }
         
-        public override bool Equals(object obj)
-        {
-            switch (obj)
-            {
-                case CommandOptionInfo commandOptionInfo:
-                    return commandOptionInfo.Name == this.Name;
-            }
-
-            return false;
-        }
-        
         public override string ToString()
         {
             return $"{Name} | '{ValueInfo?.Value ?? "null"}' | {Details} | {Template}";

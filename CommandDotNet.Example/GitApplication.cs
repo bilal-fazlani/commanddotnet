@@ -45,7 +45,7 @@ namespace CommandDotNet.Example
         }
         
         [ApplicationMetadata(Name = "commit", Description = "Commits all staged changes")]
-        public void Commit([Argument(ShortName = "m")]string commitMessage)
+        public void Commit([Option(ShortName = "m")]string commitMessage)
         {
             Console.WriteLine("Commit successful");
         }

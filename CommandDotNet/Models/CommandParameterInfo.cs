@@ -43,18 +43,7 @@ namespace CommandDotNet.Models
 
             return Nullable.GetUnderlyingType(Type)?.Name ?? Type.Name;
         }
-        
-        public override bool Equals(object obj)
-        {
-            switch (obj)
-            {
-                case CommandParameterInfo commandParameterInfo:
-                    return commandParameterInfo.Name == this.Name;
-            }
 
-            return false;
-        }
-        
         public override string ToString()
         {
             return $"{Name} | '{ValueInfo?.Value ?? "null"}' | {Details}";
