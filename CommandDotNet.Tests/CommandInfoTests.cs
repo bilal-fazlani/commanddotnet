@@ -35,7 +35,6 @@ namespace CommandDotNet.Tests
                 {
                     CommandOptionType = CommandOptionType.SingleValue,
                     DefaultValue = DBNull.Value,
-                    Name = "value",
                     Type = typeof(int),
 //                    Required = true,
                     EffectiveDescription = null,
@@ -68,7 +67,6 @@ namespace CommandDotNet.Tests
                 {
                     CommandOptionType = CommandOptionType.SingleValue,
                     DefaultValue = DBNull.Value,
-                    Name = "value",
                     Type = typeof(int),
                     //Required = true,
                     EffectiveDescription = "Int32                                             some parameter description",

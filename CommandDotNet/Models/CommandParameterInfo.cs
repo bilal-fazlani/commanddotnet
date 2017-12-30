@@ -14,10 +14,23 @@ namespace CommandDotNet.Models
 
         public CommandParameterInfo(ParameterInfo parameterInfo, AppSettings settings) : base(parameterInfo, settings)
         {
+            Name = GetName();
             TypeDisplayName = GetTypeDisplayName();
             AnnotatedDescription = GetAnnotatedDescription();
             Details = GetDetails();
             EffectiveDescription = GetEffectiveDescription();
+        }
+        
+        public string Name { get; internal set; }
+
+        private string GetName()
+        {
+            if (ParameterInfo.HasAttribute(out ArgumentAttribute attribute))
+            {
+                return attribute.Name;
+            }
+
+            return ParameterInfo.Name;
         }
 
         protected override string GetDetails()

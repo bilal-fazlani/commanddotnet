@@ -78,7 +78,7 @@ namespace CommandDotNet
                 }
 
                 throw new ValueParsingException(
-                    $"Unsupported parameter type: {argType.FullName} for parameter {arguementInfo.Name}");
+                    $"Unsupported parameter type: {argType.FullName}");
             }
 
             //when value not present but method parameter has a default value defined

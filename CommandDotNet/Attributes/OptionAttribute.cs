@@ -8,5 +8,7 @@ namespace CommandDotNet.Attributes
         public string ShortName { get; set; }
         
         public string LongName { get; set; }
+        
+        public BooleanMode BooleanMode { get; set; }
     }
 }

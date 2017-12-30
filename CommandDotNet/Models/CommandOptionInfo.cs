@@ -77,9 +77,10 @@ namespace CommandDotNet.Models
                 shortNameAdded = true;
             }
 
-            string defaultTemplate = Name.Length == 1 ? $"-{Name}" : $"--{Name}";
+            string defaultTemplate = ParameterInfo.Name.Length == 1 ? $"-{ParameterInfo.Name}" : $"--{ParameterInfo.Name}";
             if(!longNameAdded & !shortNameAdded) sb.Append(defaultTemplate);
             
+            //todo: value names
             //if(CommandOptionType != CommandOptionType.NoValue) sb.Append($" <{attribute?.LongName ?? Name}>");
             
             return sb.ToString();
@@ -131,7 +132,7 @@ namespace CommandDotNet.Models
         
         public override string ToString()
         {
-            return $"{Name} | '{ValueInfo?.Value ?? "null"}' | {Details} | {Template}";
+            return $"{ParameterInfo.Name} | '{ValueInfo?.Value ?? "null"}' | {Details} | {Template}";
         }
     }
 }

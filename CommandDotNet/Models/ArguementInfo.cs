@@ -21,14 +21,12 @@ namespace CommandDotNet.Models
             : this(settings)
         {
             ParameterInfo = parameterInfo;
-
-            Name = parameterInfo.Name;
             Type = parameterInfo.ParameterType;
             DefaultValue = parameterInfo.DefaultValue;
             IsMultipleType = GetIsMultipleType();
         }
 
-        public string Name { get; internal set; }
+        
         public Type Type { get; internal set; }
         
         public object DefaultValue { get; internal set; }
@@ -60,12 +58,6 @@ namespace CommandDotNet.Models
             return Settings.ShowArgumentDetails
                 ? $"{Details.PadRight(Constants.PadLength)}{AnnotatedDescription}"
                 : AnnotatedDescription;
-        }
-
-        public override int GetHashCode()
-        {
-            // ReSharper disable once NonReadonlyMemberInGetHashCode
-            return Name.GetHashCode();
         }
     }
 }
