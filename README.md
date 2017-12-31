@@ -1,4 +1,4 @@
-![Logo](logo.png)
+<img src="./images/SmallLogo.png" width="250px" />
 
 # CommandDotNet
 
