@@ -1,4 +1,4 @@
-<img src="./images/SmallLogo.png" width="250px" />
+<img src="./images/logo.png" width="250px" />
 
 # CommandDotNet
 
