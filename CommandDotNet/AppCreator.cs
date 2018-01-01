@@ -34,7 +34,7 @@ namespace CommandDotNet
             }
             else
             {
-                string subAppName = consoleApplicationAttribute?.Name ?? type.Name; 
+                string subAppName = consoleApplicationAttribute?.Name ?? type.Name.ChangeCase(_appSettings.Case); 
                 app = parentApplication.Command(subAppName, application => { });
             }
 

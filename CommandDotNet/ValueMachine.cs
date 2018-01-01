@@ -83,7 +83,7 @@ namespace CommandDotNet
                     {
                         return Enum.Parse(argType, argumentInfo.ValueInfo.Value);
                     }
-                    catch (ArgumentException e)
+                    catch (ArgumentException)
                     {
                         ThrowParsingException<object>(argumentInfo);
                     }

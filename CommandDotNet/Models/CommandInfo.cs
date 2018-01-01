@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Mime;
 using System.Reflection;
 using CommandDotNet.Attributes;
+using Humanizer;
 
 namespace CommandDotNet.Models
 {
@@ -55,7 +56,7 @@ namespace CommandDotNet.Models
             return arguments;
         }
 
-        public string Name => _metadataAttribute?.Name ?? _methodInfo.Name;
+        public string Name => _metadataAttribute?.Name ?? _methodInfo.Name.ChangeCase(_settings.Case);
 
         public string MethodName => _methodInfo.Name; 
 

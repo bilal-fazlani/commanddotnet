@@ -19,6 +19,10 @@ namespace CommandDotNet.Models
         {
             BooleanMode = GetBooleanMode();
             CommandOptionType = GetCommandOptionType();
+            
+            ShortName = GetShortName();
+            LongName = GetLongName();
+            
             Template = GetTemplate();
             
             TypeDisplayName = GetTypeDisplayName();
@@ -32,6 +36,36 @@ namespace CommandDotNet.Models
         public string Template { get; set; }
         
         public BooleanMode BooleanMode { get; set; }
+        
+        public string LongName { get; }
+        
+        public string ShortName { get; }
+        
+        private string GetShortName()
+        {
+            string attributeShortName = ParameterInfo.GetCustomAttribute<OptionAttribute>()?.ShortName;
+    
+            if (!string.IsNullOrEmpty(attributeShortName)) //provided by user
+                return attributeShortName;
+    
+            //use parameter name as short name 
+            return ParameterInfo.Name.Length == 1 ? ParameterInfo.Name.ChangeCase(Settings.Case) : null;
+        }
+
+        private string GetLongName()
+        {
+            string attributeLongName = ParameterInfo.GetCustomAttribute<OptionAttribute>()?.LongName;
+    
+            if (!string.IsNullOrEmpty(attributeLongName)) //long name attribute provided by user
+                return attributeLongName;
+
+            //short name is not present, 
+            if(string.IsNullOrEmpty(ShortName) && ParameterInfo.Name.Length > 1)
+                return ParameterInfo.Name.ChangeCase(Settings.Case); //return parameter name as long name
+    
+            //there is no long name
+            return null;
+        }
         
         private BooleanMode GetBooleanMode()
         {
@@ -53,36 +87,35 @@ namespace CommandDotNet.Models
         
         private string GetTemplate()
         {
-            OptionAttribute attribute = ParameterInfo.GetCustomAttribute<OptionAttribute>(false);
-
             StringBuilder sb = new StringBuilder();
-            
+    
             bool longNameAdded = false;
             bool shortNameAdded = false;
-            
-            if (!string.IsNullOrWhiteSpace(attribute?.LongName))
+    
+            if (!string.IsNullOrWhiteSpace(LongName))
             {
-                sb.Append($"--{attribute?.LongName}");
+                sb.Append($"--{LongName}");
                 longNameAdded = true;
             }
 
-            if (!string.IsNullOrWhiteSpace(attribute?.ShortName))
+            if (!string.IsNullOrWhiteSpace(ShortName))
             {
                 if (longNameAdded)
                 {
                     sb.Append(" | ");
                 }
 
-                sb.Append($"-{attribute?.ShortName}");
+                sb.Append($"-{ShortName}");
                 shortNameAdded = true;
             }
 
-            string defaultTemplate = ParameterInfo.Name.Length == 1 ? $"-{ParameterInfo.Name}" : $"--{ParameterInfo.Name}";
-            if(!longNameAdded & !shortNameAdded) sb.Append(defaultTemplate);
-            
-            //todo: value names
-            //if(CommandOptionType != CommandOptionType.NoValue) sb.Append($" <{attribute?.LongName ?? Name}>");
-            
+            if (!longNameAdded & !shortNameAdded)
+            {
+                throw new Exception("something went wrong: !longNameAdded & !shortNameAdded");
+            }
+                
+            //if(CommandOptionType != CommandOptionType.NoValue) sb.Append($" <{ValueName}>");
+    
             return sb.ToString();
         }
         

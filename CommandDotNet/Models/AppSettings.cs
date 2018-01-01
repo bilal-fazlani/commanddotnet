@@ -19,11 +19,22 @@ namespace CommandDotNet.Models
         public bool AllowArgumentSeparator { get; set; }
 
         public ArgumentMode MethodArgumentMode { get; set; } = ArgumentMode.Parameter;
+
+        public Case Case { get; set; } = Case.DontChange;
     }
 
     public enum ArgumentMode
     {
         Parameter = 0,
         Option = 1
+    }
+
+    public enum Case
+    {
+        DontChange = 0,
+        LowerCase = 1,
+        CamelCase = 2,
+        KebabCase = 3,
+        PascalCase = 4
     }
 }
