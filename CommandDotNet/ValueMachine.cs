@@ -10,71 +10,83 @@ namespace CommandDotNet
 {
     public static class ValueMachine
     {
-        public static object GetValue(ArgumentInfo arguementInfo)
+        public static object GetValue(ArgumentInfo argumentInfo)
         {
-            Type argType = arguementInfo.Type;
+            Type argType = argumentInfo.Type;
 
             //when value is present
-            if (arguementInfo.ValueInfo.HasValue && !string.IsNullOrWhiteSpace(arguementInfo.ValueInfo.Value))
+            if (argumentInfo.ValueInfo.HasValue && !string.IsNullOrWhiteSpace(argumentInfo.ValueInfo.Value))
             {
                 if (argType == typeof(char) || argType == typeof(char?))
                 {
-                    return GetChar(arguementInfo);
+                    return GetChar(argumentInfo);
                 }
 
                 if (typeof(List<char>).IsAssignableFrom(argType))
                 {
-                    return arguementInfo.ValueInfo.Values.Select(value => GetChar(arguementInfo)).ToList();
+                    return argumentInfo.ValueInfo.Values.Select(value => GetChar(argumentInfo)).ToList();
                 }
 
                 if (argType == typeof(int) || argType == typeof(int?))
                 {
-                    return GetInt(arguementInfo);
+                    return GetInt(argumentInfo);
                 }
 
                 if (typeof(List<int>).IsAssignableFrom(argType))
                 {
-                    return arguementInfo.ValueInfo.Values.Select(value => GetInt(arguementInfo)).ToList();
+                    return argumentInfo.ValueInfo.Values.Select(value => GetInt(argumentInfo)).ToList();
                 }
 
                 if (argType == typeof(long) || argType == typeof(long?))
                 {
-                    return GetLong(arguementInfo);
+                    return GetLong(argumentInfo);
                 }
 
                 if (typeof(List<long>).IsAssignableFrom(argType))
                 {
-                    return arguementInfo.ValueInfo.Values.Select(value => GetLong(arguementInfo)).ToList();
+                    return argumentInfo.ValueInfo.Values.Select(value => GetLong(argumentInfo)).ToList();
                 }
 
                 if (argType == typeof(double) || argType == typeof(double?))
                 {
-                    return GetDouble(arguementInfo);
+                    return GetDouble(argumentInfo);
                 }
 
                 if (typeof(List<double>).IsAssignableFrom(argType))
                 {
-                    return arguementInfo.ValueInfo.Values.Select(value => GetDouble(arguementInfo)).ToList();
+                    return argumentInfo.ValueInfo.Values.Select(value => GetDouble(argumentInfo)).ToList();
                 }
 
                 if (argType == typeof(bool) || argType == typeof(bool?))
                 {
-                    return GetBoolean(arguementInfo);
+                    return GetBoolean(argumentInfo);
                 }
 
                 if (typeof(List<bool>).IsAssignableFrom(argType))
                 {
-                    return arguementInfo.ValueInfo.Values.Select(value => GetBoolean(arguementInfo)).ToList();
+                    return argumentInfo.ValueInfo.Values.Select(value => GetBoolean(argumentInfo)).ToList();
                 }
 
                 if (argType == typeof(string))
                 {
-                    return arguementInfo.ValueInfo.Value;
+                    return argumentInfo.ValueInfo.Value;
                 }
 
                 if (typeof(List<string>).IsAssignableFrom(argType))
                 {
-                    return arguementInfo.ValueInfo.Values;
+                    return argumentInfo.ValueInfo.Values;
+                }
+
+                if (argType.IsEnum)
+                {
+                    try
+                    {
+                        return Enum.Parse(argType, argumentInfo.ValueInfo.Value);
+                    }
+                    catch (ArgumentException e)
+                    {
+                        ThrowParsingException<object>(argumentInfo);
+                    }
                 }
 
                 throw new ValueParsingException(
@@ -82,9 +94,9 @@ namespace CommandDotNet
             }
 
             //when value not present but method parameter has a default value defined
-            if (arguementInfo.DefaultValue != DBNull.Value && arguementInfo.DefaultValue != null)
+            if (argumentInfo.DefaultValue != DBNull.Value && argumentInfo.DefaultValue != null)
             {
-                return arguementInfo.DefaultValue;
+                return argumentInfo.DefaultValue;
             }
 
             //when there no value from inut and no default value, return default value of the type
