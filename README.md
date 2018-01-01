@@ -340,11 +340,11 @@ Here's table of examples:
 
 | Method parameter name | Longname | Shortname | Generated template
 | --- | --- | --- | --- |
-| planet |  |  | --planet |
-| planet | planet |  | --planet |
-| planet |  | p | -p |
-| planet | planet | p | -p \| --planet |
-| p |  |  | -p |
+| planet |  |  | `--planet` |
+| planet | planet |  | `--planet` |
+| planet |  | p | `-p` |
+| planet | planet | p | `-p | --planet` |
+| p |  |  | `-p` |
 
 
 ## Constructor options
