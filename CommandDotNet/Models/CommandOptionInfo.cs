@@ -40,6 +40,8 @@ namespace CommandDotNet.Models
         public string LongName { get; }
         
         public string ShortName { get; }
+
+        public bool Inherited => ParameterInfo.GetCustomAttribute<OptionAttribute>()?.Inherited ?? false;
         
         private string GetShortName()
         {

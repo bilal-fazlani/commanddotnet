@@ -76,7 +76,8 @@ namespace CommandDotNet
                     {
                         option.SetValue(command.Option(option.Template,
                             option.EffectiveDescription,
-                            option.CommandOptionType));
+                            option.CommandOptionType, 
+                            option.Inherited));
                     }
                     
                     foreach (var parameter in argumentValues.OfType<CommandParameterInfo>())
@@ -122,14 +123,17 @@ namespace CommandDotNet
                 switch (argumentInfo)
                 {
                     case CommandParameterInfo parameterInfo:
-                        parameterInfo.SetValue(_app.Argument(parameterInfo.Name,
-                            parameterInfo.EffectiveDescription, parameterInfo.IsMultipleType));
+                        parameterInfo.SetValue(_app.Argument(
+                            parameterInfo.Name,
+                            parameterInfo.EffectiveDescription, 
+                            parameterInfo.IsMultipleType));
                         break;
                     case CommandOptionInfo optionInfo:
                         optionInfo.SetValue(_app.Option(
                             optionInfo.Template,
                             optionInfo.EffectiveDescription,
-                            optionInfo.CommandOptionType));
+                            optionInfo.CommandOptionType,
+                            optionInfo.Inherited));
                         break;
                 }
             }

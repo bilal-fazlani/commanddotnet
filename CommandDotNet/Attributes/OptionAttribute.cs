@@ -10,5 +10,7 @@ namespace CommandDotNet.Attributes
         public string LongName { get; set; }
         
         public BooleanMode BooleanMode { get; set; }
+        
+        public bool Inherited { get; set; }
     }
 }
