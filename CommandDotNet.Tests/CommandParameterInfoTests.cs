@@ -26,7 +26,7 @@ namespace CommandDotNet.Tests
             new object[]
             {
                 "id", CommandOptionType.SingleValue, DBNull.Value, "Int64", "Int64", "Id of person", 
-                "Int64".PadRight(Constants.PadLength)+"Id of person", "--id | -i", typeof(long), true
+                "Int64".PadRight(Constants.PadLength)+"Id of person", "-i | --id", typeof(long), true
             },
             new object[]
             {

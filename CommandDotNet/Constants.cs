@@ -4,6 +4,6 @@
     {
         public const string HelpTemplate = "-h | -? | --help";
 
-        public const int PadLength = 50;
+        public const int PadLength = 30;
     }
 }

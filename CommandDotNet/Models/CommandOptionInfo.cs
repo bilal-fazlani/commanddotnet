@@ -88,25 +88,25 @@ namespace CommandDotNet.Models
         private string GetTemplate()
         {
             StringBuilder sb = new StringBuilder();
-    
-            bool longNameAdded = false;
+
             bool shortNameAdded = false;
-    
-            if (!string.IsNullOrWhiteSpace(LongName))
-            {
-                sb.Append($"--{LongName}");
-                longNameAdded = true;
-            }
+            bool longNameAdded = false;
 
             if (!string.IsNullOrWhiteSpace(ShortName))
             {
-                if (longNameAdded)
+                sb.Append($"-{ShortName}");
+                shortNameAdded = true;
+            }
+
+            if (!string.IsNullOrWhiteSpace(LongName))
+            {
+                if (shortNameAdded)
                 {
                     sb.Append(" | ");
                 }
-
-                sb.Append($"-{ShortName}");
-                shortNameAdded = true;
+                
+                sb.Append($"--{LongName}");
+                longNameAdded = true;
             }
 
             if (!longNameAdded & !shortNameAdded)

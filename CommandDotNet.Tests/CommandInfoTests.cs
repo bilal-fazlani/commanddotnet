@@ -69,7 +69,7 @@ namespace CommandDotNet.Tests
                     DefaultValue = DBNull.Value,
                     Type = typeof(int),
                     //Required = true,
-                    EffectiveDescription = "Int32                                             some parameter description",
+                    EffectiveDescription = "Int32".PadRight(Constants.PadLength)+"some parameter description",
                     TypeDisplayName = "Int32",
                     AnnotatedDescription = "some parameter description",
                     Details = "Int32",
