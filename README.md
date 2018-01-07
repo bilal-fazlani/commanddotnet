@@ -10,6 +10,7 @@ Table of contents:
 
 - [Installation](#installation)
 - [Introduction](#introduction)
+- [Definitions](#defintions)
 - [Parameters](#parameters)
     - [Arguments](#arguments)
     - [Options](#options)
@@ -37,6 +38,8 @@ Table of contents:
 
 From nuget: https://www.nuget.org/packages/CommandDotNet
 
+## Defintions
+![defintions](./images/definitions.png)
 
 ## Introduction
 
