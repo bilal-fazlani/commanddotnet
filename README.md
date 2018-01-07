@@ -10,7 +10,6 @@ Table of contents:
 
 - [Installation](#installation)
 - [Introduction](#introduction)
-- [Definitions](#defintions)
 - [Parameters](#parameters)
     - [Arguments](#arguments)
     - [Options](#options)
@@ -37,9 +36,6 @@ Table of contents:
 ## Installation
 
 From nuget: https://www.nuget.org/packages/CommandDotNet
-
-## Defintions
-![defintions](./images/definitions.png)
 
 ## Introduction
 
@@ -181,6 +177,8 @@ Answer: 60
 Cool. You get the gist of this library. Let's move on.
 
 ## Parameters
+
+<img src="./images/definitions.png" width="600px" />
 
 ### Arguments
 
