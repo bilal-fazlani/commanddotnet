@@ -1,4 +1,5 @@
 ﻿using CommandDotNet.Attributes;
+using CommandDotNet.Exceptions;
 using CommandDotNet.Models;
 using FluentAssertions;
 using Xunit;

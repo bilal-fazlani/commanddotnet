@@ -38,7 +38,7 @@ namespace CommandDotNet
                 {
                     if (defaultCommandInfo.Arguments.Any())
                     {
-                        throw new Exception("Method with [DefaultMethod] attribute does not support parameters");
+                        throw new AppRunnerException("Method with [DefaultMethod] attribute does not support parameters");
                     }
 
                     return await _commandRunner.RunCommand(defaultCommandInfo, null);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using CommandDotNet.Exceptions;
@@ -60,25 +61,39 @@ namespace CommandDotNet
 
                 return 1;
             }
-            catch (AggregateException e)
+            catch (AggregateException e) when (e.InnerExceptions.Any(x => x.GetBaseException() is AppRunnerException) ||
+                                               e.InnerExceptions.Any(x =>
+                                                   x.GetBaseException() is CommandParsingException))
             {
                 foreach (var innerException in e.InnerExceptions)
                 {
                     Console.Error.WriteLine(innerException.GetBaseException().Message + "\n");
 #if DEBUG
                     Console.Error.WriteLine(innerException.GetBaseException().StackTrace);
+                    if (e.InnerExceptions.Count > 1)
+                        Console.Error.WriteLine("-----------------------------------------------------------------");
 #endif
-                    Console.Error.WriteLine("-----------------------------------------------------------------");
                 }
+
                 return 1;
             }
-            catch (Exception e)
+            catch (AggregateException e) when(e.InnerExceptions.Any(x=> x is TargetInvocationException))
             {
-                Console.Error.WriteLine(e.Message + "\n");
-#if DEBUG
-                Console.Error.WriteLine(e.StackTrace);
-#endif
+                TargetInvocationException ex = (TargetInvocationException)e.InnerExceptions.SingleOrDefault(x => x is TargetInvocationException);
+                throw ex.InnerException ?? ex;
+            }
+            catch (AggregateException e)
+            {
+                foreach (Exception innerException in e.InnerExceptions)
+                {
+                    throw innerException;
+                }
+
                 return 1;
+            }
+            catch (TargetInvocationException ex)
+            {
+                throw ex.InnerException ?? ex;
             }
         }
     }

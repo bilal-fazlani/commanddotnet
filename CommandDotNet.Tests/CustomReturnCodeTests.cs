@@ -13,9 +13,7 @@ namespace CommandDotNet.Tests
 
         [Theory]
         [InlineData("VoidMethodThatHasNoException", 0)]
-        [InlineData("VoidMethodWithException", 1)]
         [InlineData("IntMethodWithNoException", 4)]
-        [InlineData("IntMethodWithException", 1)]
         public void Test(string commandName, int expectedExitCode)
         {
             AppRunner<AppForTestingReturnCodes> appRunner = new AppRunner<AppForTestingReturnCodes>();
@@ -31,19 +29,9 @@ namespace CommandDotNet.Tests
             
         }
 
-        public void VoidMethodWithException()
-        {
-            throw new Exception();
-        }
-
         public int IntMethodWithNoException()
         {
             return 4;
-        }
-        
-        public int IntMethodWithException()
-        {
-            throw new Exception();
         }
     }
 }

@@ -21,14 +21,6 @@ namespace CommandDotNet.Tests
             int exitCode = appRunner.Run(new[] {"names", "-n", "bilal", "-n", "fazlani"});
             exitCode.Should().Be(2, "length of parameters passed is 2");
         }
-        
-        [Fact(Skip = "Not ready yet")]
-        public void CanRecogniseListWhenPassedInWithCommaSeparatedValues()
-        {
-            AppRunner<MultiValueApp> appRunner = new AppRunner<MultiValueApp>();
-            int exitCode = appRunner.Run(new[] {"cities", "-c", "mumbai, pune, bangalore"});
-            exitCode.Should().Be(3, "length of parameters passed is 3");
-        }
     }
 
     public class MultiValueApp
