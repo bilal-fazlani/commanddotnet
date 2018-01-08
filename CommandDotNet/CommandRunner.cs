@@ -14,18 +14,18 @@ namespace CommandDotNet
         private readonly CommandLineApplication _app;
         private readonly Type _type;
         private readonly IEnumerable<ArgumentInfo> _constrcutorParamValues;
-        private readonly AppSettings _appSettings;
+        private readonly IDependencyResolver _dependencyResolver;
 
         public CommandRunner(
             CommandLineApplication app,
             Type type,
-            IEnumerable<ArgumentInfo> constrcutorParamValues, 
-            AppSettings appSettings)
+            IEnumerable<ArgumentInfo> constrcutorParamValues,
+            IDependencyResolver dependencyResolver)
         {
             _app = app;
             _type = type;
             _constrcutorParamValues = constrcutorParamValues;
-            _appSettings = appSettings;
+            _dependencyResolver = dependencyResolver;
         }
 
         public async Task<int> RunCommand(
@@ -37,7 +37,7 @@ namespace CommandDotNet
             try
             {
                 //create instance
-                object instance = AppInstanceCreator.CreateInstance(_type, _constrcutorParamValues);
+                object instance = AppInstanceCreator.CreateInstance(_type, _constrcutorParamValues, _dependencyResolver);
 
                 //dentify method to invove
                 MethodInfo theMethod = instance.GetType().GetMethod(commandInfo.MethodName);

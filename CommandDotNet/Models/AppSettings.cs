@@ -1,5 +1,4 @@
-﻿using System;
-using CommandDotNet.Exceptions;
+﻿using CommandDotNet.Exceptions;
 
 namespace CommandDotNet.Models
 {

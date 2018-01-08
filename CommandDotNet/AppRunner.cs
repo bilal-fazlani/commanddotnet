@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
 using CommandDotNet.Exceptions;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 
 [assembly: InternalsVisibleTo("CommandDotNet.Tests")]
+[assembly: InternalsVisibleTo("CommandDotNet.IoC.Autofac")]
+[assembly: InternalsVisibleTo("CommandDotNet.IoC.MicrosoftDependencyInjection")]
 
 namespace CommandDotNet
 {
@@ -17,6 +19,8 @@ namespace CommandDotNet
     /// <typeparam name="T">Type of the application</typeparam>
     public class AppRunner<T> where T : class
     {
+        internal IDependencyResolver DependencyResolver;
+        
         private readonly AppSettings _settings;
 
         public AppRunner(AppSettings settings = null)
@@ -36,7 +40,7 @@ namespace CommandDotNet
             {
                 AppCreator appCreator = new AppCreator(_settings);
 
-                CommandLineApplication app = appCreator.CreateApplication(typeof(T));
+                CommandLineApplication app = appCreator.CreateApplication(typeof(T), DependencyResolver);
 
                 var parsedArguments = ArgumentParser.SplitFlags(args).ToArray();
 
@@ -80,20 +84,22 @@ namespace CommandDotNet
             catch (AggregateException e) when(e.InnerExceptions.Any(x=> x is TargetInvocationException))
             {
                 TargetInvocationException ex = (TargetInvocationException)e.InnerExceptions.SingleOrDefault(x => x is TargetInvocationException);
-                throw ex.InnerException ?? ex;
+                ExceptionDispatchInfo.Capture(ex.InnerException ?? ex).Throw();
+                return 1; // this will never be called
             }
             catch (AggregateException e)
             {
                 foreach (Exception innerException in e.InnerExceptions)
                 {
-                    throw innerException;
+                    ExceptionDispatchInfo.Capture(innerException).Throw();
                 }
 
-                return 1;
+                return 1; // this will never be called if there is any inner exception
             }
             catch (TargetInvocationException ex)
             {
-                throw ex.InnerException ?? ex;
+                ExceptionDispatchInfo.Capture(ex.InnerException ?? ex).Throw();
+                return 1; // this will never be called
             }
         }
     }

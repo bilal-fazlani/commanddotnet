@@ -59,7 +59,9 @@ namespace CommandDotNet.Tests
             throw new Exception("ThrowOneMoreException");
         }
         
+#pragma warning disable 1998
         public async Task<int> ThrowExceptionAsync()
+#pragma warning restore 1998
         {
             throw new Exception("ThrowExceptionAsync");
         }

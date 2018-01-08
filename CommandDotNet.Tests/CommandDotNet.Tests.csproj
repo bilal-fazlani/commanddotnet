@@ -14,6 +14,8 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommandDotNet.IoC.Autofac\CommandDotNet.IoC.Autofac.csproj" />
+    <ProjectReference Include="..\CommandDotNet.IoC.MicrosoftDependencyInjection\CommandDotNet.IoC.MicrosoftDependencyInjection.csproj" />
     <ProjectReference Include="..\CommandDotNet\CommandDotNet.csproj" />
   </ItemGroup>
   <ItemGroup>

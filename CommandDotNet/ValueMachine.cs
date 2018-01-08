@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using CommandDotNet.Exceptions;
-using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 
 namespace CommandDotNet

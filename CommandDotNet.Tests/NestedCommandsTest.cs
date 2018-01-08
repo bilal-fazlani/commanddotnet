@@ -92,21 +92,21 @@ namespace CommandDotNet.Tests
             return 5;
         }
         
-        public Submodule SubmoduleProperty { get; set; }
-    }
-
-    public class Submodule
-    {
-        public int Add(string url)
+        public class Submodule
         {
-            Console.WriteLine($"Submodule {url} added");
-            return 6;
-        }
+            public int Add(string url)
+            {
+                Console.WriteLine($"Submodule {url} added");
+                return 6;
+            }
 
-        public int Remove(string path)
-        {
-            Console.WriteLine($"Submodule {path} removed");
-            return 7;
+            public int Remove(string path)
+            {
+                Console.WriteLine($"Submodule {path} removed");
+                return 7;
+            }
         }
     }
+
+    
 }

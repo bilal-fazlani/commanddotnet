@@ -3,10 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
 using CommandDotNet.Attributes;
-using CommandDotNet.Exceptions;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 
@@ -22,22 +19,18 @@ namespace CommandDotNet
                 .Select(mi => new CommandInfo(mi, settings));
         }
 
-        public static void CreateSubApplications(this Type type, 
+        public static void CreateSubApplications(this Type type,
             AppSettings settings, 
-            CommandLineApplication parentApplication)
+            CommandLineApplication parentApplication,
+            IDependencyResolver dependencyResolver)
         {
-            IEnumerable<Type> propertySubmodules = type
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                .Where(p => !p.PropertyType.IsValueType)
-                .Select(p => p.PropertyType);
-
             IEnumerable<Type> inlineClassSubmodules = type
                 .GetNestedTypes(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);            
             
-            foreach (Type submoduleType in propertySubmodules.Union(inlineClassSubmodules))
+            foreach (Type submoduleType in inlineClassSubmodules)
             {
                 AppCreator appCreator = new AppCreator(settings);
-                appCreator.CreateApplication(submoduleType, parentApplication);
+                appCreator.CreateApplication(submoduleType, dependencyResolver, parentApplication);
             }
         }
         

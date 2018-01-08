@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mime;
 using System.Reflection;
 using CommandDotNet.Attributes;
-using Humanizer;
 
 namespace CommandDotNet.Models
 {

@@ -16,7 +16,7 @@ namespace CommandDotNet
         private readonly AppSettings _settings;
         private readonly CommandRunner _commandRunner;
 
-        public CommandCreator(Type type, CommandLineApplication app, AppSettings settings)
+        public CommandCreator(Type type, CommandLineApplication app, IDependencyResolver dependencyResolver, AppSettings settings)
         {
             _type = type;
             _app = app;
@@ -25,7 +25,7 @@ namespace CommandDotNet
             //get values for construtor params
             List<ArgumentInfo> constructorValues = GetOptionValuesForConstructor();
             
-            _commandRunner = new CommandRunner(app, type, constructorValues, settings);
+            _commandRunner = new CommandRunner(app, type, constructorValues, dependencyResolver);
         }
 
         public void CreateDefaultCommand()

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Security.Cryptography;
 using CommandDotNet.Attributes;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
@@ -19,6 +17,7 @@ namespace CommandDotNet
 
         public CommandLineApplication CreateApplication(
             Type type,
+            IDependencyResolver dependencyResolver,
             CommandLineApplication parentApplication = null)
         {
             bool isRootApp = parentApplication == null;
@@ -50,13 +49,13 @@ namespace CommandDotNet
 
             app.AllowArgumentSeparator = _appSettings.AllowArgumentSeparator;
 
-            CommandCreator commandCreator = new CommandCreator(type, app , _appSettings);
+            CommandCreator commandCreator = new CommandCreator(type, app, dependencyResolver, _appSettings);
             
             commandCreator.CreateDefaultCommand();
 
             commandCreator.CreateCommands();
 
-            type.CreateSubApplications(_appSettings, app);
+            type.CreateSubApplications(_appSettings, app, dependencyResolver);
 
             return app;
         }
