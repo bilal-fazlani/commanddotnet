@@ -33,6 +33,7 @@ Table of contents:
     - [Boolean mode](#boolean-mode)
         - [Flag clubbing](#flag-clubbing)
 - [Exception handling](#exception-handling)
+- [Dependency Injection](#dependency-injection)
 
 ## Installation
 
@@ -736,46 +737,6 @@ OUTPUT
 ```bash
 stash popped
 ```
----
-Using nested types is one way to nest commands. Another way to do the same thing would be creating the class outside the root class and addding a property to refer nested command.
-
-Here's the same example with using property:
-
-```c#
-[ApplicationMetadata(Description = "Fake git application")]
-public class Git
-{
-    public Stash Stash { get; set; }
-    
-    [ApplicationMetadata(Description = "Commits all staged changes")]
-    public void Commit([Option(ShortName = "m")]string commitMessage)
-    {
-        Console.WriteLine("Commit successful");
-    }
-}
-
-[ApplicationMetadata(Description = "Stashes all changes when executed without any arguments")]
-public class Stash
-{
-    [DefaultMethod]
-    public void StashDefaultCommand()
-    {
-        Console.WriteLine($"changes stashed");
-    }
-
-    [ApplicationMetadata(Description = "Applies last stashed changes")]
-    public void Pop()
-    {
-        Console.WriteLine($"stash popped");
-    }
-
-    [ApplicationMetadata(Description = "Lists all saved stashed changes")]
-    public void List()
-    {
-        Console.WriteLine($"here's the list of stash");
-    }
-}
-```
 
 ## Settings
 
@@ -952,3 +913,6 @@ catch(MyBusinessException ex)
 }
 ```
 
+## Dependency Injection
+
+Coming soon...
