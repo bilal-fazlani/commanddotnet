@@ -32,6 +32,7 @@ Table of contents:
     - [Case](#case)
     - [Boolean mode](#boolean-mode)
         - [Flag clubbing](#flag-clubbing)
+- [Exception handling](#exception-handling)
 
 ## Installation
 
@@ -428,6 +429,9 @@ Notes:
  - **Any parameters in contrustor are [Options](#option) by default and you can't have [Argument](#argument) attribute in constructor parameters**
 
  - **Only one constructor is supported. If there are multiple, it will pick up first defined constructor**
+
+### Inherited
+`[Options]` attribute has a property called `Inherited`. This is perticularly useful when used with constructor options. When set to true, that option is can be passed to commands as well.
 
 ## Default values
 
@@ -931,3 +935,20 @@ In this library, there are two ways to parse boolean [Options](#options). Note t
 
 
     When you check the help of a command, you if you see `Boolean` it means if you wan't to make it true, you need to pass an explit value. If you don't pass one, it will default to `false` automatically. Implicit and explicit are just ways to pass the value, under the hood they are just boolean parameters.
+
+## Exception handling
+
+Any excption that is thrown from the method or constructor is thrown as is. You can catch it over the `AppRunner<T>.Run()` method otherwise exception will be unhandled and application will crash.
+
+```c#
+try
+{
+    AppRunner<Calculator> appRunner = new AppRunner<Calculator>();
+    return appRunner.Run(args);
+}
+catch(MyBusinessException ex)
+{
+    Console.WriteLine(ex.Message);
+}
+```
+
