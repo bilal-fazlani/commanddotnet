@@ -20,6 +20,8 @@ namespace CommandDotNet.Models
         public ArgumentMode MethodArgumentMode { get; set; } = ArgumentMode.Parameter;
 
         public Case Case { get; set; } = Case.DontChange;
+
+        public bool EnableVersionOption { get; set; } = true;
     }
 
     public enum ArgumentMode

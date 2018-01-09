@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using CommandDotNet.Attributes;
 using CommandDotNet.MicrosoftCommandLineUtils;
@@ -30,6 +31,8 @@ namespace CommandDotNet
             {
                 string rootName = $"dotnet {Assembly.GetEntryAssembly().GetName().Name}.dll";
                 app = new CommandLineApplication(throwOnUnexpectedArg: _appSettings.ThrowOnUnexpectedArgument) { Name = rootName };
+                
+                AddVersion(app);
             }
             else
             {
@@ -58,6 +61,15 @@ namespace CommandDotNet
             type.CreateSubApplications(_appSettings, app, dependencyResolver);
 
             return app;
+        }
+
+        private void AddVersion(CommandLineApplication app)
+        {
+            if (_appSettings.EnableVersionOption)
+            {
+                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
+                app.VersionOption("-v | --version", shortFormVersion: fvi.ProductVersion);
+            }
         }
     }
 }
