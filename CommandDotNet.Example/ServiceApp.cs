@@ -1,12 +1,16 @@
-﻿namespace CommandDotNet.Example
+﻿using System;
+using CommandDotNet.Attributes;
+
+namespace CommandDotNet.Example
 {
-    public class SimpleApp
+    public class ServiceApp
     {
         public IService Service { get; set; }
         
-        public int Process()
+        [DefaultMethod]
+        public void Process()
         {
-            return Service.value;
+            Console.WriteLine($"Service value is {Service.value}");
         }
     }
 
