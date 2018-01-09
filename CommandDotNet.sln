@@ -15,10 +15,6 @@ EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandDotNet.Example", "CommandDotNet.Example\CommandDotNet.Example.csproj", "{73A0E2B7-F205-47E2-A448-7E5CCD7FD6A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandDotNet.IoC.Autofac", "CommandDotNet.IoC.Autofac\CommandDotNet.IoC.Autofac.csproj", "{89EAF01B-FFB0-4562-84E0-8817FCDD0F9F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandDotNet.IoC.MicrosoftDependencyInjection", "CommandDotNet.IoC.MicrosoftDependencyInjection\CommandDotNet.IoC.MicrosoftDependencyInjection.csproj", "{05CE822B-CC59-4F14-A7B6-71C8722FACF5}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,14 +33,6 @@ Global
 		{73A0E2B7-F205-47E2-A448-7E5CCD7FD6A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73A0E2B7-F205-47E2-A448-7E5CCD7FD6A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73A0E2B7-F205-47E2-A448-7E5CCD7FD6A5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{89EAF01B-FFB0-4562-84E0-8817FCDD0F9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{89EAF01B-FFB0-4562-84E0-8817FCDD0F9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{89EAF01B-FFB0-4562-84E0-8817FCDD0F9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{89EAF01B-FFB0-4562-84E0-8817FCDD0F9F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{05CE822B-CC59-4F14-A7B6-71C8722FACF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05CE822B-CC59-4F14-A7B6-71C8722FACF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05CE822B-CC59-4F14-A7B6-71C8722FACF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05CE822B-CC59-4F14-A7B6-71C8722FACF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
