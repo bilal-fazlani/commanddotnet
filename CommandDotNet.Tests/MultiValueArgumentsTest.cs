@@ -7,33 +7,32 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
 {
-    public class MultiValueOptionsTest : TestBase
+    public class MultiValueArgumentsTest : TestBase
     {
-        public MultiValueOptionsTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public MultiValueArgumentsTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             
         }
         
         [Theory]
-        [InlineData("stringList", "-v", "john", "doe")]
-        [InlineData("intList", "-v", "3", "5")]
-        [InlineData("doubleList", "-v", "4.5", "2.3")]
-        [InlineData("enumList", "-v", "Thursday", "Tuesday")]
-        [InlineData("charList", "-v", "d", "y")]
-        [InlineData("longList", "-v", "123123", "456456534")]
+        [InlineData("stringList", "john", "doe")]
+        [InlineData("intList", "3", "5")]
+        [InlineData("doubleList", "4.5", "2.3")]
+        [InlineData("enumList", "Thursday", "Tuesday")]
+        [InlineData("charList", "d", "y")]
+        [InlineData("longList", "123123", "456456534")]
         public void CanRecogniseListWhenPassedInWithMultipleArguments(
-            string commandName, string optionName, string option1Value, string option2Value)
+            string commandName, string option1Value, string option2Value)
         {
-            AppRunner<MultiValueOptionsApp> appRunner = new AppRunner<MultiValueOptionsApp>();
-            int exitCode = appRunner.Run(new[] {commandName, optionName, option1Value,
-                optionName, option2Value });
+            AppRunner<MultiValueArgumentApp> appRunner = new AppRunner<MultiValueArgumentApp>();
+            int exitCode = appRunner.Run(new[] {commandName, option1Value, option2Value });
             exitCode.Should().Be(2, "length of parameters passed is 2");
         }
     }
 
-    public class MultiValueOptionsApp
+    public class MultiValueArgumentApp
     {
-        public int stringList([Option(ShortName = "v")] List<string> values)
+        public int stringList(List<string> values)
         {
             foreach (var value in values)
             {
@@ -45,7 +44,7 @@ namespace CommandDotNet.Tests
             return values.Count;
         }
         
-        public int intList([Option(ShortName = "v")] List<int> values)
+        public int intList(List<int> values)
         {
             foreach (var value in values)
             {
@@ -56,7 +55,7 @@ namespace CommandDotNet.Tests
             return values.Count;
         }
         
-        public int doubleList([Option(ShortName = "v")] List<double> values)
+        public int doubleList(List<double> values)
         {
             foreach (var value in values)
             {
@@ -67,7 +66,7 @@ namespace CommandDotNet.Tests
             return values.Count;
         }
         
-        public int longList([Option(ShortName = "v")] List<long> values)
+        public int longList(List<long> values)
         {
             foreach (var value in values)
             {
@@ -78,7 +77,7 @@ namespace CommandDotNet.Tests
             return values.Count;
         }
         
-        public int enumList([Option(ShortName = "v")] List<DayOfWeek> values)
+        public int enumList(List<DayOfWeek> values)
         {
             foreach (var value in values)
             {
@@ -89,7 +88,7 @@ namespace CommandDotNet.Tests
             return values.Count;
         }
         
-        public int charList([Option(ShortName = "v")] List<char> values)
+        public int charList(List<char> values)
         {
             foreach (var value in values)
             {
