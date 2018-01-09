@@ -29,6 +29,9 @@ Table of contents:
 - [Async methods](#async-methods)
 - [Nesting commands](#nesting-commands)
 - [Settings](#settings)
+    - [Show argument details](#show-argument-details)
+    - [Method argument mode](#method-argument-mode)
+    - [Enable version option](#enable-version-option)
     - [Case](#case)
     - [Boolean mode](#boolean-mode)
         - [Flag clubbing](#flag-clubbing)
@@ -744,6 +747,28 @@ stash popped
 
 When you create a new instance of `AppRunner<T>` you can pass an instance new `AppSettings` object.
 Here are the settings you can change:
+
+### Show argument details
+
+Shows type information of arguments in help text. Enabled by default.
+
+### Method argument mode
+
+Possible values : 
+
+1. Parameter (default)
+2. Option
+
+When method argument mode is set to parameter, all arguments of methods are treated as parameters and dont need any names to be passed through command line.
+Note that order of passing parameters matter in this mode.
+
+When method argument mode is set to option, all arguments of methods are treated as options and need a name to be passed.
+
+Note that this is only applicable for methods and not constructors. For constructors, all arguments are options only.
+
+### Enable version option
+
+True by default. It adds an additional option to the root command. It shows version of the application.
 
 ### Case
 
