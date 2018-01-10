@@ -11,9 +11,9 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
 {
-    public class CommandParameterInfoTests : TestBase
+    public class CommandOptionInfoTests : TestBase
     {
-        public CommandParameterInfoTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public CommandOptionInfoTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
 
@@ -97,11 +97,10 @@ namespace CommandDotNet.Tests
 
         [Theory]
         [MemberData(nameof(TestCases))]
-        public void CanIdentifyArgumentInfoFromMethods(
+        public void CanIdentifyArgumentInfoFromMethodsUsingParameterInfo(
             string parameterName,
             CommandOptionType commandOptionType, 
             object defaultValue, 
-            //bool required,
             string typeDisplayName,
             string parameterDetails,
             string annotatedDescription,
@@ -119,7 +118,6 @@ namespace CommandDotNet.Tests
 
             commandParameterInfo.CommandOptionType.Should().Be(commandOptionType, nameof(commandOptionType));
             commandParameterInfo.DefaultValue.Should().Be(defaultValue, nameof(defaultValue));
-            //commandParameterInfo.Required.Should().Be(required, nameof(required));
             commandParameterInfo.TypeDisplayName.Should().Be(typeDisplayName, nameof(typeDisplayName));
             commandParameterInfo.Details.Should().Be(parameterDetails, nameof(parameterDetails));
             commandParameterInfo.AnnotatedDescription.Should().Be(annotatedDescription, nameof(annotatedDescription));
@@ -127,6 +125,20 @@ namespace CommandDotNet.Tests
             commandParameterInfo.EffectiveDescription.Should().Be(effectiveDescription, nameof(effectiveDescription));
             commandParameterInfo.Template.Should().Be(template, nameof(template));
             commandParameterInfo.Type.Should().Be(type, nameof(type));
+        }
+
+        [Fact]
+        public void CanCreateCommandOptionInfoFromPropertyInfo()
+        {
+            PropertyInfo propertyInfo = typeof(ParameterModel).GetProperty("foreignKeyId");
+            CommandOptionInfo commandOptionInfo = new CommandOptionInfo(propertyInfo, new AppSettings());
+
+            commandOptionInfo.Details.Should().Be("Int32", "Details");
+            commandOptionInfo.Template.Should().Be("--foreignKeyId");
+            commandOptionInfo.LongName.Should().Be("foreignKeyId");
+            commandOptionInfo.TypeDisplayName.Should().Be("Int32");
+            commandOptionInfo.EffectiveDescription.Should().Be("Int32".PadRight(Constants.PadLength));
+            commandOptionInfo.IsMultipleType.Should().BeFalse();
         }
     }
     
@@ -171,5 +183,10 @@ namespace CommandDotNet.Tests
         {
             
         }
+    }
+
+    public class ParameterModel
+    {
+        public int foreignKeyId { get; set; }
     }
 }
