@@ -16,6 +16,7 @@ Table of contents:
     - [Flags](#flags)
 - [Attributes](#attributes)
     - [ApplicationMetadata](#applicationmetadata)
+    - [SubCommand](#subcommand)
     - [Argument](#argument)
     - [Option](#option)
 - [Constructor options](#constructor-options)
@@ -288,6 +289,11 @@ public void Subtract(int value1, int value2)
 
 Note that when you use ApplicationMetadata attribute on a method, you can change the name of the command that is different from method name.
 
+### SubCommand
+
+`[SubCommand]` attribute indicates that targeted property is a SubCommand.
+
+See [Nesting commands](#nesting-commands) for examples
 
 ### Argument
 
@@ -741,6 +747,37 @@ OUTPUT
 
 ```bash
 stash popped
+```
+
+***Alternative***
+
+If you like to store your sub commands as external .cs files, you can that too with `[SubCommand]` attribute.
+
+```c#
+    [ApplicationMetadata(Description = "Stashes all changes when executed without any arguments")]
+    public class Stash
+    {
+        [ApplicationMetadata(Description = "Applies last stashed changes")]
+        public void Pop()
+        {
+            Console.WriteLine($"stash popped");
+        }
+    }
+```
+
+```c#
+[ApplicationMetadata(Description = "Fake git application")]
+public class Git
+{
+    [SubCommand]
+    public Stash Stash {get;set;} // Stash class is saved in a seperate file
+
+    [ApplicationMetadata(Description = "Commits all staged changes")]
+    public void Commit([Option(ShortName = "m")]string commitMessage)
+    {
+        Console.WriteLine("Commit successful");
+    }
+}
 ```
 
 ## Settings
