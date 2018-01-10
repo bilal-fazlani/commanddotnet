@@ -14,12 +14,12 @@ namespace CommandDotNet.Tests
 
         [Theory]
         //nested types
-        [InlineData(3, new[]{"stash","pop"})] 
+        [InlineData(3, new[]{"stash","pop"})]
         [InlineData(4, new[]{"stash","list"})]
         [InlineData(5, new[]{"stash", "--additionalFactor", "1", "list"})]
         
         // default command in nested type
-        [InlineData(2, new[]{"stash"})] 
+        [InlineData(2, new[]{"stash"})]
         
         // typical scenario
         [InlineData(5, new[]{"commit", "-m", "added new feature"})]
@@ -39,9 +39,9 @@ namespace CommandDotNet.Tests
 
     public class GitApplication
     {
-        public class Remote
+        private class Remote
         {            
-            public class Origin
+            private class Origin
             {   
                 public int Show()
                 {
@@ -54,7 +54,7 @@ namespace CommandDotNet.Tests
         [ApplicationMetadata(Description = "Stashes all changes when executed without any arguments\n" +
                                            "see Stash --help for further information",
             Name = "stash")]
-        public class Stash
+        private class Stash
         {
             private readonly int _additionalFactor;
 
@@ -107,6 +107,4 @@ namespace CommandDotNet.Tests
             }
         }
     }
-
-    
 }

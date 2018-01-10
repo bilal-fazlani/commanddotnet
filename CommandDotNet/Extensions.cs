@@ -25,7 +25,7 @@ namespace CommandDotNet
             IDependencyResolver dependencyResolver)
         {
             IEnumerable<Type> inlineClassSubmodules = type
-                .GetNestedTypes(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);            
+                .GetNestedTypes(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);            
             
             foreach (Type submoduleType in inlineClassSubmodules)
             {
