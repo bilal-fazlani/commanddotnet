@@ -7,6 +7,7 @@ using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Attributes;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -19,7 +20,7 @@ namespace CommandDotNet.Tests
         }
 
         [Fact]
-        public void CanReadAndValidateModels()
+        public void CanReadModels()
         {
             TestCaseRunner<ModelApp> testCaseRunner = new TestCaseRunner<ModelApp>(TestOutputHelper, new AppSettings
             {
@@ -34,29 +35,41 @@ namespace CommandDotNet.Tests
 
     public class ModelApp
     {
-        public int ProcessModel(ProcessParams values)
+        public int SendNotification(Person person, Time time, Address address)
         {
-            string content = JsonConvert.SerializeObject(values, Formatting.Indented);
+            object obj = new
+            {
+                person,
+                time,
+                address
+            };
+            
+            string content = JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            });
             
             File.WriteAllText("TestCases/ModelTests.ModelTests.Output.json", content);
             return 5;
         }
     }
     
-    [Validator(typeof(ProcessModelValidator))]
-    public class ProcessParams: IArgumentModel
+
+    public class Person: IArgumentModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
         [Option]
         public string Email { get; set; }
+        
+        public string Number { get; set; }
     }
 
-    public class ProcessModelValidator : AbstractValidator<ProcessParams>
+    public class Address : IArgumentModel
     {
-        public ProcessModelValidator()
-        {
-            RuleFor(x => x.Id).GreaterThan(0);
-        }
+        public string City { get; set; }
+        
+        [Option(ShortName = "a")]
+        public bool HasAirport { get; set; }
     }
 }
