@@ -24,10 +24,16 @@ namespace CommandDotNet
             CommandLineApplication parentApplication,
             IDependencyResolver dependencyResolver)
         {
-            IEnumerable<Type> inlineClassSubmodules = type
-                .GetNestedTypes(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);            
+            IEnumerable<Type> propertySubmodules = type		
+                    .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)		
+                    .Where(p => !p.PropertyType.IsValueType)
+                    .Where(p => p.GetCustomAttribute<SubCommandAttribute>() != null)
+                    .Select(p => p.PropertyType);
             
-            foreach (Type submoduleType in inlineClassSubmodules)
+            IEnumerable<Type> inlineClassSubmodules = type
+                .GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);            
+            
+            foreach (Type submoduleType in propertySubmodules.Union(inlineClassSubmodules))
             {
                 AppCreator appCreator = new AppCreator(settings);
                 appCreator.CreateApplication(submoduleType, dependencyResolver, parentApplication);
