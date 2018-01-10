@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CommandDotNet.Exceptions;
 
 namespace CommandDotNet.MicrosoftCommandLineUtils
 {
@@ -21,8 +22,8 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public CommandLineApplication(bool throwOnUnexpectedArg = true)
         {
             _throwOnUnexpectedArg = throwOnUnexpectedArg;
-            Options = new List<CommandOption>();
-            Arguments = new List<CommandArgument>();
+            Options = new HashSet<CommandOption>();
+            Arguments = new HashSet<CommandArgument>();
             Commands = new List<CommandLineApplication>();
             RemainingArguments = new List<string>();
             Invoke = () => 0;
@@ -35,10 +36,10 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public string Description { get; set; }
         public bool ShowInHelpText { get; set; } = true;
         public string ExtendedHelpText { get; set; }
-        public readonly List<CommandOption> Options;
+        public readonly HashSet<CommandOption> Options;
         public CommandOption OptionHelp { get; private set; }
         public CommandOption OptionVersion { get; private set; }
-        public readonly List<CommandArgument> Arguments;
+        public readonly HashSet<CommandArgument> Arguments;
         public readonly List<string> RemainingArguments;
         public bool IsShowingInformation { get; protected set; }  // Is showing help or version?
         public Func<int> Invoke { get; set; }
@@ -87,7 +88,9 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 Description = description,
                 Inherited = inherited
             };
-            Options.Add(option);
+            bool optionAdded = Options.Add(option);
+            if(!optionAdded)
+                throw new AppRunnerException($"Option with template `{option.Template}` already added");
             configuration(option);
             return option;
         }
@@ -108,7 +111,9 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             }
 
             var argument = new CommandArgument { Name = name, Description = description, MultipleValues = multipleValues };
-            Arguments.Add(argument);
+            bool argumentAdded = Arguments.Add(argument);
+            if(!argumentAdded)
+                throw new AppRunnerException($"Argument with name '{argument.Name}' already added");
             configuration(argument);
             return argument;
         }
