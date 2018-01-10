@@ -31,6 +31,16 @@ namespace CommandDotNet.Tests
                 inputFileName: "TestCases/ModelTests.ModelTests.Input.json", 
                 outputFileName: "TestCases/ModelTests.ModelTests.Output.json");
         }
+
+        [Fact]
+        public void CanConstructorsReadModels()
+        {
+            AppRunner<ModelAppWithConstructor> appRunner = new AppRunner<ModelAppWithConstructor>(new AppSettings()
+            {
+                Case = Case.KebabCase
+            });
+            appRunner.Run("--id", "9", "read-person-data").Should().Be(6);
+        }
     }
 
     public class ModelApp
@@ -51,6 +61,23 @@ namespace CommandDotNet.Tests
             
             File.WriteAllText("TestCases/ModelTests.ModelTests.Output.json", content);
             return 5;
+        }
+    }
+
+    public class ModelAppWithConstructor
+    {
+        private readonly Person _person;
+
+        public ModelAppWithConstructor(Person person)
+        {
+            _person = person;
+        }
+
+        public int ReadPersonData()
+        {
+            if (_person != null && _person.Id == 9)
+                return 6;
+            return 1;
         }
     }
     

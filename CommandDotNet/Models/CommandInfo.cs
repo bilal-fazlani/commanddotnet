@@ -11,6 +11,7 @@ namespace CommandDotNet.Models
         private readonly MethodInfo _methodInfo;
         private readonly AppSettings _settings;
         private readonly ApplicationMetadataAttribute _metadataAttribute;
+        private readonly ArgumentInfoCreator _argumentInfoCreator;
 
         public CommandInfo(MethodInfo methodInfo, AppSettings settings)
         {
@@ -18,6 +19,7 @@ namespace CommandDotNet.Models
             _settings = settings;
 
             _metadataAttribute = _methodInfo.GetCustomAttribute<ApplicationMetadataAttribute>(false);
+            _argumentInfoCreator = new ArgumentInfoCreator(settings);
             
             Arguments = GetArguments();
         }
@@ -28,75 +30,10 @@ namespace CommandDotNet.Models
 
             foreach (ParameterInfo parameterInfo in _methodInfo.GetParameters())
             {
-                arguments.AddRange(ConvertToArgumentInfo(parameterInfo));
+                arguments.AddRange(_argumentInfoCreator.ConvertToArgumentInfos(parameterInfo, _settings.MethodArgumentMode));
             }
             
             return arguments;
-        }
-
-        private IEnumerable<ArgumentInfo> ConvertToArgumentInfo(ParameterInfo parameterInfo)
-        {
-            if (!typeof(IArgumentModel).IsAssignableFrom(parameterInfo.ParameterType))
-            {
-                if (_settings.MethodArgumentMode == ArgumentMode.Parameter)
-                {
-                    if (parameterInfo.HasAttribute<OptionAttribute>())
-                    {
-                        yield return new CommandOptionInfo(parameterInfo, _settings);
-                    }
-                    else
-                    {
-                        yield return new CommandParameterInfo(parameterInfo, _settings);
-                    }
-                }
-                else
-                {
-                    if (parameterInfo.HasAttribute<ArgumentAttribute>())
-                    {
-                        yield return new CommandParameterInfo(parameterInfo, _settings);
-                    }
-                    else
-                    {
-                        yield return new CommandOptionInfo(parameterInfo, _settings);
-                    }
-                }
-            }
-            else
-            {
-                foreach (ArgumentInfo argumentInfo in GetArgumentsFromArgumentModel(parameterInfo.ParameterType))
-                {
-                    yield return argumentInfo;
-                }
-            }
-        }
-
-        private IEnumerable<ArgumentInfo> GetArgumentsFromArgumentModel(Type modelType)
-        {
-            foreach (var propertyInfo in modelType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
-            {
-                if (_settings.MethodArgumentMode == ArgumentMode.Parameter)
-                {
-                    if (propertyInfo.HasAttribute<OptionAttribute>())
-                    {
-                        yield return new CommandOptionInfo(propertyInfo, _settings);
-                    }
-                    else
-                    {
-                        yield return new CommandParameterInfo(propertyInfo, _settings);
-                    }
-                }
-                else
-                {
-                    if (propertyInfo.HasAttribute<ArgumentAttribute>())
-                    {
-                        yield return new CommandParameterInfo(propertyInfo, _settings);
-                    }
-                    else
-                    {
-                        yield return new CommandOptionInfo(propertyInfo, _settings);
-                    }
-                }
-            }
         }
 
         public string Name => _metadataAttribute?.Name ?? _methodInfo.Name.ChangeCase(_settings.Case);
