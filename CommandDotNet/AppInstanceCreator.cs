@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using CommandDotNet.Attributes;
 using CommandDotNet.Models;
 
 namespace CommandDotNet
@@ -17,7 +18,11 @@ namespace CommandDotNet
             object instance = Activator.CreateInstance(type, values);
 
             //detect properties
-            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            var properties = type
+                .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .Where(p=> p.GetCustomAttribute<SubCommandAttribute>() == null)
+                .ToList();
+            
             if (properties.Any())
             {
                 if (dependencyResolver != null)
