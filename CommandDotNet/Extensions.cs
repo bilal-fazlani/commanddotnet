@@ -72,7 +72,24 @@ namespace CommandDotNet
         public static object GetDefaultValue(this PropertyInfo propertyInfo)
         {
             object instance = Activator.CreateInstance(propertyInfo.DeclaringType);
-            return propertyInfo.GetValue(instance);
+            object defaultValue = propertyInfo.GetValue(instance);
+            if (object.Equals(propertyInfo.PropertyType.GetDefaultValue(), defaultValue))
+            {
+                return DBNull.Value;
+            }
+
+            return defaultValue;
+        }
+        
+        public static object GetDefaultValue(this Type type)
+        {
+            Func<object> f = GetDefault<object>;
+            return f.Method.GetGenericMethodDefinition().MakeGenericMethod(type).Invoke(null, null);
+        }
+
+        private static T GetDefault<T>()
+        {
+            return default(T);
         }
     }
 }
