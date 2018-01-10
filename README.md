@@ -556,11 +556,13 @@ As of now, these are supported parameter types:
 - `bool?`
 - `char`
 - `char?`
+- `enum`
 - `List<string>`
 - `List<int>`
 - `List<long>`
 - `List<bool>`
 - `List<char>`
+- `List<enum>`
 
 These are applicable for both - Options and Arguments
 
