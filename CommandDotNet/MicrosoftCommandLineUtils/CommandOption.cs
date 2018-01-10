@@ -104,5 +104,20 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         {
             return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is CommandOption commandOption)
+            {
+                return commandOption.Template == this.Template;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Template?.GetHashCode() ?? 0;
+        }
     }
 }
