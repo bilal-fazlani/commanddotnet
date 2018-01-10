@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using CommandDotNet.Attributes;
 
@@ -24,33 +26,77 @@ namespace CommandDotNet.Models
         {
             List<ArgumentInfo> arguments = new List<ArgumentInfo>();
 
-            foreach (var parameter in _methodInfo.GetParameters())
+            foreach (ParameterInfo parameterInfo in _methodInfo.GetParameters())
+            {
+                arguments.AddRange(ConvertToArgumentInfo(parameterInfo));
+            }
+            
+            return arguments;
+        }
+
+        private IEnumerable<ArgumentInfo> ConvertToArgumentInfo(ParameterInfo parameterInfo)
+        {
+            if (!typeof(IArgumentModel).IsAssignableFrom(parameterInfo.ParameterType))
             {
                 if (_settings.MethodArgumentMode == ArgumentMode.Parameter)
                 {
-                    if (parameter.HasAttribute<OptionAttribute>())
+                    if (parameterInfo.HasAttribute<OptionAttribute>())
                     {
-                        arguments.Add(new CommandOptionInfo(parameter, _settings));
+                        yield return new CommandOptionInfo(parameterInfo, _settings);
                     }
                     else
                     {
-                        arguments.Add(new CommandParameterInfo(parameter, _settings));
+                        yield return new CommandParameterInfo(parameterInfo, _settings);
                     }
                 }
                 else
                 {
-                    if (parameter.HasAttribute<ArgumentAttribute>())
+                    if (parameterInfo.HasAttribute<ArgumentAttribute>())
                     {
-                        arguments.Add(new CommandParameterInfo(parameter, _settings));
+                        yield return new CommandParameterInfo(parameterInfo, _settings);
                     }
                     else
                     {
-                        arguments.Add(new CommandOptionInfo(parameter, _settings));
+                        yield return new CommandOptionInfo(parameterInfo, _settings);
                     }
                 }
             }
+            else
+            {
+                foreach (ArgumentInfo argumentInfo in GetArgumentsFromArgumentModel(parameterInfo.ParameterType))
+                {
+                    yield return argumentInfo;
+                }
+            }
+        }
 
-            return arguments;
+        private IEnumerable<ArgumentInfo> GetArgumentsFromArgumentModel(Type modelType)
+        {
+            foreach (var propertyInfo in modelType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+            {
+                if (_settings.MethodArgumentMode == ArgumentMode.Parameter)
+                {
+                    if (propertyInfo.HasAttribute<OptionAttribute>())
+                    {
+                        yield return new CommandOptionInfo(propertyInfo, _settings);
+                    }
+                    else
+                    {
+                        yield return new CommandParameterInfo(propertyInfo, _settings);
+                    }
+                }
+                else
+                {
+                    if (propertyInfo.HasAttribute<ArgumentAttribute>())
+                    {
+                        yield return new CommandParameterInfo(propertyInfo, _settings);
+                    }
+                    else
+                    {
+                        yield return new CommandOptionInfo(propertyInfo, _settings);
+                    }
+                }
+            }
         }
 
         public string Name => _metadataAttribute?.Name ?? _methodInfo.Name.ChangeCase(_settings.Case);

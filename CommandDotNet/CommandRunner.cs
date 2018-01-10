@@ -43,10 +43,10 @@ namespace CommandDotNet
                 MethodInfo theMethod = instance.GetType().GetMethod(commandInfo.MethodName);
 
                 //get values for method invokation
-                object[] parameters = parameterValues.Select(ValueMachine.GetValue).ToArray();
+                object[] mergedParameters = Merge(parameterValues);
                 
                 //invoke method
-                object returnedObject = theMethod.Invoke(instance, parameters);
+                object returnedObject = theMethod.Invoke(instance, mergedParameters);
 
                 //default return code for cases when method is of type void instead of int
                 int returnCode = 0;
@@ -73,6 +73,36 @@ namespace CommandDotNet
             {
                 throw new CommandParsingException(_app, e.Message);
             }
+        }
+
+        private object[] Merge(List<ArgumentInfo> argumentInfos)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            
+            foreach (var argumentInfo in argumentInfos)
+            {
+                if (!argumentInfo.IsPartOfModel)
+                    parameters.Add(argumentInfo.PropertyOrArgumentName, ValueMachine.GetValue(argumentInfo));
+                
+                else
+                {
+                    object instance;
+                    if (parameters.ContainsKey(argumentInfo.ModelType.FullName)) //already added one or more params
+                    {
+                        instance = parameters[argumentInfo.ModelType.FullName];
+                    }
+                    else //first property of model
+                    {
+                        instance = Activator.CreateInstance(argumentInfo.ModelType);
+                        parameters.Add(argumentInfo.ModelType.FullName, instance);
+                    }
+
+                    PropertyInfo propertyInfo = argumentInfo.ModelType.GetProperty(argumentInfo.PropertyOrArgumentName);
+                    propertyInfo.SetValue(instance, ValueMachine.GetValue(argumentInfo));
+                }
+            }
+            
+            return parameters.Values.ToArray();
         }
     }
 }

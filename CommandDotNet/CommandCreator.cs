@@ -70,30 +70,38 @@ namespace CommandDotNet
                     foreach (ArgumentInfo argument in commandInfo.Arguments)
                     {
                         argumentValues.Add(argument);
+                        switch (argument)
+                        {
+                            case CommandOptionInfo option:
+                                SetValueForOption(option, command);
+                                break;
+                            case CommandParameterInfo parameter:
+                                SetValueForParameter(parameter, command);
+                                break;
+                        }
                     }
-
-                    foreach (var option in argumentValues.OfType<CommandOptionInfo>())
-                    {
-                        option.SetValue(command.Option(option.Template,
-                            option.EffectiveDescription,
-                            option.CommandOptionType, 
-                            option.Inherited));
-                    }
-                    
-                    foreach (var parameter in argumentValues.OfType<CommandParameterInfo>())
-                    {
-                        parameter.SetValue(command.Argument(
-                            parameter.Name, 
-                            parameter.EffectiveDescription, 
-                            parameter.IsMultipleType));
-                    }
-                    
                 }, throwOnUnexpectedArg: _settings.ThrowOnUnexpectedArgument);
 
                 commandOption.OnExecute(async () => await _commandRunner.RunCommand(commandInfo, argumentValues));
             }
         }
-        
+
+        private static void SetValueForParameter(CommandParameterInfo parameter, CommandLineApplication command)
+        {
+            parameter.SetValue(command.Argument(
+                parameter.Name,
+                parameter.EffectiveDescription,
+                parameter.IsMultipleType));
+        }
+
+        private static void SetValueForOption(CommandOptionInfo option, CommandLineApplication command)
+        {
+            option.SetValue(command.Option(option.Template,
+                option.EffectiveDescription,
+                option.CommandOptionType,
+                option.Inherited));
+        }
+
         private List<ArgumentInfo> GetOptionValuesForConstructor()
         {
             IEnumerable<ParameterInfo> parameterInfos = _type

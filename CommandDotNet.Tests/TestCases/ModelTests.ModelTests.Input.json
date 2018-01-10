@@ -1,0 +1,24 @@
+{
+  "testCases": [
+    {
+      "testCaseName": "can read models",
+      "params": [
+        "process-model", "--email", "bilal@bilal.com", "3", "bilal"
+      ],
+      "expectedOutput": {
+        "Id" : 3,
+        "Name" : "bilal",
+        "Email" : "bilal@bilal.com"
+      },
+      "expectedExitCode" : 5
+    }
+//    {
+//      "testCaseName": "can validate models",
+//      "params": [
+//        "process-model", "--email", "bilal@bilal.com"
+//      ],
+//      "expectedExitCode" : 2,
+//      "expectedOutput": null
+//    }
+  ]
+}

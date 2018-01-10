@@ -15,7 +15,23 @@ namespace CommandDotNet.Models
         {
         }
 
-        public CommandOptionInfo(ParameterInfo parameterInfo, AppSettings settings) : base(parameterInfo, settings)
+        public CommandOptionInfo(ParameterInfo attributeProvider, AppSettings settings) : base(attributeProvider, settings)
+        {
+            BooleanMode = GetBooleanMode();
+            CommandOptionType = GetCommandOptionType();
+            
+            ShortName = GetShortName();
+            LongName = GetLongName();
+            
+            Template = GetTemplate();
+            
+            TypeDisplayName = GetTypeDisplayName();
+            AnnotatedDescription = GetAnnotatedDescription();
+            Details = GetDetails();
+            EffectiveDescription = GetEffectiveDescription();
+        }
+        
+        public CommandOptionInfo(PropertyInfo propertyInfo, AppSettings settings) : base(propertyInfo, settings)
         {
             BooleanMode = GetBooleanMode();
             CommandOptionType = GetCommandOptionType();
@@ -41,29 +57,29 @@ namespace CommandDotNet.Models
         
         public string ShortName { get; }
 
-        public bool Inherited => ParameterInfo.GetCustomAttribute<OptionAttribute>()?.Inherited ?? false;
+        public bool Inherited => AttributeProvider.GetCustomAttribute<OptionAttribute>()?.Inherited ?? false;
         
         private string GetShortName()
         {
-            string attributeShortName = ParameterInfo.GetCustomAttribute<OptionAttribute>()?.ShortName;
+            string attributeShortName = AttributeProvider.GetCustomAttribute<OptionAttribute>()?.ShortName;
     
             if (!string.IsNullOrEmpty(attributeShortName)) //provided by user
                 return attributeShortName;
     
             //use parameter name as short name 
-            return ParameterInfo.Name.Length == 1 ? ParameterInfo.Name.ChangeCase(Settings.Case) : null;
+            return PropertyOrArgumentName.Length == 1 ? PropertyOrArgumentName.ChangeCase(Settings.Case) : null;
         }
 
         private string GetLongName()
         {
-            string attributeLongName = ParameterInfo.GetCustomAttribute<OptionAttribute>()?.LongName;
+            string attributeLongName = AttributeProvider.GetCustomAttribute<OptionAttribute>()?.LongName;
     
             if (!string.IsNullOrEmpty(attributeLongName)) //long name attribute provided by user
                 return attributeLongName;
 
             //short name is not present, 
-            if(string.IsNullOrEmpty(ShortName) && ParameterInfo.Name.Length > 1)
-                return ParameterInfo.Name.ChangeCase(Settings.Case); //return parameter name as long name
+            if(string.IsNullOrEmpty(ShortName) && PropertyOrArgumentName.Length > 1)
+                return PropertyOrArgumentName.ChangeCase(Settings.Case); //return parameter name as long name
     
             //there is no long name
             return null;
@@ -71,7 +87,7 @@ namespace CommandDotNet.Models
         
         private BooleanMode GetBooleanMode()
         {
-            OptionAttribute attribute = ParameterInfo.GetCustomAttribute<OptionAttribute>();
+            OptionAttribute attribute = AttributeProvider.GetCustomAttribute<OptionAttribute>();
 
             if (attribute == null || attribute.BooleanMode == BooleanMode.Unknown)
                 return Settings.BooleanMode;
@@ -83,7 +99,7 @@ namespace CommandDotNet.Models
 
             throw new AppRunnerException(
                 $"BooleanMode property is set to `{attribute.BooleanMode}` for a non boolean parameter type. " +
-                $"Property name: {ParameterInfo.Name} " +
+                $"Property name: {PropertyOrArgumentName} " +
                 $"Type : {Type.Name}");
         }
         
@@ -161,13 +177,13 @@ namespace CommandDotNet.Models
         
         protected override string GetAnnotatedDescription()
         {
-            OptionAttribute descriptionAttribute = ParameterInfo.GetCustomAttribute<OptionAttribute>();
+            OptionAttribute descriptionAttribute = AttributeProvider.GetCustomAttribute<OptionAttribute>();
             return descriptionAttribute?.Description;
         }
         
         public override string ToString()
         {
-            return $"{ParameterInfo.Name} | '{ValueInfo?.Value ?? "null"}' | {Details} | {Template}";
+            return $"{PropertyOrArgumentName} | '{ValueInfo?.Value ?? "null"}' | {Details} | {Template}";
         }
     }
 }
