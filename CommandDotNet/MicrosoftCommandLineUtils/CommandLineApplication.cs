@@ -456,8 +456,9 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             headerBuilder.AppendLine();
 
             var nameAndVersion = new StringBuilder();
-            nameAndVersion.AppendLine(GetFullNameAndVersion());
-            nameAndVersion.AppendLine();
+            nameAndVersion.AppendLine(FullName + "\n");
+            if(!string.IsNullOrEmpty(Description))
+                nameAndVersion.AppendLine(Description+ "\n");
 
             return nameAndVersion.ToString()
                 + headerBuilder.ToString()
