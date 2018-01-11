@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using CommandDotNet.Attributes;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
@@ -58,7 +61,7 @@ namespace CommandDotNet
 
             commandCreator.CreateCommands();
 
-            type.CreateSubApplications(_appSettings, app, dependencyResolver);
+            CreateSubApplications(type, app, dependencyResolver);
 
             return app;
         }
@@ -69,6 +72,27 @@ namespace CommandDotNet
             {
                 FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
                 app.VersionOption("-v | --version", shortFormVersion: fvi.ProductVersion);
+            }
+        }
+        
+        private void CreateSubApplications(Type type,
+            CommandLineApplication parentApplication,
+            IDependencyResolver dependencyResolver)
+        {
+            IEnumerable<Type> propertySubmodules = type		
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)		
+                .Where(p => !p.PropertyType.IsValueType)
+                .Where(p => p.GetCustomAttribute<SubCommandAttribute>() != null)
+                .Select(p => p.PropertyType);
+            
+            IEnumerable<Type> inlineClassSubmodules = type
+                .GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
+                .Where(x=> !typeof(IAsyncStateMachine).IsAssignableFrom(x));
+            
+            foreach (Type submoduleType in propertySubmodules.Union(inlineClassSubmodules))
+            {
+                AppCreator appCreator = new AppCreator(_appSettings);
+                appCreator.CreateApplication(submoduleType, dependencyResolver, parentApplication);
             }
         }
     }
