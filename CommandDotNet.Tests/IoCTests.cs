@@ -3,11 +3,16 @@ using CommandDotNet.Attributes;
 using CommandDotNet.IoC.Autofac;
 using FluentAssertions;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
 {
-    public class IoCTests
+    public class IoCTests : TestBase
     {
+        public IoCTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        {
+        }
+
         [Fact]
         public void CanResolveDependencyInNestedCommand()
         {

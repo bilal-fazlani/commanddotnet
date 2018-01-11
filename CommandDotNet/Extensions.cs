@@ -19,27 +19,6 @@ namespace CommandDotNet
                 .Select(mi => new CommandInfo(mi, settings));
         }
 
-        public static void CreateSubApplications(this Type type,
-            AppSettings settings, 
-            CommandLineApplication parentApplication,
-            IDependencyResolver dependencyResolver)
-        {
-            IEnumerable<Type> propertySubmodules = type		
-                    .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)		
-                    .Where(p => !p.PropertyType.IsValueType)
-                    .Where(p => p.GetCustomAttribute<SubCommandAttribute>() != null)
-                    .Select(p => p.PropertyType);
-            
-            IEnumerable<Type> inlineClassSubmodules = type
-                .GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);            
-            
-            foreach (Type submoduleType in propertySubmodules.Union(inlineClassSubmodules))
-            {
-                AppCreator appCreator = new AppCreator(settings);
-                appCreator.CreateApplication(submoduleType, dependencyResolver, parentApplication);
-            }
-        }
-        
         public static CommandInfo GetDefaultCommandInfo(this Type type, AppSettings settings)
         {
             CommandInfo defaultCommandInfo = type
