@@ -36,13 +36,13 @@ namespace CommandDotNet.Tests
                     CommandOptionType = CommandOptionType.SingleValue,
                     DefaultValue = DBNull.Value,
                     Type = typeof(int),
-//                    Required = true,
                     EffectiveDescription = null,
                     TypeDisplayName = "Int32",
                     AnnotatedDescription = null,
                     Details = "Int32",
                     Template = "--value",
-                    BooleanMode = BooleanMode.Implicit
+                    BooleanMode = BooleanMode.Implicit,
+                    PropertyOrArgumentName = "value"
                 }
             });
         }
@@ -68,13 +68,13 @@ namespace CommandDotNet.Tests
                     CommandOptionType = CommandOptionType.SingleValue,
                     DefaultValue = DBNull.Value,
                     Type = typeof(int),
-                    //Required = true,
                     EffectiveDescription = "Int32".PadRight(Constants.PadLength)+"some parameter description",
                     TypeDisplayName = "Int32",
                     AnnotatedDescription = "some parameter description",
                     Details = "Int32",
                     Template = "--value",
-                    BooleanMode = BooleanMode.Implicit
+                    BooleanMode = BooleanMode.Implicit,
+                    PropertyOrArgumentName = "value"
                 }
             });
         }

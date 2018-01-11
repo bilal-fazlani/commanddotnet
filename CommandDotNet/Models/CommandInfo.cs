@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using CommandDotNet.Attributes;
 
@@ -9,6 +11,7 @@ namespace CommandDotNet.Models
         private readonly MethodInfo _methodInfo;
         private readonly AppSettings _settings;
         private readonly ApplicationMetadataAttribute _metadataAttribute;
+        private readonly ArgumentInfoCreator _argumentInfoCreator;
 
         public CommandInfo(MethodInfo methodInfo, AppSettings settings)
         {
@@ -16,6 +19,7 @@ namespace CommandDotNet.Models
             _settings = settings;
 
             _metadataAttribute = _methodInfo.GetCustomAttribute<ApplicationMetadataAttribute>(false);
+            _argumentInfoCreator = new ArgumentInfoCreator(settings);
             
             Arguments = GetArguments();
         }
@@ -24,32 +28,11 @@ namespace CommandDotNet.Models
         {
             List<ArgumentInfo> arguments = new List<ArgumentInfo>();
 
-            foreach (var parameter in _methodInfo.GetParameters())
+            foreach (ParameterInfo parameterInfo in _methodInfo.GetParameters())
             {
-                if (_settings.MethodArgumentMode == ArgumentMode.Parameter)
-                {
-                    if (parameter.HasAttribute<OptionAttribute>())
-                    {
-                        arguments.Add(new CommandOptionInfo(parameter, _settings));
-                    }
-                    else
-                    {
-                        arguments.Add(new CommandParameterInfo(parameter, _settings));
-                    }
-                }
-                else
-                {
-                    if (parameter.HasAttribute<ArgumentAttribute>())
-                    {
-                        arguments.Add(new CommandParameterInfo(parameter, _settings));
-                    }
-                    else
-                    {
-                        arguments.Add(new CommandOptionInfo(parameter, _settings));
-                    }
-                }
+                arguments.AddRange(_argumentInfoCreator.ConvertToArgumentInfos(parameterInfo, _settings.MethodArgumentMode));
             }
-
+            
             return arguments;
         }
 

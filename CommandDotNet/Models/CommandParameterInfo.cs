@@ -12,7 +12,15 @@ namespace CommandDotNet.Models
         {
         }
 
-        public CommandParameterInfo(ParameterInfo parameterInfo, AppSettings settings) : base(parameterInfo, settings)
+        public CommandParameterInfo(ParameterInfo attributeProvider, AppSettings settings) : base(attributeProvider, settings)
+        {
+            TypeDisplayName = GetTypeDisplayName();
+            AnnotatedDescription = GetAnnotatedDescription();
+            Details = GetDetails();
+            EffectiveDescription = GetEffectiveDescription();
+        }
+        
+        public CommandParameterInfo(PropertyInfo attributeProvider, AppSettings settings) : base(attributeProvider, settings)
         {
             TypeDisplayName = GetTypeDisplayName();
             AnnotatedDescription = GetAnnotatedDescription();
@@ -20,8 +28,8 @@ namespace CommandDotNet.Models
             EffectiveDescription = GetEffectiveDescription();
         }
 
-        public string Name => ParameterInfo.GetCustomAttribute<ArgumentAttribute>()?.Name ??
-                                   ParameterInfo.Name.ChangeCase(Settings.Case);
+        public string Name => AttributeProvider.GetCustomAttribute<ArgumentAttribute>()?.Name ??
+                                   PropertyOrArgumentName.ChangeCase(Settings.Case);
 
         protected override string GetDetails()
         {
@@ -31,7 +39,7 @@ namespace CommandDotNet.Models
         
         protected override string GetAnnotatedDescription()
         {
-            ArgumentAttribute descriptionAttribute = ParameterInfo.GetCustomAttribute<ArgumentAttribute>();
+            ArgumentAttribute descriptionAttribute = AttributeProvider.GetCustomAttribute<ArgumentAttribute>();
             return descriptionAttribute?.Description;
         }
         

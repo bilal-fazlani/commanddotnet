@@ -14,8 +14,8 @@ namespace CommandDotNet
             construcitonParams = construcitonParams ?? new List<ArgumentInfo>();
             
             //create instance
-            object[] values = construcitonParams.Select(ValueMachine.GetValue).ToArray();   
-            object instance = Activator.CreateInstance(type, values);
+            object[] mergedValues = ArgumentMerger.Merge(construcitonParams);
+            object instance = Activator.CreateInstance(type, mergedValues);
 
             //detect properties
             var properties = type

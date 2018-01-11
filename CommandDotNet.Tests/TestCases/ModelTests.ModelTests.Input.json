@@ -1,0 +1,64 @@
+{
+  "testCases": [
+    {
+      "testCaseName": "can read empty models",
+      "params": [
+        "send-notification"
+      ],
+      "expectedOutput": {
+        "person" : {
+          "id": 0,
+          "name" : null,
+          "email" : null,
+          "number" : null
+        },
+        "time" : 0,
+        "address": {
+          "city" : null,
+          "hasAirport" : false
+        }
+      },
+      "expectedExitCode" : 5
+    },
+    {
+      "testCaseName": "can read data filled models",
+      "params": [
+        "send-notification", "-a", "--email", "abc@pqr.com", "3", "bilal", "1334000098", "Tomorrow", "delhi"
+      ],
+      "expectedOutput": {
+        "person" : {
+          "id": 3,
+          "name" : "bilal",
+          "email" : "abc@pqr.com",
+          "number" : "1334000098"
+        },
+        "time" : 5,
+        "address": {
+          "city" : "delhi",
+          "hasAirport" : true
+        }
+      },
+      "expectedExitCode" : 5
+    },
+    {
+      "testCaseName": "can read data filled models - different order",
+      "params": [
+        "send-notification", "3", "bilal", "1334000098", "Tomorrow", "delhi", "-a", "--email", "abc@pqr.com"
+      ],
+      "expectedOutput": {
+        "person" : {
+          "id": 3,
+          "name" : "bilal",
+          "email" : "abc@pqr.com",
+          "number" : "1334000098"
+        },
+        "time" : 5,
+        "address": {
+          "city" : "delhi",
+          "hasAirport" : true
+        }
+      },
+      "expectedExitCode" : 5
+    }
+  ]
+}

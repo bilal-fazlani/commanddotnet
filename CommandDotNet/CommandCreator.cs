@@ -23,7 +23,7 @@ namespace CommandDotNet
             _settings = settings;
             
             //get values for construtor params
-            List<ArgumentInfo> constructorValues = GetOptionValuesForConstructor();
+            IEnumerable<ArgumentInfo> constructorValues = GetOptionValuesForConstructor();
             
             _commandRunner = new CommandRunner(app, type, constructorValues, dependencyResolver);
         }
@@ -70,31 +70,39 @@ namespace CommandDotNet
                     foreach (ArgumentInfo argument in commandInfo.Arguments)
                     {
                         argumentValues.Add(argument);
+                        switch (argument)
+                        {
+                            case CommandOptionInfo option:
+                                SetValueForOption(option, command);
+                                break;
+                            case CommandParameterInfo parameter:
+                                SetValueForParameter(parameter, command);
+                                break;
+                        }
                     }
-
-                    foreach (var option in argumentValues.OfType<CommandOptionInfo>())
-                    {
-                        option.SetValue(command.Option(option.Template,
-                            option.EffectiveDescription,
-                            option.CommandOptionType, 
-                            option.Inherited));
-                    }
-                    
-                    foreach (var parameter in argumentValues.OfType<CommandParameterInfo>())
-                    {
-                        parameter.SetValue(command.Argument(
-                            parameter.Name, 
-                            parameter.EffectiveDescription, 
-                            parameter.IsMultipleType));
-                    }
-                    
                 }, throwOnUnexpectedArg: _settings.ThrowOnUnexpectedArgument);
 
                 commandOption.OnExecute(async () => await _commandRunner.RunCommand(commandInfo, argumentValues));
             }
         }
-        
-        private List<ArgumentInfo> GetOptionValuesForConstructor()
+
+        private static void SetValueForParameter(CommandParameterInfo parameter, CommandLineApplication command)
+        {
+            parameter.SetValue(command.Argument(
+                parameter.Name,
+                parameter.EffectiveDescription,
+                parameter.IsMultipleType));
+        }
+
+        private static void SetValueForOption(CommandOptionInfo option, CommandLineApplication command)
+        {
+            option.SetValue(command.Option(option.Template,
+                option.EffectiveDescription,
+                option.CommandOptionType,
+                option.Inherited));
+        }
+
+        private IEnumerable<ArgumentInfo> GetOptionValuesForConstructor()
         {
             IEnumerable<ParameterInfo> parameterInfos = _type
                 .GetConstructors()
@@ -102,43 +110,28 @@ namespace CommandDotNet
                 .GetParameters();
 
             if(parameterInfos.Any(p => p.HasAttribute<ArgumentAttribute>()))
-                throw new AppRunnerException("Constructor arguments can not have [Parameter] attribute. Please use [Option] attribute");
+                throw new AppRunnerException("Constructor arguments can not have [Argument] attribute. Please use [Option] attribute");
+
+            ArgumentInfoCreator argumentInfoCreator = new ArgumentInfoCreator(_settings);
             
-            List<ArgumentInfo> arguments = new List<ArgumentInfo>();
-            
+            List<ArgumentInfo> argumentInfos = new List<ArgumentInfo>();
+
             foreach (var parameterInfo in parameterInfos)
             {
-                if (parameterInfo.HasAttribute<ArgumentAttribute>())
-                {
-                    arguments.Add(new CommandParameterInfo(parameterInfo, _settings));
-                }
-                else
-                {
-                    arguments.Add(new CommandOptionInfo(parameterInfo, _settings));
-                }
+                argumentInfos.AddRange(argumentInfoCreator.ConvertToArgumentInfos(parameterInfo, ArgumentMode.Option));
             }
 
-            foreach (var argumentInfo in arguments)
+            foreach (ArgumentInfo argumentInfo in argumentInfos)
             {
-                switch (argumentInfo)
-                {
-                    case CommandParameterInfo parameterInfo:
-                        parameterInfo.SetValue(_app.Argument(
-                            parameterInfo.Name,
-                            parameterInfo.EffectiveDescription, 
-                            parameterInfo.IsMultipleType));
-                        break;
-                    case CommandOptionInfo optionInfo:
-                        optionInfo.SetValue(_app.Option(
-                            optionInfo.Template,
-                            optionInfo.EffectiveDescription,
-                            optionInfo.CommandOptionType,
-                            optionInfo.Inherited));
-                        break;
-                }
+                var optionInfo = (CommandOptionInfo) argumentInfo;
+                optionInfo.SetValue(_app.Option(
+                    optionInfo.Template,
+                    optionInfo.EffectiveDescription,
+                    optionInfo.CommandOptionType,
+                    optionInfo.Inherited));
             }
-
-            return arguments;
+            
+            return argumentInfos;
         }
     }
 }

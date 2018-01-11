@@ -31,66 +31,44 @@ namespace CommandDotNet
             return defaultCommandInfo;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="parameterInfo"></param>
-        /// <param name="attribute"></param>
-        /// <typeparam name="T">Attribute Type</typeparam>
-        /// <returns></returns>
-        public static bool HasAttribute<T>(this ParameterInfo parameterInfo, out T attribute) where T : Attribute
+        public static bool HasAttribute<T>(this ICustomAttributeProvider attributeProvider) where T : Attribute
         {
-            attribute = parameterInfo.GetCustomAttribute<T>();
+            T attribute = (T)attributeProvider.GetCustomAttributes(typeof(T), false).SingleOrDefault();
             return attribute != null;
         }
         
-        public static bool HasAttribute<T>(this ParameterInfo parameterInfo) where T : Attribute
+        public static T GetCustomAttribute<T>(this ICustomAttributeProvider attributeProvider) where T : Attribute
         {
-            T attribute = parameterInfo.GetCustomAttribute<T>();
-            return attribute != null;
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="methodInfo"></param>
-        /// <param name="attribute"></param>
-        /// <typeparam name="T">Attribute Type</typeparam>
-        /// <returns></returns>
-        public static bool HasAttribute<T>(this MethodInfo methodInfo, out T attribute) where T : Attribute
-        {
-            attribute = methodInfo.GetCustomAttribute<T>();
-            return attribute != null;
-        }
-        
-        public static bool HasAttribute<T>(this MethodInfo methodInfo) where T : Attribute
-        {
-            T attribute = methodInfo.GetCustomAttribute<T>();
-            return attribute != null;
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="attribute"></param>
-        /// <typeparam name="T">Attribute Type</typeparam>
-        /// <returns></returns>
-        public static bool HasAttribute<T>(this Type type, out T attribute) where T : Attribute
-        {
-            attribute = type.GetCustomAttribute<T>();
-            return attribute != null;
-        }
-        
-        public static bool HasAttribute<T>(this Type type) where T : Attribute
-        {
-           T attribute = type.GetCustomAttribute<T>();
-            return attribute != null;
+            T attribute = (T)attributeProvider.GetCustomAttributes(typeof(T), false).SingleOrDefault();
+            return attribute;
         }
 
         public static bool IsCollection(this Type type)
         {
             return type.GetInterfaces().Any(x => x == typeof(IEnumerable));
+        }
+
+        public static object GetDefaultValue(this PropertyInfo propertyInfo)
+        {
+            object instance = Activator.CreateInstance(propertyInfo.DeclaringType);
+            object defaultValue = propertyInfo.GetValue(instance);
+            if (object.Equals(propertyInfo.PropertyType.GetDefaultValue(), defaultValue))
+            {
+                return DBNull.Value;
+            }
+
+            return defaultValue;
+        }
+        
+        public static object GetDefaultValue(this Type type)
+        {
+            Func<object> f = GetDefault<object>;
+            return f.Method.GetGenericMethodDefinition().MakeGenericMethod(type).Invoke(null, null);
+        }
+
+        private static T GetDefault<T>()
+        {
+            return default(T);
         }
     }
 }

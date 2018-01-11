@@ -43,10 +43,10 @@ namespace CommandDotNet
                 MethodInfo theMethod = instance.GetType().GetMethod(commandInfo.MethodName);
 
                 //get values for method invokation
-                object[] parameters = parameterValues.Select(ValueMachine.GetValue).ToArray();
+                object[] mergedParameters = ArgumentMerger.Merge(parameterValues);
                 
                 //invoke method
-                object returnedObject = theMethod.Invoke(instance, parameters);
+                object returnedObject = theMethod.Invoke(instance, mergedParameters);
 
                 //default return code for cases when method is of type void instead of int
                 int returnCode = 0;

@@ -34,8 +34,8 @@ namespace CommandDotNet.Tests
                 AppRunner<T> appRunner = new AppRunner<T>(_appSettings);
 
                 int exitCode = appRunner.Run(testCase.Params);
-
-                exitCode.Should().Be(0, "app should return 0 exit code");
+                
+                exitCode.Should().Be(testCase.ExpectedExitCode, $"app should return {testCase.ExpectedExitCode} exit code");
 
                 JsonDiffPatch jsonDiffPatch = new JsonDiffPatch();
 
@@ -62,6 +62,8 @@ namespace CommandDotNet.Tests
         public string[] Params { get; set; }
         
         public JObject ExpectedOutput { get; set; }
+        
+        public int ExpectedExitCode { get; set; }
 
         public override string ToString()
         {

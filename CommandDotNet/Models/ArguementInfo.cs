@@ -6,23 +6,39 @@ namespace CommandDotNet.Models
 {
     public abstract class ArgumentInfo
     {
-        protected readonly ParameterInfo ParameterInfo;
+        protected readonly ICustomAttributeProvider AttributeProvider;
         protected readonly AppSettings Settings;
 
+        public bool IsPartOfModel = false;
+        public Type ModelType;
+        
         internal ArgumentInfo(AppSettings settings)
         {
             Settings = settings;
         }
 
-        internal ArgumentInfo(ParameterInfo parameterInfo, AppSettings settings)
+        internal ArgumentInfo(ParameterInfo attributeProvider, AppSettings settings)
             : this(settings)
         {
-            ParameterInfo = parameterInfo;
-            Type = parameterInfo.ParameterType;
-            DefaultValue = parameterInfo.DefaultValue;
+            AttributeProvider = attributeProvider;
+            PropertyOrArgumentName = attributeProvider.Name;
+            Type = attributeProvider.ParameterType;
+            DefaultValue = attributeProvider.DefaultValue;
             IsMultipleType = GetIsMultipleType();
         }
 
+        internal ArgumentInfo(PropertyInfo propertyInfo, AppSettings settings)
+            : this(settings)
+        {
+            IsPartOfModel = true;
+            ModelType = propertyInfo.DeclaringType;
+            AttributeProvider = propertyInfo;
+            PropertyOrArgumentName = propertyInfo.Name;
+            Type = propertyInfo.PropertyType;
+            DefaultValue = propertyInfo.GetDefaultValue();
+            IsMultipleType = GetIsMultipleType();
+        }
+        
         
         public Type Type { get; internal set; }
         
@@ -32,6 +48,7 @@ namespace CommandDotNet.Models
         public string AnnotatedDescription { get; internal set; }
         public string EffectiveDescription { get; internal set; }
         public bool IsMultipleType { get; }
+        public string PropertyOrArgumentName { get; set; }
         internal ValueInfo ValueInfo { get; private set; }
 
         private bool GetIsMultipleType()
