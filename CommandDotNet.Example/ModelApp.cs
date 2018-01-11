@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using CommandDotNet.Attributes;
 using Newtonsoft.Json;
@@ -35,6 +36,9 @@ namespace CommandDotNet.Example
         public string Email { get; set; }
         
         public string Number { get; set; }
+        
+        [Option]
+        public List<string> Alias { get; set; }
     }
 
     public class Address : IArgumentModel

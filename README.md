@@ -25,6 +25,7 @@ Table of contents:
     - [Collection of options](#collection-of-options)
     - [Collection of arguments](#collection-of-arguments)
 - [Supported parameter types](#supported-parameter-types)
+- [Modeling](#modeling) (new!)
 - [Custom return codes](#custom-return-codes)
 - [Default method](#default-method)
 - [Async methods](#async-methods)
@@ -37,7 +38,7 @@ Table of contents:
     - [Boolean mode](#boolean-mode)
         - [Flag clubbing](#flag-clubbing)
 - [Exception handling](#exception-handling)
-- [Dependency Injection](#dependency-injection)
+- [Dependency Injection](#dependency-injection) (new!)
     - [Autofac](#autofac)
     - [Microsoft](#microsoft)
 
@@ -569,6 +570,52 @@ These are applicable for both - Options and Arguments
 Note for arguments: 
 - There can be only one `List` argument in the method. It can be used with other non `List` type arguments or `List` type options.
 - If the method has a `List` type argument, it should be defined last in the order.
+
+## Modeling
+
+```c#
+[ApplicationMetadata(Name="send", Description="sends email")]
+public void SendEmail([Option]string subject, [Option(ShortName="a")]List<string> attachments, [Option]string body, string from, string to)
+{
+
+}
+```
+
+this can turns into:
+
+```bash
+send --subject hi -a "myFile.txt" -a "important.docx" --body "just wanted you to review these files" bilal@bilal.com john@john.com
+```
+
+but the same can be achieved with :
+
+```c#
+public class Email : IArgumentModel
+{
+    [Option]
+    public string Subject {get;set;}
+    
+    [Option(ShortName="a")]
+    public List<string> Attachments {get;set;}
+    
+    [Option]
+    public string Body {get;set;}
+    
+    public string From {get;set;}
+    
+    public string To {get;set;}
+}
+```
+
+and
+
+```c#
+[ApplicationMetadata(Name="send", Description="sends email")]
+public void SendEmail(Email email)
+{
+
+}
+```
 
 ## Custom return codes
 
