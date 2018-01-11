@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.IO;
+using Newtonsoft.Json;
 
 namespace CommandDotNet.Tests
 {
@@ -7,6 +8,11 @@ namespace CommandDotNet.Tests
         public static string ToJson(this object value)
         {
             return JsonConvert.SerializeObject(value, Formatting.Indented);
+        }
+
+        public static void WriteToFile(this string value, string path)
+        {
+            File.WriteAllText(path, value);
         }
     }
 }

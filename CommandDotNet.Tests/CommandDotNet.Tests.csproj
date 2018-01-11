@@ -6,6 +6,7 @@
     <NetCoreAppImplicitPackageVersion>2.0.3</NetCoreAppImplicitPackageVersion>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="CommandDotNet.IoC.MicrosoftDependencyInjection" Version="1.0.4" />
     <PackageReference Include="FluentAssertions" Version="4.19.4" />
     <PackageReference Include="FluentValidation" Version="7.3.4" />
     <PackageReference Include="JsonDiffPatch.Net" Version="2.0.2" />
@@ -14,7 +15,6 @@
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <PackageReference Include="CommandDotNet.IoC.Autofac" Version="0.0.2-alpha" />
-    <PackageReference Include="CommandDotNet.IoC.MicrosoftDependencyInjection" Version="0.0.4-alpha" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommandDotNet\CommandDotNet.csproj" />

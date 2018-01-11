@@ -15,6 +15,7 @@ namespace CommandDotNet
         private readonly Type _type;
         private readonly IEnumerable<ArgumentInfo> _constrcutorParamValues;
         private readonly IDependencyResolver _dependencyResolver;
+        private readonly ModelValidator _modelValidator;
 
         public CommandRunner(
             CommandLineApplication app,
@@ -26,6 +27,7 @@ namespace CommandDotNet
             _type = type;
             _constrcutorParamValues = constrcutorParamValues;
             _dependencyResolver = dependencyResolver;
+            _modelValidator = new ModelValidator(dependencyResolver);
         }
 
         public async Task<int> RunCommand(
@@ -44,6 +46,12 @@ namespace CommandDotNet
 
                 //get values for method invokation
                 object[] mergedParameters = ArgumentMerger.Merge(parameterValues);
+                
+                //validate all parameters
+                foreach (dynamic param in mergedParameters)
+                {
+                    _modelValidator.ValidateModel(param);
+                }
                 
                 //invoke method
                 object returnedObject = theMethod.Invoke(instance, mergedParameters);

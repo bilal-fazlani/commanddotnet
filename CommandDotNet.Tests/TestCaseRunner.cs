@@ -12,12 +12,18 @@ namespace CommandDotNet.Tests
     public class TestCaseRunner<T> where T: class 
     {
         private readonly ITestOutputHelper _testOutputHelper;
-        private readonly AppSettings _appSettings;
-
+        private readonly AppRunner<T> _appRunner;
+        
         public TestCaseRunner(ITestOutputHelper testOutputHelper, AppSettings appSettings = null)
         {
             _testOutputHelper = testOutputHelper;
-            _appSettings = appSettings ?? new AppSettings();
+            _appRunner = new AppRunner<T>(appSettings ?? new AppSettings());
+        }
+        
+        public TestCaseRunner(ITestOutputHelper testOutputHelper, AppRunner<T> appRunner = null)
+        {
+            _testOutputHelper = testOutputHelper;
+            _appRunner = appRunner ?? new AppRunner<T>(new AppSettings());
         }
         
         public void Run(string inputFileName, string outputFileName)
@@ -31,21 +37,24 @@ namespace CommandDotNet.Tests
                 _testOutputHelper?.WriteLine($"\n\n\nRunning test case : '{testCase.TestCaseName}' with params: " +
                                              $"{string.Join(", ", testCase.Params)}");
                 
-                AppRunner<T> appRunner = new AppRunner<T>(_appSettings);
+                
 
-                int exitCode = appRunner.Run(testCase.Params);
+                int exitCode = _appRunner.Run(testCase.Params);
                 
                 exitCode.Should().Be(testCase.ExpectedExitCode, $"app should return {testCase.ExpectedExitCode} exit code");
 
-                JsonDiffPatch jsonDiffPatch = new JsonDiffPatch();
+                if (testCase.ValidateOutputJson)
+                {
+                    JsonDiffPatch jsonDiffPatch = new JsonDiffPatch();
+                    
+                    var diff = jsonDiffPatch.Diff(testCase.ExpectedOutput.ToString(), File.ReadAllText(outputFileName));
 
-                var diff = jsonDiffPatch.Diff(testCase.ExpectedOutput.ToString(), File.ReadAllText(outputFileName));
+                    _testOutputHelper?.WriteLine(diff != null ? $"diff found : {diff}" : "no diff found");
 
-                _testOutputHelper?.WriteLine(diff != null ? $"diff found : {diff}" : "no diff found");
+                    diff.Should().BeNull();
 
-                diff.Should().BeNull();
-
-                _testOutputHelper?.WriteLine($"test case '{testCase.TestCaseName}' passed");
+                    _testOutputHelper?.WriteLine($"test case '{testCase.TestCaseName}' passed");    
+                }
             }
         }
     }
@@ -64,6 +73,8 @@ namespace CommandDotNet.Tests
         public JObject ExpectedOutput { get; set; }
         
         public int ExpectedExitCode { get; set; }
+
+        public bool ValidateOutputJson { get; set; } = true;
 
         public override string ToString()
         {

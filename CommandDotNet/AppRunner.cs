@@ -81,9 +81,24 @@ namespace CommandDotNet
 
                 return 1;
             }
-            catch (AggregateException e) when(e.InnerExceptions.Any(x=> x is TargetInvocationException))
+            catch (AggregateException e) when (e.InnerExceptions.Any(x => x.GetBaseException() is ArgumentValidationException))
+
             {
-                TargetInvocationException ex = (TargetInvocationException)e.InnerExceptions.SingleOrDefault(x => x is TargetInvocationException);
+                ArgumentValidationException validationException =
+                    (ArgumentValidationException)e.InnerExceptions.FirstOrDefault(x => x.GetBaseException() is ArgumentValidationException);
+                
+                foreach (var failure in validationException.ValidationResult.Errors)
+                {
+                    Console.WriteLine(failure.ErrorMessage);
+                }
+
+                return 2;
+            }
+            
+            catch (AggregateException e) when (e.InnerExceptions.Any(x => x is TargetInvocationException))
+            {
+                TargetInvocationException ex =
+                    (TargetInvocationException) e.InnerExceptions.SingleOrDefault(x => x is TargetInvocationException);
                 ExceptionDispatchInfo.Capture(ex.InnerException ?? ex).Throw();
                 return 1; // this will never be called
             }
@@ -95,6 +110,15 @@ namespace CommandDotNet
                 }
 
                 return 1; // this will never be called if there is any inner exception
+            }
+            catch (ArgumentValidationException ex)
+            {
+                foreach (var failure in ex.ValidationResult.Errors)
+                {
+                    Console.WriteLine(failure.ErrorMessage);
+                }
+
+                return 2;
             }
             catch (TargetInvocationException ex)
             {
