@@ -19,8 +19,9 @@ namespace CommandDotNet
 
             //detect properties
             var properties = type
-                .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                .Where(p=> p.GetCustomAttribute<SubCommandAttribute>() == null)
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                 //properties which are not subcommands are dependencies
+                .Where(p=> p.GetCustomAttribute<SubCommandAttribute>() == null) 
                 .ToList();
             
             if (properties.Any())
