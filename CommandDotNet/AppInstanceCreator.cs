@@ -9,12 +9,23 @@ namespace CommandDotNet
 {
     public static class AppInstanceCreator
     {                
-        public static object CreateInstance(Type type, IEnumerable<ArgumentInfo> construcitonParams, IDependencyResolver dependencyResolver)
+        public static object CreateInstance(
+            Type type, 
+            IEnumerable<ArgumentInfo> construcitonParams, 
+            IDependencyResolver dependencyResolver,
+            ModelValidator modelValidator)
         {
             construcitonParams = construcitonParams ?? new List<ArgumentInfo>();
             
             //create instance
             object[] mergedValues = ArgumentMerger.Merge(construcitonParams);
+            
+            //validate all parameters
+            foreach (dynamic param in mergedValues)
+            {
+                modelValidator.ValidateModel(param);
+            }
+            
             object instance = Activator.CreateInstance(type, mergedValues);
 
             //detect properties

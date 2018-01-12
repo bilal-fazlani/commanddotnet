@@ -1,4 +1,6 @@
-﻿using CommandDotNet.Models;
+﻿using System.Globalization;
+using CommandDotNet.Models;
+using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Attributes;
 using Xunit;
@@ -22,6 +24,14 @@ namespace CommandDotNet.Tests
             
             testCaseRunner.Run("TestCases/ValidationTests.CanValidateModel.Input.json", "TestCases/ValidationTests.CanValidateModel.Output.json");
         }
+
+        [Fact]
+        public void CanValidateModelForConstructor()
+        {
+            AppRunner<ValidationAppForConstructor> appRunner = new AppRunner<ValidationAppForConstructor>();
+            appRunner.Run("Process").Should().Be(2, "model is invalid");
+            appRunner.Run("--Id", "2", "--Name", "bilal", "--Email" ,"bilal@bilal.com", "Process").Should().Be(0, "model is valid");
+        }
     }
 
     public class ValidationApp
@@ -29,6 +39,21 @@ namespace CommandDotNet.Tests
         public void ValidateModel(PersonModel person)
         {
             person.ToJson().WriteToFile("TestCases/ValidationTests.CanValidateModel.Output.json");
+        }
+    }
+
+    public class ValidationAppForConstructor
+    {
+        private readonly PersonModel _person;
+
+        public ValidationAppForConstructor(PersonModel person)
+        {
+            _person = person;
+        }
+
+        public void Process()
+        {
+            
         }
     }
 

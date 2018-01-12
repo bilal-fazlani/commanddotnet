@@ -39,7 +39,7 @@ namespace CommandDotNet
             try
             {
                 //create instance
-                object instance = AppInstanceCreator.CreateInstance(_type, _constrcutorParamValues, _dependencyResolver);
+                object instance = AppInstanceCreator.CreateInstance(_type, _constrcutorParamValues, _dependencyResolver, _modelValidator);
 
                 //dentify method to invove
                 MethodInfo theMethod = instance.GetType().GetMethod(commandInfo.MethodName);
