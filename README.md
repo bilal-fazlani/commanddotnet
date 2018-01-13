@@ -1113,6 +1113,7 @@ Another reason why you might want to use dependency injection is testable code. 
 ```c#
 public class App
 {
+    [InjectProperty]
     public IService Service {get;set;}
 
     public void PrintServiceValue()
