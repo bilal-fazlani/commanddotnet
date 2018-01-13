@@ -192,7 +192,7 @@ Cool. You get the gist of this library. Let's move on.
 
 ### Arguments
 
-Arguments are simple as we saw already in the [intrduction](#introduction). Arguemnts are the main parameters of the command and should be as less as possible. If you compare them to a english statement, argument is the *Subject* of the sentense. 
+Arguments are simple as we saw already in the [introduction](#introduction). Arguments are the main parameters of the command and should be as less as possible. If you compare them to a english statement, argument is the *Subject* of the sentense. 
 
 Let try an example of an english sentense `Please delete sample.docx file`
 
