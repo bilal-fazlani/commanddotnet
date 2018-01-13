@@ -81,14 +81,13 @@ namespace CommandDotNet
             CommandLineApplication parentApplication,
             IDependencyResolver dependencyResolver)
         {
-            IEnumerable<Type> propertySubmodules = type		
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)		
-                .Where(p => !p.PropertyType.IsValueType)
-                .Where(p => p.GetCustomAttribute<SubCommandAttribute>() != null)
+            IEnumerable<Type> propertySubmodules = 
+                type.GetDeclaredProperties<SubCommandAttribute>()
                 .Select(p => p.PropertyType);
             
             IEnumerable<Type> inlineClassSubmodules = type
                 .GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
+                .Where(x=> !x.IsCompilerGenerated())
                 .Where(x=> !typeof(IAsyncStateMachine).IsAssignableFrom(x));
             
             foreach (Type submoduleType in propertySubmodules.Union(inlineClassSubmodules))

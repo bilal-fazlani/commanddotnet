@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using CommandDotNet.Attributes;
+using CommandDotNet.Exceptions;
 using CommandDotNet.Models;
 
 namespace CommandDotNet
@@ -28,12 +29,8 @@ namespace CommandDotNet
             
             object instance = Activator.CreateInstance(type, mergedValues);
 
-            //detect properties
-            var properties = type
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                 //properties which are not subcommands are dependencies
-                .Where(p=> p.GetCustomAttribute<SubCommandAttribute>() == null) 
-                .ToList();
+            //detect injection properties
+            List<PropertyInfo> properties = type.GetDeclaredProperties<DependencyAttribute>().ToList();
             
             if (properties.Any())
             {
@@ -46,7 +43,8 @@ namespace CommandDotNet
                 }
                 else // there are some properties but there is no dependecncy resolver set
                 {
-                    //todo: show warning or error here
+                    throw new AppRunnerException($"Dependency resolver is not set for injecting properties. " +
+                                                 $"Please use an IoC framework'");
                 }
             }
             

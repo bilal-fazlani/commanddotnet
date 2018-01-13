@@ -53,7 +53,7 @@ namespace CommandDotNet
 
         private IEnumerable<ArgumentInfo> GetArgumentsFromArgumentModel(Type modelType, ArgumentMode argumentMode)
         {
-            foreach (var propertyInfo in modelType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+            foreach (var propertyInfo in modelType.GetDeclaredProperties())
             {
                 if (argumentMode == ArgumentMode.Parameter)
                 {
