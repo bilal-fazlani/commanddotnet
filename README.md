@@ -739,6 +739,7 @@ public class Git
     }
 
     [ApplicationMetadata(Description = "Stashes all changes when executed without any arguments")]
+    [SubCommand]
     public class Stash
     {
         [DefaultMethod]

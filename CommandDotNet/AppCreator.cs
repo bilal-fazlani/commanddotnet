@@ -87,6 +87,7 @@ namespace CommandDotNet
             
             IEnumerable<Type> inlineClassSubmodules = type
                 .GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
+                .Where(x=> x.HasAttribute<SubCommandAttribute>())
                 .Where(x=> !x.IsCompilerGenerated())
                 .Where(x=> !typeof(IAsyncStateMachine).IsAssignableFrom(x));
             

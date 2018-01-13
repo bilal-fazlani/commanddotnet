@@ -39,8 +39,10 @@ namespace CommandDotNet.Tests
 
     public class GitApplication
     {
+        [SubCommand]
         private class Remote
         {            
+            [SubCommand]
             private class Origin
             {   
                 public int Show()
@@ -54,6 +56,7 @@ namespace CommandDotNet.Tests
         [ApplicationMetadata(Description = "Stashes all changes when executed without any arguments\n" +
                                            "see Stash --help for further information",
             Name = "stash")]
+        [SubCommand]
         private class Stash
         {
             private readonly int _additionalFactor;

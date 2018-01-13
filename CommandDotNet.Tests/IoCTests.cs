@@ -34,6 +34,7 @@ namespace CommandDotNet.Tests
 
     public class NestedCommandApp
     {
+        [SubCommand]
         public class InnerApp
         {
             private readonly int _additionFactor;

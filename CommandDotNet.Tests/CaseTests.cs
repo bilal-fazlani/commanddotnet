@@ -87,6 +87,7 @@ namespace CommandDotNet.Tests
             return 10;
         }
 
+        [SubCommand]
         public class SubCommand
         {
             public int SendNotification()

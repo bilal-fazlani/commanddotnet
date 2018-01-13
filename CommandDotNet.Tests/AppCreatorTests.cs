@@ -51,13 +51,16 @@ namespace CommandDotNet.Tests
             
         }
         
+        [SubCommand]
         private class MyInnerCommand
         {
             
         }
         
+        [SubCommand]
         public class MyOtherInnerCommand
         {
+            [SubCommand]
             public class GrandChildCommand
             {
                 
