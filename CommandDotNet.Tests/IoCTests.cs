@@ -38,7 +38,7 @@ namespace CommandDotNet.Tests
         {
             private readonly int _additionFactor;
             
-            [Dependency]
+            [InjectProperty]
             public IService Service { get; set; }
 
             public InnerApp([Option(ShortName = "a")]int additionFactor)

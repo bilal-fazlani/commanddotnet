@@ -30,7 +30,7 @@ namespace CommandDotNet
             object instance = Activator.CreateInstance(type, mergedValues);
 
             //detect injection properties
-            List<PropertyInfo> properties = type.GetDeclaredProperties<DependencyAttribute>().ToList();
+            List<PropertyInfo> properties = type.GetDeclaredProperties<InjectPropertyAttribute>().ToList();
             
             if (properties.Any())
             {

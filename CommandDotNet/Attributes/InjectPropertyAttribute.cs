@@ -3,7 +3,7 @@
 namespace CommandDotNet.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class DependencyAttribute : Attribute
+    public class InjectPropertyAttribute : Attribute
     {
         
     }
