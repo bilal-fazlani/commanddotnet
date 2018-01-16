@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using CommandDotNet.Attributes;
+using CommandDotNet.Extensions;
 using CommandDotNet.Models;
 
 namespace CommandDotNet

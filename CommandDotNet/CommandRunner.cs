@@ -16,18 +16,23 @@ namespace CommandDotNet
         private readonly IEnumerable<ArgumentInfo> _constrcutorParamValues;
         private readonly IDependencyResolver _dependencyResolver;
         private readonly ModelValidator _modelValidator;
+        private readonly ArgumentMerger _argumentMerger;
+        private readonly AppInstanceCreator _appInstanceCreator;
 
         public CommandRunner(
             CommandLineApplication app,
             Type type,
             IEnumerable<ArgumentInfo> constrcutorParamValues,
-            IDependencyResolver dependencyResolver)
+            IDependencyResolver dependencyResolver,
+            AppSettings appSettings)
         {
             _app = app;
             _type = type;
             _constrcutorParamValues = constrcutorParamValues;
             _dependencyResolver = dependencyResolver;
             _modelValidator = new ModelValidator(dependencyResolver);
+            _argumentMerger = new ArgumentMerger(appSettings);
+            _appInstanceCreator = new AppInstanceCreator(appSettings);
         }
 
         public async Task<int> RunCommand(
@@ -39,13 +44,13 @@ namespace CommandDotNet
             try
             {
                 //create instance
-                object instance = AppInstanceCreator.CreateInstance(_type, _constrcutorParamValues, _dependencyResolver, _modelValidator);
+                object instance = _appInstanceCreator.CreateInstance(_type, _constrcutorParamValues, _dependencyResolver, _modelValidator);
 
                 //dentify method to invove
                 MethodInfo theMethod = instance.GetType().GetMethod(commandInfo.MethodName);
 
                 //get values for method invokation
-                object[] mergedParameters = ArgumentMerger.Merge(parameterValues);
+                object[] mergedParameters = _argumentMerger.Merge(parameterValues);
                 
                 //validate all parameters
                 foreach (dynamic param in mergedParameters)

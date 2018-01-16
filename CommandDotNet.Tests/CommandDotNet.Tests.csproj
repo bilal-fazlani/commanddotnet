@@ -2,10 +2,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <IsPackable>false</IsPackable>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>7.2</LangVersion>
     <NetCoreAppImplicitPackageVersion>2.0.3</NetCoreAppImplicitPackageVersion>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="AutoFixture.Xunit2" Version="4.0.0" />
     <PackageReference Include="CommandDotNet.IoC.MicrosoftDependencyInjection" Version="1.0.4" />
     <PackageReference Include="FluentAssertions" Version="4.19.4" />
     <PackageReference Include="FluentValidation" Version="7.3.4" />

@@ -22,6 +22,8 @@ namespace CommandDotNet.Models
         public Case Case { get; set; } = Case.DontChange;
 
         public bool EnableVersionOption { get; set; } = true;
+        
+        public bool PrompForArgumentsIfNotProvided { get; set; }
     }
 
     public enum ArgumentMode

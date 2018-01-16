@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using System.Reflection;
 using CommandDotNet.Attributes;
+using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Models
 {
@@ -29,7 +30,7 @@ namespace CommandDotNet.Models
         }
 
         public string Name => AttributeProvider.GetCustomAttribute<ArgumentAttribute>()?.Name ??
-                                   PropertyOrArgumentName.ChangeCase(Settings.Case);
+                                   PropertyOrArgumentName.ChangeCase(Settings.Case);        
 
         protected override string GetDetails()
         {

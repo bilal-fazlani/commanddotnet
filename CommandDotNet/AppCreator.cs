@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using CommandDotNet.Attributes;
+using CommandDotNet.Extensions;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 

@@ -26,7 +26,21 @@ namespace CommandDotNet.Models
 
         internal bool HasValue => _isArgument ? _commandArgument.Values.Any() : _commandOption.HasValue();
 
-        internal List<string> Values => _isArgument ? _commandArgument?.Values : _commandOption?.Values;
+        internal List<string> Values
+        {
+            get => _isArgument ? _commandArgument?.Values : _commandOption?.Values;
+            set
+            {
+                if (_isArgument)
+                {
+                    _commandArgument.Values = value;
+                }
+                else
+                {
+                    _commandOption.Values = value;
+                }
+            }
+        }
 
         internal string Value => _isArgument ? _commandArgument?.Value : _commandOption?.Value();
 

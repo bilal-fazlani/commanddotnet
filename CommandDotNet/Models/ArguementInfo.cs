@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using CommandDotNet.Extensions;
 using CommandDotNet.MicrosoftCommandLineUtils;
 
 namespace CommandDotNet.Models
@@ -17,13 +19,13 @@ namespace CommandDotNet.Models
             Settings = settings;
         }
 
-        internal ArgumentInfo(ParameterInfo attributeProvider, AppSettings settings)
+        internal ArgumentInfo(ParameterInfo parameterInfo, AppSettings settings)
             : this(settings)
         {
-            AttributeProvider = attributeProvider;
-            PropertyOrArgumentName = attributeProvider.Name;
-            Type = attributeProvider.ParameterType;
-            DefaultValue = attributeProvider.DefaultValue;
+            AttributeProvider = parameterInfo;
+            PropertyOrArgumentName = parameterInfo.Name;
+            Type = parameterInfo.ParameterType;
+            DefaultValue = parameterInfo.DefaultValue;
             IsMultipleType = GetIsMultipleType();
         }
 
@@ -35,7 +37,7 @@ namespace CommandDotNet.Models
             AttributeProvider = propertyInfo;
             PropertyOrArgumentName = propertyInfo.Name;
             Type = propertyInfo.PropertyType;
-            DefaultValue = propertyInfo.GetDefaultValue();
+            DefaultValue = GetDefaultValue(propertyInfo);
             IsMultipleType = GetIsMultipleType();
         }
         
@@ -50,6 +52,9 @@ namespace CommandDotNet.Models
         public bool IsMultipleType { get; }
         public string PropertyOrArgumentName { get; set; }
         internal ValueInfo ValueInfo { get; private set; }
+
+        public bool IsImplicit =>
+            this is CommandOptionInfo optionInfo && optionInfo.BooleanMode == BooleanMode.Implicit;
 
         private bool GetIsMultipleType()
         {
@@ -72,6 +77,18 @@ namespace CommandDotNet.Models
             return Settings.ShowArgumentDetails
                 ? $"{Details.PadRight(Constants.PadLength)}{AnnotatedDescription}"
                 : AnnotatedDescription;
+        }
+        
+        private object GetDefaultValue(PropertyInfo propertyInfo)
+        {
+            object instance = Activator.CreateInstance(propertyInfo.DeclaringType);
+            object defaultValue = propertyInfo.GetValue(instance);
+            if (object.Equals(propertyInfo.PropertyType.GetDefaultValue(), defaultValue))
+            {
+                return DBNull.Value;
+            }
+
+            return defaultValue;
         }
     }
 }

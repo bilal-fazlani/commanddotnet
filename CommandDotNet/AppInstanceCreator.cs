@@ -4,13 +4,23 @@ using System.Linq;
 using System.Reflection;
 using CommandDotNet.Attributes;
 using CommandDotNet.Exceptions;
+using CommandDotNet.Extensions;
 using CommandDotNet.Models;
 
 namespace CommandDotNet
 {
-    public static class AppInstanceCreator
-    {                
-        public static object CreateInstance(
+    public class AppInstanceCreator
+    {
+        private readonly AppSettings _appSettings;
+        private readonly ArgumentMerger _argumentMerger;
+
+        public AppInstanceCreator(AppSettings appSettings)
+        {
+            _appSettings = appSettings;
+            _argumentMerger = new ArgumentMerger(appSettings);
+        }
+        
+        public object CreateInstance(
             Type type, 
             IEnumerable<ArgumentInfo> construcitonParams, 
             IDependencyResolver dependencyResolver,
@@ -19,7 +29,7 @@ namespace CommandDotNet
             construcitonParams = construcitonParams ?? new List<ArgumentInfo>();
             
             //create instance
-            object[] mergedValues = ArgumentMerger.Merge(construcitonParams);
+            object[] mergedValues = _argumentMerger.Merge(construcitonParams);
             
             //validate all parameters
             foreach (dynamic param in mergedValues)

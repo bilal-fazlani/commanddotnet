@@ -1,5 +1,6 @@
 ﻿using System;
 using CommandDotNet.Exceptions;
+using CommandDotNet.Extensions;
 using FluentValidation;
 using FluentValidation.Attributes;
 using FluentValidation.Results;

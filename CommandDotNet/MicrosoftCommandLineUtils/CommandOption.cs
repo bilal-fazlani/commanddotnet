@@ -57,7 +57,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public string SymbolName { get; set; }
         public string ValueName { get; set; }
         public string Description { get; set; }
-        public List<string> Values { get; private set; }
+        public List<string> Values { get; internal set; }
         public CommandOptionType OptionType { get; private set; }
         public bool ShowInHelpText { get; set; } = true;
         public bool Inherited { get; set; }

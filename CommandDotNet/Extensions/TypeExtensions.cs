@@ -5,12 +5,11 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using CommandDotNet.Attributes;
-using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 
-namespace CommandDotNet
+namespace CommandDotNet.Extensions
 {
-    public static class Extensions
+    public static class TypeExtensions
     {
         public static IEnumerable<CommandInfo> GetCommandInfos(this Type type, AppSettings settings)
         {
@@ -32,42 +31,18 @@ namespace CommandDotNet
             return defaultCommandInfo;
         }
 
-        public static bool HasAttribute<T>(this ICustomAttributeProvider attributeProvider) where T : Attribute
-        {
-            T attribute = (T)attributeProvider.GetCustomAttributes(typeof(T), false).SingleOrDefault();
-            return attribute != null;
-        }
-        
-        public static T GetCustomAttribute<T>(this ICustomAttributeProvider attributeProvider) where T : Attribute
-        {
-            T attribute = (T)attributeProvider.GetCustomAttributes(typeof(T), false).SingleOrDefault();
-            return attribute;
-        }
-
         public static bool IsCollection(this Type type)
         {
             return type.GetInterfaces().Any(x => x == typeof(IEnumerable));
         }
-
-        public static object GetDefaultValue(this PropertyInfo propertyInfo)
-        {
-            object instance = Activator.CreateInstance(propertyInfo.DeclaringType);
-            object defaultValue = propertyInfo.GetValue(instance);
-            if (object.Equals(propertyInfo.PropertyType.GetDefaultValue(), defaultValue))
-            {
-                return DBNull.Value;
-            }
-
-            return defaultValue;
-        }
         
         public static object GetDefaultValue(this Type type)
         {
-            Func<object> f = GetDefault<object>;
+            Func<object> f = GetDefaultValue<object>;
             return f.Method.GetGenericMethodDefinition().MakeGenericMethod(type).Invoke(null, null);
         }
 
-        private static T GetDefault<T>()
+        private static T GetDefaultValue<T>()
         {
             return default(T);
         }

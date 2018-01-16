@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using CommandDotNet.Attributes;
 using CommandDotNet.Exceptions;
+using CommandDotNet.Extensions;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 
@@ -25,7 +26,7 @@ namespace CommandDotNet
             //get values for construtor params
             IEnumerable<ArgumentInfo> constructorValues = GetOptionValuesForConstructor();
             
-            _commandRunner = new CommandRunner(app, type, constructorValues, dependencyResolver);
+            _commandRunner = new CommandRunner(app, type, constructorValues, dependencyResolver, settings);
         }
 
         public void CreateDefaultCommand()

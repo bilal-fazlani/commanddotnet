@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using CommandDotNet.Attributes;
 using CommandDotNet.Exceptions;
+using CommandDotNet.Extensions;
 using CommandDotNet.MicrosoftCommandLineUtils;
 
 namespace CommandDotNet.Models

@@ -8,14 +8,23 @@ namespace CommandDotNet
 {
     public class ArgumentMerger
     {
-        public static object[] Merge(IEnumerable<ArgumentInfo> argumentInfos)
+        private readonly AppSettings _appSettings;
+        private readonly ValueMachine _valueMachine;
+
+        public ArgumentMerger(AppSettings appSettings)
+        {
+            _appSettings = appSettings;
+            _valueMachine = new ValueMachine(appSettings);
+        }
+        
+        public object[] Merge(IEnumerable<ArgumentInfo> argumentInfos)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             
             foreach (var argumentInfo in argumentInfos)
             {
                 if (!argumentInfo.IsPartOfModel)
-                    parameters.Add(argumentInfo.PropertyOrArgumentName, ValueMachine.GetValue(argumentInfo));
+                    parameters.Add(argumentInfo.PropertyOrArgumentName, _valueMachine.GetValue(argumentInfo));
                 
                 else
                 {
@@ -31,7 +40,7 @@ namespace CommandDotNet
                     }
 
                     PropertyInfo propertyInfo = argumentInfo.ModelType.GetProperty(argumentInfo.PropertyOrArgumentName);
-                    propertyInfo.SetValue(instance, ValueMachine.GetValue(argumentInfo));
+                    propertyInfo.SetValue(instance, _valueMachine.GetValue(argumentInfo));
                 }
             }
             

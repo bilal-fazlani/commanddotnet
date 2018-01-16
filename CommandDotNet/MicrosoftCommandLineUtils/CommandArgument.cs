@@ -16,7 +16,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public string Name { get; set; }
         public bool ShowInHelpText { get; set; } = true;
         public string Description { get; set; }
-        public List<string> Values { get; private set; }
+        public List<string> Values { get; internal set; }
         public bool MultipleValues { get; set; }
         public string Value
         {
