@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using CommandDotNet.MicrosoftCommandLineUtils;
 
@@ -26,6 +25,8 @@ namespace CommandDotNet
 
             var commandsBuilder = BuildCommands(usageBuilder);
 
+            var extendedHelpTextBuild = BuildExtendedHelpText();
+            
             if (_app.AllowArgumentSeparator)
             {
                 usageBuilder.Append(" [[--] <arg>...]");
@@ -38,7 +39,17 @@ namespace CommandDotNet
                 + argumentsBuilder
                 + optionsBuilder
                 + commandsBuilder
-                + _app.ExtendedHelpText;
+                + extendedHelpTextBuild;
+        }
+
+        private string BuildExtendedHelpText()
+        {
+            if (!string.IsNullOrEmpty(_app.ExtendedHelpText))
+            {
+                return "\n" + _app.ExtendedHelpText;
+            }
+
+            return null;
         }
         
         private StringBuilder BuildCommands(StringBuilder usageBuilder)
