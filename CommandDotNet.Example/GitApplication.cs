@@ -7,10 +7,13 @@ namespace CommandDotNet.Example
     [ApplicationMetadata(Description = "Fake git application", Name = "git")]
     public class GitApplication
     {
+        [SubCommand]
         public Submodule SubmoduleProperty { get; set; }
 
+        [SubCommand]
         public class Remote
         {
+            [SubCommand]
             public class Origin
             {
                 public void Show()
@@ -23,6 +26,7 @@ namespace CommandDotNet.Example
         [ApplicationMetadata(Description = "Stashes all changes when executed without any arguments. " +
                                            "See stash --help for further information",
             Name = "stash")]
+        [SubCommand]
         public class Stash
         {
             [DefaultMethod]
