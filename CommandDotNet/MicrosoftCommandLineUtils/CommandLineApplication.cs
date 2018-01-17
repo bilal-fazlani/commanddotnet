@@ -107,7 +107,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             {
                 var message = string.Format("The last argument '{0}' accepts multiple values. No more argument can be added.",
                     lastArg.Name);
-                throw new InvalidOperationException(message);
+                throw new AppRunnerException(message);
             }
 
             var argument = new CommandArgument { Name = name, Description = description, MultipleValues = multipleValues };
