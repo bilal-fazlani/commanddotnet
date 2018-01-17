@@ -6,9 +6,9 @@ namespace CommandDotNet.Example
     {
         static int Main(string[] args)
         {
-            AppRunner<ValidationApp> appRunner = new AppRunner<ValidationApp>(new AppSettings()
+            AppRunner<MyApplication> appRunner = new AppRunner<MyApplication>(new AppSettings()
             {
-                Case = Case.KebabCase,
+                Case = Case.KebabCase
             });
             return appRunner.Run(args);
         }

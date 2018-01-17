@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 
 namespace CommandDotNet.Example
 {
+    [ApplicationMetadata(Description = "this application is used to validate the given model")]
     public class ValidationApp
     {
         public void ValidateModel(PersonModel person, string pinCode = "400613")

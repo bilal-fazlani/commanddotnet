@@ -34,7 +34,6 @@ namespace CommandDotNet.Example
             
             bool? clog,
             
-//            [Option(RequiredString = true)]
             string cpassword,
             
             int ctimes = 0, 
@@ -61,13 +60,10 @@ namespace CommandDotNet.Example
             
             int? mfeets, 
             
-            IEnumerable<string> mfriends, 
-            
             double mheight, 
             
             bool? mlog,
             
-//            [Option(RequiredString = true)]
             string mpassword,
             
             int mtimes = 0, 
@@ -92,14 +88,14 @@ namespace CommandDotNet.Example
             Console.WriteLine("Method params");
             Console.WriteLine(JsonConvert.SerializeObject(new
             {
-                mjumped = mjumped,
-                mlevel = mlevel,
-                mfeets = mfeets,
-                mfriends = mfriends,
-                mheight = mheight,
-                mlog = mlog,
-                mauthor = mauthor,
-                mtimes = mtimes
+                mjumped,
+                mlevel,
+                mfeets,
+                mpassword,
+                mheight,
+                mlog,
+                mauthor,
+                mtimes
             }, Formatting.Indented));
         }
     }
