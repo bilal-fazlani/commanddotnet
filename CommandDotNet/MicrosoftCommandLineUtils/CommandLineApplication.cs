@@ -50,6 +50,17 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public TextWriter Out { get; set; } = Console.Out;
         public TextWriter Error { get; set; } = Console.Error;
 
+        public string GetFullCommandName()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (CommandLineApplication c = this; c != null; c = c.Parent)
+            {
+                sb.Insert(0, $"{c.Name} ");
+            }
+
+            return sb.ToString().Substring(0, sb.ToString().Length-1);
+        }
+        
         public IEnumerable<CommandOption> GetOptions()
         {
             var expr = Options.AsEnumerable();
@@ -356,7 +367,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 cmd.IsShowingInformation = true;
             }
             HelpTextGenerator helpTextGenerator = new HelpTextGenerator(this);
-            Out.WriteLine(helpTextGenerator.GetHelpText(commandName));
+            Out.WriteLine(helpTextGenerator.GetHelpText());
         }
 
         public void ShowVersion()

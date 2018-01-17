@@ -14,11 +14,13 @@ namespace CommandDotNet
             _app = app;
         }
 
-        public string GetHelpText(string commandName = null)
+        public string GetHelpText()
         {
-            var titleBuilder = BuildTitle();
-
-            var usageBuilder = BuildUsage(commandName, out CommandLineApplication target);
+            CommandLineApplication target = GetTarget();
+            
+            var titleBuilder = BuildTitle(target);
+            
+            var usageBuilder = BuildUsage(target);
 
             var argumentsBuilder = BuildArguments(target, usageBuilder);
 
@@ -33,12 +35,17 @@ namespace CommandDotNet
 
             usageBuilder.AppendLine();
 
-            return titleBuilder.ToString()
+            return titleBuilder
                 + usageBuilder.ToString()
-                + argumentsBuilder.ToString()
-                + optionsBuilder.ToString()
-                + commandsBuilder.ToString()
+                + argumentsBuilder
+                + optionsBuilder
+                + commandsBuilder
                 + target.ExtendedHelpText;
+        }
+
+        private CommandLineApplication GetTarget()
+        {
+            return _app;
         }
 
         private StringBuilder BuildCommands(CommandLineApplication target, StringBuilder usageBuilder)
@@ -59,11 +66,11 @@ namespace CommandDotNet
                     commandsBuilder.AppendLine();
                 }
 
-                if (_app.OptionHelp != null)
+                if (target.OptionHelp != null)
                 {
                     commandsBuilder.AppendLine();
                     commandsBuilder.AppendFormat(
-                        $"Use \"{target.Name} [command] --{_app.OptionHelp.LongName}\" for more information about a command.");
+                        $"Use \"{target.GetFullCommandName()} [command] --{target.OptionHelp.LongName}\" for more information about a command.");
                     commandsBuilder.AppendLine();
                 }
             }
@@ -116,43 +123,19 @@ namespace CommandDotNet
             return argumentsBuilder;
         }
 
-        private StringBuilder BuildUsage(string commandName, out CommandLineApplication target)
+        private StringBuilder BuildUsage(CommandLineApplication target)
         {
-            var usageBuilder = new StringBuilder("Usage:");
-            for (var cmd = _app; cmd != null; cmd = cmd.Parent)
-            {
-                usageBuilder.Insert(6, string.Format(" {0}", cmd.Name));
-            }
-
-            if (commandName == null || string.Equals(_app.Name, commandName, StringComparison.OrdinalIgnoreCase))
-            {
-                target = _app;
-            }
-            else
-            {
-                target = _app.Commands.SingleOrDefault(cmd =>
-                    string.Equals(cmd.Name, commandName, StringComparison.OrdinalIgnoreCase));
-
-                if (target != null)
-                {
-                    usageBuilder.AppendFormat(" {0}", commandName);
-                }
-                else
-                {
-                    // The command name is invalid so don't try to show help for something that doesn't exist
-                    target = _app;
-                }
-            }
-
+            var usageBuilder = new StringBuilder("Usage: ");
+            usageBuilder.Append(target.GetFullCommandName());
             return usageBuilder;
         }
 
-        private StringBuilder BuildTitle()
+        private StringBuilder BuildTitle(CommandLineApplication target)
         {
             var titleBuilder = new StringBuilder();
 
-            if (!string.IsNullOrEmpty(_app.Description))
-                titleBuilder.AppendLine(_app.Description + "\n");
+            if (!string.IsNullOrEmpty(target.Description))
+                titleBuilder.AppendLine(target.Description + "\n");
             return titleBuilder;
         }
     }
