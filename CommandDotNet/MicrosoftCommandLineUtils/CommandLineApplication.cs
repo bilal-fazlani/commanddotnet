@@ -360,7 +360,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         }
 
         // Show full help
-        public void ShowHelp(string commandName = null)
+        public void ShowHelp()
         {
             for (var cmd = this; cmd != null; cmd = cmd.Parent)
             {
