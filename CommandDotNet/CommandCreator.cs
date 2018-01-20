@@ -81,7 +81,7 @@ namespace CommandDotNet
                                 break;
                         }
                     }
-                }, throwOnUnexpectedArg: _settings.ThrowOnUnexpectedArgument);
+                }, _settings.HelpTextStyle ,_settings.ThrowOnUnexpectedArgument);
 
                 commandOption.OnExecute(async () => await _commandRunner.RunCommand(commandInfo, argumentValues));
             }

@@ -14,6 +14,7 @@
     <PackageIconUrl>https://raw.githubusercontent.com/bilal-fazlani/CommandDotNet/master/images/nuget-icon.png</PackageIconUrl>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="ConsoleTables" Version="2.1.0" />
     <PackageReference Include="FluentValidation" Version="7.3.4" />
     <PackageReference Include="Humanizer.Core" Version="2.2.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />

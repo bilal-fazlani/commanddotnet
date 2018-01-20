@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CommandDotNet.Exceptions;
+using CommandDotNet.HelpGeneration;
+using CommandDotNet.Models;
 
 namespace CommandDotNet.MicrosoftCommandLineUtils
 {
@@ -17,10 +19,12 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         // Indicates whether the parser should throw an exception when it runs into an unexpected argument.
         // If this field is set to false, the parser will stop parsing when it sees an unexpected argument, and all
         // remaining arguments, including the first unexpected argument, will be stored in RemainingArguments property.
+        private readonly HelpTextStyle _helpTextStyle;
         private readonly bool _throwOnUnexpectedArg;
 
-        public CommandLineApplication(bool throwOnUnexpectedArg = true)
+        public CommandLineApplication(HelpTextStyle helpTextStyle, bool throwOnUnexpectedArg)
         {
+            _helpTextStyle = helpTextStyle;
             _throwOnUnexpectedArg = throwOnUnexpectedArg;
             Options = new HashSet<CommandOption>();
             Arguments = new HashSet<CommandArgument>();
@@ -75,9 +79,10 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         }
 
         public CommandLineApplication Command(string name, Action<CommandLineApplication> configuration,
-            bool throwOnUnexpectedArg = true)
+            HelpTextStyle helpTextStyle,
+            bool throwOnUnexpectedArg)
         {
-            var command = new CommandLineApplication(throwOnUnexpectedArg) { Name = name, Parent = this };
+            var command = new CommandLineApplication(helpTextStyle, throwOnUnexpectedArg) { Name = name, Parent = this };
             Commands.Add(command);
             configuration(command);
             return command;
@@ -366,8 +371,8 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             {
                 cmd.IsShowingInformation = true;
             }
-            HelpTextGenerator helpTextGenerator = new HelpTextGenerator(this);
-            Out.WriteLine(helpTextGenerator.GetHelpText());
+            IHelpGenerator helpTextGenerator = HelpTextGeneratorFactory.Create(_helpTextStyle);
+            Out.WriteLine(helpTextGenerator.GetHelpText(this));
         }
 
         public void ShowVersion()

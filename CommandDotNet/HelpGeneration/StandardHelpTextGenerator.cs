@@ -1,33 +1,27 @@
 ﻿using System.Linq;
 using System.Text;
 using CommandDotNet.MicrosoftCommandLineUtils;
+using ConsoleTables;
 
-namespace CommandDotNet
+namespace CommandDotNet.HelpGeneration
 {
-    public class HelpTextGenerator
+    public class StandardHelpTextGenerator : IHelpGenerator
     {
-        private readonly CommandLineApplication _app;
-
-        public HelpTextGenerator(CommandLineApplication app)
-        {
-            _app = app;
-        }
-
-        public string GetHelpText()
+        public string GetHelpText(CommandLineApplication app)
         {            
-            var titleBuilder = BuildTitle();
+            var titleBuilder = BuildTitle(app);
             
-            var usageBuilder = BuildUsage();
+            var usageBuilder = BuildUsage(app);
 
-            var argumentsBuilder = BuildArguments(usageBuilder);
+            var argumentsBuilder = BuildArguments(app, usageBuilder);
 
-            var optionsBuilder = BuildOptions(usageBuilder);
+            var optionsBuilder = BuildOptions(app, usageBuilder);
 
-            var commandsBuilder = BuildCommands(usageBuilder);
+            var commandsBuilder = BuildCommands(app, usageBuilder);
 
-            var extendedHelpTextBuild = BuildExtendedHelpText();
+            var extendedHelpTextBuild = BuildExtendedHelpText(app);
             
-            if (_app.AllowArgumentSeparator)
+            if (app.AllowArgumentSeparator)
             {
                 usageBuilder.Append(" [[--] <arg>...]");
             }
@@ -42,20 +36,20 @@ namespace CommandDotNet
                 + extendedHelpTextBuild;
         }
 
-        private string BuildExtendedHelpText()
+        private string BuildExtendedHelpText(CommandLineApplication app)
         {
-            if (!string.IsNullOrEmpty(_app.ExtendedHelpText))
+            if (!string.IsNullOrEmpty(app.ExtendedHelpText))
             {
-                return "\n" + _app.ExtendedHelpText;
+                return "\n" + app.ExtendedHelpText;
             }
 
             return null;
         }
         
-        private StringBuilder BuildCommands(StringBuilder usageBuilder)
+        private StringBuilder BuildCommands(CommandLineApplication app, StringBuilder usageBuilder)
         {
             var commandsBuilder = new StringBuilder();
-            var commands = _app.Commands.Where(c => c.ShowInHelpText).ToList();
+            var commands = app.Commands.Where(c => c.ShowInHelpText).ToList();
             if (commands.Any())
             {
                 usageBuilder.Append(" [command]");
@@ -64,17 +58,19 @@ namespace CommandDotNet
                 commandsBuilder.AppendLine("Commands:");
                 var maxCmdLen = commands.Max(c => c.Name.Length);
                 var outputFormat = string.Format("  {{0, -{0}}}{{1}}", maxCmdLen + 2);
+                               
                 foreach (var cmd in commands.OrderBy(c => c.Name))
                 {
                     commandsBuilder.AppendFormat(outputFormat, cmd.Name, cmd.Description);
                     commandsBuilder.AppendLine();
                 }
 
-                if (_app.OptionHelp != null)
+                commandsBuilder.AppendLine();
+                
+                if (app.OptionHelp != null)
                 {
-                    commandsBuilder.AppendLine();
                     commandsBuilder.AppendFormat(
-                        $"Use \"{_app.GetFullCommandName()} [command] --{_app.OptionHelp.LongName}\" for more information about a command.");
+                        $"Use \"{app.GetFullCommandName()} [command] --{app.OptionHelp.LongName}\" for more information about a command.");
                     commandsBuilder.AppendLine();
                 }
             }
@@ -82,39 +78,42 @@ namespace CommandDotNet
             return commandsBuilder;
         }
 
-        private  StringBuilder BuildOptions(StringBuilder usageBuilder)
+        private  StringBuilder BuildOptions(CommandLineApplication app, StringBuilder usageBuilder)
         {
             var optionsBuilder = new StringBuilder();
-            var options = _app.GetOptions().Where(o => o.ShowInHelpText).ToList();
+            var options = app.GetOptions().Where(o => o.ShowInHelpText).ToList();
             if (options.Any())
             {
                 usageBuilder.Append(" [options]");
 
                 optionsBuilder.AppendLine();
                 optionsBuilder.AppendLine("Options:");
+                                
                 var maxOptLen = options.Max(o => o.Template.Length);
                 var outputFormat = string.Format("  {{0, -{0}}}{{1}}", maxOptLen + 2);
+                
                 foreach (var opt in options)
                 {
                     optionsBuilder.AppendFormat(outputFormat, opt.Template, opt.Description);
-                    optionsBuilder.AppendLine();
+                    optionsBuilder.AppendLine();    
                 }
             }
 
             return optionsBuilder;
         }
 
-        private StringBuilder BuildArguments(StringBuilder usageBuilder)
+        private StringBuilder BuildArguments(CommandLineApplication app, StringBuilder usageBuilder)
         {
             var argumentsBuilder = new StringBuilder();
 
-            var arguments = _app.Arguments.Where(a => a.ShowInHelpText).ToList();
+            var arguments = app.Arguments.Where(a => a.ShowInHelpText).ToList();
+                        
             if (arguments.Any())
             {
                 usageBuilder.Append(" [arguments]");
-
                 argumentsBuilder.AppendLine();
                 argumentsBuilder.AppendLine("Arguments:");
+                                
                 var maxArgLen = arguments.Max(a => a.Name.Length);
                 var outputFormat = string.Format("  {{0, -{0}}}{{1}}", maxArgLen + 2);
                 foreach (var arg in arguments)
@@ -127,19 +126,19 @@ namespace CommandDotNet
             return argumentsBuilder;
         }
 
-        private StringBuilder BuildUsage()
+        private StringBuilder BuildUsage(CommandLineApplication app)
         {
             var usageBuilder = new StringBuilder("Usage: ");
-            usageBuilder.Append(_app.GetFullCommandName());
+            usageBuilder.Append(app.GetFullCommandName());
             return usageBuilder;
         }
 
-        private StringBuilder BuildTitle()
+        private StringBuilder BuildTitle(CommandLineApplication app)
         {
             var titleBuilder = new StringBuilder();
 
-            if (!string.IsNullOrEmpty(_app.Description))
-                titleBuilder.AppendLine(_app.Description + "\n");
+            if (!string.IsNullOrEmpty(app.Description))
+                titleBuilder.AppendLine(app.Description + "\n");
             return titleBuilder;
         }
     }

@@ -38,12 +38,12 @@ namespace CommandDotNet
             
             if (isRootApp)
             {
-                app = new CommandLineApplication(throwOnUnexpectedArg: _appSettings.ThrowOnUnexpectedArgument) { Name = assemblyName };
+                app = new CommandLineApplication(_appSettings.HelpTextStyle ,_appSettings.ThrowOnUnexpectedArgument) { Name = assemblyName };
                 AddVersion(app);
             }
             else
             {
-                app = parentApplication.Command(appName, application => { });
+                app = parentApplication.Command(appName, application => { }, _appSettings.HelpTextStyle, _appSettings.ThrowOnUnexpectedArgument);
             }
 
             app.HelpOption(Constants.HelpTemplate);

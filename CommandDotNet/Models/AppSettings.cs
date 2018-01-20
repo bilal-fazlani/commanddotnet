@@ -1,4 +1,5 @@
 ﻿using CommandDotNet.Exceptions;
+using CommandDotNet.HelpGeneration;
 
 namespace CommandDotNet.Models
 {
@@ -24,6 +25,8 @@ namespace CommandDotNet.Models
         public bool EnableVersionOption { get; set; } = true;
         
         public bool PrompForArgumentsIfNotProvided { get; set; }
+
+        public HelpTextStyle HelpTextStyle { get; set; } = HelpTextStyle.Standard;
     }
 
     public enum ArgumentMode
@@ -39,5 +42,11 @@ namespace CommandDotNet.Models
         CamelCase = 2,
         KebabCase = 3,
         PascalCase = 4
+    }
+    
+    public enum HelpTextStyle
+    {
+        Standard = 0,
+        Tabular = 1
     }
 }

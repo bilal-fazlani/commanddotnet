@@ -16,8 +16,10 @@ namespace CommandDotNet.Tests
         [Fact]
         public void CanCreateApps()
         {
-            AppCreator appCreator = new AppCreator(new AppSettings());
-            CommandLineApplication app = appCreator.CreateApplication(typeof(AppCreatorTestApp), null, new CommandLineApplication());
+            var appSettings = new AppSettings();
+            AppCreator appCreator = new AppCreator(appSettings);
+            CommandLineApplication app = appCreator.CreateApplication(typeof(AppCreatorTestApp), null, 
+                new CommandLineApplication(appSettings.HelpTextStyle, appSettings.ThrowOnUnexpectedArgument));
 
             app.Commands.Should().HaveCount(3);
 
