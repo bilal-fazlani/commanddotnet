@@ -23,7 +23,6 @@ namespace CommandDotNet.Tests
             
             CommandInfo commandInfo = new CommandInfo(methodInfo, new AppSettings
             {
-                ShowArgumentDetails = false,
                 MethodArgumentMode = ArgumentMode.Option
             });
 
@@ -36,10 +35,10 @@ namespace CommandDotNet.Tests
                     CommandOptionType = CommandOptionType.SingleValue,
                     DefaultValue = DBNull.Value,
                     Type = typeof(int),
-                    EffectiveDescription = null,
-                    TypeDisplayName = "Int32",
+                    //EffectiveDescription = null,
+                    TypeDisplayName = Constants.TypeDisplayNames.Number,
                     AnnotatedDescription = null,
-                    Details = "Int32",
+                    //Details = "Int32",
                     Template = "--value",
                     BooleanMode = BooleanMode.Implicit,
                     PropertyOrArgumentName = "value"
@@ -54,7 +53,6 @@ namespace CommandDotNet.Tests
             MethodInfo methodInfo = typeof(CommandInfoTestsApplication).GetMethod("CommandWithDescriptionAndName");
             CommandInfo commandInfo = new CommandInfo(methodInfo,new AppSettings
             {
-                ShowArgumentDetails = true,
                 MethodArgumentMode = ArgumentMode.Option
             });
 
@@ -68,10 +66,10 @@ namespace CommandDotNet.Tests
                     CommandOptionType = CommandOptionType.SingleValue,
                     DefaultValue = DBNull.Value,
                     Type = typeof(int),
-                    EffectiveDescription = "Int32".PadRight(Constants.PadLength)+"some parameter description",
-                    TypeDisplayName = "Int32",
+                    //EffectiveDescription = "Int32".PadRight(Constants.PadLength)+"some parameter description",
+                    TypeDisplayName = Constants.TypeDisplayNames.Number,
                     AnnotatedDescription = "some parameter description",
-                    Details = "Int32",
+                    //Details = "Int32",
                     Template = "--value",
                     BooleanMode = BooleanMode.Implicit,
                     PropertyOrArgumentName = "value"

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -28,8 +29,6 @@ namespace CommandDotNet.Models
             
             TypeDisplayName = GetTypeDisplayName();
             AnnotatedDescription = GetAnnotatedDescription();
-            Details = GetDetails();
-            EffectiveDescription = GetEffectiveDescription();
         }
         
         public CommandOptionInfo(PropertyInfo propertyInfo, AppSettings settings) : base(propertyInfo, settings)
@@ -44,8 +43,6 @@ namespace CommandDotNet.Models
             
             TypeDisplayName = GetTypeDisplayName();
             AnnotatedDescription = GetAnnotatedDescription();
-            Details = GetDetails();
-            EffectiveDescription = GetEffectiveDescription();
         }
         
         public CommandOptionType CommandOptionType { get; set; }
@@ -132,8 +129,6 @@ namespace CommandDotNet.Models
             {
                 throw new Exception("something went wrong: !longNameAdded & !shortNameAdded");
             }
-                
-            //if(CommandOptionType != CommandOptionType.NoValue) sb.Append($" <{ValueName}>");
     
             return sb.ToString();
         }
@@ -161,19 +156,7 @@ namespace CommandDotNet.Models
 
         protected override string GetTypeDisplayName()
         {
-            if (Type.Name == "String") return Type.Name;
-
-            if (BooleanMode == BooleanMode.Implicit && (Type == typeof(bool) || Type == typeof(bool?)))
-            {
-                return "Flag";
-            }
-
-            if (typeof(IEnumerable).IsAssignableFrom(Type))
-            {
-                return $"{Type.GetGenericArguments().FirstOrDefault()?.Name} (Multiple)";
-            }
-
-            return Nullable.GetUnderlyingType(Type)?.Name ?? Type.Name;
+            return GetTypeDisplayName(Type, BooleanMode);
         }
         
         protected override string GetAnnotatedDescription()
@@ -184,7 +167,7 @@ namespace CommandDotNet.Models
         
         public override string ToString()
         {
-            return $"{PropertyOrArgumentName} | '{ValueInfo?.Value ?? "null"}' | {Details} | {Template}";
+            return $"{PropertyOrArgumentName} | '{ValueInfo?.Value ?? "empty"}' | {TypeDisplayName} | {Template}";
         }
     }
 }

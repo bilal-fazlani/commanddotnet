@@ -61,6 +61,10 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public CommandOptionType OptionType { get; private set; }
         public bool ShowInHelpText { get; set; } = true;
         public bool Inherited { get; set; }
+        
+        public string TypeDisplayName { get; set; }
+        public string DefaultValue { get; set; }
+        public bool Multiple { get; set; }
 
         public bool TryParse(string value)
         {

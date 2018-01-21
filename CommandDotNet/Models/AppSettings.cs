@@ -10,8 +10,6 @@ namespace CommandDotNet.Models
             if(BooleanMode == BooleanMode.Unknown)
                 throw new AppRunnerException("BooleanMode can not be set to BooleanMode.Unknown explicitly");
         }
-        public bool ShowArgumentDetails { get; set; } = true;
-
         public BooleanMode BooleanMode { get; set; } = BooleanMode.Implicit;
 
         public bool ThrowOnUnexpectedArgument { get; set; } = true;
@@ -26,7 +24,7 @@ namespace CommandDotNet.Models
         
         public bool PrompForArgumentsIfNotProvided { get; set; }
 
-        public HelpTextStyle HelpTextStyle { get; set; } = HelpTextStyle.Standard;
+        public HelpTextStyle HelpTextStyle { get; set; } = HelpTextStyle.Basic;
     }
 
     public enum ArgumentMode
@@ -46,7 +44,7 @@ namespace CommandDotNet.Models
     
     public enum HelpTextStyle
     {
-        Standard = 0,
+        Basic = 0,
         Tabular = 1
     }
 }

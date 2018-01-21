@@ -17,16 +17,12 @@ namespace CommandDotNet.Models
         {
             TypeDisplayName = GetTypeDisplayName();
             AnnotatedDescription = GetAnnotatedDescription();
-            Details = GetDetails();
-            EffectiveDescription = GetEffectiveDescription();
         }
         
         public CommandParameterInfo(PropertyInfo attributeProvider, AppSettings settings) : base(attributeProvider, settings)
         {
             TypeDisplayName = GetTypeDisplayName();
             AnnotatedDescription = GetAnnotatedDescription();
-            Details = GetDetails();
-            EffectiveDescription = GetEffectiveDescription();
         }
 
         public string Name => AttributeProvider.GetCustomAttribute<ArgumentAttribute>()?.Name ??
@@ -46,19 +42,12 @@ namespace CommandDotNet.Models
         
         protected override string GetTypeDisplayName()
         {
-            if (Type.Name == "String" || Type.Name == "Boolean") return Type.Name;
-
-            if (typeof(IEnumerable).IsAssignableFrom(Type))
-            {
-                return $"{Type.GetGenericArguments().FirstOrDefault()?.Name} (Multiple)";
-            }
-
-            return Nullable.GetUnderlyingType(Type)?.Name ?? Type.Name;
+            return GetTypeDisplayName(Type, BooleanMode.Explicit);
         }
 
         public override string ToString()
         {
-            return $"{Name} | '{ValueInfo?.Value ?? "null"}' | {Details}";
+            return $"{Name} | '{ValueInfo?.Value ?? "empty"}' | {TypeDisplayName}";
         }
     }
 }

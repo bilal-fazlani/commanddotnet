@@ -8,12 +8,12 @@ namespace CommandDotNet.HelpGeneration
         {
             switch (helpTextStyle)
             {
-                case HelpTextStyle.Standard:
-                    return new StandardHelpTextGenerator();
+                case HelpTextStyle.Basic:
+                    return new BasicHelpTextGenerator();
                 case HelpTextStyle.Tabular:
-                    return new TabularHelpTextGenerator();
+                    return new TabularHelpTextGenerators();
                 default:
-                    return new StandardHelpTextGenerator();
+                    return new BasicHelpTextGenerator();
             }
         }
     }

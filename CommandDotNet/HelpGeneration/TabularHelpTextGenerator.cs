@@ -5,10 +5,8 @@ using ConsoleTables;
 
 namespace CommandDotNet.HelpGeneration
 {
-    public class TabularHelpTextGenerator : IHelpGenerator
+    public class TabularHelpTextGenerators : IHelpGenerator
     {
-        //private readonly CommandLineApplication _app;
-
         public string GetHelpText(CommandLineApplication app)
         {            
             var titleBuilder = BuildTitle(app);
@@ -58,15 +56,11 @@ namespace CommandDotNet.HelpGeneration
 
                 commandsBuilder.AppendLine();
                 commandsBuilder.AppendLine("Commands:");
-//                var maxCmdLen = commands.Max(c => c.Name.Length);
-//                var outputFormat = string.Format("  {{0, -{0}}}{{1}}", maxCmdLen + 2);
                 
                 var table = new ConsoleTable("Command", "Description");
                 
                 foreach (var cmd in commands.OrderBy(c => c.Name))
                 {
-//                    commandsBuilder.AppendFormat(outputFormat, cmd.Name, cmd.Description);
-//                    commandsBuilder.AppendLine();
                     table.AddRow(cmd.Name, cmd.Description);
                 }
 
@@ -95,16 +89,11 @@ namespace CommandDotNet.HelpGeneration
                 optionsBuilder.AppendLine();
                 optionsBuilder.AppendLine("Options:");
                 
-                var table = new ConsoleTable("Option", "Description");
-                
-//                var maxOptLen = options.Max(o => o.Template.Length);
-//                var outputFormat = string.Format("  {{0, -{0}}}{{1}}", maxOptLen + 2);
+                var table = new ConsoleTable("Option", "Type" ,"Description", "Default", "Multiple");
                 
                 foreach (var opt in options)
                 {
-//                    optionsBuilder.AppendFormat(outputFormat, opt.Template, opt.Description);
-//                    optionsBuilder.AppendLine();    
-                    table.AddRow(opt.Template, opt.Description);
+                    table.AddRow(opt.Template, opt.TypeDisplayName ,opt.Description, opt.DefaultValue, opt.Multiple? "✓" : null);
                 }
                 optionsBuilder.Append(table.ToStringAlternative());
             }
@@ -124,15 +113,11 @@ namespace CommandDotNet.HelpGeneration
                 argumentsBuilder.AppendLine();
                 argumentsBuilder.AppendLine("Arguments:");
                 
-                var table = new ConsoleTable("Argumment", "Description");
-                
-                //var maxArgLen = arguments.Max(a => a.Name.Length);
-                //var outputFormat = string.Format("  {{0, -{0}}}{{1}}", maxArgLen + 2);
+                var table = new ConsoleTable("Argumment", "Type", "Description", "Default", "Multiple");
+
                 foreach (var arg in arguments)
                 {
-                    //argumentsBuilder.AppendFormat(outputFormat, arg.Name, arg.Description);
-                    //argumentsBuilder.AppendLine();
-                    table.AddRow(arg.Name, arg.Description);
+                    table.AddRow(arg.Name, arg.TypeDisplayName, arg.Description, arg.DefaultValue, arg.MultipleValues? "✓" : null);
                 }
 
                 argumentsBuilder.Append(table.ToStringAlternative());

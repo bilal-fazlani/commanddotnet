@@ -20,78 +20,78 @@ namespace CommandDotNet.Tests
         public static IEnumerable<object[]> TestCases = new[] {
             new object[]
             {
-                "jumped", CommandOptionType.SingleValue, DBNull.Value, "Boolean", "Boolean", null, 
-                null, "--jumped", typeof(bool), false
+                "jumped", CommandOptionType.SingleValue, DBNull.Value, Constants.TypeDisplayNames.Boolean, null, 
+                "--jumped", typeof(bool)
             },
             new object[]
             {
-                "id", CommandOptionType.SingleValue, DBNull.Value, "Int64", "Int64", "Id of person", 
-                "Int64".PadRight(Constants.PadLength)+"Id of person", "-i | --id", typeof(long), true
+                "id", CommandOptionType.SingleValue, DBNull.Value, Constants.TypeDisplayNames.Number,  "Id of person", 
+                "-i | --id", typeof(long)
             },
             new object[]
             {
-                "level", CommandOptionType.SingleValue, DBNull.Value, "String",  "String", null,
-                null, "-l", typeof(string), false
+                "level", CommandOptionType.SingleValue, DBNull.Value, Constants.TypeDisplayNames.Text,  null,
+                "-l", typeof(string)
             },
             new object[]
             {
-                "feets", CommandOptionType.SingleValue, DBNull.Value, "Int32" , "Int32", null,
-                null, "--feet", typeof(int?), false
+                "feets", CommandOptionType.SingleValue, DBNull.Value, Constants.TypeDisplayNames.Number , null,
+                "--feet", typeof(int?)
             },
             new object[]
             {
-                "friends", CommandOptionType.MultipleValue, DBNull.Value, "String (Multiple)", "String (Multiple)" ,null,
-                null, "--friends", typeof(IEnumerable<string>), false
+                "friends", CommandOptionType.MultipleValue, DBNull.Value, Constants.TypeDisplayNames.Text, null,
+                "--friends", typeof(IEnumerable<string>)
             },
             new object[]
             {
-                "height", CommandOptionType.SingleValue, DBNull.Value, "Double",  "Double", null,
-                null, "--height", typeof(double), false
+                "height", CommandOptionType.SingleValue, DBNull.Value, Constants.TypeDisplayNames.DecimalNumber, null,
+                "--height", typeof(double)
             },
             new object[]
             {
-                "log", CommandOptionType.NoValue, DBNull.Value, "Flag" , "Flag", null,
-                null, "--log", typeof(bool?), false
+                "log", CommandOptionType.NoValue, DBNull.Value, Constants.TypeDisplayNames.Flag, null,
+                "--log", typeof(bool?)
             },
             new object[]
             {
-                "isVerified", CommandOptionType.NoValue, DBNull.Value, "Flag" , "Flag", null,
-                null, "--isVerified", typeof(bool), false
+                "isVerified", CommandOptionType.NoValue, DBNull.Value, Constants.TypeDisplayNames.Flag, null,
+                "--isVerified", typeof(bool)
             },
             new object[]
             {
-                "email", CommandOptionType.NoValue, DBNull.Value, "Flag" , "Flag", null,
-                null, "--email", typeof(bool), false
+                "email", CommandOptionType.NoValue, DBNull.Value, Constants.TypeDisplayNames.Flag, null,
+                "--email", typeof(bool)
             },
             new object[]
             {
-                "password", CommandOptionType.SingleValue, DBNull.Value, "String" , "String", null,
-                null, "--password", typeof(string), false
+                "password", CommandOptionType.SingleValue, DBNull.Value, Constants.TypeDisplayNames.Text, null,
+                "--password", typeof(string)
             },
             new object[]
             {
-                "index", CommandOptionType.SingleValue, 1, "Int32",  "Int32 | Default value: 1", null,
-                null, "--index", typeof(int), false
+                "index", CommandOptionType.SingleValue, 1, Constants.TypeDisplayNames.Number, null,
+                "--index", typeof(int)
             },
             new object[]
             {
-                "name", CommandOptionType.SingleValue, "john", "String", "String | Default value: john", "name of person",
-                "name of person", "--name", typeof(string), false
+                "name", CommandOptionType.SingleValue, "john", Constants.TypeDisplayNames.Text, "name of person",
+                "--name", typeof(string)
             },
             new object[]
             {
-                "category1", CommandOptionType.SingleValue, DBNull.Value, "Char", "Char", null,
-                "Char".PadRight(Constants.PadLength), "--category1", typeof(char), true
+                "category1", CommandOptionType.SingleValue, DBNull.Value, Constants.TypeDisplayNames.Character, null,
+                "--category1", typeof(char)
             },
             new object[]
             {
-                "category2", CommandOptionType.SingleValue, DBNull.Value, "Char", "Char", null,
-                "Char".PadRight(Constants.PadLength), "--category2", typeof(char?), true
+                "category2", CommandOptionType.SingleValue, DBNull.Value, Constants.TypeDisplayNames.Character, null,
+                "--category2",typeof(char?)
             },
             new object[]
             {
-                "category3", CommandOptionType.SingleValue, 'b', "Char", "Char | Default value: b", null,
-                "Char | Default value: b".PadRight(Constants.PadLength), "--category3", typeof(char), true
+                "category3", CommandOptionType.SingleValue, 'b', Constants.TypeDisplayNames.Character, null,
+                "--category3", typeof(char)
             },
         };
 
@@ -102,27 +102,28 @@ namespace CommandDotNet.Tests
             CommandOptionType commandOptionType, 
             object defaultValue, 
             string typeDisplayName,
-            string parameterDetails,
+            //string parameterDetails,
             string annotatedDescription,
             
-            string effectiveDescription,
+            //string effectiveDescription,
             string template,
-            Type type,
-            bool showParameterDetails)
+            Type type
+            //bool showParameterDetails
+            )
         {
             MethodInfo methodInfo = typeof(TestApplication).GetMethod("Execute");
             var parameters = methodInfo.GetParameters();
             var parameter = parameters.Single(p => p.Name == parameterName);
             CommandOptionInfo commandParameterInfo = new CommandOptionInfo(parameter, 
-                new AppSettings{ ShowArgumentDetails = showParameterDetails, MethodArgumentMode = ArgumentMode.Option});
+                new AppSettings{ MethodArgumentMode = ArgumentMode.Option});
 
             commandParameterInfo.CommandOptionType.Should().Be(commandOptionType, nameof(commandOptionType));
             commandParameterInfo.DefaultValue.Should().Be(defaultValue, nameof(defaultValue));
             commandParameterInfo.TypeDisplayName.Should().Be(typeDisplayName, nameof(typeDisplayName));
-            commandParameterInfo.Details.Should().Be(parameterDetails, nameof(parameterDetails));
+//            commandParameterInfo.Details.Should().Be(parameterDetails, nameof(parameterDetails));
             commandParameterInfo.AnnotatedDescription.Should().Be(annotatedDescription, nameof(annotatedDescription));
 
-            commandParameterInfo.EffectiveDescription.Should().Be(effectiveDescription, nameof(effectiveDescription));
+//            commandParameterInfo.EffectiveDescription.Should().Be(effectiveDescription, nameof(effectiveDescription));
             commandParameterInfo.Template.Should().Be(template, nameof(template));
             commandParameterInfo.Type.Should().Be(type, nameof(type));
         }
@@ -133,11 +134,11 @@ namespace CommandDotNet.Tests
             PropertyInfo propertyInfo = typeof(ParameterModel).GetProperty("foreignKeyId");
             CommandOptionInfo commandOptionInfo = new CommandOptionInfo(propertyInfo, new AppSettings());
 
-            commandOptionInfo.Details.Should().Be("Int32", "Details");
+//            commandOptionInfo.Details.Should().Be("Int32", "Details");
             commandOptionInfo.Template.Should().Be("--foreignKeyId");
             commandOptionInfo.LongName.Should().Be("foreignKeyId");
-            commandOptionInfo.TypeDisplayName.Should().Be("Int32");
-            commandOptionInfo.EffectiveDescription.Should().Be("Int32".PadRight(Constants.PadLength));
+            commandOptionInfo.TypeDisplayName.Should().Be(Constants.TypeDisplayNames.Number);
+//            commandOptionInfo.EffectiveDescription.Should().Be("Int32".PadRight(Constants.PadLength));
             commandOptionInfo.IsMultipleType.Should().BeFalse();
         }
     }

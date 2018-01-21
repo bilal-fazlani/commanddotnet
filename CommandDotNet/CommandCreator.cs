@@ -91,16 +91,23 @@ namespace CommandDotNet
         {
             parameter.SetValue(command.Argument(
                 parameter.Name,
-                parameter.EffectiveDescription,
+                parameter.AnnotatedDescription,
+                _=>{},
+                parameter.TypeDisplayName,
+                parameter.DefaultValue.ToString(),
                 parameter.IsMultipleType));
         }
 
         private static void SetValueForOption(CommandOptionInfo option, CommandLineApplication command)
         {
             option.SetValue(command.Option(option.Template,
-                option.EffectiveDescription,
+                option.AnnotatedDescription,
                 option.CommandOptionType,
-                option.Inherited));
+                _=>{},
+                option.Inherited,
+                option.TypeDisplayName,
+                option.DefaultValue.ToString(),
+                option.IsMultipleType));
         }
 
         private IEnumerable<ArgumentInfo> GetOptionValuesForConstructor()
@@ -127,9 +134,13 @@ namespace CommandDotNet
                 var optionInfo = (CommandOptionInfo) argumentInfo;
                 optionInfo.SetValue(_app.Option(
                     optionInfo.Template,
-                    optionInfo.EffectiveDescription,
+                    optionInfo.AnnotatedDescription,
                     optionInfo.CommandOptionType,
-                    optionInfo.Inherited));
+                    _=>{},
+                    optionInfo.Inherited,
+                    optionInfo.TypeDisplayName,
+                    optionInfo.DefaultValue.ToString(),
+                    optionInfo.IsMultipleType));
             }
             
             return argumentInfos;

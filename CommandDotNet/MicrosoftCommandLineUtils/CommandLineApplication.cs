@@ -88,21 +88,18 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             return command;
         }
 
-        public CommandOption Option(string template, string description, CommandOptionType optionType)
-            => Option(template, description, optionType, _ => { }, inherited: false);
-
-        public CommandOption Option(string template, string description, CommandOptionType optionType, bool inherited)
-            => Option(template, description, optionType, _ => { }, inherited);
-
-        public CommandOption Option(string template, string description, CommandOptionType optionType, Action<CommandOption> configuration)
-            => Option(template, description, optionType, configuration, inherited: false);
-
-        public CommandOption Option(string template, string description, CommandOptionType optionType, Action<CommandOption> configuration, bool inherited)
+        internal CommandOption Option(string template, string description, CommandOptionType optionType, 
+            Action<CommandOption> configuration, bool inherited,
+            string typeDisplayName, string defaultValue, bool multiple
+            )
         {
             var option = new CommandOption(template, optionType)
             {
                 Description = description,
-                Inherited = inherited
+                Inherited = inherited,
+                DefaultValue = defaultValue,
+                TypeDisplayName = typeDisplayName,
+                Multiple = multiple
             };
             bool optionAdded = Options.Add(option);
             if(!optionAdded)
@@ -111,12 +108,10 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             return option;
         }
 
-        public CommandArgument Argument(string name, string description, bool multipleValues = false)
-        {
-            return Argument(name, description, _ => { }, multipleValues);
-        }
-
-        public CommandArgument Argument(string name, string description, Action<CommandArgument> configuration, bool multipleValues = false)
+        public CommandArgument Argument(
+            string name, string description, 
+            Action<CommandArgument> configuration,
+            string typeDisplayName, string defaultValue, bool multiple)
         {
             var lastArg = Arguments.LastOrDefault();
             if (lastArg != null && lastArg.MultipleValues)
@@ -126,7 +121,14 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 throw new AppRunnerException(message);
             }
 
-            var argument = new CommandArgument { Name = name, Description = description, MultipleValues = multipleValues };
+            var argument = new CommandArgument
+            {
+                Name = name, 
+                Description = description, 
+                MultipleValues = multiple,
+                TypeDisplayName = typeDisplayName,
+                DefaultValue = defaultValue
+            };
             bool argumentAdded = Arguments.Add(argument);
             if(!argumentAdded)
                 throw new AppRunnerException($"Argument with name '{argument.Name}' already added");
@@ -322,7 +324,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         {
             // Help option is special because we stop parsing once we see it
             // So we store it separately for further use
-            OptionHelp = Option(template, "Show help information", CommandOptionType.NoValue);
+            OptionHelp = Option(template, "Show help information", CommandOptionType.NoValue, _=>{}, false, Constants.TypeDisplayNames.Flag, null, false);
 
             return OptionHelp;
         }
@@ -348,7 +350,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         {
             // Version option is special because we stop parsing once we see it
             // So we store it separately for further use
-            OptionVersion = Option(template, "Show version information", CommandOptionType.NoValue);
+            OptionVersion = Option(template, "Show version information", CommandOptionType.NoValue, _=>{}, false, Constants.TypeDisplayNames.Flag, null, false);
             ShortVersionGetter = shortFormVersionGetter;
             LongVersionGetter = longFormVersionGetter ?? shortFormVersionGetter;
 
