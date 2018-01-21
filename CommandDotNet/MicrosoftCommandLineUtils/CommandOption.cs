@@ -65,6 +65,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public string TypeDisplayName { get; set; }
         public string DefaultValue { get; set; }
         public bool Multiple { get; set; }
+        public List<string> AllowedValues { get; set; }
 
         public bool TryParse(string value)
         {

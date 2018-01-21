@@ -90,7 +90,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 
         internal CommandOption Option(string template, string description, CommandOptionType optionType, 
             Action<CommandOption> configuration, bool inherited,
-            string typeDisplayName, string defaultValue, bool multiple
+            string typeDisplayName, string defaultValue, bool multiple, List<string> allowedValues
             )
         {
             var option = new CommandOption(template, optionType)
@@ -99,7 +99,8 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 Inherited = inherited,
                 DefaultValue = defaultValue,
                 TypeDisplayName = typeDisplayName,
-                Multiple = multiple
+                Multiple = multiple,
+                AllowedValues = allowedValues
             };
             bool optionAdded = Options.Add(option);
             if(!optionAdded)
@@ -111,7 +112,8 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public CommandArgument Argument(
             string name, string description, 
             Action<CommandArgument> configuration,
-            string typeDisplayName, string defaultValue, bool multiple)
+            string typeDisplayName, string defaultValue, bool multiple,
+            List<string> allowedValues)
         {
             var lastArg = Arguments.LastOrDefault();
             if (lastArg != null && lastArg.MultipleValues)
@@ -127,7 +129,8 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 Description = description, 
                 MultipleValues = multiple,
                 TypeDisplayName = typeDisplayName,
-                DefaultValue = defaultValue
+                DefaultValue = defaultValue,
+                AllowedValues = allowedValues
             };
             bool argumentAdded = Arguments.Add(argument);
             if(!argumentAdded)
@@ -324,7 +327,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         {
             // Help option is special because we stop parsing once we see it
             // So we store it separately for further use
-            OptionHelp = Option(template, "Show help information", CommandOptionType.NoValue, _=>{}, false, Constants.TypeDisplayNames.Flag, null, false);
+            OptionHelp = Option(template, "Show help information", CommandOptionType.NoValue, _=>{}, false, Constants.TypeDisplayNames.Flag, null, false, null);
 
             return OptionHelp;
         }
@@ -350,7 +353,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         {
             // Version option is special because we stop parsing once we see it
             // So we store it separately for further use
-            OptionVersion = Option(template, "Show version information", CommandOptionType.NoValue, _=>{}, false, Constants.TypeDisplayNames.Flag, null, false);
+            OptionVersion = Option(template, "Show version information", CommandOptionType.NoValue, _=>{}, false, Constants.TypeDisplayNames.Flag, null, false, null);
             ShortVersionGetter = shortFormVersionGetter;
             LongVersionGetter = longFormVersionGetter ?? shortFormVersionGetter;
 

@@ -20,6 +20,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public bool MultipleValues { get; set; }
         public string TypeDisplayName { get; set; }
         public string DefaultValue { get; set; }
+        public List<string> AllowedValues { get; set; }
         
         public string Value
         {

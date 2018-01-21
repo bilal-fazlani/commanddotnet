@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -27,6 +28,7 @@ namespace CommandDotNet.Models
             Type = parameterInfo.ParameterType;
             DefaultValue = parameterInfo.DefaultValue;
             IsMultipleType = GetIsMultipleType();
+            AllowedValues = GetAllowedValues();
         }
 
         internal ArgumentInfo(PropertyInfo propertyInfo, AppSettings settings)
@@ -39,9 +41,9 @@ namespace CommandDotNet.Models
             Type = propertyInfo.PropertyType;
             DefaultValue = GetDefaultValue(propertyInfo);
             IsMultipleType = GetIsMultipleType();
+            AllowedValues = GetAllowedValues();
         }
-        
-        
+
         public Type Type { get; internal set; }
         
         public object DefaultValue { get; internal set; }
@@ -51,6 +53,7 @@ namespace CommandDotNet.Models
         public string PropertyOrArgumentName { get; set; }
         public bool IsPartOfModel { get; set; }
         public Type ModelType { get; set; }
+        public List<string> AllowedValues { get; set; }
         internal ValueInfo ValueInfo { get; private set; }
 
         public bool IsImplicit =>
@@ -66,6 +69,21 @@ namespace CommandDotNet.Models
             ValueInfo = new ValueInfo(parameter);
         }
 
+        private List<string> GetAllowedValues()
+        {
+            if (Type == typeof(bool) && !IsImplicit)
+            {
+                return new List<string>(){"true", "false"};
+            }
+
+            if (Type.IsEnum)
+            {
+                return Enum.GetNames(Type).ToList();
+            }
+
+            return null;
+        }
+        
         protected abstract string GetAnnotatedDescription();
 
         protected abstract string GetTypeDisplayName();

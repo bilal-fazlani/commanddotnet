@@ -8,7 +8,8 @@ namespace CommandDotNet.Example
         {
             AppRunner<MyApplication> appRunner = new AppRunner<MyApplication>(new AppSettings()
             {
-                Case = Case.KebabCase
+                Case = Case.KebabCase,
+                HelpTextStyle = HelpTextStyle.Tabular
             });
             return appRunner.Run(args);
         }

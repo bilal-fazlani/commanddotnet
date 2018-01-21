@@ -95,7 +95,8 @@ namespace CommandDotNet
                 _=>{},
                 parameter.TypeDisplayName,
                 parameter.DefaultValue.ToString(),
-                parameter.IsMultipleType));
+                parameter.IsMultipleType,
+                parameter.AllowedValues));
         }
 
         private static void SetValueForOption(CommandOptionInfo option, CommandLineApplication command)
@@ -107,7 +108,8 @@ namespace CommandDotNet
                 option.Inherited,
                 option.TypeDisplayName,
                 option.DefaultValue.ToString(),
-                option.IsMultipleType));
+                option.IsMultipleType,
+                option.AllowedValues));
         }
 
         private IEnumerable<ArgumentInfo> GetOptionValuesForConstructor()
@@ -140,7 +142,8 @@ namespace CommandDotNet
                     optionInfo.Inherited,
                     optionInfo.TypeDisplayName,
                     optionInfo.DefaultValue.ToString(),
-                    optionInfo.IsMultipleType));
+                    optionInfo.IsMultipleType,
+                    optionInfo.AllowedValues));
             }
             
             return argumentInfos;
