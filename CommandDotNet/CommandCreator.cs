@@ -94,7 +94,7 @@ namespace CommandDotNet
                 parameter.AnnotatedDescription,
                 _=>{},
                 parameter.TypeDisplayName,
-                parameter.DefaultValue.ToString(),
+                parameter.DefaultValue,
                 parameter.IsMultipleType,
                 parameter.AllowedValues));
         }
@@ -107,7 +107,7 @@ namespace CommandDotNet
                 _=>{},
                 option.Inherited,
                 option.TypeDisplayName,
-                option.DefaultValue.ToString(),
+                option.DefaultValue,
                 option.IsMultipleType,
                 option.AllowedValues));
         }
@@ -141,7 +141,7 @@ namespace CommandDotNet
                     _=>{},
                     optionInfo.Inherited,
                     optionInfo.TypeDisplayName,
-                    optionInfo.DefaultValue.ToString(),
+                    optionInfo.DefaultValue,
                     optionInfo.IsMultipleType,
                     optionInfo.AllowedValues));
             }

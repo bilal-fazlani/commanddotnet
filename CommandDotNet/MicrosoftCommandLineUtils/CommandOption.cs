@@ -63,7 +63,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public bool Inherited { get; set; }
         
         public string TypeDisplayName { get; set; }
-        public string DefaultValue { get; set; }
+        public object DefaultValue { get; set; }
         public bool Multiple { get; set; }
         public List<string> AllowedValues { get; set; }
 

@@ -14,7 +14,7 @@
 
             public const string Boolean = "Boolean";
 
-            public const string DecimalNumber = "Decimal number";
+            public const string DecimalNumber = "Decimal";
 
             public const string Character = "Character";
 

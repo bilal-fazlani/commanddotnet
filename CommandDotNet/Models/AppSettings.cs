@@ -45,6 +45,7 @@ namespace CommandDotNet.Models
     public enum HelpTextStyle
     {
         Basic = 0,
-        Tabular = 1
+        Standard = 1,
+        Tabular = 2
     }
 }
