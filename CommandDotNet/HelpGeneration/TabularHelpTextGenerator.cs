@@ -5,7 +5,7 @@ using ConsoleTables;
 
 namespace CommandDotNet.HelpGeneration
 {
-    public class TabularHelpTextGenerators : IHelpGenerator
+    public class TabularHelpTextGenerator : IHelpGenerator
     {
         public string GetHelpText(CommandLineApplication app)
         {            
