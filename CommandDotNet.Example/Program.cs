@@ -9,7 +9,7 @@ namespace CommandDotNet.Example
             AppRunner<MyApplication> appRunner = new AppRunner<MyApplication>(new AppSettings()
             {
                 Case = Case.KebabCase,
-                HelpTextStyle = HelpTextStyle.Tabular
+                HelpTextStyle = HelpTextStyle.Detailed
             });
             return appRunner.Run(args);
         }

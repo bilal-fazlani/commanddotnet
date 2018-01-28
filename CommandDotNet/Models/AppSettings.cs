@@ -24,7 +24,7 @@ namespace CommandDotNet.Models
         
         public bool PrompForArgumentsIfNotProvided { get; set; }
 
-        public HelpTextStyle HelpTextStyle { get; set; } = HelpTextStyle.Basic;
+        public HelpTextStyle HelpTextStyle { get; set; } = HelpTextStyle.Detailed;
     }
 
     public enum ArgumentMode
@@ -45,7 +45,6 @@ namespace CommandDotNet.Models
     public enum HelpTextStyle
     {
         Basic = 0,
-        Standard = 1,
-        Tabular = 2
+        Detailed = 1
     }
 }

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using CommandDotNet.MicrosoftCommandLineUtils;
 
 namespace CommandDotNet.HelpGeneration
 {
-    public class StandardHelpTextGenerator : IHelpGenerator
+    public class DetailedHelpTextGenerator : IHelpGenerator
     {
         public string GetHelpText(CommandLineApplication app)
         {            
@@ -58,12 +56,16 @@ namespace CommandDotNet.HelpGeneration
                 usageBuilder.Append(" [command]");
 
                 commandsBuilder.AppendLine();
-                commandsBuilder.AppendLine("Commands:");
-               
-                RenderList(commands, commandsBuilder, 
-                    command => command.Name,
-                    command => command.Description);
-                
+                commandsBuilder.AppendLine("Commands:\n\r");
+                var maxCmdLen = commands.Max(c => c.Name.Length);
+                var outputFormat = string.Format("  {{0, -{0}}}{{1}}", maxCmdLen + 2);
+                               
+                foreach (var cmd in commands.OrderBy(c => c.Name))
+                {
+                    commandsBuilder.AppendFormat(outputFormat, cmd.Name, cmd.Description);
+                    commandsBuilder.AppendLine();
+                }
+
                 commandsBuilder.AppendLine();
                 
                 if (app.OptionHelp != null)
@@ -86,19 +88,46 @@ namespace CommandDotNet.HelpGeneration
                 usageBuilder.Append(" [options]");
 
                 optionsBuilder.AppendLine();
-                optionsBuilder.AppendLine("Options:");
+                optionsBuilder.AppendLine("Options:\n\r");
 
-                RenderList(options, optionsBuilder, 
-                    opt => {
-                        StringBuilder sb = new StringBuilder(opt.Template);
-                        if (!string.IsNullOrEmpty(opt.TypeDisplayName))
-                        {
-                            sb.Append($" [{opt.TypeDisplayName}]");
-                        }
+                foreach (var commandOption in options)
+                {
+                    //template format
+                    optionsBuilder.Append(RenderParameter(options, commandOption, o =>
+                    {
+                        StringBuilder sb = new StringBuilder(o.Template);
+                        sb.Append(o.Multiple ? " (Multiple)" : "");
                         return sb.ToString();
-                    },
-                    opt => opt.DefaultValue != DBNull.Value ? $"Default: {opt.DefaultValue}" : null,
-                    opt => opt.Description);
+                    }));
+                    
+                    //type display name
+                    optionsBuilder.Append(RenderParameter(options, commandOption, o =>
+                    {
+                        if(!string.IsNullOrEmpty(o.TypeDisplayName))
+                            return $"<{o.TypeDisplayName.ToUpperInvariant()}>";
+                        return null;
+                    }));
+                    
+                    //default value
+                    optionsBuilder.Append(RenderParameter(options, commandOption, o =>
+                    {
+                        if(o.DefaultValue != DBNull.Value)
+                            return $"[{o.DefaultValue.ToString()}]";
+                        return null;
+                    }));
+
+                    //description
+                    optionsBuilder.Append(string.IsNullOrEmpty(commandOption.Description)? null: "\n\r  " + commandOption.Description);
+                    
+                    //Allowed values
+                    optionsBuilder.Append(
+                        (!string.IsNullOrEmpty(commandOption.TypeDisplayName) && (commandOption.AllowedValues?.Any() ?? false))
+                            ? $"\n\r  Allowed values: {string.Join(", ", commandOption.AllowedValues)}"
+                            : null);
+                                        
+                    optionsBuilder.AppendLine();
+                    optionsBuilder.AppendLine();
+                }
             }
 
             return optionsBuilder;
@@ -114,20 +143,46 @@ namespace CommandDotNet.HelpGeneration
             {
                 usageBuilder.Append(" [arguments]");
                 argumentsBuilder.AppendLine();
-                argumentsBuilder.AppendLine("Arguments:");
-                
-                RenderList(arguments, argumentsBuilder, 
-                    arg =>
+                argumentsBuilder.AppendLine("Arguments:\n\r");
+
+                foreach (var commandArgument in arguments)
+                {
+                    //template format
+                    argumentsBuilder.Append(RenderParameter(arguments, commandArgument, arg =>
                     {
                         StringBuilder sb = new StringBuilder(arg.Name);
-                        if (!string.IsNullOrEmpty(arg.TypeDisplayName))
-                        {
-                            sb.Append($" [{arg.TypeDisplayName}]");
-                        }
+                        sb.Append(arg.MultipleValues ? " (Multiple)" : "");
                         return sb.ToString();
-                    },
-                    arg => arg.DefaultValue != DBNull.Value ? $"Default: {arg.DefaultValue}" : null,
-                    arg => arg.Description);
+                    }));
+                    
+                    //type display name
+                    argumentsBuilder.Append(RenderParameter(arguments, commandArgument, arg =>
+                    {
+                        if(!string.IsNullOrEmpty(arg.TypeDisplayName))
+                            return $"<{arg.TypeDisplayName.ToUpperInvariant()}>";
+                        return null;
+                    }));
+                    
+                    //default value
+                    argumentsBuilder.Append(RenderParameter(arguments, commandArgument, arg =>
+                    {
+                        if(arg.DefaultValue != DBNull.Value)
+                            return $"[{arg.DefaultValue.ToString()}]";
+                        return null;
+                    }));
+
+                    //description
+                    argumentsBuilder.Append(string.IsNullOrEmpty(commandArgument.Description) ? "\n\r  " + commandArgument.Description : null);
+                    
+                    //Allowed values
+                    argumentsBuilder.Append(
+                        (!string.IsNullOrEmpty(commandArgument.TypeDisplayName) && (commandArgument.AllowedValues?.Any() ?? false))
+                            ? $"\n\r  Allowed values: {string.Join(", ", commandArgument.AllowedValues)}"
+                            : null);
+                        
+                    argumentsBuilder.AppendLine();
+                    argumentsBuilder.AppendLine();
+                }
             }
 
             return argumentsBuilder;
@@ -148,34 +203,7 @@ namespace CommandDotNet.HelpGeneration
                 titleBuilder.AppendLine(app.Description + "\n");
             return titleBuilder;
         }
-        
-        private void RenderList<T>(List<T> records, StringBuilder stringBuilder, params Func<T, string>[] fields)
-        {
-            int totalMaxLength = 0;
-            
-            foreach (var field in fields)
-            {
-                totalMaxLength += GetColumnMaxLength(records, field);
-            }
 
-            totalMaxLength += 4 * fields.Length;
-            
-            string dashes = string.Join("",Enumerable.Range(0, totalMaxLength).Select(i => "-"));
-
-            stringBuilder.AppendLine(dashes);
-            
-            foreach (var record in records)
-            {
-                foreach (var field in fields)
-                {
-                    stringBuilder.Append(RenderParameter(records, record, field));
-                }
-
-                stringBuilder.AppendLine();
-                stringBuilder.AppendLine(dashes);
-            }
-        }
-        
         private string RenderParameter<T>(List<T> arguments, T argument, Func<T, string> function)
         {
             int maxLength = GetColumnMaxLength(arguments, function);

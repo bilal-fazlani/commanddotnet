@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
 using CommandDotNet.Attributes;
 using Newtonsoft.Json;
 
@@ -21,24 +22,35 @@ namespace CommandDotNet.Example
         private readonly string _cauthor;
 
         public MyApplication(
-            [Option(Description = "c did someone jump?")]
-            bool cjumped, 
+            [Option(Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor " +
+                                  "incididunt ut labore et dolore magna aliqua. " +
+                                  "Ut enim ad minim veniam, quis nostrud exercitation ullamco")]
+            bool cjumped,             
             
-            string clevel, 
-            
+            [Option(Description = "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia ")]
             int? cfeets, 
             
+            [Option(Description = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium")]
             IEnumerable<string> cfriends, 
             
+            [Option(Description = "doloremque laudantium, totam rem aperiam,")]
             double cheight, 
             
             bool? clog,
             
             string cpassword,
             
-            int ctimes = 0, 
+            [Option(Description = "doloremque laudantium, totam rem aperiam,")]
+            DayOfWeek day,
             
-            string cauthor = "c john")
+            int ctimes = 343,
+            
+            [Option(Description = "laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in " +
+                                  "reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. " +
+                                  "Excepteur sint occaecat cupidatat non proident,")]
+            string clevel = "default random text",
+            
+            string cauthor = "minima veniam")
         {
             _cjumped = cjumped;
             _clevel = clevel;

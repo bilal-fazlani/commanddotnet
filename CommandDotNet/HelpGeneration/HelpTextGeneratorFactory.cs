@@ -10,10 +10,8 @@ namespace CommandDotNet.HelpGeneration
             {
                 case HelpTextStyle.Basic:
                     return new BasicHelpTextGenerator();
-                case HelpTextStyle.Tabular:
-                    return new TabularHelpTextGenerator();
-                case HelpTextStyle.Standard:
-                    return new StandardHelpTextGenerator();
+                case HelpTextStyle.Detailed:
+                    return new DetailedHelpTextGenerator();
                 default:
                     return new BasicHelpTextGenerator();
             }
