@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Text;
 using CommandDotNet.MicrosoftCommandLineUtils;
-using ConsoleTables;
 
 namespace CommandDotNet.HelpGeneration
 {
