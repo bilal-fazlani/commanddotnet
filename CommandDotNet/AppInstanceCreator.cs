@@ -9,7 +9,7 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet
 {
-    public class AppInstanceCreator
+    internal class AppInstanceCreator
     {
         private readonly AppSettings _appSettings;
         private readonly ArgumentMerger _argumentMerger;

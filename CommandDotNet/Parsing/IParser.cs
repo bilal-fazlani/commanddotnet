@@ -3,7 +3,7 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet.Parsing
 {
-    public interface IParser
+    internal interface IParser
     {
         dynamic Parse(ArgumentInfo argumentInfo);
     }

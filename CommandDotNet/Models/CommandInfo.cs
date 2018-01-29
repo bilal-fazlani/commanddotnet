@@ -6,7 +6,7 @@ using CommandDotNet.Attributes;
 
 namespace CommandDotNet.Models
 {
-    public class CommandInfo
+    internal class CommandInfo
     {
         private readonly MethodInfo _methodInfo;
         private readonly AppSettings _settings;

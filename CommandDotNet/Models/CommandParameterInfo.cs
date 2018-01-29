@@ -7,7 +7,7 @@ using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Models
 {
-    public class CommandParameterInfo : ArgumentInfo
+    internal class CommandParameterInfo : ArgumentInfo
     {
         public CommandParameterInfo(AppSettings settings) : base(settings)
         {

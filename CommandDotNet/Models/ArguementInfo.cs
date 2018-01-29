@@ -10,7 +10,7 @@ using CommandDotNet.MicrosoftCommandLineUtils;
 
 namespace CommandDotNet.Models
 {
-    public abstract class ArgumentInfo
+    internal abstract class ArgumentInfo
     {
         protected readonly ICustomAttributeProvider AttributeProvider;
         protected readonly AppSettings Settings;

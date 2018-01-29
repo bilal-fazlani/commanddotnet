@@ -6,7 +6,7 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet
 {
-    public class ArgumentMerger
+    internal class ArgumentMerger
     {
         private readonly AppSettings _appSettings;
         private readonly ValueMachine _valueMachine;

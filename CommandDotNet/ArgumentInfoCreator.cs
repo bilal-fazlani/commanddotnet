@@ -7,7 +7,7 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet
 {
-    public class ArgumentInfoCreator
+    internal class ArgumentInfoCreator
     {
         private readonly AppSettings _settings;
 

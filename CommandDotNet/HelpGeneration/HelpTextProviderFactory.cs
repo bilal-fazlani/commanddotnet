@@ -2,9 +2,9 @@
 
 namespace CommandDotNet.HelpGeneration
 {
-    public static class HelpTextProviderFactory
+    internal static class HelpTextProviderFactory
     {
-        public static IHelpProvider Create(AppSettings appSettings)
+        internal static IHelpProvider Create(AppSettings appSettings)
         {
             if (appSettings.CustomHelpProvider != null)
             {

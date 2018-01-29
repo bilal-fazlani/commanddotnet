@@ -9,7 +9,7 @@ using CommandDotNet.Parsing;
 
 namespace CommandDotNet
 {
-    public class ValueMachine
+    internal class ValueMachine
     {
         private readonly AppSettings _appSettings;
 

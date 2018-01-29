@@ -4,15 +4,15 @@ using System.Reflection;
 
 namespace CommandDotNet.Extensions
 {
-    public static class CustomAttributeProviderExtensions
+    internal static class CustomAttributeProviderExtensions
     {
-        public static bool HasAttribute<T>(this ICustomAttributeProvider attributeProvider) where T : Attribute
+        internal static bool HasAttribute<T>(this ICustomAttributeProvider attributeProvider) where T : Attribute
         {
             T attribute = (T)attributeProvider.GetCustomAttributes(typeof(T), false).SingleOrDefault();
             return attribute != null;
         }
         
-        public static T GetCustomAttribute<T>(this ICustomAttributeProvider attributeProvider) where T : Attribute
+        internal static T GetCustomAttribute<T>(this ICustomAttributeProvider attributeProvider) where T : Attribute
         {
             T attribute = (T)attributeProvider.GetCustomAttributes(typeof(T), false).SingleOrDefault();
             return attribute;

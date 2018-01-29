@@ -9,7 +9,7 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet
 {
-    public class CommandRunner
+    internal class CommandRunner
     {
         private readonly CommandLineApplication _app;
         private readonly Type _type;

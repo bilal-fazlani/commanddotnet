@@ -4,7 +4,7 @@ using CommandDotNet.Exceptions;
 
 namespace CommandDotNet.Parsing
 {
-    public static class ParserFactory
+    internal static class ParserFactory
     {
         public static IParser CreateInstnace(Type argumentType)
         {

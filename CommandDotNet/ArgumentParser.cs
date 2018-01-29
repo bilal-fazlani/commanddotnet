@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace CommandDotNet
 {
-    public class ArgumentParser
+    internal class ArgumentParser
     {
         public static IEnumerable<string> SplitFlags(params string[] args)
         {

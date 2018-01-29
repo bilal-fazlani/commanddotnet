@@ -5,7 +5,7 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet.HelpGeneration
 {
-    public class BasicHelpTextProvider : IHelpProvider
+    internal class BasicHelpTextProvider : IHelpProvider
     {
         private readonly AppSettings _appSettings;
 

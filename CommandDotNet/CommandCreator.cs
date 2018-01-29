@@ -10,7 +10,7 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet
 {
-    public class CommandCreator
+    internal class CommandCreator
     {
         private readonly Type _type;
         private readonly CommandLineApplication _app;

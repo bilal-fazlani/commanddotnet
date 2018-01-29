@@ -11,7 +11,7 @@ using CommandDotNet.MicrosoftCommandLineUtils;
 
 namespace CommandDotNet.Models
 {
-    public class CommandOptionInfo : ArgumentInfo
+    internal class CommandOptionInfo : ArgumentInfo
     {
         public CommandOptionInfo(AppSettings settings) : base(settings)
         {

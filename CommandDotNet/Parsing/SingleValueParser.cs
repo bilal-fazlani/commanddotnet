@@ -4,7 +4,7 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet.Parsing
 {
-    public class SingleValueParser : IParser
+    internal class SingleValueParser : IParser
     {
         private readonly Type _underyingType;
 

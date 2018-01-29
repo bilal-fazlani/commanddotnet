@@ -3,7 +3,7 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet.Parsing
 {
-    public class NullableValueParser : IParser
+    internal class NullableValueParser : IParser
     {
         private readonly Type _type;
         private readonly SingleValueParser _singleValueParser;

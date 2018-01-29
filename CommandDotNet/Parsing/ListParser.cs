@@ -5,7 +5,7 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet.Parsing
 {
-    public class ListParser : IParser
+    internal class ListParser : IParser
     {
         private readonly Type _underLyingType;
         private readonly SingleValueParser _singleValueParser;

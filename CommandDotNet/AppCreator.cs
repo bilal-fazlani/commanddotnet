@@ -11,7 +11,7 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet
 {
-    public class AppCreator
+    internal class AppCreator
     {
         private readonly AppSettings _appSettings;
 

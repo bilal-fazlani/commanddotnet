@@ -15,7 +15,7 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet.MicrosoftCommandLineUtils
 {
-    public class CommandLineApplication : ICommand
+    internal class CommandLineApplication : ICommand
     {
         private readonly AppSettings _appSettings;
         // Indicates whether the parser should throw an exception when it runs into an unexpected argument.
@@ -26,7 +26,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             _appSettings = appSettings;
             Options = new HashSet<CommandOption>();
             Arguments = new HashSet<CommandArgument>();
-            Commands = new List<CommandLineApplication>();
+            Commands = new List<ICommand>();
             RemainingArguments = new List<string>();
             Invoke = () => 0;
         }
@@ -47,7 +47,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public Func<int> Invoke { get; set; }
         public Func<string> LongVersionGetter { get; set; }
         public Func<string> ShortVersionGetter { get; set; }
-        public List<CommandLineApplication> Commands { get; }
+        public List<ICommand> Commands { get; }
         public TextWriter Out { get; set; } = Console.Out;
         public TextWriter Error { get; set; } = Console.Error;
 
@@ -280,7 +280,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                         if (string.Equals(subcommand.Name, arg, StringComparison.OrdinalIgnoreCase))
                         {
                             processed = true;
-                            command = subcommand;
+                            command = (CommandLineApplication)subcommand;
                             break;
                         }
                     }

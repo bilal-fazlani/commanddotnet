@@ -9,9 +9,9 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet.Extensions
 {
-    public static class TypeExtensions
+    internal static class TypeExtensions
     {
-        public static IEnumerable<CommandInfo> GetCommandInfos(this Type type, AppSettings settings)
+        internal static IEnumerable<CommandInfo> GetCommandInfos(this Type type, AppSettings settings)
         {
             return type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(m => !m.IsSpecialName)
@@ -19,7 +19,7 @@ namespace CommandDotNet.Extensions
                 .Select(mi => new CommandInfo(mi, settings));
         }
 
-        public static CommandInfo GetDefaultCommandInfo(this Type type, AppSettings settings)
+        internal static CommandInfo GetDefaultCommandInfo(this Type type, AppSettings settings)
         {
             CommandInfo defaultCommandInfo = type
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
@@ -31,12 +31,12 @@ namespace CommandDotNet.Extensions
             return defaultCommandInfo;
         }
 
-        public static bool IsCollection(this Type type)
+        internal static bool IsCollection(this Type type)
         {
             return type.GetInterfaces().Any(x => x == typeof(IEnumerable));
         }
         
-        public static object GetDefaultValue(this Type type)
+        internal static object GetDefaultValue(this Type type)
         {
             Func<object> f = GetDefaultValue<object>;
             return f.Method.GetGenericMethodDefinition().MakeGenericMethod(type).Invoke(null, null);
@@ -47,7 +47,7 @@ namespace CommandDotNet.Extensions
             return default(T);
         }
         
-        public static bool IsCompilerGenerated(this Type t) {
+        internal static bool IsCompilerGenerated(this Type t) {
             if (t == null)
                 return false;
 
@@ -55,14 +55,14 @@ namespace CommandDotNet.Extensions
                    || IsCompilerGenerated(t.DeclaringType);
         }
 
-        public static IEnumerable<PropertyInfo> GetDeclaredProperties<TAttribute>(this Type type) where TAttribute: Attribute
+        internal static IEnumerable<PropertyInfo> GetDeclaredProperties<TAttribute>(this Type type) where TAttribute: Attribute
         {
             return type
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(x => x.HasAttribute<TAttribute>());
         }
         
-        public static IEnumerable<PropertyInfo> GetDeclaredProperties(this Type type)
+        internal static IEnumerable<PropertyInfo> GetDeclaredProperties(this Type type)
         {
             return type
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
