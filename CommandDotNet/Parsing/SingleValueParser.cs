@@ -13,7 +13,7 @@ namespace CommandDotNet.Parsing
             _underyingType = underyingType;
         }
 
-        public dynamic ParseString(string value, bool implicitBoolean)
+        public dynamic ParseString(string value, bool implicitBoolean, string typeDisplayName)
         {
             try
             {
@@ -57,13 +57,13 @@ namespace CommandDotNet.Parsing
                     return int.Parse(value);
                 }
             }
-            catch (FormatException e)
+            catch (FormatException)
             {
-                throw new ValueParsingException($"'{value}' is not a valid {_underyingType}");
+                throw new ValueParsingException($"'{value}' is not a valid {typeDisplayName}");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
-                throw new ValueParsingException($"'{value}' is not a valid {_underyingType}");
+                throw new ValueParsingException($"'{value}' is not a valid {typeDisplayName}");
             }
             
             throw new AppRunnerException($"type : {_underyingType} is not supported");
@@ -71,7 +71,7 @@ namespace CommandDotNet.Parsing
         
         public dynamic Parse(ArgumentInfo argumentInfo)
         {
-            return ParseString(argumentInfo.ValueInfo.Value, argumentInfo.IsImplicit);
+            return ParseString(argumentInfo.ValueInfo.Value, argumentInfo.IsImplicit, argumentInfo.TypeDisplayName);
         }
     }
 }

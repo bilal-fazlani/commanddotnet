@@ -66,9 +66,13 @@ namespace CommandDotNet
 
                 return 1;
             }
+            catch (ValueParsingException e)
+            {
+                Console.Error.WriteLine(e.Message + "\n");
+                return 2;
+            }
             catch (AggregateException e) when (e.InnerExceptions.Any(x => x.GetBaseException() is AppRunnerException) ||
-                                               e.InnerExceptions.Any(x =>
-                                                   x.GetBaseException() is CommandParsingException))
+                                               e.InnerExceptions.Any(x => x.GetBaseException() is CommandParsingException))
             {
                 foreach (var innerException in e.InnerExceptions)
                 {
@@ -95,7 +99,16 @@ namespace CommandDotNet
 
                 return 2;
             }
-            
+            catch (AggregateException e) when (e.InnerExceptions.Any(x => x.GetBaseException() is ValueParsingException))
+
+            {
+                ValueParsingException valueParsingException =
+                    (ValueParsingException)e.InnerExceptions.FirstOrDefault(x => x.GetBaseException() is ValueParsingException);
+                
+                Console.Error.WriteLine(valueParsingException.Message + "\n");
+
+                return 2;
+            }
             catch (AggregateException e) when (e.InnerExceptions.Any(x => x is TargetInvocationException))
             {
                 TargetInvocationException ex =

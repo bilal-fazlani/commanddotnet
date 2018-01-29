@@ -41,51 +41,44 @@ namespace CommandDotNet
         {
             parameterValues = parameterValues ?? new List<ArgumentInfo>();
 
-            try
+            //create instance
+            object instance = _appInstanceCreator.CreateInstance(_type, _constrcutorParamValues, _dependencyResolver, _modelValidator);
+
+            //dentify method to invove
+            MethodInfo theMethod = instance.GetType().GetMethod(commandInfo.MethodName);
+
+            //get values for method invokation
+            object[] mergedParameters = _argumentMerger.Merge(parameterValues);
+                
+            //validate all parameters
+            foreach (dynamic param in mergedParameters)
             {
-                //create instance
-                object instance = _appInstanceCreator.CreateInstance(_type, _constrcutorParamValues, _dependencyResolver, _modelValidator);
-
-                //dentify method to invove
-                MethodInfo theMethod = instance.GetType().GetMethod(commandInfo.MethodName);
-
-                //get values for method invokation
-                object[] mergedParameters = _argumentMerger.Merge(parameterValues);
-                
-                //validate all parameters
-                foreach (dynamic param in mergedParameters)
-                {
-                    _modelValidator.ValidateModel(param);
-                }
-                
-                //invoke method
-                object returnedObject = theMethod.Invoke(instance, mergedParameters);
-
-                //default return code for cases when method is of type void instead of int
-                int returnCode = 0;
-
-                //wait for method to complete
-                switch (returnedObject)
-                {
-                    case Task<int> intPromise:
-                        returnCode = await intPromise;
-                        break;
-                    case Task promise:
-                        await promise;
-                        break;
-                    case int intValue:
-                        returnCode = intValue;
-                        break;
-                    //for void and every other return type, the value is already set to 0
-                }
-                
-                //return the actual return code
-                return returnCode;
+                _modelValidator.ValidateModel(param);
             }
-            catch (ValueParsingException e)
+                
+            //invoke method
+            object returnedObject = theMethod.Invoke(instance, mergedParameters);
+
+            //default return code for cases when method is of type void instead of int
+            int returnCode = 0;
+
+            //wait for method to complete
+            switch (returnedObject)
             {
-                throw new CommandParsingException(_app, e.Message);
+                case Task<int> intPromise:
+                    returnCode = await intPromise;
+                    break;
+                case Task promise:
+                    await promise;
+                    break;
+                case int intValue:
+                    returnCode = intValue;
+                    break;
+                //for void and every other return type, the value is already set to 0
             }
+                
+            //return the actual return code
+            return returnCode;
         }
     }
 }

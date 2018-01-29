@@ -15,7 +15,7 @@ namespace CommandDotNet.Tests
         [InlineData("Now", 3)]
         [InlineData("Yesterday", 4)]
         [InlineData("Tomorrow", 5)]
-        [InlineData("Invalid", 1)]
+        [InlineData("Invalid", 2)]
         public void CanParseEnums(string input,int expectedExitCode)
         {
             AppRunner<EnumApp> appRunner = new AppRunner<EnumApp>();
