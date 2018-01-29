@@ -19,7 +19,7 @@ namespace CommandDotNet.Tests
             var appSettings = new AppSettings();
             AppCreator appCreator = new AppCreator(appSettings);
             CommandLineApplication app = appCreator.CreateApplication(typeof(AppCreatorTestApp), null, 
-                new CommandLineApplication(appSettings.HelpTextStyle, appSettings.ThrowOnUnexpectedArgument));
+                new CommandLineApplication(appSettings));
 
             app.Commands.Should().HaveCount(3);
 

@@ -1,12 +1,20 @@
 ﻿using System.Linq;
 using System.Text;
 using CommandDotNet.MicrosoftCommandLineUtils;
+using CommandDotNet.Models;
 
 namespace CommandDotNet.HelpGeneration
 {
     public class BasicHelpTextGenerator : IHelpGenerator
     {
-        public string GetHelpText(CommandLineApplication app)
+        private readonly AppSettings _appSettings;
+
+        public BasicHelpTextGenerator(AppSettings appSettings)
+        {
+            _appSettings = appSettings;
+        }
+        
+        public string GetHelpText(ICommand app)
         {            
             var titleBuilder = BuildTitle(app);
             
@@ -20,7 +28,7 @@ namespace CommandDotNet.HelpGeneration
 
             var extendedHelpTextBuild = BuildExtendedHelpText(app);
             
-            if (app.AllowArgumentSeparator)
+            if (_appSettings.AllowArgumentSeparator)
             {
                 usageBuilder.Append(" [[--] <arg>...]");
             }
@@ -35,7 +43,7 @@ namespace CommandDotNet.HelpGeneration
                 + extendedHelpTextBuild;
         }
 
-        private string BuildExtendedHelpText(CommandLineApplication app)
+        private string BuildExtendedHelpText(ICommand app)
         {
             if (!string.IsNullOrEmpty(app.ExtendedHelpText))
             {
@@ -45,7 +53,7 @@ namespace CommandDotNet.HelpGeneration
             return null;
         }
         
-        private StringBuilder BuildCommands(CommandLineApplication app, StringBuilder usageBuilder)
+        private StringBuilder BuildCommands(ICommand app, StringBuilder usageBuilder)
         {
             var commandsBuilder = new StringBuilder();
             var commands = app.Commands.Where(c => c.ShowInHelpText).ToList();
@@ -77,7 +85,7 @@ namespace CommandDotNet.HelpGeneration
             return commandsBuilder;
         }
 
-        private  StringBuilder BuildOptions(CommandLineApplication app, StringBuilder usageBuilder)
+        private  StringBuilder BuildOptions(ICommand app, StringBuilder usageBuilder)
         {
             var optionsBuilder = new StringBuilder();
             var options = app.GetOptions().Where(o => o.ShowInHelpText).ToList();
@@ -101,7 +109,7 @@ namespace CommandDotNet.HelpGeneration
             return optionsBuilder;
         }
 
-        private StringBuilder BuildArguments(CommandLineApplication app, StringBuilder usageBuilder)
+        private StringBuilder BuildArguments(ICommand app, StringBuilder usageBuilder)
         {
             var argumentsBuilder = new StringBuilder();
 
@@ -125,14 +133,14 @@ namespace CommandDotNet.HelpGeneration
             return argumentsBuilder;
         }
 
-        private StringBuilder BuildUsage(CommandLineApplication app)
+        private StringBuilder BuildUsage(ICommand app)
         {
             var usageBuilder = new StringBuilder("Usage: ");
             usageBuilder.Append(app.GetFullCommandName());
             return usageBuilder;
         }
 
-        private StringBuilder BuildTitle(CommandLineApplication app)
+        private StringBuilder BuildTitle(ICommand app)
         {
             var titleBuilder = new StringBuilder();
 

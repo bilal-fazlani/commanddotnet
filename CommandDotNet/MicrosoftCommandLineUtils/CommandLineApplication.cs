@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using CommandDotNet.Exceptions;
@@ -14,18 +15,15 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet.MicrosoftCommandLineUtils
 {
-    public class CommandLineApplication
+    public class CommandLineApplication : ICommand
     {
+        private readonly AppSettings _appSettings;
         // Indicates whether the parser should throw an exception when it runs into an unexpected argument.
         // If this field is set to false, the parser will stop parsing when it sees an unexpected argument, and all
         // remaining arguments, including the first unexpected argument, will be stored in RemainingArguments property.
-        private readonly HelpTextStyle _helpTextStyle;
-        private readonly bool _throwOnUnexpectedArg;
-
-        public CommandLineApplication(HelpTextStyle helpTextStyle, bool throwOnUnexpectedArg)
+        public CommandLineApplication(AppSettings appSettings)
         {
-            _helpTextStyle = helpTextStyle;
-            _throwOnUnexpectedArg = throwOnUnexpectedArg;
+            _appSettings = appSettings;
             Options = new HashSet<CommandOption>();
             Arguments = new HashSet<CommandArgument>();
             Commands = new List<CommandLineApplication>();
@@ -40,17 +38,16 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public string Description { get; set; }
         public bool ShowInHelpText { get; set; } = true;
         public string ExtendedHelpText { get; set; }
-        public readonly HashSet<CommandOption> Options;
+        public HashSet<CommandOption> Options { get; }
         public CommandOption OptionHelp { get; private set; }
         public CommandOption OptionVersion { get; private set; }
-        public readonly HashSet<CommandArgument> Arguments;
+        public HashSet<CommandArgument> Arguments { get; }
         public readonly List<string> RemainingArguments;
         public bool IsShowingInformation { get; protected set; }  // Is showing help or version?
         public Func<int> Invoke { get; set; }
         public Func<string> LongVersionGetter { get; set; }
         public Func<string> ShortVersionGetter { get; set; }
-        public readonly List<CommandLineApplication> Commands;
-        public bool AllowArgumentSeparator { get; set; }
+        public List<CommandLineApplication> Commands { get; }
         public TextWriter Out { get; set; } = Console.Out;
         public TextWriter Error { get; set; } = Console.Error;
 
@@ -82,7 +79,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             HelpTextStyle helpTextStyle,
             bool throwOnUnexpectedArg)
         {
-            var command = new CommandLineApplication(helpTextStyle, throwOnUnexpectedArg) { Name = name, Parent = this };
+            var command = new CommandLineApplication(_appSettings) { Name = name, Parent = this };
             Commands.Add(command);
             configuration(command);
             return command;
@@ -179,7 +176,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 
                         if (option == null)
                         {
-                            if (string.IsNullOrEmpty(longOptionName) && !command._throwOnUnexpectedArg  && AllowArgumentSeparator)
+                            if (string.IsNullOrEmpty(longOptionName) && !_appSettings.ThrowOnUnexpectedArgument  && _appSettings.AllowArgumentSeparator)
                             {
                                 // skip over the '--' argument separator
                                 index++;
@@ -376,7 +373,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             {
                 cmd.IsShowingInformation = true;
             }
-            IHelpGenerator helpTextGenerator = HelpTextGeneratorFactory.Create(_helpTextStyle);
+            IHelpGenerator helpTextGenerator = HelpTextGeneratorFactory.Create(_appSettings);
             Out.WriteLine(helpTextGenerator.GetHelpText(this));
         }
 
@@ -410,7 +407,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 
         private void HandleUnexpectedArg(CommandLineApplication command, string[] args, int index, string argTypeName)
         {
-            if (command._throwOnUnexpectedArg)
+            if (_appSettings.ThrowOnUnexpectedArgument)
             {
                 command.ShowHint();
                 throw new CommandParsingException(command, $"Unrecognized {argTypeName} '{args[index]}'");

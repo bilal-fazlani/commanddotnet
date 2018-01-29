@@ -4,16 +4,16 @@ namespace CommandDotNet.HelpGeneration
 {
     public static class HelpTextGeneratorFactory
     {
-        public static IHelpGenerator Create(HelpTextStyle helpTextStyle)
+        public static IHelpGenerator Create(AppSettings appSettings)
         {
-            switch (helpTextStyle)
+            switch (appSettings.HelpTextStyle)
             {
                 case HelpTextStyle.Basic:
-                    return new BasicHelpTextGenerator();
+                    return new BasicHelpTextGenerator(appSettings);
                 case HelpTextStyle.Detailed:
-                    return new DetailedHelpTextGenerator();
+                    return new DetailedHelpTextGenerator(appSettings);
                 default:
-                    return new BasicHelpTextGenerator();
+                    return new BasicHelpTextGenerator(appSettings);
             }
         }
     }

@@ -38,7 +38,7 @@ namespace CommandDotNet
             
             if (isRootApp)
             {
-                app = new CommandLineApplication(_appSettings.HelpTextStyle ,_appSettings.ThrowOnUnexpectedArgument) { Name = assemblyName };
+                app = new CommandLineApplication(_appSettings) { Name = assemblyName };
                 AddVersion(app);
             }
             else
@@ -55,8 +55,6 @@ namespace CommandDotNet
             app.ExtendedHelpText = consoleApplicationAttribute?.ExtendedHelpText;
 
             app.Syntax = consoleApplicationAttribute?.Syntax;
-
-            app.AllowArgumentSeparator = _appSettings.AllowArgumentSeparator;
 
             CommandCreator commandCreator = new CommandCreator(type, app, dependencyResolver, _appSettings);
             
