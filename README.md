@@ -42,6 +42,8 @@ Table of contents:
 - [Dependency Injection](#dependency-injection) (new!)
     - [Autofac](#autofac)
     - [Microsoft](#microsoft)
+- Promt for arguments (beta)
+- Alternative help text formats (beta)
 
 ## Installation
 
