@@ -28,25 +28,4 @@ namespace CommandDotNet.Models
         
         internal IHelpProvider CustomHelpProvider { get; set; }
     }
-
-    public enum ArgumentMode
-    {
-        Parameter = 0,
-        Option = 1
-    }
-
-    public enum Case
-    {
-        DontChange = 0,
-        LowerCase = 1,
-        CamelCase = 2,
-        KebabCase = 3,
-        PascalCase = 4
-    }
-    
-    public enum HelpTextStyle
-    {
-        Basic = 0,
-        Detailed = 1
-    }
 }
