@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using CommandDotNet.Exceptions;
+using CommandDotNet.HelpGeneration;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 
@@ -125,6 +126,12 @@ namespace CommandDotNet
                 ExceptionDispatchInfo.Capture(ex.InnerException ?? ex).Throw();
                 return 1; // this will never be called
             }
+        }
+
+        public AppRunner<T> WithCustomHelpProvider(IHelpProvider customHelpProvider)
+        {
+            _settings.CustomHelpProvider = customHelpProvider;
+            return this;
         }
     }
 }

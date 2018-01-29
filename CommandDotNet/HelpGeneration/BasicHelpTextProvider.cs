@@ -5,11 +5,11 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet.HelpGeneration
 {
-    public class BasicHelpTextGenerator : IHelpGenerator
+    public class BasicHelpTextProvider : IHelpProvider
     {
         private readonly AppSettings _appSettings;
 
-        public BasicHelpTextGenerator(AppSettings appSettings)
+        public BasicHelpTextProvider(AppSettings appSettings)
         {
             _appSettings = appSettings;
         }

@@ -7,11 +7,11 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet.HelpGeneration
 {
-    public class DetailedHelpTextGenerator : IHelpGenerator
+    public class DetailedHelpTextProvider : IHelpProvider
     {
         private readonly AppSettings _appSettings;
 
-        public DetailedHelpTextGenerator(AppSettings appSettings)
+        public DetailedHelpTextProvider(AppSettings appSettings)
         {
             _appSettings = appSettings;
         }

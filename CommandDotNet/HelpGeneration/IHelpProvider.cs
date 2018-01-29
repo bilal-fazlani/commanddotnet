@@ -2,7 +2,7 @@
 
 namespace CommandDotNet.HelpGeneration
 {
-    public interface IHelpGenerator
+    public interface IHelpProvider
     {
         string GetHelpText(ICommand app);
     }

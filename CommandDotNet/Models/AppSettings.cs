@@ -25,6 +25,8 @@ namespace CommandDotNet.Models
         public bool PrompForArgumentsIfNotProvided { get; set; }
 
         public HelpTextStyle HelpTextStyle { get; set; } = HelpTextStyle.Detailed;
+        
+        internal IHelpProvider CustomHelpProvider { get; set; }
     }
 
     public enum ArgumentMode

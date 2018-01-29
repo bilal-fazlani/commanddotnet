@@ -373,8 +373,8 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             {
                 cmd.IsShowingInformation = true;
             }
-            IHelpGenerator helpTextGenerator = HelpTextGeneratorFactory.Create(_appSettings);
-            Out.WriteLine(helpTextGenerator.GetHelpText(this));
+            IHelpProvider helpTextProvider = HelpTextProviderFactory.Create(_appSettings);
+            Out.WriteLine(helpTextProvider.GetHelpText(this));
         }
 
         public void ShowVersion()
