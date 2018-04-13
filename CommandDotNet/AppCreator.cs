@@ -30,27 +30,25 @@ namespace CommandDotNet
             CommandLineApplication app;
 
             ApplicationMetadataAttribute consoleApplicationAttribute = type.GetCustomAttribute<ApplicationMetadataAttribute>(false);
-            
-            string assemblyName = $"dotnet {Assembly.GetEntryAssembly().GetName().Name}.dll";
-            
-            string appName = consoleApplicationAttribute?.Name ?? type.Name.ChangeCase(_appSettings.Case); 
-            
-            
+
             if (isRootApp)
             {
-                app = new CommandLineApplication(_appSettings) { Name = assemblyName };
+                string assemblyName = $"{Assembly.GetEntryAssembly().GetName().Name}.dll";
+                string defaultRootCommand = $"dotnet {assemblyName}";
+                string rootCommandName = consoleApplicationAttribute?.Name ?? defaultRootCommand;
+                app = new CommandLineApplication(_appSettings) { Name = rootCommandName };
+                app.FullName = consoleApplicationAttribute?.Name ?? assemblyName;
                 AddVersion(app);
             }
             else
             {
+                string appName = consoleApplicationAttribute?.Name ?? type.Name.ChangeCase(_appSettings.Case); 
                 app = parentApplication.Command(appName, application => { }, _appSettings.HelpTextStyle, _appSettings.ThrowOnUnexpectedArgument);
             }
 
             app.HelpOption(Constants.HelpTemplate);
 
             app.Description = consoleApplicationAttribute?.Description;
-
-            app.FullName = appName;
 
             app.ExtendedHelpText = consoleApplicationAttribute?.ExtendedHelpText;
 
