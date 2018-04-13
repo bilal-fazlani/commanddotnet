@@ -28,7 +28,7 @@ namespace CommandDotNet.Tests
 
             commandInfo.Name.Should().Be("CommandWithNoDescription");
             commandInfo.Description.Should().BeNull();
-            commandInfo.Arguments.ShouldBeEquivalentTo(new List<ArgumentInfo>()
+            commandInfo.Arguments.Should().BeEquivalentTo(new List<ArgumentInfo>()
             {
                 new CommandOptionInfo(new AppSettings())
                 {
@@ -58,8 +58,8 @@ namespace CommandDotNet.Tests
 
             commandInfo.Name.Should().Be("somecommand");
             commandInfo.ExtendedHelpText.Should().Be("extended help");
-            commandInfo.Description.ShouldBeEquivalentTo("some command description and name");
-            commandInfo.Arguments.ShouldBeEquivalentTo(new List<ArgumentInfo>()
+            commandInfo.Description.Should().BeEquivalentTo("some command description and name");
+            commandInfo.Arguments.Should().BeEquivalentTo(new List<ArgumentInfo>()
             {
                 new CommandOptionInfo(new AppSettings())
                 {
