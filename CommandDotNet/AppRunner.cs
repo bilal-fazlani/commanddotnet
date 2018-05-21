@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using CommandDotNet.Exceptions;
 using CommandDotNet.HelpGeneration;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
-
-[assembly: InternalsVisibleTo("CommandDotNet.Tests")]
-[assembly: InternalsVisibleTo("CommandDotNet.IoC.Autofac")]
-[assembly: InternalsVisibleTo("CommandDotNet.IoC.MicrosoftDependencyInjection")]
 
 namespace CommandDotNet
 {
@@ -20,8 +15,8 @@ namespace CommandDotNet
     /// <typeparam name="T">Type of the application</typeparam>
     public class AppRunner<T> where T : class
     {
-        internal IDependencyResolver DependencyResolver;
-        
+        public IDependencyResolver DependencyResolver { get; set; }
+
         private readonly AppSettings _settings;
 
         public AppRunner(AppSettings settings = null)
