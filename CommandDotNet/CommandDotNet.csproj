@@ -10,13 +10,13 @@
     <PackageProjectUrl>https://github.com/bilal-fazlani/CommandDotNet</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/bilal-fazlani/CommandDotNet</RepositoryUrl>
-    <NetStandardImplicitPackageVersion>2.0.2</NetStandardImplicitPackageVersion>
+    <!--<NetStandardImplicitPackageVersion>2.0.2</NetStandardImplicitPackageVersion>-->
     <PackageIconUrl>https://raw.githubusercontent.com/bilal-fazlani/CommandDotNet/master/images/nuget-icon.png</PackageIconUrl>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="7.5.2" />
-    <PackageReference Include="Humanizer.Core" Version="2.2.0" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
+    <PackageReference Include="FluentValidation" Version="7.6.100" />
+    <PackageReference Include="Humanizer.Core" Version="2.3.3" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Primitives" Version="4.3.0" />
