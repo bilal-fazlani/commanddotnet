@@ -14,8 +14,8 @@
     <PackageIconUrl>https://raw.githubusercontent.com/bilal-fazlani/CommandDotNet/master/images/nuget-icon.png</PackageIconUrl>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="7.6.100" />
-    <PackageReference Include="Humanizer.Core" Version="2.3.3" />
+    <PackageReference Include="FluentValidation" Version="7.6.103" />
+    <PackageReference Include="Humanizer.Core" Version="2.4.2" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />

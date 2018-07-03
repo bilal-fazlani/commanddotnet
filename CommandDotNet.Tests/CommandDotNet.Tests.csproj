@@ -6,10 +6,10 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoFixture.Xunit2" Version="4.4.0" />
-    <PackageReference Include="CommandDotNet.IoC.Autofac" Version="1.0.0" />
-    <PackageReference Include="CommandDotNet.IoC.MicrosoftDependencyInjection" Version="1.0.4" />
-    <PackageReference Include="FluentAssertions" Version="5.3.2" />
-    <PackageReference Include="FluentValidation" Version="7.6.100" />
+    <PackageReference Include="CommandDotNet.IoC.Autofac" Version="1.0.5" />
+    <PackageReference Include="CommandDotNet.IoC.MicrosoftDependencyInjection" Version="1.0.9" />
+    <PackageReference Include="FluentAssertions" Version="5.4.1" />
+    <PackageReference Include="FluentValidation" Version="7.6.103" />
     <PackageReference Include="JsonDiffPatch.Net" Version="2.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
