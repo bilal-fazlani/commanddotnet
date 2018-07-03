@@ -30,11 +30,11 @@ namespace CommandDotNet
         }
 
         /// <summary>
-        /// Exceutes the specified command with given parameters
+        /// Executes the specified command with given parameters
         /// </summary>
         /// <param name="args">Command line arguments</param>
         /// <returns>If target method returns int, this method will return that value. Else, 
-        /// it will return 0 in case of successs and 1 in case of unhandled exception</returns>
+        /// it will return 0 in case of success and 1 in case of unhandled exception</returns>
         public int Run(params string[] args)
         {
             try
