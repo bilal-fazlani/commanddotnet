@@ -9,8 +9,6 @@ using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 
 [assembly: InternalsVisibleTo("CommandDotNet.Tests")]
-[assembly: InternalsVisibleTo("CommandDotNet.IoC.Autofac")]
-[assembly: InternalsVisibleTo("CommandDotNet.IoC.MicrosoftDependencyInjection")]
 
 namespace CommandDotNet
 {
