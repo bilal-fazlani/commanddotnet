@@ -39,12 +39,12 @@ namespace CommandDotNet.Tests
         [ApplicationMetadata(Name = "Hello", Description = "Hello Service")]
         public async Task<bool> Download([Option] string provider = "abc")
         {
-            return true;
+            return await Task.FromResult(true);
         }
         
         public async Task<bool> DownloadNew([Option] string provider = "abc")
         {
-            return true;
+            return await Task.FromResult(true);;
         }
     }
 }
