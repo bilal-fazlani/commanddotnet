@@ -6,6 +6,11 @@
 
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/CommandDotNet.svg)](https://www.nuget.org/packages/CommandDotNet)  [![NuGet](https://img.shields.io/nuget/dt/CommandDotNet.svg)](https://www.nuget.org/packages/CommandDotNet)
 
+
+***Model your command line application interface in a class***
+
+The purpose of this **framework** is to let developers focus on the core logic of command line application and forget about how arguments are parsed & validated. This library also let's you structure your CLI app into a hierarchy of commands and subcommands and invokes appropriate methods based on CLI input... just like how respective controller methods are invoked for http requests based on requeset path. 
+
 Table of contents:
 
 - [Installation](#installation)
