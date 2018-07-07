@@ -10,7 +10,7 @@
 
 ***Model your command line application interface in a class***
 
-The purpose of this **framework** is to let developers focus on the core logic of command line application and forget about how arguments are **parsed** & **validated**. This library also let's you structure your CLI app into a hierarchy of commands and subcommands and **invokes appropriate methods** in your app based on user input... just like how respective controller methods are invoked for http requests based on request path. 
+The purpose of this **framework** is to let developers focus on the core logic of command line application and forget about how arguments are **parsed** & **validated**. This library also let's you structure your CLI app into a hierarchy of commands and subcommands and **invokes appropriate methods** in your app based on user input.
 
 It provides **out of the box CLI help** with full customization options.
 
