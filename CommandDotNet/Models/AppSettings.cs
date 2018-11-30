@@ -1,4 +1,5 @@
-﻿using CommandDotNet.Exceptions;
+﻿using System;
+using CommandDotNet.Exceptions;
 using CommandDotNet.HelpGeneration;
 
 namespace CommandDotNet.Models
@@ -25,7 +26,9 @@ namespace CommandDotNet.Models
         public bool PrompForArgumentsIfNotProvided { get; set; }
 
         public HelpTextStyle HelpTextStyle { get; set; } = HelpTextStyle.Detailed;
-        
+
+        public Func<RunContext, object> OnRun { get; set; }
+
         internal IHelpProvider CustomHelpProvider { get; set; }
     }
 }

@@ -15,6 +15,7 @@ namespace CommandDotNet
         private readonly Type _type;
         private readonly IEnumerable<ArgumentInfo> _constrcutorParamValues;
         private readonly IDependencyResolver _dependencyResolver;
+        private readonly AppSettings _appSettings;
         private readonly ModelValidator _modelValidator;
         private readonly ArgumentMerger _argumentMerger;
         private readonly AppInstanceCreator _appInstanceCreator;
@@ -30,6 +31,7 @@ namespace CommandDotNet
             _type = type;
             _constrcutorParamValues = constrcutorParamValues;
             _dependencyResolver = dependencyResolver;
+            _appSettings = appSettings;
             _modelValidator = new ModelValidator(dependencyResolver);
             _argumentMerger = new ArgumentMerger(appSettings);
             _appInstanceCreator = new AppInstanceCreator(appSettings);
@@ -55,9 +57,26 @@ namespace CommandDotNet
             {
                 _modelValidator.ValidateModel(param);
             }
-                
+
+            object returnedObject;
+
             //invoke method
-            object returnedObject = theMethod.Invoke(instance, mergedParameters);
+            if (_appSettings.OnRun == null)
+            {
+                returnedObject = theMethod.Invoke(instance, mergedParameters);
+            }
+            else
+            {
+                var runContext = new RunContext
+                {
+                    RunDelegate = (changedMergedParameters) => theMethod.Invoke(instance, changedMergedParameters),
+                    AppSettings = _appSettings,
+                    CommandInfo = commandInfo,
+                    ParameterValues = parameterValues,
+                    MergedParameters = mergedParameters
+                };
+                returnedObject = _appSettings.OnRun(runContext);
+            }
 
             //default return code for cases when method is of type void instead of int
             int returnCode = 0;
