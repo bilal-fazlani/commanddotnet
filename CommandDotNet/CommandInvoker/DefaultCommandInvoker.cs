@@ -9,7 +9,7 @@ namespace CommandDotNet.CommandInvoker
         {
             Type type = commandInvocation.Instance.GetType();
             MethodInfo theMethod = type.GetMethod(commandInvocation.CommandInfo.MethodName);
-            object returnedObject = theMethod.Invoke(commandInvocation.Instance,commandInvocation.MergedParameters);
+            object returnedObject = theMethod.Invoke(commandInvocation.Instance,commandInvocation.ParamsForCommandMethod);
             return returnedObject;
         }
     }

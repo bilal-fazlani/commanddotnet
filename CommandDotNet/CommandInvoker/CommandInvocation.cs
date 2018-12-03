@@ -7,9 +7,9 @@ namespace CommandDotNet.CommandInvoker
     {
         public CommandInfo CommandInfo { get; set; }
 
-        public List<ArgumentInfo> ParameterValues { get; set; }
+        public List<ArgumentInfo> ArgsFromCli { get; set; }
 
-        public object[] MergedParameters { get; set; }
+        public object[] ParamsForCommandMethod { get; set; }
 
         public object Instance { get; set; }
     }

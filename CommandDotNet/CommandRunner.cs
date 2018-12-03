@@ -59,9 +59,9 @@ namespace CommandDotNet
             CommandInvocation commandInvocation = new CommandInvocation
             {
                 CommandInfo = commandInfo,
-                MergedParameters = mergedParameters,
+                ParamsForCommandMethod = mergedParameters,
                 Instance = instance,
-                ParameterValues = parameterValues
+                ArgsFromCli = parameterValues
             };
 
             object returnedObject = _appSettings.CommandInvoker.Invoke(commandInvocation);
