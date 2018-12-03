@@ -1182,7 +1182,7 @@ static int Main(string[] args)
 
 ### Custom interceptor before method execution
 
-In order to introduce custom logic before command invokation, you need to create custom class, derived from ICommandInvoker.
+Invoking the command method can be customized by implementing ICommandInvoker and registering the an instance with AppRunner.WithCommandInvoker. The WithCommandInvoker method provides the default implementation so it can be wrapped using the [Decorator Pattern](https://en.wikipedia.org/wiki/Decorator_pattern).
 
 ```c#
 static int Main(string[] args)

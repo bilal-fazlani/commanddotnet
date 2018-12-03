@@ -21,10 +21,10 @@ namespace CommandDotNet.Tests
 
             Action<CommandInvocation> actionBeforeInvokation =new Action<CommandInvocation>(  context =>
              {
-                 context.MergedParameters.Length.Should().Be(2);
-                 var car = ((Car)context.MergedParameters[0]);
+                 context.ParamsForCommandMethod.Length.Should().Be(2);
+                 var car = ((Car)context.ParamsForCommandMethod[0]);
                  car.Number.Should().Be(carNumber);
-                 ((string)context.MergedParameters[1]).Should().Be(ownerName);
+                 ((string)context.ParamsForCommandMethod[1]).Should().Be(ownerName);
              });
 
 
