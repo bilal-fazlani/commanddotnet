@@ -1,4 +1,4 @@
-version: 2.6.{build}
+version: 2.7.{build}
 branches:
   except:
   - gh-pages
