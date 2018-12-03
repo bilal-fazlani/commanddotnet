@@ -19,7 +19,7 @@ dotnet_csproj:
   file_version: '{version}'
   informational_version: '{version}'
 build_script:
-- cmd: dotnet pack -o output -c Release --include-symbols -p:SymbolPackageFormat=snupkg --include-source CommandDotNet/CommandDotNet.csproj /p:Version=%APPVEYOR_BUILD_VERSION%
+- cmd: dotnet pack -o output -c Release --include-symbols --include-source CommandDotNet/CommandDotNet.csproj /p:Version=%APPVEYOR_BUILD_VERSION%
 test_script:
 - cmd: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
 artifacts:
