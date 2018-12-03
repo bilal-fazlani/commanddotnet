@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
+using CommandDotNet.CommandInvoker;
 using CommandDotNet.Exceptions;
 using CommandDotNet.HelpGeneration;
 using CommandDotNet.MicrosoftCommandLineUtils;
@@ -142,6 +143,12 @@ namespace CommandDotNet
         public AppRunner<T> WithCustomHelpProvider(IHelpProvider customHelpProvider)
         {
             _settings.CustomHelpProvider = customHelpProvider;
+            return this;
+        }
+
+        public AppRunner<T> WithCommandInvoker(Func<ICommandInvoker, ICommandInvoker> commandInvokerProvider)
+        {
+            _settings.CommandInvoker = commandInvokerProvider(_settings.CommandInvoker);
             return this;
         }
     }
