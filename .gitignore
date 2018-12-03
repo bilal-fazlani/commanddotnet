@@ -4,3 +4,4 @@ bin
 output
 .vscode
 CommandDotNet.sln.DotSettings.user
+.vs/
