@@ -1,4 +1,4 @@
-﻿namespace CommandDotNet.CommandInterceptor
+﻿namespace CommandDotNet.CommandInvoker
 {
     public interface ICommandInvoker
     {

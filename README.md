@@ -53,6 +53,7 @@ Table of contents:
 - [Dependency Injection](#dependency-injection) (new!)
     - [Autofac](#autofac)
     - [Microsoft](#microsoft)
+- [Custom interceptor before method execution](#custom-interceptor-before-method-execution)
 - Promt for arguments (beta)
 - Alternative help text formats (beta)
 
@@ -1176,5 +1177,33 @@ static int Main(string[] args)
     AppRunner<ServiceApp> appRunner = new AppRunner<ServiceApp>().UseMicrosoftDependencyInjection(serviceProvider)
     
     return appRunner.Run(args);
+}
+```
+
+### Custom interceptor before method execution
+
+In order to introduce custom logic before command invokation, you need to create custom class, derived from ICommandInvoker.
+
+```c#
+static int Main(string[] args)
+{
+     AppRunner<CustomCommandInvokerApp> appRunner = new AppRunner<CustomCommandInvokerApp>().WithCommandInvoker(inner => new CustomCommandInvoker(inner));
+     return appRunner.Run(args);
+}
+
+public class CustomCommandInvoker : ICommandInvoker
+{
+    private readonly ICommandInvoker _inner;
+
+    public CustomCommandInvoker(ICommandInvoker inner)
+    {
+        _inner = inner;
+    }
+
+    public object Invoke(CommandInvocation commandInvocation)
+    {
+        // Your custom code here
+        return _inner.Invoke(commandInvocation);
+    }
 }
 ```
