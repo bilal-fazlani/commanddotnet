@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace CommandDotNet.CommandInterceptor
+namespace CommandDotNet.CommandInvoker
 {
     internal class DefaultCommandInvoker : ICommandInvoker
     {

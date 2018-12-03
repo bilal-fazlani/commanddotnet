@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using CommandDotNet.CommandInterceptor;
+using CommandDotNet.CommandInvoker;
 using CommandDotNet.Exceptions;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;

@@ -1,4 +1,4 @@
-﻿using CommandDotNet.CommandInterceptor;
+﻿using CommandDotNet.CommandInvoker;
 using CommandDotNet.Exceptions;
 using CommandDotNet.HelpGeneration;
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using CommandDotNet.Models;
 
-namespace CommandDotNet.CommandInterceptor
+namespace CommandDotNet.CommandInvoker
 {
     public class CommandInvocation
     {
