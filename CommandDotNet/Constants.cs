@@ -14,6 +14,8 @@
 
             public const string Boolean = "Boolean";
 
+            public const string DoubleNumber = "Double";
+
             public const string DecimalNumber = "Decimal";
 
             public const string Character = "Character";

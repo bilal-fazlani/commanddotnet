@@ -45,8 +45,18 @@ namespace CommandDotNet.Tests
             },
             new object[]
             {
-                "height", CommandOptionType.SingleValue, DBNull.Value, Constants.TypeDisplayNames.DecimalNumber, null,
+                "height", CommandOptionType.SingleValue, DBNull.Value, Constants.TypeDisplayNames.DoubleNumber, null,
                 "--height", typeof(double)
+            },
+            new object[]
+            {
+                "price", CommandOptionType.SingleValue, DBNull.Value, Constants.TypeDisplayNames.DecimalNumber, null,
+                "--price", typeof(decimal)
+            },
+            new object[]
+            {
+                "age", CommandOptionType.SingleValue, DBNull.Value, Constants.TypeDisplayNames.Number, null,
+                "--age", typeof(short)
             },
             new object[]
             {
@@ -160,8 +170,12 @@ namespace CommandDotNet.Tests
             
             IEnumerable<string> friends, 
             
-            double height, 
+            double height,
             
+            decimal price,
+
+            short age,
+
             bool? log,
             
             [Option(BooleanMode = BooleanMode.Implicit)]
