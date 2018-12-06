@@ -6,7 +6,7 @@ namespace CommandDotNet.Example
     {
         static int Main(string[] args)
         {
-            AppRunner<MyApplication> appRunner = new AppRunner<MyApplication>(new AppSettings()
+            AppRunner<Issue55> appRunner = new AppRunner<Issue55>(new AppSettings()
             {
                 Case = Case.KebabCase,
                 HelpTextStyle = HelpTextStyle.Detailed
