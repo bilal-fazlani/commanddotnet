@@ -5,6 +5,17 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/bilal-fazlani/CommandDotNet.svg)]()  [![Build status](https://ci.appveyor.com/api/projects/status/0q3laab22dy66sm7/branch/master?svg=true)](https://ci.appveyor.com/project/bilal-fazlani/commanddotnet/branch/master)  [![AppVeyor tests](https://img.shields.io/appveyor/tests/bilal-fazlani/CommandDotNet.svg)](https://ci.appveyor.com/project/bilal-fazlani/commanddotnet/build/tests)
 
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/CommandDotNet.svg)](https://www.nuget.org/packages/CommandDotNet)  [![NuGet](https://img.shields.io/nuget/dt/CommandDotNet.svg)](https://www.nuget.org/packages/CommandDotNet)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/bilalfazlani/5)
+
+---
+
+***Model your command line application interface in a class***
+
+The purpose of this **framework** is to let developers focus on the core logic of command line application and forget about how arguments are **parsed** & **validated**. This library also let's you structure your CLI app into a hierarchy of commands and subcommands and **invokes appropriate methods** in your app based on user input.
+
+It provides **out of the box CLI help** with full customization options.
+
+---
 
 Table of contents:
 
@@ -42,6 +53,7 @@ Table of contents:
 - [Dependency Injection](#dependency-injection) (new!)
     - [Autofac](#autofac)
     - [Microsoft](#microsoft)
+- [Custom interceptor before method execution](#custom-interceptor-before-method-execution)
 - Promt for arguments (beta)
 - Alternative help text formats (beta)
 
@@ -1165,5 +1177,33 @@ static int Main(string[] args)
     AppRunner<ServiceApp> appRunner = new AppRunner<ServiceApp>().UseMicrosoftDependencyInjection(serviceProvider)
     
     return appRunner.Run(args);
+}
+```
+
+### Custom interceptor before method execution
+
+Invoking the command method can be customized by implementing ICommandInvoker and registering the an instance with AppRunner.WithCommandInvoker. The WithCommandInvoker method provides the default implementation so it can be wrapped using the [Decorator Pattern](https://en.wikipedia.org/wiki/Decorator_pattern).
+
+```c#
+static int Main(string[] args)
+{
+     AppRunner<CustomCommandInvokerApp> appRunner = new AppRunner<CustomCommandInvokerApp>().WithCommandInvoker(inner => new CustomCommandInvoker(inner));
+     return appRunner.Run(args);
+}
+
+public class CustomCommandInvoker : ICommandInvoker
+{
+    private readonly ICommandInvoker _inner;
+
+    public CustomCommandInvoker(ICommandInvoker inner)
+    {
+        _inner = inner;
+    }
+
+    public object Invoke(CommandInvocation commandInvocation)
+    {
+        // Your custom code here
+        return _inner.Invoke(commandInvocation);
+    }
 }
 ```

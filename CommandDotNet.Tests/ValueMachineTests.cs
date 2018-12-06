@@ -16,7 +16,7 @@ namespace CommandDotNet.Tests
             ValueMachine valueMachine = new ValueMachine(appSettings);
             
             ParameterInfo parameterInfo =
-                typeof(ValueMachineTests).GetMethod("TestMethodWithNoDefaultValue").GetParameters()[0];
+                typeof(TestSubject).GetMethod("TestMethodWithNoDefaultValue").GetParameters()[0];
 
             CommandOptionInfo optionInfo = new CommandOptionInfo(parameterInfo, appSettings);
             
@@ -37,7 +37,7 @@ namespace CommandDotNet.Tests
             ValueMachine valueMachine = new ValueMachine(appSettings);
             
             ParameterInfo parameterInfo =
-                typeof(ValueMachineTests).GetMethod("TestMethodWithDefaultValue").GetParameters()[0];
+                typeof(TestSubject).GetMethod("TestMethodWithDefaultValue").GetParameters()[0];
 
             CommandOptionInfo optionInfo = new CommandOptionInfo(parameterInfo, appSettings);
             
@@ -58,7 +58,7 @@ namespace CommandDotNet.Tests
             ValueMachine valueMachine = new ValueMachine(appSettings);
             
             ParameterInfo parameterInfo =
-                typeof(ValueMachineTests).GetMethod("TestMethodWithDefaultValue").GetParameters()[0];
+                typeof(TestSubject).GetMethod("TestMethodWithDefaultValue").GetParameters()[0];
 
             CommandOptionInfo optionInfo = new CommandOptionInfo(parameterInfo, appSettings);
             
@@ -76,18 +76,22 @@ namespace CommandDotNet.Tests
                         
             ValueMachine valueMachine = new ValueMachine(appSettings);
             
+            
             ParameterInfo parameterInfo =
-                typeof(ValueMachineTests).GetMethod("TestMethodWithNoDefaultValue").GetParameters()[0];
+                typeof(TestSubject).GetMethod("TestMethodWithNoDefaultValue").GetParameters()[0];
 
             CommandOptionInfo optionInfo = new CommandOptionInfo(parameterInfo, appSettings);
             
             optionInfo.SetValue(new CommandOption("--test", CommandOptionType.SingleValue));
             
-            object value = valueMachine.GetValue(optionInfo);
+            object actualValue = valueMachine.GetValue(optionInfo);
 
-            value.Should().Be(0);
+            actualValue.Should().Be(0);
         }
-        
+    }
+
+    internal class TestSubject
+    {
         public void TestMethodWithNoDefaultValue(int value)
         {
             

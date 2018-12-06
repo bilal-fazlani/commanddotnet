@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionF
 ProjectSection(SolutionItems) = preProject
 	.gitignore = .gitignore
 	README.md = README.md
+	appveyor.yml = appveyor.yml
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandDotNet.Example", "CommandDotNet.Example\CommandDotNet.Example.csproj", "{73A0E2B7-F205-47E2-A448-7E5CCD7FD6A5}"

@@ -3,14 +3,13 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
+using CommandDotNet.CommandInvoker;
 using CommandDotNet.Exceptions;
 using CommandDotNet.HelpGeneration;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 
 [assembly: InternalsVisibleTo("CommandDotNet.Tests")]
-[assembly: InternalsVisibleTo("CommandDotNet.IoC.Autofac")]
-[assembly: InternalsVisibleTo("CommandDotNet.IoC.MicrosoftDependencyInjection")]
 
 namespace CommandDotNet
 {
@@ -30,11 +29,11 @@ namespace CommandDotNet
         }
 
         /// <summary>
-        /// Exceutes the specified command with given parameters
+        /// Executes the specified command with given parameters
         /// </summary>
         /// <param name="args">Command line arguments</param>
         /// <returns>If target method returns int, this method will return that value. Else, 
-        /// it will return 0 in case of successs and 1 in case of unhandled exception</returns>
+        /// it will return 0 in case of success and 1 in case of unhandled exception</returns>
         public int Run(params string[] args)
         {
             try
@@ -144,6 +143,12 @@ namespace CommandDotNet
         public AppRunner<T> WithCustomHelpProvider(IHelpProvider customHelpProvider)
         {
             _settings.CustomHelpProvider = customHelpProvider;
+            return this;
+        }
+
+        public AppRunner<T> WithCommandInvoker(Func<ICommandInvoker, ICommandInvoker> commandInvokerProvider)
+        {
+            _settings.CommandInvoker = commandInvokerProvider(_settings.CommandInvoker);
             return this;
         }
     }

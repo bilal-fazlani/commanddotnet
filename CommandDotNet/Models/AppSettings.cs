@@ -1,4 +1,5 @@
-﻿using CommandDotNet.Exceptions;
+﻿using CommandDotNet.CommandInvoker;
+using CommandDotNet.Exceptions;
 using CommandDotNet.HelpGeneration;
 
 namespace CommandDotNet.Models
@@ -9,6 +10,7 @@ namespace CommandDotNet.Models
         {
             if(BooleanMode == BooleanMode.Unknown)
                 throw new AppRunnerException("BooleanMode can not be set to BooleanMode.Unknown explicitly");
+            CommandInvoker = new DefaultCommandInvoker();
         }
         public BooleanMode BooleanMode { get; set; } = BooleanMode.Implicit;
 
@@ -27,5 +29,7 @@ namespace CommandDotNet.Models
         public HelpTextStyle HelpTextStyle { get; set; } = HelpTextStyle.Detailed;
         
         internal IHelpProvider CustomHelpProvider { get; set; }
+
+        internal ICommandInvoker CommandInvoker { get; set; }
     }
 }

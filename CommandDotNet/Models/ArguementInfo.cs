@@ -10,7 +10,7 @@ using CommandDotNet.MicrosoftCommandLineUtils;
 
 namespace CommandDotNet.Models
 {
-    internal abstract class ArgumentInfo
+    public abstract class ArgumentInfo
     {
         protected readonly ICustomAttributeProvider AttributeProvider;
         protected readonly AppSettings Settings;
@@ -122,7 +122,7 @@ namespace CommandDotNet.Models
             }
 
             //is int
-            if (type == typeof(int) || type == typeof(long))
+            if (type == typeof(short) || type == typeof(int) || type == typeof(long))
             {
                 return Constants.TypeDisplayNames.Number;
             }
@@ -135,6 +135,12 @@ namespace CommandDotNet.Models
             
             //is double
             if (type == typeof(double))
+            {
+                return Constants.TypeDisplayNames.DoubleNumber;
+            }
+
+            //is decimal
+            if (type == typeof(decimal))
             {
                 return Constants.TypeDisplayNames.DecimalNumber;
             }
