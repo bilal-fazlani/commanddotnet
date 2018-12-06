@@ -14,7 +14,7 @@ namespace CommandDotNet
     {
         private readonly CommandLineApplication _app;
         private readonly Type _type;
-        private readonly IEnumerable<ArgumentInfo> _constrcutorParamValues;
+        private readonly IEnumerable<ArgumentInfo> _constructorParamValues;
         private readonly IDependencyResolver _dependencyResolver;
         private readonly AppSettings _appSettings;
         private readonly ModelValidator _modelValidator;
@@ -24,13 +24,13 @@ namespace CommandDotNet
         public CommandRunner(
             CommandLineApplication app,
             Type type,
-            IEnumerable<ArgumentInfo> constrcutorParamValues,
+            IEnumerable<ArgumentInfo> constructorParamValues,
             IDependencyResolver dependencyResolver,
             AppSettings appSettings)
         {
             _app = app;
             _type = type;
-            _constrcutorParamValues = constrcutorParamValues;
+            _constructorParamValues = constructorParamValues;
             _dependencyResolver = dependencyResolver;
             _appSettings = appSettings;
             _modelValidator = new ModelValidator(dependencyResolver);
@@ -54,8 +54,8 @@ namespace CommandDotNet
             }
 
             //create instance
-            object instance = _appInstanceCreator.CreateInstance(_type, _constrcutorParamValues, _dependencyResolver, _modelValidator);
-
+            object instance = _appInstanceCreator.CreateInstance(_type, _constructorParamValues, _dependencyResolver, _modelValidator);
+            
             CommandInvocation commandInvocation = new CommandInvocation
             {
                 CommandInfo = commandInfo,
@@ -66,6 +66,14 @@ namespace CommandDotNet
 
             object returnedObject = _appSettings.CommandInvoker.Invoke(commandInvocation);
 
+            //disposing --
+            switch (instance)
+            {
+                case IDisposable disposable : disposable.Dispose();
+                    break;
+            }
+            //disposing --
+            
             //default return code for cases when method is of type void instead of int
             int returnCode = 0;
 

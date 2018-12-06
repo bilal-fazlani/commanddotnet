@@ -16,6 +16,7 @@ namespace CommandDotNet.Extensions
             return type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(m => !m.IsSpecialName)
                 .Where(m => !m.HasAttribute<DefaultMethodAttribute>())
+                .Where(m => (typeof(IDisposable).IsAssignableFrom(type) && m.Name == "Dispose") ? m.Name != "Dispose" : true )
                 .Select(mi => new CommandInfo(mi, settings));
         }
 
