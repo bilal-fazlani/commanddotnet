@@ -5,13 +5,13 @@ using CommandDotNet.Extensions;
 namespace CommandDotNet.CommandInvoker
 {
 
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Method)]
     public class PreHookAttribute : Attribute
     {
         
     }
     
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Method)]
     public class PostHookAttribute : Attribute
     {
         
