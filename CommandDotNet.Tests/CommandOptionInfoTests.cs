@@ -142,7 +142,8 @@ namespace CommandDotNet.Tests
         public void CanCreateCommandOptionInfoFromPropertyInfo()
         {
             PropertyInfo propertyInfo = typeof(ParameterModel).GetProperty("foreignKeyId");
-            CommandOptionInfo commandOptionInfo = new CommandOptionInfo(propertyInfo, new AppSettings());
+            CommandOptionInfo commandOptionInfo = new CommandOptionInfo(propertyInfo, 
+                new AppSettings{ArgumentModelResolver = new CachedArgumentModelResolver()});
 
 //            commandOptionInfo.Details.Should().Be("Int32", "Details");
             commandOptionInfo.Template.Should().Be("--foreignKeyId");
@@ -200,7 +201,7 @@ namespace CommandDotNet.Tests
         }
     }
 
-    public class ParameterModel
+    public class ParameterModel : IArgumentModel
     {
         public int foreignKeyId { get; set; }
     }

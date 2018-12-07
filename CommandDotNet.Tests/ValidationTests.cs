@@ -28,8 +28,9 @@ namespace CommandDotNet.Tests
         [Fact]
         public void CanValidateModelForConstructor()
         {
-            AppRunner<ValidationAppForConstructor> appRunner = new AppRunner<ValidationAppForConstructor>();
+            var appRunner = new AppRunner<ValidationAppForConstructor>();
             appRunner.Run("Process").Should().Be(2, "model is invalid");
+            appRunner = new AppRunner<ValidationAppForConstructor>();
             appRunner.Run("--Id", "2", "--Name", "bilal", "--Email" ,"bilal@bilal.com", "Process").Should().Be(0, "model is valid");
         }
     }

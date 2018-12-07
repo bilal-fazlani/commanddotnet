@@ -35,7 +35,7 @@ namespace CommandDotNet
                     }
                     else //first property of model
                     {
-                        instance = Activator.CreateInstance(argumentInfo.ModelType);
+                        instance = _appSettings.ArgumentModelResolver.ResolveArgumentModel(argumentInfo.ModelType);
                         parameters.Add(argumentInfo.ModelType.FullName, instance);
                     }
 

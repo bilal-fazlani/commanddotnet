@@ -22,7 +22,7 @@ namespace CommandDotNet.Tests.Parsing
         {
             SingleValueParser valueParser = new SingleValueParser(valueType);
             PropertyInfo propertyInfo = typeof(PropertyModel).GetProperty(propertyName);
-            AppSettings appSettings = new AppSettings();
+            AppSettings appSettings = new AppSettings{ArgumentModelResolver = new CachedArgumentModelResolver()};
             CommandOptionInfo commandOptionInfo = new CommandOptionInfo(propertyInfo, appSettings);
             
             //set value
@@ -37,7 +37,7 @@ namespace CommandDotNet.Tests.Parsing
         }
     }
     
-    public class PropertyModel
+    public class PropertyModel : IArgumentModel
     {
         public int Int { get; set; }
         public string String { get; set; }

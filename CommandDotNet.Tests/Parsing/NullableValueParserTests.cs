@@ -13,7 +13,9 @@ namespace CommandDotNet.Tests.Parsing
         public void CanParseNullableInt()
         {
             NullableValueParser parser = new NullableValueParser(typeof(int), new SingleValueParser(typeof(int)));
-            CommandParameterInfo parameterInfo = new CommandParameterInfo(typeof(IntPropertyModel).GetProperty("Id"), new AppSettings());
+            CommandParameterInfo parameterInfo = new CommandParameterInfo(
+                typeof(IntPropertyModel).GetProperty("Id"), 
+                new AppSettings{ArgumentModelResolver = new CachedArgumentModelResolver()});
             parameterInfo.SetValue(new CommandArgument()
             {
                 Values = new List<string>(){"3"},
@@ -26,7 +28,7 @@ namespace CommandDotNet.Tests.Parsing
             value.Should().BeOfType<int>().And.Be(3);
         }
 
-        public class IntPropertyModel
+        public class IntPropertyModel : IArgumentModel
         {
             public int? Id { get; set; }
         }

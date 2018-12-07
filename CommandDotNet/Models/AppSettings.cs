@@ -31,5 +31,8 @@ namespace CommandDotNet.Models
         internal IHelpProvider CustomHelpProvider { get; set; }
 
         internal ICommandInvoker CommandInvoker { get; set; }
+
+        // lives here so the same instance is used everywhere.  other choices were messy.
+        internal CachedArgumentModelResolver ArgumentModelResolver { get; set; }
     }
 }

@@ -92,7 +92,7 @@ namespace CommandDotNet.Models
         
         private object GetDefaultValue(PropertyInfo propertyInfo)
         {
-            object instance = Activator.CreateInstance(propertyInfo.DeclaringType);
+            object instance = Settings.ArgumentModelResolver.ResolveArgumentModel(propertyInfo.DeclaringType);
             object defaultValue = propertyInfo.GetValue(instance);
             if (object.Equals(propertyInfo.PropertyType.GetDefaultValue(), defaultValue))
             {

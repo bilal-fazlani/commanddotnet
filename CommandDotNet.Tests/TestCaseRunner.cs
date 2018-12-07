@@ -12,18 +12,12 @@ namespace CommandDotNet.Tests
     public class TestCaseRunner<T> where T: class 
     {
         private readonly ITestOutputHelper _testOutputHelper;
-        private readonly AppRunner<T> _appRunner;
+        private readonly AppSettings _appSettings;
         
         public TestCaseRunner(ITestOutputHelper testOutputHelper, AppSettings appSettings = null)
         {
             _testOutputHelper = testOutputHelper;
-            _appRunner = new AppRunner<T>(appSettings ?? new AppSettings());
-        }
-        
-        public TestCaseRunner(ITestOutputHelper testOutputHelper, AppRunner<T> appRunner = null)
-        {
-            _testOutputHelper = testOutputHelper;
-            _appRunner = appRunner ?? new AppRunner<T>(new AppSettings());
+            _appSettings = appSettings ?? new AppSettings();
         }
         
         public void Run(string inputFileName, string outputFileName)
@@ -39,7 +33,8 @@ namespace CommandDotNet.Tests
                 
                 
 
-                int exitCode = _appRunner.Run(testCase.Params);
+                var appRunner = new AppRunner<T>(_appSettings);
+                int exitCode = appRunner.Run(testCase.Params);
                 
                 exitCode.Should().Be(testCase.ExpectedExitCode, $"app should return {testCase.ExpectedExitCode} exit code");
 

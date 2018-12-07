@@ -19,13 +19,14 @@ namespace CommandDotNet
     /// <typeparam name="T">Type of the application</typeparam>
     public class AppRunner<T> where T : class
     {
-        internal IDependencyResolver DependencyResolver;
+        private CachedArgumentModelResolver DependencyResolver;
         
         private readonly AppSettings _settings;
 
         public AppRunner(AppSettings settings = null)
         {
             _settings = settings ?? new AppSettings();
+            DependencyResolver = _settings.ArgumentModelResolver = new CachedArgumentModelResolver();
         }
 
         /// <summary>
@@ -149,6 +150,12 @@ namespace CommandDotNet
         public AppRunner<T> WithCommandInvoker(Func<ICommandInvoker, ICommandInvoker> commandInvokerProvider)
         {
             _settings.CommandInvoker = commandInvokerProvider(_settings.CommandInvoker);
+            return this;
+        }
+        
+        public AppRunner<T> UseDependencyResolver(IDependencyResolver dependencyResolver)
+        {
+            DependencyResolver.HostProvidedResolver = dependencyResolver;
             return this;
         }
     }
