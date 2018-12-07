@@ -6,6 +6,8 @@ namespace CommandDotNet.Models
 {
     public class AppSettings
     {
+        private bool _enableCommandHooks;
+        
         public AppSettings()
         {
             if(BooleanMode == BooleanMode.Unknown)
@@ -23,7 +25,24 @@ namespace CommandDotNet.Models
         public Case Case { get; set; } = Case.DontChange;
 
         public bool EnableVersionOption { get; set; } = true;
-        
+
+        public bool EnableCommandHooks
+        {
+            get => _enableCommandHooks;
+            set
+            {
+                _enableCommandHooks = value;
+                if (value)
+                {
+                    CommandInvoker = new PrePostHookCommandInvoker(new DefaultCommandInvoker());
+                }
+                else
+                {
+                    CommandInvoker = new DefaultCommandInvoker();
+                }
+            }
+        }
+
         public bool PrompForArgumentsIfNotProvided { get; set; }
 
         public HelpTextStyle HelpTextStyle { get; set; } = HelpTextStyle.Detailed;
