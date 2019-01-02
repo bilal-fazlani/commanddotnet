@@ -5,3 +5,4 @@ output
 .vscode
 CommandDotNet.sln.DotSettings.user
 .vs/
+*.ncrunchsolution.user

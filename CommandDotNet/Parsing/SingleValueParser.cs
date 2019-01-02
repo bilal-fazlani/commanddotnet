@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using CommandDotNet.Exceptions;
 using CommandDotNet.Models;
 
@@ -44,7 +45,7 @@ namespace CommandDotNet.Parsing
 
                 if (_underyingType == typeof(double))
                 {
-                    return double.Parse(value);
+                    return double.Parse(value, CultureInfo.InvariantCulture);
                 }
 
                 if (_underyingType == typeof(long))
