@@ -14,6 +14,7 @@ namespace CommandDotNet.Tests.Parsing
         [Theory]
         [InlineData("dotnet example.dll --key=value", new string[] { "dotnet", "example.dll", "--key=value" })]
         [InlineData("test config \"sometext (and more)\"", new string[] { "test", "config", "sometext (and more)" })]
+        [InlineData("test config -ab", new string[] { "test", "config", "-a", "-b" })]
         public void TestInputValues(string input, string[] expectedResult)
         {
             var chunks = input.Split(" ");
