@@ -1,5 +1,7 @@
 #! /bin/bash -e
 
+dotnet test
+
 dotnet pack \
 -o output \
 -c Release \
