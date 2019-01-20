@@ -29,7 +29,7 @@ deploy:
 - provider: NuGet
   api_key:
     secure: IP4hm35AxgCDx81eH83zzHRg3fUFRAgQYK8mKOwOfSPLDc6qkXdEWfFq6GeXI9s5
-  skip_symbols: true
+  skip_symbols: false
   artifact: Nuget
   on:
     branch: release
