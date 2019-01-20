@@ -1,1 +1,1 @@
-dotnet pack -o output -c Release --include-symbols -p:SymbolPackageFormat=snupkg --include-source CommandDotNet/CommandDotNet.csproj /p:Version=%APPVEYOR_BUILD_VERSION%
+dotnet pack -o output -c Release --include-symbols --include-source CommandDotNet/CommandDotNet.csproj /p:Version=%APPVEYOR_BUILD_VERSION%
