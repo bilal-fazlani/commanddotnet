@@ -14,7 +14,7 @@ matrix:
       os: windows
 
 script:
-  - dotnet test CommandDotNet.Example/CommandDotNet.Example.csproj
+  - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
 #-----------------------------------
 
 #--------- DEPLOYMENT --------------
