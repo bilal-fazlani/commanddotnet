@@ -1,15 +1,20 @@
 language: csharp
 mono: none
-dotnet: 2.1
+dotnet: 2.2
 
 cache:
   directories:
     - $HOME/.nuget/packages
 
+global:
+  - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
+  - DOTNET_CLI_TELEMETRY_OPTOUT=1
+
 #--------- TEST MATRIX --------------
 os:
   - linux
   - osx
+  - windows
 
 script:
  - ./build.sh
@@ -21,7 +26,7 @@ stages:
   
 jobs: 
   include:
-    - stage: deply
+    - stage: deploy
       script:
         - echo "DEPLOYING PROJECT"
       os: linux
