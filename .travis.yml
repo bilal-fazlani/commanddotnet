@@ -31,6 +31,6 @@ jobs:
       dotnet: 2.1
 #-----------------------------------
 
-cache:
-  directories:
-    - $HOME/.nuget/packages  
+# cache:
+#   directories:
+#     - $HOME/.nuget/packages  
