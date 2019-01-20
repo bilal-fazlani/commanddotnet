@@ -21,7 +21,7 @@ dotnet_csproj:
 build_script:
 - cmd: build.bat
 test_script:
-- cmd: test.bat
+- cmd: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
 artifacts:
 - path: CommandDotNet/output/**
   name: Nuget
