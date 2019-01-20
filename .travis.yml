@@ -1,12 +1,17 @@
 language: csharp
 mono: none
 dotnet: 2.1
+
 stages:
   - name: test
 
 jobs: 
   include:
     - stage: test
-      scripts:
+      script:
         - ./build.sh
 
+cache:
+  directories:
+    - $HOME/.nuget/packages        
+    - /usr/local/share/dotnet/
