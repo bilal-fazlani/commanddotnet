@@ -1,1 +1,0 @@
-dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj

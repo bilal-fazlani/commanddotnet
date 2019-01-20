@@ -17,7 +17,7 @@
         <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
-        <IncludeSymbols>true</IncludeSymbols>
+        <IncludeSymbols>false</IncludeSymbols>
         <!-- This is for future -->
         <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
         <!-- https://github.com/dotnet/sourcelink/blob/master/docs/README.md#embedallsources -->
