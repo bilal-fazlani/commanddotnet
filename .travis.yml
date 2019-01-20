@@ -10,10 +10,10 @@ matrix:
   include:
     - name: test on macos using dotnet 2.1.300
       os: osx
-      # dotnet: 2.1.300
+      dotnet: 2.1.300
     - name: test on linux using dotnet 2.1
       os: linux
-      # dotnet: 2.1
+      dotnet: 2.1
     - name: test on windows
       os: windows
       # dotnet: 2.1
