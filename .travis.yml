@@ -1,10 +1,6 @@
 language: csharp
 mono: none
 
-cache:
-  directories:
-    - $HOME/.nuget/packages
-
 #--------- TEST MATRIX --------------
 matrix:
   include:
@@ -18,14 +14,16 @@ matrix:
       os: windows
 
 script:
-  - if [[ $TRAVIS_OS_NAME == 'windows' ]]; then dotnet --version; else dotnet --version; fi
+  - dotnet test CommandDotNet.Example/CommandDotNet.Example.csproj
 #-----------------------------------
 
 #--------- DEPLOYMENT --------------
-jobs: 
-  include:
-    - stage: deploy
-      script:
-        - echo "DEPLOYING PROJECT"
-      os: linux
+deploy:
+  provider: script
+  script: ./deploy.sh
+  tags: true
 #-----------------------------------
+
+cache:
+  directories:
+    - $HOME/.nuget/packages  
