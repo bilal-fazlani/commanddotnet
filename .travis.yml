@@ -1,9 +1,9 @@
 language: csharp
 mono: none
 
-# cache:
-#   directories:
-#     - $HOME/.nuget/packages
+cache:
+  directories:
+    - $HOME/.nuget/packages
 
 #--------- TEST MATRIX --------------
 matrix:
