@@ -1,5 +1,5 @@
-language: java
-# mono: none
+language: csharp
+mono: none
 
 # cache:
 #   directories:
