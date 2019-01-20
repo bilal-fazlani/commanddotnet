@@ -14,13 +14,13 @@ cache:
 
 matrix:
   include:
-  - name: test on linux using dotnet 2.1
-    os: linux
-    dotnet: 2.1
-    mono: none
   - name: test on macos using dotnet 2.1.300
     os: osx
     dotnet: 2.1.300
+    mono: none
+  - name: test on linux using dotnet 2.1
+    os: linux
+    dotnet: 2.1
     mono: none
     # - os: windows
     #   dotnet: 2.1
