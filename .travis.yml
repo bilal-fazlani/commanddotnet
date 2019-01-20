@@ -1,5 +1,12 @@
 language: csharp
 mono: none
 dotnet: 2.1
-script:
-    - dotnet restore
+stages:
+  - name: test
+
+jobs: 
+  include:
+    - stage: test
+      scripts:
+        - ./build.sh
+
