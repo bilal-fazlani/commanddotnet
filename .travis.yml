@@ -21,11 +21,11 @@ script:
   - if [[ $TRAVIS_OS_NAME == 'windows' ]]; then dotnet --version; else dotnet --version; fi
 #-----------------------------------
 
-# #--------- DEPLOYMENT --------------
-# jobs: 
-#   include:
-#     - stage: deploy
-#       script:
-#         - echo "DEPLOYING PROJECT"
-#       os: linux
-# #-----------------------------------
+#--------- DEPLOYMENT --------------
+jobs: 
+  include:
+    - stage: deploy
+      script:
+        - echo "DEPLOYING PROJECT"
+      os: linux
+#-----------------------------------
