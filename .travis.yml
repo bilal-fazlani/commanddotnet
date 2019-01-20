@@ -2,15 +2,27 @@ language: csharp
 mono: none
 dotnet: 2.1
 
-stages:
-  - name: test
-
-jobs: 
-  include:
-    - stage: test
-      script:
-        - ./build.sh
-
 cache:
   directories:
     - $HOME/.nuget/packages
+
+#--------- TEST MATRIX --------------
+os:
+  - linux
+  - osx
+
+script:
+ - ./build.sh
+#-----------------------------------
+
+#--------- DEPLOYMENT --------------
+stages:
+  - name: deploy
+  
+jobs: 
+  include:
+    - stage: deply
+      script:
+        - echo "DEPLOYING PROJECT"
+      os: linux
+#-----------------------------------
