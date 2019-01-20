@@ -21,6 +21,7 @@ ProjectSection(SolutionItems) = preProject
 	deploy.sh = deploy.sh
 	test.bat = test.bat
 	build.bat = build.bat
+	.travis.yml = .travis.yml
 EndProjectSection
 EndProject
 Global
