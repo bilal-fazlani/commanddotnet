@@ -16,6 +16,13 @@ EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandDotNet.Example", "CommandDotNet.Example\CommandDotNet.Example.csproj", "{73A0E2B7-F205-47E2-A448-7E5CCD7FD6A5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{6296D4E9-7128-4CFA-BFB9-1DF6004B7626}"
+ProjectSection(SolutionItems) = preProject
+	deploy.sh = deploy.sh
+	test.sh = test.sh
+	build.sh = build.sh
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,5 +44,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6296D4E9-7128-4CFA-BFB9-1DF6004B7626} = {4CA1A4AA-7105-4FEC-B88B-3A4AD3BBD6EE}
 	EndGlobalSection
 EndGlobal

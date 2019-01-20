@@ -19,9 +19,9 @@ dotnet_csproj:
   file_version: '{version}'
   informational_version: '{version}'
 build_script:
-- cmd: dotnet pack -o output -c Release --include-symbols -p:SymbolPackageFormat=snupkg --include-source CommandDotNet/CommandDotNet.csproj /p:Version=%APPVEYOR_BUILD_VERSION%
+- cmd: ./build.sh
 test_script:
-- cmd: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
+- cmd: ./test.sh
 artifacts:
 - path: CommandDotNet/output/**
   name: Nuget
