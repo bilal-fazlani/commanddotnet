@@ -7,11 +7,12 @@
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/bilalfazlani/5)
 
 ### Build status: 
-#### Windows:
+#### Windows: 
 [![Build status](https://ci.appveyor.com/api/projects/status/0q3laab22dy66sm7/branch/master?svg=true)](https://ci.appveyor.com/project/bilal-fazlani/commanddotnet/branch/master)
 [![AppVeyor tests](https://img.shields.io/appveyor/tests/bilal-fazlani/CommandDotNet.svg)](https://ci.appveyor.com/project/bilal-fazlani/commanddotnet/build/tests) 
 
-#### Ubuntu: [![Build Status](https://travis-ci.com/bilal-fazlani/commanddotnet.svg?branch=master)](https://travis-ci.com/bilal-fazlani/commanddotnet)
+#### Ubuntu:
+[![Build Status](https://travis-ci.com/bilal-fazlani/commanddotnet.svg?branch=master)](https://travis-ci.com/bilal-fazlani/commanddotnet)
 
 ---
 
