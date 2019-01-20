@@ -21,7 +21,8 @@ script:
 deploy:
   provider: script
   script: ./deploy.sh
-  tags: true
+  on:
+    tags: true
 #-----------------------------------
 
 cache:
