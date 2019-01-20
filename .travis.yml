@@ -14,9 +14,12 @@ matrix:
     - name: test on linux using dotnet 2.1
       os: linux
       dotnet: 2.1
+    - name: windows test
+      os: windows
+      dotnet: 2.1
 
 script:
-  - ./build.sh
+  - if [[ $TRAVIS_OS_NAME == 'windows' ]]; then tbuild.bat; else ./build.sh; fi
 #-----------------------------------
 
 #--------- DEPLOYMENT --------------
