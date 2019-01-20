@@ -25,6 +25,7 @@ jobs:
   
 #--------- DEPLOYMENT JOB ----------  
     - stage: deploy
+      name: nuget & github release
       script: ./deploy.sh
       os: linux
       dotnet: 2.1
