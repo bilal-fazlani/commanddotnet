@@ -20,7 +20,7 @@ jobs:
       dotnet: 2.1
     - name: test on windows
       os: windows
-      script: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
+      script: dotnet test CommandDotNet.Tests\CommandDotNet.Tests.csproj
 #-----------------------------------
   
 #--------- DEPLOYMENT JOB ----------  
