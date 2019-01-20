@@ -12,15 +12,15 @@ jobs:
     - stage: test
       name: test on macos using dotnet 2.1.300
       os: osx
-      script: echo "OSX"
+      script: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
       dotnet: 2.1.300
     - name: test on linux using dotnet 2.1
       os: linux
-      script: echo "LINUX"
+      script: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
       dotnet: 2.1
     - name: test on windows
       os: windows
-      script: echo "WINDOWS"
+      script: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
 #-----------------------------------
   
 #--------- DEPLOYMENT JOB ----------  
