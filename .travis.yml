@@ -7,10 +7,10 @@ cache:
     - $HOME/.nuget/packages
 
 #--------- TEST MATRIX --------------
-os:
-  - linux
-  - osx
-  - windows
+# os:
+#   - linux
+#   - osx
+#   - windows
 
 matrix:
   include:
