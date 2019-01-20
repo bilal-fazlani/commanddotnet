@@ -16,7 +16,7 @@ os:
   - windows
 
 dotnet: 
-  - 2.2
+  - 2.1
 
 script:
  - ./build.sh
