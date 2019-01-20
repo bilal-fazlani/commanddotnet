@@ -21,7 +21,9 @@
         <!-- This is for future -->
         <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
         <!-- https://github.com/dotnet/sourcelink/blob/master/docs/README.md#embedallsources -->
-        <EmbedAllSources>true</EmbedAllSources> 
+        <EmbedAllSources>true</EmbedAllSources>
+        <DebugType>embedded</DebugType>
+        <DebugSymbols>true</DebugSymbols>
     </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="7.6.103" />
