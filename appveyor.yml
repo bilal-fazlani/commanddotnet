@@ -19,9 +19,9 @@ dotnet_csproj:
   file_version: '{version}'
   informational_version: '{version}'
 build_script:
-- cmd: ./build.sh
+- cmd: build.bat
 test_script:
-- cmd: ./test.sh
+- cmd: test.bat
 artifacts:
 - path: CommandDotNet/output/**
   name: Nuget
