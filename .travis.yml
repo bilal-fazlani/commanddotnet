@@ -1,6 +1,5 @@
 language: csharp
 mono: none
-dotnet: 2.2
 
 cache:
   directories:
@@ -16,14 +15,14 @@ os:
   - osx
   - windows
 
+dotnet: 
+  - 2.2
+
 script:
  - ./build.sh
 #-----------------------------------
 
 #--------- DEPLOYMENT --------------
-stages:
-  - name: deploy
-  
 jobs: 
   include:
     - stage: deploy
