@@ -1,5 +1,5 @@
 language: csharp
-# mono: none
+mono: none
 # dotnet: 2.1
 
 cache:
