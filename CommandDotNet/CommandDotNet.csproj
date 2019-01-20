@@ -19,6 +19,8 @@
         <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <!-- https://github.com/dotnet/sourcelink/blob/master/docs/README.md#embedallsources -->
+        <EmbedAllSources>true</EmbedAllSources> 
     </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="7.6.103" />
