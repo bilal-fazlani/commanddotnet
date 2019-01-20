@@ -13,30 +13,22 @@ jobs:
       name: test on macos using dotnet 2.1.300
       os: osx
       script: echo "OSX"
-      # dotnet: 2.1.300
+      dotnet: 2.1.300
     - name: test on linux using dotnet 2.1
       os: linux
       script: echo "LINUX"
-      # dotnet: 2.1
+      dotnet: 2.1
     - name: test on windows
       os: windows
       script: echo "WINDOWS"
+#-----------------------------------
+  
+#--------- DEPLOYMENT JOB ----------  
     - stage: deploy
       script: ./deploy.sh
       os: linux
-
-# script:
-#   - echo ""
-#   #test CommandDotNet.Tests/CommandDotNet.Tests.csproj
+      dotnet: 2.1
 #-----------------------------------
-
-# #--------- DEPLOYMENT --------------
-# deploy:
-#   provider: script
-#   script: ./deploy.sh
-#   on:
-#     tags: true
-# #-----------------------------------
 
 cache:
   directories:
