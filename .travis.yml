@@ -16,10 +16,9 @@ matrix:
       dotnet: 2.1
     - name: test on windows
       os: windows
-      # dotnet: 2.1
 
 script:
-  - if [[ $TRAVIS_OS_NAME == 'windows' ]]; then echo "WINDOWS TEST"; else echo "UNIX TEST"; fi
+  - if [[ $TRAVIS_OS_NAME == 'windows' ]]; then dotnet --version; else dotnet --version; fi
 #-----------------------------------
 
 # #--------- DEPLOYMENT --------------
