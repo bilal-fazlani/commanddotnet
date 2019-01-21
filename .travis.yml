@@ -3,18 +3,19 @@ mono: none
 
 stages:
   - name: test
-  - name: deploy
-    if: tag IS present
+  # COMMENTED BECAUSE TRAVIS DOES NOT SUPPORT SECRETS FOR WINDOWS YET  
+  # - name: deploy
+  #   if: tag IS present
 
 #--------- TEST JOBS --------------
 jobs:
   include:
     - stage: test
-      name: test on macos using dotnet 2.1.300
+      name: test on osx
       os: osx
       script: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
       dotnet: 2.1.300
-    - name: test on linux using dotnet 2.1
+    - name: test on linux
       os: linux
       script: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
       dotnet: 2.1
@@ -22,13 +23,14 @@ jobs:
       os: windows
       script: dotnet test
 #-----------------------------------
-  
+
+# COMMENTED BECAUSE TRAVIS DOES NOT SUPPORT SECRETS FOR WINDOWS YET  
 #--------- DEPLOYMENT JOB ----------  
-    - stage: deploy
-      name: nuget & github release
-      script: ./deploy.sh
-      os: linux
-      dotnet: 2.1
+    # - stage: deploy
+    #   name: nuget & github release
+    #   script: ./deploy.sh
+    #   os: linux
+    #   dotnet: 2.1
 #-----------------------------------
 
 # cache:
