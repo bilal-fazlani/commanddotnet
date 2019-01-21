@@ -8,4 +8,4 @@ CommandDotNet/CommandDotNet.csproj \
 /p:Version=$TRAVIS_TAG
 
 #PUBLISH TO NUGET
-dotnet nuget push -k $NUGET_API_KEY CommandDotNet.$TRAVIS_TAG.nupkg
+dotnet nuget push -k $NUGET_API_KEY_COMMANDDOTNET CommandDotNet.$TRAVIS_TAG.nupkg
