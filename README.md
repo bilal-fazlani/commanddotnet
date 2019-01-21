@@ -2,17 +2,11 @@
 
 # CommandDotNet
 
+
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/CommandDotNet.svg)](https://www.nuget.org/packages/CommandDotNet)  [![NuGet](https://img.shields.io/nuget/dt/CommandDotNet.svg)](https://www.nuget.org/packages/CommandDotNet)
+[![Build Status](https://travis-ci.com/bilal-fazlani/commanddotnet.svg?branch=master)](https://travis-ci.com/bilal-fazlani/commanddotnet)
 [![GitHub last commit](https://img.shields.io/github/last-commit/bilal-fazlani/CommandDotNet.svg)]()
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/bilalfazlani/5)
-
-### Build status: 
-#### Windows: 
-[![Build status](https://ci.appveyor.com/api/projects/status/0q3laab22dy66sm7/branch/master?svg=true)](https://ci.appveyor.com/project/bilal-fazlani/commanddotnet/branch/master)
-[![AppVeyor tests](https://img.shields.io/appveyor/tests/bilal-fazlani/CommandDotNet.svg)](https://ci.appveyor.com/project/bilal-fazlani/commanddotnet/build/tests) 
-
-#### Ubuntu:
-[![Build Status](https://travis-ci.com/bilal-fazlani/commanddotnet.svg?branch=master)](https://travis-ci.com/bilal-fazlani/commanddotnet)
 
 ---
 
