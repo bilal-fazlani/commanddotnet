@@ -4,7 +4,7 @@
             "testCaseName": "can recognise string, int, string array, double & few null entries",
             "params" : [
                 "TestMethodParams",
-                "--name", "\"bilal fazlani\"",
+                "--name", "bilal fazlani",
                 "--id", "4",
                 "--tag", "human",
                 "-t", "male",

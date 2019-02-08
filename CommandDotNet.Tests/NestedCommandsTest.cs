@@ -22,7 +22,7 @@ namespace CommandDotNet.Tests
         [InlineData(2, new[]{"stash"})]
         
         // typical scenario
-        [InlineData(5, new[]{"commit", "-m", "\"added new feature\""})]
+        [InlineData(5, new[]{"commit", "-m", "added new feature"})]
         
         // external module
         [InlineData(6, new[]{"submodule","add"})]

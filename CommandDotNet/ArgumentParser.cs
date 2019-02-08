@@ -6,39 +6,25 @@ namespace CommandDotNet
 {
     internal class ArgumentParser
     {
-        private static readonly Regex ArgumentsSplitRegex = new Regex(@"(?<!\\)"".+(?<!\\)""|(?<!\\)'.+(?<!\\)'|[^\s]+", RegexOptions.Compiled);
-        private static readonly Regex TrimRegex = new Regex(@"^""|^'|""$|'$", RegexOptions.Compiled);
-        private static readonly Regex UnescapeRegex = new Regex(@"\\'|\\""", RegexOptions.Compiled);
-        private static readonly Regex MixedFlagsRegex = new Regex(@"(?<=^-)\w{2,}", RegexOptions.Compiled);
-
         public static IEnumerable<string> SplitFlags(params string[] args)
         {
-            var joined = string.Join(" ", args);
-            foreach (Match match in ArgumentsSplitRegex.Matches(joined))
+            foreach (var arg in args)
             {
-                var sanitized = SanitizeValue(match.Value);
-                var mixedMatch = MixedFlagsRegex.Match(sanitized);
-                if (mixedMatch.Success)
+                Regex mixedFlagsRegex = new Regex(@"^^-(\w{2,})");
+                Match match = mixedFlagsRegex.Match(arg);
+                if (match.Success)
                 {
-                    foreach (var @char in mixedMatch.Value.ToCharArray())
+                    List<char> flags = match.Groups[1].Value.ToList();
+                    foreach (var flag in flags)
                     {
-                        yield return new string(new[] {'-', @char});
+                        yield return $"-{flag}";
                     }
                 }
                 else
                 {
-                    yield return sanitized;
+                    yield return arg;
                 }
             }
-        }
-
-        private static string SanitizeValue(string value)
-        {
-            return UnescapeRegex.Replace(
-                TrimRegex.Replace(
-                    value, 
-                    string.Empty), 
-                string.Empty);
         }
     }
 }
