@@ -1,19 +1,38 @@
-language: generic
-before_install:
-- mkdir -p ~/artefacts/
+language: csharp
+mono: none
+
+stages:
+    - name: test
+    - name: deploy
+      if: tag IS present
+
+#--------- TEST JOBS --------------
 jobs:
-  include:
-  - stage: setup files
-    script: echo one | tee > ~/artefacts/artefact.txt
-  - stage: use shared files
-    script:
-    - cat ~/commanddotnet/74/*
-addons:
-  artifacts:
-    working_dir: ~/artefacts/
-    s3_region: ap-west-2
-env:
-  global:
-  - secure: kD8PD7ZaPMlZRwC6Ra7DZHzymgTZPcYO1rLJAVid6GydzobO4FALbsd/ThoGatWUMirSDXeScpVRtwx6w0Ce7x+N5xfjTi2AV5XPNxnhraZK6ZbEiy5br5wFz+BVYQ2MbFQrMNKTFfWNjVsnXiGazj0b0sMyqsvFNkQqCH0L7/cWsp6oSkuf49dFU8H5AnUFPQYuf3zm9TkDlcFabOrWbQALuAqV0zz47osMMWcsRrVvgwfnsvbcePHh0LvJCoFSCGzQA6RvMFjJJI7FpaPbhcouV4ltAmzY9xSM+wCe9jFIJFyiHCb5MxXR9QpupcOpXXLKD9uQ5pEGWMHSJSeH7G14liLzU7C3of3OfYLZKu6RGu4Jk3Y3sjiRlfiPiMJ8ejQp1IimCMSeYZCMS4RutnzwXeZFo/Cp8sNMR/Rfrlgdg/7CKusUmwp0FcJHuqyCWsPOlZf8e6aqR/y8wb8Vcuey+1Ca0rIP8NwhKYKl6FfQiLStQDfi43yICa58YJ5jte/ZANtouzBix7tEFS4sXDBPHQBUWyROHS+2OpW4A7zhcwFrexZB5z+s0ByRMI5mbAyajk9/WX8qbsw+Z3O4j4FGbPlUt/9DtS3lU1DLCk8cAiYcnZ2ZTSHK6umDUtyBpEWsHWiQpVvVuoT8A1nVVTjswePQQ91Woq8u4YcGB5k=
-  - secure: LqNcTI/NBSmrG9mUv/H7ej8jzTVYSZmskcbD03VyeCJI7vgEv7LanbCmnHDVTDyLkPS3/Vo45Zx8YpwZrsVOOaYEvvVs7R4dQfivgzadEZzt6ozhzT0MEOXU7SAnnv1rX7yry1egz3EXaNu8QDhL35pyaab6UpdtiG5ZcqOyAVLqAUO8Y17XQzawbygMJglHSvCQoLuEl50hFqqEyhBMQL6Rz/leazMe/Yi1ygSJ/GNzzOmg1snrw2llwdT6/aGMTyLUUhmUkf7YmqwNl4UHcJNa70QIMT+cH6zl9kTa9uabLcnKE9XM8jM8pPRHy+Ejs8HNT/amZ1+wxSbwLYxnz/I1NMDF14op0u/JhYNh9EIWZ7AhEqQVlAkuCcogtvemiqkQ55p2415grHtQlM0IPgJ2G0QhyaPzDVgLq75Cjv334gi7NUe8SD905zRbYHT2WzjD5Kdv3idI1wUAg9s0ZLeNL3nuZU6ET9UHf8Bs/85zFaV9+9vtHk5PJ7/qLH66d/2juplyO0MZeTfJgzJWw2oo63rj9aeDlXnNOgfyBknupi8lTxHVqYNKtZjFrMjwjzAC+48f4Kg3IVQ04vC/uujbQjdwCtophOGu5aXfrCm6f3342HsvRqWHwsvFmxMddSye9aNRBVhFsH7PH28WUNgQN4AoKcFglBUCo4kuj+I=
-  - secure: IXdMbzBA64/wcfuE3Lwc3TQe3+5JCCFu1E08qRA+nB+e/xEOQQBiURN+oNJTByjn5w4+tCAG0qeFq5rrBu+8UbUprsUOebLWJvsIzKRb0I1K6Hx5nQZdwTfqmRepKhC+gVOVRUPgF9pdVtkomSXVvYIGyrZPOhxgv53tQnHGp9vnxPA+64jR0hJwOPudIxJjks7vyDydiKbWkSib9jyOf7sgsYwy714l2NT69NnohlZ3WQirRBaXArYRmiXS4lS33OlMappe/oEcI7Rpt3AYx88zlEWBPEkv74/FEM2TMNwkpKlvINF0zQttfEDMJooOCUfWtS3Yo20HmskuOZo9vTS9S1zIRIIPerBTjR+118Vg5gXs7MfaH0+Q4GNO1xQ2P0ta9ydufOFQE8wFaUDGDQffXVqNZJ3eejOyts4ax5B4wbMRhz6I+0DoxxqQNa5Dx2KtG689z/TS6EKnPH8Q8YXGxiJvMCGtkA4dlNDBHSa+TujIH/4eqLnVIcgeM+yhzTh57PgAZRSeIF7jrXdL7jrMv9P3xLxJ4r12E9kaFKsjfwtEiH3BqB4qwxl7aZdjA+E5cRGwNUGLsP7S+OVfxEDwNVKN4r9zYBqHx0orX/zw/CpRdrm33ETTB97dFBfm8WxptpPo+rk1YqRRVNOwo3egHkNk1jyEpnjck7pe0kw=
+    include:
+        - stage: test
+          name: test on osx
+          os: osx
+          script: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
+          dotnet: 2.1.300
+        - name: test on linux
+          os: linux
+          script: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
+          dotnet: 2.1
+        - name: test on windows
+          os: windows
+          script: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
+        #-----------------------------------
+
+        #--------- DEPLOYMENT JOB ----------  
+        - stage: deploy
+          name: nuget & github release
+          script: ./deploy.sh
+          os: linux
+          dotnet: 2.1
+          env:
+              - secure: umGBSeo5NxTY/R7mcpygIaqznyAj2GIS+fSps/WQbh8jvtBwCLedvfEPiGMefGHOHYJuKIqaz2uOqCHcVbpJ1aeyHndRcwi8t6JzSqUBQRNOaAmpDYvAM5D/sQzPtvDLOAiEHgq+9q4gbDZCuwgnko4I/G9my7N1J18tVSBq7CWhNar0JKX8cRmlqyz0gISFhEia3YtZCgbQTwZtVzkatXqDdNYQguKIAO10aALmTbFWcDq0lp8IzH8b1o0YuR0nmNg2cjBgFTlb0qEtgJ8d/mdBWvgV3q1o1R6hn5Kdi/jCAvWPdhB/oqa83K8PDVTBeDzVfB41KKBGn/IbBp+09Wdkqqmw45d4aNfuCdjzsMw4q+5bwUmbHJb/tE+udu4A+GDZEuH7VUF8GRk2prVxT/phP4cAlh0H501FkIDrReiIpbRzw4KNziDjYoHqm9R0yYwSTeyuFAOqScpWZpHlnza5acwZwgnV50SHncENb7vRUYZqWgjohcSqdzBiVPN+yZ0sX5M6pp/7vPmz8VqbxkITzFeKMIoukSMTMyNpSCXkFob/CcDZJV39h5+nv0wdXbAfa6WRgaDA4DTIcmWZQxFCpf57ZcpZkJek/WEnFRl/glTW40wDSrpDqQVa78KPph5SKRjSHLYrETWB3u/SS2X0JwOwQqJ2KjAv3YgqUIs=
+#-----------------------------------
+
+# cache:
+#   directories:
+#     - $HOME/.nuget/packages  
