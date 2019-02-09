@@ -7,7 +7,7 @@ jobs:
     script: echo one | tee > ~/artefacts/artefact.txt
   - stage: use shared files
     script:
-    - cat ~/artefacts/artefact.txt
+    - cat ~/commanddotnet/74/*
 addons:
   artifacts:
     working_dir: ~/artefacts/
