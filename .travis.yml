@@ -1,5 +1,8 @@
 language: generic
 
+before_install:
+    - mkdir -p ~/$TRAVIS_BUILD_NUMBER 
+
 jobs:
   include:
   - stage: setup files
