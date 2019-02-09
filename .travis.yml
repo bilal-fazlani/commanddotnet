@@ -1,6 +1,6 @@
 language: generic
 before_install:
-- mkdir -p ~/$TRAVIS_BUILD_NUMBER
+- mkdir -p ~/artefacts/
 jobs:
   include:
   - stage: setup files
