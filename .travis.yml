@@ -6,9 +6,7 @@ before_install:
 jobs:
   include:
   - stage: setup files
-    script: echo one | tee > ~/$TRAVIS_BUILD_NUMBER/one
-  - stage: setup files
-    script: echo two | tee > ~/$TRAVIS_BUILD_NUMBER/two
+    script: echo one | tee > artefact.txt
   - stage: use shared files
     script:
     - cat ~/$TRAVIS_BUILD_NUMBER/*
