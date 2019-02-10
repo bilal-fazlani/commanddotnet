@@ -17,7 +17,7 @@ namespace CommandDotNet.Tests.Parsing
         [InlineData("test config -ab", new string[] { "test", "config", "-a", "-b" })]
         public void TestInputValues(string input, string[] expectedResult)
         {
-            var chunks = input.Split(" ");
+            var chunks = input.Split(' ');
             var parsed = ArgumentParser.SplitFlags(chunks);
             parsed.Should().BeEquivalentTo(expectedResult);
         }
