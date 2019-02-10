@@ -1,20 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AutoFixture.Xunit2" Version="4.4.0" />
+    <PackageReference Include="AutoFixture.Xunit2" Version="4.8.0" />
     <PackageReference Include="CommandDotNet.IoC.Autofac" Version="1.0.5" />
     <PackageReference Include="CommandDotNet.IoC.MicrosoftDependencyInjection" Version="1.0.9" />
-    <PackageReference Include="FluentAssertions" Version="5.4.1" />
+    <PackageReference Include="FluentAssertions" Version="5.6.0" />
     <PackageReference Include="FluentValidation" Version="7.6.103" />
     <PackageReference Include="JsonDiffPatch.Net" Version="2.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="xunit" Version="2.4.0-beta.1.build3958" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0-beta.1.build3958" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommandDotNet\CommandDotNet.csproj" />
