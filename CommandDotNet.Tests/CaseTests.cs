@@ -1,6 +1,4 @@
-﻿using System.Net.Mail;
-using System.Reflection.Metadata.Ecma335;
-using CommandDotNet.Attributes;
+﻿using CommandDotNet.Attributes;
 using CommandDotNet.Models;
 using FluentAssertions;
 using Xunit;
