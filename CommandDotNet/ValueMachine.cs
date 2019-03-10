@@ -43,25 +43,27 @@ namespace CommandDotNet
 
         private void PromptForValue(ArgumentInfo argumentInfo)
         {
-            if (argumentInfo is CommandParameterInfo parameterInfo && _appSettings.PrompForArgumentsIfNotProvided)
+            if (!this._appSettings.PrompForArgumentsIfNotProvided
+                || !(argumentInfo is CommandParameterInfo parameterInfo)
+                || parameterInfo.ValueInfo.HasValue
+                || parameterInfo.DefaultValue != DBNull.Value)
             {
-                if (!parameterInfo.ValueInfo.HasValue && parameterInfo.DefaultValue == DBNull.Value)
-                {
-                    List<string> inputs = new List<string>();
-                    if (parameterInfo.IsMultipleType)
-                    {
-                        Console.Write($"{parameterInfo.Name} ({parameterInfo.TypeDisplayName}) [separate values by space]: ");
-                        inputs = Console.ReadLine().Split(' ').ToList();
-                    }
-                    else
-                    {
-                        Console.Write($"{parameterInfo.Name} ({parameterInfo.TypeDisplayName}): ");
-                        inputs.Add(Console.ReadLine());
-                    }
-
-                    parameterInfo.ValueInfo.Values = inputs;
-                }
+                return;
             }
+
+            List<string> inputs = new List<string>();
+            if (parameterInfo.IsMultipleType)
+            {
+                Console.Write($"{parameterInfo.Name} ({parameterInfo.TypeDisplayName}) [separate values by space]: ");
+                inputs = Console.ReadLine().Split(' ').ToList();
+            }
+            else
+            {
+                Console.Write($"{parameterInfo.Name} ({parameterInfo.TypeDisplayName}): ");
+                inputs.Add(Console.ReadLine());
+            }
+
+            parameterInfo.ValueInfo.Values = inputs;
         }
     }
 }
