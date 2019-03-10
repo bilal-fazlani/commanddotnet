@@ -26,7 +26,7 @@ namespace CommandDotNet
             if (argumentInfo.ValueInfo.HasValue && argumentInfo.ValueInfo.Value != null)
             {
                 //parse value
-                IParser parser = ParserFactory.CreateInstnace(argumentInfo.Type);
+                IParser parser = ParserFactory.CreateInstance(argumentInfo.Type);
                 return parser.Parse(argumentInfo);
             }
 

@@ -10,37 +10,37 @@ namespace CommandDotNet.Tests.Parsing
         [Fact]
         public void CanCreateNullableParser()
         {
-            IParser parser = ParserFactory.CreateInstnace(typeof(int?));
+            IParser parser = ParserFactory.CreateInstance(typeof(int?));
             parser.Should().BeOfType<NullableValueParser>();
         }
         
         [Fact]
         public void CanCreateSingleValueParser()
         {
-            IParser parser = ParserFactory.CreateInstnace(typeof(int));
+            IParser parser = ParserFactory.CreateInstance(typeof(int));
             parser.Should().BeOfType<SingleValueParser>();
         }
         
         [Fact]
         public void CanCreateListParser()
         {
-            IParser parser = ParserFactory.CreateInstnace(typeof(List<int>));
+            IParser parser = ParserFactory.CreateInstance(typeof(List<int>));
             parser.Should().BeOfType<ListParser>();
         }
 
         [Fact]
         public void CanWorkWithEnums()
         {
-            ParserFactory.CreateInstnace(typeof(Time)).Should().BeOfType<SingleValueParser>();
-            ParserFactory.CreateInstnace(typeof(Time?)).Should().BeOfType<NullableValueParser>();
-            ParserFactory.CreateInstnace(typeof(List<Time>)).Should().BeOfType<ListParser>();
+            ParserFactory.CreateInstance(typeof(Time)).Should().BeOfType<SingleValueParser>();
+            ParserFactory.CreateInstance(typeof(Time?)).Should().BeOfType<NullableValueParser>();
+            ParserFactory.CreateInstance(typeof(List<Time>)).Should().BeOfType<ListParser>();
         }
         
         [Fact]
         public void CanWorkWithStrings()
         {
-            ParserFactory.CreateInstnace(typeof(string)).Should().BeOfType<SingleValueParser>();
-            ParserFactory.CreateInstnace(typeof(List<string>)).Should().BeOfType<ListParser>();
+            ParserFactory.CreateInstance(typeof(string)).Should().BeOfType<SingleValueParser>();
+            ParserFactory.CreateInstance(typeof(List<string>)).Should().BeOfType<ListParser>();
         }
     }
 }
