@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using CommandDotNet.Extensions;
 using CommandDotNet.Models;
 
 namespace CommandDotNet
@@ -23,28 +24,28 @@ namespace CommandDotNet
             
             foreach (var argumentInfo in argumentInfos)
             {
-                if (!argumentInfo.IsPartOfModel)
-                    parameters.Add(argumentInfo.PropertyOrArgumentName, _valueMachine.GetValue(argumentInfo));
-                
+                if (argumentInfo.IsPartOfModel)
+                {
+                    MergeModel(parameters, argumentInfo);
+                }
                 else
                 {
-                    object instance;
-                    if (parameters.ContainsKey(argumentInfo.ModelType.FullName)) //already added one or more params
-                    {
-                        instance = parameters[argumentInfo.ModelType.FullName];
-                    }
-                    else //first property of model
-                    {
-                        instance = Activator.CreateInstance(argumentInfo.ModelType);
-                        parameters.Add(argumentInfo.ModelType.FullName, instance);
-                    }
-
-                    PropertyInfo propertyInfo = argumentInfo.ModelType.GetProperty(argumentInfo.PropertyOrArgumentName);
-                    propertyInfo.SetValue(instance, _valueMachine.GetValue(argumentInfo));
+                    parameters.Add(argumentInfo.PropertyOrArgumentName, _valueMachine.GetValue(argumentInfo));
                 }
             }
             
             return parameters.Values.ToArray();
+        }
+
+        private void MergeModel(Dictionary<string, object> parameters, ArgumentInfo argumentInfo)
+        {
+            object instance = parameters.GetOrAdd(
+                argumentInfo.ModelType.FullName, 
+                //first property of model
+                () => Activator.CreateInstance(argumentInfo.ModelType));
+
+            PropertyInfo propertyInfo = argumentInfo.ModelType.GetProperty(argumentInfo.PropertyOrArgumentName);
+            propertyInfo.SetValue(instance, _valueMachine.GetValue(argumentInfo));
         }
     }
 }
