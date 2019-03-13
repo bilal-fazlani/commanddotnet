@@ -42,7 +42,7 @@ namespace CommandDotNet
 
         private static bool IsOption(ICustomAttributeProvider attributeProvider, ArgumentMode argumentMode)
         {
-            // TODO: developer can force the argument mode with an attribute
+            // developer can force the argument mode with an attribute
             
             switch (argumentMode)
             {
