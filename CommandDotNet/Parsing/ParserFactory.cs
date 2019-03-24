@@ -6,7 +6,7 @@ namespace CommandDotNet.Parsing
 {
     internal static class ParserFactory
     {
-        public static IParser CreateInstnace(Type argumentType)
+        public static IParser CreateInstance(Type argumentType)
         {
             if (argumentType.IsGenericType && argumentType.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
