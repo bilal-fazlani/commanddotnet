@@ -59,20 +59,13 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 sb.Insert(0, $"{c.Name} ");
             }
 
-            return sb.ToString().Substring(0, sb.ToString().Length-1);
-        }
-        
+            return string.Join(" ", this.GetSelfAndParentCommands().Select(c => c.Name));
+        } 
+
         public IEnumerable<CommandOption> GetOptions()
         {
-            var expr = Options.AsEnumerable();
-            var rootNode = this;
-            while (rootNode.Parent != null)
-            {
-                rootNode = rootNode.Parent;
-                expr = expr.Concat(rootNode.Options.Where(o => o.Inherited));
-            }
-
-            return expr;
+            var inheritedOptions = this.GetParentCommands().SelectMany(a => a.Options.Where(o => o.Inherited));
+            return this.Options.Concat(inheritedOptions);
         }
 
         public CommandLineApplication Command(string name, Action<CommandLineApplication> configuration,
@@ -369,7 +362,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         // Show full help
         public void ShowHelp()
         {
-            for (var cmd = this; cmd != null; cmd = cmd.Parent)
+            foreach (var cmd in this.GetSelfAndParentCommands())
             {
                 cmd.IsShowingInformation = true;
             }
@@ -379,7 +372,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 
         public void ShowVersion()
         {
-            for (var cmd = this; cmd != null; cmd = cmd.Parent)
+            foreach (var cmd in this.GetSelfAndParentCommands())
             {
                 cmd.IsShowingInformation = true;
             }
@@ -395,14 +388,29 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 
         public void ShowRootCommandFullNameAndVersion()
         {
-            var rootCmd = this;
-            while (rootCmd.Parent != null)
-            {
-                rootCmd = rootCmd.Parent;
-            }
-
+            var rootCmd = this.GetParentCommands().Last();
             Out.WriteLine(rootCmd.GetFullNameAndVersion());
             Out.WriteLine();
+        }
+        
+        private IEnumerable<CommandLineApplication> GetSelfAndParentCommands()
+        {
+            for (CommandLineApplication c = this; c != null; c = c.Parent)
+            {
+                yield return c;
+            }
+        }
+ 
+        private IEnumerable<CommandLineApplication> GetParentCommands()
+        {
+            if (this.Parent == null)
+            {
+                yield break;
+            }
+            for (CommandLineApplication c = this.Parent; c != null; c = c.Parent)
+            {
+                yield return c;
+            }
         }
 
         private void HandleUnexpectedArg(CommandLineApplication command, string[] args, int index, string argTypeName)
