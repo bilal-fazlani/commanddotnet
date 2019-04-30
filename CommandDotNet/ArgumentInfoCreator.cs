@@ -19,11 +19,13 @@ namespace CommandDotNet
         
         public IEnumerable<ArgumentInfo> ConvertToArgumentInfos(ParameterInfo parameterInfo, ArgumentMode argumentMode)
         {
-            if (typeof(IArgumentModel).IsAssignableFrom(parameterInfo.ParameterType))
+            if (parameterInfo.ParameterType.InheritsFrom<IArgumentModel>())
             {
                 return GetArgumentsFromArgumentModel(parameterInfo.ParameterType, argumentMode);
             }
 
+            var argInfos = new List<ArgumentInfo>();
+            
             var argumentInfo = IsOption(parameterInfo, argumentMode)
                 ? (ArgumentInfo) new CommandOptionInfo(parameterInfo, this._settings)
                 : new CommandParameterInfo(parameterInfo, this._settings);
@@ -35,9 +37,21 @@ namespace CommandDotNet
         {
             return modelType
                 .GetDeclaredProperties()
-                .Select(propertyInfo => IsOption(propertyInfo, argumentMode)
-                    ? (ArgumentInfo) new CommandOptionInfo(propertyInfo, _settings)
-                    : new CommandParameterInfo(propertyInfo, _settings));
+                .SelectMany(propertyInfo => GetArgumentFromProperty(propertyInfo, argumentMode));
+        }
+
+        private IEnumerable<ArgumentInfo> GetArgumentFromProperty(PropertyInfo propertyInfo, ArgumentMode argumentMode)
+        {
+            if (propertyInfo.PropertyType.InheritsFrom<IArgumentModel>())
+            {
+                return GetArgumentsFromArgumentModel(propertyInfo.PropertyType, argumentMode);
+            }
+
+            var argumentInfo = IsOption(propertyInfo, argumentMode)
+                ? (ArgumentInfo) new CommandOptionInfo(propertyInfo, this._settings)
+                : new CommandParameterInfo(propertyInfo, this._settings);
+
+            return new[] {argumentInfo};
         }
 
         private static bool IsOption(ICustomAttributeProvider attributeProvider, ArgumentMode argumentMode)
