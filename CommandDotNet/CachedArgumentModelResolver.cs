@@ -20,12 +20,12 @@ namespace CommandDotNet
                 return null;
             }
             
-            return this.GetOrAdd(type, () => this.CreateInstance(type, false));
+            return this.GetOrAdd(type, () => this.CreateInstance(type));
         }
         
         public object Resolve(Type type)
         {
-            return this.GetOrAdd(type, () => this.CreateInstance(type, true));
+            return this.GetOrAdd(type, () => this.CreateInstance(type));
         }
 
         private static bool IsArgumentModel(Type type)
@@ -48,13 +48,34 @@ namespace CommandDotNet
             return instance;
         }
 
-        private object CreateInstance(Type type, bool tryHostResolverFirst)
+        private object CreateInstance(Type type)
         {
-            if (tryHostResolverFirst && this.HostProvidedResolver != null)
+            // HostProvidedResolver is allowed first attempt
+            // to create/resolve the instance.
+            // This let's the app manage the instance lifecycle
+            // when desired.
+            if (this.TryResolve(type, out var resolve))
+            {
+                return resolve;
+            }
+
+            // If the type is an IArgumentModel, then this framework
+            // is responsible for model lifecycle if the HostProvidedResolver
+            // is not configured or to do so.
+            return IsArgumentModel(type) 
+                ? Activator.CreateInstance(type) 
+                : null;
+        }
+
+        private bool TryResolve(Type type, out object instance)
+        {
+            instance = null;
+            
+            if (this.HostProvidedResolver != null)
             {
                 try
                 {
-                    return this.HostProvidedResolver.Resolve(type);
+                    instance = this.HostProvidedResolver.Resolve(type);
                 }
                 catch (Exception e)
                 {
@@ -63,9 +84,7 @@ namespace CommandDotNet
                 }
             }
 
-            return IsArgumentModel(type) 
-                ? Activator.CreateInstance(type) 
-                : null;
+            return instance != null;
         }
     }
 }

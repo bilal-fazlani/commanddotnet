@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using CommandDotNet.Attributes;
 using FluentAssertions;
@@ -39,37 +41,49 @@ namespace CommandDotNet.Tests
         [Fact]
         public void WhenNotRegisteredWithDiArgumentModelsAreInjected()
         {
+            var resolver = new CustomDependencyResolver(registerModel: false);
             var appRunner = new AppRunner<CachedArgumentModelResolverApp>()
-                .UseDependencyResolver(new CustomDependencyResolver(registerModel: false));
+                .UseDependencyResolver(resolver);
                 
             appRunner.Run("TestInjection").Should().Be(0);
+            resolver.ResolveRequests.Count.Should().Be(1);
+            resolver.ResolveRequests.Contains(typeof(Model));
         }
 
         [Fact]
         public void WhenNotRegisteredWithDiInjectedModelsAreSameInstanceAsParams()
         {
+            var resolver = new CustomDependencyResolver(registerModel: false);
             var appRunner = new AppRunner<CachedArgumentModelResolverApp>()
-                .UseDependencyResolver(new CustomDependencyResolver(registerModel: false));
+                .UseDependencyResolver(resolver);
                 
             appRunner.Run("SameInstance", "-v", "1", "-w", "1").Should().Be(2);
+            resolver.ResolveRequests.Count.Should().Be(1);
+            resolver.ResolveRequests.Contains(typeof(Model));
         }
 
         [Fact]
         public void WhenRegisteredWithDiArgumentModelsAreInjected()
         {
+            var resolver = new CustomDependencyResolver(registerModel: true);
             var appRunner = new AppRunner<CachedArgumentModelResolverApp>()
-                .UseDependencyResolver(new CustomDependencyResolver(registerModel: true));
+                .UseDependencyResolver(resolver);
                 
             appRunner.Run("TestInjection").Should().Be(0);
+            resolver.ResolveRequests.Count.Should().Be(1);
+            resolver.ResolveRequests.Contains(typeof(Model));
         }
 
         [Fact]
         public void WhenRegisteredWithDiInjectedModelsAreSameInstanceAsParams()
         {
+            var resolver = new CustomDependencyResolver(registerModel: true);
             var appRunner = new AppRunner<CachedArgumentModelResolverApp>()
-                .UseDependencyResolver(new CustomDependencyResolver(registerModel: true));
+                .UseDependencyResolver(resolver);
                 
             appRunner.Run("SameInstance", "-v", "1", "-w", "1").Should().Be(2);
+            resolver.ResolveRequests.Count.Should().Be(1);
+            resolver.ResolveRequests.Contains(typeof(Model));
         }
         
         public class CachedArgumentModelResolverApp
@@ -100,6 +114,8 @@ namespace CommandDotNet.Tests
         public class CustomDependencyResolver : IDependencyResolver
         {
             private IContainer _container;
+            
+            public List<Type> ResolveRequests = new List<Type>();
         
             public CustomDependencyResolver(bool registerModel)
             {
@@ -115,6 +131,7 @@ namespace CommandDotNet.Tests
         
             public object Resolve(Type type)
             {
+                this.ResolveRequests.Add(type);
                 return _container.Resolve(type);
             }
         }
