@@ -1,0 +1,38 @@
+language: csharp
+mono: none
+
+stages:
+    - name: test
+    - name: deploy
+      if: tag IS present
+
+#--------- TEST JOBS --------------
+jobs:
+    include:
+        - stage: test
+          name: test on osx
+          os: osx
+          script: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
+          dotnet: 2.1.300
+        - name: test on linux
+          os: linux
+          script: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
+          dotnet: 2.1
+        - name: test on windows
+          os: windows
+          script: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
+        #-----------------------------------
+
+        #--------- DEPLOYMENT JOB ----------  
+        - stage: deploy
+          name: nuget & github release
+          script: ./deploy.sh
+          os: linux
+          dotnet: 2.1
+          env:
+              - secure: umGBSeo5NxTY/R7mcpygIaqznyAj2GIS+fSps/WQbh8jvtBwCLedvfEPiGMefGHOHYJuKIqaz2uOqCHcVbpJ1aeyHndRcwi8t6JzSqUBQRNOaAmpDYvAM5D/sQzPtvDLOAiEHgq+9q4gbDZCuwgnko4I/G9my7N1J18tVSBq7CWhNar0JKX8cRmlqyz0gISFhEia3YtZCgbQTwZtVzkatXqDdNYQguKIAO10aALmTbFWcDq0lp8IzH8b1o0YuR0nmNg2cjBgFTlb0qEtgJ8d/mdBWvgV3q1o1R6hn5Kdi/jCAvWPdhB/oqa83K8PDVTBeDzVfB41KKBGn/IbBp+09Wdkqqmw45d4aNfuCdjzsMw4q+5bwUmbHJb/tE+udu4A+GDZEuH7VUF8GRk2prVxT/phP4cAlh0H501FkIDrReiIpbRzw4KNziDjYoHqm9R0yYwSTeyuFAOqScpWZpHlnza5acwZwgnV50SHncENb7vRUYZqWgjohcSqdzBiVPN+yZ0sX5M6pp/7vPmz8VqbxkITzFeKMIoukSMTMyNpSCXkFob/CcDZJV39h5+nv0wdXbAfa6WRgaDA4DTIcmWZQxFCpf57ZcpZkJek/WEnFRl/glTW40wDSrpDqQVa78KPph5SKRjSHLYrETWB3u/SS2X0JwOwQqJ2KjAv3YgqUIs=
+#-----------------------------------
+
+# cache:
+#   directories:
+#     - $HOME/.nuget/packages  

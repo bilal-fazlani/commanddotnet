@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using CommandDotNet.Models;
+﻿using CommandDotNet.Models;
 using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Attributes;

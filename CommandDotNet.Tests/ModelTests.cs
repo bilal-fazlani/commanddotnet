@@ -1,11 +1,7 @@
-﻿using System;
-using System.IO;
-using System.Runtime.CompilerServices;
+﻿using System.IO;
 using CommandDotNet.Attributes;
 using CommandDotNet.Models;
 using FluentAssertions;
-using FluentValidation;
-using FluentValidation.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Xunit;

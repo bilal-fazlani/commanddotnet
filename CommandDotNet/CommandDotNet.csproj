@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>7.2</LangVersion>
+    <LangVersion>7.3</LangVersion>
     <Authors>Bilal Fazlani</Authors>
     <NeutralLanguage>en-US</NeutralLanguage>
     <AssemblyTitle>CommandDotNet</AssemblyTitle>
@@ -13,10 +13,23 @@
     <!--<NetStandardImplicitPackageVersion>2.0.2</NetStandardImplicitPackageVersion>-->
     <PackageIconUrl>https://raw.githubusercontent.com/bilal-fazlani/CommandDotNet/master/images/nuget-icon.png</PackageIconUrl>
   </PropertyGroup>
+    <PropertyGroup>
+        <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+        <IncludeSymbols>false</IncludeSymbols>
+        <!-- This is for future -->
+        <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
+        <!-- https://github.com/dotnet/sourcelink/blob/master/docs/README.md#embedallsources -->
+        <EmbedAllSources>true</EmbedAllSources>
+        <DebugType>embedded</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="7.6.103" />
-    <PackageReference Include="Humanizer.Core" Version="2.4.2" />
+    <PackageReference Include="Humanizer.Core" Version="2.5.16" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Primitives" Version="4.3.0" />

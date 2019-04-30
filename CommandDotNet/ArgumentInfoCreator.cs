@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using CommandDotNet.Attributes;
 using CommandDotNet.Extensions;
@@ -18,66 +19,39 @@ namespace CommandDotNet
         
         public IEnumerable<ArgumentInfo> ConvertToArgumentInfos(ParameterInfo parameterInfo, ArgumentMode argumentMode)
         {
-            if (!typeof(IArgumentModel).IsAssignableFrom(parameterInfo.ParameterType))
+            if (typeof(IArgumentModel).IsAssignableFrom(parameterInfo.ParameterType))
             {
-                if (argumentMode == ArgumentMode.Parameter)
-                {
-                    if (parameterInfo.HasAttribute<OptionAttribute>())
-                    {
-                        yield return new CommandOptionInfo(parameterInfo, _settings);
-                    }
-                    else
-                    {
-                        yield return new CommandParameterInfo(parameterInfo, _settings);
-                    }
-                }
-                else
-                {
-                    if (parameterInfo.HasAttribute<ArgumentAttribute>())
-                    {
-                        yield return new CommandParameterInfo(parameterInfo, _settings);
-                    }
-                    else
-                    {
-                        yield return new CommandOptionInfo(parameterInfo, _settings);
-                    }
-                }
+                return GetArgumentsFromArgumentModel(parameterInfo.ParameterType, argumentMode);
             }
-            else
-            {
-                foreach (ArgumentInfo argumentInfo in GetArgumentsFromArgumentModel(parameterInfo.ParameterType, argumentMode))
-                {
-                    yield return argumentInfo;
-                }
-            }
+
+            var argumentInfo = IsOption(parameterInfo, argumentMode)
+                ? (ArgumentInfo) new CommandOptionInfo(parameterInfo, this._settings)
+                : new CommandParameterInfo(parameterInfo, this._settings);
+
+            return new[] {argumentInfo};
         }
 
         private IEnumerable<ArgumentInfo> GetArgumentsFromArgumentModel(Type modelType, ArgumentMode argumentMode)
         {
-            foreach (var propertyInfo in modelType.GetDeclaredProperties())
+            return modelType
+                .GetDeclaredProperties()
+                .Select(propertyInfo => IsOption(propertyInfo, argumentMode)
+                    ? (ArgumentInfo) new CommandOptionInfo(propertyInfo, _settings)
+                    : new CommandParameterInfo(propertyInfo, _settings));
+        }
+
+        private static bool IsOption(ICustomAttributeProvider attributeProvider, ArgumentMode argumentMode)
+        {
+            // developer can force the argument mode with an attribute
+            
+            switch (argumentMode)
             {
-                if (argumentMode == ArgumentMode.Parameter)
-                {
-                    if (propertyInfo.HasAttribute<OptionAttribute>())
-                    {
-                        yield return new CommandOptionInfo(propertyInfo, _settings);
-                    }
-                    else
-                    {
-                        yield return new CommandParameterInfo(propertyInfo, _settings);
-                    }
-                }
-                else
-                {
-                    if (propertyInfo.HasAttribute<ArgumentAttribute>())
-                    {
-                        yield return new CommandParameterInfo(propertyInfo, _settings);
-                    }
-                    else
-                    {
-                        yield return new CommandOptionInfo(propertyInfo, _settings);
-                    }
-                }
+                case ArgumentMode.Parameter:
+                    return attributeProvider.HasAttribute<OptionAttribute>();
+                case ArgumentMode.Option:
+                    return !attributeProvider.HasAttribute<ArgumentAttribute>();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(argumentMode), argumentMode, null);
             }
         }
     }

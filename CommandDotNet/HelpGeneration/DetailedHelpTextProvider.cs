@@ -180,7 +180,7 @@ namespace CommandDotNet.HelpGeneration
                     }));
 
                     //description
-                    argumentsBuilder.Append(string.IsNullOrEmpty(commandArgument.Description) ? "\n\r  " + commandArgument.Description : null);
+                    argumentsBuilder.Append(string.IsNullOrEmpty(commandArgument.Description) ? null : "\n\r  " + commandArgument.Description);
                     
                     //Allowed values
                     argumentsBuilder.Append(
