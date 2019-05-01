@@ -16,7 +16,7 @@ namespace CommandDotNet.Parsing
         
         public dynamic Parse(ArgumentInfo argumentInfo)
         {
-            dynamic value = _singleValueParser.ParseString(argumentInfo.ValueInfo.Value, argumentInfo.IsImplicit, argumentInfo.TypeDisplayName);
+            dynamic value = _singleValueParser.Parse(argumentInfo);
             Type nullableType = typeof(Nullable<>).MakeGenericType(_type);
             object instance = Activator.CreateInstance(nullableType, new[]{value});
             return instance;

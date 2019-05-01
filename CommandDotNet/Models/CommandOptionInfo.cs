@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -13,10 +14,6 @@ namespace CommandDotNet.Models
 {
     internal class CommandOptionInfo : ArgumentInfo
     {
-        public CommandOptionInfo(AppSettings settings) : base(settings)
-        {
-        }
-
         public CommandOptionInfo(ParameterInfo attributeProvider, AppSettings settings) : base(attributeProvider, settings)
         {
             BooleanMode = GetBooleanMode();
@@ -27,7 +24,6 @@ namespace CommandDotNet.Models
             
             Template = GetTemplate();
             
-            TypeDisplayName = GetTypeDisplayName();
             AnnotatedDescription = GetAnnotatedDescription();
         }
         
@@ -41,10 +37,11 @@ namespace CommandDotNet.Models
             
             Template = GetTemplate();
             
-            TypeDisplayName = GetTypeDisplayName();
             AnnotatedDescription = GetAnnotatedDescription();
         }
-        
+
+        public override bool IsImplicit => BooleanMode == BooleanMode.Implicit;
+
         public CommandOptionType CommandOptionType { get; set; }
         
         public string Template { get; set; }
@@ -146,17 +143,6 @@ namespace CommandDotNet.Models
             }
             
             return CommandOptionType.SingleValue;
-        }
-
-        protected override string GetDetails()
-        {
-            return
-                $"{GetTypeDisplayName()}{(DefaultValue != DBNull.Value ? " | Default value: " + DefaultValue : null)}";
-        }
-
-        protected override string GetTypeDisplayName()
-        {
-            return GetTypeDisplayName(Type, BooleanMode);
         }
         
         protected override string GetAnnotatedDescription()

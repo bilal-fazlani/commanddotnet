@@ -1,29 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 using CommandDotNet.Parsing;
+using CommandDotNet.TypeDescriptors;
 using FluentAssertions;
 using Xunit;
+using Xunit.Sdk;
 
 namespace CommandDotNet.Tests.Parsing
 {
     public class SingleValueParserTests
     {
-        [Theory]
-        [InlineData("Int", typeof(int), "3", 3)]
-        [InlineData("String", typeof(string), "data", "data")]
-        [InlineData("Double", typeof(double), "4.5", 4.5D)]
-        [InlineData("Long", typeof(long), "5656565656", 5656565656L)]
-        [InlineData("Time", typeof(Time), "Tomorrow", Time.Tomorrow)]
-        [InlineData("Char", typeof(char), "g", 'g')]
-        public void CanParIntegers(string propertyName, Type valueType, string value, object typedValue)
+        private static readonly AppSettings _appSettings = InitAppSettings();
+
+
+        public static TheoryData<string, Type, string, object> Values =>
+            new TheoryData<string, Type, string, object>
+            {
+                {"Int", typeof(int), "3", 3},
+                {"String", typeof(string), "data", "data"},
+                {"Double", typeof(double), "4.5", 4.5D},
+                {"Long", typeof(long), "5656565656", 5656565656L},
+                {"Time", typeof(Time), "Tomorrow", Time.Tomorrow},
+                {"Char", typeof(char), "g", 'g'},
+                {"Decimal", typeof(decimal), "4.5", 4.5m},
+                {"Person", typeof(Person), "lala", new Person("lala")},
+            };
+    
+        public class PropertyModel
         {
-            SingleValueParser valueParser = new SingleValueParser(valueType);
+            public int Int { get; set; }
+            public string String { get; set; }
+            public double Double { get; set; }
+            public long Long { get; set; }
+            public bool Bool { get; set; }
+            public Time Time { get; set; }
+            public char Char { get; set; }
+            public decimal Decimal { get; set; }
+            public Person Person { get; set; }
+        }
+        
+        [Theory]
+        [MemberData(nameof(Values))]
+        public void CanParseValues(string propertyName, Type valueType, string value, object typedValue)
+        {
+            IArgumentTypeDescriptor typeDescriptor = _appSettings.ArgumentTypeDescriptors.GetDescriptor(valueType);
+            SingleValueParser valueParser = new SingleValueParser(typeDescriptor);
             PropertyInfo propertyInfo = typeof(PropertyModel).GetProperty(propertyName);
-            AppSettings appSettings = new AppSettings();
-            CommandOptionInfo commandOptionInfo = new CommandOptionInfo(propertyInfo, appSettings);
+            CommandOptionInfo commandOptionInfo = new CommandOptionInfo(propertyInfo, _appSettings);
             
             //set value
             CommandOption option = new CommandOption("--test", CommandOptionType.SingleValue);
@@ -35,16 +62,46 @@ namespace CommandDotNet.Tests.Parsing
             parsedValue.Should().BeOfType(valueType);
             parsedValue.Should().Be(typedValue);
         }
-    }
-    
-    public class PropertyModel
-    {
-        public int Int { get; set; }
-        public string String { get; set; }
-        public double Double { get; set; }
-        public long Long { get; set; }
-        public bool Bool { get; set; }
-        public Time Time { get; set; }
-        public char Char { get; set; }
+
+        private static AppSettings InitAppSettings()
+        {
+            var appSettings = new AppSettings();
+            appSettings.ArgumentTypeDescriptors.Add(new PersonTypeDescriptor());
+            return appSettings;
+        }
+
+        public class Person
+        {
+            public string Name { get; }
+
+            public Person(string name)
+            {
+                Name = name;
+            }
+
+            public override bool Equals(object obj)
+            {
+                return obj is Person that && this.Name == that.Name;
+            }
+        }
+        
+        public class PersonTypeDescriptor : IArgumentTypeDescriptor
+        {
+            public bool CanSupport(Type type)
+            {
+                return type == typeof(Person);
+            }
+
+            public string GetDisplayName(ArgumentInfo argumentInfo)
+            {
+                return "text";
+            }
+
+            public object ParseString(ArgumentInfo argumentInfo, string value)
+            {
+                argumentInfo.Should().NotBeNull();
+                return new Person(value);
+            }
+        }
     }
 }

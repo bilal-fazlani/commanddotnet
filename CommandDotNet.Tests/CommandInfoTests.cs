@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using CommandDotNet.Attributes;
 using CommandDotNet.MicrosoftCommandLineUtils;
@@ -28,24 +28,19 @@ namespace CommandDotNet.Tests
 
             commandInfo.Name.Should().Be("CommandWithNoDescription");
             commandInfo.Description.Should().BeNull();
-            commandInfo.Arguments.Should().BeEquivalentTo(new List<ArgumentInfo>()
-            {
-                new CommandOptionInfo(new AppSettings())
-                {
-                    CommandOptionType = CommandOptionType.SingleValue,
-                    DefaultValue = DBNull.Value,
-                    Type = typeof(int),
-                    //EffectiveDescription = null,
-                    TypeDisplayName = Constants.TypeDisplayNames.Number,
-                    AnnotatedDescription = null,
-                    //Details = "Int32",
-                    Template = "--value",
-                    BooleanMode = BooleanMode.Implicit,
-                    PropertyOrArgumentName = "value"
-                }
-            });
+            
+            var argumentInfo = commandInfo.Arguments.Cast<CommandOptionInfo>().Single();
+            
+            argumentInfo.CommandOptionType.Should().Be(CommandOptionType.SingleValue);
+            argumentInfo.DefaultValue.Should().Be(DBNull.Value);
+            argumentInfo.Type.Should().Be(typeof(int));
+            argumentInfo.UnderlyingType.Should().Be(typeof(int));
+            argumentInfo.TypeDisplayName.Should().Be(Constants.TypeDisplayNames.Number);
+            argumentInfo.AnnotatedDescription.Should().Be(null);
+            argumentInfo.Template.Should().Be("--value");
+            argumentInfo.BooleanMode.Should().Be(BooleanMode.Implicit);
+            argumentInfo.PropertyOrArgumentName.Should().Be("value");
         }
-        
         
         [Fact]
         public void CanIdentifyCommandInfoWithDescriptionAndName()
@@ -59,22 +54,18 @@ namespace CommandDotNet.Tests
             commandInfo.Name.Should().Be("somecommand");
             commandInfo.ExtendedHelpText.Should().Be("extended help");
             commandInfo.Description.Should().BeEquivalentTo("some command description and name");
-            commandInfo.Arguments.Should().BeEquivalentTo(new List<ArgumentInfo>()
-            {
-                new CommandOptionInfo(new AppSettings())
-                {
-                    CommandOptionType = CommandOptionType.SingleValue,
-                    DefaultValue = DBNull.Value,
-                    Type = typeof(int),
-                    //EffectiveDescription = "Int32".PadRight(Constants.PadLength)+"some parameter description",
-                    TypeDisplayName = Constants.TypeDisplayNames.Number,
-                    AnnotatedDescription = "some parameter description",
-                    //Details = "Int32",
-                    Template = "--value",
-                    BooleanMode = BooleanMode.Implicit,
-                    PropertyOrArgumentName = "value"
-                }
-            });
+            
+            var argumentInfo = commandInfo.Arguments.Cast<CommandOptionInfo>().Single();
+            
+            argumentInfo.CommandOptionType.Should().Be(CommandOptionType.SingleValue);
+            argumentInfo.DefaultValue.Should().Be(DBNull.Value);
+            argumentInfo.Type.Should().Be(typeof(int));
+            argumentInfo.UnderlyingType.Should().Be(typeof(int));
+            argumentInfo.TypeDisplayName.Should().Be(Constants.TypeDisplayNames.Number);
+            argumentInfo.AnnotatedDescription.Should().Be("some parameter description");
+            argumentInfo.Template.Should().Be("--value");
+            argumentInfo.BooleanMode.Should().Be(BooleanMode.Implicit);
+            argumentInfo.PropertyOrArgumentName.Should().Be("value");
         }
     }
     

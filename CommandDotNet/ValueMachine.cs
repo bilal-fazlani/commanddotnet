@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using CommandDotNet.Exceptions;
 using CommandDotNet.Extensions;
 using CommandDotNet.Models;
 using CommandDotNet.Parsing;
@@ -12,10 +10,12 @@ namespace CommandDotNet
     internal class ValueMachine
     {
         private readonly AppSettings _appSettings;
+        private ParserFactory _parserFactory;
 
         public ValueMachine(AppSettings appSettings)
         {
             _appSettings = appSettings;
+            _parserFactory = new ParserFactory(_appSettings);
         }
 
         public object GetValue(ArgumentInfo argumentInfo)
@@ -26,7 +26,7 @@ namespace CommandDotNet
             if (argumentInfo.ValueInfo.HasValue && argumentInfo.ValueInfo.Value != null)
             {
                 //parse value
-                IParser parser = ParserFactory.CreateInstance(argumentInfo.Type);
+                IParser parser = _parserFactory.CreateInstance(argumentInfo.Type);
                 return parser.Parse(argumentInfo);
             }
 
@@ -43,7 +43,7 @@ namespace CommandDotNet
 
         private void PromptForValue(ArgumentInfo argumentInfo)
         {
-            if (!this._appSettings.PrompForArgumentsIfNotProvided
+            if (!_appSettings.PrompForArgumentsIfNotProvided
                 || !(argumentInfo is CommandParameterInfo parameterInfo)
                 || parameterInfo.ValueInfo.HasValue
                 || parameterInfo.DefaultValue != DBNull.Value)

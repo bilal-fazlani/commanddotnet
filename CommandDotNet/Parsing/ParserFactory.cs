@@ -1,33 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using CommandDotNet.Exceptions;
+using CommandDotNet.Models;
+using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet.Parsing
 {
-    internal static class ParserFactory
+    internal class ParserFactory
     {
-        public static IParser CreateInstance(Type argumentType)
+        private readonly AppSettings _appSettings;
+
+        public ParserFactory(AppSettings appSettings)
+        {
+            _appSettings = appSettings;
+        }
+
+        public IParser CreateInstance(Type argumentType)
         {
             if (argumentType.IsGenericType && argumentType.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 Type underLyingType = argumentType.GetGenericArguments()[0];
-                SingleValueParser singleValueParser = new SingleValueParser(underLyingType);
-                return new NullableValueParser(underLyingType, singleValueParser);
+                return new NullableValueParser(underLyingType, GetSingleValueParser(underLyingType));
             }
 
             if (argumentType.IsGenericType && argumentType.GetGenericTypeDefinition() == typeof(List<>))
             {
                 Type underLyingType = argumentType.GetGenericArguments()[0];
-                SingleValueParser singleValueParser = new SingleValueParser(underLyingType);
-                return new ListParser(underLyingType, singleValueParser);
+                return new ListParser(underLyingType, GetSingleValueParser(underLyingType));
             }
             
             if (argumentType.IsValueType || argumentType == typeof(string))
             {
-                return new SingleValueParser(argumentType);
+                return GetSingleValueParser(argumentType);
             }
 
             throw new AppRunnerException($"type of '{argumentType.Name}' is not supported");
+        }
+
+        internal SingleValueParser GetSingleValueParser(Type argumentType)
+        {
+            var descriptor = _appSettings.ArgumentTypeDescriptors.GetDescriptorOrThrow(argumentType);
+            SingleValueParser singleValueParser = new SingleValueParser(descriptor);
+            return singleValueParser;
         }
     }
 }

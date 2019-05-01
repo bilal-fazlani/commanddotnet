@@ -1,6 +1,7 @@
 ﻿using CommandDotNet.CommandInvoker;
 using CommandDotNet.Exceptions;
 using CommandDotNet.HelpGeneration;
+using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet.Models
 {
@@ -27,6 +28,8 @@ namespace CommandDotNet.Models
         public bool PrompForArgumentsIfNotProvided { get; set; }
 
         public HelpTextStyle HelpTextStyle { get; set; } = HelpTextStyle.Detailed;
+        
+        public ArgumentTypeDescriptors ArgumentTypeDescriptors { get; } = new ArgumentTypeDescriptors();
         
         internal IHelpProvider CustomHelpProvider { get; set; }
 

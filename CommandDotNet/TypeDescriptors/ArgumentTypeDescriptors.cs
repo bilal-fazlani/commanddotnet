@@ -1,0 +1,50 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
+using CommandDotNet.Exceptions;
+
+namespace CommandDotNet.TypeDescriptors
+{
+    public class ArgumentTypeDescriptors
+    {
+        private List<IArgumentTypeDescriptor> _customDescriptors = new List<IArgumentTypeDescriptor>();
+        private List<IArgumentTypeDescriptor> _defaultDescriptors = new List<IArgumentTypeDescriptor>
+        {
+            new BoolTypeDescriptor(),
+            new EnumTypeDesriptor(),
+                
+            new DelegatedTypeDescriptor<string>(Constants.TypeDisplayNames.Text, (a,v) => v),
+            new DelegatedTypeDescriptor<char>(Constants.TypeDisplayNames.Character, (a,v) => char.Parse(v)),
+                
+            new DelegatedTypeDescriptor<long>(Constants.TypeDisplayNames.Number, (a, v) => long.Parse(v, CultureInfo.InvariantCulture)),
+            new DelegatedTypeDescriptor<int>(Constants.TypeDisplayNames.Number, (a, v) => int.Parse(v, CultureInfo.InvariantCulture)),
+            new DelegatedTypeDescriptor<short>(Constants.TypeDisplayNames.Number, (a, v) => short.Parse(v, CultureInfo.InvariantCulture)),
+            new DelegatedTypeDescriptor<decimal>(Constants.TypeDisplayNames.DecimalNumber, (a, v) => decimal.Parse(v, CultureInfo.InvariantCulture)),
+            new DelegatedTypeDescriptor<double>(Constants.TypeDisplayNames.DoubleNumber, (a, v) => double.Parse(v, CultureInfo.InvariantCulture)),
+            
+            new ComponentModelTypeDescriptor()
+        };
+        
+        public void Add(IArgumentTypeDescriptor argumentTypeDescriptor)
+        {
+            _customDescriptors.Add(argumentTypeDescriptor);
+        }
+
+        public IArgumentTypeDescriptor GetDescriptor(Type type)
+        {
+            return _customDescriptors.FirstOrDefault(d => d.CanSupport(type))
+                   ?? _defaultDescriptors.FirstOrDefault(d => d.CanSupport(type));
+        }
+
+        public IArgumentTypeDescriptor GetDescriptorOrThrow(Type type)
+        {
+            return GetDescriptor(type) ?? throw new AppRunnerException(
+                       $"type : {type} is not supported.  " +
+                       $"Implement a {nameof(TypeConverter)} or {nameof(IArgumentTypeDescriptor)} " +
+                       $"to support this type.");
+        }
+    }
+}

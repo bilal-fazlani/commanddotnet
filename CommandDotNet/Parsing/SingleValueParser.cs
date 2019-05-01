@@ -1,78 +1,41 @@
 ﻿using System;
-using System.Globalization;
 using CommandDotNet.Exceptions;
 using CommandDotNet.Models;
+using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet.Parsing
 {
     internal class SingleValueParser : IParser
     {
-        private readonly Type _underyingType;
+        private readonly IArgumentTypeDescriptor _argumentTypeDescriptor;
 
-        public SingleValueParser(Type underyingType)
+        public SingleValueParser(IArgumentTypeDescriptor argumentTypeDescriptor)
         {
-            _underyingType = underyingType;
-        }
-
-        public dynamic ParseString(string value, bool implicitBoolean, string typeDisplayName)
-        {
-            try
-            {
-                if (_underyingType == typeof(string))
-                {
-                    return value;
-                }
-
-                if (_underyingType.IsEnum)
-                {
-                    return Enum.Parse(_underyingType, value);
-                }
-
-                if (_underyingType == typeof(char))
-                {
-                    return char.Parse(value);
-                }
-
-                if (_underyingType == typeof(bool))
-                {
-                    if(implicitBoolean)
-                    {
-                        return value == "on";
-                    }
-
-                    return bool.Parse(value);
-                }
-
-                if (_underyingType == typeof(double))
-                {
-                    return double.Parse(value, CultureInfo.InvariantCulture);
-                }
-
-                if (_underyingType == typeof(long))
-                {
-                    return long.Parse(value, CultureInfo.InvariantCulture);
-                }
-
-                if (_underyingType == typeof(int))
-                {
-                    return int.Parse(value, CultureInfo.InvariantCulture);
-                }
-            }
-            catch (FormatException)
-            {
-                throw new ValueParsingException($"'{value}' is not a valid {typeDisplayName}");
-            }
-            catch (ArgumentException)
-            {
-                throw new ValueParsingException($"'{value}' is not a valid {typeDisplayName}");
-            }
-            
-            throw new AppRunnerException($"type : {_underyingType} is not supported");
+            _argumentTypeDescriptor = argumentTypeDescriptor;
         }
         
         public dynamic Parse(ArgumentInfo argumentInfo)
         {
-            return ParseString(argumentInfo.ValueInfo.Value, argumentInfo.IsImplicit, argumentInfo.TypeDisplayName);
+            var value = argumentInfo.ValueInfo.Value;
+            return ParseString(argumentInfo, value);
+        }
+
+        public dynamic ParseString(ArgumentInfo argumentInfo, string value)
+        {
+            try
+            {
+                return _argumentTypeDescriptor.ParseString(argumentInfo, value);
+            }
+            catch (FormatException)
+            {
+                throw new ValueParsingException(
+                    $"'{value}' is not a valid {_argumentTypeDescriptor.GetDisplayName(argumentInfo)}");
+            }
+            catch (ArgumentException)
+            {
+                throw new ValueParsingException(
+                    $"'{value}' is not a valid {_argumentTypeDescriptor.GetDisplayName(argumentInfo)}");
+            }
         }
     }
 }

@@ -3,61 +3,85 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using CommandDotNet.Exceptions;
 using CommandDotNet.Extensions;
 using CommandDotNet.MicrosoftCommandLineUtils;
+using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet.Models
 {
     public abstract class ArgumentInfo
     {
-        protected readonly ICustomAttributeProvider AttributeProvider;
-        protected readonly AppSettings Settings;
-        
-        internal ArgumentInfo(AppSettings settings)
+        private readonly IArgumentTypeDescriptor _typeDescriptor;
+
+        protected ArgumentInfo(ParameterInfo parameterInfo, AppSettings settings)
+            : this(settings,
+                parameterInfo,
+                parameterInfo.Name,
+                parameterInfo.ParameterType,
+                parameterInfo.DefaultValue)
         {
-            Settings = settings;
         }
 
-        internal ArgumentInfo(ParameterInfo parameterInfo, AppSettings settings)
-            : this(settings)
-        {
-            AttributeProvider = parameterInfo;
-            PropertyOrArgumentName = parameterInfo.Name;
-            Type = parameterInfo.ParameterType;
-            DefaultValue = parameterInfo.DefaultValue;
-            IsMultipleType = GetIsMultipleType();
-            AllowedValues = GetAllowedValues();
-        }
-
-        internal ArgumentInfo(PropertyInfo propertyInfo, AppSettings settings)
-            : this(settings)
+        protected ArgumentInfo(PropertyInfo propertyInfo, AppSettings settings)
+            : this(settings,
+                propertyInfo,
+                propertyInfo.Name,
+                propertyInfo.PropertyType,
+                GetDefaultValue(propertyInfo))
         {
             IsPartOfModel = true;
             ModelType = propertyInfo.DeclaringType;
-            AttributeProvider = propertyInfo;
-            PropertyOrArgumentName = propertyInfo.Name;
-            Type = propertyInfo.PropertyType;
-            DefaultValue = GetDefaultValue(propertyInfo);
-            IsMultipleType = GetIsMultipleType();
-            AllowedValues = GetAllowedValues();
         }
 
-        public Type Type { get; internal set; }
+        private ArgumentInfo(
+            AppSettings settings,
+            ICustomAttributeProvider attributeProvider,
+            string propertyOrArgumentName,
+            Type type,
+            object defaultValue)
+        {
+            Settings = settings;
+
+            AttributeProvider = attributeProvider;
+            PropertyOrArgumentName = propertyOrArgumentName;
+            Type = type;
+            DefaultValue = defaultValue;
+            
+            IsMultipleType = GetIsMultipleType();
+            UnderlyingType = GetUnderlyingType(Type);
+            
+            _typeDescriptor = Settings.ArgumentTypeDescriptors
+                .GetDescriptorOrThrow(UnderlyingType);
+        }
+
+        protected AppSettings Settings { get; private set; }
+        protected ICustomAttributeProvider AttributeProvider { get; private set; }
         
-        public object DefaultValue { get; internal set; }
-        public string TypeDisplayName { get; internal set; }
+        public Type Type { get; private set; }
+
+        /// <summary>
+        /// In cases where <see cref="ArgumentInfo.Type"/> is List or Nullable,
+        /// this will be the generic type that input will be converted to.
+        /// In all other cases, it will be the same as <see cref="ArgumentInfo.Type"/>
+        /// </summary>
+        public Type UnderlyingType { get; }
+        
+        public object DefaultValue { get; }
+        
         public string AnnotatedDescription { get; internal set; }
         public bool IsMultipleType { get; }
-        public string PropertyOrArgumentName { get; set; }
-        public bool IsPartOfModel { get; set; }
-        public Type ModelType { get; set; }
-        public List<string> AllowedValues { get; set; }
+        public string PropertyOrArgumentName { get; }
+        public bool IsPartOfModel { get; }
+        public Type ModelType { get; }
         internal ValueInfo ValueInfo { get; private set; }
 
-        public bool IsImplicit =>
-            this is CommandOptionInfo optionInfo && optionInfo.BooleanMode == BooleanMode.Implicit;
+        public virtual bool IsImplicit => false;
+        
+        public string TypeDisplayName => _typeDescriptor.GetDisplayName(this);
+
+        public List<string> AllowedValues => (_typeDescriptor as IAllowedValuesTypeDescriptor)
+            ?.GetAllowedValues(this)
+            .ToList();
 
         private bool GetIsMultipleType()
         {
@@ -68,29 +92,10 @@ namespace CommandDotNet.Models
         {
             ValueInfo = new ValueInfo(parameter);
         }
-
-        private List<string> GetAllowedValues()
-        {
-            if (Type == typeof(bool) && !IsImplicit)
-            {
-                return new List<string>(){"true", "false"};
-            }
-
-            if (Type.IsEnum)
-            {
-                return Enum.GetNames(Type).ToList();
-            }
-
-            return null;
-        }
         
         protected abstract string GetAnnotatedDescription();
-
-        protected abstract string GetTypeDisplayName();
         
-        protected abstract string GetDetails();
-        
-        private object GetDefaultValue(PropertyInfo propertyInfo)
+        private static object GetDefaultValue(PropertyInfo propertyInfo)
         {
             object instance = Activator.CreateInstance(propertyInfo.DeclaringType);
             object defaultValue = propertyInfo.GetValue(instance);
@@ -101,63 +106,22 @@ namespace CommandDotNet.Models
 
             return defaultValue;
         }
-        
-        protected static string GetTypeDisplayName(Type type, BooleanMode booleanMode)
+
+        private static Type GetUnderlyingType(Type type)
         {
-            //is string
-            if (type == typeof(string)) return Constants.TypeDisplayNames.Text;
-
-            //is boolean
-            if (type == typeof(bool))
-            {
-                if (booleanMode == BooleanMode.Implicit)
-                    return Constants.TypeDisplayNames.Flag;
-                return Constants.TypeDisplayNames.Boolean;
-            }
-
             //List
             if (typeof(IEnumerable).IsAssignableFrom(type) && type.GetGenericArguments().Any())
             {
-                return GetTypeDisplayName(type.GetGenericArguments().First(), booleanMode);
-            }
-
-            //is int
-            if (type == typeof(short) || type == typeof(int) || type == typeof(long))
-            {
-                return Constants.TypeDisplayNames.Number;
-            }
-            
-            //is char
-            if (type == typeof(char))
-            {
-                return Constants.TypeDisplayNames.Character;
-            }
-            
-            //is double
-            if (type == typeof(double))
-            {
-                return Constants.TypeDisplayNames.DoubleNumber;
-            }
-
-            //is decimal
-            if (type == typeof(decimal))
-            {
-                return Constants.TypeDisplayNames.DecimalNumber;
-            }
-
-            //enum
-            if (type.IsEnum)
-            {
-                return type.Name;
+                return type.GetGenericArguments().First();
             }
             
             //nullable
             if (Nullable.GetUnderlyingType(type) != null)
             {
-                return GetTypeDisplayName(Nullable.GetUnderlyingType(type), booleanMode);
+                return Nullable.GetUnderlyingType(type);
             }
 
-            throw new AppRunnerException($"type '{type.Name}' is not supported");
+            return type;
         }
     }
 }
