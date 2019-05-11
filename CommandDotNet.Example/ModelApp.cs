@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using CommandDotNet.Attributes;
+using FluentValidation;
+using FluentValidation.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace CommandDotNet.Example
 {
+    [ApplicationMetadata(Name = "models", Description = "example of using IArgumentModel, including fluent validation.")]
     public class ModelApp
     {
         public int SendNotification(Person person, Address address)
@@ -28,6 +30,7 @@ namespace CommandDotNet.Example
     }
     
 
+    [Validator(typeof(PersonValidator))]
     public class Person: IArgumentModel
     {
         public int Id { get; set; }
@@ -47,5 +50,15 @@ namespace CommandDotNet.Example
         
         [Option(ShortName = "a")]
         public bool HasAirport { get; set; }
+    }
+
+    public class PersonValidator : AbstractValidator<Person>
+    {
+        public PersonValidator()
+        {
+            RuleFor(x => x.Id).GreaterThan(0);
+            RuleFor(x => x.Name).NotEmpty();
+            RuleFor(x => x.Email).NotEmpty().EmailAddress();
+        }
     }
 }
