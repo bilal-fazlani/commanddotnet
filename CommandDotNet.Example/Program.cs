@@ -1,4 +1,6 @@
-﻿using CommandDotNet.Models;
+﻿using CommandDotNet.Attributes;
+using CommandDotNet.Example.Issues;
+using CommandDotNet.Models;
 
 namespace CommandDotNet.Example
 {
@@ -6,12 +8,33 @@ namespace CommandDotNet.Example
     {
         static int Main(string[] args)
         {
-            AppRunner<Issue55> appRunner = new AppRunner<Issue55>(new AppSettings()
+            // return Run<GitApplication>(args);
+            return Run<Examples>(args);
+        }
+
+        private static int Run<TApp>(string[] args) where TApp : class
+        {
+            AppRunner<TApp> appRunner = new AppRunner<TApp>(new AppSettings()
             {
                 Case = Case.KebabCase,
                 HelpTextStyle = HelpTextStyle.Detailed
             });
             return appRunner.Run(args);
         }
+    }
+
+    public class Examples
+    {
+        [SubCommand]
+        public GitApplication GitApplication { get; set; }
+        
+        [SubCommand]
+        public ModelApp ModelApp { get; set; }
+        
+        [SubCommand]
+        public MyApplication MyApplication { get; set; }
+
+        [SubCommand]
+        public IssueApps IssueApps { get; set; }
     }
 }

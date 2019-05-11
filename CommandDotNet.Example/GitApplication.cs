@@ -4,7 +4,7 @@ using CommandDotNet.Attributes;
 
 namespace CommandDotNet.Example
 {
-    [ApplicationMetadata(Description = "Fake git application", Name = "git")]
+    [ApplicationMetadata(Name = "git", Description = "Fake git application")]
     public class GitApplication
     {
         [SubCommand]
