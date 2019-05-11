@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using CommandDotNet.Models;
 using Xunit.Abstractions;
 
@@ -9,12 +11,14 @@ namespace CommandDotNet.Tests
         protected readonly ITestOutputHelper TestOutputHelper;
         protected readonly TestConsoleWriter TestConsoleWriter;
 
+        private List<EventHandler<string>> _outputHandlers = new List<EventHandler<string>>();
+
         public TestBase(ITestOutputHelper testOutputHelper)
         {
             TestOutputHelper = testOutputHelper;
             TestConsoleWriter = new TestConsoleWriter();
-            
-            TestConsoleWriter.WriteLineEvent += OnWriteLine;
+
+            CaptureOutputLine(OnWriteLine);
             
             Console.SetOut(TestConsoleWriter);
             Console.SetError(TestConsoleWriter);
@@ -32,9 +36,18 @@ namespace CommandDotNet.Tests
             }
         }
 
+        protected void CaptureOutputLine(EventHandler<string> handler)
+        {
+            TestConsoleWriter.WriteLineEvent += handler;
+            _outputHandlers.Append(handler);
+        }
+
         public void Dispose()
         {
-            TestConsoleWriter.WriteLineEvent -= OnWriteLine;
+            foreach (var handler in _outputHandlers)
+            {
+                TestConsoleWriter.WriteLineEvent -= handler;
+            }
             TestConsoleWriter.Dispose();
         }
     }
