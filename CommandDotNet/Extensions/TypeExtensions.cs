@@ -70,5 +70,10 @@ namespace CommandDotNet.Extensions
                 .Where(p => !p.IsSpecialName)
                 .Where(x => !x.PropertyType.IsCompilerGenerated());
         }
+
+        internal static bool InheritsFrom<T>(this Type type)
+        {
+            return typeof(T).IsAssignableFrom(type);
+        }
     }
 }

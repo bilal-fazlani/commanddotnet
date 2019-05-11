@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using CommandDotNet.Attributes;
+using CommandDotNet.Exceptions;
 using CommandDotNet.Extensions;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
@@ -14,10 +15,12 @@ namespace CommandDotNet
     internal class AppCreator
     {
         private readonly AppSettings _appSettings;
+        private readonly Assembly _hostAssembly;
 
         public AppCreator(AppSettings appSettings)
         {
             _appSettings = appSettings;
+            _hostAssembly = Assembly.GetEntryAssembly();
         }
 
         public CommandLineApplication CreateApplication(
@@ -33,11 +36,25 @@ namespace CommandDotNet
 
             if (isRootApp)
             {
-                string assemblyName = $"{Assembly.GetEntryAssembly().GetName().Name}.dll";
-                string defaultRootCommand = $"dotnet {assemblyName}";
-                string rootCommandName = consoleApplicationAttribute?.Name ?? defaultRootCommand;
-                app = new CommandLineApplication(_appSettings) { Name = rootCommandName };
-                app.FullName = consoleApplicationAttribute?.Name ?? assemblyName;
+                app = new CommandLineApplication(_appSettings);
+                string rootCommandName = consoleApplicationAttribute?.Name;
+                if (rootCommandName != null)
+                {
+                    app.Name = rootCommandName;
+                    app.FullName = rootCommandName;
+                }
+                else if(_hostAssembly != null)
+                {
+                    string assemblyName = $"{_hostAssembly.GetName().Name}.dll";
+                    app.Name = $"dotnet {assemblyName}";
+                    app.FullName = assemblyName;
+                }
+                else
+                {
+                    app.Name = "...";
+                    app.FullName = "...";
+                }
+                
                 AddVersion(app);
             }
             else
@@ -69,7 +86,16 @@ namespace CommandDotNet
         {
             if (_appSettings.EnableVersionOption)
             {
-                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
+                if (this._hostAssembly == null)
+                {
+                    throw new AppRunnerException(
+                        "Unable to determine version because Assembly.GetEntryAssembly() is null. " +
+                        "This is a known issue when running unit tests in .net framework. " +
+                        "Consider disabling for test runs. " +
+                        "https://tinyurl.com/y6rnjqsg");
+                }
+                
+                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(_hostAssembly.Location);
                 app.VersionOption("-v | --version", shortFormVersion: fvi.ProductVersion);
             }
         }

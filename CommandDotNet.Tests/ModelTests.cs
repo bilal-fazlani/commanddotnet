@@ -86,6 +86,7 @@ namespace CommandDotNet.Tests
         public string Email { get; set; }
         
         public string Number { get; set; }
+        public Job Job { get; set; }
     }
 
     public class Address : IArgumentModel
@@ -94,5 +95,12 @@ namespace CommandDotNet.Tests
         
         [Option(ShortName = "a")]
         public bool HasAirport { get; set; }
+    }
+
+    public class Job : IArgumentModel
+    {
+        public string Company { get; set; }
+        [Option]
+        public string Position { get; set; }
     }
 }
