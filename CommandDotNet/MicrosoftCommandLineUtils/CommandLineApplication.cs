@@ -53,7 +53,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 
         public string GetFullCommandName()
         {
-            return string.Join(" ", GetSelfAndParentCommands().Select(c => c.Name));
+            return string.Join(" ", GetSelfAndParentCommands().Reverse().Select(c => c.Name));
         } 
 
         public IEnumerable<CommandOption> GetOptions()
