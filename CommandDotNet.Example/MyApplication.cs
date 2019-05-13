@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace CommandDotNet.Example
 {
-    [ApplicationMetadata(Name = "SampleAppName", Description = "Sample application for demonstation", ExtendedHelpText = "this is extended help text")]
+    [ApplicationMetadata(Name = "demo", Description = "Sample application for demonstration", ExtendedHelpText = "this is extended help text")]
     public class MyApplication
     {
         private readonly bool _cjumped;
