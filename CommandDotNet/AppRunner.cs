@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -149,6 +150,18 @@ namespace CommandDotNet
         public AppRunner<T> WithCommandInvoker(Func<ICommandInvoker, ICommandInvoker> commandInvokerProvider)
         {
             _settings.CommandInvoker = commandInvokerProvider(_settings.CommandInvoker);
+            return this;
+        }
+
+        public AppRunner<T> OverrideConsoleOut(TextWriter writer)
+        {
+            _settings.Out = writer;
+            return this;
+        }
+
+        public AppRunner<T> OverrideConsoleError(TextWriter writer)
+        {
+            _settings.Error = writer;
             return this;
         }
     }
