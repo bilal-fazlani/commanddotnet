@@ -48,26 +48,26 @@ namespace CommandDotNet
             }
             catch (AppRunnerException e)
             {
-                Console.Error.WriteLine(e.Message + "\n");
+                _settings.Error.WriteLine(e.Message + "\n");
 #if DEBUG
-                Console.Error.WriteLine(e.StackTrace);
+                _settings.Error.WriteLine(e.StackTrace);
 #endif
                 return 1;
             }
             catch (CommandParsingException e)
             {
-                Console.Error.WriteLine(e.Message + "\n");
+                _settings.Error.WriteLine(e.Message + "\n");
                 e.Command.ShowHelp();
 
 #if DEBUG
-                Console.Error.WriteLine(e.StackTrace);
+                _settings.Error.WriteLine(e.StackTrace);
 #endif
 
                 return 1;
             }
             catch (ValueParsingException e)
             {
-                Console.Error.WriteLine(e.Message + "\n");
+                _settings.Error.WriteLine(e.Message + "\n");
                 return 2;
             }
             catch (AggregateException e) when (e.InnerExceptions.Any(x => x.GetBaseException() is AppRunnerException) ||
@@ -75,11 +75,11 @@ namespace CommandDotNet
             {
                 foreach (var innerException in e.InnerExceptions)
                 {
-                    Console.Error.WriteLine(innerException.GetBaseException().Message + "\n");
+                    _settings.Error.WriteLine(innerException.GetBaseException().Message + "\n");
 #if DEBUG
-                    Console.Error.WriteLine(innerException.GetBaseException().StackTrace);
+                    _settings.Error.WriteLine(innerException.GetBaseException().StackTrace);
                     if (e.InnerExceptions.Count > 1)
-                        Console.Error.WriteLine("-----------------------------------------------------------------");
+                        _settings.Error.WriteLine("-----------------------------------------------------------------");
 #endif
                 }
 
@@ -93,7 +93,7 @@ namespace CommandDotNet
                 
                 foreach (var failure in validationException.ValidationResult.Errors)
                 {
-                    Console.WriteLine(failure.ErrorMessage);
+                    _settings.Out.WriteLine(failure.ErrorMessage);
                 }
 
                 return 2;
@@ -104,7 +104,7 @@ namespace CommandDotNet
                 ValueParsingException valueParsingException =
                     (ValueParsingException)e.InnerExceptions.FirstOrDefault(x => x.GetBaseException() is ValueParsingException);
                 
-                Console.Error.WriteLine(valueParsingException.Message + "\n");
+                _settings.Error.WriteLine(valueParsingException.Message + "\n");
 
                 return 2;
             }
@@ -128,7 +128,7 @@ namespace CommandDotNet
             {
                 foreach (var failure in ex.ValidationResult.Errors)
                 {
-                    Console.WriteLine(failure.ErrorMessage);
+                    _settings.Out.WriteLine(failure.ErrorMessage);
                 }
 
                 return 2;
