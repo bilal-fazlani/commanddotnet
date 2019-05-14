@@ -12,7 +12,7 @@ namespace CommandDotNet.Tests.Parsing
         [Fact]
         public void CanParseNullableInt()
         {
-            NullableValueParser parser = new NullableValueParser(typeof(int), new SingleValueParser(typeof(int)));
+            NullableValueParser parser = new NullableValueParser(typeof(int), new ParserFactory(new AppSettings()).GetSingleValueParser(typeof(int)));
             CommandParameterInfo parameterInfo = new CommandParameterInfo(typeof(IntPropertyModel).GetProperty("Id"), new AppSettings());
             parameterInfo.SetValue(new CommandArgument()
             {

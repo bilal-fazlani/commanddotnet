@@ -23,7 +23,7 @@ namespace CommandDotNet.Parsing
 
             foreach (string stringValue in argumentInfo.ValueInfo.Values)
             {
-                dynamic value = _singleValueParser.ParseString(stringValue, argumentInfo.IsImplicit, argumentInfo.TypeDisplayName);
+                dynamic value = _singleValueParser.ParseString(argumentInfo, stringValue);
                 listInstance.Add(value);
             }
 
