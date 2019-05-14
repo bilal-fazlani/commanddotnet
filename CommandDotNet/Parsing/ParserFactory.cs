@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CommandDotNet.Exceptions;
+using CommandDotNet.Extensions;
 using CommandDotNet.Models;
 using CommandDotNet.TypeDescriptors;
 
@@ -17,24 +18,19 @@ namespace CommandDotNet.Parsing
 
         public IParser CreateInstance(Type argumentType)
         {
-            if (argumentType.IsGenericType && argumentType.GetGenericTypeDefinition() == typeof(Nullable<>))
+            var underLyingType = argumentType.GetNullableUnderlyingType();
+            if (underLyingType != null)
             {
-                Type underLyingType = argumentType.GetGenericArguments()[0];
                 return new NullableValueParser(underLyingType, GetSingleValueParser(underLyingType));
             }
 
-            if (argumentType.IsGenericType && argumentType.GetGenericTypeDefinition() == typeof(List<>))
+            underLyingType = argumentType.GetListUnderlyingType();
+            if (underLyingType != null)
             {
-                Type underLyingType = argumentType.GetGenericArguments()[0];
                 return new ListParser(underLyingType, GetSingleValueParser(underLyingType));
             }
             
-            if (argumentType.IsValueType || argumentType == typeof(string))
-            {
-                return GetSingleValueParser(argumentType);
-            }
-
-            throw new AppRunnerException($"type of '{argumentType.Name}' is not supported");
+            return GetSingleValueParser(argumentType);
         }
 
         internal SingleValueParser GetSingleValueParser(Type argumentType)
