@@ -27,8 +27,8 @@ namespace CommandDotNet
             var argInfos = new List<ArgumentInfo>();
             
             var argumentInfo = IsOption(parameterInfo, argumentMode)
-                ? (ArgumentInfo) new CommandOptionInfo(parameterInfo, this._settings)
-                : new CommandParameterInfo(parameterInfo, this._settings);
+                ? (ArgumentInfo) new CommandOptionInfo(parameterInfo, _settings)
+                : new CommandParameterInfo(parameterInfo, _settings);
 
             return new[] {argumentInfo};
         }
@@ -48,8 +48,8 @@ namespace CommandDotNet
             }
 
             var argumentInfo = IsOption(propertyInfo, argumentMode)
-                ? (ArgumentInfo) new CommandOptionInfo(propertyInfo, this._settings)
-                : new CommandParameterInfo(propertyInfo, this._settings);
+                ? (ArgumentInfo) new CommandOptionInfo(propertyInfo, _settings)
+                : new CommandParameterInfo(propertyInfo, _settings);
 
             return new[] {argumentInfo};
         }

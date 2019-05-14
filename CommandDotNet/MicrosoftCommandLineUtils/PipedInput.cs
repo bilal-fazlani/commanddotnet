@@ -16,10 +16,10 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         /// <inheritdoc />
         private PipedInput(string[] lines)
         {
-            this.Values = lines;
+            Values = lines;
             
             // this will only be null when Console.IsInputRedirected == false
-            this.InputWasPiped = lines != null;
+            InputWasPiped = lines != null;
         }
 
         public static PipedInput GetPipedInput(bool keepEmptyLines = false)

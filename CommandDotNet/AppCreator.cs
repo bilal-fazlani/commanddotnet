@@ -86,7 +86,7 @@ namespace CommandDotNet
         {
             if (_appSettings.EnableVersionOption)
             {
-                if (this._hostAssembly == null)
+                if (_hostAssembly == null)
                 {
                     throw new AppRunnerException(
                         "Unable to determine version because Assembly.GetEntryAssembly() is null. " +
