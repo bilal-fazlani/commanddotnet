@@ -37,70 +37,70 @@ namespace CommandDotNet.Tests
             });
             appRunner.Run("--id", "9", "read-person-data").Should().Be(6);
         }
-    }
 
-    public class ModelApp
-    {
-        public int SendNotification(Person person, Time time, Address address)
+        public class ModelApp
         {
-            object obj = new
+            public int SendNotification(Person person, Time time, Address address)
             {
-                person,
-                time,
-                address
-            };
+                object obj = new
+                {
+                    person,
+                    time,
+                    address
+                };
             
-            string content = JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings
+                string content = JsonConvert.SerializeObject(obj, Formatting.Indented, new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                });
+            
+                File.WriteAllText("TestCases/ModelTests.ModelTests.Output.json", content);
+                return 5;
+            }
+        }
+
+        public class ModelAppWithConstructor
+        {
+            private readonly Person _person;
+
+            public ModelAppWithConstructor(Person person)
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            });
-            
-            File.WriteAllText("TestCases/ModelTests.ModelTests.Output.json", content);
-            return 5;
-        }
-    }
+                _person = person;
+            }
 
-    public class ModelAppWithConstructor
-    {
-        private readonly Person _person;
-
-        public ModelAppWithConstructor(Person person)
-        {
-            _person = person;
+            public int ReadPersonData()
+            {
+                if (_person != null && _person.Id == 9)
+                    return 6;
+                return 1;
+            }
         }
-
-        public int ReadPersonData()
-        {
-            if (_person != null && _person.Id == 9)
-                return 6;
-            return 1;
-        }
-    }
     
 
-    public class Person: IArgumentModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        [Option]
-        public string Email { get; set; }
+        public class Person: IArgumentModel
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            [Option]
+            public string Email { get; set; }
         
-        public string Number { get; set; }
-        public Job Job { get; set; }
-    }
+            public string Number { get; set; }
+            public Job Job { get; set; }
+        }
 
-    public class Address : IArgumentModel
-    {
-        public string City { get; set; }
+        public class Address : IArgumentModel
+        {
+            public string City { get; set; }
         
-        [Option(ShortName = "a")]
-        public bool HasAirport { get; set; }
-    }
+            [Option(ShortName = "a")]
+            public bool HasAirport { get; set; }
+        }
 
-    public class Job : IArgumentModel
-    {
-        public string Company { get; set; }
-        [Option]
-        public string Position { get; set; }
+        public class Job : IArgumentModel
+        {
+            public string Company { get; set; }
+            [Option]
+            public string Position { get; set; }
+        }
     }
 }
