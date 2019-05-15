@@ -39,11 +39,6 @@ namespace CommandDotNet.Extensions
                 : null;
         }
 
-        internal static Type GetNullableUnderlyingType(this Type type)
-        {
-            return Nullable.GetUnderlyingType(type);
-        }
-
         internal static bool IsCollection(this Type type)
         {
             return type.GetInterfaces().Any(x => x == typeof(IEnumerable));

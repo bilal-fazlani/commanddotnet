@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using AutoFixture;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 using CommandDotNet.Parsing;
@@ -19,7 +17,7 @@ namespace CommandDotNet.Tests.Parsing
         [ClassData(typeof(TestDataGeneratorForListParserTests))]
         public void CanParseLists(string parameterName, Type underLyingType, List<string> stringValues, object typedValue)
         {
-            ListParser listParser = new ListParser(underLyingType, new ParserFactory(new AppSettings()).GetSingleValueParser(underLyingType));
+            ListParser listParser = new ListParser(new ParserFactory(new AppSettings()).GetSingleValueParser(underLyingType));
 
             ParameterInfo parameterInfo = typeof(ParameterClass).GetMethod("List").GetParameters()
                 .Single(x => x.Name == parameterName);

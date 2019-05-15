@@ -109,7 +109,7 @@ namespace CommandDotNet.Models
 
         private static Type GetUnderlyingType(Type type)
         {
-            return type.GetNullableUnderlyingType() 
+            return Nullable.GetUnderlyingType(type) 
                    ?? type.GetListUnderlyingType() 
                    ?? type;
         }

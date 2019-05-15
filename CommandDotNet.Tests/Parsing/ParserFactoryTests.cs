@@ -1,6 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using CommandDotNet.Models;
 using CommandDotNet.Parsing;
+using CommandDotNet.Tests.Parsing.Models;
+using CommandDotNet.Tests.Utils;
 using FluentAssertions;
 using Xunit;
 
@@ -8,40 +13,46 @@ namespace CommandDotNet.Tests.Parsing
 {
     public class ParserFactoryTests
     {
-        [Fact]
-        public void CanCreateNullableParser()
-        {
-            IParser parser = new ParserFactory(new AppSettings()).CreateInstance(typeof(int?));
-            parser.Should().BeOfType<NullableValueParser>();
-        }
+        private static AppSettings _appSettings = new AppSettings().Add<PersonTypeDescriptor>();
+
+        private static readonly Dictionary<string, CommandOptionInfo> _commandOptionInfos =
+            TestFactory.GetArgumentsFromModel<PropertyModel>(_appSettings)
+                .Cast<CommandOptionInfo>()
+                .ToDictionary(a => a.PropertyOrArgumentName);
         
+
         [Fact]
         public void CanCreateSingleValueParser()
         {
-            IParser parser = new ParserFactory(new AppSettings()).CreateInstance(typeof(int));
-            parser.Should().BeOfType<SingleValueParser>();
+            GetParser(m => m.Int).Should().BeOfType<SingleValueParser>();
+            GetParser(m => m.NullableInt).Should().BeOfType<SingleValueParser>();
         }
-        
+
         [Fact]
         public void CanCreateListParser()
         {
-            IParser parser = new ParserFactory(new AppSettings()).CreateInstance(typeof(List<int>));
-            parser.Should().BeOfType<ListParser>();
+            GetParser(m => m.ListInt).Should().BeOfType<ListParser>();
         }
 
         [Fact]
         public void CanWorkWithEnums()
         {
-            new ParserFactory(new AppSettings()).CreateInstance(typeof(Time)).Should().BeOfType<SingleValueParser>();
-            new ParserFactory(new AppSettings()).CreateInstance(typeof(Time?)).Should().BeOfType<NullableValueParser>();
-            new ParserFactory(new AppSettings()).CreateInstance(typeof(List<Time>)).Should().BeOfType<ListParser>();
+            GetParser(m => m.Time).Should().BeOfType<SingleValueParser>();
+            GetParser(m => m.NullableTime).Should().BeOfType<SingleValueParser>();
+            GetParser(m => m.ListTime).Should().BeOfType<ListParser>();
         }
         
         [Fact]
         public void CanWorkWithStrings()
         {
-            new ParserFactory(new AppSettings()).CreateInstance(typeof(string)).Should().BeOfType<SingleValueParser>();
-            new ParserFactory(new AppSettings()).CreateInstance(typeof(List<string>)).Should().BeOfType<ListParser>();
+            GetParser(m => m.String).Should().BeOfType<SingleValueParser>();
+            GetParser(m => m.ListString).Should().BeOfType<ListParser>();
+        }
+
+        private static IParser GetParser<TP>(Expression<Func<PropertyModel, TP>> propertySelector)
+        {
+            var propertyName = ((MemberExpression) propertySelector.Body).Member.Name;
+            return new ParserFactory(_appSettings).CreateInstance(_commandOptionInfos[propertyName]);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using CommandDotNet.Extensions;
 using CommandDotNet.Models;
 
 namespace CommandDotNet.TypeDescriptors
@@ -19,7 +20,9 @@ namespace CommandDotNet.TypeDescriptors
 
         public object ParseString(ArgumentInfo argumentInfo, string value)
         {
-            var typeConverter = TypeDescriptor.GetConverter(argumentInfo.UnderlyingType);
+            var typeConverter = argumentInfo.IsMultipleType
+                ? TypeDescriptor.GetConverter(argumentInfo.UnderlyingType)
+                : TypeDescriptor.GetConverter(argumentInfo.Type);
             return typeConverter.ConvertFrom(value);
         }
     }

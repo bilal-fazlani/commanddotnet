@@ -30,7 +30,7 @@ namespace CommandDotNet
                     {
                         throw new AppRunnerException("Constructor arguments can not have [Argument] attribute. Please use [Option] attribute");
                     }
-                    return this.GetArgumentsFromParameter(p, argumentMode);
+                    return GetArgumentsFromParameter(p, argumentMode);
                 })
                 .ToList();
         }
