@@ -87,15 +87,12 @@ namespace CommandDotNet.Models
             if (attribute == null || attribute.BooleanMode == BooleanMode.Unknown)
                 return Settings.BooleanMode;
 
-            if (Type == typeof(bool) || Type == typeof(bool?))
-            {
-                return attribute.BooleanMode;
-            }
-
-            throw new AppRunnerException(
-                $"BooleanMode property is set to `{attribute.BooleanMode}` for a non boolean parameter type. " +
-                $"Property name: {PropertyOrArgumentName} " +
-                $"Type : {Type.Name}");
+            return UnderlyingType == typeof(bool)
+                ? attribute.BooleanMode
+                : throw new AppRunnerException(
+                    $"BooleanMode property is set to `{attribute.BooleanMode}` for a non boolean parameter type. " +
+                    $"Property name: {PropertyOrArgumentName} " +
+                    $"Type : {Type.Name}");
         }
         
         private string GetTemplate()
