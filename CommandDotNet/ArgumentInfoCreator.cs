@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using CommandDotNet.Attributes;
+using CommandDotNet.Exceptions;
 using CommandDotNet.Extensions;
 using CommandDotNet.Models;
 
@@ -16,15 +17,37 @@ namespace CommandDotNet
         {
             _settings = settings;
         }
+
+        public IEnumerable<ArgumentInfo> GetArgumentsFromMethod(MethodBase methodBase, ArgumentMode argumentMode)
+        {
+            var isCtor = methodBase is ConstructorInfo;
+            
+            return methodBase
+                .GetParameters()
+                .SelectMany(p =>
+                {
+                    if (isCtor && p.HasAttribute<ArgumentAttribute>())
+                    {
+                        throw new AppRunnerException("Constructor arguments can not have [Argument] attribute. Please use [Option] attribute");
+                    }
+                    return this.GetArgumentsFromParameter(p, argumentMode);
+                })
+                .ToList();
+        }
         
-        public IEnumerable<ArgumentInfo> ConvertToArgumentInfos(ParameterInfo parameterInfo, ArgumentMode argumentMode)
+        public IEnumerable<ArgumentInfo> GetArgumentsFromModel(Type modelType, ArgumentMode argumentMode)
+        {
+            return modelType
+                .GetDeclaredProperties()
+                .SelectMany(propertyInfo => GetArgumentFromProperty(propertyInfo, argumentMode));
+        }
+        
+        public IEnumerable<ArgumentInfo> GetArgumentsFromParameter(ParameterInfo parameterInfo, ArgumentMode argumentMode)
         {
             if (parameterInfo.ParameterType.InheritsFrom<IArgumentModel>())
             {
-                return GetArgumentsFromArgumentModel(parameterInfo.ParameterType, argumentMode);
+                return GetArgumentsFromModel(parameterInfo.ParameterType, argumentMode);
             }
-
-            var argInfos = new List<ArgumentInfo>();
             
             var argumentInfo = IsOption(parameterInfo, argumentMode)
                 ? (ArgumentInfo) new CommandOptionInfo(parameterInfo, _settings)
@@ -33,18 +56,11 @@ namespace CommandDotNet
             return new[] {argumentInfo};
         }
 
-        private IEnumerable<ArgumentInfo> GetArgumentsFromArgumentModel(Type modelType, ArgumentMode argumentMode)
-        {
-            return modelType
-                .GetDeclaredProperties()
-                .SelectMany(propertyInfo => GetArgumentFromProperty(propertyInfo, argumentMode));
-        }
-
-        private IEnumerable<ArgumentInfo> GetArgumentFromProperty(PropertyInfo propertyInfo, ArgumentMode argumentMode)
+        public IEnumerable<ArgumentInfo> GetArgumentFromProperty(PropertyInfo propertyInfo, ArgumentMode argumentMode)
         {
             if (propertyInfo.PropertyType.InheritsFrom<IArgumentModel>())
             {
-                return GetArgumentsFromArgumentModel(propertyInfo.PropertyType, argumentMode);
+                return GetArgumentsFromModel(propertyInfo.PropertyType, argumentMode);
             }
 
             var argumentInfo = IsOption(propertyInfo, argumentMode)

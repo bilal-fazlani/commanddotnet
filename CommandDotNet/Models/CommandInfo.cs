@@ -11,7 +11,6 @@ namespace CommandDotNet.Models
         private readonly MethodInfo _methodInfo;
         private readonly AppSettings _settings;
         private readonly ApplicationMetadataAttribute _metadataAttribute;
-        private readonly ArgumentInfoCreator _argumentInfoCreator;
 
         public CommandInfo(MethodInfo methodInfo, AppSettings settings)
         {
@@ -19,21 +18,8 @@ namespace CommandDotNet.Models
             _settings = settings;
 
             _metadataAttribute = _methodInfo.GetCustomAttribute<ApplicationMetadataAttribute>(false);
-            _argumentInfoCreator = new ArgumentInfoCreator(settings);
             
-            Arguments = GetArguments();
-        }
-
-        private IEnumerable<ArgumentInfo> GetArguments()
-        {
-            List<ArgumentInfo> arguments = new List<ArgumentInfo>();
-
-            foreach (ParameterInfo parameterInfo in _methodInfo.GetParameters())
-            {
-                arguments.AddRange(_argumentInfoCreator.ConvertToArgumentInfos(parameterInfo, _settings.MethodArgumentMode));
-            }
-            
-            return arguments;
+            Arguments = new ArgumentInfoCreator(settings).GetArgumentsFromMethod(methodInfo, settings.MethodArgumentMode);
         }
 
         public string Name => _metadataAttribute?.Name ?? _methodInfo.Name.ChangeCase(_settings.Case);
