@@ -1,6 +1,6 @@
-﻿using System.Reflection;
-using CommandDotNet.MicrosoftCommandLineUtils;
+﻿using System.Linq;
 using CommandDotNet.Models;
+using CommandDotNet.Tests.Utils;
 using FluentAssertions;
 using Xunit;
 
@@ -11,95 +11,58 @@ namespace CommandDotNet.Tests
         [Fact]
         public void CanGiveValueWhenUserHasProvidedValue()
         {
-            AppSettings appSettings = new AppSettings();
-                        
-            ValueMachine valueMachine = new ValueMachine(appSettings);
-            
-            ParameterInfo parameterInfo =
-                typeof(TestSubject).GetMethod("TestMethodWithNoDefaultValue").GetParameters()[0];
-
-            CommandOptionInfo optionInfo = new CommandOptionInfo(parameterInfo, appSettings);
-            
-            optionInfo.SetValue(new CommandOption("--test", CommandOptionType.SingleValue));
-            
-            optionInfo.ValueInfo.Values.Add("7");
-            
-            object value = valueMachine.GetValue(optionInfo);
+            var value = GetValue(nameof(TestSubject.TestMethodWithNoDefaultValue), "7");
 
             value.Should().Be(7);
         }
-        
+
         [Fact]
         public void CanGiveValueWhenUserHasProvidedValueAndThereIsADefaultValue()
         {
-            AppSettings appSettings = new AppSettings();
-                        
-            ValueMachine valueMachine = new ValueMachine(appSettings);
-            
-            ParameterInfo parameterInfo =
-                typeof(TestSubject).GetMethod("TestMethodWithDefaultValue").GetParameters()[0];
-
-            CommandOptionInfo optionInfo = new CommandOptionInfo(parameterInfo, appSettings);
-            
-            optionInfo.SetValue(new CommandOption("--test", CommandOptionType.SingleValue));
-            
-            optionInfo.ValueInfo.Values.Add("7");
-            
-            object value = valueMachine.GetValue(optionInfo);
-
+            var value = GetValue(nameof(TestSubject.TestMethodWithDefaultValue), "7");
             value.Should().Be(7);
         }
 
         [Fact]
         public void CanGiveValueWhenUserHasNotProvidedValueAndThereIsADefaultValue()
         {
-            AppSettings appSettings = new AppSettings();
-                        
-            ValueMachine valueMachine = new ValueMachine(appSettings);
-            
-            ParameterInfo parameterInfo =
-                typeof(TestSubject).GetMethod("TestMethodWithDefaultValue").GetParameters()[0];
-
-            CommandOptionInfo optionInfo = new CommandOptionInfo(parameterInfo, appSettings);
-            
-            optionInfo.SetValue(new CommandOption("--test", CommandOptionType.SingleValue));
-            
-            object value = valueMachine.GetValue(optionInfo);
-
+            var value = GetValue(nameof(TestSubject.TestMethodWithDefaultValue), null);
             value.Should().Be(5);
         }
         
         [Fact]
         public void CanGiveValueWhenUserHasNotProvidedValueAndThereIsNoDefaultValue()
         {
-            AppSettings appSettings = new AppSettings();
-                        
-            ValueMachine valueMachine = new ValueMachine(appSettings);
-            
-            
-            ParameterInfo parameterInfo =
-                typeof(TestSubject).GetMethod("TestMethodWithNoDefaultValue").GetParameters()[0];
-
-            CommandOptionInfo optionInfo = new CommandOptionInfo(parameterInfo, appSettings);
-            
-            optionInfo.SetValue(new CommandOption("--test", CommandOptionType.SingleValue));
-            
-            object actualValue = valueMachine.GetValue(optionInfo);
-
-            actualValue.Should().Be(0);
+            var value = GetValue(nameof(TestSubject.TestMethodWithNoDefaultValue), null);
+            value.Should().Be(0);
         }
-    }
 
-    internal class TestSubject
-    {
-        public void TestMethodWithNoDefaultValue(int value)
+        private static object GetValue(string methodName, string argValue)
         {
+            var appSettings = new AppSettings();
+            var valueMachine = new ValueMachine(appSettings);
             
+            var optionInfo = TestFactory
+                .GetArgumentsFromMethod<TestSubject>(methodName)
+                .Cast<CommandOptionInfo>()
+                .Single();
+            
+            optionInfo.SetValueForTest(argValue);
+
+            return valueMachine.GetValue(optionInfo);
         }
+
+        internal class TestSubject
+        {
+            public void TestMethodWithNoDefaultValue(int value)
+            {
+            
+            }
         
-        public void TestMethodWithDefaultValue(int value = 5)
-        {
+            public void TestMethodWithDefaultValue(int value = 5)
+            {
             
+            }
         }
     }
 }

@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 using CommandDotNet.Parsing;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TypeDescriptors;
 using FluentAssertions;
 using Xunit;
-using Xunit.Sdk;
 
 namespace CommandDotNet.Tests.Parsing
 {
     public class SingleValueParserTests
     {
         private static readonly AppSettings _appSettings = InitAppSettings();
+
+        private static readonly Dictionary<string, CommandOptionInfo> _commandOptionInfos =
+            TestFactory.GetArgumentsFromModel<PropertyModel>(_appSettings)
+                .Cast<CommandOptionInfo>()
+                .ToDictionary(a => a.PropertyOrArgumentName);
 
 
         public static TheoryData<string, Type, string, object> Values =>
@@ -47,16 +50,12 @@ namespace CommandDotNet.Tests.Parsing
         [MemberData(nameof(Values))]
         public void CanParseValues(string propertyName, Type valueType, string value, object typedValue)
         {
-            IArgumentTypeDescriptor typeDescriptor = _appSettings.ArgumentTypeDescriptors.GetDescriptor(valueType);
-            SingleValueParser valueParser = new SingleValueParser(typeDescriptor);
-            PropertyInfo propertyInfo = typeof(PropertyModel).GetProperty(propertyName);
-            CommandOptionInfo commandOptionInfo = new CommandOptionInfo(propertyInfo, _appSettings);
+            var typeDescriptor = _appSettings.ArgumentTypeDescriptors.GetDescriptor(valueType);
+            var valueParser = new SingleValueParser(typeDescriptor);
+
+            var commandOptionInfo = _commandOptionInfos[propertyName].SetValueForTest(value);
+            commandOptionInfo.SetValueForTest(value);
             
-            //set value
-            CommandOption option = new CommandOption("--test", CommandOptionType.SingleValue);
-            commandOptionInfo.SetValue(option);
-            commandOptionInfo.ValueInfo.Values = new List<string>(){value};
-                
             object parsedValue = valueParser.Parse(commandOptionInfo);
 
             parsedValue.Should().BeOfType(valueType);
