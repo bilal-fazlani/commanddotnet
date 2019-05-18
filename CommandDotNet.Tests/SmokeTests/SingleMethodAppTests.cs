@@ -1,3 +1,5 @@
+using CommandDotNet.Attributes;
+using CommandDotNet.Tests.Utils;
 using FluentAssertions;
 using Xunit;
 
@@ -52,15 +54,33 @@ Options:
         public void MethodIsCalledWithExpectedValues()
         {
             var results = new AppRunner<TestHelpOutput>().RunInMem("Add", "2", "3");
-            results.ExitCode.Should().Be(5);
-            results.ConsoleOut.Should().BeEmpty();
+            results.ExitCode.Should().Be(0);
+            
+            results.ConsoleOut.Should().Be("2+3=5");
+            
+            var inputs = results.Inputs.Get<TestHelpOutput>();
+            inputs.X.Should().Be(2);
+            inputs.Y.Should().Be(3);
         }
 
         public class TestHelpOutput
         {
-            public int Add(int x, int y)
+            [InjectProperty]
+            public TestWriter Writer { get; set; }
+            
+            [InjectProperty]
+            public Inputs Inputs { get; set; }
+            
+            public int X { get; private set; }
+            public int Y { get; private set; }
+            
+            public void Add(int x, int y)
             {
-                return x + y;
+                Writer.Write($"{x}+{y}={x+y}");
+
+                X = x;
+                Y = y;
+                Inputs.Capture(this);
             }
         }
     }
