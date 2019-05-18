@@ -64,7 +64,7 @@ namespace CommandDotNet.HelpGeneration
                 usageBuilder.Append(" [command]");
 
                 commandsBuilder.AppendLine();
-                commandsBuilder.AppendLine("Commands:\n\r");
+                commandsBuilder.AppendLine($"Commands:{Environment.NewLine}");
                 var maxCmdLen = commands.Max(c => c.Name.Length);
                 var outputFormat = string.Format("  {{0, -{0}}}{{1}}", maxCmdLen + 2);
                                
@@ -96,7 +96,7 @@ namespace CommandDotNet.HelpGeneration
                 usageBuilder.Append(" [options]");
 
                 optionsBuilder.AppendLine();
-                optionsBuilder.AppendLine("Options:\n\r");
+                optionsBuilder.AppendLine($"Options:{Environment.NewLine}");
 
                 foreach (var commandOption in options)
                 {
@@ -125,12 +125,12 @@ namespace CommandDotNet.HelpGeneration
                     }));
 
                     //description
-                    optionsBuilder.Append(string.IsNullOrEmpty(commandOption.Description)? null: "\n\r  " + commandOption.Description);
+                    optionsBuilder.Append(string.IsNullOrEmpty(commandOption.Description)? null: $"{Environment.NewLine}  {commandOption.Description}");
                     
                     //Allowed values
                     optionsBuilder.Append(
                         (!string.IsNullOrEmpty(commandOption.TypeDisplayName) && (commandOption.AllowedValues?.Any() ?? false))
-                            ? $"\n\r  Allowed values: {string.Join(", ", commandOption.AllowedValues)}"
+                            ? $"{Environment.NewLine}  Allowed values: {string.Join(", ", commandOption.AllowedValues)}"
                             : null);
                                         
                     optionsBuilder.AppendLine();
@@ -151,7 +151,7 @@ namespace CommandDotNet.HelpGeneration
             {
                 usageBuilder.Append(" [arguments]");
                 argumentsBuilder.AppendLine();
-                argumentsBuilder.AppendLine("Arguments:\n\r");
+                argumentsBuilder.AppendLine($"Arguments:{Environment.NewLine}");
 
                 foreach (var commandArgument in arguments)
                 {
@@ -180,12 +180,12 @@ namespace CommandDotNet.HelpGeneration
                     }));
 
                     //description
-                    argumentsBuilder.Append(string.IsNullOrEmpty(commandArgument.Description) ? null : "\n\r  " + commandArgument.Description);
+                    argumentsBuilder.Append(string.IsNullOrEmpty(commandArgument.Description) ? null : $"{Environment.NewLine}  {commandArgument.Description}");
                     
                     //Allowed values
                     argumentsBuilder.Append(
                         (!string.IsNullOrEmpty(commandArgument.TypeDisplayName) && (commandArgument.AllowedValues?.Any() ?? false))
-                            ? $"\n\r  Allowed values: {string.Join(", ", commandArgument.AllowedValues)}"
+                            ? $"{Environment.NewLine}  Allowed values: {string.Join(", ", commandArgument.AllowedValues)}"
                             : null);
                         
                     argumentsBuilder.AppendLine();
@@ -208,7 +208,7 @@ namespace CommandDotNet.HelpGeneration
             var titleBuilder = new StringBuilder();
 
             if (!string.IsNullOrEmpty(app.Description))
-                titleBuilder.AppendLine(app.Description + "\n");
+                titleBuilder.AppendLine(app.Description + Environment.NewLine);
             return titleBuilder;
         }
 
