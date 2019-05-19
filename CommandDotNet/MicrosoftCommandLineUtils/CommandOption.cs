@@ -114,7 +114,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         {
             if (obj is CommandOption commandOption)
             {
-                return commandOption.Template == this.Template;
+                return commandOption.Template == Template;
             }
 
             return false;
@@ -122,7 +122,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 
         public override int GetHashCode()
         {
-            return this.Template?.GetHashCode() ?? 0;
+            return Template?.GetHashCode() ?? 0;
         }
     }
 }

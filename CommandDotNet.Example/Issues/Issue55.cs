@@ -13,8 +13,8 @@ namespace CommandDotNet.Example.Issues
         
         public Issue55([Option(Inherited = true)]string baseId, [Option(Inherited = true)]string host = "localhost:8080")
         {
-            this._baseId = baseId;
-            this._host = host;
+            _baseId = baseId;
+            _host = host;
             
             //some more initial work here
             Console.WriteLine("Initial work...");
@@ -22,8 +22,8 @@ namespace CommandDotNet.Example.Issues
 
         public void getFirmwareVersion()
         {
-            Console.WriteLine(this._baseId);
-            Console.WriteLine(this._host);
+            Console.WriteLine(_baseId);
+            Console.WriteLine(_host);
         }
 
         public void Dispose()

@@ -81,7 +81,7 @@ namespace CommandDotNet.Tests.Parsing
 
             public override bool Equals(object obj)
             {
-                return obj is Person that && this.Name == that.Name;
+                return obj is Person that && Name == that.Name;
             }
         }
         

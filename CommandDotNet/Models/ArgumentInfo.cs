@@ -109,19 +109,9 @@ namespace CommandDotNet.Models
 
         private static Type GetUnderlyingType(Type type)
         {
-            //List
-            if (typeof(IEnumerable).IsAssignableFrom(type) && type.GetGenericArguments().Any())
-            {
-                return type.GetGenericArguments().First();
-            }
-            
-            //nullable
-            if (Nullable.GetUnderlyingType(type) != null)
-            {
-                return Nullable.GetUnderlyingType(type);
-            }
-
-            return type;
+            return type.GetNullableUnderlyingType() 
+                   ?? type.GetListUnderlyingType() 
+                   ?? type;
         }
     }
 }
