@@ -16,13 +16,14 @@ namespace CommandDotNet.Tests.BddTests.Apps
             [Option(ShortName = "o", LongName = "operator", Description = "the operation to apply")]
             string operation = "+")
         {
-            this.TestOutputs.Capture(new AddResults {X = x, Y = y});
+            TestOutputs.Capture(new AddResults {X = x, Y = y, Op = operation});
         }
 
         public class AddResults
         {
             public int X { get; set; }
             public int Y { get; set; }
+            public string Op { get; set; }
         }
     }
 }

@@ -11,12 +11,18 @@ namespace CommandDotNet.Tests.BddTests
 
         public IEnumerator<object[]> GetEnumerator()
         {
-            return this.Scenarios.Select(s => new Object[] { s }).GetEnumerator();
+            // exclude skipped tests until xunit allows us to
+            // skip them in a way so they appear as skipped
+            // in the test runner
+            return Scenarios
+                .Where(s => s.SkipReason == null)
+                .Select(s => new Object[] { s })
+                .GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
     }
 }
