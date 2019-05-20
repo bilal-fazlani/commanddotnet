@@ -7,18 +7,16 @@ namespace CommandDotNet.Parsing
 {
     internal class ListParser : IParser
     {
-        private readonly Type _underLyingType;
         private readonly SingleValueParser _singleValueParser;
 
-        public ListParser(Type underLyingType, SingleValueParser singleValueParser)
+        public ListParser(SingleValueParser singleValueParser)
         {
-            _underLyingType = underLyingType;
             _singleValueParser = singleValueParser;
         }
 
         public dynamic Parse(ArgumentInfo argumentInfo)
         {
-            Type listType = typeof(List<>).MakeGenericType(_underLyingType);
+            Type listType = typeof(List<>).MakeGenericType(argumentInfo.UnderlyingType);
             IList listInstance = (IList) Activator.CreateInstance(listType);
 
             foreach (string stringValue in argumentInfo.ValueInfo.Values)

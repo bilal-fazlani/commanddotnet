@@ -112,22 +112,13 @@ namespace CommandDotNet
 
         private IEnumerable<ArgumentInfo> GetOptionValuesForConstructor()
         {
-            IEnumerable<ParameterInfo> parameterInfos = _type
+            var firstCtor = _type
                 .GetConstructors()
-                .FirstOrDefault()
-                .GetParameters();
-
-            if(parameterInfos.Any(p => p.HasAttribute<ArgumentAttribute>()))
-                throw new AppRunnerException("Constructor arguments can not have [Argument] attribute. Please use [Option] attribute");
-
-            ArgumentInfoCreator argumentInfoCreator = new ArgumentInfoCreator(_settings);
+                .FirstOrDefault();
             
-            List<ArgumentInfo> argumentInfos = new List<ArgumentInfo>();
-
-            foreach (var parameterInfo in parameterInfos)
-            {
-                argumentInfos.AddRange(argumentInfoCreator.ConvertToArgumentInfos(parameterInfo, ArgumentMode.Option));
-            }
+            List<ArgumentInfo> argumentInfos = new ArgumentInfoCreator(_settings)
+                .GetArgumentsFromMethod(firstCtor, ArgumentMode.Option)
+                .ToList();
 
             foreach (ArgumentInfo argumentInfo in argumentInfos)
             {

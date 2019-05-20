@@ -16,21 +16,11 @@ namespace CommandDotNet.Parsing
             _appSettings = appSettings;
         }
 
-        public IParser CreateInstance(Type argumentType)
+        public IParser CreateInstance(ArgumentInfo argumentInfo)
         {
-            var underLyingType = argumentType.GetNullableUnderlyingType();
-            if (underLyingType != null)
-            {
-                return new NullableValueParser(underLyingType, GetSingleValueParser(underLyingType));
-            }
-
-            underLyingType = argumentType.GetListUnderlyingType();
-            if (underLyingType != null)
-            {
-                return new ListParser(underLyingType, GetSingleValueParser(underLyingType));
-            }
-            
-            return GetSingleValueParser(argumentType);
+            return argumentInfo.IsMultipleType
+                ? new ListParser(GetSingleValueParser(argumentInfo.UnderlyingType))
+                : (IParser)GetSingleValueParser(argumentInfo.Type);
         }
 
         internal SingleValueParser GetSingleValueParser(Type argumentType)
