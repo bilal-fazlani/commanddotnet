@@ -9,13 +9,12 @@ namespace CommandDotNet.Tests.BddTests
 
         public void Add(IScenario scenario)
         {
-            this._scenarios.Add(scenario);
+            _scenarios.Add(scenario);
         }
 
-        IEnumerator<IScenario> IEnumerable<IScenario>.GetEnumerator() =>
-            this._scenarios.GetEnumerator();
+        public IEnumerator<IScenario> GetEnumerator() =>
+            _scenarios.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() =>
-            this._scenarios.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

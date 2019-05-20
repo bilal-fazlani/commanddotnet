@@ -1,3 +1,4 @@
+using System;
 using CommandDotNet.Tests.BddTests.Apps;
 
 namespace CommandDotNet.Tests.BddTests.TestScenarios
