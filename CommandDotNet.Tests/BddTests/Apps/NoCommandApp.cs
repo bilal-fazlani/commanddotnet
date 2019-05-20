@@ -1,4 +1,4 @@
-namespace CommandDotNet.Tests.SmokeTests.Apps
+namespace CommandDotNet.Tests.BddTests.Apps
 {
     public class NoCommandApp
     {

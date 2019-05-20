@@ -1,7 +1,7 @@
 using CommandDotNet.Attributes;
 using CommandDotNet.Tests.Utils;
 
-namespace CommandDotNet.Tests.SmokeTests.Apps
+namespace CommandDotNet.Tests.BddTests.Apps
 {
     public class SingleCommandApp
     {
@@ -14,8 +14,8 @@ namespace CommandDotNet.Tests.SmokeTests.Apps
             
         public void Add(int x, int y)
         {
-            Writer.Write($"{x}+{y}={x+y}");
-            TestOutputs.Capture(new AddResults{X = x, Y = y});
+            this.Writer.Write($"{x}+{y}={x+y}");
+            this.TestOutputs.Capture(new AddResults{X = x, Y = y});
         }
 
         public class AddResults

@@ -22,7 +22,4 @@
   <ItemGroup>
     <Content Include="TestCases/**/*" CopyToOutputDirectory="Always" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SmokeTests\Framework\" />
-  </ItemGroup>
 </Project>

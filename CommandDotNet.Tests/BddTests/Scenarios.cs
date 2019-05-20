@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace CommandDotNet.Tests.SmokeTests
+namespace CommandDotNet.Tests.BddTests
 {
     public class Scenarios : IEnumerable<IScenario>
     {
@@ -9,13 +9,13 @@ namespace CommandDotNet.Tests.SmokeTests
 
         public void Add(IScenario scenario)
         {
-            _scenarios.Add(scenario);
+            this._scenarios.Add(scenario);
         }
 
         IEnumerator<IScenario> IEnumerable<IScenario>.GetEnumerator() =>
-            _scenarios.GetEnumerator();
+            this._scenarios.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() =>
-            _scenarios.GetEnumerator();
+            this._scenarios.GetEnumerator();
     }
 }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CommandDotNet.Tests.SmokeTests
+namespace CommandDotNet.Tests.BddTests
 {
     public abstract class ScenariosBaseTheory : IEnumerable<object[]>
     {
@@ -11,12 +11,12 @@ namespace CommandDotNet.Tests.SmokeTests
 
         public IEnumerator<object[]> GetEnumerator()
         {
-            return Scenarios.Select(s => new Object[] { s }).GetEnumerator();
+            return this.Scenarios.Select(s => new Object[] { s }).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
     }
 }
