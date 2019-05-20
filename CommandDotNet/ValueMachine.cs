@@ -54,12 +54,12 @@ namespace CommandDotNet
             List<string> inputs = new List<string>();
             if (parameterInfo.IsMultipleType)
             {
-                Console.Write($"{parameterInfo.Name} ({parameterInfo.TypeDisplayName}) [separate values by space]: ");
+                _appSettings.Out.Write($"{parameterInfo.Name} ({parameterInfo.TypeDisplayName}) [separate values by space]: ");
                 inputs = Console.ReadLine().Split(' ').ToList();
             }
             else
             {
-                Console.Write($"{parameterInfo.Name} ({parameterInfo.TypeDisplayName}): ");
+                _appSettings.Out.Write($"{parameterInfo.Name} ({parameterInfo.TypeDisplayName}): ");
                 inputs.Add(Console.ReadLine());
             }
 

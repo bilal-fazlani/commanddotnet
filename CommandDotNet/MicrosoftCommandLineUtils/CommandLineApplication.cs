@@ -48,8 +48,6 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public Func<string> LongVersionGetter { get; set; }
         public Func<string> ShortVersionGetter { get; set; }
         public List<ICommand> Commands { get; }
-        public TextWriter Out { get; set; } = Console.Out;
-        public TextWriter Error { get; set; } = Console.Error;
 
         public string GetFullCommandName()
         {
@@ -345,7 +343,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         {
             if (OptionHelp != null)
             {
-                Out.WriteLine(string.Format("Specify --{0} for a list of available options and commands.", OptionHelp.LongName));
+                _appSettings.Out.WriteLine(string.Format("Specify --{0} for a list of available options and commands.", OptionHelp.LongName));
             }
         }
 
@@ -357,7 +355,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 cmd.IsShowingInformation = true;
             }
             IHelpProvider helpTextProvider = HelpTextProviderFactory.Create(_appSettings);
-            Out.WriteLine(helpTextProvider.GetHelpText(this));
+            _appSettings.Out.WriteLine(helpTextProvider.GetHelpText(this));
         }
 
         public void ShowVersion()
@@ -367,8 +365,8 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 cmd.IsShowingInformation = true;
             }
 
-            Out.WriteLine(FullName);
-            Out.WriteLine(LongVersionGetter());
+            _appSettings.Out.WriteLine(FullName);
+            _appSettings.Out.WriteLine(LongVersionGetter());
         }
 
         public string GetFullNameAndVersion()
@@ -379,8 +377,8 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public void ShowRootCommandFullNameAndVersion()
         {
             var rootCmd = GetParentCommands().Last();
-            Out.WriteLine(rootCmd.GetFullNameAndVersion());
-            Out.WriteLine();
+            _appSettings.Out.WriteLine(rootCmd.GetFullNameAndVersion());
+            _appSettings.Out.WriteLine();
         }
         
         private IEnumerable<CommandLineApplication> GetSelfAndParentCommands()

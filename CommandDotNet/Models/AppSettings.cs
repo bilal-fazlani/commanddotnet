@@ -1,4 +1,6 @@
-﻿using CommandDotNet.CommandInvoker;
+﻿using System;
+using System.IO;
+using CommandDotNet.CommandInvoker;
 using CommandDotNet.Exceptions;
 using CommandDotNet.HelpGeneration;
 using CommandDotNet.TypeDescriptors;
@@ -7,13 +9,18 @@ namespace CommandDotNet.Models
 {
     public class AppSettings
     {
-        public AppSettings()
+        private BooleanMode _booleanMode = BooleanMode.Implicit;
+
+        public BooleanMode BooleanMode
         {
-            if(BooleanMode == BooleanMode.Unknown)
-                throw new AppRunnerException("BooleanMode can not be set to BooleanMode.Unknown explicitly");
-            CommandInvoker = new DefaultCommandInvoker();
+            get => _booleanMode;
+            set
+            {
+                if(value == BooleanMode.Unknown)
+                    throw new AppRunnerException("BooleanMode can not be set to BooleanMode.Unknown explicitly");
+                _booleanMode = value;
+            }
         }
-        public BooleanMode BooleanMode { get; set; } = BooleanMode.Implicit;
 
         public bool ThrowOnUnexpectedArgument { get; set; } = true;
         
@@ -33,6 +40,9 @@ namespace CommandDotNet.Models
         
         internal IHelpProvider CustomHelpProvider { get; set; }
 
-        internal ICommandInvoker CommandInvoker { get; set; }
+        internal ICommandInvoker CommandInvoker { get; set; } = new DefaultCommandInvoker();
+        
+        internal TextWriter Out { get; set; } = Console.Out;
+        internal TextWriter Error { get; set; } = Console.Error;
     }
 }
