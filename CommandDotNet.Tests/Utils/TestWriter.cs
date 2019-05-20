@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 
 namespace CommandDotNet.Tests.Utils

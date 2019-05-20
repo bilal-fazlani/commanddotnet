@@ -23,7 +23,7 @@ namespace CommandDotNet
         internal IDependencyResolver DependencyResolver;
         
         private readonly AppSettings _settings;
-
+        
         public AppRunner(AppSettings settings = null)
         {
             _settings = settings ?? new AppSettings();

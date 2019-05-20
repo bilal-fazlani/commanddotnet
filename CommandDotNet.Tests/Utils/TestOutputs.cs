@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CommandDotNet.Tests.Utils
 {
-    public class Inputs
+    public class TestOutputs
     {
         private Dictionary<Type, object> _inputs = new Dictionary<Type, object>();
 

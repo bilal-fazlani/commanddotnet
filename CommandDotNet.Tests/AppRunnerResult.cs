@@ -7,13 +7,13 @@ namespace CommandDotNet.Tests
     {
         public int ExitCode { get; }
         public string ConsoleOut { get; }
-        public Inputs Inputs { get; }
+        public TestOutputs TestOutputs { get; }
 
-        public AppRunnerResult(int exitCode, string consoleOut, Inputs inputs)
+        public AppRunnerResult(int exitCode, string consoleOut, TestOutputs testOutputs)
         {
             ExitCode = exitCode;
             ConsoleOut = consoleOut;
-            Inputs = inputs;
+            TestOutputs = testOutputs;
         }
 
         /// <summary>
