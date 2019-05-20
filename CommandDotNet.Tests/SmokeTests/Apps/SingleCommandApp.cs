@@ -3,7 +3,7 @@ using CommandDotNet.Tests.Utils;
 
 namespace CommandDotNet.Tests.SmokeTests.Apps
 {
-    public class SingleMethodApp
+    public class SingleCommandApp
     {
         [InjectProperty]
         public TestWriter Writer { get; set; }
@@ -11,16 +11,17 @@ namespace CommandDotNet.Tests.SmokeTests.Apps
         [InjectProperty]
         public TestOutputs TestOutputs { get; set; }
             
-        public int X { get; private set; }
-        public int Y { get; private set; }
             
         public void Add(int x, int y)
         {
             Writer.Write($"{x}+{y}={x+y}");
+            TestOutputs.Capture(new AddResults{X = x, Y = y});
+        }
 
-            X = x;
-            Y = y;
-            TestOutputs.Capture(this);
+        public class AddResults
+        {
+            public int X { get; set; }
+            public int Y { get; set; }
         }
     }
 }

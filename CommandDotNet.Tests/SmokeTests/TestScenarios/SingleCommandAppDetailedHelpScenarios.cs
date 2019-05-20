@@ -2,12 +2,12 @@ using CommandDotNet.Tests.SmokeTests.Apps;
 
 namespace CommandDotNet.Tests.SmokeTests.TestScenarios
 {
-    public class SingleMethodAppDetailedHelpScenarios : ScenariosBaseTheory
+    public class SingleCommandAppDetailedHelpScenarios : ScenariosBaseTheory
     {
         public override Scenarios Scenarios =>
             new Scenarios
             {
-                new Scenario<SingleMethodApp>("default help shows command and example")
+                new Scenario<SingleCommandApp>("default help shows command and example")
                 {
                     Args = "-h",
                     Help = @"Usage: dotnet testhost.dll [options] [command]
@@ -27,7 +27,7 @@ Commands:
 
 Use ""dotnet testhost.dll [command] --help"" for more information about a command."
                 },
-                new Scenario<SingleMethodApp>("help for command shows arguments and options")
+                new Scenario<SingleCommandApp>("help for command shows arguments and options")
                 {
                     Args = "Add -h",
                     Help = @"Usage: dotnet testhost.dll Add [arguments] [options]

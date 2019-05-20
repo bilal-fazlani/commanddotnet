@@ -13,9 +13,14 @@ namespace CommandDotNet.Tests.Utils
             _inputs.Add(value.GetType(), value);
         }
 
+        public object Get(Type type)
+        {
+            return _inputs.GetValueOrDefault(type);
+        }
+
         public T Get<T>()
         {
-            return (T) _inputs[typeof(T)];
+            return (T)Get(typeof(T));
         }
     }
 }

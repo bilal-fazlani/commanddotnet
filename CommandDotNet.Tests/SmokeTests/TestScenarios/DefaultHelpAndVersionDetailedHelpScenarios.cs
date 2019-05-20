@@ -7,7 +7,7 @@ namespace CommandDotNet.Tests.SmokeTests.TestScenarios
         public override Scenarios Scenarios =>
             new Scenarios
             {
-                new Scenario<EmptyApp>("no args and no default method - show help")
+                new Scenario<NoCommandApp>("no args and no default method - show help")
                 {
                     Args = null,
                     Help = @"Usage: dotnet testhost.dll [options]
@@ -20,7 +20,7 @@ Options:
   -h | --help             
   Show help information"
                 },
-                new Scenario<EmptyApp>("--help shows help - no commands")
+                new Scenario<NoCommandApp>("--help shows help - no commands")
                 {
                     Args = "--help",
                     Help = @"Usage: dotnet testhost.dll [options]
@@ -33,7 +33,7 @@ Options:
   -h | --help             
   Show help information"
                 },
-                new Scenario<EmptyApp>("-h shows help - no commands")
+                new Scenario<NoCommandApp>("-h shows help - no commands")
                 {
                     Args = "-h",
                     Help = @"Usage: dotnet testhost.dll [options]
@@ -46,13 +46,13 @@ Options:
   -h | --help             
   Show help information"
                 },
-                new Scenario<EmptyApp>("--version shows version")
+                new Scenario<NoCommandApp>("--version shows version")
                 {
                     Args = "--version",
                     Help = @"testhost.dll
 15.9.0"
                 },
-                new Scenario<EmptyApp>("-v shows version")
+                new Scenario<NoCommandApp>("-v shows version")
                 {
                     Args = "--version",
                     Help = @"testhost.dll

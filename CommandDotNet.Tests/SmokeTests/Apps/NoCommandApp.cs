@@ -1,6 +1,6 @@
 namespace CommandDotNet.Tests.SmokeTests.Apps
 {
-    public class EmptyApp
+    public class NoCommandApp
     {
             
     }
