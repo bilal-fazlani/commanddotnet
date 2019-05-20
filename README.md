@@ -16,9 +16,13 @@ The purpose of this **framework** is to let developers focus on the core logic o
 
 It provides **out of the box CLI help** with full customization options.
 
+## Credits 🎉
+
+Special thanks to [Drew Burlingame](https://github.com/drewburlingame) for continuous support and contributions
+
 ---
 
-Table of contents:
+## Table of contents:
 
 - [Installation](#installation)
 - [Introduction](#introduction)
