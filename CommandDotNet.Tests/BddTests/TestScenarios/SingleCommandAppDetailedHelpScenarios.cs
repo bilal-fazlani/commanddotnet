@@ -40,14 +40,19 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
 Arguments:
 
   x    <NUMBER>
+  the first operand
 
   y    <NUMBER>
+  the second operand
 
 
 Options:
 
   -h | --help
-  Show help information"
+  Show help information
+
+  -o | --operator    <TEXT>    [+]
+  the operation to apply"
                     }
                 }
             };
