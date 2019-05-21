@@ -89,8 +89,6 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                     // Add a value to indicate that this option was specified
                     Values.Add("on");
                     break;
-                default:
-                    break;
             }
             return true;
         }

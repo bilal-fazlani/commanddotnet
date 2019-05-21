@@ -1,5 +1,4 @@
-﻿using CommandDotNet.Models;
-using Humanizer;
+﻿using Humanizer;
 
 namespace CommandDotNet
 {

@@ -41,8 +41,8 @@ namespace CommandDotNet
                 .GetDeclaredProperties()
                 .SelectMany(propertyInfo => GetArgumentFromProperty(propertyInfo, argumentMode));
         }
-        
-        public IEnumerable<ArgumentInfo> GetArgumentsFromParameter(ParameterInfo parameterInfo, ArgumentMode argumentMode)
+
+        private IEnumerable<ArgumentInfo> GetArgumentsFromParameter(ParameterInfo parameterInfo, ArgumentMode argumentMode)
         {
             if (parameterInfo.ParameterType.InheritsFrom<IArgumentModel>())
             {
@@ -56,7 +56,7 @@ namespace CommandDotNet
             return new[] {argumentInfo};
         }
 
-        public IEnumerable<ArgumentInfo> GetArgumentFromProperty(PropertyInfo propertyInfo, ArgumentMode argumentMode)
+        private IEnumerable<ArgumentInfo> GetArgumentFromProperty(PropertyInfo propertyInfo, ArgumentMode argumentMode)
         {
             if (propertyInfo.PropertyType.InheritsFrom<IArgumentModel>())
             {

@@ -11,25 +11,23 @@ namespace CommandDotNet
 {
     internal class AppInstanceCreator
     {
-        private readonly AppSettings _appSettings;
         private readonly ArgumentMerger _argumentMerger;
 
         public AppInstanceCreator(AppSettings appSettings)
         {
-            _appSettings = appSettings;
             _argumentMerger = new ArgumentMerger(appSettings);
         }
         
         public object CreateInstance(
             Type type, 
-            IEnumerable<ArgumentInfo> construcitonParams, 
+            IEnumerable<ArgumentInfo> constructionParams, 
             IDependencyResolver dependencyResolver,
             ModelValidator modelValidator)
         {
-            construcitonParams = construcitonParams ?? new List<ArgumentInfo>();
+            constructionParams = constructionParams ?? new List<ArgumentInfo>();
             
             //create instance
-            object[] mergedValues = _argumentMerger.Merge(construcitonParams);
+            object[] mergedValues = _argumentMerger.Merge(constructionParams);
             
             //validate all parameters
             foreach (dynamic param in mergedValues)
@@ -51,10 +49,10 @@ namespace CommandDotNet
                         propertyInfo.SetValue(instance, dependencyResolver.Resolve(propertyInfo.PropertyType));
                     }
                 }
-                else // there are some properties but there is no dependecncy resolver set
+                else // there are some properties but there is no dependency resolver set
                 {
-                    throw new AppRunnerException($"Dependency resolver is not set for injecting properties. " +
-                                                 $"Please use an IoC framework'");
+                    throw new AppRunnerException("Dependency resolver is not set for injecting properties. " +
+                                                 "Please use an IoC framework'");
                 }
             }
             

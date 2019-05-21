@@ -60,7 +60,7 @@ namespace CommandDotNet
             else
             {
                 string appName = consoleApplicationAttribute?.Name ?? type.Name.ChangeCase(_appSettings.Case); 
-                app = parentApplication.Command(appName, application => { }, _appSettings.HelpTextStyle, _appSettings.ThrowOnUnexpectedArgument);
+                app = parentApplication.Command(appName, application => { });
             }
 
             app.HelpOption(Constants.HelpTemplate);

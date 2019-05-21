@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using CommandDotNet.CommandInvoker;
-using CommandDotNet.Exceptions;
-using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 
 namespace CommandDotNet
 {
     internal class CommandRunner
     {
-        private readonly CommandLineApplication _app;
         private readonly Type _type;
         private readonly IEnumerable<ArgumentInfo> _constructorParamValues;
         private readonly IDependencyResolver _dependencyResolver;
@@ -22,13 +17,11 @@ namespace CommandDotNet
         private readonly AppInstanceCreator _appInstanceCreator;
 
         public CommandRunner(
-            CommandLineApplication app,
             Type type,
             IEnumerable<ArgumentInfo> constructorParamValues,
             IDependencyResolver dependencyResolver,
             AppSettings appSettings)
         {
-            _app = app;
             _type = type;
             _constructorParamValues = constructorParamValues;
             _dependencyResolver = dependencyResolver;
@@ -44,7 +37,7 @@ namespace CommandDotNet
         {
             parameterValues = parameterValues ?? new List<ArgumentInfo>();
 
-            //get values for method invokation
+            //get values for method invocation
             object[] mergedParameters = _argumentMerger.Merge(parameterValues);
                 
             //validate all parameters

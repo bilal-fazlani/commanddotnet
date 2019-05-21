@@ -22,12 +22,6 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public object DefaultValue { get; set; }
         public List<string> AllowedValues { get; set; }
         
-        public string Value
-        {
-            get
-            {
-                return Values.FirstOrDefault();
-            }
-        }
+        public string Value => Values.FirstOrDefault();
     }
 }

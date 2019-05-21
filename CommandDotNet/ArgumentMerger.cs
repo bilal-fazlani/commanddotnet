@@ -9,12 +9,10 @@ namespace CommandDotNet
 {
     internal class ArgumentMerger
     {
-        private readonly AppSettings _appSettings;
         private readonly ValueMachine _valueMachine;
 
         public ArgumentMerger(AppSettings appSettings)
         {
-            _appSettings = appSettings;
             _valueMachine = new ValueMachine(appSettings);
         }
         

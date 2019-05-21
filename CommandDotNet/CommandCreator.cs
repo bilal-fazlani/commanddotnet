@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using CommandDotNet.Attributes;
 using CommandDotNet.Exceptions;
 using CommandDotNet.Extensions;
 using CommandDotNet.MicrosoftCommandLineUtils;
@@ -23,10 +21,10 @@ namespace CommandDotNet
             _app = app;
             _settings = settings;
             
-            //get values for construtor params
+            //get values for constructor params
             IEnumerable<ArgumentInfo> constructorValues = GetOptionValuesForConstructor();
             
-            _commandRunner = new CommandRunner(app, type, constructorValues, dependencyResolver, settings);
+            _commandRunner = new CommandRunner(type, constructorValues, dependencyResolver, settings);
         }
 
         public void CreateDefaultCommand()
@@ -79,7 +77,7 @@ namespace CommandDotNet
                                 break;
                         }
                     }
-                }, _settings.HelpTextStyle ,_settings.ThrowOnUnexpectedArgument);
+                });
 
                 commandOption.OnExecute(async () => await _commandRunner.RunCommand(commandInfo, argumentValues));
             }

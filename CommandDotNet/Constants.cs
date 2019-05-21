@@ -4,9 +4,7 @@
     {
         public const string HelpTemplate = "-h | --help";
 
-        public const int PadLength = 30;
-
-        public class TypeDisplayNames
+        public static class TypeDisplayNames
         {
             public const string Flag = null;
 

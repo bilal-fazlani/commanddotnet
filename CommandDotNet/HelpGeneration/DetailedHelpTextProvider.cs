@@ -66,7 +66,7 @@ namespace CommandDotNet.HelpGeneration
                 commandsBuilder.AppendLine();
                 commandsBuilder.AppendLine($"Commands:{Environment.NewLine}");
                 var maxCmdLen = commands.Max(c => c.Name.Length);
-                var outputFormat = string.Format("  {{0, -{0}}}{{1}}", maxCmdLen + 2);
+                var outputFormat = $"  {{0, -{maxCmdLen + 2}}}{{1}}";
                                
                 foreach (var cmd in commands.OrderBy(c => c.Name))
                 {

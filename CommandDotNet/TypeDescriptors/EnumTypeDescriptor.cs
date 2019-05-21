@@ -4,7 +4,7 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet.TypeDescriptors
 {
-    public class EnumTypeDesriptor : 
+    public class EnumTypeDescriptor : 
         IArgumentTypeDescriptor,
         IAllowedValuesTypeDescriptor
     {

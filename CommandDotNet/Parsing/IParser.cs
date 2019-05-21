@@ -1,5 +1,4 @@
-﻿using System;
-using CommandDotNet.Models;
+﻿using CommandDotNet.Models;
 
 namespace CommandDotNet.Parsing
 {
