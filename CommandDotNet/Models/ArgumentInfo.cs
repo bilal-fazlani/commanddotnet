@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -54,10 +53,10 @@ namespace CommandDotNet.Models
                 .GetDescriptorOrThrow(UnderlyingType);
         }
 
-        protected AppSettings Settings { get; private set; }
-        protected ICustomAttributeProvider AttributeProvider { get; private set; }
+        protected AppSettings Settings { get; }
+        protected ICustomAttributeProvider AttributeProvider { get; }
         
-        public Type Type { get; private set; }
+        public Type Type { get; }
 
         /// <summary>
         /// In cases where <see cref="ArgumentInfo.Type"/> is List or Nullable,
@@ -92,14 +91,12 @@ namespace CommandDotNet.Models
         {
             ValueInfo = new ValueInfo(parameter);
         }
-        
-        protected abstract string GetAnnotatedDescription();
-        
+
         private static object GetDefaultValue(PropertyInfo propertyInfo)
         {
             object instance = Activator.CreateInstance(propertyInfo.DeclaringType);
             object defaultValue = propertyInfo.GetValue(instance);
-            if (object.Equals(propertyInfo.PropertyType.GetDefaultValue(), defaultValue))
+            if (Equals(propertyInfo.PropertyType.GetDefaultValue(), defaultValue))
             {
                 return DBNull.Value;
             }

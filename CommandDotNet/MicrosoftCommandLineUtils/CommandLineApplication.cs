@@ -4,10 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using CommandDotNet.Exceptions;
 using CommandDotNet.HelpGeneration;
@@ -43,7 +40,6 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public CommandOption OptionVersion { get; private set; }
         public HashSet<CommandArgument> Arguments { get; }
         public readonly List<string> RemainingArguments;
-        public bool IsShowingInformation { get; protected set; }  // Is showing help or version?
         public Func<int> Invoke { get; set; }
         public Func<string> LongVersionGetter { get; set; }
         public Func<string> ShortVersionGetter { get; set; }
@@ -66,9 +62,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 string.Equals(optionNameToCompare(o), optionName, StringComparison.Ordinal));
         }
 
-        public CommandLineApplication Command(string name, Action<CommandLineApplication> configuration,
-            HelpTextStyle helpTextStyle,
-            bool throwOnUnexpectedArg)
+        public CommandLineApplication Command(string name, Action<CommandLineApplication> configuration)
         {
             var command = new CommandLineApplication(_appSettings) { Name = name, Parent = this };
             Commands.Add(command);
@@ -106,8 +100,8 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             var lastArg = Arguments.LastOrDefault();
             if (lastArg != null && lastArg.MultipleValues)
             {
-                var message = string.Format("The last argument '{0}' accepts multiple values. No more argument can be added.",
-                    lastArg.Name);
+                var message =
+                    $"The last argument '{lastArg.Name}' accepts multiple values. No more argument can be added.";
                 throw new AppRunnerException(message);
             }
 
@@ -125,11 +119,6 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 throw new AppRunnerException($"Argument with name '{argument.Name}' already added");
             configuration(argument);
             return argument;
-        }
-
-        public void OnExecute(Func<int> invoke)
-        {
-            Invoke = invoke;
         }
 
         public void OnExecute(Func<Task<int>> invoke)
@@ -213,12 +202,12 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                     if (isLongOption || isShortOption)
                     {
                         // If we find a help/version option, show information and stop parsing
-                        if (command.OptionHelp == option)
+                        if (Equals(command.OptionHelp, option))
                         {
                             command.ShowHelp();
                             return 0;
                         }
-                        if (command.OptionVersion == option)
+                        if (Equals(command.OptionVersion, option))
                         {
                             command.ShowVersion();
                             return 0;
@@ -301,26 +290,24 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         }
 
         // Helper method that adds a help option
-        public CommandOption HelpOption(string template)
+        public void HelpOption(string template)
         {
             // Help option is special because we stop parsing once we see it
             // So we store it separately for further use
             OptionHelp = Option(template, "Show help information", CommandOptionType.NoValue, _=>{}, false, Constants.TypeDisplayNames.Flag, DBNull.Value, false, null);
-
-            return OptionHelp;
         }
 
-        public CommandOption VersionOption(string template,
+        public void VersionOption(string template,
             string shortFormVersion,
             string longFormVersion = null)
         {
             if (longFormVersion == null)
             {
-                return VersionOption(template, () => shortFormVersion);
+                VersionOption(template, () => shortFormVersion);
             }
             else
             {
-                return VersionOption(template, () => shortFormVersion, () => longFormVersion);
+                VersionOption(template, () => shortFormVersion, () => longFormVersion);
             }
         }
 
@@ -343,44 +330,23 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         {
             if (OptionHelp != null)
             {
-                _appSettings.Out.WriteLine(string.Format("Specify --{0} for a list of available options and commands.", OptionHelp.LongName));
+                _appSettings.Out.WriteLine($"Specify --{OptionHelp.LongName} for a list of available options and commands.");
             }
         }
 
         // Show full help
         public void ShowHelp()
         {
-            foreach (var cmd in GetSelfAndParentCommands())
-            {
-                cmd.IsShowingInformation = true;
-            }
             IHelpProvider helpTextProvider = HelpTextProviderFactory.Create(_appSettings);
             _appSettings.Out.WriteLine(helpTextProvider.GetHelpText(this));
         }
 
         public void ShowVersion()
         {
-            foreach (var cmd in GetSelfAndParentCommands())
-            {
-                cmd.IsShowingInformation = true;
-            }
-
             _appSettings.Out.WriteLine(FullName);
             _appSettings.Out.WriteLine(LongVersionGetter());
         }
 
-        public string GetFullNameAndVersion()
-        {
-            return ShortVersionGetter == null ? FullName : string.Format("{0} {1}", FullName, ShortVersionGetter());
-        }
-
-        public void ShowRootCommandFullNameAndVersion()
-        {
-            var rootCmd = GetParentCommands().Last();
-            _appSettings.Out.WriteLine(rootCmd.GetFullNameAndVersion());
-            _appSettings.Out.WriteLine();
-        }
-        
         private IEnumerable<CommandLineApplication> GetSelfAndParentCommands()
         {
             for (CommandLineApplication c = this; c != null; c = c.Parent)
@@ -422,21 +388,9 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 _enumerator = enumerator;
             }
 
-            public CommandArgument Current
-            {
-                get
-                {
-                    return _enumerator.Current;
-                }
-            }
+            public CommandArgument Current => _enumerator.Current;
 
-            object IEnumerator.Current
-            {
-                get
-                {
-                    return Current;
-                }
-            }
+            object IEnumerator.Current => Current;
 
             public void Dispose()
             {

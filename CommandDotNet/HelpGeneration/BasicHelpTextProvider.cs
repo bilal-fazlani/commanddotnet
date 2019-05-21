@@ -64,7 +64,7 @@ namespace CommandDotNet.HelpGeneration
                 commandsBuilder.AppendLine();
                 commandsBuilder.AppendLine("Commands:");
                 var maxCmdLen = commands.Max(c => c.Name.Length);
-                var outputFormat = string.Format("  {{0, -{0}}}{{1}}", maxCmdLen + 2);
+                var outputFormat = $"  {{0, -{maxCmdLen + 2}}}{{1}}";
                                
                 foreach (var cmd in commands.OrderBy(c => c.Name))
                 {
@@ -97,7 +97,7 @@ namespace CommandDotNet.HelpGeneration
                 optionsBuilder.AppendLine("Options:");
                                 
                 var maxOptLen = options.Max(o => o.Template.Length);
-                var outputFormat = string.Format("  {{0, -{0}}}{{1}}", maxOptLen + 2);
+                var outputFormat = $"  {{0, -{maxOptLen + 2}}}{{1}}";
                 
                 foreach (var opt in options)
                 {
@@ -122,7 +122,7 @@ namespace CommandDotNet.HelpGeneration
                 argumentsBuilder.AppendLine("Arguments:");
                                 
                 var maxArgLen = arguments.Max(a => a.Name.Length);
-                var outputFormat = string.Format("  {{0, -{0}}}{{1}}", maxArgLen + 2);
+                var outputFormat = $"  {{0, -{maxArgLen + 2}}}{{1}}";
                 foreach (var arg in arguments)
                 {
                     argumentsBuilder.AppendFormat(outputFormat, arg.Name, arg.Description);

@@ -31,8 +31,15 @@ namespace CommandDotNet.Models
         public Case Case { get; set; } = Case.DontChange;
 
         public bool EnableVersionOption { get; set; } = true;
-        
-        public bool PrompForArgumentsIfNotProvided { get; set; }
+
+        [Obsolete("Use correctly spelled PromptForArgumentsIfNotProvided")]
+        public bool PrompForArgumentsIfNotProvided
+        {
+            get => PromptForArgumentsIfNotProvided;
+            set => PromptForArgumentsIfNotProvided = value;
+        }
+
+        public bool PromptForArgumentsIfNotProvided { get; set; }
 
         public HelpTextStyle HelpTextStyle { get; set; } = HelpTextStyle.Detailed;
         

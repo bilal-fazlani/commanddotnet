@@ -10,7 +10,7 @@ namespace CommandDotNet
     internal class ValueMachine
     {
         private readonly AppSettings _appSettings;
-        private ParserFactory _parserFactory;
+        private readonly ParserFactory _parserFactory;
 
         public ValueMachine(AppSettings appSettings)
         {
@@ -33,17 +33,17 @@ namespace CommandDotNet
             //when value not present but method parameter has a default value defined
             if (argumentInfo.DefaultValue != DBNull.Value && argumentInfo.DefaultValue != null)
             {
-                //use default paramter or property value
+                //use default parameter or property value
                 return argumentInfo.DefaultValue;
             }
 
-            //when there no value from inut and no default value, return default value of the type
+            //when there no value from input and no default value, return default value of the type
             return argumentInfo.Type.GetDefaultValue();
         }
 
         private void PromptForValue(ArgumentInfo argumentInfo)
         {
-            if (!_appSettings.PrompForArgumentsIfNotProvided
+            if (!_appSettings.PromptForArgumentsIfNotProvided
                 || !(argumentInfo is CommandParameterInfo parameterInfo)
                 || parameterInfo.ValueInfo.HasValue
                 || parameterInfo.DefaultValue != DBNull.Value)
@@ -51,16 +51,16 @@ namespace CommandDotNet
                 return;
             }
 
-            List<string> inputs = new List<string>();
+            List<string> inputs;
             if (parameterInfo.IsMultipleType)
             {
                 _appSettings.Out.Write($"{parameterInfo.Name} ({parameterInfo.TypeDisplayName}) [separate values by space]: ");
-                inputs = Console.ReadLine().Split(' ').ToList();
+                inputs = Console.ReadLine()?.Split(' ').ToList() ?? new List<string>();
             }
             else
             {
                 _appSettings.Out.Write($"{parameterInfo.Name} ({parameterInfo.TypeDisplayName}): ");
-                inputs.Add(Console.ReadLine());
+                inputs = new List<string>{ Console.ReadLine() };
             }
 
             parameterInfo.ValueInfo.Values = inputs;

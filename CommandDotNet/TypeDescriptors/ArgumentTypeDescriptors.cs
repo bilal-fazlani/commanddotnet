@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -10,11 +9,11 @@ namespace CommandDotNet.TypeDescriptors
 {
     public class ArgumentTypeDescriptors
     {
-        private List<IArgumentTypeDescriptor> _customDescriptors = new List<IArgumentTypeDescriptor>();
-        private List<IArgumentTypeDescriptor> _defaultDescriptors = new List<IArgumentTypeDescriptor>
+        private readonly List<IArgumentTypeDescriptor> _customDescriptors = new List<IArgumentTypeDescriptor>();
+        private readonly List<IArgumentTypeDescriptor> _defaultDescriptors = new List<IArgumentTypeDescriptor>
         {
             new BoolTypeDescriptor(),
-            new EnumTypeDesriptor(),
+            new EnumTypeDescriptor(),
                 
             new DelegatedTypeDescriptor<string>(Constants.TypeDisplayNames.Text, (a,v) => v),
             new DelegatedTypeDescriptor<char>(Constants.TypeDisplayNames.Character, (a,v) => char.Parse(v)),
@@ -44,7 +43,7 @@ namespace CommandDotNet.TypeDescriptors
             return GetDescriptor(type) ?? throw new AppRunnerException(
                        $"type : {type} is not supported.  " +
                        $"Implement a {nameof(TypeConverter)} or {nameof(IArgumentTypeDescriptor)} " +
-                       $"to support this type.");
+                       "to support this type.");
         }
     }
 }

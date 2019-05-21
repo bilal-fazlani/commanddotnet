@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using CommandDotNet.Attributes;
@@ -42,11 +39,11 @@ namespace CommandDotNet.Models
 
         public override bool IsImplicit => BooleanMode == BooleanMode.Implicit;
 
-        public CommandOptionType CommandOptionType { get; set; }
+        public CommandOptionType CommandOptionType { get; }
         
-        public string Template { get; set; }
+        public string Template { get; }
         
-        public BooleanMode BooleanMode { get; set; }
+        public BooleanMode BooleanMode { get; }
         
         public string LongName { get; }
         
@@ -141,11 +138,10 @@ namespace CommandDotNet.Models
             
             return CommandOptionType.SingleValue;
         }
-        
-        protected override string GetAnnotatedDescription()
+
+        private string GetAnnotatedDescription()
         {
-            OptionAttribute descriptionAttribute = AttributeProvider.GetCustomAttribute<OptionAttribute>();
-            return descriptionAttribute?.Description;
+            return AttributeProvider.GetCustomAttribute<OptionAttribute>()?.Description;
         }
         
         public override string ToString()

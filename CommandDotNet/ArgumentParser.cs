@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace CommandDotNet
 {
-    internal class ArgumentParser
+    internal static class ArgumentParser
     {
         private static readonly Regex ArgumentsSplitRegex = new Regex(@"(?<!\\)"".+(?<!\\)""|(?<!\\)'.+(?<!\\)'|[^\s]+", RegexOptions.Compiled);
         private static readonly Regex TrimRegex = new Regex(@"^""|^'|""$|'$", RegexOptions.Compiled);

@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel;
-using CommandDotNet.Extensions;
 using CommandDotNet.Models;
 
 namespace CommandDotNet.TypeDescriptors
