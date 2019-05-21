@@ -8,9 +8,17 @@ namespace CommandDotNet.Tests.BddTests
 {
     public class ScenarioTests
     {
+        [Theory(Skip = "skipped tests")]
+        [ClassData(typeof(DefaultCommandDetailedHelpScenarios))]
+        public void Skipped(IScenario scenario)
+        {
+
+        }
+
         [Theory]
-        [ClassData(typeof(DefaultHelpAndVersionDetailedHelpScenarios))]
+        [ClassData(typeof(BasicHelpAndVersionDetailedHelpScenarios))]
         [ClassData(typeof(SingleCommandAppDetailedHelpScenarios))]
+        [ClassData(typeof(DefaultCommandDetailedHelpScenarios))]
         public void Help(IScenario scenario)
         {
             var results = scenario.AppType.RunAppInMem(scenario.WhenArgs);
@@ -21,6 +29,7 @@ namespace CommandDotNet.Tests.BddTests
 
         [Theory]
         [ClassData(typeof(BasicParseScenarios))]
+        [ClassData(typeof(DefaultCommandParseScenarios))]
         public void Parse(IScenario scenario)
         {
             var results = scenario.AppType.RunAppInMem(scenario.WhenArgs);
