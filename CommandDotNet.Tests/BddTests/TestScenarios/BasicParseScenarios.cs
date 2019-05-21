@@ -38,7 +38,7 @@ namespace CommandDotNet.Tests.BddTests.TestScenarios
                     Then =
                     {
                         ExitCode = 1,
-                        HelpContainsText = "Unrecognized command or argument '%'"
+                        HelpContainsTexts = {"Unrecognized command or argument '%'"}
                     }
                 },
                 new Given<SingleCommandApp>("extra arguments not allowed")
@@ -47,7 +47,7 @@ namespace CommandDotNet.Tests.BddTests.TestScenarios
                     Then =
                     {
                         ExitCode = 1,
-                        HelpContainsText = "Unrecognized command or argument '4'"
+                        HelpContainsTexts = {"Unrecognized command or argument '4'"}
                     }
                 },
                 new Given<SingleCommandApp>("positional arguments are required")
@@ -57,7 +57,7 @@ namespace CommandDotNet.Tests.BddTests.TestScenarios
                     Then =
                     {
                         ExitCode = 1,
-                        HelpContainsText = "missing positional argument 'Y'"
+                        HelpContainsTexts = {"missing positional argument 'Y'"}
                     }
                 }
             };

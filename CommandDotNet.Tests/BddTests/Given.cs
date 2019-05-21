@@ -1,4 +1,5 @@
 using System;
+using CommandDotNet.Models;
 
 namespace CommandDotNet.Tests.BddTests
 {
@@ -6,12 +7,14 @@ namespace CommandDotNet.Tests.BddTests
     {
         public string Name { get; }
         public Type AppType => typeof(T);
-        public string SkipReason { get; set; }
 
-
+        public ScenarioAnd And { get; } = new ScenarioAnd();
         public string WhenArgs { get; set; }
-
         public ScenarioThen Then { get; } = new ScenarioThen();
+
+        IScenarioContext IScenario.Context { get; set; }
+
+        public string SkipReason { get; set; }
 
         public Given(string name)
         {
@@ -20,7 +23,10 @@ namespace CommandDotNet.Tests.BddTests
 
         public override string ToString()
         {
-            return $"{AppType.Name}: {Name}";
+            var context = ((IScenario)this).Context;
+            return context?.Description == null 
+                ? $"{AppType.Name}: {Name}" 
+                : $"{AppType.Namespace}: {Name} ({context.Description})";
         }
     }
 }

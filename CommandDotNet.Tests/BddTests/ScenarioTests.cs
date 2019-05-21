@@ -1,18 +1,22 @@
+using System;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using CommandDotNet.Tests.BddTests.TestScenarios;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.BddTests
 {
     public class ScenarioTests
     {
-        [Theory(Skip = "skipped tests")]
-        [ClassData(typeof(DefaultCommandDetailedHelpScenarios))]
-        public void Skipped(IScenario scenario)
-        {
+        private readonly ITestOutputHelper _output;
 
+        public ScenarioTests(ITestOutputHelper output)
+        {
+            _output = output;
         }
 
         [Theory]
@@ -21,10 +25,22 @@ namespace CommandDotNet.Tests.BddTests
         [ClassData(typeof(DefaultCommandDetailedHelpScenarios))]
         public void Help(IScenario scenario)
         {
-            var results = scenario.AppType.RunAppInMem(scenario.WhenArgs);
-            AssertExitCodeAndErrorMessage(scenario, results);
+            try
+            {
 
-            results.HelpShouldBe(scenario.Then.Help);
+                var results = scenario.AppType.RunAppInMem(scenario.WhenArgs, scenario.And.AppSettings);
+                AssertExitCodeAndErrorMessage(scenario, results);
+
+                if (scenario.Then.Help != null)
+                {
+                    results.HelpShouldBe(scenario.Then.Help);
+                }
+            }
+            catch (Exception)
+            {
+                PrintContext(scenario);
+                throw;
+            }
         }
 
         [Theory]
@@ -32,30 +48,60 @@ namespace CommandDotNet.Tests.BddTests
         [ClassData(typeof(DefaultCommandParseScenarios))]
         public void Parse(IScenario scenario)
         {
-            var results = scenario.AppType.RunAppInMem(scenario.WhenArgs);
-            AssertExitCodeAndErrorMessage(scenario, results);
-            AssertOutputItems(scenario, results);
+            try
+            {
+                var results = scenario.AppType.RunAppInMem(scenario.WhenArgs, scenario.And.AppSettings);
+                AssertExitCodeAndErrorMessage(scenario, results);
+
+                AssertOutputItems(scenario, results);
+            }
+            catch (Exception)
+            {
+                PrintContext(scenario);
+                throw;
+            }
+        }
+
+        private void PrintContext(IScenario scenario)
+        {
+            _output.WriteLine($"Scenario class: {scenario.Context.Host.GetType()}");
+            var appSettings = scenario.And.AppSettings;
+            var appSettingsProps = appSettings.GetType()
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .OrderBy(p => p.Name);
+            _output.WriteLine("");
+            _output.WriteLine($"AppSettings:");
+            foreach (var propertyInfo in appSettingsProps)
+            {
+                _output.WriteLine($"  {propertyInfo.Name}: {propertyInfo.GetValue(appSettings)}");
+            }
         }
 
         private static void AssertExitCodeAndErrorMessage(IScenario scenario, AppRunnerResult result)
         {
             var expectedExitCode = scenario.Then.ExitCode.GetValueOrDefault();
-            var expectedOutputText = scenario.Then.HelpContainsText;
+            var missingHelpTexts = scenario.Then.HelpContainsTexts
+                .Where(t => !result.ConsoleOut.Contains(t))
+                .ToList();
 
-            if (expectedExitCode != result.ExitCode || (expectedOutputText != null && !result.ConsoleOut.Contains(expectedOutputText)))
+            if (expectedExitCode != result.ExitCode || missingHelpTexts.Count > 0)
             {
                 var sb = new StringBuilder();
                 sb.AppendLine($"ExitCode: expected={expectedExitCode} actual={result.ExitCode}");
-                if (expectedOutputText != null)
+                if (missingHelpTexts.Count > 0)
                 {
-                    sb.AppendLine($"Expected error message in output:");
                     sb.AppendLine();
-                    sb.AppendLine(expectedOutputText);
+                    sb.AppendLine($"Missing text in output:");
+                    foreach (var text in missingHelpTexts)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"  {text}");
+                    }
                 }
 
                 sb.AppendLine();
                 sb.AppendLine("Console output:");
-
+                sb.AppendLine();
                 sb.AppendLine(string.IsNullOrWhiteSpace(result.ConsoleOut) ? "<no output>" : result.ConsoleOut);
 
                 throw new AssertionFailedException(sb.ToString());
