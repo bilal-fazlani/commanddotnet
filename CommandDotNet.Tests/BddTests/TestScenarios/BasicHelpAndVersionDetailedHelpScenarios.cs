@@ -1,9 +1,8 @@
-using System;
 using CommandDotNet.Tests.BddTests.Apps;
 
 namespace CommandDotNet.Tests.BddTests.TestScenarios
 {
-    public class DefaultHelpAndVersionDetailedHelpScenarios : ScenariosBaseTheory
+    public class BasicHelpAndVersionDetailedHelpScenarios : ScenariosBaseTheory
     {
         public override Scenarios Scenarios =>
             new Scenarios
