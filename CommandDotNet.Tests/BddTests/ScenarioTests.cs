@@ -23,6 +23,7 @@ namespace CommandDotNet.Tests.BddTests
         [ClassData(typeof(BasicHelpAndVersionDetailedHelpScenarios))]
         [ClassData(typeof(SingleCommandAppDetailedHelpScenarios))]
         [ClassData(typeof(DefaultCommandDetailedHelpScenarios))]
+        [ClassData(typeof(ArgumentSeparatorHelpScenarios))]
         public void Help(IScenario scenario)
         {
             try
@@ -46,6 +47,7 @@ namespace CommandDotNet.Tests.BddTests
         [Theory]
         [ClassData(typeof(BasicParseScenarios))]
         [ClassData(typeof(DefaultCommandParseScenarios))]
+        [ClassData(typeof(ArgumentSeparatorParseScenarios))]
         public void Parse(IScenario scenario)
         {
             try
