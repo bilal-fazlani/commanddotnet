@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using CommandDotNet.Tests.BddTests.TestScenarios;
+using CommandDotNet.Tests.BddTests.Framework;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
@@ -14,50 +15,67 @@ namespace CommandDotNet.Tests.BddTests
     {
         private readonly ITestOutputHelper _output;
 
+        private static List<ScenariosBaseTheory> AllScenarios = typeof(ScenarioTests).Assembly.GetTypes()
+            .Where(t => typeof(ScenariosBaseTheory).IsAssignableFrom(t) && !t.IsAbstract)
+            .Select(Activator.CreateInstance)
+            .Cast<ScenariosBaseTheory>()
+            .ToList();
+
         public ScenarioTests(ITestOutputHelper output)
         {
             _output = output;
         }
 
-        [Theory]
-        [ClassData(typeof(BasicHelpAndVersionDetailedHelpScenarios))]
-        [ClassData(typeof(SingleCommandAppDetailedHelpScenarios))]
-        [ClassData(typeof(DefaultCommandDetailedHelpScenarios))]
-        public void Help(IScenario scenario)
+        public static IEnumerable<object[]> ActiveScenarios =>
+            AllScenarios
+                .SelectMany(s => s.GetActive())
+                .ToObjectArrays();
+
+        public static IEnumerable<object[]> SkippedScenarios
         {
+            get
+            {
+                var skippedScenarios = AllScenarios
+                    .SelectMany(s => s.GetSkipped())
+                    .ToList();
+
+                return skippedScenarios.Count == 0
+                    ? new[] {new Skipped()}.ToObjectArrays()
+                    : skippedScenarios.ToObjectArrays();
+            }
+        }
+
+
+        [Theory]
+        [MemberData(nameof(SkippedScenarios), Skip = "skipped scenarios")]
+        public void Skipped(IScenario scenario)
+        {
+        }
+
+
+        [Theory]
+        [MemberData(nameof(ActiveScenarios))]
+        public void Scenarios(IScenario s)
+        {
+            // short parameter name to reduce redundant appearance of "scenario" in test name.
             try
             {
+                var results = s.AppType.RunAppInMem(s.WhenArgs, s.And.AppSettings);
+                AssertExitCodeAndErrorMessage(s, results);
 
-                var results = scenario.AppType.RunAppInMem(scenario.WhenArgs, scenario.And.AppSettings);
-                AssertExitCodeAndErrorMessage(scenario, results);
-
-                if (scenario.Then.Help != null)
+                if (s.Then.Help != null)
                 {
-                    results.HelpShouldBe(scenario.Then.Help);
+                    results.HelpShouldBe(s.Then.Help);
+                }
+
+                if (s.Then.Outputs.Count > 0)
+                {
+                    AssertOutputItems(s, results);
                 }
             }
             catch (Exception)
             {
-                PrintContext(scenario);
-                throw;
-            }
-        }
-
-        [Theory]
-        [ClassData(typeof(BasicParseScenarios))]
-        [ClassData(typeof(DefaultCommandParseScenarios))]
-        public void Parse(IScenario scenario)
-        {
-            try
-            {
-                var results = scenario.AppType.RunAppInMem(scenario.WhenArgs, scenario.And.AppSettings);
-                AssertExitCodeAndErrorMessage(scenario, results);
-
-                AssertOutputItems(scenario, results);
-            }
-            catch (Exception)
-            {
-                PrintContext(scenario);
+                PrintContext(s);
                 throw;
             }
         }

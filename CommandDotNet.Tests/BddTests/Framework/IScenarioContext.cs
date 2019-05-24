@@ -1,4 +1,4 @@
-namespace CommandDotNet.Tests.BddTests
+namespace CommandDotNet.Tests.BddTests.Framework
 {
     public interface IScenarioContext
     {
