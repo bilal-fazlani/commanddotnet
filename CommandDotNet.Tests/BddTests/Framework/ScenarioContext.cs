@@ -1,6 +1,4 @@
-using CommandDotNet.Models;
-
-namespace CommandDotNet.Tests.BddTests
+namespace CommandDotNet.Tests.BddTests.Framework
 {
     public class ScenarioContext: IScenarioContext
     {

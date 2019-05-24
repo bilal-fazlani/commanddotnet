@@ -1,7 +1,6 @@
 using System;
-using CommandDotNet.Models;
 
-namespace CommandDotNet.Tests.BddTests
+namespace CommandDotNet.Tests.BddTests.Framework
 {
     public interface IScenario
     {

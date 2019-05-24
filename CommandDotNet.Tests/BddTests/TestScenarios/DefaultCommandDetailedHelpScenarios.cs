@@ -1,4 +1,5 @@
 using CommandDotNet.Tests.BddTests.Apps;
+using CommandDotNet.Tests.BddTests.Framework;
 
 namespace CommandDotNet.Tests.BddTests.TestScenarios
 {

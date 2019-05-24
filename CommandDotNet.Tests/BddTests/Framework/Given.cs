@@ -1,7 +1,6 @@
 using System;
-using CommandDotNet.Models;
 
-namespace CommandDotNet.Tests.BddTests
+namespace CommandDotNet.Tests.BddTests.Framework
 {
     public class Given<T> : IScenario
     {
@@ -24,9 +23,9 @@ namespace CommandDotNet.Tests.BddTests
         public override string ToString()
         {
             var context = ((IScenario)this).Context;
-            return context?.Description == null 
-                ? $"{AppType.Name}: {Name}" 
-                : $"{AppType.Namespace}: {Name} ({context.Description})";
+            return context.Description == null 
+                ? $"{context.Host.GetType().Name} > {AppType.Name}: {Name}" 
+                : $"{context.Host.GetType().Name} > {AppType.Namespace}: {Name} ({context.Description})";
         }
     }
 }
