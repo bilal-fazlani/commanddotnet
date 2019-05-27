@@ -11,7 +11,7 @@ namespace CommandDotNet.HelpGeneration
                 return appSettings.CustomHelpProvider;
             }
             
-            switch (appSettings.HelpTextStyle)
+            switch (appSettings.Help.TextStyle)
             {
                 case HelpTextStyle.Basic:
                     return new BasicHelpTextProvider(appSettings);

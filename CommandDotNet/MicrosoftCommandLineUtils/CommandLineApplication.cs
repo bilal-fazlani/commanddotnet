@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using CommandDotNet.Exceptions;
 using CommandDotNet.HelpGeneration;
@@ -15,43 +16,49 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
     internal class CommandLineApplication : ICommand
     {
         private readonly AppSettings _appSettings;
+
+        private readonly List<string> _remainingArguments;
+        private Action _printVersion;
+        private Func<int> _invoke;
+        private CommandOption _optionVersion;
+        private CommandLineApplication _parent;
+
         // Indicates whether the parser should throw an exception when it runs into an unexpected argument.
         // If this field is set to false, the parser will stop parsing when it sees an unexpected argument, and all
         // remaining arguments, including the first unexpected argument, will be stored in RemainingArguments property.
         public CommandLineApplication(AppSettings appSettings)
         {
             _appSettings = appSettings;
+            _remainingArguments = new List<string>();
+            _invoke = () => 0;
+
             Options = new HashSet<CommandOption>();
             Arguments = new HashSet<CommandArgument>();
             Commands = new List<ICommand>();
-            RemainingArguments = new List<string>();
-            Invoke = () => 0;
         }
 
-        public CommandLineApplication Parent { get; set; }
         public string Name { get; set; }
-        public string FullName { get; set; }
         public string Syntax { get; set; }
         public string Description { get; set; }
-        public bool ShowInHelpText { get; set; } = true;
+        public bool ShowInHelpText => true;
         public string ExtendedHelpText { get; set; }
         public HashSet<CommandOption> Options { get; }
         public CommandOption OptionHelp { get; private set; }
-        public CommandOption OptionVersion { get; private set; }
+        public ICustomAttributeProvider CustomAttributeProvider { get; set; }
         public HashSet<CommandArgument> Arguments { get; }
-        public readonly List<string> RemainingArguments;
-        public Func<int> Invoke { get; set; }
-        public Action PrintVersion { get; set; }
+        public ICommand Parent => _parent;
         public List<ICommand> Commands { get; }
+
+        [Obsolete("This was used solely for help.  The functionality has been moved to help providers.")]
 
         public string GetFullCommandName()
         {
-            return string.Join(" ", GetSelfAndParentCommands().Reverse().Select(c => c.Name));
-        } 
+            return string.Join(" ", this.GetParentCommands(true).Reverse().Select(c => c.Name));
+        }
 
         public IEnumerable<CommandOption> GetOptions()
         {
-            var inheritedOptions = GetParentCommands().SelectMany(a => a.Options.Where(o => o.Inherited));
+            var inheritedOptions = this.GetParentCommands().SelectMany(a => a.Options.Where(o => o.Inherited));
             return Options.Concat(inheritedOptions);
         }
 
@@ -63,7 +70,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 
         public CommandLineApplication Command(string name, Action<CommandLineApplication> configuration)
         {
-            var command = new CommandLineApplication(_appSettings) { Name = name, Parent = this };
+            var command = new CommandLineApplication(_appSettings) { Name = name, _parent = this };
             Commands.Add(command);
             configuration(command);
             return command;
@@ -122,7 +129,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 
         public void OnExecute(Func<Task<int>> invoke)
         {
-            Invoke = () => invoke().Result;
+            _invoke = () => invoke().Result;
         }
         
         public int Execute(params string[] args)
@@ -206,7 +213,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                             command.ShowHelp();
                             return 0;
                         }
-                        if (Equals(command.OptionVersion, option))
+                        if (Equals(command._optionVersion, option))
                         {
                             command.ShowVersion();
                             return 0;
@@ -285,7 +292,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 throw new CommandParsingException(command, $"Missing value for option '{option.LongName}'");
             }
 
-            return command.Invoke();
+            return command._invoke();
         }
 
         // Helper method that adds a help option
@@ -300,8 +307,8 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         {
             // Version option is special because we stop parsing once we see it
             // So we store it separately for further use
-            OptionVersion = Option(template, "Show version information", CommandOptionType.NoValue, _=>{}, false, Constants.TypeDisplayNames.Flag, DBNull.Value, false, null);
-            PrintVersion = printVersion;
+            _optionVersion = Option(template, "Show version information", CommandOptionType.NoValue, _=>{}, false, Constants.TypeDisplayNames.Flag, DBNull.Value, false, null);
+            _printVersion = printVersion;
         }
 
         // Helper method that adds a version option
@@ -324,27 +331,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 
         private void ShowVersion()
         {
-            PrintVersion();
-        }
-
-        private IEnumerable<CommandLineApplication> GetSelfAndParentCommands()
-        {
-            for (CommandLineApplication c = this; c != null; c = c.Parent)
-            {
-                yield return c;
-            }
-        }
- 
-        private IEnumerable<CommandLineApplication> GetParentCommands()
-        {
-            if (Parent == null)
-            {
-                yield break;
-            }
-            for (CommandLineApplication c = Parent; c != null; c = c.Parent)
-            {
-                yield return c;
-            }
+            _printVersion();
         }
 
         private void HandleUnexpectedArg(CommandLineApplication command, string[] args, int index, string argTypeName)
@@ -356,7 +343,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             }
 
             // All remaining arguments are stored for further use
-            command.RemainingArguments.AddRange(new ArraySegment<string>(args, index, args.Length - index));
+            command._remainingArguments.AddRange(new ArraySegment<string>(args, index, args.Length - index));
         }
 
         private class CommandArgumentEnumerator : IEnumerator<CommandArgument>

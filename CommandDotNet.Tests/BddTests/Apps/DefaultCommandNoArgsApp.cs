@@ -13,7 +13,7 @@ namespace CommandDotNet.Tests.BddTests.Apps
         [DefaultMethod]
         public void DefaultMethod()
         {
-            this.TestOutputs.Capture(DefaultMethodExecuted);
+            TestOutputs.Capture(DefaultMethodExecuted);
         }
     }
 }

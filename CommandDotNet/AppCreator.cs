@@ -33,44 +33,28 @@ namespace CommandDotNet
 
             CommandLineApplication app;
 
-            ApplicationMetadataAttribute consoleApplicationAttribute = type.GetCustomAttribute<ApplicationMetadataAttribute>(false);
+            var applicationAttribute = type.GetCustomAttribute<ApplicationMetadataAttribute>(false);
+
+            string appName = applicationAttribute?.Name ?? type.Name.ChangeCase(_appSettings.Case);
 
             if (isRootApp)
             {
-                app = new CommandLineApplication(_appSettings);
-                string rootCommandName = consoleApplicationAttribute?.Name;
-                if (rootCommandName != null)
-                {
-                    app.Name = rootCommandName;
-                    app.FullName = rootCommandName;
-                }
-                else if(_hostAssembly != null)
-                {
-                    string assemblyName = $"{_hostAssembly.GetName().Name}.dll";
-                    app.Name = $"dotnet {assemblyName}";
-                    app.FullName = assemblyName;
-                }
-                else
-                {
-                    app.Name = "...";
-                    app.FullName = "...";
-                }
-                
+                app = new CommandLineApplication(_appSettings) {Name = appName};
+                app.CustomAttributeProvider = type;
                 AddVersion(app);
             }
             else
             {
-                string appName = consoleApplicationAttribute?.Name ?? type.Name.ChangeCase(_appSettings.Case); 
                 app = parentApplication.Command(appName, application => { });
             }
 
             app.HelpOption(Constants.HelpTemplate);
 
-            app.Description = consoleApplicationAttribute?.Description;
+            app.Description = applicationAttribute?.Description;
 
-            app.ExtendedHelpText = consoleApplicationAttribute?.ExtendedHelpText;
+            app.ExtendedHelpText = applicationAttribute?.ExtendedHelpText;
 
-            app.Syntax = consoleApplicationAttribute?.Syntax;
+            app.Syntax = applicationAttribute?.Syntax;
 
             CommandCreator commandCreator = new CommandCreator(type, app, dependencyResolver, _appSettings);
             

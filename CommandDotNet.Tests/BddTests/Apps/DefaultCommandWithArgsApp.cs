@@ -13,7 +13,7 @@ namespace CommandDotNet.Tests.BddTests.Apps
             [Argument(Description = "some text")]
             string text)
         {
-            this.TestOutputs.Capture(text);
+            TestOutputs.Capture(text);
         }
     }
 }
