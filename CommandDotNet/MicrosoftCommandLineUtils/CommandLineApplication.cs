@@ -41,8 +41,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public HashSet<CommandArgument> Arguments { get; }
         public readonly List<string> RemainingArguments;
         public Func<int> Invoke { get; set; }
-        public Func<string> LongVersionGetter { get; set; }
-        public Func<string> ShortVersionGetter { get; set; }
+        public Action PrintVersion { get; set; }
         public List<ICommand> Commands { get; }
 
         public string GetFullCommandName()
@@ -297,36 +296,18 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             OptionHelp = Option(template, "Show help information", CommandOptionType.NoValue, _=>{}, false, Constants.TypeDisplayNames.Flag, DBNull.Value, false, null);
         }
 
-        public void VersionOption(string template,
-            string shortFormVersion,
-            string longFormVersion = null)
-        {
-            if (longFormVersion == null)
-            {
-                VersionOption(template, () => shortFormVersion);
-            }
-            else
-            {
-                VersionOption(template, () => shortFormVersion, () => longFormVersion);
-            }
-        }
-
-        // Helper method that adds a version option
-        public CommandOption VersionOption(string template,
-            Func<string> shortFormVersionGetter,
-            Func<string> longFormVersionGetter = null)
+        internal void VersionOption(string template, Action printVersion)
         {
             // Version option is special because we stop parsing once we see it
             // So we store it separately for further use
             OptionVersion = Option(template, "Show version information", CommandOptionType.NoValue, _=>{}, false, Constants.TypeDisplayNames.Flag, DBNull.Value, false, null);
-            ShortVersionGetter = shortFormVersionGetter;
-            LongVersionGetter = longFormVersionGetter ?? shortFormVersionGetter;
-
-            return OptionVersion;
+            PrintVersion = printVersion;
         }
 
+        // Helper method that adds a version option
+
         // Show short hint that reminds users to use help option
-        public void ShowHint()
+        private void ShowHint()
         {
             if (OptionHelp != null)
             {
@@ -341,10 +322,9 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             _appSettings.Out.WriteLine(helpTextProvider.GetHelpText(this));
         }
 
-        public void ShowVersion()
+        private void ShowVersion()
         {
-            _appSettings.Out.WriteLine(FullName);
-            _appSettings.Out.WriteLine(LongVersionGetter());
+            PrintVersion();
         }
 
         private IEnumerable<CommandLineApplication> GetSelfAndParentCommands()

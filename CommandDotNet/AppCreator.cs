@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -96,7 +97,15 @@ namespace CommandDotNet
                 }
                 
                 FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(_hostAssembly.Location);
-                app.VersionOption("-v | --version", shortFormVersion: fvi.ProductVersion);
+                var filename = Path.GetFileName(_hostAssembly.Location);
+                string version = fvi.ProductVersion;
+                app.VersionOption(
+                    "-v | --version", 
+                    () =>
+                    {
+                        _appSettings.Out.WriteLine(filename);
+                        _appSettings.Out.WriteLine(version);
+                    });
             }
         }
         
