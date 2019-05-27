@@ -99,7 +99,7 @@ namespace CommandDotNet.Tests.BddTests
         {
             var expectedExitCode = scenario.Then.ExitCode.GetValueOrDefault();
             var missingHelpTexts = scenario.Then.HelpContainsTexts
-                .Where(t => !result.ConsoleOut.Contains(t))
+                .Where(t => !result.HelpContains(t))
                 .ToList();
 
             if (expectedExitCode != result.ExitCode || missingHelpTexts.Count > 0)

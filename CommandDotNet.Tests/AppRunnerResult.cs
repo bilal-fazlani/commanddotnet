@@ -28,5 +28,12 @@ namespace CommandDotNet.Tests
             expected = expected.NormalizeLineEndings();
             actual.Should().Be(expected);
         }
+
+        public bool HelpContains(string expected)
+        {
+            var actual = ConsoleOut.NormalizeLineEndings();
+            expected = expected.NormalizeLineEndings();
+            return actual.Contains(expected);
+        }
     }
 }

@@ -47,7 +47,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 
         public string GetFullCommandName()
         {
-            return string.Join(" ", GetSelfAndParentCommands().Reverse().Select(c => c.Name));
+            return string.Join(" ", GetSelfAndParentCommands().Reverse().Select(c => c.FullName ?? c.Name));
         } 
 
         public IEnumerable<CommandOption> GetOptions()
@@ -343,7 +343,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 
         public void ShowVersion()
         {
-            _appSettings.Out.WriteLine(FullName);
+            _appSettings.Out.WriteLine(Name);
             _appSettings.Out.WriteLine(LongVersionGetter());
         }
 

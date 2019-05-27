@@ -1,4 +1,5 @@
-﻿using CommandDotNet.Attributes;
+﻿using System;
+using CommandDotNet.Attributes;
 using CommandDotNet.Example.Issues;
 using CommandDotNet.Models;
 
@@ -36,5 +37,10 @@ namespace CommandDotNet.Example
 
         [SubCommand]
         public IssueApps IssueApps { get; set; }
+
+        public void Add(int x, int y)
+        {
+            Console.Out.WriteLine(x+y);
+        }
     }
 }

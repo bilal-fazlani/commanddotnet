@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -37,24 +38,32 @@ namespace CommandDotNet
             if (isRootApp)
             {
                 app = new CommandLineApplication(_appSettings);
+
+                // _hostAssembly can be null when loaded from tests. see Issue #65
+                if (_hostAssembly != null)
+                {
+                    app.Name = Path.GetFileName(_hostAssembly.Location);
+                    app.FullName = Path.GetFileName(_hostAssembly.Location).EndsWith(".exe") 
+                        ? Path.GetFileName(_hostAssembly.Location) 
+                        : $"dotnet {Path.GetFileName(_hostAssembly.Location)}";
+                }
+
+                /*
                 string rootCommandName = consoleApplicationAttribute?.Name;
                 if (rootCommandName != null)
                 {
-                    app.Name = rootCommandName;
-                    app.FullName = rootCommandName;
+                    app.Name = app.Name == null
+                        ? rootCommandName
+                        : app.Name = $"{app.Name} {rootCommandName}";
                 }
-                else if(_hostAssembly != null)
+                */
+
+                if(app.Name == null)
                 {
-                    string assemblyName = $"{_hostAssembly.GetName().Name}.dll";
-                    app.Name = $"dotnet {assemblyName}";
-                    app.FullName = assemblyName;
+                    // this is only expected to happen in tests
+                    app.FullName = app.Name = "...";
                 }
-                else
-                {
-                    app.Name = "...";
-                    app.FullName = "...";
-                }
-                
+
                 AddVersion(app);
             }
             else
