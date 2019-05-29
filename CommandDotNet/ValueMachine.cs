@@ -31,7 +31,7 @@ namespace CommandDotNet
             }
 
             //when value not present but method parameter has a default value defined
-            if (argumentInfo.DefaultValue != DBNull.Value && argumentInfo.DefaultValue != null)
+            if (!argumentInfo.DefaultValue.IsNullValue())
             {
                 //use default parameter or property value
                 return argumentInfo.DefaultValue;
@@ -46,7 +46,7 @@ namespace CommandDotNet
             if (!_appSettings.PromptForArgumentsIfNotProvided
                 || !(argumentInfo is CommandParameterInfo parameterInfo)
                 || parameterInfo.ValueInfo.HasValue
-                || parameterInfo.DefaultValue != DBNull.Value)
+                || !parameterInfo.DefaultValue.IsNullValue())
             {
                 return;
             }
