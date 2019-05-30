@@ -7,7 +7,8 @@ namespace CommandDotNet.Tests.BddTests.Framework
     {
         public int? ExitCode { get; set; }
         public string Help { get; set; }
-        public IList Outputs { get; } = new List<object>();
+        public bool OutputsStrict { get; set; }
+        public List<object> Outputs { get; } = new List<object>();
         public List<string> HelpContainsTexts { get; } = new List<string>();
     }
 }

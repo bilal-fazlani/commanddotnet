@@ -17,7 +17,10 @@ namespace CommandDotNet.Example
             AppRunner<TApp> appRunner = new AppRunner<TApp>(new AppSettings()
             {
                 Case = Case.KebabCase,
-                HelpTextStyle = HelpTextStyle.Detailed
+                Help =
+                {
+                    TextStyle = HelpTextStyle.Detailed
+                }
             });
             return appRunner.Run(args);
         }

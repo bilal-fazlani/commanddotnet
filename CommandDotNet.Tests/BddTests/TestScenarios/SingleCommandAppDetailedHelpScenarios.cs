@@ -13,7 +13,7 @@ namespace CommandDotNet.Tests.BddTests.TestScenarios
                     WhenArgs = "-h",
                     Then =
                     {
-                        Help = @"Usage: dotnet testhost.dll [options] [command]
+                        Help = @"Usage: Math [options] [command]
 
 Options:
 
@@ -28,7 +28,7 @@ Commands:
 
   Add
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+Use ""Math [command] --help"" for more information about a command."
                     }
                 },
                 new Given<SingleCommandApp>("help for command shows arguments and options")
@@ -36,7 +36,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "Add -h",
                     Then =
                     {
-                        Help = @"Usage: dotnet testhost.dll Add [arguments] [options]
+                        Help = @"Usage: Math Add [arguments] [options]
 
 Arguments:
 

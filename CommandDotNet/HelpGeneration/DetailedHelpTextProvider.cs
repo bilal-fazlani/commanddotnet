@@ -79,9 +79,9 @@ namespace CommandDotNet.HelpGeneration
                 
                 if (app.OptionHelp != null)
                 {
-                    commandsBuilder.AppendFormat(
-                        $"Use \"{app.GetFullCommandName()} [command] --{app.OptionHelp.LongName}\" for more information about a command.");
-                    commandsBuilder.AppendLine();
+                    commandsBuilder.Append("Use \"");
+                    commandsBuilder.AppendUsageCommandNames(app, _appSettings);
+                    commandsBuilder.AppendLine($" [command] --{app.OptionHelp.LongName}\" for more information about a command.");
                 }
             }
 
@@ -195,9 +195,7 @@ namespace CommandDotNet.HelpGeneration
 
         private StringBuilder BuildUsage(ICommand app)
         {
-            var usageBuilder = new StringBuilder("Usage: ");
-            usageBuilder.Append(app.GetFullCommandName());
-            return usageBuilder;
+            return new StringBuilder("Usage: ").AppendUsageCommandNames(app, _appSettings);
         }
 
         private StringBuilder BuildTitle(ICommand app)

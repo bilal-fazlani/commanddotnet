@@ -99,7 +99,7 @@ namespace CommandDotNet.Tests.BddTests
         {
             var expectedExitCode = scenario.Then.ExitCode.GetValueOrDefault();
             var missingHelpTexts = scenario.Then.HelpContainsTexts
-                .Where(t => !result.ConsoleOut.Contains(t))
+                .Where(t => !result.HelpContains(t))
                 .ToList();
 
             if (expectedExitCode != result.ExitCode || missingHelpTexts.Count > 0)
@@ -134,6 +134,18 @@ namespace CommandDotNet.Tests.BddTests
                 actualOutput.Should()
                     .NotBeNull(because: $"{expectedOutput.GetType().Name} should have been output in test run");
                 actualOutput.Should().BeEquivalentTo(expectedOutput);
+            }
+
+            var actualOutputs = results.TestOutputs.Outputs;
+            if (scenario.Then.OutputsStrict && actualOutputs.Count > scenario.Then.Outputs.Count)
+            {
+                var expectedOutputTypes = scenario.Then.Outputs.Select(o => o.GetType()).ToHashSet();
+                var unexpectedTypes = string.Join(",", actualOutputs.Keys
+                    .Where(t => !expectedOutputTypes.Contains(t))
+                    .Select(t => t.Name)
+                    .OrderBy(n => n));
+
+                throw new AssertionFailedException($"Unexpected output: {unexpectedTypes}");
             }
         }
     }

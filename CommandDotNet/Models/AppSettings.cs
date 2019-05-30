@@ -41,7 +41,14 @@ namespace CommandDotNet.Models
 
         public bool PromptForArgumentsIfNotProvided { get; set; }
 
-        public HelpTextStyle HelpTextStyle { get; set; } = HelpTextStyle.Detailed;
+        public AppHelpSettings Help { get; set; } = new AppHelpSettings();
+
+        [Obsolete("Use Help.TextStyle")]
+        public HelpTextStyle HelpTextStyle
+        {
+            get => Help.TextStyle; 
+            set => Help.TextStyle = value;
+        }
         
         public ArgumentTypeDescriptors ArgumentTypeDescriptors { get; } = new ArgumentTypeDescriptors();
         
@@ -51,5 +58,6 @@ namespace CommandDotNet.Models
         
         internal TextWriter Out { get; set; } = Console.Out;
         internal TextWriter Error { get; set; } = Console.Error;
+
     }
 }
