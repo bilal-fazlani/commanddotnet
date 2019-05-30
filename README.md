@@ -278,7 +278,7 @@ C# method for the same would look like
 ```c#
 public void Delete(
     string fileName, 
-    bool safely, 
+    [Option]bool safely, 
     [Option]string time = "Now")
 ```
 
