@@ -135,6 +135,18 @@ namespace CommandDotNet.Tests.BddTests
                     .NotBeNull(because: $"{expectedOutput.GetType().Name} should have been output in test run");
                 actualOutput.Should().BeEquivalentTo(expectedOutput);
             }
+
+            var actualOutputs = results.TestOutputs.Outputs;
+            if (scenario.Then.OutputsStrict && actualOutputs.Count > scenario.Then.Outputs.Count)
+            {
+                var expectedOutputTypes = scenario.Then.Outputs.Select(o => o.GetType()).ToHashSet();
+                var unexpectedTypes = string.Join(",", actualOutputs.Keys
+                    .Where(t => !expectedOutputTypes.Contains(t))
+                    .Select(t => t.Name)
+                    .OrderBy(n => n));
+
+                throw new AssertionFailedException($"Unexpected output: {unexpectedTypes}");
+            }
         }
     }
 }

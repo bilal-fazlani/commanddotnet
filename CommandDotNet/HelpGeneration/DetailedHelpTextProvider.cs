@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CommandDotNet.Extensions;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 
@@ -117,12 +118,10 @@ namespace CommandDotNet.HelpGeneration
                     }));
                     
                     //default value
-                    optionsBuilder.Append(RenderParameter(options, commandOption, o =>
-                    {
-                        if(o.DefaultValue != DBNull.Value)
-                            return $"[{o.DefaultValue.ToString()}]";
-                        return null;
-                    }));
+                    optionsBuilder.Append(RenderParameter(options, commandOption, o => 
+                        o.DefaultValue.IsNullValue() 
+                            ? null 
+                            : $"[{o.DefaultValue.ToString()}]"));
 
                     //description
                     optionsBuilder.Append(string.IsNullOrEmpty(commandOption.Description)? null: $"{Environment.NewLine}  {commandOption.Description}");
@@ -173,11 +172,9 @@ namespace CommandDotNet.HelpGeneration
                     
                     //default value
                     argumentsBuilder.Append(RenderParameter(arguments, commandArgument, arg =>
-                    {
-                        if(arg.DefaultValue != DBNull.Value)
-                            return $"[{arg.DefaultValue.ToString()}]";
-                        return null;
-                    }));
+                        arg.DefaultValue.IsNullValue()
+                            ? null
+                            : $"[{arg.DefaultValue.ToString()}]"));
 
                     //description
                     argumentsBuilder.Append(string.IsNullOrEmpty(commandArgument.Description) ? null : $"{Environment.NewLine}  {commandArgument.Description}");
