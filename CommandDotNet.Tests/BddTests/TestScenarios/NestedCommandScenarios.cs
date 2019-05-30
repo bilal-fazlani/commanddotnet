@@ -5,7 +5,7 @@ using CommandDotNet.Tests.Utils;
 
 namespace CommandDotNet.Tests.BddTests.TestScenarios
 {
-    public class SubCommandScenarios : ScenariosBaseTheory
+    public class NestedCommandScenarios : ScenariosBaseTheory
     {
         public override Scenarios Scenarios =>
             new Scenarios
