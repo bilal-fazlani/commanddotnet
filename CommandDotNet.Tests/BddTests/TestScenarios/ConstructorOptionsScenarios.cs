@@ -4,7 +4,7 @@ using CommandDotNet.Tests.Utils;
 
 namespace CommandDotNet.Tests.BddTests.TestScenarios
 {
-    public class GlobalOptionsScenarios : ScenariosBaseTheory
+    public class ConstructorOptionsScenarios : ScenariosBaseTheory
     {
         public override Scenarios Scenarios =>
             new Scenarios
