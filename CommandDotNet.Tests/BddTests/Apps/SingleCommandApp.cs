@@ -3,6 +3,7 @@ using CommandDotNet.Tests.Utils;
 
 namespace CommandDotNet.Tests.BddTests.Apps
 {
+    [ApplicationMetadata(Name = "Math")]
     public class SingleCommandApp
     {
         [InjectProperty]
