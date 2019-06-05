@@ -13,7 +13,7 @@ namespace CommandDotNet.Tests.BddTests.TestScenarios
                     WhenArgs = null,
                     Then =
                     {
-                        Help = @"Usage: dotnet testhost.dll [options]
+                        Result = @"Usage: dotnet testhost.dll [options]
 
 Options:
 
@@ -29,7 +29,7 @@ Options:
                     WhenArgs = "--help",
                     Then =
                     {
-                        Help = @"Usage: dotnet testhost.dll [options]
+                        Result = @"Usage: dotnet testhost.dll [options]
 
 Options:
 
@@ -45,7 +45,7 @@ Options:
                     WhenArgs = "-h",
                     Then =
                     {
-                        Help = @"Usage: dotnet testhost.dll [options]
+                        Result = @"Usage: dotnet testhost.dll [options]
 
 Options:
 
@@ -61,7 +61,7 @@ Options:
                     WhenArgs = "--version",
                     Then =
                     {
-                        Help = @"testhost.dll
+                        Result = @"testhost.dll
 15.9.0"
                     }
                 },
@@ -70,7 +70,7 @@ Options:
                     WhenArgs = "--version",
                     Then =
                     {
-                        Help = @"testhost.dll
+                        Result = @"testhost.dll
 15.9.0"
                     }
                 }

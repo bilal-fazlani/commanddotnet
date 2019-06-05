@@ -10,5 +10,6 @@ namespace CommandDotNet.Tests.BddTests.Framework
         string WhenArgs { get; }
         ScenarioThen Then { get; }
         string SkipReason { get; }
+        string NotSupportedReason { get; }
     }
 }

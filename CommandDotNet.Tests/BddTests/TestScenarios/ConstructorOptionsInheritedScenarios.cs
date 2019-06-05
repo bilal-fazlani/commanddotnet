@@ -14,7 +14,7 @@ namespace CommandDotNet.Tests.BddTests.TestScenarios
                     WhenArgs = "-h",
                     Then =
                     {
-                        Help = @"Usage: dotnet testhost.dll [options] [command]
+                        Result = @"Usage: dotnet testhost.dll [options] [command]
 
 Options:
 
@@ -39,7 +39,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "Leaf -h",
                     Then =
                     {
-                        Help = @"Usage: dotnet testhost.dll Leaf [options] [command]
+                        Result = @"Usage: dotnet testhost.dll Leaf [options] [command]
 
 Options:
 
@@ -63,7 +63,6 @@ Use ""dotnet testhost.dll Leaf [command] --help"" for more information about a c
                     WhenArgs = "--rootOpt root Leaf --LeafOpt leaf Do --DoOpt a b",
                     Then =
                     {
-                        OutputsStrict = true,
                         Outputs =
                         {
                             //new RootGlobalResult{RootOpt = "root"},
@@ -77,7 +76,6 @@ Use ""dotnet testhost.dll Leaf [command] --help"" for more information about a c
                     WhenArgs = "Leaf Do --LeafOpt leaf --rootOpt root --DoOpt a b",
                     Then =
                     {
-                        OutputsStrict = true,
                         Outputs =
                         {
                             //new RootGlobalResult{RootOpt = "root"},

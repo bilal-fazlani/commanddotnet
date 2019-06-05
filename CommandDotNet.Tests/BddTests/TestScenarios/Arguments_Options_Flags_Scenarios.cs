@@ -4,7 +4,7 @@ using CommandDotNet.Tests.Utils;
 
 namespace CommandDotNet.Tests.BddTests.TestScenarios
 {
-    public class FlagScenarios : ScenariosBaseTheory
+    public class Arguments_Options_Flags_Scenarios : ScenariosBaseTheory
     {
         public override Scenarios Scenarios =>
             new Scenarios
@@ -12,7 +12,7 @@ namespace CommandDotNet.Tests.BddTests.TestScenarios
                 new Given<FlagApp>($"help is boolean")
                 {
                     WhenArgs = "Do -h",
-                    Then = {Help = @"Usage: dotnet testhost.dll Do [options]
+                    Then = {Result = @"Usage: dotnet testhost.dll Do [options]
 
 Options:
 
