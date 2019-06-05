@@ -5,7 +5,34 @@ They utilize C#'s [object initializer](https://docs.microsoft.com/en-us/dotnet/c
 
 Let's look at an example to test flag clubbing.
 
-First, we'll create the `FlagApp` class containing the `club` command with a single `flag` called flag, using the short name `f`.
+## Creating the test class
+
+First, let's create the test class.
+
+``` c#
+public class FlagClubbing : ScenarioTestBase<FlagClubbing>
+{
+    public FlagClubbing(ITestOutputHelper output) : base(output)
+    {
+    }
+
+    public static Scenarios Scenarios =>
+            new Scenarios
+            {
+                new Given<FlagApp>(...) {...},
+                new Given<FlagApp>(...) {...}
+                // see examples of Given below
+            }
+}
+```
+
+The class must extend from `ScenarioTestBase` and pass `ITestOutputHelper` to the base class.  `ITestOutputHelper` is used to write to the xUnit output stream.
+
+The class must contain a static property named `Scenarios` that returns `IEnumerable<IScenario>` (which is implemented by the `Scenarios` type)
+
+## Example app
+
+Next, let's create the `FlagApp` class containing the `club` command with a single `flag` called flag, using the short name `f`.  Nest the app within the test class to avoid polluting the test namespace with apps that could conflict.
 
 ``` c#
 public class FlagApp
