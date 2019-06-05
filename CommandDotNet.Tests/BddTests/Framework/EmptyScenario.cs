@@ -2,7 +2,7 @@ using System;
 
 namespace CommandDotNet.Tests.BddTests.Framework
 {
-    public class Skipped : IScenario
+    public class EmptyScenario : IScenario
     {
         private readonly IScenario _backingScenario;
 
@@ -21,8 +21,9 @@ namespace CommandDotNet.Tests.BddTests.Framework
         public ScenarioThen Then => _backingScenario.Then;
 
         public string SkipReason => _backingScenario.SkipReason;
+        public string NotSupportedReason => _backingScenario.NotSupportedReason;
 
-        public Skipped(IScenario backingScenario = null)
+        public EmptyScenario(IScenario backingScenario = null)
         {
             _backingScenario = backingScenario;
         }

@@ -13,7 +13,7 @@ namespace CommandDotNet.Tests.BddTests.TestScenarios
                     WhenArgs = "-h",
                     Then =
                     {
-                        Help = @"Usage: dotnet testhost.dll [options]
+                        Result = @"Usage: dotnet testhost.dll [options]
 
 Options:
 
@@ -30,7 +30,7 @@ Options:
                     WhenArgs = "-h",
                     Then =
                     {
-                        Help = @"Usage: dotnet testhost.dll [options]
+                        Result = @"Usage: dotnet testhost.dll [options]
 
 Arguments:
 

@@ -15,7 +15,7 @@ namespace CommandDotNet.Tests.BddTests.TestScenarios
                     WhenArgs = "-h",
                     Then =
                     {
-                        Help = @"Usage: dotnet testhost.dll [options] [command]
+                        Result = @"Usage: dotnet testhost.dll [options] [command]
 
 Options:
 
@@ -39,7 +39,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "Second -h",
                     Then =
                     {
-                        Help = @"Usage: dotnet testhost.dll Second [options] [command]
+                        Result = @"Usage: dotnet testhost.dll Second [options] [command]
 
 Options:
 
@@ -60,7 +60,7 @@ Use ""dotnet testhost.dll Second [command] --help"" for more information about a
                     WhenArgs = "Second Third -h",
                     Then =
                     {
-                        Help = @"Usage: dotnet testhost.dll Second Third [options] [command]
+                        Result = @"Usage: dotnet testhost.dll Second Third [options] [command]
 
 Options:
 
