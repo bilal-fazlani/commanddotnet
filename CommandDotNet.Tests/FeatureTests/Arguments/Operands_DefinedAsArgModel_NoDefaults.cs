@@ -4,166 +4,185 @@ using CommandDotNet.Attributes;
 using CommandDotNet.Models;
 using CommandDotNet.Tests.BddTests.Framework;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models;
-using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsParams;
+using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
 using CommandDotNet.Tests.Utils;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class Options_DefinedAsMethodParams_NoDefaults : ScenarioTestBase<Options_DefinedAsMethodParams_NoDefaults>
+    public class Operands_DefinedAsArgModel_NoDefaults : ScenarioTestBase<Operands_DefinedAsArgModel_NoDefaults>
     {
         private static AppSettings BasicHelp = new AppSettings{Help = {TextStyle = HelpTextStyle.Basic}};
         private static AppSettings DetailedHelp = new AppSettings {Help = {TextStyle = HelpTextStyle.Detailed}};
 
-        public Options_DefinedAsMethodParams_NoDefaults(ITestOutputHelper output) : base(output)
+        public Operands_DefinedAsArgModel_NoDefaults(ITestOutputHelper output) : base(output)
         {
         }
 
         public static Scenarios Scenarios =>
             new Scenarios
             {
-                new Given<OptionsNoDefaults>("SampleTypes - Basic Help")
+                new Given<OperandsNoDefaults>("SampleTypes - Basic Help")
                 {
                     And = {AppSettings = BasicHelp},
                     WhenArgs = "ArgsNoDefault -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll ArgsNoDefault [options]
+                        Result = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments] [options]
+
+Arguments:
+  StringArg
+  StructArg
+  StructNArg
+  EnumArg
+  ObjectArg
+  StringListArg
 
 Options:
-  -h | --help      Show help information
-  --stringArg
-  --structArg
-  --structNArg
-  --enumArg
-  --objectArg
-  --stringListArg"
+  -h | --help  Show help information"
                     }
                 },
-                new Given<OptionsNoDefaults>("SampleTypes - Detailed Help")
+                new Given<OperandsNoDefaults>("SampleTypes - Detailed Help")
                 {
                     And = {AppSettings = DetailedHelp},
                     WhenArgs = "ArgsNoDefault -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll ArgsNoDefault [options]
+                        Result = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments] [options]
 
-Options:
+Arguments:
 
-  -h | --help
-  Show help information
+  StringArg                   <TEXT>
 
-  --stringArg                   <TEXT>
+  StructArg                   <NUMBER>
 
-  --structArg                   <NUMBER>
+  StructNArg                  <NUMBER>
 
-  --structNArg                  <NUMBER>
-
-  --enumArg                     <DAYOFWEEK>
+  EnumArg                     <DAYOFWEEK>
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
-  --objectArg                   <URI>
+  ObjectArg                   <URI>
 
-  --stringListArg (Multiple)    <TEXT>"
+  StringListArg (Multiple)    <TEXT>
+
+
+Options:
+
+  -h | --help
+  Show help information"
                     }
                 },
-                new Given<OptionsNoDefaults>("StructList - Basic Help")
+                new Given<OperandsNoDefaults>("StructList - Basic Help")
                 {
                     And = {AppSettings = BasicHelp},
                     WhenArgs = "StructListNoDefault -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll StructListNoDefault [options]
+                        Result = @"Usage: dotnet testhost.dll StructListNoDefault [arguments] [options]
+
+Arguments:
+  StructListArg
 
 Options:
-  -h | --help      Show help information
-  --structListArg"
+  -h | --help  Show help information"
                     }
                 },
-                new Given<OptionsNoDefaults>("StructList - Detailed Help")
+                new Given<OperandsNoDefaults>("StructList - Detailed Help")
                 {
                     And = {AppSettings = DetailedHelp},
                     WhenArgs = "StructListNoDefault -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll StructListNoDefault [options]
+                        Result = @"Usage: dotnet testhost.dll StructListNoDefault [arguments] [options]
+
+Arguments:
+
+  StructListArg (Multiple)    <NUMBER>
+
 
 Options:
 
   -h | --help
-  Show help information
-
-  --structListArg (Multiple)    <NUMBER>"
+  Show help information"
                     }
                 },
-                new Given<OptionsNoDefaults>("EnumList - Basic Help")
+                new Given<OperandsNoDefaults>("EnumList - Basic Help")
                 {
                     And = {AppSettings = BasicHelp},
                     WhenArgs = "EnumListNoDefault -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll EnumListNoDefault [options]
+                        Result = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments] [options]
+
+Arguments:
+  EnumListArg
 
 Options:
-  -h | --help    Show help information
-  --enumListArg"
+  -h | --help  Show help information"
                     }
                 },
-                new Given<OptionsNoDefaults>("EnumList - Detailed Help")
+                new Given<OperandsNoDefaults>("EnumList - Detailed Help")
                 {
                     And = {AppSettings = DetailedHelp},
                     WhenArgs = "EnumListNoDefault -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll EnumListNoDefault [options]
+                        Result = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments] [options]
+
+Arguments:
+
+  EnumListArg (Multiple)    <DAYOFWEEK>
+  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+
 
 Options:
 
   -h | --help
-  Show help information
-
-  --enumListArg (Multiple)    <DAYOFWEEK>
-  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
+  Show help information"
                     }
                 },
-                new Given<OptionsNoDefaults>("ObjectList - Basic Help")
+                new Given<OperandsNoDefaults>("ObjectList - Basic Help")
                 {
                     And = {AppSettings = BasicHelp},
                     WhenArgs = "ObjectListNoDefault -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll ObjectListNoDefault [options]
+                        Result = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments] [options]
+
+Arguments:
+  ObjectListArg
 
 Options:
-  -h | --help      Show help information
-  --objectListArg"
+  -h | --help  Show help information"
                     }
                 },
-                new Given<OptionsNoDefaults>("ObjectList - Detailed Help")
+                new Given<OperandsNoDefaults>("ObjectList - Detailed Help")
                 {
                     And = {AppSettings = DetailedHelp},
                     WhenArgs = "ObjectListNoDefault -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll ObjectListNoDefault [options]
+                        Result = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments] [options]
+
+Arguments:
+
+  ObjectListArg (Multiple)    <URI>
+
 
 Options:
 
   -h | --help
-  Show help information
-
-  --objectListArg (Multiple)    <URI>"
+  Show help information"
                     }
                 },
-                new Given<OptionsNoDefaults>("SampleTypes - Exec - named")
+                new Given<OperandsNoDefaults>("SampleTypes - Exec - positional")
                 {
-                    WhenArgs = "ArgsNoDefault --stringArg green --structArg 1 --structNArg 2 --enumArg Monday " +
-                               "--objectArg http://google.com --stringListArg yellow --stringListArg orange",
+                    WhenArgs = "ArgsNoDefault green 1 2 Monday http://google.com yellow orange",
                     Then =
                     {
                         Outputs =
                         {
-                            new ParametersSampleTypesResults
+                            new OperandsNoDefaultsSampleTypesModel
                             {
                                 StringArg = "green",
                                 StructArg = 1,
@@ -175,14 +194,14 @@ Options:
                         }
                     }
                 },
-                new Given<OptionsNoDefaults>("SampleTypes - Exec - operands not required")
+                new Given<OperandsNoDefaults>("SampleTypes - Exec - operands not required")
                 {
                     WhenArgs = "ArgsNoDefault",
                     Then =
                     {
                         Outputs =
                         {
-                            new ParametersSampleTypesResults
+                            new OperandsNoDefaultsSampleTypesModel
                             {
                                 StructArg = default(int),
                                 EnumArg = default(DayOfWeek),
@@ -190,42 +209,42 @@ Options:
                         }
                     }
                 },
-                new Given<OptionsNoDefaults>("StructList - Exec - named")
+                new Given<OperandsNoDefaults>("StructList - Exec - positional")
                 {
-                    WhenArgs = "StructListNoDefault --structListArg 23 --structListArg 5 --structListArg 7",
+                    WhenArgs = "StructListNoDefault 23 5 7",
                     Then =
                     {
                         Outputs =
                         {
-                            new ParametersSampleTypesResults
+                            new OperandsNoDefaultsStructListArgumentModel
                             {
                                 StructListArg = new List<int>{23,5,7}
                             }
                         }
                     }
                 },
-                new Given<OptionsNoDefaults>("EnumList - Exec - named")
+                new Given<OperandsNoDefaults>("EnumList - Exec - positional")
                 {
-                    WhenArgs = "EnumListNoDefault --enumListArg Friday --enumListArg Tuesday --enumListArg Thursday",
+                    WhenArgs = "EnumListNoDefault Friday Tuesday Thursday",
                     Then =
                     {
                         Outputs =
                         {
-                            new ParametersSampleTypesResults
+                            new OperandsNoDefaultsEnumListArgumentModel
                             {
                                 EnumListArg = new List<DayOfWeek>{DayOfWeek.Friday, DayOfWeek.Tuesday, DayOfWeek.Thursday}
                             }
                         }
                     }
                 },
-                new Given<OptionsNoDefaults>("ObjectList - Exec - named")
+                new Given<OperandsNoDefaults>("ObjectList - Exec - positional")
                 {
-                    WhenArgs = "ObjectListNoDefault --objectListArg http://google.com --objectListArg http://apple.com --objectListArg http://github.com",
+                    WhenArgs = "ObjectListNoDefault http://google.com http://apple.com http://github.com",
                     Then =
                     {
                         Outputs =
                         {
-                            new ParametersSampleTypesResults
+                            new OperandsNoDefaultsObjectListArgumentModel
                             {
                                 ObjectListArg = new List<Uri>
                                 {
@@ -239,39 +258,29 @@ Options:
                 },
             };
 
-        private class OptionsNoDefaults : IArgsNoDefaultsSampleTypesMethod
+        private class OperandsNoDefaults
         {
             [InjectProperty]
             public TestOutputs TestOutputs { get; set; }
 
-            public void ArgsNoDefault(
-                [Option] string stringArg,
-                [Option] int structArg,
-                [Option] int? structNArg,
-                [Option] DayOfWeek enumArg,
-                [Option] Uri objectArg,
-                [Option] List<string> stringListArg)
+            public void ArgsNoDefault(OperandsNoDefaultsSampleTypesModel model)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(
-                    stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
+                TestOutputs.Capture(model);
             }
 
-            public void StructListNoDefault(
-                [Option] List<int> structListArg)
+            public void StructListNoDefault(OperandsNoDefaultsStructListArgumentModel model)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(structListArg));
+                TestOutputs.Capture(model);
             }
 
-            public void EnumListNoDefault(
-                [Option] List<DayOfWeek> enumListArg)
+            public void EnumListNoDefault(OperandsNoDefaultsEnumListArgumentModel model)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(enumListArg));
+                TestOutputs.Capture(model);
             }
 
-            public void ObjectListNoDefault(
-                [Option] List<Uri> objectListArg)
+            public void ObjectListNoDefault(OperandsNoDefaultsObjectListArgumentModel model)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(objectListArg));
+                TestOutputs.Capture(model);
             }
         }
     }
