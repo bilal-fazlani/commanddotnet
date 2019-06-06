@@ -285,6 +285,7 @@ Options:
             public TestOutputs TestOutputs { get; set; }
 
             public void ArgsNoDefault(
+                [Argument] bool boolArg,
                 [Argument] string stringArg,
                 [Argument] int structArg,
                 [Argument] int? structNArg,
@@ -293,7 +294,7 @@ Options:
                 [Argument] List<string> stringListArg)
             {
                 TestOutputs.Capture(new ParametersSampleTypesResults(
-                    stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
+                    boolArg, stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
             }
 
             public void StructListNoDefault(

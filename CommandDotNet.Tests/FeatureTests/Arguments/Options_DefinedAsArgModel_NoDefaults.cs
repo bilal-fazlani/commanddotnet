@@ -29,6 +29,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
 Options:
   -h | --help      Show help information
+  --BoolArg
   --StringArg
   --StructArg
   --StructNArg
@@ -49,6 +50,8 @@ Options:
 
   -h | --help
   Show help information
+
+  --BoolArg
 
   --StringArg                   <TEXT>
 

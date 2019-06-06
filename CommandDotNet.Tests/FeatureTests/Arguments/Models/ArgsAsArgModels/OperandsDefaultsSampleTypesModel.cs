@@ -7,6 +7,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels
     public class OperandsDefaultsSampleTypesModel : ISampleTypesArgumentsModel
     {
         [Argument]
+        public bool BoolArg { get; set; } = true;
+
+        [Argument]
         public string StringArg { get; set; } = "lala";
 
         [Argument]

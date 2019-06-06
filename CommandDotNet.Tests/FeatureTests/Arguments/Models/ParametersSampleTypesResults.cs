@@ -7,6 +7,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments.Models
     /// <summary>To capture outputs for args from params tests</summary>
     public class ParametersSampleTypesResults : ISampleTypesArgumentsModel
     {
+        public bool BoolArg { get; set; }
         public string StringArg { get; set; }
         public int StructArg { get; set; }
         public int? StructNArg { get; set; }
@@ -22,9 +23,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments.Models
         }
 
         public ParametersSampleTypesResults(
-            string stringArg, int structArg, int? structNArg, 
+            bool boolArg, string stringArg, int structArg, int? structNArg, 
             DayOfWeek enumArg, Uri objectArg, List<string> stringListArg)
         {
+            BoolArg = boolArg;
             StringArg = stringArg;
             StructArg = structArg;
             StructNArg = structNArg;
