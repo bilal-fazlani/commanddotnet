@@ -8,6 +8,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels
         ISampleTypesArgumentsModel, IStructListArgumentModel, IEnumListArgumentModel, IObjectListArgumentModel
     {
         [Option]
+        public bool BoolArg { get; set; } = true;
+
+        [Option]
         public string StringArg { get; set; } = "lala";
 
         [Option]

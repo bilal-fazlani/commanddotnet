@@ -29,6 +29,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments] [options]
 
 Arguments:
+  boolArg
   stringArg
   structArg
   structNArg
@@ -46,6 +47,9 @@ Options:
                     Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments] [options]
 
 Arguments:
+
+  boolArg                     <BOOLEAN>      [True]
+  Allowed values: true, false
 
   stringArg                   <TEXT>         [lala]
 
@@ -153,11 +157,12 @@ Options:
                 },
                 new Given<OperandsDefaults>("SampleTypes - Exec - positional")
                 {
-                    WhenArgs = "ArgsDefaults green 1 2 Monday http://google.com yellow orange",
+                    WhenArgs = "ArgsDefaults true green 1 2 Monday http://google.com yellow orange",
                     Then =
                     {
                         Outputs = { new ParametersSampleTypesResults
                         {
+                            BoolArg = true,
                             StringArg = "green",
                             StructArg = 1,
                             StructNArg = 2,
@@ -176,6 +181,7 @@ Options:
                         {
                             new ParametersSampleTypesResults
                             {
+                                BoolArg = true,
                                 StringArg = "lala",
                                 StructArg = 3,
                                 StructNArg = 4,
@@ -192,6 +198,7 @@ Options:
             public TestOutputs TestOutputs { get; set; }
 
             public void ArgsDefaults(
+                [Argument] bool boolArg = true,
                 [Argument] string stringArg = "lala", 
                 [Argument] int structArg = 3, 
                 [Argument] int? structNArg = 4,
@@ -200,7 +207,7 @@ Options:
                 [Argument] List<string> stringListArg = null)
             {
                 TestOutputs.Capture(new ParametersSampleTypesResults(
-                    stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
+                    boolArg, stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
             }
 
             public void StructListDefaults(

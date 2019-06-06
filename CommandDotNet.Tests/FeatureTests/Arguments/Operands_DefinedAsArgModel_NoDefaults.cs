@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using CommandDotNet.Attributes;
 using CommandDotNet.Models;
 using CommandDotNet.Tests.BddTests.Framework;
-using CommandDotNet.Tests.FeatureTests.Arguments.Models;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
 using CommandDotNet.Tests.Utils;
 using Xunit.Abstractions;
@@ -31,6 +30,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         Result = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments] [options]
 
 Arguments:
+  BoolArg
   StringArg
   StructArg
   StructNArg
@@ -51,6 +51,9 @@ Options:
                         Result = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments] [options]
 
 Arguments:
+
+  BoolArg                     <BOOLEAN>
+  Allowed values: true, false
 
   StringArg                   <TEXT>
 
@@ -177,13 +180,14 @@ Options:
                 },
                 new Given<OperandsNoDefaults>("SampleTypes - Exec - positional")
                 {
-                    WhenArgs = "ArgsNoDefault green 1 2 Monday http://google.com yellow orange",
+                    WhenArgs = "ArgsNoDefault true green 1 2 Monday http://google.com yellow orange",
                     Then =
                     {
                         Outputs =
                         {
                             new OperandsNoDefaultsSampleTypesModel
                             {
+                                BoolArg = true,
                                 StringArg = "green",
                                 StructArg = 1,
                                 StructNArg = 2,

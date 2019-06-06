@@ -10,6 +10,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels
     /// </summary>
     public interface ISampleTypesArgumentsModel: IArgumentModel
     {
+        bool BoolArg { get; set; }
         string StringArg { get; set; }
         int StructArg { get; set; }
         int? StructNArg { get; set; }

@@ -6,6 +6,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsParams
     public interface IArgsNoDefaultsSampleTypesMethod
     {
         void ArgsNoDefault(
+            bool boolArg,
             string stringArg,
             int structArg,
             int? structNArg,

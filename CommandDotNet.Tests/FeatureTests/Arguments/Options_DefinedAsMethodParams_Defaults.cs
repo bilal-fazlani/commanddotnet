@@ -32,6 +32,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
 Options:
   -h | --help      Show help information
+  --boolArg
   --stringArg
   --structArg
   --structNArg
@@ -52,6 +53,8 @@ Options:
 
   -h | --help
   Show help information
+
+  --boolArg                                    [True]
 
   --stringArg                   <TEXT>         [lala]
 
@@ -165,6 +168,7 @@ Options:
                         {
                             new ParametersSampleTypesResults
                             {
+                                BoolArg = true,
                                 StringArg = "green",
                                 StructArg = 1,
                                 StructNArg = 2,
@@ -184,6 +188,7 @@ Options:
                         {
                             new ParametersSampleTypesResults
                             {
+                                BoolArg = true,
                                 StringArg = "lala",
                                 StructArg = 3,
                                 StructNArg = 4,
@@ -247,6 +252,7 @@ Options:
             public TestOutputs TestOutputs { get; set; }
 
             public void ArgsDefaults(
+                [Option] bool boolArg = true,
                 [Option] string stringArg = "lala", 
                 [Option] int structArg = 3, 
                 [Option] int? structNArg = 4,
@@ -255,7 +261,7 @@ Options:
                 [Option] List<string> stringListArg = null)
             {
                 TestOutputs.Capture(new ParametersSampleTypesResults(
-                    stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
+                    boolArg, stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
             }
 
             public void StructListDefaults(

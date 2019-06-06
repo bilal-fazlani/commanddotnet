@@ -31,6 +31,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         Result = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments] [options]
 
 Arguments:
+  boolArg
   stringArg
   structArg
   structNArg
@@ -51,6 +52,9 @@ Options:
                         Result = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments] [options]
 
 Arguments:
+
+  boolArg                     <BOOLEAN>
+  Allowed values: true, false
 
   stringArg                   <TEXT>
 
@@ -177,13 +181,14 @@ Options:
                 },
                 new Given<OperandsNoDefaults>("SampleTypes - Exec - positional")
                 {
-                    WhenArgs = "ArgsNoDefault green 1 2 Monday http://google.com yellow orange",
+                    WhenArgs = "ArgsNoDefault true green 1 2 Monday http://google.com yellow orange",
                     Then =
                     {
                         Outputs =
                         {
                             new ParametersSampleTypesResults
                             {
+                                BoolArg = true,
                                 StringArg = "green",
                                 StructArg = 1,
                                 StructNArg = 2,
@@ -285,6 +290,7 @@ Options:
             public TestOutputs TestOutputs { get; set; }
 
             public void ArgsNoDefault(
+                [Argument] bool boolArg,
                 [Argument] string stringArg,
                 [Argument] int structArg,
                 [Argument] int? structNArg,
@@ -293,7 +299,7 @@ Options:
                 [Argument] List<string> stringListArg)
             {
                 TestOutputs.Capture(new ParametersSampleTypesResults(
-                    stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
+                    boolArg, stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
             }
 
             public void StructListNoDefault(

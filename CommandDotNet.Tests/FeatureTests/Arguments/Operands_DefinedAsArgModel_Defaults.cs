@@ -28,6 +28,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments] [options]
 
 Arguments:
+  BoolArg
   StringArg
   StructArg
   StructNArg
@@ -46,6 +47,9 @@ Options:
                     Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments] [options]
 
 Arguments:
+
+  BoolArg                     <BOOLEAN>      [True]
+  Allowed values: true, false
 
   StringArg                   <TEXT>         [lala]
 
@@ -156,11 +160,12 @@ Options:
                 },
                 new Given<OperandsDefaults>("SampleTypes - Exec - positional")
                 {
-                    WhenArgs = "ArgsDefaults green 1 2 Monday http://google.com yellow orange",
+                    WhenArgs = "ArgsDefaults true green 1 2 Monday http://google.com yellow orange",
                     Then =
                     {
                         Outputs = { new OperandsDefaultsSampleTypesModel
                         {
+                            BoolArg = true,
                             StringArg = "green",
                             StructArg = 1,
                             StructNArg = 2,
