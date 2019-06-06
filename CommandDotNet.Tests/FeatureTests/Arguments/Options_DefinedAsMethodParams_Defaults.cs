@@ -175,7 +175,7 @@ Options:
                         }
                     }
                 },
-                new Given<OptionsDefaults>("SampleTypes - Exec - operands not required")
+                new Given<OptionsDefaults>("SampleTypes - Exec - options not required - uses defaults")
                 {
                     WhenArgs = "ArgsDefaults",
                     Then =
