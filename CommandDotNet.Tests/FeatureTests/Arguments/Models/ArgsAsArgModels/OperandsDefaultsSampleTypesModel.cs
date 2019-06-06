@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using CommandDotNet.Attributes;
 
-namespace CommandDotNet.Tests.BddTests.Models
+namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels
 {
     public class OperandsDefaultsSampleTypesModel : ISampleTypesArgumentsModel
     {
@@ -23,18 +23,5 @@ namespace CommandDotNet.Tests.BddTests.Models
 
         [Argument]
         public List<string> StringListArg { get; set; } = new List<string> {"red", "blue"};
-
-        [Argument]
-        public List<int> StructListArg { get; set; } = new List<int> {3, 4};
-
-        [Argument]
-        public List<DayOfWeek> EnumListArg { get; set; } = new List<DayOfWeek> {DayOfWeek.Monday, DayOfWeek.Tuesday};
-
-        [Argument]
-        public List<Uri> ObjectListArg { get; set; } = new List<Uri>
-        {
-            new Uri("http://google.com"),
-            new Uri("http://github.com")
-        };
     }
 }

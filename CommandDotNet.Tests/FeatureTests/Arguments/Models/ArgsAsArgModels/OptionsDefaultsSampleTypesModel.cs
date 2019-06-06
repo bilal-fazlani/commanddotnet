@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using CommandDotNet.Attributes;
 
-namespace CommandDotNet.Tests.BddTests.Models
+namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels
 {
-    public class OptionsDefaultsSampleTypesModel : ISampleTypesArgumentsModel
+    public class OptionsDefaultsSampleTypesModel : 
+        ISampleTypesArgumentsModel, IStructListArgumentModel, IEnumListArgumentModel, IObjectListArgumentModel
     {
         [Option]
         public string StringArg { get; set; } = "lala";

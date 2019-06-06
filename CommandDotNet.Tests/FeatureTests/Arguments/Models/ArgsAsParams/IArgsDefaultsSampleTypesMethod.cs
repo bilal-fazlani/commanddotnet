@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CommandDotNet.Tests.BddTests.Models
+namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsParams
 {
     public interface IArgsDefaultsSampleTypesMethod
     {

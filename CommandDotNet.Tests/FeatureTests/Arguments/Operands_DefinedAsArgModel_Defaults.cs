@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using CommandDotNet.Attributes;
 using CommandDotNet.Models;
 using CommandDotNet.Tests.BddTests.Framework;
-using CommandDotNet.Tests.BddTests.Models;
+using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
 using CommandDotNet.Tests.Utils;
 using Xunit.Abstractions;
 
@@ -28,36 +28,37 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments] [options]
 
 Arguments:
-  stringArg
-  structArg
-  structNArg
-  enumArg
-  objectArg
-  stringListArg
+  StringArg
+  StructArg
+  StructNArg
+  EnumArg
+  ObjectArg
+  StringListArg
 
 Options:
   -h | --help  Show help information" }
                 },
                 new Given<OperandsDefaults>("SampleTypes - Detailed Help")
                 {
+                    SkipReason = "Help should not contain default value as [System.Collections.Generic.List`1[System.String]]",
                     And = {AppSettings = DetailedHelp},
                     WhenArgs = "ArgsDefaults -h",
                     Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments] [options]
 
 Arguments:
 
-  stringArg                   <TEXT>         [lala]
+  StringArg                   <TEXT>         [lala]
 
-  structArg                   <NUMBER>       [3]
+  StructArg                   <NUMBER>       [3]
 
-  structNArg                  <NUMBER>       [4]
+  StructNArg                  <NUMBER>       [4]
 
-  enumArg                     <DAYOFWEEK>    [Wednesday]
+  EnumArg                     <DAYOFWEEK>    [Tuesday]
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
-  objectArg                   <URI>
+  ObjectArg                   <URI>          [http://google.com/]
 
-  stringListArg (Multiple)    <TEXT>
+  StringListArg (Multiple)    <TEXT>         [System.Collections.Generic.List`1[System.String]]
 
 
 Options:
@@ -72,20 +73,21 @@ Options:
                     Then = { Result = @"Usage: dotnet testhost.dll StructListDefaults [arguments] [options]
 
 Arguments:
-  structListArg
+  StructListArg
 
 Options:
   -h | --help  Show help information" }
                 },
                 new Given<OperandsDefaults>("StructList - Detailed Help")
                 {
+                    SkipReason = "Help should not contain default value as [System.Collections.Generic.List`1[System.Int32]]",
                     And = {AppSettings = DetailedHelp},
                     WhenArgs = "StructListDefaults -h",
                     Then = { Result = @"Usage: dotnet testhost.dll StructListDefaults [arguments] [options]
 
 Arguments:
 
-  structListArg (Multiple)    <NUMBER>
+  StructListArg (Multiple)    <NUMBER>    [System.Collections.Generic.List`1[System.Int32]]
 
 
 Options:
@@ -100,20 +102,21 @@ Options:
                     Then = { Result = @"Usage: dotnet testhost.dll EnumListDefaults [arguments] [options]
 
 Arguments:
-  enumListArg
+  EnumListArg
 
 Options:
   -h | --help  Show help information" }
                 },
                 new Given<OperandsDefaults>("EnumList - Detailed Help")
                 {
+                    SkipReason = "Help should not contain default value as [System.Collections.Generic.List`1[System.DayOfWeek]]",
                     And = {AppSettings = DetailedHelp},
                     WhenArgs = "EnumListDefaults -h",
                     Then = { Result = @"Usage: dotnet testhost.dll EnumListDefaults [arguments] [options]
 
 Arguments:
 
-  enumListArg (Multiple)    <DAYOFWEEK>
+  EnumListArg (Multiple)    <DAYOFWEEK>    [System.Collections.Generic.List`1[System.DayOfWeek]]
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
 
@@ -129,20 +132,21 @@ Options:
                     Then = { Result = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments] [options]
 
 Arguments:
-  objectListArg
+  ObjectListArg
 
 Options:
   -h | --help  Show help information" }
                 },
                 new Given<OperandsDefaults>("ObjectList - Detailed Help")
                 {
+                    SkipReason = "Help should not contain default value as [System.Collections.Generic.List`1[System.Uri]]",
                     And = {AppSettings = DetailedHelp},
                     WhenArgs = "ObjectListDefaults -h",
                     Then = { Result = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments] [options]
 
 Arguments:
 
-  objectListArg (Multiple)    <URI>
+  ObjectListArg (Multiple)    <URI>    [System.Collections.Generic.List`1[System.Uri]]
 
 
 Options:
@@ -155,7 +159,7 @@ Options:
                     WhenArgs = "ArgsDefaults green 1 2 Monday http://google.com yellow orange",
                     Then =
                     {
-                        Outputs = { new ParametersSampleTypesResults
+                        Outputs = { new OperandsDefaultsSampleTypesModel
                         {
                             StringArg = "green",
                             StructArg = 1,
@@ -173,51 +177,41 @@ Options:
                     {
                         Outputs =
                         {
-                            new ParametersSampleTypesResults
+                            new OperandsDefaultsSampleTypesModel
                             {
                                 StringArg = "lala",
                                 StructArg = 3,
                                 StructNArg = 4,
-                                EnumArg = DayOfWeek.Wednesday,
+                                EnumArg = DayOfWeek.Tuesday,
                             }
                         }
                     }
                 },
             };
 
-        private class OperandsDefaults : IArgsDefaultsSampleTypesMethod
+        private class OperandsDefaults
         {
             [InjectProperty]
             public TestOutputs TestOutputs { get; set; }
 
-            public void ArgsDefaults(
-                [Argument] string stringArg = "lala",
-                [Argument] int structArg = 3,
-                [Argument] int? structNArg = 4,
-                [Argument] DayOfWeek enumArg = DayOfWeek.Wednesday,
-                [Argument] Uri objectArg = null,
-                [Argument] List<string> stringListArg = null)
+            public void ArgsDefaults(OperandsDefaultsSampleTypesModel model)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(
-                    stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
+                TestOutputs.Capture(model);
             }
 
-            public void StructListDefaults(
-                [Argument] List<int> structListArg = null)
+            public void StructListDefaults(OperandsDefaultsStructListArgumentModel model)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(structListArg));
+                TestOutputs.Capture(model);
             }
 
-            public void EnumListDefaults(
-                [Argument] List<DayOfWeek> enumListArg = null)
+            public void EnumListDefaults(OperandsDefaultsEnumListArgumentModel model)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(enumListArg));
+                TestOutputs.Capture(model);
             }
 
-            public void ObjectListDefaults(
-                [Argument] List<Uri> objectListArg = null)
+            public void ObjectListDefaults(OperandsDefaultsObjectListArgumentModel model)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(objectListArg));
+                TestOutputs.Capture(model);
             }
         }
     }

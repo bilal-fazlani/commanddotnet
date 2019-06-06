@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
 
-namespace CommandDotNet.Tests.BddTests.Models
+namespace CommandDotNet.Tests.FeatureTests.Arguments.Models
 {
     /// <summary>To capture outputs for args from params tests</summary>
     public class ParametersSampleTypesResults : ISampleTypesArgumentsModel
