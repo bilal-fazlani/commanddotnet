@@ -1,12 +1,17 @@
 using CommandDotNet.Attributes;
 using CommandDotNet.Models;
 using CommandDotNet.Tests.BddTests.Framework;
+using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.BddTests.TestScenarios
+namespace CommandDotNet.Tests.FeatureTests
 {
-    public class UsageAppNameStylesScenarios : ScenariosBaseTheory
+    public class UsageAppNameStyles : ScenarioTestBase<UsageAppNameStyles>
     {
-        public override Scenarios Scenarios =>
+        public UsageAppNameStyles(ITestOutputHelper output) : base(output)
+        {
+        }
+
+        public static Scenarios Scenarios =>
             new Scenarios
             {
                 new Given<WithAppMetadataName>("Adaptive style uses GlobalTool style")
