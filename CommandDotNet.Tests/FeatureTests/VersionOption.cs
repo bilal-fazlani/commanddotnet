@@ -1,5 +1,5 @@
 using CommandDotNet.Models;
-using CommandDotNet.Tests.BddTests.Framework;
+using CommandDotNet.Tests.ScenarioFramework;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests

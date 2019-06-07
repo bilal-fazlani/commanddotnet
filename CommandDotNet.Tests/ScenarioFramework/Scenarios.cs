@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace CommandDotNet.Tests.BddTests.Framework
+namespace CommandDotNet.Tests.ScenarioFramework
 {
     public class Scenarios : IEnumerable<IScenario>
     {

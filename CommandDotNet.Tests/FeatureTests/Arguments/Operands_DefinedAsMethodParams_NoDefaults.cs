@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using CommandDotNet.Attributes;
 using CommandDotNet.Models;
-using CommandDotNet.Tests.BddTests.Framework;
+using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsParams;
 using CommandDotNet.Tests.Utils;
