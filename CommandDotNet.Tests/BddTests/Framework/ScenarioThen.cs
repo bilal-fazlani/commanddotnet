@@ -10,5 +10,6 @@ namespace CommandDotNet.Tests.BddTests.Framework
         public bool AllowUnspecifiedOutputs { get; set; }
         public List<object> Outputs { get; } = new List<object>();
         public List<string> ResultsContainsTexts { get; } = new List<string>();
+        public List<string> ResultsNotContainsTexts { get; } = new List<string>();
     }
 }

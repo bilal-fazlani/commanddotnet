@@ -66,7 +66,11 @@ namespace CommandDotNet.Tests.BddTests.Framework
                 .Where(t => !result.HelpContains(t))
                 .ToList();
 
-            if (expectedExitCode != result.ExitCode || missingHelpTexts.Count > 0)
+            var unexpectedHelpTexts = scenario.Then.ResultsNotContainsTexts
+                .Where(result.HelpContains)
+                .ToList();
+
+            if (expectedExitCode != result.ExitCode || missingHelpTexts.Count > 0 || unexpectedHelpTexts.Count > 0)
             {
                 var sb = new StringBuilder();
                 sb.AppendLine($"ExitCode: expected={expectedExitCode} actual={result.ExitCode}");
@@ -75,6 +79,16 @@ namespace CommandDotNet.Tests.BddTests.Framework
                     sb.AppendLine();
                     sb.AppendLine($"Missing text in output:");
                     foreach (var text in missingHelpTexts)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"  {text}");
+                    }
+                }
+                if (unexpectedHelpTexts.Count > 0)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine($"Unexpected text in output:");
+                    foreach (var text in unexpectedHelpTexts)
                     {
                         sb.AppendLine();
                         sb.AppendLine($"  {text}");
