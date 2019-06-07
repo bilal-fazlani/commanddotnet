@@ -1,22 +1,23 @@
-using CommandDotNet.Tests.BddTests.Apps;
+using CommandDotNet.Attributes;
 using CommandDotNet.Tests.BddTests.Framework;
+using CommandDotNet.Tests.Utils;
+using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.BddTests.TestScenarios
+namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class BasicParseScenarios : ScenariosBaseTheory
+    public class BasicParseScenarios : ScenarioTestBase<BasicParseScenarios>
     {
-        public override Scenarios Scenarios =>
+        public BasicParseScenarios(ITestOutputHelper output) : base(output)
+        {
+        }
+
+        public static Scenarios Scenarios =>
             new Scenarios
             {
                 new Given<SingleCommandApp>("method is called with expected values")
                 {
                     WhenArgs = "Add -o * 2 3",
                     Then = {Outputs = {new SingleCommandApp.AddResults {X = 2, Y = 3, Op = "*"}}}
-                },
-                new Given<SingleCommandApp>("option not required")
-                {
-                    WhenArgs = "Add 2 3",
-                    Then = {Outputs = {new SingleCommandApp.AddResults {X = 2, Y = 3, Op = "+"}}}
                 },
                 new Given<SingleCommandApp>("option can be specified after positional arg")
                 {
@@ -62,5 +63,29 @@ namespace CommandDotNet.Tests.BddTests.TestScenarios
                     }
                 }
             };
+
+        public class SingleCommandApp
+        {
+            [InjectProperty]
+            public TestOutputs TestOutputs { get; set; }
+
+            public void Add(
+                [Argument(Description = "the first operand")]
+                int x,
+                [Argument(Description = "the second operand")]
+                int y,
+                [Option(ShortName = "o", LongName = "operator", Description = "the operation to apply")]
+                string operation = "+")
+            {
+                TestOutputs.Capture(new AddResults { X = x, Y = y, Op = operation });
+            }
+
+            public class AddResults
+            {
+                public int X { get; set; }
+                public int Y { get; set; }
+                public string Op { get; set; }
+            }
+        }
     }
 }
