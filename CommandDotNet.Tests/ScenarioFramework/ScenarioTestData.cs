@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CommandDotNet.Models;
 
-namespace CommandDotNet.Tests.BddTests.Framework
+namespace CommandDotNet.Tests.ScenarioFramework
 {
     public class ScenarioTestData
     {

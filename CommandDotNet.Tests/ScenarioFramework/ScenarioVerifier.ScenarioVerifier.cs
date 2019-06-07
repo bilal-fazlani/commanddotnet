@@ -6,7 +6,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.BddTests.Framework
+namespace CommandDotNet.Tests.ScenarioFramework
 {
     public class ScenarioVerifier
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace CommandDotNet.Tests.BddTests.Framework
+namespace CommandDotNet.Tests.ScenarioFramework
 {
     public class Given<T> : IScenario
     {

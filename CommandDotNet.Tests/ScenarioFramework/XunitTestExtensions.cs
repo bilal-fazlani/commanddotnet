@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CommandDotNet.Tests.BddTests.Framework
+namespace CommandDotNet.Tests.ScenarioFramework
 {
     public static class XunitTestExtensions
     {

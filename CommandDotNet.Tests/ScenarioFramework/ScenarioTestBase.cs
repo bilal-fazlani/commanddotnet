@@ -5,7 +5,7 @@ using CommandDotNet.Models;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.BddTests.Framework
+namespace CommandDotNet.Tests.ScenarioFramework
 {
     public abstract class ScenarioTestBase<TSuper>
     {

@@ -1,6 +1,6 @@
 using CommandDotNet.Models;
 
-namespace CommandDotNet.Tests.BddTests.Framework
+namespace CommandDotNet.Tests.ScenarioFramework
 {
     public class ScenarioAnd
     {

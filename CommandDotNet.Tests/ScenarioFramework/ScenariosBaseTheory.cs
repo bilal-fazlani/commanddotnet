@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using CommandDotNet.Models;
 
-namespace CommandDotNet.Tests.BddTests.Framework
+namespace CommandDotNet.Tests.ScenarioFramework
 {
     public abstract class ScenariosBaseTheory
     {
