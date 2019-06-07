@@ -1,12 +1,17 @@
 using CommandDotNet.Attributes;
 using CommandDotNet.Tests.BddTests.Framework;
 using CommandDotNet.Tests.Utils;
+using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.BddTests.TestScenarios
+namespace CommandDotNet.Tests.FeatureTests
 {
-    public class ConstructorOptionsInheritedScenarios : ScenariosBaseTheory
+    public class ConstructorOptions : ScenarioTestBase<ConstructorOptions>
     {
-        public override Scenarios Scenarios =>
+        public ConstructorOptions(ITestOutputHelper output) : base(output)
+        {
+        }
+
+        public static Scenarios Scenarios =>
             new Scenarios
             {
                 new Given<Root>("help includes global options")
@@ -34,7 +39,7 @@ Commands:
 Use ""dotnet testhost.dll [command] --help"" for more information about a command."
                     }
                 },
-                new Given<Root>("help for sub-command includes local and inherited root global options")
+                new Given<Root>("help for sub-command includes only local global options")
                 {
                     WhenArgs = "Leaf -h",
                     Then =
@@ -48,8 +53,6 @@ Options:
 
   --LeafOpt      <TEXT>
 
-  --rootOpt      <TEXT>
-
 
 Commands:
 
@@ -60,52 +63,35 @@ Use ""dotnet testhost.dll Leaf [command] --help"" for more information about a c
                 },
                 new Given<Root>("executing sub-command will parse and execute local global options")
                 {
-                    WhenArgs = "--rootOpt root Leaf --LeafOpt leaf Do --DoOpt a b",
+                    WhenArgs = "Leaf --LeafOpt leaf Do --DoOpt a b",
                     Then =
                     {
                         Outputs =
                         {
-                            //new RootGlobalResult{RootOpt = "root"},
                             new LeafGlobalResult{LeafOpt = "leaf"},
                             new LeafDoResult{DoOpt = "a", DoArg = "b"}
                         }
                     }
                 },
-                new Given<Root>("global option can be specified after local command")
+                new Given<Root>("global option must be specified before local command")
                 {
-                    WhenArgs = "Leaf Do --LeafOpt leaf --rootOpt root --DoOpt a b",
+                    WhenArgs = "Leaf Do --LeafOpt leaf --DoOpt a b",
                     Then =
                     {
-                        Outputs =
-                        {
-                            //new RootGlobalResult{RootOpt = "root"},
-                            new LeafGlobalResult{LeafOpt = "leaf"},
-                            new LeafDoResult{DoOpt = "a", DoArg = "b"}
-                        }
+                        ExitCode = 1,
+                        ResultsContainsTexts = { "Unrecognized option '--LeafOpt'" }
                     }
                 }
             };
 
         public class Root
         {
-            private readonly string _rootOpt;
-
-            private TestOutputs _testOutputs;
-
             [InjectProperty]
-            public TestOutputs TestOutputs
-            {
-                get => _testOutputs;
-                set
-                {
-                    _testOutputs = value;
-                    _testOutputs.Capture(new RootGlobalResult{RootOpt = _rootOpt});
-                }
-            }
+            public TestOutputs TestOutputs { get; set; }
 
-            public Root([Option(Inherited = true)] string rootOpt)
+            public Root([Option] string rootOpt = null)
             {
-                _rootOpt = rootOpt;
+                TestOutputs.Capture(new RootGlobalResult{RootOpt = rootOpt});
             }
 
             [SubCommand]
@@ -140,7 +126,7 @@ Use ""dotnet testhost.dll Leaf [command] --help"" for more information about a c
 
         public class LeafGlobalResult : IArgumentModel
         {
-            [Option(Inherited = true)]
+            [Option]
             public string LeafOpt { get; set; }
         }
 
@@ -150,8 +136,6 @@ Use ""dotnet testhost.dll Leaf [command] --help"" for more information about a c
             public string DoOpt { get; set; }
             [Argument]
             public string DoArg { get; set; }
-
-            internal string InheritedRootOpt { get; set; }
         }
     }
 }
