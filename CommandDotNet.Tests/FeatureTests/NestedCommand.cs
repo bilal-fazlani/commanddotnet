@@ -1,13 +1,17 @@
 using CommandDotNet.Attributes;
-using CommandDotNet.Tests.BddTests.Apps;
 using CommandDotNet.Tests.BddTests.Framework;
 using CommandDotNet.Tests.Utils;
+using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.BddTests.TestScenarios
+namespace CommandDotNet.Tests.FeatureTests
 {
-    public class NestedCommandScenarios : ScenariosBaseTheory
+    public class NestedCommand : ScenarioTestBase<NestedCommand>
     {
-        public override Scenarios Scenarios =>
+        public NestedCommand(ITestOutputHelper output) : base(output)
+        {
+        }
+
+        public static Scenarios Scenarios =>
             new Scenarios
             {
                 new Given<ThreeLevelsApp>("help includes 1st level commands and 2nd level app")
