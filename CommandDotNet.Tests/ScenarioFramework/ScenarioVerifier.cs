@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using CommandDotNet.Tests.Utils;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit.Abstractions;

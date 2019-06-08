@@ -38,7 +38,7 @@ namespace CommandDotNet.Tests.ScenarioFramework
             var scenarios = scenariosRaw as IEnumerable<IScenario>;
             if (scenariosProp == null)
             {
-                throw new Exception($"test class static property `{scenarioPropName}` ({scenariosRaw?.GetType()}) must implement {typeof(IEnumerable<ScenariosBaseTheory>)}");
+                throw new Exception($"test class static property `{scenarioPropName}` ({scenariosRaw?.GetType()}) must implement {typeof(IEnumerable<IScenario>)}");
             }
 
             return new ScenarioTestData(scenarios, new AppSettings());

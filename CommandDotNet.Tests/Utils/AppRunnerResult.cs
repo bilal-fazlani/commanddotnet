@@ -1,7 +1,6 @@
-using CommandDotNet.Tests.Utils;
 using FluentAssertions;
 
-namespace CommandDotNet.Tests
+namespace CommandDotNet.Tests.Utils
 {
     public class AppRunnerResult
     {
