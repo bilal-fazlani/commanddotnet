@@ -121,7 +121,7 @@ Options:
                         ResultsContainsTexts = { "'2' is not a valid Boolean" }
                     }
                 },
-                new Given<App>("Explicit - exec - option defaults to false if specified without value")
+                new Given<App>("Explicit - exec - option value is required")
                 {
                     And = {AppSettings = ExplicitBasicHelp},
                     WhenArgs = "Do --option",
