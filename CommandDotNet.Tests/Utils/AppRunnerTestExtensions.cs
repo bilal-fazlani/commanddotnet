@@ -6,11 +6,6 @@ namespace CommandDotNet.Tests.Utils
 {
     public static class AppRunnerTestExtensions
     {
-        public static AppRunnerResult RunAppInMem(this Type appType, string args, AppSettings appSettings = null)
-        {
-            return RunAppInMem(appType, args?.Split(' ') ?? new string[0], appSettings);
-        }
-
         public static AppRunnerResult RunAppInMem(this Type appType, string[] args, AppSettings appSettings = null)
         {
             var type = typeof(AppRunner<>).MakeGenericType(appType);

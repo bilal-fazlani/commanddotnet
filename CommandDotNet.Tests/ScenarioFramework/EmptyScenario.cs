@@ -18,6 +18,8 @@ namespace CommandDotNet.Tests.ScenarioFramework
 
         public string WhenArgs => _backingScenario.WhenArgs;
 
+        public string[] WhenArgsArray => _backingScenario.WhenArgsArray;
+
         public ScenarioThen Then => _backingScenario.Then;
 
         public string SkipReason => _backingScenario.SkipReason;

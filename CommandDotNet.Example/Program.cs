@@ -1,4 +1,7 @@
-﻿using CommandDotNet.Attributes;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
+using CommandDotNet.Attributes;
 using CommandDotNet.Example.Issues;
 using CommandDotNet.Models;
 
@@ -8,6 +11,17 @@ namespace CommandDotNet.Example
     {
         static int Main(string[] args)
         {
+            if (args.FirstOrDefault() == "dump")
+            {
+                Console.Out.WriteLine("the system parsed the args as...");
+                foreach (var arg in args)
+                {
+                    Console.Out.WriteLine(arg);
+                }
+
+                return 0;
+            }
+
             // return Run<GitApplication>(args);
             return Run<Examples>(args);
         }

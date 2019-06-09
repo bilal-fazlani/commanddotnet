@@ -9,6 +9,10 @@ namespace CommandDotNet.Tests.ScenarioFramework
 
         public ScenarioAnd And { get; } = new ScenarioAnd();
         public string WhenArgs { get; set; }
+
+        /// <summary>Use this for tested arguments that can contain spaces</summary>
+        public string[] WhenArgsArray { get; set; }
+
         public ScenarioThen Then { get; } = new ScenarioThen();
 
         IScenarioContext IScenario.Context { get; set; }
