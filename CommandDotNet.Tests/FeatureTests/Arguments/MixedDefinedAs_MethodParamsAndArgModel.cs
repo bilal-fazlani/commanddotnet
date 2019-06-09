@@ -90,6 +90,29 @@ Options:
                             }
                         }
                     }
+                },
+                new Given<App>("exec - options can be included after arguments")
+                {
+                    And = {AppSettings = BasicHelp},
+                    WhenArgs = "Do --paramOptionList poB --paramOptionList poC " +
+                               "red --paramOptionList poD green --paramOptionList poE " +
+                               "blue --paramOptionList poF orange --paramOptionList poG",
+                    Then =
+                    {
+                        Outputs =
+                        {
+                            new Model
+                            {
+                                ModelArg = "red"
+                            },
+                            new Params
+                            {
+                                ParamOptionList = new List<string>{"poB", "poC", "poD", "poE", "poF", "poG"},
+                                ParamArg = "green",
+                                ParamArgList = new List<string>{"blue", "orange"}
+                            }
+                        }
+                    }
                 }
             };
 
