@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using CommandDotNet.Attributes;
+﻿using CommandDotNet.Attributes;
 using CommandDotNet.Models;
 using FluentAssertions;
 using Xunit;
