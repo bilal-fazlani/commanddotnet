@@ -1,10 +1,8 @@
 using System;
 using System.IO;
-using System.Reflection;
 using CommandDotNet.Models;
-using CommandDotNet.Tests.Utils;
 
-namespace CommandDotNet.Tests
+namespace CommandDotNet.Tests.Utils
 {
     public static class AppRunnerTestExtensions
     {
