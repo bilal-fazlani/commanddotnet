@@ -29,7 +29,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     WhenArgs = "Add 2 3 -o:*",
                     Then = {Outputs = {new SingleCommandApp.AddResults {X = 2, Y = 3, Op = "*"}}}
                 },
-                new Given<SingleCommandApp>("option can be specified after positional arg")
+                new Given<SingleCommandApp>("option can be equals separated: --option=value")
                 {
                     WhenArgs = "Add 2 3 -o=*",
                     Then = {Outputs = {new SingleCommandApp.AddResults {X = 2, Y = 3, Op = "*"}}}
