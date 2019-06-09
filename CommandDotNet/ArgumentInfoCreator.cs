@@ -18,9 +18,13 @@ namespace CommandDotNet
             _settings = settings;
         }
 
-        public IEnumerable<ArgumentInfo> GetArgumentsFromMethod(MethodBase methodBase, ArgumentMode argumentMode)
+        public IEnumerable<ArgumentInfo> GetArgumentsFromMethod(MethodBase methodBase)
         {
             var isCtor = methodBase is ConstructorInfo;
+
+            var argumentMode = isCtor 
+                ? ArgumentMode.Option 
+                : _settings.MethodArgumentMode;
             
             return methodBase
                 .GetParameters()

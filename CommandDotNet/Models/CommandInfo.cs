@@ -17,7 +17,7 @@ namespace CommandDotNet.Models
 
             _metadataAttribute = _methodInfo.GetCustomAttribute<ApplicationMetadataAttribute>(false);
             
-            Arguments = new ArgumentInfoCreator(settings).GetArgumentsFromMethod(methodInfo, settings.MethodArgumentMode);
+            Arguments = new ArgumentInfoCreator(settings).GetArgumentsFromMethod(methodInfo);
         }
 
         public string Name => _metadataAttribute?.Name ?? _methodInfo.Name.ChangeCase(_settings.Case);
