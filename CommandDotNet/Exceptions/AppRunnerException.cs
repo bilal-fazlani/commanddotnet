@@ -6,7 +6,11 @@ namespace CommandDotNet.Exceptions
     {
         public AppRunnerException(string message) : base(message)
         {
-            
+
+        }
+        public AppRunnerException(string message, Exception innerException) : base(message, innerException)
+        {
+
         }
     }
 }

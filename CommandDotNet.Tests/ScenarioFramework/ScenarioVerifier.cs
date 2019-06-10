@@ -18,26 +18,30 @@ namespace CommandDotNet.Tests.ScenarioFramework
             _output = output;
         }
 
-        public void VerifyScenario(IScenario s)
+        public void VerifyScenario(IScenario scenario)
         {
+            if (scenario.And.AppSettings == null)
+            {
+                scenario.And.AppSettings = TestAppSettings.TestDefault;
+            }
             try
             {
-                var results = s.AppType.RunAppInMem(s.WhenArgs, s.And.AppSettings);
-                AssertExitCodeAndErrorMessage(s, results);
+                var results = scenario.AppType.RunAppInMem(scenario.WhenArgs, scenario.And.AppSettings, scenario.And.Dependencies);
+                AssertExitCodeAndErrorMessage(scenario, results);
 
-                if (s.Then.Result != null)
+                if (scenario.Then.Result != null)
                 {
-                    results.HelpShouldBe(s.Then.Result);
+                    results.HelpShouldBe(scenario.Then.Result);
                 }
 
-                if (s.Then.Outputs.Count > 0)
+                if (scenario.Then.Outputs.Count > 0)
                 {
-                    AssertOutputItems(s, results);
+                    AssertOutputItems(scenario, results);
                 }
             }
             catch (Exception)
             {
-                PrintContext(s);
+                PrintContext(scenario);
                 throw;
             }
         }
@@ -97,9 +101,9 @@ namespace CommandDotNet.Tests.ScenarioFramework
                 }
 
                 sb.AppendLine();
-                sb.AppendLine("Console output:");
-                sb.AppendLine();
+                sb.AppendLine("Console output <begin> ------------------------------");
                 sb.AppendLine(String.IsNullOrWhiteSpace(result.ConsoleOut) ? "<no output>" : result.ConsoleOut);
+                sb.AppendLine("Console output <end>   ------------------------------");
 
                 throw new AssertionFailedException(sb.ToString());
             }
