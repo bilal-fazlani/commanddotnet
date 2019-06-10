@@ -12,7 +12,7 @@ namespace CommandDotNet.Tests.ScenarioFramework
         /// When false, test runs always pass but skipped tests with no theories will count as 1 test, making hard to identify
         /// actual skipped tests
         /// </summary>
-        private const bool DisableEmptyScenario = true;
+        private const bool DisableEmptyScenario = false;
 
         public static IEnumerable<object[]> ToObjectArrays<T>(this IEnumerable<T> items)
         {
