@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using CommandDotNet.Models;
 using Xunit;
 using Xunit.Abstractions;
 
