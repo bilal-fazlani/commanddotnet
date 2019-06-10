@@ -8,8 +8,8 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class DefaultCommandMethod : ScenarioTestBase<DefaultCommandMethod>
     {
-        private static AppSettings BasicHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Basic } };
-        private static AppSettings DetailedHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Detailed } };
+        private static AppSettings BasicHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Basic }, EnableVersionOption = false };
+        private static AppSettings DetailedHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Detailed }, EnableVersionOption = false };
         
         public DefaultCommandMethod(ITestOutputHelper output) : base(output)
         {
@@ -18,7 +18,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public static Scenarios Scenarios =>
             new Scenarios
             {
-                new Given<DefaultCommandWithoutParamsApp>("default command method without params - Basic Help - includes other commands")
+                new Given<WithoutParamsApp>("without params - Basic Help - includes other commands")
                 {
                     And = {AppSettings = BasicHelp},
                     WhenArgs = "-h",
@@ -27,8 +27,7 @@ namespace CommandDotNet.Tests.FeatureTests
                         Result = @"Usage: dotnet testhost.dll [options] [command]
 
 Options:
-  -v | --version  Show version information
-  -h | --help     Show help information
+  -h | --help  Show help information
 
 Commands:
   AnotherCommand
@@ -36,7 +35,7 @@ Commands:
 Use ""dotnet testhost.dll [command] --help"" for more information about a command."
                     }
                 },
-                new Given<DefaultCommandWithoutParamsApp>("default command method without params - Detailed Help - includes other commands")
+                new Given<WithoutParamsApp>("without params - Detailed Help - includes other commands")
                 {
                     And = {AppSettings = DetailedHelp},
                     WhenArgs = "-h",
@@ -45,9 +44,6 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                         Result = @"Usage: dotnet testhost.dll [options] [command]
 
 Options:
-
-  -v | --version
-  Show version information
 
   -h | --help
   Show help information
@@ -60,7 +56,7 @@ Commands:
 Use ""dotnet testhost.dll [command] --help"" for more information about a command."
                     }
                 },
-                new Given<DefaultCommandWithParams>("default command method with params - Basic Help - includes args and other commands")
+                new Given<WithParamsApp>("with params - Basic Help - includes args and other commands")
                 {
                     SkipReason = "Known Issue #24 - should include method args",
                     And = {AppSettings = BasicHelp},
@@ -70,8 +66,8 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                         Result = @"Usage: dotnet testhost.dll [options] [command]
 
 Options:
-  -v | --version  Show version information
   -h | --help     Show help information
+  --text
 
 Commands:
   AnotherCommand
@@ -79,7 +75,7 @@ Commands:
 Use ""dotnet testhost.dll [command] --help"" for more information about a command."
                     }
                 },
-                new Given<DefaultCommandWithParams>("default command method with params - Detailed Help - includes args and other commands")
+                new Given<WithParamsApp>("with params - Detailed Help - includes args and other commands")
                 {
                     SkipReason = "Known Issue #24 - should include method args",
                     And = {AppSettings = DetailedHelp},
@@ -90,11 +86,10 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
 
 Options:
 
-  -v | --version
-  Show version information
-
   -h | --help
   Show help information
+
+  --text
 
 
 Commands:
@@ -104,15 +99,15 @@ Commands:
 Use ""dotnet testhost.dll [command] --help"" for more information about a command."
                     }
                 },
-                new Given<DefaultCommandWithoutParamsApp>("default command method without params - execute")
+                new Given<WithoutParamsApp>("without params - execute")
                 {
                     WhenArgs = "",
                     Then =
                     {
-                        Outputs = { DefaultCommandWithoutParamsApp.DefaultMethodExecuted }
+                        Outputs = { WithoutParamsApp.DefaultMethodExecuted }
                     }
                 },
-                new Given<DefaultCommandWithParams>("default command method with params - execute")
+                new Given<WithParamsApp>("with params - execute")
                 {
                     SkipReason = "Known Issue #24",
                     WhenArgs = "abcde",
@@ -123,7 +118,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 }
             };
 
-        public class DefaultCommandWithoutParamsApp
+        public class WithoutParamsApp
         {
             public const string DefaultMethodExecuted = "default executed";
 
@@ -142,7 +137,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             }
         }
 
-        public class DefaultCommandWithParams
+        public class WithParamsApp
         {
             [InjectProperty]
             public TestOutputs TestOutputs { get; set; }
