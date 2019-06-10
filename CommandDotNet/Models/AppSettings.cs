@@ -58,7 +58,7 @@ namespace CommandDotNet.Models
             set => Help.TextStyle = value;
         }
         
-        public ArgumentTypeDescriptors ArgumentTypeDescriptors { get; } = new ArgumentTypeDescriptors();
+        public ArgumentTypeDescriptors ArgumentTypeDescriptors { get; internal set; } = new ArgumentTypeDescriptors();
         
         internal IHelpProvider CustomHelpProvider { get; set; }
 
@@ -66,6 +66,5 @@ namespace CommandDotNet.Models
         
         internal TextWriter Out { get; set; } = Console.Out;
         internal TextWriter Error { get; set; } = Console.Error;
-
     }
 }

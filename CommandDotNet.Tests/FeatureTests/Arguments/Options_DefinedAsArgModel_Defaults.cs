@@ -11,8 +11,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class Options_DefinedAsArgModel_Defaults : ScenarioTestBase<Options_DefinedAsArgModel_Defaults>
     {
-        private static AppSettings BasicHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Basic } };
-        private static AppSettings DetailedHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Detailed } };
+        private static AppSettings BasicHelp = TestAppSettings.BasicHelp;
+        private static AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
         public Options_DefinedAsArgModel_Defaults(ITestOutputHelper output) : base(output)
         {

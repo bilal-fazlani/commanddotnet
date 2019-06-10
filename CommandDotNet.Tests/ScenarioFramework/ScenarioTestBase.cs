@@ -40,8 +40,8 @@ namespace CommandDotNet.Tests.ScenarioFramework
             {
                 throw new Exception($"test class static property `{scenarioPropName}` ({scenariosRaw?.GetType()}) must implement {typeof(IEnumerable<IScenario>)}");
             }
-
-            return new ScenarioTestData(scenarios, new AppSettings());
+            
+            return new ScenarioTestData(scenarios, TestAppSettings.TestDefault);
         }
 
         public ScenarioTestBase(ITestOutputHelper output)
