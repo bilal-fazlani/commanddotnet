@@ -6,8 +6,8 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class VersionOption : ScenarioTestBase<VersionOption>
     {
-        private static AppSettings VersionEnabledBasicHelp = new AppSettings { EnableVersionOption = true, Help = { TextStyle = HelpTextStyle.Basic } };
-        private static AppSettings VersionEnabledDetailedHelp = new AppSettings { EnableVersionOption = true, Help = { TextStyle = HelpTextStyle.Detailed } };
+        private static AppSettings VersionEnabledBasicHelp = TestAppSettings.BasicHelp.Clone(a => a.EnableVersionOption = true);
+        private static AppSettings VersionEnabledDetailedHelp = TestAppSettings.DetailedHelp.Clone(a => a.EnableVersionOption = true);
         private static AppSettings VersionDisabled = new AppSettings { EnableVersionOption = false };
 
         public VersionOption(ITestOutputHelper output) : base(output)

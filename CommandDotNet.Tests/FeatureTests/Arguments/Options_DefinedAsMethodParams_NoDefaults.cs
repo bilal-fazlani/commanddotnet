@@ -12,8 +12,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class Options_DefinedAsMethodParams_NoDefaults : ScenarioTestBase<Options_DefinedAsMethodParams_NoDefaults>
     {
-        private static AppSettings BasicHelp = new AppSettings{Help = {TextStyle = HelpTextStyle.Basic}};
-        private static AppSettings DetailedHelp = new AppSettings {Help = {TextStyle = HelpTextStyle.Detailed}};
+        private static AppSettings BasicHelp = TestAppSettings.BasicHelp;
+        private static AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
         public Options_DefinedAsMethodParams_NoDefaults(ITestOutputHelper output) : base(output)
         {

@@ -8,8 +8,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class NestedArgModel : ScenarioTestBase<NestedArgModel>
     {
-        private static AppSettings BasicHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Basic } };
-        private static AppSettings DetailedHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Detailed } };
+        private static AppSettings BasicHelp = TestAppSettings.BasicHelp;
+        private static AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
         public NestedArgModel(ITestOutputHelper output) : base(output)
         {

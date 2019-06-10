@@ -22,4 +22,7 @@
   <ItemGroup>
     <Content Include="TestCases/**/*" CopyToOutputDirectory="Always" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Parsing\" />
+  </ItemGroup>
 </Project>

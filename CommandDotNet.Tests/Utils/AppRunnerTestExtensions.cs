@@ -14,7 +14,7 @@ namespace CommandDotNet.Tests.Utils
         public static AppRunnerResult RunAppInMem(this Type appType, string[] args, AppSettings appSettings = null)
         {
             var type = typeof(AppRunner<>).MakeGenericType(appType);
-            var runner = Activator.CreateInstance(type, appSettings ?? new AppSettings());
+            var runner = Activator.CreateInstance(type, appSettings ?? TestAppSettings.TestDefault);
 
             var runInMemMethod = typeof(AppRunnerTestExtensions)
                 .GetMethod("RunInMem")
