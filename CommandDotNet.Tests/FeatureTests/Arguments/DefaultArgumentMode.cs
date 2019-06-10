@@ -7,18 +7,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class DefaultArgumentMode : ScenarioTestBase<DefaultArgumentMode>
     {
-        private static readonly AppSettings OperandMode = new AppSettings
-        {
-            MethodArgumentMode = ArgumentMode.Parameter,
-            Help = { TextStyle = HelpTextStyle.Basic },
-            EnableVersionOption = false
-        };
-        private static readonly AppSettings OptionMode = new AppSettings
-        {
-            MethodArgumentMode = ArgumentMode.Option, 
-            Help = { TextStyle = HelpTextStyle.Basic },
-            EnableVersionOption = false
-        };
+        private static readonly AppSettings OperandMode = TestAppSettings.BasicHelp.Clone(a => a.MethodArgumentMode = ArgumentMode.Parameter);
+        private static readonly AppSettings OptionMode = TestAppSettings.BasicHelp.Clone(a => a.MethodArgumentMode = ArgumentMode.Option);
 
         public DefaultArgumentMode(ITestOutputHelper output) : base(output)
         {

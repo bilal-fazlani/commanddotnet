@@ -9,8 +9,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class MixedDefinedAs_MethodParamsAndArgModel : ScenarioTestBase<MixedDefinedAs_MethodParamsAndArgModel>
     {
-        private static AppSettings BasicHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Basic } };
-        private static AppSettings DetailedHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Detailed } };
+        private static AppSettings BasicHelp = TestAppSettings.BasicHelp;
+        private static AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
         public MixedDefinedAs_MethodParamsAndArgModel(ITestOutputHelper output) : base(output)
         {

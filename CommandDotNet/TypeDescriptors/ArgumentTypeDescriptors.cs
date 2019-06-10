@@ -26,7 +26,17 @@ namespace CommandDotNet.TypeDescriptors
             
             new ComponentModelTypeDescriptor()
         };
-        
+
+        public ArgumentTypeDescriptors()
+        {
+        }
+
+        internal ArgumentTypeDescriptors(ArgumentTypeDescriptors origin)
+        {
+            _customDescriptors = new List<IArgumentTypeDescriptor>(origin._customDescriptors);
+            _defaultDescriptors = new List<IArgumentTypeDescriptor>(origin._defaultDescriptors);
+        }
+
         public void Add(IArgumentTypeDescriptor argumentTypeDescriptor)
         {
             _customDescriptors.Add(argumentTypeDescriptor);

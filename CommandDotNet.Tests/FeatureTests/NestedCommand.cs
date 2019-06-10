@@ -29,9 +29,6 @@ namespace CommandDotNet.Tests.FeatureTests
 
 Options:
 
-  -v | --version
-  Show version information
-
   -h | --help
   Show help information
 

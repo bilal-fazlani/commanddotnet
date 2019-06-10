@@ -8,10 +8,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class AppsSettings_BoolMode : ScenarioTestBase<AppsSettings_BoolMode>
     {
-        private static AppSettings ImplicitBasicHelp = new AppSettings { BooleanMode = BooleanMode.Implicit, Help = { TextStyle = HelpTextStyle.Basic } };
-        private static AppSettings ImplicitDetailedHelp = new AppSettings { BooleanMode = BooleanMode.Implicit, Help = { TextStyle = HelpTextStyle.Detailed } };
-        private static AppSettings ExplicitBasicHelp = new AppSettings { BooleanMode = BooleanMode.Explicit, Help = { TextStyle = HelpTextStyle.Basic } };
-        private static AppSettings ExplicitDetailedHelp = new AppSettings { BooleanMode = BooleanMode.Explicit, Help = { TextStyle = HelpTextStyle.Detailed } };
+        private static AppSettings ImplicitBasicHelp = TestAppSettings.BasicHelp.Clone(a => a.BooleanMode = BooleanMode.Implicit);
+        private static AppSettings ImplicitDetailedHelp = TestAppSettings.DetailedHelp.Clone(a => a.BooleanMode = BooleanMode.Implicit);
+
+        private static AppSettings ExplicitBasicHelp = TestAppSettings.BasicHelp.Clone(a => a.BooleanMode = BooleanMode.Explicit);
+        private static AppSettings ExplicitDetailedHelp = TestAppSettings.DetailedHelp.Clone(a => a.BooleanMode = BooleanMode.Explicit);
 
         public AppsSettings_BoolMode(ITestOutputHelper output) : base(output)
         {

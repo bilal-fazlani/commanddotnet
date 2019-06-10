@@ -46,8 +46,8 @@
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Text/@EntryValue">&#xD;
     public class $FeatureTestName$ : ScenarioTestBase&lt;$FeatureTestName$&gt;&#xD;
     {&#xD;
-        private static AppSettings BasicHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Basic } };&#xD;
-        private static AppSettings DetailedHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Detailed } };&#xD;
+        private static AppSettings BasicHelp = TestAppSettings.BasicHelp;&#xD;
+        private static AppSettings DetailedHelp = TestAppSettings.DetailedHelp;&#xD;
 &#xD;
         public $FeatureTestName$(ITestOutputHelper output) : base(output)&#xD;
         {&#xD;
