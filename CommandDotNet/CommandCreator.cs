@@ -115,7 +115,7 @@ namespace CommandDotNet
                 .FirstOrDefault();
             
             List<ArgumentInfo> argumentInfos = new ArgumentInfoCreator(_settings)
-                .GetArgumentsFromMethod(firstCtor, ArgumentMode.Option)
+                .GetArgumentsFromMethod(firstCtor)
                 .ToList();
 
             foreach (ArgumentInfo argumentInfo in argumentInfos)
