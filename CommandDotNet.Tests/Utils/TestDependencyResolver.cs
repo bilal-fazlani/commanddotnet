@@ -12,10 +12,10 @@ namespace CommandDotNet.Tests.Utils
             return _services[type];
         }
 
-        public void Register<T>(T service)
+        public void Register(object service)
         {
             // don't allow accidental overwrite
-            _services.Add(typeof(T), service);
+            _services.Add(service.GetType(), service);
         }
     }
 }

@@ -16,6 +16,10 @@ namespace CommandDotNet.Tests.ScenarioFramework
         public string SkipReason { get; set; }
         public string NotSupportedReason { get; set; }
 
+        public Given()
+        {
+        }
+
         public Given(string name)
         {
             Name = name;
