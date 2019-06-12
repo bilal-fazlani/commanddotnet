@@ -1,4 +1,6 @@
-﻿using CommandDotNet.Attributes;
+﻿using System;
+using System.Linq;
+using CommandDotNet.Attributes;
 using CommandDotNet.Example.Issues;
 using CommandDotNet.Models;
 
@@ -8,6 +10,14 @@ namespace CommandDotNet.Example
     {
         static int Main(string[] args)
         {
+            if (args.FirstOrDefault() == "echo-args")
+            {
+                foreach (var arg in args.Skip(1))
+                {
+                    Console.Out.WriteLine(arg);
+                }
+                return 0;
+            }
             // return Run<GitApplication>(args);
             return Run<Examples>(args);
         }
