@@ -24,7 +24,8 @@ namespace CommandDotNet.TypeDescriptors
             new DelegatedTypeDescriptor<decimal>(Constants.TypeDisplayNames.DecimalNumber, (a, v) => decimal.Parse(v, CultureInfo.InvariantCulture)),
             new DelegatedTypeDescriptor<double>(Constants.TypeDisplayNames.DoubleNumber, (a, v) => double.Parse(v, CultureInfo.InvariantCulture)),
             
-            new ComponentModelTypeDescriptor()
+            new ComponentModelTypeDescriptor(),
+            new StringCtorTypeDescriptor()
         };
 
         public ArgumentTypeDescriptors()
