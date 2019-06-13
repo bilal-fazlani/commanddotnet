@@ -23,9 +23,6 @@
     <Content Include="TestCases/**/*" CopyToOutputDirectory="Always" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Parsing\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Update="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
