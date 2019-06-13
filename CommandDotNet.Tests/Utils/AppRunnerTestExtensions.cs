@@ -48,7 +48,7 @@ namespace CommandDotNet.Tests.Utils
             {
                 resolver.Register(dependency);
             }
-            runner.DependencyResolver = resolver;
+            runner.UseDependencyResolver(resolver);
 
             var inputs = new TestOutputs();
             resolver.Register(inputs);
