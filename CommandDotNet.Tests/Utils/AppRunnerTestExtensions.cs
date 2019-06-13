@@ -32,10 +32,11 @@ namespace CommandDotNet.Tests.Utils
             // to capture output directly to XUnit
             return (AppRunnerResult)runInMemMethod.Invoke(null, new[] { runner, args, null, dependencies });
         }
+
         public static AppRunnerResult RunInMem<T>(
             this AppRunner<T> runner, 
             string[] args, 
-            ITestOutputHelper testOutputHelper = null,
+            ITestOutputHelper testOutputHelper,
             IEnumerable<object> dependencies = null) where T : class
         {
             var consoleOut = new TestConsoleWriter(testOutputHelper);
