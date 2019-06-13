@@ -3,16 +3,11 @@ using System.Threading.Tasks;
 using CommandDotNet.Attributes;
 using FluentAssertions;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
 {
-    public class ExceptionHandlingTests : TestBase
+    public class ExceptionHandlingTests
     {
-        public ExceptionHandlingTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
-        {
-        }
-
         [Theory]
         [InlineData("ThrowException")]
         [InlineData("ThrowOneMoreException")]
@@ -39,44 +34,44 @@ namespace CommandDotNet.Tests
             Exception exception = Assert.Throws<Exception>(() => appRunner.Run("Process"));
             exception.Message.Should().Be("Constructor is broken");
         }
-    }
 
-    public class ExceptionApp
-    {
-        [DefaultMethod]
-        public void Default()
+        public class ExceptionApp
         {
-            throw new Exception("Default");
-        }
-        
-        public void ThrowException()
-        {
-            throw new Exception("ThrowException");
-        }
+            [DefaultMethod]
+            public void Default()
+            {
+                throw new Exception("Default");
+            }
 
-        public int ThrowOneMoreException()
-        {
-            throw new Exception("ThrowOneMoreException");
-        }
-        
+            public void ThrowException()
+            {
+                throw new Exception("ThrowException");
+            }
+
+            public int ThrowOneMoreException()
+            {
+                throw new Exception("ThrowOneMoreException");
+            }
+
 #pragma warning disable 1998
-        public async Task<int> ThrowExceptionAsync()
+            public async Task<int> ThrowExceptionAsync()
 #pragma warning restore 1998
-        {
-            throw new Exception("ThrowExceptionAsync");
+            {
+                throw new Exception("ThrowExceptionAsync");
+            }
         }
-    }
-    
-    public class ExceptionConstructorApp
-    {
-        public ExceptionConstructorApp()
+
+        public class ExceptionConstructorApp
         {
-            throw new Exception("Constructor is broken");
-        }
-        
-        public void Process()
-        {
-            
+            public ExceptionConstructorApp()
+            {
+                throw new Exception("Constructor is broken");
+            }
+
+            public void Process()
+            {
+
+            }
         }
     }
 }

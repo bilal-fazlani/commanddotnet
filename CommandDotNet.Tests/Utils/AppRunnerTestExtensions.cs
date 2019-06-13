@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using CommandDotNet.Models;
+using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.Utils
 {
@@ -27,16 +27,18 @@ namespace CommandDotNet.Tests.Utils
                 .GetGenericMethodDefinition()
                 .MakeGenericMethod(appType);
 
-            return (AppRunnerResult)runInMemMethod.Invoke(null, new[] { runner, args, dependencies });
+            // scenarios don't pass testOutputHelper because that framework
+            // print the AppRunnerResult.ConsoleOut so it's not necessary
+            // to capture output directly to XUnit
+            return (AppRunnerResult)runInMemMethod.Invoke(null, new[] { runner, args, null, dependencies });
         }
-        public static AppRunnerResult RunInMem<T>(this AppRunner<T> runner, string[] args, IEnumerable<object> dependencies) where T : class
+        public static AppRunnerResult RunInMem<T>(
+            this AppRunner<T> runner, 
+            string[] args, 
+            ITestOutputHelper testOutputHelper = null,
+            IEnumerable<object> dependencies = null) where T : class
         {
-            return runner.RunAppInMem(args, dependencies);
-        }
-
-        private static AppRunnerResult RunAppInMem<T>(this AppRunner<T> runner, string[] args, IEnumerable<object> dependencies) where T : class
-        {
-            var consoleOut = new StringWriter();
+            var consoleOut = new TestConsoleWriter(testOutputHelper);
             runner.OverrideConsoleOut(consoleOut);
             runner.OverrideConsoleError(consoleOut);
 
@@ -46,7 +48,7 @@ namespace CommandDotNet.Tests.Utils
             {
                 resolver.Register(dependency);
             }
-            runner.DependencyResolver = resolver;
+            runner.UseDependencyResolver(resolver);
 
             var inputs = new TestOutputs();
             resolver.Register(inputs);

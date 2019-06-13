@@ -1,73 +1,109 @@
 ﻿using System;
 using CommandDotNet.Attributes;
 using CommandDotNet.CommandInvoker;
+using CommandDotNet.Tests.Utils;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
 {
-    public class CommandInvokerTests : TestBase
+    public class CommandInvokerTests
     {
-        public CommandInvokerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        private readonly ITestOutputHelper _testOutputHelper;
+
+        public CommandInvokerTests(ITestOutputHelper testOutputHelper)
         {
+            _testOutputHelper = testOutputHelper;
         }
+
+        // can read CommandInfo
+        // can read ArgsFromCli
+        // can read ParamsForCommandMethod
+        // can read Instance
+
+        // can modify ParamsForCommandMethod
+        // can modify Instance 
 
         [Fact]
-        public void CanConstructorsReadModels()
+        public void InvokerCanReadAndUpdateInput()
         {
             string carNumber = "DEY-7776";
-            string ownerName = "John";
+            string ownerName = "Jack";
+            string newOwnerName = "Jill";
 
-            Action<CommandInvocation> actionBeforeInvokation =new Action<CommandInvocation>(  context =>
-             {
-                 context.ParamsForCommandMethod.Length.Should().Be(2);
-                 var car = ((Car)context.ParamsForCommandMethod[0]);
-                 car.Number.Should().Be(carNumber);
-                 ((string)context.ParamsForCommandMethod[1]).Should().Be(ownerName);
-             });
+            Car invokedCar = null;
+            string invokedOwner = null;
 
+            void ActionBeforeInvocation(CommandInvocation context)
+            {
+                context.ParamsForCommandMethod.Length.Should().Be(2);
+                invokedCar = (Car) context.ParamsForCommandMethod[0];
+                invokedOwner = (string) context.ParamsForCommandMethod[1];
 
-            AppRunner<CustomCommandInvokerApp> appRunner = new AppRunner<CustomCommandInvokerApp>().WithCommandInvoker(inner => new CustomCommandInvoker(inner, actionBeforeInvokation));
-            appRunner.Run("NotifyOwner", "--Number", carNumber, "--owner", ownerName).Should().Be(5);
+                context.ParamsForCommandMethod[1] = newOwnerName;
+            }
+
+            var result = RunInMem(ActionBeforeInvocation, carNumber, ownerName);
+
+            result.ExitCode.Should().Be(5);
+            result.TestOutputs.Get<string>().Should().Be(newOwnerName);
+
+            invokedCar.Number.Should().Be(carNumber);
+            invokedOwner.Should().Be(ownerName);
         }
-    }
 
-    public class CustomCommandInvoker : ICommandInvoker
-    {
-        private readonly ICommandInvoker _inner;
-        private readonly Action<CommandInvocation> _actionBeforeInvokation;
-
-        public CustomCommandInvoker(ICommandInvoker inner, Action<CommandInvocation> actionBeforeInvokation)
+        private AppRunnerResult RunInMem(Action<CommandInvocation> actionBeforeInvocation, string carNumber, string ownerName)
         {
-            _inner = inner;
-            _actionBeforeInvokation = actionBeforeInvokation;
+            bool invokerWasCalled = false;
+
+            var result = new AppRunner<App>()
+                .WithCommandInvoker(inner => new Invoker(inner, invoker =>
+                {
+                    invokerWasCalled = true;
+                    actionBeforeInvocation(invoker);
+                }))
+                .RunInMem(new []{ "NotifyOwner", "--Number", carNumber, "--owner", ownerName }, _testOutputHelper);
+            invokerWasCalled.Should().BeTrue();
+
+            return result;
         }
 
-        public object Invoke(CommandInvocation commandInvocation)
+        public class Invoker : ICommandInvoker
         {
-            _actionBeforeInvokation(commandInvocation);
-            return _inner.Invoke(commandInvocation);
-        }
-    }
+            private readonly ICommandInvoker _inner;
+            private readonly Action<CommandInvocation> _actionBeforeInvocation;
 
-    public class CustomCommandInvokerApp
-    {
-        public int NotifyOwner(
-            Car car,
-            [Option(LongName = "owner")]
-            string owner)
+            public Invoker(ICommandInvoker inner, Action<CommandInvocation> actionBeforeInvocation)
+            {
+                _inner = inner;
+                _actionBeforeInvocation = actionBeforeInvocation;
+            }
+
+            public object Invoke(CommandInvocation commandInvocation)
+            {
+                _actionBeforeInvocation(commandInvocation);
+                return _inner.Invoke(commandInvocation);
+            }
+        }
+
+        public class App
         {
+            [InjectProperty]
+            public TestOutputs TestOutputs { get; set; }
 
-            return 5;
+            public int NotifyOwner(Car car, [Option] string owner)
+            {
+                TestOutputs.Capture(car);
+                TestOutputs.Capture(owner);
+                return 5;
+            }
         }
-    }
 
-    public class Car : IArgumentModel
-    {
-        public int Id { get; set; }
-
-        [Option]
-        public string Number { get; set; }
+        public class Car : IArgumentModel
+        {
+            [Option]
+            public string Number { get; set; }
+        }
     }
 }
