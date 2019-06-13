@@ -20,7 +20,7 @@ namespace CommandDotNet.Tests.Utils
         /// This method removes trailing white space from each line and standardizes Environment.NewLine
         /// for all line endings
         /// </summary>
-        public void HelpShouldBe(string expected)
+        public void OutputShouldBe(string expected)
         {
             var actual = ConsoleOut.NormalizeLineEndings();
             expected = expected.NormalizeLineEndings();
@@ -32,7 +32,7 @@ namespace CommandDotNet.Tests.Utils
         /// This method removes trailing white space from each line and standardizes Environment.NewLine
         /// for all line endings
         /// </summary>
-        public bool HelpContains(string expected)
+        public bool OutputContains(string expected)
         {
             var actual = ConsoleOut.NormalizeLineEndings();
             expected = expected.NormalizeLineEndings();

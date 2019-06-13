@@ -6,19 +6,20 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.ScenarioFramework
 {
-    public abstract class ScenarioTestBase<TSuper>
+    public abstract class ScenarioTestBase<TSuper> : TestBase
     {
-        private readonly ScenarioVerifier _scenarioVerifier;
+        public ScenarioTestBase(ITestOutputHelper output) : base(output)
+        {
+        }
 
-        private static readonly ScenarioTestData TestData = GetAllScenarios();
+        [Theory]
+        [MemberData(nameof(GetScenarios))]
+        public void Active(IScenario scenario)
+        {
+            Verify(scenario);
+        }
 
-        public static IEnumerable<object[]> ActiveScenarios => TestData.ActiveTheories;
-
-        public static IEnumerable<object[]> SkippedScenarios => TestData.SkippedTheories;
-
-        public static IEnumerable<object[]> NotSupportedScenarios => TestData.NotSupportedTheories;
-
-        private static ScenarioTestData GetAllScenarios()
+        public static IEnumerable<object[]> GetScenarios()
         {
             var scenarioPropName = "Scenarios";
 
@@ -39,36 +40,8 @@ namespace CommandDotNet.Tests.ScenarioFramework
             {
                 throw new Exception($"test class static property `{scenarioPropName}` ({scenariosRaw?.GetType()}) must implement {typeof(IEnumerable<IScenario>)}");
             }
-            
-            return new ScenarioTestData(scenarios, TestAppSettings.TestDefault);
-        }
 
-        public ScenarioTestBase(ITestOutputHelper output)
-        {
-            _scenarioVerifier = new ScenarioVerifier(output);
-        }
-
-        [Theory]
-        [MemberData(nameof(SkippedScenarios), 
-            DisableDiscoveryEnumeration = true, 
-            Skip = "skipped scenarios")]
-        public void Skipped(IScenario scenario)
-        {
-        }
-
-        [Theory]
-        [MemberData(nameof(NotSupportedScenarios), 
-            DisableDiscoveryEnumeration = true, 
-            Skip = "not-supported scenarios (features to consider)")]
-        public void NotSupported(IScenario scenario)
-        {
-        }
-
-        [Theory]
-        [MemberData(nameof(ActiveScenarios))]
-        public void Active(IScenario scenario)
-        {
-            _scenarioVerifier.VerifyScenario(scenario);
+            return new ScenarioTestData(scenarios, TestAppSettings.TestDefault).ActiveTheories;
         }
     }
 }

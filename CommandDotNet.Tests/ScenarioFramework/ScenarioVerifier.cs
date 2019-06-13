@@ -31,7 +31,7 @@ namespace CommandDotNet.Tests.ScenarioFramework
 
                 if (scenario.Then.Result != null)
                 {
-                    results.HelpShouldBe(scenario.Then.Result);
+                    results.OutputShouldBe(scenario.Then.Result);
                 }
 
                 if (scenario.Then.Outputs.Count > 0)
@@ -68,11 +68,11 @@ namespace CommandDotNet.Tests.ScenarioFramework
         {
             var expectedExitCode = scenario.Then.ExitCode.GetValueOrDefault();
             var missingHelpTexts = scenario.Then.ResultsContainsTexts
-                .Where(t => !result.HelpContains(t))
+                .Where(t => !result.OutputContains(t))
                 .ToList();
 
             var unexpectedHelpTexts = scenario.Then.ResultsNotContainsTexts
-                .Where(result.HelpContains)
+                .Where(result.OutputContains)
                 .ToList();
 
             if (expectedExitCode != result.ExitCode || missingHelpTexts.Count > 0 || unexpectedHelpTexts.Count > 0)

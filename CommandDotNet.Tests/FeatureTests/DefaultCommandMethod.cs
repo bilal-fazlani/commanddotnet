@@ -2,11 +2,12 @@ using CommandDotNet.Attributes;
 using CommandDotNet.Models;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.Utils;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests
 {
-    public class DefaultCommandMethod : ScenarioTestBase<DefaultCommandMethod>
+    public class DefaultCommandMethod : TestBase
     {
         private static AppSettings BasicHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Basic }, EnableVersionOption = false };
         private static AppSettings DetailedHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Detailed }, EnableVersionOption = false };
@@ -15,16 +16,16 @@ namespace CommandDotNet.Tests.FeatureTests
         {
         }
 
-        public static Scenarios Scenarios =>
-            new Scenarios
+        [Fact]
+        public void WithoutParams_BasicHelp_IncludesOtherCommands()
+        {
+            Verify(new Given<WithoutParamsApp>
             {
-                new Given<WithoutParamsApp>("without params - Basic Help - includes other commands")
+                And = { AppSettings = BasicHelp },
+                WhenArgs = "-h",
+                Then =
                 {
-                    And = {AppSettings = BasicHelp},
-                    WhenArgs = "-h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll [options] [command]
+                    Result = @"Usage: dotnet testhost.dll [options] [command]
 
 Options:
   -h | --help  Show help information
@@ -33,15 +34,20 @@ Commands:
   AnotherCommand
 
 Use ""dotnet testhost.dll [command] --help"" for more information about a command."
-                    }
-                },
-                new Given<WithoutParamsApp>("without params - Detailed Help - includes other commands")
+                }
+            });
+        }
+
+        [Fact]
+        public void WithoutParams_DetailedHelp_IncludesOtherCommands()
+        {
+            Verify(new Given<WithoutParamsApp>
+            {
+                And = { AppSettings = DetailedHelp },
+                WhenArgs = "-h",
+                Then =
                 {
-                    And = {AppSettings = DetailedHelp},
-                    WhenArgs = "-h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll [options] [command]
+                    Result = @"Usage: dotnet testhost.dll [options] [command]
 
 Options:
 
@@ -54,16 +60,20 @@ Commands:
   AnotherCommand
 
 Use ""dotnet testhost.dll [command] --help"" for more information about a command."
-                    }
-                },
-                new Given<WithParamsApp>("with params - Basic Help - includes args and other commands")
+                }
+            });
+        }
+
+        [Fact(Skip = "Known Issue #24 - should include method args")]
+        public void WithParams_BasicHelp_IncludesArgsOtherCommands()
+        {
+            Verify(new Given<WithParamsApp>
+            {
+                And = {AppSettings = BasicHelp},
+                WhenArgs = "-h",
+                Then =
                 {
-                    SkipReason = "Known Issue #24 - should include method args",
-                    And = {AppSettings = BasicHelp},
-                    WhenArgs = "-h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll [options] [command]
+                    Result = @"Usage: dotnet testhost.dll [options] [command]
 
 Options:
   -h | --help     Show help information
@@ -73,16 +83,20 @@ Commands:
   AnotherCommand
 
 Use ""dotnet testhost.dll [command] --help"" for more information about a command."
-                    }
-                },
-                new Given<WithParamsApp>("with params - Detailed Help - includes args and other commands")
+                }
+            });
+        }
+
+        [Fact(Skip = "Known Issue #24 - should include method args")]
+        public void WithParams_DetailedHelp_IncludesArgsOtherCommands()
+        {
+            Verify(new Given<WithParamsApp>
+            {
+                And = { AppSettings = DetailedHelp },
+                WhenArgs = "-h",
+                Then =
                 {
-                    SkipReason = "Known Issue #24 - should include method args",
-                    And = {AppSettings = DetailedHelp},
-                    WhenArgs = "-h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll [options] [command]
+                    Result = @"Usage: dotnet testhost.dll [options] [command]
 
 Options:
 
@@ -97,26 +111,35 @@ Commands:
   AnotherCommand
 
 Use ""dotnet testhost.dll [command] --help"" for more information about a command."
-                    }
-                },
-                new Given<WithoutParamsApp>("without params - execute")
-                {
-                    WhenArgs = "",
-                    Then =
-                    {
-                        Outputs = { WithoutParamsApp.DefaultMethodExecuted }
-                    }
-                },
-                new Given<WithParamsApp>("with params - execute")
-                {
-                    SkipReason = "Known Issue #24",
-                    WhenArgs = "abcde",
-                    Then =
-                    {
-                        Outputs = { "abcde" }
-                    }
                 }
-            };
+            });
+        }
+
+        [Fact]
+        public void WithoutParams_Execute_works()
+        {
+            Verify(new Given<WithoutParamsApp>
+            {
+                WhenArgs = "",
+                Then =
+                {
+                    Outputs = { WithoutParamsApp.DefaultMethodExecuted }
+                }
+            });
+        }
+
+        [Fact(Skip = "Known Issue #24")]
+        public void WithParams_Execute_works()
+        {
+            Verify(new Given<WithParamsApp>
+            {
+                WhenArgs = "abcde",
+                Then =
+                {
+                    Outputs = { "abcde" }
+                }
+            });
+        }
 
         public class WithoutParamsApp
         {
