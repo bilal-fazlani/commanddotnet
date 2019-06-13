@@ -1,5 +1,6 @@
 ﻿using System;
-using CommandDotNet.Models;
+using CommandDotNet.Tests.ScenarioFramework;
+using CommandDotNet.Tests.Utils;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
@@ -7,35 +8,23 @@ namespace CommandDotNet.Tests
     public class TestBase
     {
         protected readonly ITestOutputHelper TestOutputHelper;
-        protected readonly TestConsoleWriter TestConsoleWriter;
 
-        public TestBase(ITestOutputHelper testOutputHelper)
+        private readonly ScenarioVerifier _scenarioVerifier;
+
+        protected TestBase(ITestOutputHelper testOutputHelper)
         {
             TestOutputHelper = testOutputHelper;
-            TestConsoleWriter = new TestConsoleWriter();
-            
-            TestConsoleWriter.WriteLineEvent += OnWriteLine;
-            
-            Console.SetOut(TestConsoleWriter);
-            Console.SetError(TestConsoleWriter);
+            _scenarioVerifier = new ScenarioVerifier(testOutputHelper);
+
+            // WARNING: this doesn't play well with parallelized tests
+            var testConsoleWriter = new TestConsoleWriter(testOutputHelper);
+            Console.SetOut(testConsoleWriter);
+            Console.SetError(testConsoleWriter);
         }
 
-        private void OnWriteLine(object sender, string value)
+        protected void Verify(IScenario scenario)
         {
-            try
-            {
-                TestOutputHelper?.WriteLine(value);
-            }
-            catch (InvalidOperationException e) when(e.Message == "There is no currently active test.")
-            {
-                
-            }
-        }
-
-        public void Dispose()
-        {
-            TestConsoleWriter.WriteLineEvent -= OnWriteLine;
-            TestConsoleWriter.Dispose();
+            _scenarioVerifier.VerifyScenario(scenario);
         }
     }
 }
