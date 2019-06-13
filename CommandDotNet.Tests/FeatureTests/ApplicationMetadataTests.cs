@@ -1,11 +1,10 @@
 ﻿using CommandDotNet.Attributes;
 using CommandDotNet.Models;
 using CommandDotNet.Tests.ScenarioFramework;
-using CommandDotNet.Tests.Utils;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests
+namespace CommandDotNet.Tests.FeatureTests
 {
     public class ApplicationMetadataTests : TestBase
     {
