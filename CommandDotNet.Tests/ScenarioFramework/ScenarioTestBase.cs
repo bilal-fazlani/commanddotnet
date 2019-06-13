@@ -8,13 +8,18 @@ namespace CommandDotNet.Tests.ScenarioFramework
 {
     public abstract class ScenarioTestBase<TSuper> : TestBase
     {
-        private static readonly ScenarioTestData TestData = GetAllScenarios();
+        public ScenarioTestBase(ITestOutputHelper output) : base(output)
+        {
+        }
 
-        public static IEnumerable<object[]> ActiveScenarios => TestData.ActiveTheories;
+        [Theory]
+        [MemberData(nameof(GetScenarios))]
+        public void Active(IScenario scenario)
+        {
+            Verify(scenario);
+        }
 
-        public static IEnumerable<object[]> SkippedScenarios => TestData.SkippedTheories;
-
-        private static ScenarioTestData GetAllScenarios()
+        public static IEnumerable<object[]> GetScenarios()
         {
             var scenarioPropName = "Scenarios";
 
@@ -35,27 +40,8 @@ namespace CommandDotNet.Tests.ScenarioFramework
             {
                 throw new Exception($"test class static property `{scenarioPropName}` ({scenariosRaw?.GetType()}) must implement {typeof(IEnumerable<IScenario>)}");
             }
-            
-            return new ScenarioTestData(scenarios, TestAppSettings.TestDefault);
-        }
 
-        public ScenarioTestBase(ITestOutputHelper output) : base(output)
-        {
-        }
-
-        [Theory]
-        [MemberData(nameof(SkippedScenarios), 
-            DisableDiscoveryEnumeration = true, 
-            Skip = "skipped scenarios")]
-        public void Skipped(IScenario scenario)
-        {
-        }
-
-        [Theory]
-        [MemberData(nameof(ActiveScenarios))]
-        public void Active(IScenario scenario)
-        {
-            Verify(scenario);
+            return new ScenarioTestData(scenarios, TestAppSettings.TestDefault).ActiveTheories;
         }
     }
 }

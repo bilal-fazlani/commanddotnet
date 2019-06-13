@@ -1,6 +1,7 @@
 using CommandDotNet.Attributes;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.Utils;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
@@ -51,18 +52,22 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         ExitCode = 1,
                         ResultsContainsTexts = {"Unrecognized command or argument '4'"}
                     }
-                },
-                new Given<SingleCommandApp>("positional arguments are required")
-                {
-                    SkipReason = "Not implemented yet",
-                    WhenArgs = "Add 2",
-                    Then =
-                    {
-                        ExitCode = 1,
-                        ResultsContainsTexts = {"missing positional argument 'Y'"}
-                    }
                 }
             };
+
+        [Fact(Skip = "Method params cannot be marked as required yet.  Requiredness is only possible via FluentValidator")]
+        public void PositionalArgumentsAreRequired()
+        {
+            Verify(new Given<SingleCommandApp>
+            {
+                WhenArgs = "Add 2",
+                Then =
+                {
+                    ExitCode = 1,
+                    ResultsContainsTexts = {"missing positional argument 'Y'"}
+                }
+            });
+        }
 
         public class SingleCommandApp
         {
