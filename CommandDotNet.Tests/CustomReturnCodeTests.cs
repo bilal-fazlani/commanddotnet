@@ -1,14 +1,17 @@
-﻿using System;
+﻿using CommandDotNet.Tests.Utils;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
 {
-    public class CustomReturnCodeTests : TestBase
+    public class CustomReturnCodeTests
     {
-        public CustomReturnCodeTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        private readonly ITestOutputHelper _testOutputHelper;
+
+        public CustomReturnCodeTests(ITestOutputHelper testOutputHelper)
         {
+            _testOutputHelper = testOutputHelper;
         }
 
         [Theory]
@@ -16,22 +19,23 @@ namespace CommandDotNet.Tests
         [InlineData("IntMethodWithNoException", 4)]
         public void Test(string commandName, int expectedExitCode)
         {
-            AppRunner<AppForTestingReturnCodes> appRunner = new AppRunner<AppForTestingReturnCodes>();
-            int actualExitCode = appRunner.Run(new[] {commandName});
-            actualExitCode.Should().Be(expectedExitCode);
-        }
-    }
-
-    public class AppForTestingReturnCodes
-    {
-        public void VoidMethodThatHasNoException()
-        {
+            var result = new AppRunner<App>()
+                .RunInMem(new[] { commandName }, _testOutputHelper);
             
+            result.ExitCode.Should().Be(expectedExitCode);
         }
 
-        public int IntMethodWithNoException()
+        public class App
         {
-            return 4;
+            public void VoidMethodThatHasNoException()
+            {
+
+            }
+
+            public int IntMethodWithNoException()
+            {
+                return 4;
+            }
         }
     }
 }
