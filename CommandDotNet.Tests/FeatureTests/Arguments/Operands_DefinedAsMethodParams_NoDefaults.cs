@@ -214,27 +214,6 @@ Options:
                         }
                     }
                 },
-                new Given<OperandsNoDefaults>("SampleTypes - Exec - named")
-                {
-                    NotSupportedReason = "named args are assumed to be options.",
-                    WhenArgs =
-                        "ArgsNoDefault --stringArg green --structArg 1 --structNArg 2 --enumArg Monday --objectArg http://google.com --stringListArg yellow --stringListArg orange",
-                    Then =
-                    {
-                        Outputs =
-                        {
-                            new ParametersSampleTypesResults
-                            {
-                                StringArg = "green",
-                                StructArg = 1,
-                                StructNArg = 2,
-                                EnumArg = DayOfWeek.Monday,
-                                ObjectArg = new Uri("http://google.com"),
-                                StringListArg = new List<string> {"yellow", "orange"}
-                            }
-                        }
-                    }
-                },
                 new Given<OperandsNoDefaults>("StructList - Exec - positional")
                 {
                     WhenArgs = "StructListNoDefault 23 5 7",

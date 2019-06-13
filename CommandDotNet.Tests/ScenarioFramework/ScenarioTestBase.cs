@@ -6,17 +6,13 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.ScenarioFramework
 {
-    public abstract class ScenarioTestBase<TSuper>
+    public abstract class ScenarioTestBase<TSuper> : TestBase
     {
-        private readonly ScenarioVerifier _scenarioVerifier;
-
         private static readonly ScenarioTestData TestData = GetAllScenarios();
 
         public static IEnumerable<object[]> ActiveScenarios => TestData.ActiveTheories;
 
         public static IEnumerable<object[]> SkippedScenarios => TestData.SkippedTheories;
-
-        public static IEnumerable<object[]> NotSupportedScenarios => TestData.NotSupportedTheories;
 
         private static ScenarioTestData GetAllScenarios()
         {
@@ -43,9 +39,8 @@ namespace CommandDotNet.Tests.ScenarioFramework
             return new ScenarioTestData(scenarios, TestAppSettings.TestDefault);
         }
 
-        public ScenarioTestBase(ITestOutputHelper output)
+        public ScenarioTestBase(ITestOutputHelper output) : base(output)
         {
-            _scenarioVerifier = new ScenarioVerifier(output);
         }
 
         [Theory]
@@ -57,18 +52,10 @@ namespace CommandDotNet.Tests.ScenarioFramework
         }
 
         [Theory]
-        [MemberData(nameof(NotSupportedScenarios), 
-            DisableDiscoveryEnumeration = true, 
-            Skip = "not-supported scenarios (features to consider)")]
-        public void NotSupported(IScenario scenario)
-        {
-        }
-
-        [Theory]
         [MemberData(nameof(ActiveScenarios))]
         public void Active(IScenario scenario)
         {
-            _scenarioVerifier.VerifyScenario(scenario);
+            Verify(scenario);
         }
     }
 }

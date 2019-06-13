@@ -21,7 +21,6 @@ namespace CommandDotNet.Tests.ScenarioFramework
         public ScenarioThen Then => _backingScenario.Then;
 
         public string SkipReason => _backingScenario.SkipReason;
-        public string NotSupportedReason => _backingScenario.NotSupportedReason;
 
         public EmptyScenario(IScenario backingScenario = null)
         {
