@@ -4,7 +4,7 @@ using CommandDotNet.Attributes;
 using FluentAssertions;
 using Xunit;
 
-namespace CommandDotNet.Tests
+namespace CommandDotNet.Tests.FeatureTests
 {
     public class ExceptionHandlingTests
     {

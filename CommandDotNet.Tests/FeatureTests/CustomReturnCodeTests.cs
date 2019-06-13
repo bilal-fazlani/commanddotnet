@@ -3,7 +3,7 @@ using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests
+namespace CommandDotNet.Tests.FeatureTests
 {
     public class CustomReturnCodeTests
     {

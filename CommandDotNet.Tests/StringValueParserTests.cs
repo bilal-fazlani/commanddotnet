@@ -5,10 +5,13 @@ using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.Parsing
+namespace CommandDotNet.Tests
 {
     public class StringValueParserTests
     {
+        // TODO: this test can be removed when branch args-separator-feature-tests
+        //       is fixed and merged
+
         private readonly ITestOutputHelper _testOutputHelper;
 
         public StringValueParserTests(ITestOutputHelper testOutputHelper)
