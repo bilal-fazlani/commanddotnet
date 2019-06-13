@@ -43,7 +43,7 @@ Options:
             });
         }
 
-        [Fact(Skip = "Help should not contain default values as [System.Collections.Generic.List`1[...]]")]
+        [Fact]
         public void SampleTypes_DetailedHelp_IncludesAll()
         {
             Verify(new Given<OptionsDefaults>
@@ -57,8 +57,7 @@ Options:
   -h | --help
   Show help information
 
-  --BoolArg                     <BOOLEAN>      [True]
-  Allowed values: true, false
+  --BoolArg                                    [True]
 
   --StringArg                   <TEXT>         [lala]
 
@@ -71,14 +70,14 @@ Options:
 
   --ObjectArg                   <URI>          [http://google.com/]
 
-  --StringListArg (Multiple)    <TEXT>         [System.Collections.Generic.List`1[System.String]]
+  --StringListArg (Multiple)    <TEXT>         [blue,red]
 
-  --StructListArg (Multiple)    <NUMBER>       [System.Collections.Generic.List`1[System.Int32]]
+  --StructListArg (Multiple)    <NUMBER>       [3,4]
 
-  --EnumListArg (Multiple)      <DAYOFWEEK>    [System.Collections.Generic.List`1[System.DayOfWeek]]
+  --EnumListArg (Multiple)      <DAYOFWEEK>    [Monday,Tuesday]
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
-  --ObjectListArg (Multiple)    <URI>          [System.Collections.Generic.List`1[System.Uri]]" }
+  --ObjectListArg (Multiple)    <URI>          [http://github.com/,http://google.com/]" }
             });
         }
 
