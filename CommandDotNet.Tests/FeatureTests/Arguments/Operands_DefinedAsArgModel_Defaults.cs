@@ -42,7 +42,7 @@ Options:
             });
         }
 
-        [Fact(Skip = "Help should not contain default value as [System.Collections.Generic.List`1[System.String]]")]
+        [Fact]
         public void SampleTypes_DetailedHelp_IncludesAll()
         {
             Verify(new Given<OperandsDefaults>
@@ -67,7 +67,7 @@ Arguments:
 
   ObjectArg                   <URI>          [http://google.com/]
 
-  StringListArg (Multiple)    <TEXT>         [System.Collections.Generic.List`1[System.String]]
+  StringListArg (Multiple)    <TEXT>         [blue,red]
 
 
 Options:
@@ -94,7 +94,7 @@ Options:
             });
         }
 
-        [Fact(Skip = "Help should not contain default value as [System.Collections.Generic.List`1[System.Int32]]")]
+        [Fact]
         public void StructList_DetailedHelp_IncludesList()
         {
             Verify(new Given<OperandsDefaults>
@@ -105,7 +105,7 @@ Options:
 
 Arguments:
 
-  StructListArg (Multiple)    <NUMBER>    [System.Collections.Generic.List`1[System.Int32]]
+  StructListArg (Multiple)    <NUMBER>    [3,4]
 
 
 Options:
@@ -132,7 +132,7 @@ Options:
             });
         }
 
-        [Fact(Skip = "Help should not contain default value as [System.Collections.Generic.List`1[System.DayOfWeek]]")]
+        [Fact]
         public void EnumList_DetailedHelp_IncludesList()
         {
             Verify(new Given<OperandsDefaults>
@@ -143,7 +143,7 @@ Options:
 
 Arguments:
 
-  EnumListArg (Multiple)    <DAYOFWEEK>    [System.Collections.Generic.List`1[System.DayOfWeek]]
+  EnumListArg (Multiple)    <DAYOFWEEK>    [Monday,Tuesday]
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
 
@@ -171,7 +171,7 @@ Options:
             });
         }
 
-        [Fact(Skip = "Help should not contain default value as [System.Collections.Generic.List`1[System.Uri]]")]
+        [Fact]
         public void ObjectList_DetailedHelp_IncludesList()
         {
             Verify(new Given<OperandsDefaults>
@@ -182,7 +182,7 @@ Options:
 
 Arguments:
 
-  ObjectListArg (Multiple)    <URI>    [System.Collections.Generic.List`1[System.Uri]]
+  ObjectListArg (Multiple)    <URI>    [http://github.com/,http://google.com/]
 
 
 Options:

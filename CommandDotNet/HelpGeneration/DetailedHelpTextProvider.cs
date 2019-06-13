@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,6 +47,20 @@ namespace CommandDotNet.HelpGeneration
                 + extendedHelpTextBuild;
         }
 
+        private StringBuilder BuildUsage(ICommand app)
+        {
+            return new StringBuilder("Usage: ").AppendUsageCommandNames(app, _appSettings);
+        }
+
+        private StringBuilder BuildTitle(ICommand app)
+        {
+            var titleBuilder = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(app.Description))
+                titleBuilder.AppendLine(app.Description + Environment.NewLine);
+            return titleBuilder;
+        }
+
         private string BuildExtendedHelpText(ICommand app)
         {
             if (!string.IsNullOrEmpty(app.ExtendedHelpText))
@@ -55,7 +70,7 @@ namespace CommandDotNet.HelpGeneration
 
             return null;
         }
-        
+
         private StringBuilder BuildCommands(ICommand app, StringBuilder usageBuilder)
         {
             var commandsBuilder = new StringBuilder();
@@ -99,47 +114,28 @@ namespace CommandDotNet.HelpGeneration
                 optionsBuilder.AppendLine();
                 optionsBuilder.AppendLine($"Options:{Environment.NewLine}");
 
-                foreach (var commandOption in options)
-                {
-                    //template format
-                    optionsBuilder.Append(RenderParameter(options, commandOption, o =>
+                var helpValues = options.Select(a =>
+                    new ArgumentHelpValues
                     {
-                        StringBuilder sb = new StringBuilder(o.Template);
-                        sb.Append(o.Multiple ? " (Multiple)" : "");
-                        return sb.ToString();
-                    }));
-                    
-                    //type display name
-                    optionsBuilder.Append(RenderParameter(options, commandOption, o =>
-                    {
-                        if(!string.IsNullOrEmpty(o.TypeDisplayName))
-                            return $"<{o.TypeDisplayName.ToUpperInvariant()}>";
-                        return null;
-                    }));
-                    
-                    //default value
-                    optionsBuilder.Append(RenderParameter(options, commandOption, o => 
-                        o.DefaultValue.IsNullValue() 
-                            ? null 
-                            : $"[{o.DefaultValue.ToString()}]"));
+                        Template = $"{a.Template}{(a.Multiple ? " (Multiple)" : "")}",
+                        DisplayName = a.TypeDisplayName.IsNullOrEmpty()
+                            ? null
+                            : $"<{a.TypeDisplayName.ToUpperInvariant()}>",
+                        DefaultValue = GetDefaultValueString(a.DefaultValue),
+                        Description = a.Description.IsNullOrEmpty()
+                            ? null
+                            : $"{Environment.NewLine}  {a.Description}",
+                        AllowedValues = a.TypeDisplayName.IsNullOrEmpty() || a.AllowedValues == null || !a.AllowedValues.Any()
+                            ? null
+                            : $"{Environment.NewLine}  Allowed values: {a.AllowedValues.ToCsv(", ")}"
+                    }).ToList();
 
-                    //description
-                    optionsBuilder.Append(string.IsNullOrEmpty(commandOption.Description)? null: $"{Environment.NewLine}  {commandOption.Description}");
-                    
-                    //Allowed values
-                    optionsBuilder.Append(
-                        (!string.IsNullOrEmpty(commandOption.TypeDisplayName) && (commandOption.AllowedValues?.Any() ?? false))
-                            ? $"{Environment.NewLine}  Allowed values: {string.Join(", ", commandOption.AllowedValues)}"
-                            : null);
-                                        
-                    optionsBuilder.AppendLine();
-                    optionsBuilder.AppendLine();
-                }
+                AppendArguments(optionsBuilder, helpValues);
             }
 
             return optionsBuilder;
         }
-        
+
         private StringBuilder BuildParameters(ICommand app, StringBuilder usageBuilder)
         {
             var argumentsBuilder = new StringBuilder();
@@ -151,73 +147,76 @@ namespace CommandDotNet.HelpGeneration
                 usageBuilder.Append(" [arguments]");
                 argumentsBuilder.AppendLine();
                 argumentsBuilder.AppendLine($"Arguments:{Environment.NewLine}");
-
-                foreach (var commandArgument in arguments)
-                {
-                    //template format
-                    argumentsBuilder.Append(RenderParameter(arguments, commandArgument, arg =>
+                
+                var helpValues = arguments.Select(a =>
+                    new ArgumentHelpValues
                     {
-                        StringBuilder sb = new StringBuilder(arg.Name);
-                        sb.Append(arg.MultipleValues ? " (Multiple)" : "");
-                        return sb.ToString();
-                    }));
-                    
-                    //type display name
-                    argumentsBuilder.Append(RenderParameter(arguments, commandArgument, arg =>
-                    {
-                        if(!string.IsNullOrEmpty(arg.TypeDisplayName))
-                            return $"<{arg.TypeDisplayName.ToUpperInvariant()}>";
-                        return null;
-                    }));
-                    
-                    //default value
-                    argumentsBuilder.Append(RenderParameter(arguments, commandArgument, arg =>
-                        arg.DefaultValue.IsNullValue()
+                        Template = $"{a.Name}{(a.MultipleValues ? " (Multiple)" : "")}",
+                        DisplayName = a.TypeDisplayName.IsNullOrEmpty()
                             ? null
-                            : $"[{arg.DefaultValue.ToString()}]"));
+                            : $"<{a.TypeDisplayName.ToUpperInvariant()}>",
+                        DefaultValue = GetDefaultValueString(a.DefaultValue),
+                        Description = a.Description.IsNullOrEmpty()
+                            ? null
+                            : $"{Environment.NewLine}  {a.Description}",
+                        AllowedValues = a.TypeDisplayName.IsNullOrEmpty() || a.AllowedValues == null || !a.AllowedValues.Any()
+                            ? null
+                            : $"{Environment.NewLine}  Allowed values: {a.AllowedValues.ToCsv(", ")}"
+                    }).ToList();
 
-                    //description
-                    argumentsBuilder.Append(string.IsNullOrEmpty(commandArgument.Description) ? null : $"{Environment.NewLine}  {commandArgument.Description}");
-                    
-                    //Allowed values
-                    argumentsBuilder.Append(
-                        (!string.IsNullOrEmpty(commandArgument.TypeDisplayName) && (commandArgument.AllowedValues?.Any() ?? false))
-                            ? $"{Environment.NewLine}  Allowed values: {string.Join(", ", commandArgument.AllowedValues)}"
-                            : null);
-                        
-                    argumentsBuilder.AppendLine();
-                    argumentsBuilder.AppendLine();
-                }
+                AppendArguments(argumentsBuilder, helpValues);
             }
 
             return argumentsBuilder;
         }
 
-        private StringBuilder BuildUsage(ICommand app)
+        private void AppendArguments(StringBuilder argumentsBuilder, List<ArgumentHelpValues> helpValues)
         {
-            return new StringBuilder("Usage: ").AppendUsageCommandNames(app, _appSettings);
+            var templateMaxLength = helpValues.Max(a => a.Template?.Length) ?? 0;
+            var displayNameMaxLength = helpValues.Max(a => a.DisplayName?.Length) ?? 0;
+            var defaultValueMaxLength = helpValues.Max(a => a.DefaultValue?.Length) ?? 0;
+
+            foreach (var helpValue in helpValues)
+            {
+                argumentsBuilder.Append(Align(templateMaxLength, helpValue.Template));
+                argumentsBuilder.Append(Align(displayNameMaxLength, helpValue.DisplayName));
+                argumentsBuilder.Append(Align(defaultValueMaxLength, helpValue.DefaultValue));
+                argumentsBuilder.Append(helpValue.Description);
+                argumentsBuilder.Append(helpValue.AllowedValues);
+                argumentsBuilder.AppendLine();
+                argumentsBuilder.AppendLine();
+            }
         }
 
-        private StringBuilder BuildTitle(ICommand app)
+        private class ArgumentHelpValues
         {
-            var titleBuilder = new StringBuilder();
-
-            if (!string.IsNullOrEmpty(app.Description))
-                titleBuilder.AppendLine(app.Description + Environment.NewLine);
-            return titleBuilder;
+            public string Template;
+            public string DisplayName;
+            public string DefaultValue;
+            public string Description;
+            public string AllowedValues;
         }
 
-        private string RenderParameter<T>(List<T> arguments, T argument, Func<T, string> function)
+        private static string GetDefaultValueString(object defaultValue)
         {
-            int maxLength = GetColumnMaxLength(arguments, function);
-            return string.Format(ColumnFormat(maxLength), function(argument));
+            if (defaultValue.IsNullValue())
+            {
+                return null;
+            }
+
+            if (defaultValue is string)
+            {
+                return $"[{defaultValue}]";
+            }
+
+            if (defaultValue is IEnumerable collection)
+            {
+                return $"[{collection.ToOrderedCsv()}]";
+            }
+
+            return $"[{defaultValue}]";
         }
-        
-        private string ColumnFormat(int maxLength) => $"  {{0, -{maxLength + 2}}}";
-        
-        private int GetColumnMaxLength<T>(List<T> options, Func<T,string> column)
-        {
-            return options.Max(o => column(o)?.Length ?? 0);
-        }
+
+        private string Align(int maxLength, string value) => string.Format($"  {{0, -{maxLength + 2}}}", value);
     }
 }
