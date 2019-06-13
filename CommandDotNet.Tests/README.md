@@ -3,7 +3,7 @@
 When implementing new features, there are two patterns for writing feature tests.
 
 ## Scenario pattern
-This [readme.md](FeatureTests\README.md) will walk you through how to use it.  This pattern gives a succint, declarative way to specify the scenario from the perspective of calling the app from the command line.
+This [readme.md](FeatureTests/README.md) will walk you through how to use it.  This pattern gives a succint, declarative way to specify the scenario from the perspective of calling the app from the command line.
 
 
 ## AppRunner pattern
@@ -26,7 +26,7 @@ This requires an instance of `ITestOutputHelper` to ensure output for the test i
 
 `ConsoleOut` is what you'd see in the console window.
 
-`TestOutputs` are described in the [Scenario readme.md](FeatureTests\README.md)
+`TestOutputs` are described in the [Scenario readme.md](FeatureTests/README.md)
 
 `OutputShouldBe` and `OutputContains` are helpers that normalize the help output which can contain extra whitespace at the end of lines.
 
