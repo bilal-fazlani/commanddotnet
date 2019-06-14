@@ -64,7 +64,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             });
         }
 
-        [Fact(Skip = "Known Issue #24 - should include method args")]
+        [Fact]
         public void WithParams_BasicHelp_IncludesArgsOtherCommands()
         {
             Verify(new Given<WithParamsApp>
@@ -73,11 +73,13 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 WhenArgs = "-h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll [options] [command]
+                    Result = @"Usage: dotnet testhost.dll [arguments] [options] [command]
+
+Arguments:
+  text  some text
 
 Options:
-  -h | --help     Show help information
-  --text
+  -h | --help  Show help information
 
 Commands:
   AnotherCommand
@@ -87,7 +89,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             });
         }
 
-        [Fact(Skip = "Known Issue #24 - should include method args")]
+        [Fact]
         public void WithParams_DetailedHelp_IncludesArgsOtherCommands()
         {
             Verify(new Given<WithParamsApp>
@@ -96,14 +98,18 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 WhenArgs = "-h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll [options] [command]
+                    Result = @"Usage: dotnet testhost.dll [arguments] [options] [command]
+
+Arguments:
+
+  text    <TEXT>
+  some text
+
 
 Options:
 
   -h | --help
   Show help information
-
-  --text
 
 
 Commands:
@@ -128,7 +134,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             });
         }
 
-        [Fact(Skip = "Known Issue #24")]
+        [Fact]
         public void WithParams_Execute_works()
         {
             Verify(new Given<WithParamsApp>

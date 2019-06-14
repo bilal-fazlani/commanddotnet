@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using CommandDotNet.Attributes;
 using CommandDotNet.Exceptions;
 using CommandDotNet.Extensions;
 using CommandDotNet.MicrosoftCommandLineUtils;
@@ -27,60 +29,63 @@ namespace CommandDotNet
             _commandRunner = new CommandRunner(type, constructorValues, dependencyResolver, settings);
         }
 
-        public void CreateDefaultCommand()
+        public void CreateDefaultCommand(IApplicationMetadata applicationMetadata)
         {
             CommandInfo defaultCommandInfo = _type.GetDefaultCommandInfo(_settings);
-            
-            _app.OnExecute(async () =>
+
+            if (defaultCommandInfo != null)
             {
-                if (defaultCommandInfo != null)
+                ConfigureMetadata(_app, applicationMetadata);
+                ConfigureCommandLineApplication(_app, defaultCommandInfo);
+            }
+            else
+            {
+                ConfigureMetadata(_app, applicationMetadata);
+                _app.OnExecute(() =>
                 {
-                    if (defaultCommandInfo.Arguments.Any())
-                    {
-                        throw new AppRunnerException("Method with [DefaultMethod] attribute does not support parameters");
-                    }
-
-                    return await _commandRunner.RunCommand(defaultCommandInfo, null);
-                }
-
-                _app.ShowHelp();
-                return 0;
-            });
+                    _app.ShowHelp();
+                    return Task.FromResult(0);
+                });
+            }
         }
 
         public void CreateCommands()
         {            
             foreach (CommandInfo commandInfo in _type.GetCommandInfos(_settings))
             {
-                List<ArgumentInfo> argumentValues = new List<ArgumentInfo>();
-
-                CommandLineApplication commandOption = _app.Command(commandInfo.Name, command =>
-                {
-                    command.Description = commandInfo.Description;
-
-                    command.ExtendedHelpText = commandInfo.ExtendedHelpText;
-
-                    command.Syntax = commandInfo.Syntax;
-                    
-                    command.HelpOption(Constants.HelpTemplate);
-                      
-                    foreach (ArgumentInfo argument in commandInfo.Arguments)
-                    {
-                        argumentValues.Add(argument);
-                        switch (argument)
-                        {
-                            case CommandOptionInfo option:
-                                SetValueForOption(option, command);
-                                break;
-                            case CommandParameterInfo parameter:
-                                SetValueForParameter(parameter, command);
-                                break;
-                        }
-                    }
-                });
-
-                commandOption.OnExecute(async () => await _commandRunner.RunCommand(commandInfo, argumentValues));
+                var command = _app.Command(commandInfo.Name);
+                ConfigureMetadata(command, commandInfo);
+                ConfigureCommandLineApplication(command, commandInfo);
             }
+        }
+
+        private static void ConfigureMetadata(CommandLineApplication app, IApplicationMetadata applicationMetadata)
+        {
+            app.Description = applicationMetadata?.Description;
+            app.ExtendedHelpText = applicationMetadata?.ExtendedHelpText;
+            app.Syntax = applicationMetadata?.Syntax;
+            app.HelpOption(Constants.HelpTemplate);
+        }
+
+        private void ConfigureCommandLineApplication(CommandLineApplication app, CommandInfo commandInfo)
+        {
+            List<ArgumentInfo> argumentValues = new List<ArgumentInfo>();
+
+            foreach (ArgumentInfo argument in commandInfo.Arguments)
+            {
+                argumentValues.Add(argument);
+                switch (argument)
+                {
+                    case CommandOptionInfo option:
+                        SetValueForOption(option, app);
+                        break;
+                    case CommandParameterInfo parameter:
+                        SetValueForParameter(parameter, app);
+                        break;
+                }
+            }
+
+            app.OnExecute(async () => await _commandRunner.RunCommand(commandInfo, argumentValues));
         }
 
         private static void SetValueForParameter(CommandParameterInfo parameter, CommandLineApplication command)

@@ -68,11 +68,10 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 string.Equals(optionNameToCompare(o), optionName, StringComparison.Ordinal));
         }
 
-        public CommandLineApplication Command(string name, Action<CommandLineApplication> configuration)
+        public CommandLineApplication Command(string name)
         {
             var command = new CommandLineApplication(_appSettings) { Name = name, _parent = this };
             Commands.Add(command);
-            configuration(command);
             return command;
         }
 
