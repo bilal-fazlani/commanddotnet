@@ -1224,3 +1224,16 @@ public class CustomCommandInvoker : ICommandInvoker
     }
 }
 ```
+## Piped Input
+
+Piped input can be injected into your command class by defining an `IEnumerable<string>` property decorated with the `PipedInputAttribute`.
+
+``` c#
+[PipedInput(keepEmptyLines:false)] 
+public string[] PipedInput { get; set; }
+
+```
+
+Note: the type must assignable from either `List<string>` or `string[]`
+
+see the [PipedInputExampleApp](CommandDotNet.Example/PipedInputExampleApp.cs)

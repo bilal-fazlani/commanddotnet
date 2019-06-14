@@ -5,6 +5,7 @@ using System.Reflection;
 using CommandDotNet.Attributes;
 using CommandDotNet.Exceptions;
 using CommandDotNet.Extensions;
+using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
 
 namespace CommandDotNet
@@ -38,8 +39,52 @@ namespace CommandDotNet
             object instance = Activator.CreateInstance(type, mergedValues);
 
             //detect injection properties
-            List<PropertyInfo> properties = type.GetDeclaredProperties<InjectPropertyAttribute>().ToList();
+            InjectProperties(instance, dependencyResolver);
+
+            InjectPipedInput(instance);
+
+            return instance;
+        }
+
+        private void InjectPipedInput(object instance)
+        {
+            var property = instance.GetType()
+                .GetDeclaredProperties<PipedInputAttribute>()
+                .FirstOrDefault();
+
+            if (property == null)
+            {
+                return;
+            }
+
+            var isAssignableFromList = property.PropertyType.IsAssignableFrom(typeof(List<string>));
+            var isAssignableFromArray = property.PropertyType.IsAssignableFrom(typeof(string[]));
+
+            if (!isAssignableFromList && !isAssignableFromArray)
+            {
+                throw new AppRunnerException($"{property.DeclaringType.Name}.{property.Name} must be assignable from either List<string> or string[]");
+            }
             
+            var keepEmptyLines = property.GetCustomAttribute<PipedInputAttribute>()?.KeepEmptyLines ?? false;
+            var pipedInput = PipedInput.GetPipedInput(keepEmptyLines);
+
+            if (pipedInput.InputWasPiped)
+            {
+                if (isAssignableFromList)
+                {
+                    property.SetValue(instance, pipedInput.Values.ToList());
+                }
+                else if (isAssignableFromArray)
+                {
+                    property.SetValue(instance, pipedInput.Values.ToArray());
+                }
+            }
+        }
+
+        private static void InjectProperties(object instance, IDependencyResolver dependencyResolver)
+        {
+            List<PropertyInfo> properties = instance.GetType().GetDeclaredProperties<InjectPropertyAttribute>().ToList();
+
             if (properties.Any())
             {
                 if (dependencyResolver != null)
@@ -55,8 +100,6 @@ namespace CommandDotNet
                                                  "Please use an IoC framework'");
                 }
             }
-            
-            return instance;
         }
     }
 }

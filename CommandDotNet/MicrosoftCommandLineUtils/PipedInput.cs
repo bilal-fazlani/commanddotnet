@@ -14,7 +14,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public IEnumerable<string> Values { get; }
 
         /// <inheritdoc />
-        private PipedInput(string[] lines)
+        private PipedInput(IEnumerable<string> lines)
         {
             Values = lines;
             
@@ -32,8 +32,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                         keepEmptyLines
                             ? StringSplitOptions.None
                             : StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.Trim())
-                    .ToArray();
+                    .Select(s => s.Trim());
                 
                 return new PipedInput(input);
             }

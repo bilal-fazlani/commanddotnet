@@ -48,6 +48,9 @@ namespace CommandDotNet.Example
         public MyApplication MyApplication { get; set; }
 
         [SubCommand]
+        public PipedInputExampleApp PipedInputExampleApp { get; set; }
+
+        [SubCommand]
         public IssueApps IssueApps { get; set; }
     }
 }
