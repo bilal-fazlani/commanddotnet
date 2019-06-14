@@ -18,14 +18,6 @@ namespace CommandDotNet.Tests.FeatureTests
             Exception exception = Assert.Throws<Exception>(() => appRunner.Run(commandName));
             exception.Message.Should().Be(commandName);
         }
-
-        [Fact]
-        public void CanThrowExceptionsFromDefaultMethod()
-        {
-            AppRunner<ExceptionApp> appRunner = new AppRunner<ExceptionApp>();
-            Exception exception = Assert.Throws<Exception>(() => appRunner.Run());
-            exception.Message.Should().Be("Default");
-        }
         
         [Fact]
         public void CanThrowExceptionsFromConstructor()

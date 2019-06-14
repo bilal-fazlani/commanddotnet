@@ -88,7 +88,10 @@ namespace CommandDotNet.HelpGeneration
         private  StringBuilder BuildOptions(ICommand app, StringBuilder usageBuilder)
         {
             var optionsBuilder = new StringBuilder();
-            var options = app.GetOptions().Where(o => o.ShowInHelpText).ToList();
+            var options = app.GetOptions()
+                .Where(o => o.ShowInHelpText)
+                .OrderByDescending(o => o.IsSystemOption)
+                .ToList();
             if (options.Any())
             {
                 usageBuilder.Append(" [options]");
