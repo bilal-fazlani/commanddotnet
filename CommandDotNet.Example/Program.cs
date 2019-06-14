@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using CommandDotNet.Attributes;
+﻿using CommandDotNet.Attributes;
 using CommandDotNet.Example.Issues;
 using CommandDotNet.Models;
 
@@ -10,21 +8,19 @@ namespace CommandDotNet.Example
     {
         static int Main(string[] args)
         {
-            if (args.FirstOrDefault() == "echo-args")
+            var result = Directives.ProcessDirectives(ref args);
+            if (result.ExitCode.HasValue)
             {
-                foreach (var arg in args.Skip(1))
-                {
-                    Console.Out.WriteLine(arg);
-                }
-                return 0;
+                return result.ExitCode.Value;
             }
+
             // return Run<GitApplication>(args);
             return Run<Examples>(args);
         }
 
         private static int Run<TApp>(string[] args) where TApp : class
         {
-            AppRunner<TApp> appRunner = new AppRunner<TApp>(new AppSettings()
+            AppRunner<TApp> appRunner = new AppRunner<TApp>(new AppSettings
             {
                 Case = Case.KebabCase,
                 Help =
@@ -34,20 +30,20 @@ namespace CommandDotNet.Example
             });
             return appRunner.Run(args);
         }
-    }
 
-    public class Examples
-    {
-        [SubCommand]
-        public GitApplication GitApplication { get; set; }
-        
-        [SubCommand]
-        public ModelApp ModelApp { get; set; }
-        
-        [SubCommand]
-        public MyApplication MyApplication { get; set; }
+        public class Examples
+        {
+            [SubCommand]
+            public GitApplication GitApplication { get; set; }
 
-        [SubCommand]
-        public IssueApps IssueApps { get; set; }
+            [SubCommand]
+            public ModelApp ModelApp { get; set; }
+
+            [SubCommand]
+            public MyApplication MyApplication { get; set; }
+
+            [SubCommand]
+            public IssueApps IssueApps { get; set; }
+        }
     }
 }
