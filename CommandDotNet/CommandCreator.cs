@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CommandDotNet.Attributes;
-using CommandDotNet.Exceptions;
 using CommandDotNet.Extensions;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
