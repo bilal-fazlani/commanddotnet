@@ -19,41 +19,73 @@ namespace CommandDotNet.Tests.FeatureTests
         }
 
         [Fact]
-        public void BasicHelp_DoesNotInclude_DisposeMethod()
+        public void When_IDisposable_BasicHelp_DoesNotInclude_DisposeMethod()
         {
-            Verify(new Given<App>
+            Verify(new Given<DisposableApp>
             {
                 And = {AppSettings = BasicHelp},
-                WhenArgs = "Do -h",
-                Then = { ResultsNotContainsTexts = { "Dispose" } }
+                WhenArgs = "-h",
+                Then = {ResultsNotContainsTexts = {"Dispose"}}
             });
         }
 
         [Fact]
-        public void DetailedHelp_DoesNotInclude_DisposeMethod()
+        public void When_IDisposable_DetailedHelp_DoesNotInclude_DisposeMethod()
         {
-            Verify(new Given<App>
+            Verify(new Given<DisposableApp>
             {
                 And = {AppSettings = DetailedHelp},
-                WhenArgs = "Do -h",
-                Then = {ResultsNotContainsTexts = { "Dispose" } }
+                WhenArgs = "-h",
+                Then = {ResultsNotContainsTexts = {"Dispose"}}
             });
         }
 
         [Fact]
-        public void CallsDisposeMethod()
+        public void When_NotIDisposable_BasicHelp_DoesNotInclude_DisposeMethod()
         {
-            Verify(new Given<App>
+            Verify(new Given<NotDisposableApp>
             {
-                WhenArgs = "Do",
-                Then =
-                {
-                    Outputs = { true }
-                }
+                And = { AppSettings = BasicHelp },
+                WhenArgs = "-h",
+                Then = { ResultsContainsTexts = { @"Commands:
+  Dispose  " } }
             });
         }
 
-        public class App : IDisposable
+        [Fact]
+        public void When_NotIDisposable_DetailedHelp_DoesNotInclude_DisposeMethod()
+        {
+            Verify(new Given<NotDisposableApp>
+            {
+                And = { AppSettings = DetailedHelp },
+                WhenArgs = "-h",
+                Then = { ResultsContainsTexts = { @"Commands:
+
+  Dispose  " } }
+            });
+        }
+
+        [Fact]
+        public void When_IDisposable_CallsDisposeMethod()
+        {
+            Verify(new Given<DisposableApp>
+            {
+                WhenArgs = "Do",
+                Then = {Outputs = {true}}
+            });
+        }
+
+        [Fact]
+        public void When_NotIDisposable_CallsDisposeMethod()
+        {
+            Verify(new Given<NotDisposableApp>
+            {
+                WhenArgs = "Dispose",
+                Then = { Outputs = { true } }
+            });
+        }
+
+        public class DisposableApp : IDisposable
         {
             [InjectProperty]
             public TestOutputs TestOutputs { get; set; }
@@ -67,5 +99,17 @@ namespace CommandDotNet.Tests.FeatureTests
                 TestOutputs.Capture(true);
             }
         }
+
+        public class NotDisposableApp
+        {
+            [InjectProperty]
+            public TestOutputs TestOutputs { get; set; }
+
+            public void Dispose()
+            {
+                TestOutputs.Capture(true);
+            }
+        }
+
     }
 }
