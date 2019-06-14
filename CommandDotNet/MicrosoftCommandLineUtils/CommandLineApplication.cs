@@ -68,11 +68,10 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 string.Equals(optionNameToCompare(o), optionName, StringComparison.Ordinal));
         }
 
-        public CommandLineApplication Command(string name, Action<CommandLineApplication> configuration)
+        public CommandLineApplication Command(string name)
         {
             var command = new CommandLineApplication(_appSettings) { Name = name, _parent = this };
             Commands.Add(command);
-            configuration(command);
             return command;
         }
 
@@ -301,6 +300,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             // Help option is special because we stop parsing once we see it
             // So we store it separately for further use
             OptionHelp = Option(template, "Show help information", CommandOptionType.NoValue, _=>{}, false, Constants.TypeDisplayNames.Flag, DBNull.Value, false, null);
+            OptionHelp.IsSystemOption = true;
         }
 
         internal void VersionOption(string template, Action printVersion)
@@ -308,6 +308,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             // Version option is special because we stop parsing once we see it
             // So we store it separately for further use
             _optionVersion = Option(template, "Show version information", CommandOptionType.NoValue, _=>{}, false, Constants.TypeDisplayNames.Flag, DBNull.Value, false, null);
+            _optionVersion.IsSystemOption = true;
             _printVersion = printVersion;
         }
 

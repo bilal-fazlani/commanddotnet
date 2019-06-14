@@ -4,7 +4,7 @@ using CommandDotNet.Attributes;
 
 namespace CommandDotNet.Models
 {
-    public class CommandInfo
+    public class CommandInfo : IApplicationMetadata
     {
         private readonly MethodInfo _methodInfo;
         private readonly AppSettings _settings;
