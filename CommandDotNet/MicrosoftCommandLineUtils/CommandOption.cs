@@ -51,6 +51,9 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             }
         }
 
+        /// <summary>True when option is help or version</summary>
+        public bool IsSystemOption { get; set; }
+
         public string Template { get; set; }
         public string ShortName { get; set; }
         public string LongName { get; set; }

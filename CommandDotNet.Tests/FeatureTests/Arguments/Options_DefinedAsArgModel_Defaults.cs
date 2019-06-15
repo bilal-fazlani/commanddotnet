@@ -5,27 +5,28 @@ using CommandDotNet.Models;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
 using CommandDotNet.Tests.Utils;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class Options_DefinedAsArgModel_Defaults : ScenarioTestBase<Options_DefinedAsArgModel_Defaults>
+    public class Options_DefinedAsArgModel_Defaults : TestBase
     {
-        private static AppSettings BasicHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Basic } };
-        private static AppSettings DetailedHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Detailed } };
+        private static AppSettings BasicHelp = TestAppSettings.BasicHelp;
+        private static AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
         public Options_DefinedAsArgModel_Defaults(ITestOutputHelper output) : base(output)
         {
         }
 
-        public static Scenarios Scenarios =>
-            new Scenarios
+        [Fact]
+        public void SampleTypes_BasicHelp_IncludesAll()
+        {
+            Verify(new Given<OptionsDefaults>
             {
-                new Given<OptionsDefaults>("SampleTypes - Basic Help")
-                {
-                    And = {AppSettings = BasicHelp},
-                    WhenArgs = "ArgsDefaults -h",
-                    Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
+                And = { AppSettings = BasicHelp },
+                WhenArgs = "ArgsDefaults -h",
+                Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
 Options:
   -h | --help      Show help information
@@ -39,21 +40,24 @@ Options:
   --StructListArg
   --EnumListArg
   --ObjectListArg" }
-                },
-                new Given<OptionsDefaults>("SampleTypes - Detailed Help")
-                {
-                    SkipReason = "Help should not contain default values as [System.Collections.Generic.List`1[...]]",
-                    And = {AppSettings = DetailedHelp},
-                    WhenArgs = "ArgsDefaults -h",
-                    Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
+            });
+        }
+
+        [Fact]
+        public void SampleTypes_DetailedHelp_IncludesAll()
+        {
+            Verify(new Given<OptionsDefaults>
+            {
+                And = { AppSettings = DetailedHelp },
+                WhenArgs = "ArgsDefaults -h",
+                Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
 Options:
 
   -h | --help
   Show help information
 
-  --BoolArg                     <BOOLEAN>      [True]
-  Allowed values: true, false
+  --BoolArg                                    [True]
 
   --StringArg                   <TEXT>         [lala]
 
@@ -66,52 +70,62 @@ Options:
 
   --ObjectArg                   <URI>          [http://google.com/]
 
-  --StringListArg (Multiple)    <TEXT>         [System.Collections.Generic.List`1[System.String]]
+  --StringListArg (Multiple)    <TEXT>         [blue,red]
 
-  --StructListArg (Multiple)    <NUMBER>       [System.Collections.Generic.List`1[System.Int32]]
+  --StructListArg (Multiple)    <NUMBER>       [3,4]
 
-  --EnumListArg (Multiple)      <DAYOFWEEK>    [System.Collections.Generic.List`1[System.DayOfWeek]]
+  --EnumListArg (Multiple)      <DAYOFWEEK>    [Monday,Tuesday]
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
-  --ObjectListArg (Multiple)    <URI>          [System.Collections.Generic.List`1[System.Uri]]" }
-                },
-                new Given<OptionsDefaults>("SampleTypes - Exec - named")
+  --ObjectListArg (Multiple)    <URI>          [http://github.com/,http://google.com/]" }
+            });
+        }
+
+        [Fact]
+        public void SampleTypes_Exec_OptionsCanBeAssignedByName()
+        {
+            Verify(new Given<OptionsDefaults>
+            {
+                WhenArgs = "ArgsDefaults --StringArg green --StructArg 1 --StructNArg 2 " +
+                           "--EnumArg Monday --ObjectArg http://google.com " +
+                           "--StringListArg yellow --StringListArg orange " +
+                           "--StructListArg 23 --StructListArg 5 " +
+                           "--EnumListArg Friday --EnumListArg Tuesday " +
+                           "--ObjectListArg http://apple.com --ObjectListArg http://github.com",
+                Then =
                 {
-                    WhenArgs = "ArgsDefaults --StringArg green --StructArg 1 --StructNArg 2 " +
-                               "--EnumArg Monday --ObjectArg http://google.com " +
-                               "--StringListArg yellow --StringListArg orange " +
-                               "--StructListArg 23 --StructListArg 5 " +
-                               "--EnumListArg Friday --EnumListArg Tuesday " +
-                               "--ObjectListArg http://apple.com --ObjectListArg http://github.com",
-                    Then =
+                    Outputs = { new OptionsDefaultsSampleTypesModel
                     {
-                        Outputs = { new OptionsDefaultsSampleTypesModel
+                        StringArg = "green",
+                        StructArg = 1,
+                        StructNArg = 2,
+                        EnumArg = DayOfWeek.Monday,
+                        ObjectArg = new Uri("http://google.com"),
+                        StringListArg = new List<string>{"yellow", "orange"},
+                        StructListArg = new List<int>{23,5},
+                        EnumListArg = new List<DayOfWeek>{DayOfWeek.Friday, DayOfWeek.Tuesday},
+                        ObjectListArg = new List<Uri>
                         {
-                            StringArg = "green",
-                            StructArg = 1,
-                            StructNArg = 2,
-                            EnumArg = DayOfWeek.Monday,
-                            ObjectArg = new Uri("http://google.com"),
-                            StringListArg = new List<string>{"yellow", "orange"},
-                            StructListArg = new List<int>{23,5},
-                            EnumListArg = new List<DayOfWeek>{DayOfWeek.Friday, DayOfWeek.Tuesday},
-                            ObjectListArg = new List<Uri>
-                            {
-                                new Uri("http://apple.com"),
-                                new Uri("http://github.com"),
-                            }
-                        } }
-                    }
-                },
-                new Given<OptionsDefaults>("SampleTypes - Exec - options not required - uses defaults")
+                            new Uri("http://apple.com"),
+                            new Uri("http://github.com"),
+                        }
+                    } }
+                }
+            });
+        }
+
+        [Fact]
+        public void SampleTypes_Exec_OptionsAreNotRequired()
+        {
+            Verify(new Given<OptionsDefaults>
+            {
+                WhenArgs = "ArgsDefaults",
+                Then =
                 {
-                    WhenArgs = "ArgsDefaults",
-                    Then =
-                    {
-                        Outputs = { new OptionsDefaultsSampleTypesModel() }
-                    }
-                },
-            };
+                    Outputs = { new OptionsDefaultsSampleTypesModel() }
+                }
+            });
+        }
 
         private class OptionsDefaults
         {

@@ -17,8 +17,9 @@ namespace CommandDotNet.Tests.ScenarioFramework
 
         IScenarioContext IScenario.Context { get; set; }
 
-        public string SkipReason { get; set; }
-        public string NotSupportedReason { get; set; }
+        public Given()
+        {
+        }
 
         public Given(string name)
         {
@@ -29,18 +30,14 @@ namespace CommandDotNet.Tests.ScenarioFramework
         {
             var context = ((IScenario)this).Context;
 
-            var name = SkipReason == null
-                ? Name
-                : $"{Name} ({SkipReason})";
-
             if (context == null)
             {
-                return name;
+                return Name;
             }
 
             return context.Description == null 
-                ? $"{context.Host.GetType().Name} > {name}" 
-                : $"{context.Host.GetType().Name} > {name} ({context.Description})";
+                ? $"{context.Host.GetType().Name} > {Name}" 
+                : $"{context.Host.GetType().Name} > {Name} ({context.Description})";
         }
     }
 }

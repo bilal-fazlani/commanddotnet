@@ -13,23 +13,24 @@ namespace CommandDotNet.Extensions
     {
         internal static IEnumerable<CommandInfo> GetCommandInfos(this Type type, AppSettings settings)
         {
-            return type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                .Where(m => !m.IsSpecialName)
+            return type.GetDeclaredMethods()
                 .Where(m => !m.HasAttribute<DefaultMethodAttribute>())
-                .Where(m => (typeof(IDisposable).IsAssignableFrom(type) && m.Name == "Dispose") ? m.Name != "Dispose" : true )
                 .Select(mi => new CommandInfo(mi, settings));
         }
 
         internal static CommandInfo GetDefaultCommandInfo(this Type type, AppSettings settings)
         {
-            CommandInfo defaultCommandInfo = type
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                .Where(m => !m.IsSpecialName)
+            return type.GetDeclaredMethods()
                 .Where(m => m.HasAttribute<DefaultMethodAttribute>())
                 .Select(mi => new CommandInfo(mi, settings))
                 .FirstOrDefault();
-            
-            return defaultCommandInfo;
+        }
+
+        private static IEnumerable<MethodInfo> GetDeclaredMethods(this Type type)
+        {
+            return type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .Where(m => !m.IsSpecialName)
+                .Where(m => !typeof(IDisposable).IsAssignableFrom(type) || m.Name != "Dispose");
         }
 
         internal static Type GetListUnderlyingType(this Type type)
@@ -66,7 +67,7 @@ namespace CommandDotNet.Extensions
         internal static IEnumerable<PropertyInfo> GetDeclaredProperties<TAttribute>(this Type type) where TAttribute: Attribute
         {
             return type
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .GetDeclaredProperties()
                 .Where(x => x.HasAttribute<TAttribute>());
         }
         
@@ -74,7 +75,6 @@ namespace CommandDotNet.Extensions
         {
             return type
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                .Where(p => !p.IsSpecialName)
                 .Where(x => !x.PropertyType.IsCompilerGenerated());
         }
 

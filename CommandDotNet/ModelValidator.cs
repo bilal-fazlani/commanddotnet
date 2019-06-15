@@ -1,6 +1,7 @@
 ﻿using System;
 using CommandDotNet.Exceptions;
 using CommandDotNet.Extensions;
+using FluentValidation;
 using FluentValidation.Attributes;
 using FluentValidation.Results;
 
@@ -25,22 +26,21 @@ namespace CommandDotNet
             
             if (declaredValidatorType != null)
             {
-                //Type validatorType = typeof(AbstractValidator<>).MakeGenericType(modelType);
-                
-                dynamic validator;
+                object validator;   
                 try
                 {
-                    validator = _dependencyResolver?.Resolve(declaredValidatorType) ??
-                                Activator.CreateInstance(declaredValidatorType);
+                    if (_dependencyResolver == null || !_dependencyResolver.TryResolve(declaredValidatorType, out validator))
+                    {
+                        validator = Activator.CreateInstance(declaredValidatorType);
+                    }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     throw new AppRunnerException($"Could not create instance of {declaredValidatorType.Name}. Please ensure it's either injected via IoC or has a default constructor.\n" +
-                                                 "This exception could also occur if default constructor threw an exception");
+                                                 "This exception could also occur if default constructor threw an exception", e);
                 }
 
-                ValidationResult validationResult = validator.Validate(model);
-                    //((AbstractValidator<dynamic>)validator).Validate(model);
+                ValidationResult validationResult = ((IValidator)validator).Validate(model);
 
                 if (!validationResult.IsValid)
                 {

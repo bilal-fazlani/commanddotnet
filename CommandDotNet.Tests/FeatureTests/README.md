@@ -1,4 +1,4 @@
-﻿# Working with feature tests.
+﻿# Testing with scenarios.
 
 The scenarios are modelled after the BDD Given-When-Then syntax.  
 They utilize C#'s [object initializer](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/object-and-collection-initializers) syntax to make defining a scenario as terse as possible while remaining readable.
@@ -10,25 +10,22 @@ Let's look at an example to test flag clubbing.
 First, let's create the test class.
 
 ``` c#
-public class FlagClubbing : ScenarioTestBase<FlagClubbing>
+public class FlagClubbing : TestBase
 {
     public FlagClubbing(ITestOutputHelper output) : base(output)
     {
     }
 
-    public static Scenarios Scenarios =>
-            new Scenarios
-            {
-                new Given<FlagApp>(...) {...},
-                new Given<FlagApp>(...) {...}
-                // see examples of Given below
-            }
+    [Fact]
+    public void TestName()
+    {
+        // see examples of Given below
+        Verify(new Given<FlagApp>(...) {...});
+    }
 }
 ```
 
-The class must extend from `ScenarioTestBase` and pass `ITestOutputHelper` to the base class.  `ITestOutputHelper` is used to write to the xUnit output stream.
-
-The class must contain a static property named `Scenarios` that returns `IEnumerable<IScenario>` (which is implemented by the `Scenarios` type)
+The class must extend from `TestBase` and pass `ITestOutputHelper` to the base class.  `ITestOutputHelper` is used to write to the xUnit output stream.
 
 ## Example app
 
@@ -154,11 +151,31 @@ new Given<FlagApp>("exec with custom appsettings")
 
 The default `AppSettings` can be overridden by passing one to the `And` clause.
 
+## Injecting Dependencies
+
+``` c#
+new Given<FlagApp>("exec with custom appsettings")
+{
+    And = {Dependencies = {new Service1(), new Service2()}},
+    WhenArgs = "club -f",
+    Then = {...}
+};
+```
+
+Dependencies by passing the instances into the `And` clause.
+
+The instances will be registered by type as singletons within the context of that scenario.
+
+## Rider & Resharper templates
+
+Templates are included in CommandDotNet.sln.DotSettings to make it easer to create new test fixtures.
+
+Open Template Explorer and you'll find them in the `Solution "CommandDotNet" team-shared` layer.
 
 ## Summary
 
-Most scenarios can be modelled this way.  To my knowledge, overrides applied directly to `AppRunner` are not yet handled, for example, applying a CustomHelpProvider.
+Most scenarios can be modelled this way.  Overrides applied directly to `AppRunner` are not yet handled, for example, applying a CustomHelpProvider.
 
 Pull requests should include test coverage for their features.
 
-This is also a good way to post a repro for a bug.  Fixing the bug will fix the test and the test can be kept to avoid regressions.
+This is also a good way to post a repro for a bug.

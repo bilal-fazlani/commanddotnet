@@ -164,5 +164,11 @@ namespace CommandDotNet
             _settings.Error = writer;
             return this;
         }
+
+        public AppRunner<T> UseDependencyResolver(IDependencyResolver dependencyResolver)
+        {
+            DependencyResolver = dependencyResolver;
+            return this;
+        }
     }
 }

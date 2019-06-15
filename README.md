@@ -566,7 +566,7 @@ dotnet example.dll LaunchRocket mars earth jupiter
 
 ## Supported parameter types
 
-Supports all types where a TypeConverter is defined that can convert from a string.  Includes, but not limited to:
+Supports all types with a string constructor or where a TypeConverter is defined that can convert from a string.  Includes, but not limited to:
 
 - `string`
 - `char`
@@ -579,8 +579,10 @@ Supports all types where a TypeConverter is defined that can convert from a stri
 - `double`
 - `Guid`
 - `Uri`
+- `FileInfo`
+- `DirectoryInfo`
 
-Also supports `List<T>` and `Nullable<T>` where T can be converted from string.
+Also supports `List<T>`, `IEnumerable<T>` and `Nullable<T>` where T can be converted from string.  Note: `T[]` is not supported.
 
 These are applicable for both - Options and Arguments
 

@@ -24,9 +24,20 @@ namespace CommandDotNet.TypeDescriptors
             new DelegatedTypeDescriptor<decimal>(Constants.TypeDisplayNames.DecimalNumber, (a, v) => decimal.Parse(v, CultureInfo.InvariantCulture)),
             new DelegatedTypeDescriptor<double>(Constants.TypeDisplayNames.DoubleNumber, (a, v) => double.Parse(v, CultureInfo.InvariantCulture)),
             
-            new ComponentModelTypeDescriptor()
+            new ComponentModelTypeDescriptor(),
+            new StringCtorTypeDescriptor()
         };
-        
+
+        public ArgumentTypeDescriptors()
+        {
+        }
+
+        internal ArgumentTypeDescriptors(ArgumentTypeDescriptors origin)
+        {
+            _customDescriptors = new List<IArgumentTypeDescriptor>(origin._customDescriptors);
+            _defaultDescriptors = new List<IArgumentTypeDescriptor>(origin._defaultDescriptors);
+        }
+
         public void Add(IArgumentTypeDescriptor argumentTypeDescriptor)
         {
             _customDescriptors.Add(argumentTypeDescriptor);
@@ -40,9 +51,9 @@ namespace CommandDotNet.TypeDescriptors
 
         public IArgumentTypeDescriptor GetDescriptorOrThrow(Type type)
         {
-            return GetDescriptor(type) ?? throw new AppRunnerException(
+            return GetDescriptor(type) ?? throw new ValueParsingException(
                        $"type : {type} is not supported. If it's an argument model, " +
-                       $"inherit from {nameof(IArgumentModel)}, otherwise" +
+                       $"inherit from {nameof(IArgumentModel)}, otherwise " +
                        $"implement a {nameof(TypeConverter)} or {nameof(IArgumentTypeDescriptor)} " +
                        "to support this type.");
         }

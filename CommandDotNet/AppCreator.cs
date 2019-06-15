@@ -39,26 +39,21 @@ namespace CommandDotNet
 
             if (isRootApp)
             {
-                app = new CommandLineApplication(_appSettings) {Name = appName};
-                app.CustomAttributeProvider = type;
+                app = new CommandLineApplication(_appSettings)
+                {
+                    Name = appName, 
+                    CustomAttributeProvider = type
+                };
                 AddVersion(app);
             }
             else
             {
-                app = parentApplication.Command(appName, application => { });
+                app = parentApplication.Command(appName);
             }
-
-            app.HelpOption(Constants.HelpTemplate);
-
-            app.Description = applicationAttribute?.Description;
-
-            app.ExtendedHelpText = applicationAttribute?.ExtendedHelpText;
-
-            app.Syntax = applicationAttribute?.Syntax;
 
             CommandCreator commandCreator = new CommandCreator(type, app, dependencyResolver, _appSettings);
             
-            commandCreator.CreateDefaultCommand();
+            commandCreator.CreateDefaultCommand(applicationAttribute);
 
             commandCreator.CreateCommands();
 

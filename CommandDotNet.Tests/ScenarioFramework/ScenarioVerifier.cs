@@ -18,32 +18,38 @@ namespace CommandDotNet.Tests.ScenarioFramework
             _output = output;
         }
 
-        public void VerifyScenario(IScenario s)
+        public void VerifyScenario(IScenario scenario)
         {
-            if (s.WhenArgs != null && s.WhenArgsArray != null)
+            if (scenario.WhenArgs != null && scenario.WhenArgsArray != null)
             {
-                throw new InvalidOperationException($"Both {nameof(s.WhenArgs)} and {nameof(s.WhenArgsArray)} were specified.  Only one can be specified.");
+                throw new InvalidOperationException($"Both {nameof(scenario.WhenArgs)} and {nameof(scenario.WhenArgsArray)} were specified.  Only one can be specified.");
             }
-            
+            if (scenario.And.AppSettings == null)
+            {
+                scenario.And.AppSettings = TestAppSettings.TestDefault;
+            }
+
+
             try
             {
-                var args = s.WhenArgsArray ?? s.WhenArgs.SplitArgs();
-                var results = s.AppType.RunAppInMem(args, s.And.AppSettings);
-                AssertExitCodeAndErrorMessage(s, results);
+                var args = scenario.WhenArgsArray ?? scenario.WhenArgs.SplitArgs();
+                var results = scenario.AppType.RunAppInMem(args, scenario.And.AppSettings, scenario.And.Dependencies);
+                AssertExitCodeAndErrorMessage(scenario, results);
 
-                if (s.Then.Result != null)
+
+                if (scenario.Then.Result != null)
                 {
-                    results.HelpShouldBe(s.Then.Result);
+                    results.OutputShouldBe(scenario.Then.Result);
                 }
 
-                if (s.Then.Outputs.Count > 0)
+                if (scenario.Then.Outputs.Count > 0)
                 {
-                    AssertOutputItems(s, results);
+                    AssertOutputItems(scenario, results);
                 }
             }
             catch (Exception)
             {
-                PrintContext(s);
+                PrintContext(scenario);
                 throw;
             }
         }
@@ -70,11 +76,11 @@ namespace CommandDotNet.Tests.ScenarioFramework
         {
             var expectedExitCode = scenario.Then.ExitCode.GetValueOrDefault();
             var missingHelpTexts = scenario.Then.ResultsContainsTexts
-                .Where(t => !result.HelpContains(t))
+                .Where(t => !result.OutputContains(t))
                 .ToList();
 
             var unexpectedHelpTexts = scenario.Then.ResultsNotContainsTexts
-                .Where(result.HelpContains)
+                .Where(result.OutputContains)
                 .ToList();
 
             if (expectedExitCode != result.ExitCode || missingHelpTexts.Count > 0 || unexpectedHelpTexts.Count > 0)
@@ -103,9 +109,9 @@ namespace CommandDotNet.Tests.ScenarioFramework
                 }
 
                 sb.AppendLine();
-                sb.AppendLine("Console output:");
-                sb.AppendLine();
+                sb.AppendLine("Console output <begin> ------------------------------");
                 sb.AppendLine(String.IsNullOrWhiteSpace(result.ConsoleOut) ? "<no output>" : result.ConsoleOut);
+                sb.AppendLine("Console output <end>   ------------------------------");
 
                 throw new AssertionFailedException(sb.ToString());
             }

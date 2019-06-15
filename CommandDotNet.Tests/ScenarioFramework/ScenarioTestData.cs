@@ -7,12 +7,8 @@ namespace CommandDotNet.Tests.ScenarioFramework
     public class ScenarioTestData
     {
         public IEnumerable<IScenario> ActiveScenarios { get; }
-        public IEnumerable<IScenario> SkippedScenarios { get; }
-        public IEnumerable<IScenario> NotSupportedScenarios { get; }
 
         public IEnumerable<object[]> ActiveTheories { get; }
-        public IEnumerable<object[]> SkippedTheories { get; }
-        public IEnumerable<object[]> NotSupportedTheories { get; }
 
         public ScenarioTestData(
             IEnumerable<IScenario> scenarios, 
@@ -26,13 +22,8 @@ namespace CommandDotNet.Tests.ScenarioFramework
                 return s;
             }).ToList();
 
-            ActiveScenarios = all.Where(s => s.SkipReason == null && s.NotSupportedReason == null);
-            SkippedScenarios = all.Where(s => s.SkipReason != null);
-            NotSupportedScenarios = all.Where(s => s.NotSupportedReason != null);
-
+            ActiveScenarios = all;
             ActiveTheories = ActiveScenarios.ToObjectArrays();
-            SkippedTheories = SkippedScenarios.ToObjectArrays();
-            NotSupportedTheories = NotSupportedScenarios.ToObjectArrays();
         }
     }
 }

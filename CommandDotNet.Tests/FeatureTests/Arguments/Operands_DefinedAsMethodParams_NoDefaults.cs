@@ -12,8 +12,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class Operands_DefinedAsMethodParams_NoDefaults : ScenarioTestBase<Operands_DefinedAsMethodParams_NoDefaults>
     {
-        private static AppSettings BasicHelp = new AppSettings{Help = {TextStyle = HelpTextStyle.Basic}};
-        private static AppSettings DetailedHelp = new AppSettings {Help = {TextStyle = HelpTextStyle.Detailed}};
+        private static AppSettings BasicHelp = TestAppSettings.BasicHelp;
+        private static AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
         public Operands_DefinedAsMethodParams_NoDefaults(ITestOutputHelper output) : base(output)
         {
@@ -210,27 +210,6 @@ Options:
                             {
                                 StructArg = default(int),
                                 EnumArg = default(DayOfWeek),
-                            }
-                        }
-                    }
-                },
-                new Given<OperandsNoDefaults>("SampleTypes - Exec - named")
-                {
-                    NotSupportedReason = "named args are assumed to be options.",
-                    WhenArgs =
-                        "ArgsNoDefault --stringArg green --structArg 1 --structNArg 2 --enumArg Monday --objectArg http://google.com --stringListArg yellow --stringListArg orange",
-                    Then =
-                    {
-                        Outputs =
-                        {
-                            new ParametersSampleTypesResults
-                            {
-                                StringArg = "green",
-                                StructArg = 1,
-                                StructNArg = 2,
-                                EnumArg = DayOfWeek.Monday,
-                                ObjectArg = new Uri("http://google.com"),
-                                StringListArg = new List<string> {"yellow", "orange"}
                             }
                         }
                     }

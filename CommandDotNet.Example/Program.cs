@@ -11,15 +11,10 @@ namespace CommandDotNet.Example
     {
         static int Main(string[] args)
         {
-            if (args.FirstOrDefault() == "dump")
+            var result = Directives.ProcessDirectives(ref args);
+            if (result.ExitCode.HasValue)
             {
-                Console.Out.WriteLine("the system parsed the args as...");
-                foreach (var arg in args)
-                {
-                    Console.Out.WriteLine(arg);
-                }
-
-                return 0;
+                return result.ExitCode.Value;
             }
 
             // return Run<GitApplication>(args);
@@ -28,7 +23,7 @@ namespace CommandDotNet.Example
 
         private static int Run<TApp>(string[] args) where TApp : class
         {
-            AppRunner<TApp> appRunner = new AppRunner<TApp>(new AppSettings()
+            AppRunner<TApp> appRunner = new AppRunner<TApp>(new AppSettings
             {
                 Case = Case.KebabCase,
                 Help =
@@ -38,20 +33,20 @@ namespace CommandDotNet.Example
             });
             return appRunner.Run(args);
         }
-    }
 
-    public class Examples
-    {
-        [SubCommand]
-        public GitApplication GitApplication { get; set; }
-        
-        [SubCommand]
-        public ModelApp ModelApp { get; set; }
-        
-        [SubCommand]
-        public MyApplication MyApplication { get; set; }
+        public class Examples
+        {
+            [SubCommand]
+            public GitApplication GitApplication { get; set; }
 
-        [SubCommand]
-        public IssueApps IssueApps { get; set; }
+            [SubCommand]
+            public ModelApp ModelApp { get; set; }
+
+            [SubCommand]
+            public MyApplication MyApplication { get; set; }
+
+            [SubCommand]
+            public IssueApps IssueApps { get; set; }
+        }
     }
 }

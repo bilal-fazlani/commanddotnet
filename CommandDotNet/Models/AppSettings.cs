@@ -11,6 +11,14 @@ namespace CommandDotNet.Models
     {
         private BooleanMode _booleanMode = BooleanMode.Implicit;
 
+        /// <summary>
+        /// When Explicit, options require a 'true' or 'false' value be specified.
+        /// When Implicit, an option is considered false unless it's specified.
+        /// The next argument will be considered a new argument.
+        /// </summary>
+        /// <remarks>
+        /// BooleanMode applies to bool options only.
+        /// </remarks>
         public BooleanMode BooleanMode
         {
             get => _booleanMode;
@@ -50,7 +58,7 @@ namespace CommandDotNet.Models
             set => Help.TextStyle = value;
         }
         
-        public ArgumentTypeDescriptors ArgumentTypeDescriptors { get; } = new ArgumentTypeDescriptors();
+        public ArgumentTypeDescriptors ArgumentTypeDescriptors { get; internal set; } = new ArgumentTypeDescriptors();
         
         internal IHelpProvider CustomHelpProvider { get; set; }
 
@@ -58,6 +66,5 @@ namespace CommandDotNet.Models
         
         internal TextWriter Out { get; set; } = Console.Out;
         internal TextWriter Error { get; set; } = Console.Error;
-
     }
 }

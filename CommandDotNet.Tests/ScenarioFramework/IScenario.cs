@@ -10,7 +10,5 @@ namespace CommandDotNet.Tests.ScenarioFramework
         string WhenArgs { get; }
         string[] WhenArgsArray { get; }
         ScenarioThen Then { get; }
-        string SkipReason { get; }
-        string NotSupportedReason { get; }
     }
 }

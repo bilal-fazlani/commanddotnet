@@ -3,7 +3,7 @@
 namespace CommandDotNet.Attributes
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class ApplicationMetadataAttribute : Attribute
+    public class ApplicationMetadataAttribute : Attribute, IApplicationMetadata
     {
         public string Name { get; set; }
         

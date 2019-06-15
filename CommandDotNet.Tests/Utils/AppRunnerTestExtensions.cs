@@ -1,38 +1,48 @@
 using System;
-using System.IO;
+using System.Collections.Generic;
+using System.Linq;
 using CommandDotNet.Models;
+using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.Utils
 {
     public static class AppRunnerTestExtensions
     {
-        public static AppRunnerResult RunAppInMem(this Type appType, string[] args, AppSettings appSettings = null)
+        public static AppRunnerResult RunAppInMem(
+            this Type appType, string[] args, 
+            AppSettings appSettings = null, IEnumerable<object> dependencies = null)
         {
             var type = typeof(AppRunner<>).MakeGenericType(appType);
-            var runner = Activator.CreateInstance(type, appSettings ?? new AppSettings());
+            var runner = Activator.CreateInstance(type, appSettings ?? TestAppSettings.TestDefault);
 
             var runInMemMethod = typeof(AppRunnerTestExtensions)
                 .GetMethod("RunInMem")
                 .GetGenericMethodDefinition()
                 .MakeGenericMethod(appType);
 
-            return (AppRunnerResult)runInMemMethod.Invoke(null, new[] { runner, args });
+            // scenarios don't pass testOutputHelper because that framework
+            // print the AppRunnerResult.ConsoleOut so it's not necessary
+            // to capture output directly to XUnit
+            return (AppRunnerResult)runInMemMethod.Invoke(null, new[] { runner, args, null, dependencies });
         }
 
-        public static AppRunnerResult RunInMem<T>(this AppRunner<T> runner, params string[] args) where T : class
+        public static AppRunnerResult RunInMem<T>(
+            this AppRunner<T> runner, 
+            string[] args, 
+            ITestOutputHelper testOutputHelper,
+            IEnumerable<object> dependencies = null) where T : class
         {
-            return runner.RunAppInMem(args);
-        }
-
-        private static AppRunnerResult RunAppInMem<T>(this AppRunner<T> runner, string[] args) where T : class
-        {
-            var consoleOut = new StringWriter();
+            var consoleOut = new TestConsoleWriter(testOutputHelper);
             runner.OverrideConsoleOut(consoleOut);
             runner.OverrideConsoleError(consoleOut);
 
             var resolver = new TestDependencyResolver();
             resolver.Register(new TestWriter(consoleOut));
-            runner.DependencyResolver = resolver;
+            foreach (var dependency in dependencies ?? Enumerable.Empty<object>())
+            {
+                resolver.Register(dependency);
+            }
+            runner.UseDependencyResolver(resolver);
 
             var inputs = new TestOutputs();
             resolver.Register(inputs);

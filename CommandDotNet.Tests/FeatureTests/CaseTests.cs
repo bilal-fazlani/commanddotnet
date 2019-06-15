@@ -1,15 +1,19 @@
 ﻿using CommandDotNet.Attributes;
 using CommandDotNet.Models;
+using CommandDotNet.Tests.Utils;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests
+namespace CommandDotNet.Tests.FeatureTests
 {
-    public class CaseTests : TestBase
+    public class CaseTests
     {
-        public CaseTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        private readonly ITestOutputHelper _testOutputHelper;
+
+        public CaseTests(ITestOutputHelper testOutputHelper)
         {
+            _testOutputHelper = testOutputHelper;
         }
 
         [Theory]
@@ -25,13 +29,11 @@ namespace CommandDotNet.Tests
         [InlineData(Case.LowerCase, "wn")]
         public void CanHonorCommandCase(Case @case, string commandName)
         {
-            AppRunner<CommandCaseApp> appRunner = new AppRunner<CommandCaseApp>(new AppSettings
-            {
-                Case = @case
-            });
-            appRunner.Run(commandName).Should().Be(10);
+            var result = new AppRunner<App>(new AppSettings {Case = @case})
+                .RunInMem(new[] {commandName}, _testOutputHelper);
+
+            result.ExitCode.Should().Be(10);
         }
-        
         
         [Theory]
         [InlineData(Case.DontChange, "Send", "--messageName", "--Sender", "-P", "-c")]
@@ -42,11 +44,11 @@ namespace CommandDotNet.Tests
         public void CanHonorOptionCase(Case @case, string commandName, string messageName, 
             string senderName, string priorotyName, string cName)
         {
-            AppRunner<CommandCaseApp> appRunner = new AppRunner<CommandCaseApp>(new AppSettings
-            {
-                Case = @case
-            });
-            appRunner.Run(commandName, messageName, "m", senderName, "s", priorotyName, "3", cName, "4" ).Should().Be(10);
+            var args = new[] { commandName, messageName, "m", senderName, "s", priorotyName, "3", cName, "4" };
+            var result = new AppRunner<App>(new AppSettings { Case = @case })
+                .RunInMem(args, _testOutputHelper);
+            
+            result.ExitCode.Should().Be(10);
         }
 
         [Theory]
@@ -57,40 +59,38 @@ namespace CommandDotNet.Tests
         [InlineData(Case.LowerCase, "subcommand", "sendnotification")]
         public void CanHonorSubCommandCase(Case @case, string commandName, string notificationCommandName)
         {
-            AppRunner<CommandCaseApp> appRunner = new AppRunner<CommandCaseApp>(new AppSettings
-            {
-                Case = @case
-            });
+            var result = new AppRunner<App>(new AppSettings { Case = @case })
+                .RunInMem(new[] { commandName, notificationCommandName }, _testOutputHelper);
             
-            appRunner.Run(commandName, notificationCommandName).Should().Be(10);
-        }
-    }
-    
-    public class CommandCaseApp
-    {
-        public int ProcessRequest()
-        {
-            return 10;
+            result.ExitCode.Should().Be(10);
         }
 
-        public int Send([Option] string messageName, [Option(LongName = "Sender")] string senderName, 
-            [Option(ShortName = "P")] int priority, [Option]int c)
+        public class App
         {
-            return messageName == "m" && senderName == "s" && priority == 3 && c == 4 ? 10 : 1;
-        }
-        
-        [ApplicationMetadata(Name = "wn")]
-        public int WithName()
-        {
-            return 10;
-        }
-
-        [SubCommand]
-        public class SubCommand
-        {
-            public int SendNotification()
+            public int ProcessRequest()
             {
                 return 10;
+            }
+
+            public int Send([Option] string messageName, [Option(LongName = "Sender")] string senderName,
+                [Option(ShortName = "P")] int priority, [Option]int c)
+            {
+                return messageName == "m" && senderName == "s" && priority == 3 && c == 4 ? 10 : 1;
+            }
+
+            [ApplicationMetadata(Name = "wn")]
+            public int WithName()
+            {
+                return 10;
+            }
+
+            [SubCommand]
+            public class SubCommand
+            {
+                public int SendNotification()
+                {
+                    return 10;
+                }
             }
         }
     }
