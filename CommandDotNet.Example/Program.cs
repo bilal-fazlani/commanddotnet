@@ -8,12 +8,6 @@ namespace CommandDotNet.Example
     {
         static int Main(string[] args)
         {
-            var result = Directives.ProcessDirectives(ref args);
-            if (result.ExitCode.HasValue)
-            {
-                return result.ExitCode.Value;
-            }
-
             // return Run<GitApplication>(args);
             return Run<Examples>(args);
         }

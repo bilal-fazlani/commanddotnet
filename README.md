@@ -1090,6 +1090,24 @@ In this library, there are two ways to parse boolean [Options](#options). Note t
 
     When you check the help of a command, you if you see `Boolean` it means if you wan't to make it true, you need to pass an explit value. If you don't pass one, it will default to `false` automatically. Implicit and explicit are just ways to pass the value, under the hood they are just boolean parameters.
 
+## Directives
+
+Directives are special arguments enabling cross cutting features.  We've followed the pattern defined by  [System.CommandLine](https://github.com/dotnet/command-line-api/wiki/Features-overview#debugging) to provide two directives: Debug & Parse
+
+Directives must be the first argument and will be removed from further processing.
+
+### Debug
+
+Sometimes you just need to debug into a process and configuring the debug arguments in VS is too many extra steps.
+
+When you specify `[debug]`, the process id will output to the console and wait for you to attach your debugger.
+
+### Parse
+
+Rules for including spaces in arguments and escaping special characters differ from shell to shell.  Sometimes it's not clear why arguments aren't mapping correctly.
+
+When you specify `[parse]`, the process will exit immediately after printing each argument onto a new line.  This enables you to catch cases where the shell did not parse your arguments as expected.
+
 ## Exception handling
 
 Any excption that is thrown from the method or constructor is thrown as is. You can catch it over the `AppRunner<T>.Run()` method otherwise exception will be unhandled and application will crash.

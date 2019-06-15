@@ -133,6 +133,12 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         
         public int Execute(params string[] args)
         {
+            var directivesResult = Directives.ProcessDirectives(_appSettings, ref args);
+            if (directivesResult.ExitCode.HasValue)
+            {
+                return directivesResult.ExitCode.Value;
+            }
+
             var command = ParseCommand(args);
             return command._invoke();
         }
