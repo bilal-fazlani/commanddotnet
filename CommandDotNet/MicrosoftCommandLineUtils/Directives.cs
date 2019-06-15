@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CommandDotNet.Example
+namespace CommandDotNet.MicrosoftCommandLineUtils
 {
     internal static class Directives
     {
