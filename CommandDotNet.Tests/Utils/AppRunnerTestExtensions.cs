@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using CommandDotNet.Models;
 using Xunit.Abstractions;
 
@@ -8,6 +9,11 @@ namespace CommandDotNet.Tests.Utils
 {
     public static class AppRunnerTestExtensions
     {
+        private static readonly MethodInfo RunAppInMemoryGenericMethod = typeof(AppRunnerTestExtensions)
+            .GetMethods()
+            .First(m => m.Name == nameof(RunInMem) && m.GetParameters().Any(p => p.Name == "args" && p.ParameterType == typeof(string[])))
+            .GetGenericMethodDefinition();
+
         public static AppRunnerResult RunAppInMem(
             this Type appType, string[] args, 
             AppSettings appSettings = null, IEnumerable<object> dependencies = null)
@@ -15,15 +21,21 @@ namespace CommandDotNet.Tests.Utils
             var type = typeof(AppRunner<>).MakeGenericType(appType);
             var runner = Activator.CreateInstance(type, appSettings ?? TestAppSettings.TestDefault);
 
-            var runInMemMethod = typeof(AppRunnerTestExtensions)
-                .GetMethod("RunInMem")
-                .GetGenericMethodDefinition()
-                .MakeGenericMethod(appType);
+            var runInMemMethod = RunAppInMemoryGenericMethod.MakeGenericMethod(appType);
 
             // scenarios don't pass testOutputHelper because that framework
             // print the AppRunnerResult.ConsoleOut so it's not necessary
             // to capture output directly to XUnit
             return (AppRunnerResult)runInMemMethod.Invoke(null, new[] { runner, args, null, dependencies });
+        }
+
+        public static AppRunnerResult RunInMem<T>(
+            this AppRunner<T> runner,
+            string args,
+            ITestOutputHelper testOutputHelper,
+            IEnumerable<object> dependencies = null) where T : class
+        {
+            return runner.RunInMem(args.SplitArgs(), testOutputHelper, dependencies);
         }
 
         public static AppRunnerResult RunInMem<T>(
