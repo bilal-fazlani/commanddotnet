@@ -24,9 +24,11 @@ namespace CommandDotNet.Tests.ScenarioFramework
             {
                 scenario.And.AppSettings = TestAppSettings.TestDefault;
             }
+
+            AppRunnerResult results = null;
             try
             {
-                var results = scenario.AppType.RunAppInMem(scenario.WhenArgs.SplitArgs(), scenario.And.AppSettings, scenario.And.Dependencies);
+                results = scenario.AppType.RunAppInMem(scenario.WhenArgs.SplitArgs(), scenario.And.AppSettings, scenario.And.Dependencies);
                 AssertExitCodeAndErrorMessage(scenario, results);
 
                 if (scenario.Then.Result != null)
@@ -42,6 +44,12 @@ namespace CommandDotNet.Tests.ScenarioFramework
             catch (Exception)
             {
                 PrintContext(scenario);
+                if (results != null)
+                {
+                    _output.WriteLine("");
+                    _output.WriteLine("App Results:");
+                    _output.WriteLine(results.ConsoleOut);
+                }
                 throw;
             }
         }

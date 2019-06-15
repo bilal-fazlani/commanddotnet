@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using CommandDotNet.Exceptions;
 using CommandDotNet.HelpGeneration;
 using CommandDotNet.Models;
+using CommandDotNet.Parsing;
 
 namespace CommandDotNet.MicrosoftCommandLineUtils
 {
@@ -131,23 +132,54 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             _invoke = () => invoke().Result;
         }
         
-        public int Execute(params string[] args)
+        public int Execute(ParserContext parserContext, string[] args)
         {
             var directivesResult = Directives.ProcessDirectives(_appSettings, ref args);
             if (directivesResult.ExitCode.HasValue)
             {
                 return directivesResult.ExitCode.Value;
             }
-
-            var command = ParseCommand(args);
+            var command = ParseCommand(parserContext, args);
             return command._invoke();
         }
 
-        private CommandLineApplication ParseCommand(string[] args)
+        private CommandLineApplication ParseCommand(ParserContext parserContext, string[] args)
         {
             CommandLineApplication command = this;
             CommandOption option = null;
             IEnumerator<CommandArgument> arguments = null;
+            
+            // TODO: when Parse directive is enabled, log the args after each transformation
+
+            /*
+            _appSettings.Out.WriteLine("received:");
+            foreach (var arg in args)
+            {
+                _appSettings.Out.WriteLine($"   {arg}");
+            }
+            _appSettings.Out.WriteLine();
+            */
+
+            foreach (var transformation in parserContext.ArgumentTransformations.OrderBy(t => t.Order))
+            {
+                try
+                {
+                    args = transformation.Transformation(args);
+
+                    /*
+                    _appSettings.Out.WriteLine($"transformation: {transformation.Name}");
+                    foreach (var arg in args)
+                    {
+                        _appSettings.Out.WriteLine($"   {arg}");
+                    }
+                    _appSettings.Out.WriteLine();
+                    */
+                }
+                catch (Exception e)
+                {
+                    throw new AppRunnerException($"transformation failure for: {transformation}", e);
+                }
+            }
 
             for (var index = 0; index < args.Length; index++)
             {

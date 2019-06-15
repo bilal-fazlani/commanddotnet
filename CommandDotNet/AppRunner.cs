@@ -9,6 +9,7 @@ using CommandDotNet.Exceptions;
 using CommandDotNet.HelpGeneration;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
+using CommandDotNet.Parsing;
 
 [assembly: InternalsVisibleTo("CommandDotNet.Tests")]
 
@@ -23,10 +24,18 @@ namespace CommandDotNet
         internal IDependencyResolver DependencyResolver;
         
         private readonly AppSettings _settings;
-        
+        private readonly ParserBuilder _parserBuilder = new ParserBuilder();
+
         public AppRunner(AppSettings settings = null)
         {
             _settings = settings ?? new AppSettings();
+
+            _parserBuilder.AddArgumentTransformation(
+                "unclub-flags", 
+                ArgumentTransformation.Orders.UnclubFlags, 
+                args => ArgumentParser.SplitFlags(args).ToArray());
+
+            // TODO: add .rsp file transformation as an extension option
         }
 
         /// <summary>
@@ -43,9 +52,7 @@ namespace CommandDotNet
 
                 CommandLineApplication app = appCreator.CreateApplication(typeof(T), DependencyResolver);
 
-                var parsedArguments = ArgumentParser.SplitFlags(args).ToArray();
-
-                return app.Execute(parsedArguments);
+                return app.Execute(_parserBuilder.Build(), args);
             }
             catch (AppRunnerException e)
             {

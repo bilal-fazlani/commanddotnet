@@ -126,7 +126,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         {
             Verify(new Given<WithoutParamsApp>
             {
-                WhenArgs = "",
+                WhenArgs = null,
                 Then =
                 {
                     Outputs = { WithoutParamsApp.DefaultMethodExecuted }
