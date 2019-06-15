@@ -1,43 +1,37 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace CommandDotNet
 {
     internal static class ArgumentParser
     {
-        private static readonly Regex ArgumentsSplitRegex = new Regex(@"(?<!\\)"".+(?<!\\)""|(?<!\\)'.+(?<!\\)'|[^\s]+", RegexOptions.Compiled);
-        private static readonly Regex TrimRegex = new Regex(@"^""|^'|""$|'$", RegexOptions.Compiled);
-        private static readonly Regex UnescapeRegex = new Regex(@"\\'|\\""", RegexOptions.Compiled);
-        private static readonly Regex MixedFlagsRegex = new Regex(@"(?<=^-)\w{2,}", RegexOptions.Compiled);
-
         public static IEnumerable<string> SplitFlags(params string[] args)
         {
-            var joined = string.Join(" ", args);
-            foreach (Match match in ArgumentsSplitRegex.Matches(joined))
+            foreach (var arg in args)
             {
-                var sanitized = SanitizeValue(match.Value);
-                var mixedMatch = MixedFlagsRegex.Match(sanitized);
-                if (mixedMatch.Success)
+                if (arg.Length > 2 && IsShortOption(arg) && !HasValue(arg) )
                 {
-                    foreach (var @char in mixedMatch.Value.ToCharArray())
+                    foreach (var flag in arg.ToCharArray().Skip(1))
                     {
-                        yield return new string(new[] {'-', @char});
+                        yield return $"-{flag}";
                     }
                 }
                 else
                 {
-                    yield return sanitized;
+                    yield return arg;
                 }
             }
         }
 
-        private static string SanitizeValue(string value)
+        private static bool IsShortOption(string arg)
         {
-            return UnescapeRegex.Replace(
-                TrimRegex.Replace(
-                    value, 
-                    string.Empty), 
-                string.Empty);
+            return arg[0] == '-' && arg[1] != '-';
+        }
+
+        private static bool HasValue(string arg)
+        {
+            return arg[2] == ':' || arg[2] == '=';
         }
     }
 }

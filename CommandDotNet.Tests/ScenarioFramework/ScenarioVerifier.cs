@@ -20,6 +20,11 @@ namespace CommandDotNet.Tests.ScenarioFramework
 
         public void VerifyScenario(IScenario scenario)
         {
+            if (scenario.WhenArgs != null && scenario.WhenArgsArray != null)
+            {
+                throw new InvalidOperationException($"Both {nameof(scenario.WhenArgs)} and {nameof(scenario.WhenArgsArray)} were specified.  Only one can be specified.");
+            }
+
             if (scenario.And.AppSettings == null)
             {
                 scenario.And.AppSettings = TestAppSettings.TestDefault;
@@ -28,7 +33,8 @@ namespace CommandDotNet.Tests.ScenarioFramework
             AppRunnerResult results = null;
             try
             {
-                results = scenario.AppType.RunAppInMem(scenario.WhenArgs.SplitArgs(), scenario.And.AppSettings, scenario.And.Dependencies);
+                var args = scenario.WhenArgsArray ?? scenario.WhenArgs.SplitArgs();
+                results = scenario.AppType.RunAppInMem(args, scenario.And.AppSettings, scenario.And.Dependencies);
                 AssertExitCodeAndErrorMessage(scenario, results);
 
                 if (scenario.Then.Result != null)

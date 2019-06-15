@@ -6,59 +6,82 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class BasicParseScenarios : ScenarioTestBase<BasicParseScenarios>
+    public class BasicParseScenarios : TestBase
     {
         public BasicParseScenarios(ITestOutputHelper output) : base(output)
         {
         }
 
-        public static Scenarios Scenarios =>
-            new Scenarios
+        [Fact]
+        public void MethodIsCalledWithExpectedValues()
+        {
+            Verify(new Given<App>
             {
-                new Given<SingleCommandApp>("method is called with expected values")
+                WhenArgs = "Add -o * 2 3",
+                Then = { Outputs = { new App.AddResults { X = 2, Y = 3, Op = "*" } } }
+            });
+        }
+
+        [Fact]
+        public void OptionCanBeSpecifiedAfterPositionalArg()
+        {
+            Verify(new Given<App>
+            {
+                WhenArgs = "Add 2 3 -o *",
+                Then = { Outputs = { new App.AddResults { X = 2, Y = 3, Op = "*" } } }
+            });
+        }
+
+        [Fact]
+        public void OptionCanBeColonSeparated()
+        {
+            Verify(new Given<App>
+            {
+                WhenArgs = "Add 2 3 -o:*",
+                Then = { Outputs = { new App.AddResults { X = 2, Y = 3, Op = "*" } } }
+            });
+        }
+
+        [Fact]
+        public void OptionCanBeEqualsSeparated()
+        {
+            Verify(new Given<App>
+            {
+                WhenArgs = "Add 2 3 -o=*",
+                Then = { Outputs = { new App.AddResults { X = 2, Y = 3, Op = "*" } } }
+            });
+        }
+
+        [Fact]
+        public void DoesNotModifySpecialCharactersInArguments()
+        {
+            Verify(new Given<App>("exec - special characters should be retained")
+            {
+                WhenArgsArray = new[] { "Do", "~!@#$%^&*()_= +[]\\{} |;':\",./<>?" },
+                Then =
                 {
-                    WhenArgs = "Add -o * 2 3",
-                    Then = {Outputs = {new SingleCommandApp.AddResults {X = 2, Y = 3, Op = "*"}}}
-                },
-                new Given<SingleCommandApp>("option can be specified after positional arg")
-                {
-                    WhenArgs = "Add 2 3 -o *",
-                    Then = {Outputs = {new SingleCommandApp.AddResults {X = 2, Y = 3, Op = "*"}}}
-                },
-                new Given<SingleCommandApp>("option can be colon separated: --option:value")
-                {
-                    WhenArgs = "Add 2 3 -o:*",
-                    Then = {Outputs = {new SingleCommandApp.AddResults {X = 2, Y = 3, Op = "*"}}}
-                },
-                new Given<SingleCommandApp>("option can be equals separated: --option=value")
-                {
-                    WhenArgs = "Add 2 3 -o=*",
-                    Then = {Outputs = {new SingleCommandApp.AddResults {X = 2, Y = 3, Op = "*"}}}
-                },
-                new Given<SingleCommandApp>("error when extra value provided for option")
-                {
-                    WhenArgs = "Add 2 3 -o * %",
-                    Then =
-                    {
-                        ExitCode = 1,
-                        ResultsContainsTexts = {"Unrecognized command or argument '%'"}
-                    }
-                },
-                new Given<SingleCommandApp>("extra arguments not allowed")
-                {
-                    WhenArgs = "Add 2 3 4",
-                    Then =
-                    {
-                        ExitCode = 1,
-                        ResultsContainsTexts = {"Unrecognized command or argument '4'"}
-                    }
+                    Outputs = { "~!@#$%^&*()_= +[]\\{} |;':\",./<>?" }
                 }
-            };
+            });
+        }
+
+        [Fact]
+        public void BracketsShouldbeRetainedInText()
+        {
+            Verify(new Given<App>
+            {
+                WhenArgsArray = new[] { "Do", "[some (parenthesis) {curly} and [bracketed] text]" },
+                Then =
+                {
+                    Outputs = { "[some (parenthesis) {curly} and [bracketed] text]" }
+                }
+            });
+        }
 
         [Fact(Skip = "Method params cannot be marked as required yet.  Requiredness is only possible via FluentValidator")]
         public void PositionalArgumentsAreRequired()
         {
-            Verify(new Given<SingleCommandApp>
+            Verify(new Given<App>
             {
                 WhenArgs = "Add 2",
                 Then =
@@ -69,7 +92,35 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             });
         }
 
-        public class SingleCommandApp
+        [Fact]
+        public void ErrorWhenExtraValueProvidedForOption()
+        {
+            Verify(new Given<App>
+            {
+                WhenArgs = "Add 2 3 -o * %",
+                Then =
+                {
+                    ExitCode = 1,
+                    ResultsContainsTexts = {"Unrecognized command or argument '%'"}
+                }
+            });
+        }
+
+        [Fact]
+        public void ExtraArgumentsNotAllowed()
+        {
+            Verify(new Given<App>
+            {
+                WhenArgs = "Add 2 3 4",
+                Then =
+                {
+                    ExitCode = 1,
+                    ResultsContainsTexts = {"Unrecognized command or argument '4'"}
+                }
+            });
+        }
+
+        public class App
         {
             [InjectProperty]
             public TestOutputs TestOutputs { get; set; }
@@ -83,6 +134,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 string operation = "+")
             {
                 TestOutputs.Capture(new AddResults { X = x, Y = y, Op = operation });
+            }
+
+            public void Do([Argument] string arg)
+            {
+                TestOutputs.Capture(arg);
             }
 
             public class AddResults
