@@ -25,7 +25,7 @@ namespace CommandDotNet.Tests
         public void TestValues(string input, int expectedCode)
         {
             var result = new AppRunner<App>(new AppSettings {Case = Case.LowerCase})
-                .RunInMem(input.Split(' '), _testOutputHelper);
+                .RunInMem(input.SplitArgs(), _testOutputHelper);
 
             result.ExitCode.Should().Be(expectedCode);
         }

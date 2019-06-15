@@ -26,7 +26,7 @@ namespace CommandDotNet.Tests.ScenarioFramework
             }
             try
             {
-                var results = scenario.AppType.RunAppInMem(scenario.WhenArgs, scenario.And.AppSettings, scenario.And.Dependencies);
+                var results = scenario.AppType.RunAppInMem(scenario.WhenArgs.SplitArgs(), scenario.And.AppSettings, scenario.And.Dependencies);
                 AssertExitCodeAndErrorMessage(scenario, results);
 
                 if (scenario.Then.Result != null)

@@ -133,6 +133,12 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         
         public int Execute(params string[] args)
         {
+            var command = ParseCommand(args);
+            return command._invoke();
+        }
+
+        private CommandLineApplication ParseCommand(string[] args)
+        {
             CommandLineApplication command = this;
             CommandOption option = null;
             IEnumerator<CommandArgument> arguments = null;
@@ -140,7 +146,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             for (var index = 0; index < args.Length; index++)
             {
                 var arg = args[index];
-                
+
                 /* Process flow
                  *
                  * easy to determine options so check those first.  options start with -- or -
@@ -156,28 +162,29 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                  *
                  * assign argument as value for next argument in the command
                  */
-                
+
                 // control flow is tricky.  Watch for: continue, break, return & throw
-                
+
                 if (option == null)
                 {
                     string[] optionParts = null;
 
                     var isLongOption = arg.StartsWith("--");
                     var isShortOption = !isLongOption && arg.StartsWith("-");
-                    
+
                     if (isLongOption)
                     {
-                        optionParts = arg.Substring(2).Split(new[] { ':', '=' }, 2);
+                        optionParts = arg.Substring(2).Split(new[] {':', '='}, 2);
                         var optionName = optionParts[0];
                         option = command.FindOption(o => o.LongName, optionName);
 
                         if (option == null)
                         {
                             var isArgumentSeparator = string.IsNullOrEmpty(optionName);
-                            
+
                             // ??? if AllowArgumentSeparator is true, why would this be considered an unexpected argument?
-                            if (isArgumentSeparator && !_appSettings.ThrowOnUnexpectedArgument  && _appSettings.AllowArgumentSeparator)
+                            if (isArgumentSeparator && !_appSettings.ThrowOnUnexpectedArgument &&
+                                _appSettings.AllowArgumentSeparator)
                             {
                                 // skip over the '--' argument separator
                                 // all remaining arguments to be added to command.RemainingArguments 
@@ -188,14 +195,14 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                             break;
                         }
                     }
-                    
+
                     if (isShortOption)
                     {
-                        optionParts = arg.Substring(1).Split(new[] { ':', '=' }, 2);
+                        optionParts = arg.Substring(1).Split(new[] {':', '='}, 2);
                         var optionName = optionParts[0];
                         // If not a short option, try symbol option.  e.g.  ?
                         option = command.FindOption(o => o.ShortName, optionName)
-                            ?? command.FindOption(o => o.SymbolName, optionName);
+                                 ?? command.FindOption(o => o.SymbolName, optionName);
 
                         if (option == null)
                         {
@@ -203,19 +210,28 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                             break;
                         }
                     }
-                    
+
                     if (isLongOption || isShortOption)
                     {
                         // If we find a help/version option, show information and stop parsing
                         if (Equals(command.OptionHelp, option))
                         {
-                            command.ShowHelp();
-                            return 0;
+                            command._invoke = () =>
+                            {
+                                command.ShowHelp();
+                                return 0;
+                            };
+                            return command;
                         }
+
                         if (Equals(command._optionVersion, option))
                         {
-                            command.ShowVersion();
-                            return 0;
+                            command._invoke = () =>
+                            {
+                                command.ShowVersion();
+                                return 0;
+                            };
+                            return command;
                         }
 
                         if (optionParts.Length == 2)
@@ -224,8 +240,10 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                             if (!option.TryParse(optionValue))
                             {
                                 command.ShowHint();
-                                throw new CommandParsingException(command, $"Unexpected value '{optionValue}' for option '{option.LongName}'");
+                                throw new CommandParsingException(command,
+                                    $"Unexpected value '{optionValue}' for option '{option.LongName}'");
                             }
+
                             option = null;
                         }
                         else if (option.OptionType == CommandOptionType.NoValue)
@@ -234,7 +252,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                             option.TryParse(null);
                             option = null;
                         }
-                        
+
                         // process next argument
                         continue;
                     }
@@ -247,8 +265,9 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                         command.ShowHint();
                         throw new CommandParsingException(command, $"Unexpected value '{arg}' for option '{option.LongName}'");
                     }
+
                     option = null;
-                    
+
                     // process next argument
                     continue;
                 }
@@ -258,22 +277,22 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                     var subCommand = command.Commands
                         .Cast<CommandLineApplication>()
                         .FirstOrDefault(c => c.Name.Equals(arg, StringComparison.OrdinalIgnoreCase));
-                    
+
                     if (subCommand != null)
                     {
                         command = subCommand;
-                        
+
                         // process next argument for the subcommand
                         continue;
                     }
                 }
-                
+
                 if (arguments == null)
                 {
                     // TODO: Arguments is expected to be ordered but HashSet does not guarantee order
                     arguments = new CommandArgumentEnumerator(command.Arguments.GetEnumerator());
                 }
-                
+
                 if (arguments.MoveNext())
                 {
                     arguments.Current.Values.Add(arg);
@@ -291,7 +310,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 throw new CommandParsingException(command, $"Missing value for option '{option.LongName}'");
             }
 
-            return command._invoke();
+            return command;
         }
 
         // Helper method that adds a help option
