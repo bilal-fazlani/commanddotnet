@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using CommandDotNet.Models;
 
 namespace CommandDotNet.MicrosoftCommandLineUtils
 {
@@ -17,39 +18,45 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             }
         }
 
-        public static DirectivesResult ProcessDirectives(ref string[] args)
+        // this is obviously not the ideal design.  major code smell.
+        // but... it meets our needs simply until we have settled
+        // on a better design for implementing the control flow
+        // i.e. middleware pipeline
+        internal static bool InTestHarness { private get; set; }
+
+        public static DirectivesResult ProcessDirectives(AppSettings appSettings, ref string[] args)
         {
-            var firstArg = args.FirstOrDefault();
-            if (firstArg == null)
+            bool IsDirective(string directiveName, ref string[] arguments)
             {
-                return new DirectivesResult();
+                return arguments.FirstOrDefault()?.Equals($"[{directiveName}]", StringComparison.InvariantCultureIgnoreCase) ?? false;
             }
 
             // adapted from https://github.com/dotnet/command-line-api directives
 
-            if (firstArg.Equals("[debug]", StringComparison.InvariantCultureIgnoreCase))
+            if (IsDirective("debug", ref args))
             {
                 args = args.Skip(1).ToArray();
                 var process = Process.GetCurrentProcess();
 
                 var processId = process.Id;
 
-                Console.Out.WriteLine($"Attach your debugger to process {processId} ({process.ProcessName}).");
+                appSettings.Out.WriteLine($"Attach your debugger to process {processId} ({process.ProcessName}).");
 
-                while (!Debugger.IsAttached)
+                while (!InTestHarness && !Debugger.IsAttached)
                 {
                     Task.Delay(500);
                 }
             }
-            else if (firstArg.Equals("[parse]", StringComparison.InvariantCultureIgnoreCase))
+
+            if (IsDirective("parse", ref args))
             {
-                foreach (var arg in args.Skip(1))
+                args = args.Skip(1).ToArray();
+                foreach (var arg in args)
                 {
-                    Console.Out.WriteLine(arg);
+                    appSettings.Out.WriteLine(arg);
                 }
                 return new DirectivesResult(0);
             }
-
 
             return new DirectivesResult();
         }
