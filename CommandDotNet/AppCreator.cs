@@ -104,6 +104,11 @@ namespace CommandDotNet
             
             foreach (Type submoduleType in propertySubmodules.Union(inlineClassSubmodules))
             {
+                // TODO: optimization - return a LazyAppCreator, parsing sub applications only as needed
+                //       the current code creates all sub applications
+                //       for an app like git with a lot of commands this can have a noticeable impact
+                //       this accounts for ~10% of the run time across all feature tests
+
                 AppCreator appCreator = new AppCreator(_appSettings);
                 appCreator.CreateApplication(submoduleType, dependencyResolver, parentApplication);
             }

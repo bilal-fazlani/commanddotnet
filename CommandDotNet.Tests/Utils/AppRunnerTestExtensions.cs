@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using CommandDotNet.Models;
 using Xunit.Abstractions;
 
@@ -8,24 +9,18 @@ namespace CommandDotNet.Tests.Utils
 {
     public static class AppRunnerTestExtensions
     {
-        public static AppRunnerResult RunAppInMem(
-            this Type appType, string args, 
-            AppSettings appSettings = null, IEnumerable<object> dependencies = null)
-        {
-            return RunAppInMem(appType, args?.Split(' ') ?? new string[0], appSettings, dependencies);
-        }
+        private static readonly MethodInfo RunAppInMemoryGenericMethod = typeof(AppRunnerTestExtensions)
+            .GetMethod(nameof(RunInMem))
+            .GetGenericMethodDefinition();
 
         public static AppRunnerResult RunAppInMem(
             this Type appType, string[] args, 
             AppSettings appSettings = null, IEnumerable<object> dependencies = null)
         {
-            var type = typeof(AppRunner<>).MakeGenericType(appType);
-            var runner = Activator.CreateInstance(type, appSettings ?? TestAppSettings.TestDefault);
+            var appRunnerType = typeof(AppRunner<>).MakeGenericType(appType);
+            var runInMemMethod = RunAppInMemoryGenericMethod.MakeGenericMethod(appType);
 
-            var runInMemMethod = typeof(AppRunnerTestExtensions)
-                .GetMethod("RunInMem")
-                .GetGenericMethodDefinition()
-                .MakeGenericMethod(appType);
+            var runner = Activator.CreateInstance(appRunnerType, appSettings ?? TestAppSettings.TestDefault);
 
             // scenarios don't pass testOutputHelper because that framework
             // print the AppRunnerResult.ConsoleOut so it's not necessary
@@ -51,11 +46,11 @@ namespace CommandDotNet.Tests.Utils
             }
             runner.UseDependencyResolver(resolver);
 
-            var inputs = new TestOutputs();
-            resolver.Register(inputs);
+            var outputs = new TestOutputs();
+            resolver.Register(outputs);
 
             var exitCode = runner.Run(args);
-            return new AppRunnerResult(exitCode, consoleOut.ToString(), inputs);
+            return new AppRunnerResult(exitCode, consoleOut.ToString(), outputs);
         }
     }
 }

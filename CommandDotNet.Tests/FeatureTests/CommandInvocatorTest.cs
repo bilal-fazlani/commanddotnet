@@ -99,7 +99,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     invokerWasCalled = true;
                     actionBeforeInvocation(invoker);
                 }))
-                .RunInMem(new []{ "NotifyOwner", "--Number", carNumber.ToString(), "--owner", ownerName }, _testOutputHelper);
+                .RunInMem($"NotifyOwner --Number {carNumber} --owner {ownerName}".SplitArgs(), _testOutputHelper);
             invokerWasCalled.Should().BeTrue();
 
             return result;

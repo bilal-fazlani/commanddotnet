@@ -18,5 +18,10 @@ namespace CommandDotNet.Tests.Utils
             // trim extra empty line endings so tests are easier to write with less wasted space.
             return result.TrimEnd(Environment.NewLine.ToCharArray());
         }
+
+        public static string[] SplitArgs(this string args)
+        {
+            return args?.Split(' ') ?? new string[0];
+        }
     }
 }
