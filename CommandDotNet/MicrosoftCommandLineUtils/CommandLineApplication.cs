@@ -134,12 +134,18 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         
         public int Execute(ParserContext parserContext, string[] args)
         {
-            var directivesResult = Directives.ProcessDirectives(_appSettings, ref args);
+            var directivesResult = Directives.ProcessDirectives(_appSettings, parserContext, ref args);
             if (directivesResult.ExitCode.HasValue)
             {
                 return directivesResult.ExitCode.Value;
             }
+
             var command = ParseCommand(parserContext, args);
+            if (parserContext.ParseDirectiveEnabled)
+            {
+                return 0;
+            }
+
             return command._invoke();
         }
 
@@ -148,38 +154,10 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             CommandLineApplication command = this;
             CommandOption option = null;
             IEnumerator<CommandArgument> arguments = null;
-            
+
             // TODO: when Parse directive is enabled, log the args after each transformation
 
-            /*
-            _appSettings.Out.WriteLine("received:");
-            foreach (var arg in args)
-            {
-                _appSettings.Out.WriteLine($"   {arg}");
-            }
-            _appSettings.Out.WriteLine();
-            */
-
-            foreach (var transformation in parserContext.ArgumentTransformations.OrderBy(t => t.Order))
-            {
-                try
-                {
-                    args = transformation.Transformation(args);
-
-                    /*
-                    _appSettings.Out.WriteLine($"transformation: {transformation.Name}");
-                    foreach (var arg in args)
-                    {
-                        _appSettings.Out.WriteLine($"   {arg}");
-                    }
-                    _appSettings.Out.WriteLine();
-                    */
-                }
-                catch (Exception e)
-                {
-                    throw new AppRunnerException($"transformation failure for: {transformation}", e);
-                }
-            }
+            args = ApplyArgumentTransformations(parserContext, args);
 
             for (var index = 0; index < args.Length; index++)
             {
@@ -349,6 +327,53 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             }
 
             return command;
+        }
+
+        private string[] ApplyArgumentTransformations(ParserContext parserContext, string[] args)
+        {
+            if (parserContext.ParseDirectiveEnabled)
+            {
+                _appSettings.Out.WriteLine("received:");
+                foreach (var arg in args)
+                {
+                    _appSettings.Out.WriteLine($"   {arg}");
+                }
+                _appSettings.Out.WriteLine();
+            }
+
+            foreach (var transformation in parserContext.ArgumentTransformations.OrderBy(t => t.Order))
+            {
+                try
+                {
+                    var tempArgs = transformation.Transformation(args);
+
+                    if (parserContext.ParseDirectiveEnabled)
+                    {
+                        if (args.Length == tempArgs.Length &&
+                            Enumerable.Range(0, args.Length).All(i => args[i] == tempArgs[i]))
+                        {
+                            _appSettings.Out.WriteLine($"transformation: {transformation.Name} (no changes)");
+                        }
+                        else
+                        {
+                            _appSettings.Out.WriteLine($"transformation: {transformation.Name}");
+                            foreach (var arg in tempArgs)
+                            {
+                                _appSettings.Out.WriteLine($"   {arg}");
+                            }
+                            _appSettings.Out.WriteLine();
+                        }
+                    }
+
+                    args = tempArgs;
+                }
+                catch (Exception e)
+                {
+                    throw new AppRunnerException($"transformation failure for: {transformation}", e);
+                }
+            }
+
+            return args;
         }
 
         // Helper method that adds a help option
