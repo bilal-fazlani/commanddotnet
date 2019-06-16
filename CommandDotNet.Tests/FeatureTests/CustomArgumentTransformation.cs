@@ -27,7 +27,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .UseArgumentTransform("test", 1,
                     tokens => new Tokens(tokens.Select(t =>
                         t.TokenType == TokenType.Argument && t.Value != "Do"
-                            ? new Token("roses", "roses", TokenType.Argument)
+                            ? "roses".Tokenize()
                             : t)))
                 .RunInMem("[parse] Do --opt1 smells like".SplitArgs(), _output);
 
@@ -51,7 +51,7 @@ roses
                 .UseArgumentTransform("test", 1, 
                     tokens => new Tokens(tokens.Select(t =>
                         t.TokenType == TokenType.Argument && t.Value != "Do"
-                            ? new Token("roses", "roses", TokenType.Argument) 
+                            ? "roses".Tokenize()
                             : t)))
                 .RunInMem("Do --opt1 smells like".SplitArgs(), _output);
 
