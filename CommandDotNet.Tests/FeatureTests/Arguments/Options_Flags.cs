@@ -1,24 +1,25 @@
 using CommandDotNet.Attributes;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.Utils;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class Options_Flags : ScenarioTestBase<Options_Flags>
+    public class Options_Flags : TestBase
     {
         public Options_Flags(ITestOutputHelper output) : base(output)
         {
         }
 
-        public static Scenarios Scenarios =>
-            new Scenarios
+        [Fact]
+        public void Help_DoesNotInclude_BoolTypeOrAllowedArgumentValues()
+        {
+            Verify(new Given<FlagApp>
             {
-                new Given<FlagApp>($"help does not include bool type or allowed arguments")
-                {
-                    // because the value should not be provided
-                    WhenArgs = "Do -h",
-                    Then = {Result = @"Usage: dotnet testhost.dll Do [options]
+                // because the value should not be provided
+                WhenArgs = "Do -h",
+                Then = { Result = @"Usage: dotnet testhost.dll Do [options]
 
 Options:
 
@@ -26,23 +27,38 @@ Options:
   Show help information
 
   --flag" }
-                },
-                new Given<FlagApp>($"when specified, flag is true")
-                {
-                    WhenArgs = "Do --flag",
-                    Then = {Outputs = {true}}
-                },
-                new Given<FlagApp>($"when not specified, flag is false")
-                {
-                    WhenArgs = "Do",
-                    Then = {Outputs = {false}}
-                },
-                new Given<FlagApp>($"clubbing is supported")
-                {
-                    WhenArgs = "Club -ab",
-                    Then = {Outputs = {new ClubResults{FlagA = true, FlagB = true}}}
-                },
-            };
+            });
+        }
+
+        [Fact]
+        public void WhenFlagIsSpecified_ValueIsTrue()
+        {
+            Verify(new Given<FlagApp>
+            {
+                WhenArgs = "Do --flag",
+                Then = { Outputs = { true } }
+            });
+        }
+
+        [Fact]
+        public void WhenFlagIsNotSpecified_ValueIsFalse()
+        {
+            Verify(new Given<FlagApp>
+            {
+                WhenArgs = "Do",
+                Then = { Outputs = { false } }
+            });
+        }
+
+        [Fact]
+        public void FlagsCanBeClubbed()
+        {
+            Verify(new Given<FlagApp>
+            {
+                WhenArgs = "Club -ab",
+                Then = { Outputs = { new ClubResults { FlagA = true, FlagB = true } } }
+            });
+        }
 
         private class FlagApp
         {

@@ -39,7 +39,6 @@ namespace CommandDotNet.Tests.Utils
             runner.OverrideConsoleError(consoleOut);
 
             var resolver = new TestDependencyResolver();
-            resolver.Register(new TestWriter(consoleOut));
             foreach (var dependency in dependencies ?? Enumerable.Empty<object>())
             {
                 resolver.Register(dependency);

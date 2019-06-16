@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Models;
+using CommandDotNet.Parsing;
 
 namespace CommandDotNet.MicrosoftCommandLineUtils
 {
@@ -24,8 +25,13 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         // i.e. middleware pipeline
         internal static bool InTestHarness { private get; set; }
 
-        public static DirectivesResult ProcessDirectives(AppSettings appSettings, ref string[] args)
+        public static DirectivesResult ProcessDirectives(AppSettings appSettings, ParserContext parserContext, ref string[] args)
         {
+            if (!appSettings.EnableDirectives)
+            {
+                return new DirectivesResult();
+            }
+
             bool IsDirective(string directiveName, ref string[] arguments)
             {
                 return arguments.FirstOrDefault()?.Equals($"[{directiveName}]", StringComparison.InvariantCultureIgnoreCase) ?? false;
@@ -47,15 +53,11 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                     Task.Delay(500);
                 }
             }
-
+            
             if (IsDirective("parse", ref args))
             {
                 args = args.Skip(1).ToArray();
-                foreach (var arg in args)
-                {
-                    appSettings.Out.WriteLine(arg);
-                }
-                return new DirectivesResult(0);
+                parserContext.ParseDirectiveEnabled = true;
             }
 
             return new DirectivesResult();

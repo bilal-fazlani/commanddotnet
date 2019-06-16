@@ -1094,6 +1094,10 @@ In this library, there are two ways to parse boolean [Options](#options). Note t
 
 Directives are special arguments enabling cross cutting features.  We've followed the pattern defined by  [System.CommandLine](https://github.com/dotnet/command-line-api/wiki/Features-overview#debugging) to provide two directives: Debug & Parse
 
+```c#
+new AppSettings { EnableDirectives = true }
+```
+
 Directives must be the first argument and will be removed from further processing.
 
 ### Debug

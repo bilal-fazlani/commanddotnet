@@ -9,6 +9,7 @@ using CommandDotNet.Exceptions;
 using CommandDotNet.HelpGeneration;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
+using CommandDotNet.Parsing;
 
 [assembly: InternalsVisibleTo("CommandDotNet.Tests")]
 
@@ -23,10 +24,13 @@ namespace CommandDotNet
         internal IDependencyResolver DependencyResolver;
         
         private readonly AppSettings _settings;
-        
+        private readonly ParserBuilder _parserBuilder = new ParserBuilder();
+
         public AppRunner(AppSettings settings = null)
         {
             _settings = settings ?? new AppSettings();
+
+            // TODO: add .rsp file transformation as an extension option
         }
 
         /// <summary>
@@ -43,9 +47,7 @@ namespace CommandDotNet
 
                 CommandLineApplication app = appCreator.CreateApplication(typeof(T), DependencyResolver);
 
-                var parsedArguments = ArgumentParser.SplitFlags(args).ToArray();
-
-                return app.Execute(parsedArguments);
+                return app.Execute(_parserBuilder.Build(), args);
             }
             catch (AppRunnerException e)
             {
@@ -57,6 +59,11 @@ namespace CommandDotNet
             }
             catch (CommandParsingException e)
             {
+                var optionHelp = e.Command.OptionHelp;
+                if (optionHelp != null)
+                {
+                    _settings.Out.WriteLine($"Specify --{optionHelp.LongName} for a list of available options and commands.");
+                }
                 _settings.Error.WriteLine(e.Message + "\n");
                 e.Command.ShowHelp();
 

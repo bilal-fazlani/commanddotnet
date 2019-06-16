@@ -61,7 +61,6 @@ namespace CommandDotNet
         {
             app.Description = applicationMetadata?.Description;
             app.ExtendedHelpText = applicationMetadata?.ExtendedHelpText;
-            app.Syntax = applicationMetadata?.Syntax;
             app.HelpOption(Constants.HelpTemplate);
         }
 
