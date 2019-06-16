@@ -22,7 +22,7 @@ namespace CommandDotNet
     public class AppRunner<T> where T : class
     {
         internal IDependencyResolver DependencyResolver;
-        
+
         private readonly AppSettings _settings;
         private readonly ParserBuilder _parserBuilder = new ParserBuilder();
 
@@ -62,8 +62,10 @@ namespace CommandDotNet
                 var optionHelp = e.Command.OptionHelp;
                 if (optionHelp != null)
                 {
-                    _settings.Out.WriteLine($"Specify --{optionHelp.LongName} for a list of available options and commands.");
+                    _settings.Out.WriteLine(
+                        $"Specify --{optionHelp.LongName} for a list of available options and commands.");
                 }
+
                 _settings.Error.WriteLine(e.Message + "\n");
                 e.Command.ShowHelp();
 
@@ -79,7 +81,8 @@ namespace CommandDotNet
                 return 2;
             }
             catch (AggregateException e) when (e.InnerExceptions.Any(x => x.GetBaseException() is AppRunnerException) ||
-                                               e.InnerExceptions.Any(x => x.GetBaseException() is CommandParsingException))
+                                               e.InnerExceptions.Any(x =>
+                                                   x.GetBaseException() is CommandParsingException))
             {
                 foreach (var innerException in e.InnerExceptions)
                 {
@@ -93,12 +96,14 @@ namespace CommandDotNet
 
                 return 1;
             }
-            catch (AggregateException e) when (e.InnerExceptions.Any(x => x.GetBaseException() is ArgumentValidationException))
+            catch (AggregateException e) when (e.InnerExceptions.Any(x =>
+                x.GetBaseException() is ArgumentValidationException))
 
             {
                 ArgumentValidationException validationException =
-                    (ArgumentValidationException)e.InnerExceptions.FirstOrDefault(x => x.GetBaseException() is ArgumentValidationException);
-                
+                    (ArgumentValidationException) e.InnerExceptions.FirstOrDefault(x =>
+                        x.GetBaseException() is ArgumentValidationException);
+
                 foreach (var failure in validationException.ValidationResult.Errors)
                 {
                     _settings.Out.WriteLine(failure.ErrorMessage);
@@ -106,12 +111,14 @@ namespace CommandDotNet
 
                 return 2;
             }
-            catch (AggregateException e) when (e.InnerExceptions.Any(x => x.GetBaseException() is ValueParsingException))
+            catch (AggregateException e) when (e.InnerExceptions.Any(x => x.GetBaseException() is ValueParsingException)
+            )
 
             {
                 ValueParsingException valueParsingException =
-                    (ValueParsingException)e.InnerExceptions.FirstOrDefault(x => x.GetBaseException() is ValueParsingException);
-                
+                    (ValueParsingException) e.InnerExceptions.FirstOrDefault(x =>
+                        x.GetBaseException() is ValueParsingException);
+
                 _settings.Error.WriteLine(valueParsingException.Message + "\n");
 
                 return 2;
@@ -175,6 +182,12 @@ namespace CommandDotNet
         public AppRunner<T> UseDependencyResolver(IDependencyResolver dependencyResolver)
         {
             DependencyResolver = dependencyResolver;
+            return this;
+        }
+
+        public AppRunner<T> UseArgumentTransform(string name, int order, Func<Tokens, Tokens> transformation)
+        {
+            _parserBuilder.AddArgumentTransformation(name, order, transformation);
             return this;
         }
     }
