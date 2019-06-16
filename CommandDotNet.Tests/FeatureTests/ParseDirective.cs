@@ -1,4 +1,5 @@
 using CommandDotNet.Attributes;
+using CommandDotNet.Models;
 using CommandDotNet.Tests.ScenarioFramework;
 using Xunit;
 using Xunit.Abstractions;
@@ -7,6 +8,8 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class ParseDirective : TestBase
     {
+        private readonly AppSettings DirectivesEnabled = TestAppSettings.TestDefault.Clone(s => s.EnableDirectives = true);
+
         public ParseDirective(ITestOutputHelper output) : base(output)
         {
         }
@@ -16,6 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             Verify(new Given<App>
             {
+                And = { AppSettings = DirectivesEnabled },
                 WhenArgs = "[parse] some -ab args to echo",
                 Then =
                 {
@@ -42,6 +46,7 @@ echo"
         {
             Verify(new Given<App>
             {
+                And = { AppSettings = DirectivesEnabled },
                 WhenArgs = "[parse] some args to echo",
                 Then =
                 {

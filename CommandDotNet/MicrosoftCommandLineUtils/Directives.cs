@@ -27,6 +27,11 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 
         public static DirectivesResult ProcessDirectives(AppSettings appSettings, ParserContext parserContext, ref string[] args)
         {
+            if (!appSettings.EnableDirectives)
+            {
+                return new DirectivesResult();
+            }
+
             bool IsDirective(string directiveName, ref string[] arguments)
             {
                 return arguments.FirstOrDefault()?.Equals($"[{directiveName}]", StringComparison.InvariantCultureIgnoreCase) ?? false;

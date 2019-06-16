@@ -1,8 +1,7 @@
 using System.Diagnostics;
-using CommandDotNet.Attributes;
 using CommandDotNet.MicrosoftCommandLineUtils;
+using CommandDotNet.Models;
 using CommandDotNet.Tests.ScenarioFramework;
-using CommandDotNet.Tests.Utils;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -10,10 +9,26 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class DebugDirective : TestBase
     {
+        private readonly AppSettings DirectivesEnabled = TestAppSettings.TestDefault.Clone(s => s.EnableDirectives = true);
+
         public DebugDirective(ITestOutputHelper output) : base(output)
         {
             // skip waiting for debugger to connect
             Directives.InTestHarness = true;
+        }
+
+        [Fact]
+        public void Directives_DisabledByDefault()
+        {
+            Verify(new Given<App>
+            {
+                WhenArgs = "[debug] Do",
+                Then =
+                {
+                    ExitCode = 1, // method should have been called
+                    ResultsContainsTexts = { "Unrecognized command or argument '[debug]'" }
+                }
+            });
         }
 
         [Fact]
@@ -22,6 +37,7 @@ namespace CommandDotNet.Tests.FeatureTests
             var processId = Process.GetCurrentProcess().Id;
             Verify(new Given<App>
             {
+                And = { AppSettings = DirectivesEnabled },
                 WhenArgs = "[debug] Do",
                 Then =
                 {

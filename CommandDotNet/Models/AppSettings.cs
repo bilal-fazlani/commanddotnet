@@ -40,6 +40,8 @@ namespace CommandDotNet.Models
 
         public bool EnableVersionOption { get; set; } = true;
 
+        public bool EnableDirectives { get; set; }
+
         [Obsolete("Use correctly spelled PromptForArgumentsIfNotProvided")]
         public bool PrompForArgumentsIfNotProvided
         {

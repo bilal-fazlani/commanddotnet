@@ -27,7 +27,7 @@ namespace CommandDotNet.Parsing
 
             var remainingArguments = new List<Token>();
 
-            var tokens = args.Tokenize(includeDirectives: true);
+            var tokens = args.Tokenize(includeDirectives: _appSettings.EnableDirectives);
 
             tokens = ApplyArgumentTransformations(tokens);
 
