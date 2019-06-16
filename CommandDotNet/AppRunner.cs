@@ -30,11 +30,6 @@ namespace CommandDotNet
         {
             _settings = settings ?? new AppSettings();
 
-            _parserBuilder.AddArgumentTransformation(
-                "unclub-flags", 
-                ArgumentTransformation.Orders.UnclubFlags, 
-                args => ArgumentParser.SplitFlags(args).ToArray());
-
             // TODO: add .rsp file transformation as an extension option
         }
 
@@ -64,6 +59,11 @@ namespace CommandDotNet
             }
             catch (CommandParsingException e)
             {
+                var optionHelp = e.Command.OptionHelp;
+                if (optionHelp != null)
+                {
+                    _settings.Out.WriteLine($"Specify --{optionHelp.LongName} for a list of available options and commands.");
+                }
                 _settings.Error.WriteLine(e.Message + "\n");
                 e.Command.ShowHelp();
 

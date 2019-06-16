@@ -4,16 +4,11 @@ namespace CommandDotNet.Parsing
 {
     public class ArgumentTransformation
     {
-        public static class Orders
-        {
-            public const int UnclubFlags = 100;
-        }
-
         public string Name { get; }
         public int Order { get; }
-        public Func<string[], string[]> Transformation { get; }
+        public Func<Tokens, Tokens> Transformation { get; }
 
-        public ArgumentTransformation(string name, int order, Func<string[],string[]> transformation)
+        public ArgumentTransformation(string name, int order, Func<Tokens, Tokens> transformation)
         {
             Name = name;
             Order = order;

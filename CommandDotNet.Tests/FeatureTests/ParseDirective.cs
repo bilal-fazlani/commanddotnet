@@ -20,19 +20,19 @@ namespace CommandDotNet.Tests.FeatureTests
                 Then =
                 {
                     ExitCode = 0, // method should not have been called
-                    Result = @"received:
-   some
-   -ab
-   args
-   to
-   echo
-transformation: unclub-flags
-   some
-   -a
-   -b
-   args
-   to
-   echo"
+                    Result = @"==> received
+some
+-ab
+args
+to
+echo
+==> transformation: Expand clubbed flags
+some
+-a
+-b
+args
+to
+echo"
                 }
             });
         }
@@ -46,12 +46,12 @@ transformation: unclub-flags
                 Then =
                 {
                     ExitCode = 0, // method should not have been called
-                    Result = @"received:
-   some
-   args
-   to
-   echo
-transformation: unclub-flags (no changes)"
+                    Result = @"==> received
+some
+args
+to
+echo
+==> transformation: Expand clubbed flags (no changes)"
                 }
             });
         }

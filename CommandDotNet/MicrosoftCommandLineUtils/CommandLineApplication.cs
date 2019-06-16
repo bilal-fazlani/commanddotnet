@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -17,11 +16,8 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
     internal class CommandLineApplication : ICommand
     {
         private readonly AppSettings _appSettings;
-
-        private readonly List<string> _remainingArguments;
         private Action _printVersion;
         private Func<int> _invoke;
-        private CommandOption _optionVersion;
         private CommandLineApplication _parent;
 
         // Indicates whether the parser should throw an exception when it runs into an unexpected argument.
@@ -30,7 +26,6 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public CommandLineApplication(AppSettings appSettings)
         {
             _appSettings = appSettings;
-            _remainingArguments = new List<string>();
             _invoke = () => 0;
 
             Options = new HashSet<CommandOption>();
@@ -39,12 +34,12 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         }
 
         public string Name { get; set; }
-        public string Syntax { get; set; }
         public string Description { get; set; }
         public bool ShowInHelpText => true;
         public string ExtendedHelpText { get; set; }
         public HashSet<CommandOption> Options { get; }
         public CommandOption OptionHelp { get; private set; }
+        public CommandOption OptionVersion { get; private set; }
         public ICustomAttributeProvider CustomAttributeProvider { get; set; }
         public HashSet<CommandArgument> Arguments { get; }
         public ICommand Parent => _parent;
@@ -61,12 +56,6 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         {
             var inheritedOptions = this.GetParentCommands().SelectMany(a => a.Options.Where(o => o.Inherited));
             return Options.Concat(inheritedOptions);
-        }
-
-        private CommandOption FindOption(Func<CommandOption, string> optionNameToCompare, string optionName)
-        {
-            return GetOptions().SingleOrDefault(o =>
-                string.Equals(optionNameToCompare(o), optionName, StringComparison.Ordinal));
         }
 
         public CommandLineApplication Command(string name)
@@ -140,241 +129,17 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 return directivesResult.ExitCode.Value;
             }
 
-            var command = ParseCommand(parserContext, args);
-            if (parserContext.ParseDirectiveEnabled)
-            {
-                return 0;
-            }
+            var parseResult = new CommandParser(_appSettings, parserContext).ParseCommand(this, args);
 
-            return command._invoke();
+            // if the ExitCode has been set, the parser has determined
+            // the command should not be executed
+            if (parseResult.ExitCode.HasValue)
+            {
+                return parseResult.ExitCode.Value;
+            }
+            return ((CommandLineApplication)parseResult.Command)._invoke();
         }
 
-        private CommandLineApplication ParseCommand(ParserContext parserContext, string[] args)
-        {
-            CommandLineApplication command = this;
-            CommandOption option = null;
-            IEnumerator<CommandArgument> arguments = null;
-
-            // TODO: when Parse directive is enabled, log the args after each transformation
-
-            args = ApplyArgumentTransformations(parserContext, args);
-
-            for (var index = 0; index < args.Length; index++)
-            {
-                var arg = args[index];
-
-                /* Process flow
-                 *
-                 * easy to determine options so check those first.  options start with -- or -
-                 * if option,
-                 *   check if the value is provided in same string with : or =
-                 *     if value is needed and not provided store option for next argument
-                 *
-                 * if previous argument was option needing a value,
-                 *   parse argument for option
-                 *
-                 * if argument is the name of a subcommand
-                 *   processing remaining arguments for the sub command
-                 *
-                 * assign argument as value for next argument in the command
-                 */
-
-                // control flow is tricky.  Watch for: continue, break, return & throw
-
-                if (option == null)
-                {
-                    string[] optionParts = null;
-
-                    var isLongOption = arg.StartsWith("--");
-                    var isShortOption = !isLongOption && arg.StartsWith("-");
-
-                    if (isLongOption)
-                    {
-                        optionParts = arg.Substring(2).Split(new[] {':', '='}, 2);
-                        var optionName = optionParts[0];
-                        option = command.FindOption(o => o.LongName, optionName);
-
-                        if (option == null)
-                        {
-                            var isArgumentSeparator = string.IsNullOrEmpty(optionName);
-
-                            // ??? if AllowArgumentSeparator is true, why would this be considered an unexpected argument?
-                            if (isArgumentSeparator && !_appSettings.ThrowOnUnexpectedArgument &&
-                                _appSettings.AllowArgumentSeparator)
-                            {
-                                // skip over the '--' argument separator
-                                // all remaining arguments to be added to command.RemainingArguments 
-                                index++;
-                            }
-
-                            HandleUnexpectedArg(command, args, index, argTypeName: "option");
-                            break;
-                        }
-                    }
-
-                    if (isShortOption)
-                    {
-                        optionParts = arg.Substring(1).Split(new[] {':', '='}, 2);
-                        var optionName = optionParts[0];
-                        // If not a short option, try symbol option.  e.g.  ?
-                        option = command.FindOption(o => o.ShortName, optionName)
-                                 ?? command.FindOption(o => o.SymbolName, optionName);
-
-                        if (option == null)
-                        {
-                            HandleUnexpectedArg(command, args, index, argTypeName: "option");
-                            break;
-                        }
-                    }
-
-                    if (isLongOption || isShortOption)
-                    {
-                        // If we find a help/version option, show information and stop parsing
-                        if (Equals(command.OptionHelp, option))
-                        {
-                            command._invoke = () =>
-                            {
-                                command.ShowHelp();
-                                return 0;
-                            };
-                            return command;
-                        }
-
-                        if (Equals(command._optionVersion, option))
-                        {
-                            command._invoke = () =>
-                            {
-                                command.ShowVersion();
-                                return 0;
-                            };
-                            return command;
-                        }
-
-                        if (optionParts.Length == 2)
-                        {
-                            var optionValue = optionParts[1];
-                            if (!option.TryParse(optionValue))
-                            {
-                                command.ShowHint();
-                                throw new CommandParsingException(command,
-                                    $"Unexpected value '{optionValue}' for option '{option.LongName}'");
-                            }
-
-                            option = null;
-                        }
-                        else if (option.OptionType == CommandOptionType.NoValue)
-                        {
-                            // No value is needed for this option
-                            option.TryParse(null);
-                            option = null;
-                        }
-
-                        // process next argument
-                        continue;
-                    }
-                }
-
-                if (option != null) // this is the value for the previous option
-                {
-                    if (!option.TryParse(arg))
-                    {
-                        command.ShowHint();
-                        throw new CommandParsingException(command, $"Unexpected value '{arg}' for option '{option.LongName}'");
-                    }
-
-                    option = null;
-
-                    // process next argument
-                    continue;
-                }
-
-                if (arguments == null)
-                {
-                    var subCommand = command.Commands
-                        .Cast<CommandLineApplication>()
-                        .FirstOrDefault(c => c.Name.Equals(arg, StringComparison.OrdinalIgnoreCase));
-
-                    if (subCommand != null)
-                    {
-                        command = subCommand;
-
-                        // process next argument for the subcommand
-                        continue;
-                    }
-                }
-
-                if (arguments == null)
-                {
-                    // TODO: Arguments is expected to be ordered but HashSet does not guarantee order
-                    arguments = new CommandArgumentEnumerator(command.Arguments.GetEnumerator());
-                }
-
-                if (arguments.MoveNext())
-                {
-                    arguments.Current.Values.Add(arg);
-                }
-                else
-                {
-                    HandleUnexpectedArg(command, args, index, argTypeName: "command or argument");
-                    break;
-                }
-            }
-
-            if (option != null) // an option was left without a value
-            {
-                command.ShowHint();
-                throw new CommandParsingException(command, $"Missing value for option '{option.LongName}'");
-            }
-
-            return command;
-        }
-
-        private string[] ApplyArgumentTransformations(ParserContext parserContext, string[] args)
-        {
-            if (parserContext.ParseDirectiveEnabled)
-            {
-                _appSettings.Out.WriteLine("received:");
-                foreach (var arg in args)
-                {
-                    _appSettings.Out.WriteLine($"   {arg}");
-                }
-                _appSettings.Out.WriteLine();
-            }
-
-            foreach (var transformation in parserContext.ArgumentTransformations.OrderBy(t => t.Order))
-            {
-                try
-                {
-                    var tempArgs = transformation.Transformation(args);
-
-                    if (parserContext.ParseDirectiveEnabled)
-                    {
-                        if (args.Length == tempArgs.Length &&
-                            Enumerable.Range(0, args.Length).All(i => args[i] == tempArgs[i]))
-                        {
-                            _appSettings.Out.WriteLine($"transformation: {transformation.Name} (no changes)");
-                        }
-                        else
-                        {
-                            _appSettings.Out.WriteLine($"transformation: {transformation.Name}");
-                            foreach (var arg in tempArgs)
-                            {
-                                _appSettings.Out.WriteLine($"   {arg}");
-                            }
-                            _appSettings.Out.WriteLine();
-                        }
-                    }
-
-                    args = tempArgs;
-                }
-                catch (Exception e)
-                {
-                    throw new AppRunnerException($"transformation failure for: {transformation}", e);
-                }
-            }
-
-            return args;
-        }
 
         // Helper method that adds a help option
         public void HelpOption(string template)
@@ -389,21 +154,12 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         {
             // Version option is special because we stop parsing once we see it
             // So we store it separately for further use
-            _optionVersion = Option(template, "Show version information", CommandOptionType.NoValue, _=>{}, false, Constants.TypeDisplayNames.Flag, DBNull.Value, false, null);
-            _optionVersion.IsSystemOption = true;
+            OptionVersion = Option(template, "Show version information", CommandOptionType.NoValue, _=>{}, false, Constants.TypeDisplayNames.Flag, DBNull.Value, false, null);
+            OptionVersion.IsSystemOption = true;
             _printVersion = printVersion;
         }
 
         // Helper method that adds a version option
-
-        // Show short hint that reminds users to use help option
-        private void ShowHint()
-        {
-            if (OptionHelp != null)
-            {
-                _appSettings.Out.WriteLine($"Specify --{OptionHelp.LongName} for a list of available options and commands.");
-            }
-        }
 
         // Show full help
         public void ShowHelp()
@@ -412,57 +168,9 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             _appSettings.Out.WriteLine(helpTextProvider.GetHelpText(this));
         }
 
-        private void ShowVersion()
+        public void ShowVersion()
         {
-            _printVersion();
-        }
-
-        private void HandleUnexpectedArg(CommandLineApplication command, string[] args, int index, string argTypeName)
-        {
-            if (_appSettings.ThrowOnUnexpectedArgument)
-            {
-                command.ShowHint();
-                throw new CommandParsingException(command, $"Unrecognized {argTypeName} '{args[index]}'");
-            }
-
-            // All remaining arguments are stored for further use
-            command._remainingArguments.AddRange(new ArraySegment<string>(args, index, args.Length - index));
-        }
-
-        private class CommandArgumentEnumerator : IEnumerator<CommandArgument>
-        {
-            private readonly IEnumerator<CommandArgument> _enumerator;
-
-            public CommandArgumentEnumerator(IEnumerator<CommandArgument> enumerator)
-            {
-                _enumerator = enumerator;
-            }
-
-            public CommandArgument Current => _enumerator.Current;
-
-            object IEnumerator.Current => Current;
-
-            public void Dispose()
-            {
-                _enumerator.Dispose();
-            }
-
-            public bool MoveNext()
-            {
-                if (Current == null || !Current.MultipleValues)
-                {
-                    return _enumerator.MoveNext();
-                }
-
-                // If current argument allows multiple values, we don't move forward and
-                // all later values will be added to current CommandArgument.Values
-                return true;
-            }
-
-            public void Reset()
-            {
-                _enumerator.Reset();
-            }
+            this.GetRootCommand()._printVersion();
         }
     }
 }

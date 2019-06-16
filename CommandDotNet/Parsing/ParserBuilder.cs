@@ -10,7 +10,7 @@ namespace CommandDotNet.Parsing
         internal Dictionary<string, ArgumentTransformation> ArgumentTransformationsByName
             = new Dictionary<string, ArgumentTransformation>();
 
-        public void AddArgumentTransformation(string name, int order, Func<string[],string[]> transformation)
+        public void AddArgumentTransformation(string name, int order, Func<Tokens,Tokens> transformation)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             if (transformation == null) throw new ArgumentNullException(nameof(transformation));
