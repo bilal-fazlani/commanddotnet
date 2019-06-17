@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.Utils
 
         public static string[] SplitArgs(this string args)
         {
-            return args?.Split(' ') ?? new string[0];
+            return args?.Trim().Split(' ') ?? new string[0];
         }
     }
 }
