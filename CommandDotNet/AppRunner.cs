@@ -179,12 +179,6 @@ namespace CommandDotNet
             return this;
         }
 
-        public AppRunner<T> UseDependencyResolver(IDependencyResolver dependencyResolver)
-        {
-            DependencyResolver = dependencyResolver;
-            return this;
-        }
-
         public AppRunner<T> UseArgumentTransform(string name, int order, Func<Tokens, Tokens> transformation)
         {
             _parserBuilder.AddArgumentTransformation(name, order, transformation);
