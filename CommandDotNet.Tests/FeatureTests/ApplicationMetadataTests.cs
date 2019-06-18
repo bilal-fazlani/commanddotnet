@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 WhenArgs = "-h",
                 Then = { Result = @"app description
 
-Usage: SomeApp [options] [command]
+Usage: SomeApp [command] [options]
 
 Options:
   -h | --help  Show help information
@@ -48,7 +48,7 @@ app extended help" }
                 WhenArgs = "-h",
                 Then = { Result = @"app description
 
-Usage: SomeApp [options] [command]
+Usage: SomeApp [command] [options]
 
 Options:
 
@@ -76,7 +76,7 @@ app extended help" }
                 WhenArgs = "SubApp -h",
                 Then = { Result = @"sub-app description
 
-Usage: SomeApp SubApp [options] [command]
+Usage: SomeApp SubApp [command] [options]
 
 Options:
   -h | --help  Show help information
@@ -99,7 +99,7 @@ sub-app extended help" }
                 WhenArgs = "SubApp -h",
                 Then = { Result = @"sub-app description
 
-Usage: SomeApp SubApp [options] [command]
+Usage: SomeApp SubApp [command] [options]
 
 Options:
 

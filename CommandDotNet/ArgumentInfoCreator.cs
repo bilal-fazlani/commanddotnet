@@ -30,9 +30,9 @@ namespace CommandDotNet
                 .GetParameters()
                 .SelectMany(p =>
                 {
-                    if (isCtor && p.HasAttribute<ArgumentAttribute>())
+                    if (isCtor && p.HasAttribute<OperandAttribute>())
                     {
-                        throw new AppRunnerException("Constructor arguments can not have [Argument] attribute. Please use [Option] attribute");
+                        throw new AppRunnerException("Constructor arguments can not have [Operand] attribute. Please use [Option] attribute");
                     }
                     return GetArgumentsFromParameter(p, argumentMode);
                 })
@@ -54,8 +54,8 @@ namespace CommandDotNet
             }
             
             var argumentInfo = IsOption(parameterInfo, argumentMode)
-                ? (ArgumentInfo) new CommandOptionInfo(parameterInfo, _settings)
-                : new CommandParameterInfo(parameterInfo, _settings);
+                ? (ArgumentInfo) new OptionArgumentInfo(parameterInfo, _settings)
+                : new OperandArgumentInfo(parameterInfo, _settings);
 
             return new[] {argumentInfo};
         }
@@ -68,8 +68,8 @@ namespace CommandDotNet
             }
 
             var argumentInfo = IsOption(propertyInfo, argumentMode)
-                ? (ArgumentInfo) new CommandOptionInfo(propertyInfo, _settings)
-                : new CommandParameterInfo(propertyInfo, _settings);
+                ? (ArgumentInfo) new OptionArgumentInfo(propertyInfo, _settings)
+                : new OperandArgumentInfo(propertyInfo, _settings);
 
             return new[] {argumentInfo};
         }
@@ -80,10 +80,11 @@ namespace CommandDotNet
             
             switch (argumentMode)
             {
-                case ArgumentMode.Parameter:
+                case ArgumentMode.Operand:
                     return attributeProvider.HasAttribute<OptionAttribute>();
                 case ArgumentMode.Option:
-                    return !attributeProvider.HasAttribute<ArgumentAttribute>();
+                    return !attributeProvider.HasAttribute<OperandAttribute>()
+                        && !attributeProvider.HasAttribute<ArgumentAttribute>();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(argumentMode), argumentMode, null);
             }

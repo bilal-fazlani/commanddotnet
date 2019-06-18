@@ -28,7 +28,7 @@ namespace CommandDotNet
                 }
                 else
                 {
-                    parameters.Add(argumentInfo.PropertyOrArgumentName, _valueMachine.GetValue(argumentInfo));
+                    parameters.Add(argumentInfo.PropertyOrParameterName, _valueMachine.GetValue(argumentInfo));
                 }
             }
 
@@ -47,7 +47,7 @@ namespace CommandDotNet
                 //first property of model
                 () => Activator.CreateInstance(argumentInfo.ModelType));
 
-            PropertyInfo propertyInfo = argumentInfo.ModelType.GetProperty(argumentInfo.PropertyOrArgumentName);
+            PropertyInfo propertyInfo = argumentInfo.ModelType.GetProperty(argumentInfo.PropertyOrParameterName);
             propertyInfo.SetValue(instance, _valueMachine.GetValue(argumentInfo));
         }
 

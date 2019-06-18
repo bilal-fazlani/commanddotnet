@@ -25,7 +25,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 WhenArgs = "-h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll [options] [command]
+                    Result = @"Usage: dotnet testhost.dll [command] [options]
 
 Options:
   -h | --help  Show help information
@@ -47,7 +47,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 WhenArgs = "-h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll [options] [command]
+                    Result = @"Usage: dotnet testhost.dll [command] [options]
 
 Options:
 
@@ -73,7 +73,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 WhenArgs = "-h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll [arguments] [options] [command]
+                    Result = @"Usage: dotnet testhost.dll [command] [arguments] [options]
 
 Arguments:
   text  some text
@@ -98,7 +98,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 WhenArgs = "-h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll [arguments] [options] [command]
+                    Result = @"Usage: dotnet testhost.dll [command] [arguments] [options]
 
 Arguments:
 
@@ -173,7 +173,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
 
             [DefaultMethod]
             public void DefaultMethod(
-                [Argument(Description = "some text")]
+                [Operand(Description = "some text")]
                 string text)
             {
                 TestOutputs.Capture(text);

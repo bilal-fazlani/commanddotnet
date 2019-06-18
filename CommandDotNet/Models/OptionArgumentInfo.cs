@@ -9,9 +9,9 @@ using CommandDotNet.MicrosoftCommandLineUtils;
 
 namespace CommandDotNet.Models
 {
-    internal class CommandOptionInfo : ArgumentInfo
+    internal class OptionArgumentInfo : ArgumentInfo
     {
-        public CommandOptionInfo(ParameterInfo attributeProvider, AppSettings settings) : base(attributeProvider, settings)
+        public OptionArgumentInfo(ParameterInfo attributeProvider, AppSettings settings) : base(attributeProvider, settings)
         {
             BooleanMode = GetBooleanMode();
             CommandOptionType = GetCommandOptionType();
@@ -24,7 +24,7 @@ namespace CommandDotNet.Models
             AnnotatedDescription = GetAnnotatedDescription();
         }
         
-        public CommandOptionInfo(PropertyInfo propertyInfo, AppSettings settings) : base(propertyInfo, settings)
+        public OptionArgumentInfo(PropertyInfo propertyInfo, AppSettings settings) : base(propertyInfo, settings)
         {
             BooleanMode = GetBooleanMode();
             CommandOptionType = GetCommandOptionType();
@@ -59,7 +59,7 @@ namespace CommandDotNet.Models
                 return attributeShortName;
     
             //use parameter name as short name 
-            return PropertyOrArgumentName.Length == 1 ? PropertyOrArgumentName.ChangeCase(Settings.Case) : null;
+            return PropertyOrParameterName.Length == 1 ? PropertyOrParameterName.ChangeCase(Settings.Case) : null;
         }
 
         private string GetLongName()
@@ -70,8 +70,8 @@ namespace CommandDotNet.Models
                 return attributeLongName;
 
             //short name is not present, 
-            if(string.IsNullOrEmpty(ShortName) && PropertyOrArgumentName.Length > 1)
-                return PropertyOrArgumentName.ChangeCase(Settings.Case); //return parameter name as long name
+            if(string.IsNullOrEmpty(ShortName) && PropertyOrParameterName.Length > 1)
+                return PropertyOrParameterName.ChangeCase(Settings.Case); //return parameter name as long name
     
             //there is no long name
             return null;
@@ -88,7 +88,7 @@ namespace CommandDotNet.Models
                 ? attribute.BooleanMode
                 : throw new AppRunnerException(
                     $"BooleanMode property is set to `{attribute.BooleanMode}` for a non boolean parameter type. " +
-                    $"Property name: {PropertyOrArgumentName} " +
+                    $"Property name: {PropertyOrParameterName} " +
                     $"Type : {Type.Name}");
         }
         
@@ -146,7 +146,7 @@ namespace CommandDotNet.Models
         
         public override string ToString()
         {
-            return $"{PropertyOrArgumentName} | '{ValueInfo?.Value ?? "empty"}' | {TypeDisplayName} | {Template}";
+            return $"{PropertyOrParameterName} | '{ValueInfo?.Value ?? "empty"}' | {TypeDisplayName} | {Template}";
         }
     }
 }

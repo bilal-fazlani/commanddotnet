@@ -36,7 +36,7 @@ namespace CommandDotNet.Parsing
                     new OptionTokenType(value, isLongOption, isShortOption, isClubbed, hasValue, assignmentIndex));
             }
 
-            return new Token(arg, arg, TokenType.Argument);
+            return new Token(arg, arg, TokenType.Operand);
         }
 
         public static Tokens ExpandClubbedOptions(this Tokens tokens)
@@ -68,7 +68,7 @@ namespace CommandDotNet.Parsing
             {
                 if (foundSeparator)
                 {
-                    yield return new Token(arg, arg, TokenType.Argument);
+                    yield return new Token(arg, arg, TokenType.Operand);
                 }
 
                 var token = Tokenize(arg, includeDirectives);

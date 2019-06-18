@@ -159,7 +159,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             public TestOutputs TestOutputs { get; set; }
             public void Do(Model model,
                 [Option] int popt_01, [Option] int popt_02, [Option] int popt_03, [Option] int popt_04, [Option] int popt_05, [Option] int popt_06, [Option] int popt_07, [Option] int popt_08, [Option] int popt_09, [Option] int popt_10, [Option] int popt_11, [Option] int popt_12, [Option] int popt_13, [Option] int popt_14, [Option] int popt_15, [Option] int popt_16, [Option] int popt_17, [Option] int popt_18, [Option] int popt_19, [Option] int popt_20, [Option] int popt_21, [Option] int popt_22, [Option] int popt_23, [Option] int popt_24, [Option] int popt_25, [Option] int popt_26, [Option] int popt_27, [Option] int popt_28, [Option] int popt_29, [Option] int popt_30, [Option] int popt_31, [Option] int popt_32, [Option] int popt_33, [Option] int popt_34, [Option] int popt_35, [Option] int popt_36, [Option] int popt_37, [Option] int popt_38, [Option] int popt_39, [Option] int popt_40, [Option] int popt_41, [Option] int popt_42, [Option] int popt_43, [Option] int popt_44, [Option] int popt_45, [Option] int popt_46, [Option] int popt_47, [Option] int popt_48, [Option] int popt_49, [Option] int popt_50,
-[Argument] int parg_01, [Argument] int parg_02, [Argument] int parg_03, [Argument] int parg_04, [Argument] int parg_05, [Argument] int parg_06, [Argument] int parg_07, [Argument] int parg_08, [Argument] int parg_09, [Argument] int parg_10, [Argument] int parg_11, [Argument] int parg_12, [Argument] int parg_13, [Argument] int parg_14, [Argument] int parg_15, [Argument] int parg_16, [Argument] int parg_17, [Argument] int parg_18, [Argument] int parg_19, [Argument] int parg_20, [Argument] int parg_21, [Argument] int parg_22, [Argument] int parg_23, [Argument] int parg_24, [Argument] int parg_25, [Argument] int parg_26, [Argument] int parg_27, [Argument] int parg_28, [Argument] int parg_29, [Argument] int parg_30, [Argument] int parg_31, [Argument] int parg_32, [Argument] int parg_33, [Argument] int parg_34, [Argument] int parg_35, [Argument] int parg_36, [Argument] int parg_37, [Argument] int parg_38, [Argument] int parg_39, [Argument] int parg_40, [Argument] int parg_41, [Argument] int parg_42, [Argument] int parg_43, [Argument] int parg_44, [Argument] int parg_45, [Argument] int parg_46, [Argument] int parg_47, [Argument] int parg_48, [Argument] int parg_49, [Argument] int parg_50)
+[Operand] int parg_01, [Operand] int parg_02, [Operand] int parg_03, [Operand] int parg_04, [Operand] int parg_05, [Operand] int parg_06, [Operand] int parg_07, [Operand] int parg_08, [Operand] int parg_09, [Operand] int parg_10, [Operand] int parg_11, [Operand] int parg_12, [Operand] int parg_13, [Operand] int parg_14, [Operand] int parg_15, [Operand] int parg_16, [Operand] int parg_17, [Operand] int parg_18, [Operand] int parg_19, [Operand] int parg_20, [Operand] int parg_21, [Operand] int parg_22, [Operand] int parg_23, [Operand] int parg_24, [Operand] int parg_25, [Operand] int parg_26, [Operand] int parg_27, [Operand] int parg_28, [Operand] int parg_29, [Operand] int parg_30, [Operand] int parg_31, [Operand] int parg_32, [Operand] int parg_33, [Operand] int parg_34, [Operand] int parg_35, [Operand] int parg_36, [Operand] int parg_37, [Operand] int parg_38, [Operand] int parg_39, [Operand] int parg_40, [Operand] int parg_41, [Operand] int parg_42, [Operand] int parg_43, [Operand] int parg_44, [Operand] int parg_45, [Operand] int parg_46, [Operand] int parg_47, [Operand] int parg_48, [Operand] int parg_49, [Operand] int parg_50)
             {
                 var paramsModel = new Model
                 {
@@ -376,105 +376,105 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             public int mopt_49 { get; set; }
             [Option]
             public int mopt_50 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_01 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_02 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_03 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_04 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_05 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_06 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_07 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_08 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_09 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_10 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_11 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_12 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_13 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_14 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_15 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_16 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_17 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_18 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_19 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_20 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_21 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_22 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_23 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_24 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_25 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_26 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_27 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_28 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_29 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_30 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_31 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_32 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_33 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_34 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_35 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_36 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_37 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_38 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_39 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_40 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_41 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_42 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_43 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_44 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_45 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_46 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_47 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_48 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_49 { get; set; }
-            [Argument]
+            [Operand]
             public int marg_50 { get; set; }
         }
         
@@ -516,7 +516,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
             // generate parameters
             var paramOptions = range.Select(i => $"[Option] int {i.ParamOption}");
-            var paramArgs = range.Select(i => $"[Argument] int {i.ParamArg}");
+            var paramArgs = range.Select(i => $"[Operand] int {i.ParamArg}");
             var methodParams = $"\n                {paramOptions.ToCsv()},\n                {paramArgs.ToCsv()}";
 
             // generate paramsModel
@@ -534,7 +534,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             _output.WriteLine("\n  --- generate model --- \n");
 
             var modelOptions = range.Select(i => $"[Option]\npublic int {i.ModelOption} {{ get; set; }}");
-            var modelArgs = range.Select(i => $"[Argument]\npublic int {i.ModelArg} {{ get; set; }}");
+            var modelArgs = range.Select(i => $"[Operand]\npublic int {i.ModelArg} {{ get; set; }}");
             _output.WriteLine("public class Model : IArgumentModel\n{");
             _output.WriteLine(modelOptions.Union(modelArgs).ToCsv(Environment.NewLine));
             _output.WriteLine("}");

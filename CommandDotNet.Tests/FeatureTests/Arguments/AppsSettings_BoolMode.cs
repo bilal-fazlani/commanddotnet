@@ -33,8 +33,8 @@ Arguments:
   operand
 
 Options:
-  -h | --help  Show help information
-  --option"
+  --option
+  -h | --help  Show help information"
                     }
                 },
                 new Given<App>("Explicit - Detailed Help - does include allowed values")
@@ -53,11 +53,11 @@ Arguments:
 
 Options:
 
-  -h | --help
-  Show help information
-
   --option       <BOOLEAN>
-  Allowed values: true, false"
+  Allowed values: true, false
+
+  -h | --help
+  Show help information"
                     }
                 },
                 new Given<App>("Implicit - Basic Help - does not include allowed values")
@@ -72,8 +72,8 @@ Arguments:
   operand
 
 Options:
-  -h | --help  Show help information
-  --option"
+  --option
+  -h | --help  Show help information"
                     }
                 },
                 new Given<App>("Implicit - Detailed Help - does not include allowed values for option")
@@ -92,10 +92,10 @@ Arguments:
 
 Options:
 
-  -h | --help
-  Show help information
+  --option
 
-  --option"
+  -h | --help
+  Show help information"
                     }
                 },
                 new Given<App>("Implicit - exec - option is false if not specified")
@@ -147,14 +147,14 @@ Options:
 
             public void Do(
                 [Option] bool option, 
-                [Argument] bool operand)
+                [Operand] bool operand)
             {
                 TestOutputs.Capture(new Result(option, operand));
             }
 
             public void Do2(
                 [Option] bool option,
-                [Argument] int number)
+                [Operand] int number)
             {
                 TestOutputs.Capture(new Result(option, number));
             }

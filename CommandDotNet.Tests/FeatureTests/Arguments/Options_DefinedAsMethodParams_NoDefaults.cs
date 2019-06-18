@@ -31,14 +31,14 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         Result = @"Usage: dotnet testhost.dll ArgsNoDefault [options]
 
 Options:
-  -h | --help      Show help information
   --boolArg
   --stringArg
   --structArg
   --structNArg
   --enumArg
   --objectArg
-  --stringListArg"
+  --stringListArg
+  -h | --help      Show help information"
                     }
                 },
                 new Given<OptionsNoDefaults>("SampleTypes - Detailed Help")
@@ -50,9 +50,6 @@ Options:
                         Result = @"Usage: dotnet testhost.dll ArgsNoDefault [options]
 
 Options:
-
-  -h | --help
-  Show help information
 
   --boolArg
 
@@ -67,7 +64,10 @@ Options:
 
   --objectArg                   <URI>
 
-  --stringListArg (Multiple)    <TEXT>"
+  --stringListArg (Multiple)    <TEXT>
+
+  -h | --help
+  Show help information"
                     }
                 },
                 new Given<OptionsNoDefaults>("StructList - Basic Help")
@@ -79,8 +79,8 @@ Options:
                         Result = @"Usage: dotnet testhost.dll StructListNoDefault [options]
 
 Options:
-  -h | --help      Show help information
-  --structListArg"
+  --structListArg
+  -h | --help      Show help information"
                     }
                 },
                 new Given<OptionsNoDefaults>("StructList - Detailed Help")
@@ -93,10 +93,10 @@ Options:
 
 Options:
 
-  -h | --help
-  Show help information
+  --structListArg (Multiple)    <NUMBER>
 
-  --structListArg (Multiple)    <NUMBER>"
+  -h | --help
+  Show help information"
                     }
                 },
                 new Given<OptionsNoDefaults>("EnumList - Basic Help")
@@ -108,8 +108,8 @@ Options:
                         Result = @"Usage: dotnet testhost.dll EnumListNoDefault [options]
 
 Options:
-  -h | --help    Show help information
-  --enumListArg"
+  --enumListArg
+  -h | --help    Show help information"
                     }
                 },
                 new Given<OptionsNoDefaults>("EnumList - Detailed Help")
@@ -122,11 +122,11 @@ Options:
 
 Options:
 
-  -h | --help
-  Show help information
-
   --enumListArg (Multiple)    <DAYOFWEEK>
-  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
+  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+
+  -h | --help
+  Show help information"
                     }
                 },
                 new Given<OptionsNoDefaults>("ObjectList - Basic Help")
@@ -138,8 +138,8 @@ Options:
                         Result = @"Usage: dotnet testhost.dll ObjectListNoDefault [options]
 
 Options:
-  -h | --help      Show help information
-  --objectListArg"
+  --objectListArg
+  -h | --help      Show help information"
                     }
                 },
                 new Given<OptionsNoDefaults>("ObjectList - Detailed Help")
@@ -152,10 +152,10 @@ Options:
 
 Options:
 
-  -h | --help
-  Show help information
+  --objectListArg (Multiple)    <URI>
 
-  --objectListArg (Multiple)    <URI>"
+  -h | --help
+  Show help information"
                     }
                 },
                 new Given<OptionsNoDefaults>("SampleTypes - Exec - named")

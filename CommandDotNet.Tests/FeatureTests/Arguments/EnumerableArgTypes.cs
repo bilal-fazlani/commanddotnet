@@ -30,8 +30,8 @@ Arguments:
   Args
 
 Options:
-  -h | --help  Show help information
-  --Options" }
+  --Options
+  -h | --help  Show help information" }
             });
         }
 
@@ -51,10 +51,10 @@ Arguments:
 
 Options:
 
-  -h | --help
-  Show help information
+  --Options (Multiple)    <TEXT>
 
-  --Options (Multiple)    <TEXT>" }
+  -h | --help
+  Show help information" }
             });
         }
 
@@ -71,8 +71,8 @@ Arguments:
   args
 
 Options:
-  -h | --help  Show help information
-  --options" }
+  --options
+  -h | --help  Show help information" }
             });
         }
 
@@ -92,10 +92,10 @@ Arguments:
 
 Options:
 
-  -h | --help
-  Show help information
+  --options (Multiple)    <TEXT>
 
-  --options (Multiple)    <TEXT>" }
+  -h | --help
+  Show help information" }
             });
         }
 

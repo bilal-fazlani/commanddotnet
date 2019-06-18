@@ -19,14 +19,14 @@ namespace CommandDotNet.Tests.FeatureTests
                     WhenArgs = "-h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll [options] [command]
+                        Result = @"Usage: dotnet testhost.dll [command] [options]
 
 Options:
 
+  --rootOpt      <TEXT>
+
   -h | --help
   Show help information
-
-  --rootOpt      <TEXT>
 
 
 Commands:
@@ -41,14 +41,14 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "Leaf -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Leaf [options] [command]
+                        Result = @"Usage: dotnet testhost.dll Leaf [command] [options]
 
 Options:
 
+  --LeafOpt      <TEXT>
+
   -h | --help
   Show help information
-
-  --LeafOpt      <TEXT>
 
 
 Commands:
@@ -131,7 +131,7 @@ Use ""dotnet testhost.dll Leaf [command] --help"" for more information about a c
         {
             [Option]
             public string DoOpt { get; set; }
-            [Argument]
+            [Operand]
             public string DoArg { get; set; }
         }
     }

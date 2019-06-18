@@ -29,7 +29,6 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
 Options:
-  -h | --help      Show help information
   --BoolArg
   --StringArg
   --StructArg
@@ -39,7 +38,8 @@ Options:
   --StringListArg
   --StructListArg
   --EnumListArg
-  --ObjectListArg" }
+  --ObjectListArg
+  -h | --help      Show help information" }
             });
         }
 
@@ -53,9 +53,6 @@ Options:
                 Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
 Options:
-
-  -h | --help
-  Show help information
 
   --BoolArg                                    [True]
 
@@ -77,7 +74,10 @@ Options:
   --EnumListArg (Multiple)      <DAYOFWEEK>    [Monday,Tuesday]
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
-  --ObjectListArg (Multiple)    <URI>          [http://github.com/,http://google.com/]" }
+  --ObjectListArg (Multiple)    <URI>          [http://github.com/,http://google.com/]
+
+  -h | --help
+  Show help information" }
             });
         }
 

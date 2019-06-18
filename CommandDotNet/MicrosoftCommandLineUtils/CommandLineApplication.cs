@@ -20,16 +20,13 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         private Func<int> _invoke;
         private CommandLineApplication _parent;
 
-        // Indicates whether the parser should throw an exception when it runs into an unexpected argument.
-        // If this field is set to false, the parser will stop parsing when it sees an unexpected argument, and all
-        // remaining arguments, including the first unexpected argument, will be stored in RemainingArguments property.
         public CommandLineApplication(AppSettings appSettings)
         {
             _appSettings = appSettings;
             _invoke = () => 0;
 
             Options = new HashSet<CommandOption>();
-            Arguments = new HashSet<CommandArgument>();
+            Operands = new HashSet<CommandOperand>();
             Commands = new List<ICommand>();
         }
 
@@ -41,7 +38,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public CommandOption OptionHelp { get; private set; }
         public CommandOption OptionVersion { get; private set; }
         public ICustomAttributeProvider CustomAttributeProvider { get; set; }
-        public HashSet<CommandArgument> Arguments { get; }
+        public HashSet<CommandOperand> Operands { get; }
         public ICommand Parent => _parent;
         public List<ICommand> Commands { get; }
 
@@ -86,21 +83,21 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             return option;
         }
 
-        public CommandArgument Argument(
+        public CommandOperand Operand(
             string name, string description, 
-            Action<CommandArgument> configuration,
+            Action<CommandOperand> configuration,
             string typeDisplayName, object defaultValue, bool multiple,
             List<string> allowedValues)
         {
-            var lastArg = Arguments.LastOrDefault();
-            if (lastArg != null && lastArg.MultipleValues)
+            var lastOperand = Operands.LastOrDefault();
+            if (lastOperand != null && lastOperand.MultipleValues)
             {
                 var message =
-                    $"The last argument '{lastArg.Name}' accepts multiple values. No more argument can be added.";
+                    $"The last operand '{lastOperand.Name}' accepts multiple values. No more operands can be added.";
                 throw new AppRunnerException(message);
             }
 
-            var argument = new CommandArgument
+            var operand = new CommandOperand
             {
                 Name = name, 
                 Description = description, 
@@ -109,11 +106,11 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 DefaultValue = defaultValue,
                 AllowedValues = allowedValues
             };
-            bool argumentAdded = Arguments.Add(argument);
-            if(!argumentAdded)
-                throw new AppRunnerException($"Argument with name '{argument.Name}' already added");
-            configuration(argument);
-            return argument;
+            bool operandAdded = Operands.Add(operand);
+            if(!operandAdded)
+                throw new AppRunnerException($"Operand with name '{operand.Name}' already added");
+            configuration(operand);
+            return operand;
         }
 
         public void OnExecute(Func<Task<int>> invoke)

@@ -3,6 +3,7 @@ using System.Linq;
 using CommandDotNet.Attributes;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.Utils;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests
@@ -25,7 +26,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     WhenArgs = "-h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll [options] [command]
+                        Result = @"Usage: dotnet testhost.dll [command] [options]
 
 Options:
 
@@ -46,7 +47,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "Second -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Second [options] [command]
+                        Result = @"Usage: dotnet testhost.dll Second [command] [options]
 
 Options:
 
@@ -67,7 +68,7 @@ Use ""dotnet testhost.dll Second [command] --help"" for more information about a
                     WhenArgs = "Second Third -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Second Third [options] [command]
+                        Result = @"Usage: dotnet testhost.dll Second Third [command] [options]
 
 Options:
 
@@ -178,7 +179,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
         {
             [Option]
             public string Opt1 { get; set; }
-            [Argument]
+            [Operand]
             public string Arg1 { get; set; }
         }
 
@@ -186,7 +187,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
         {
             [Option]
             public string Opt2 { get; set; }
-            [Argument]
+            [Operand]
             public string Arg2 { get; set; }
         }
 
@@ -194,7 +195,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
         {
             [Option]
             public string Opt3 { get; set; }
-            [Argument]
+            [Operand]
             public string Arg3 { get; set; }
         }
     }

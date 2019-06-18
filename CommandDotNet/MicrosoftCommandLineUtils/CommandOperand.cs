@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace CommandDotNet.MicrosoftCommandLineUtils
 {
-    public class CommandArgument : IParameter
+    public class CommandOperand : IArgument
     {
-        public CommandArgument()
+        public CommandOperand()
         {
             Values = new List<string>();
         }

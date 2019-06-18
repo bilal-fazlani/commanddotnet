@@ -4,7 +4,7 @@
     {
         Directive,
         Option,
-        Argument,
+        Operand,
         Separator
     }
 }

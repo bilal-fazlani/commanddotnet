@@ -6,34 +6,34 @@ namespace CommandDotNet.Models
 {
     internal class ValueInfo
     {
-        private readonly CommandArgument _commandArgument;
+        private readonly CommandOperand _commandOperand;
         private readonly CommandOption _commandOption;
 
-        private readonly bool _isArgument;
+        private readonly bool _isOperand;
 
-        public ValueInfo(IParameter parameter)
+        public ValueInfo(IArgument argument)
         {
-            if (parameter is CommandArgument argument)
+            if (argument is CommandOperand operand)
             {
-                _isArgument = true;
-                _commandArgument = argument;
+                _isOperand = true;
+                _commandOperand = operand;
             }
             else
             {
-                _commandOption = (CommandOption) parameter;
+                _commandOption = (CommandOption) argument;
             }
         }
 
-        internal bool HasValue => _isArgument ? _commandArgument.Values.Any() : _commandOption.HasValue();
+        internal bool HasValue => _isOperand ? _commandOperand.Values.Any() : _commandOption.HasValue();
 
         internal List<string> Values
         {
-            get => _isArgument ? _commandArgument?.Values : _commandOption?.Values;
+            get => _isOperand ? _commandOperand?.Values : _commandOption?.Values;
             set
             {
-                if (_isArgument)
+                if (_isOperand)
                 {
-                    _commandArgument.Values = value;
+                    _commandOperand.Values = value;
                 }
                 else
                 {
@@ -42,11 +42,11 @@ namespace CommandDotNet.Models
             }
         }
 
-        internal string Value => _isArgument ? _commandArgument?.Value : _commandOption?.Value();
+        internal string Value => _isOperand ? _commandOperand?.Value : _commandOption?.Value();
 
         public override string ToString()
         {
-            return string.Join(", ", _isArgument ? _commandArgument?.Values : _commandOption?.Values);
+            return string.Join(", ", _isOperand ? _commandOperand?.Values : _commandOption?.Values);
         }
     }
 }

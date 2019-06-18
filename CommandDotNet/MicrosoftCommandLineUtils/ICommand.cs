@@ -14,7 +14,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         [Obsolete("This was used solely for help.  The functionality has been moved to help providers.")]
         string GetFullCommandName();
         HashSet<CommandOption> Options { get; }
-        HashSet<CommandArgument> Arguments { get; }
+        HashSet<CommandOperand> Operands { get; }
         ICommand Parent { get; }
         List<ICommand> Commands { get; }
         CommandOption OptionHelp { get; }
