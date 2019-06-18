@@ -152,7 +152,8 @@ namespace CommandDotNet.Parsing
             {
                 if (_appSettings.ThrowOnUnexpectedArgument)
                 {
-                    throw new CommandParsingException(command, $"Unrecognized command or operand '{token.RawValue}'");
+                    // use the term "argument" for messages displayed to users
+                    throw new CommandParsingException(command, $"Unrecognized command or argument '{token.RawValue}'");
                 }
                 return ParseOperandResult.UnexpectedArgument;
             }
