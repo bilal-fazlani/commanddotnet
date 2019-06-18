@@ -23,7 +23,7 @@ namespace CommandDotNet.Parsing
         {
             CommandLineApplication currentCommand = app;
             CommandOption currentOption = null;
-            IEnumerator<CommandArgument> arguments = new CommandArgumentEnumerator(app.Arguments);
+            IEnumerator<CommandOperand> arguments = new CommandOperandEnumerator(app.Operands);
 
             var remainingArguments = new List<Token>();
 
@@ -67,20 +67,20 @@ namespace CommandDotNet.Parsing
                                 throw new ArgumentOutOfRangeException(optionResult.ToString());
                         }
                         break;
-                    case TokenType.Argument:
-                        var argumentResult = ParseArgument(token, ref currentCommand, ref currentOption, arguments);
-                        switch (argumentResult)
+                    case TokenType.Operand:
+                        var operandResult = ParseOperand(token, ref currentCommand, ref currentOption, arguments);
+                        switch (operandResult)
                         {
-                            case ParseArgumentResult.Succeeded:
+                            case ParseOperandResult.Succeeded:
                                 break;
-                            case ParseArgumentResult.UnexpectedArgument:
+                            case ParseOperandResult.UnexpectedArgument:
                                 ignoreRemainingArguments = true;
                                 break;
-                            case ParseArgumentResult.NewSubCommand:
-                                arguments = new CommandArgumentEnumerator(currentCommand.Arguments);
+                            case ParseOperandResult.NewSubCommand:
+                                arguments = new CommandOperandEnumerator(currentCommand.Operands);
                                 break;
                             default:
-                                throw new ArgumentOutOfRangeException(argumentResult.ToString());
+                                throw new ArgumentOutOfRangeException(operandResult.ToString());
                         }
                         break;
                     case TokenType.Separator:
@@ -101,7 +101,7 @@ namespace CommandDotNet.Parsing
             return new ParseResult(currentCommand, args, tokens, unparsedTokens: new Tokens(remainingArguments));
         }
 
-        private enum ParseArgumentResult
+        private enum ParseOperandResult
         {
             Succeeded,
             UnexpectedArgument,
@@ -116,18 +116,18 @@ namespace CommandDotNet.Parsing
             ShowVersion,
         }
 
-        private ParseArgumentResult ParseArgument(
+        private ParseOperandResult ParseOperand(
             Token token, 
             ref CommandLineApplication command,
             ref CommandOption option, 
-            IEnumerator<CommandArgument> arguments)
+            IEnumerator<CommandOperand> operands)
         {
             if (option != null)
             {
                 if (option.TryParse(token.Value))
                 {
                     option = null;
-                    return ParseArgumentResult.Succeeded;
+                    return ParseOperandResult.Succeeded;
                 }
 
                 throw new CommandParsingException(command, $"Unexpected value '{token.Value}' for option '{option.LongName}'");
@@ -141,23 +141,23 @@ namespace CommandDotNet.Parsing
             {
                 command = subCommand;
                 option = null;
-                return ParseArgumentResult.NewSubCommand;
+                return ParseOperandResult.NewSubCommand;
             }
 
-            if (arguments.MoveNext())
+            if (operands.MoveNext())
             {
-                arguments.Current.Values.Add(token.Value);
+                operands.Current.Values.Add(token.Value);
             }
             else
             {
                 if (_appSettings.ThrowOnUnexpectedArgument)
                 {
-                    throw new CommandParsingException(command, $"Unrecognized command or argument '{token.RawValue}'");
+                    throw new CommandParsingException(command, $"Unrecognized command or operand '{token.RawValue}'");
                 }
-                return ParseArgumentResult.UnexpectedArgument;
+                return ParseOperandResult.UnexpectedArgument;
             }
 
-            return ParseArgumentResult.Succeeded;
+            return ParseOperandResult.Succeeded;
         }
 
         private ParseOptionResult ParseOption(Token token, CommandLineApplication command, out CommandOption option)
@@ -270,16 +270,16 @@ namespace CommandDotNet.Parsing
             return args;
         }
 
-        private class CommandArgumentEnumerator : IEnumerator<CommandArgument>
+        private class CommandOperandEnumerator : IEnumerator<CommandOperand>
         {
-            private readonly IEnumerator<CommandArgument> _enumerator;
+            private readonly IEnumerator<CommandOperand> _enumerator;
 
-            public CommandArgumentEnumerator(IEnumerable<CommandArgument> enumerable)
+            public CommandOperandEnumerator(IEnumerable<CommandOperand> enumerable)
             {
                 _enumerator = enumerable.GetEnumerator();
             }
 
-            public CommandArgument Current => _enumerator.Current;
+            public CommandOperand Current => _enumerator.Current;
 
             object IEnumerator.Current => Current;
 
@@ -295,8 +295,8 @@ namespace CommandDotNet.Parsing
                     return _enumerator.MoveNext();
                 }
 
-                // If current argument allows multiple values, we don't move forward and
-                // all later values will be added to current CommandArgument.Values
+                // If current operand allows multiple values, we don't move forward and
+                // all later values will be added to current CommandOperand.Values
                 return true;
             }
 

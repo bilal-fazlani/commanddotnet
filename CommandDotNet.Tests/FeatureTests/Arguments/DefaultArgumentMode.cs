@@ -7,7 +7,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class DefaultArgumentMode : ScenarioTestBase<DefaultArgumentMode>
     {
-        private static readonly AppSettings OperandMode = TestAppSettings.BasicHelp.Clone(a => a.MethodArgumentMode = ArgumentMode.Parameter);
+        private static readonly AppSettings OperandMode = TestAppSettings.BasicHelp.Clone(a => a.MethodArgumentMode = ArgumentMode.Operand);
         private static readonly AppSettings OptionMode = TestAppSettings.BasicHelp.Clone(a => a.MethodArgumentMode = ArgumentMode.Option);
 
         public DefaultArgumentMode(ITestOutputHelper output) : base(output)
@@ -24,30 +24,30 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     WhenArgs = "-h",
                     Then =
                     {
-                        ResultsNotContainsTexts = { "Arguments:" },
+                        ResultsNotContainsTexts = { "Arguments" },
                         ResultsContainsTexts =
                         {
                             @"Options:
-  -h | --help    Show help information
   --ctorDefault  
-  --ctorOption"
+  --ctorOption
+  -h | --help    Show help information"
                         }
                     }
                 },
                 new Given<App>(
-                    $"Ctor - Mode={ArgumentMode.Parameter} - non-attributed params default to {ArgumentMode.Option}")
+                    $"Ctor - Mode={ArgumentMode.Operand} - non-attributed params default to {ArgumentMode.Option}")
                 {
                     And = {AppSettings = OperandMode},
                     WhenArgs = "-h",
                     Then =
                     {
-                        ResultsNotContainsTexts = { "Arguments:" },
+                        ResultsNotContainsTexts = { "Arguments" },
                         ResultsContainsTexts =
                         {
                             @"Options:
-  -h | --help    Show help information
   --ctorDefault  
-  --ctorOption"
+  --ctorOption
+  -h | --help    Show help information"
                         }
                     }
                 },
@@ -63,14 +63,14 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                             @"Arguments:
   operand",
                             @"Options:
-  -h | --help  Show help information
   --default
-  --option"
+  --option
+  -h | --help  Show help information"
                         }
                     }
                 },
                 new Given<App>(
-                    $"Method - Mode={ArgumentMode.Parameter} - Method - non-attributed params default to {ArgumentMode.Parameter}")
+                    $"Method - Mode={ArgumentMode.Operand} - Method - non-attributed params default to {ArgumentMode.Operand}")
                 {
                     And = {AppSettings = OperandMode},
                     WhenArgs = "Method -h",
@@ -82,8 +82,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
   default
   operand",
                             @"Options:
-  -h | --help  Show help information
-  --option"
+  --option
+  -h | --help  Show help information"
                         }
                     }
                 },
@@ -99,14 +99,14 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                             @"Arguments:
   Operand",
                             @"Options:
-  -h | --help  Show help information
   --Default
-  --Option"
+  --Option
+  -h | --help  Show help information"
                         }
                     }
                 },
                 new Given<App>(
-                    $"Model - Mode={ArgumentMode.Parameter} - non-attributed properties default to {ArgumentMode.Parameter}")
+                    $"Model - Mode={ArgumentMode.Operand} - non-attributed properties default to {ArgumentMode.Operand}")
                 {
                     And = {AppSettings = OperandMode},
                     WhenArgs = "Model -h",
@@ -118,8 +118,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
   Default
   Operand",
                             @"Options:
-  -h | --help  Show help information
-  --Option"
+  --Option
+  -h | --help  Show help information"
                         }
                     }
                 },
@@ -136,7 +136,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             {
             }
 
-            public void Method(string @default, [Argument] string operand, [Option] string option)
+            public void Method(string @default, [Operand] string operand, [Option] string option)
             {
             }
         }
@@ -144,7 +144,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public class Model : IArgumentModel
         {
             public string Default { get; set; }
-            [Argument]
+            [Operand]
             public string Operand { get; set; }
             [Option]
             public string Option { get; set; }

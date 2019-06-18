@@ -31,11 +31,11 @@ Arguments:
   paramArgList
 
 Options:
-  -h | --help        Show help information
   --ModelOption
   --ModelOptionList
   --paramOption
-  --paramOptionList" }
+  --paramOptionList
+  -h | --help        Show help information" }
                 },
                 new Given<App>("Detailed Help - includes model and param defined args")
                 {
@@ -54,16 +54,16 @@ Arguments:
 
 Options:
 
-  -h | --help
-  Show help information
-
   --ModelOption                   <TEXT>
 
   --ModelOptionList (Multiple)    <TEXT>
 
   --paramOption                   <TEXT>
 
-  --paramOptionList (Multiple)    <TEXT>" }
+  --paramOptionList (Multiple)    <TEXT>
+
+  -h | --help
+  Show help information" }
                 },
                 new Given<App>("exec - maps to all args")
                 {
@@ -123,10 +123,10 @@ Options:
 
             public void Do(
                 Model model,
-                [Argument] string paramArg,
+                [Operand] string paramArg,
                 [Option] string paramOption,
                 [Option] List<string> paramOptionList,
-                [Argument] List<string> paramArgList)
+                [Operand] List<string> paramArgList)
             {
                 TestOutputs.Capture(model);
                 TestOutputs.Capture(new Params(paramArg, paramOption, paramOptionList, paramArgList));
@@ -135,7 +135,7 @@ Options:
 
         public class Model : IArgumentModel
         {
-            [Argument]
+            [Operand]
             public string ModelArg { get; set; }
 
             [Option]

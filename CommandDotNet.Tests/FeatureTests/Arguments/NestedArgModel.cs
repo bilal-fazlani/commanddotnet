@@ -29,9 +29,9 @@ Arguments:
   Operand2
 
 Options:
-  -h | --help  Show help information
   --Option1
-  --Option2" }
+  --Option2
+  -h | --help  Show help information" }
                 },
                 new Given<NestedModelApp>("Nested Model - Detailed Help - includes nested operands and options")
                 {
@@ -48,12 +48,12 @@ Arguments:
 
 Options:
 
-  -h | --help
-  Show help information
-
   --Option1      <TEXT>
 
-  --Option2      <TEXT>" }
+  --Option2      <TEXT>
+
+  -h | --help
+  Show help information" }
                 },
                 new Given<NestedModelApp>("Nested Model - exec - maps nested operands and options")
                 {
@@ -89,7 +89,7 @@ Options:
             [Option]
             public string Option1 { get; set; }
 
-            [Argument]
+            [Operand]
             public string Operand1 { get; set; }
 
             public NestedModel NestedModel { get; set; }
@@ -100,7 +100,7 @@ Options:
             [Option]
             public string Option2 { get; set; }
 
-            [Argument]
+            [Operand]
             public string Operand2 { get; set; }
         }
     }

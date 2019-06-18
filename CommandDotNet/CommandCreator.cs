@@ -73,11 +73,11 @@ namespace CommandDotNet
                 argumentValues.Add(argument);
                 switch (argument)
                 {
-                    case CommandOptionInfo option:
+                    case OptionArgumentInfo option:
                         SetValueForOption(option, app);
                         break;
-                    case CommandParameterInfo parameter:
-                        SetValueForParameter(parameter, app);
+                    case OperandArgumentInfo operand:
+                        SetValueForParameter(operand, app);
                         break;
                 }
             }
@@ -85,19 +85,19 @@ namespace CommandDotNet
             app.OnExecute(async () => await _commandRunner.RunCommand(commandInfo, argumentValues));
         }
 
-        private static void SetValueForParameter(CommandParameterInfo parameter, CommandLineApplication command)
+        private static void SetValueForParameter(OperandArgumentInfo operandArgument, CommandLineApplication command)
         {
-            parameter.SetValue(command.Argument(
-                parameter.Name,
-                parameter.AnnotatedDescription,
+            operandArgument.SetValue(command.Operand(
+                operandArgument.Name,
+                operandArgument.AnnotatedDescription,
                 _=>{},
-                parameter.TypeDisplayName,
-                parameter.DefaultValue,
-                parameter.IsMultipleType,
-                parameter.AllowedValues));
+                operandArgument.TypeDisplayName,
+                operandArgument.DefaultValue,
+                operandArgument.IsMultipleType,
+                operandArgument.AllowedValues));
         }
 
-        private static void SetValueForOption(CommandOptionInfo option, CommandLineApplication command)
+        private static void SetValueForOption(OptionArgumentInfo option, CommandLineApplication command)
         {
             option.SetValue(command.Option(option.Template,
                 option.AnnotatedDescription,
@@ -122,7 +122,7 @@ namespace CommandDotNet
 
             foreach (ArgumentInfo argumentInfo in argumentInfos)
             {
-                var optionInfo = (CommandOptionInfo) argumentInfo;
+                var optionInfo = (OptionArgumentInfo) argumentInfo;
                 optionInfo.SetValue(_app.Option(
                     optionInfo.Template,
                     optionInfo.AnnotatedDescription,

@@ -24,11 +24,11 @@ namespace CommandDotNet.HelpGeneration
             
             var usageBuilder = BuildUsage(app);
 
-            var argumentsBuilder = BuildParameters(app, usageBuilder);
+            var commandsBuilder = BuildCommands(app, usageBuilder);
+            
+            var operandsBuilder = BuildOperands(app, usageBuilder);
 
             var optionsBuilder = BuildOptions(app, usageBuilder);
-
-            var commandsBuilder = BuildCommands(app, usageBuilder);
 
             var extendedHelpTextBuild = BuildExtendedHelpText(app);
             
@@ -41,7 +41,7 @@ namespace CommandDotNet.HelpGeneration
 
             return titleBuilder
                 + usageBuilder.ToString()
-                + argumentsBuilder
+                + operandsBuilder
                 + optionsBuilder
                 + commandsBuilder
                 + extendedHelpTextBuild;
@@ -108,7 +108,7 @@ namespace CommandDotNet.HelpGeneration
             var optionsBuilder = new StringBuilder();
             List<CommandOption> options = app.GetOptions()
                 .Where(o => o.ShowInHelpText)
-                .OrderByDescending(o => o.IsSystemOption)
+                .OrderBy(o => o.IsSystemOption)
                 .ToList();
             if (options.Any())
             {
@@ -139,14 +139,15 @@ namespace CommandDotNet.HelpGeneration
             return optionsBuilder;
         }
 
-        private StringBuilder BuildParameters(ICommand app, StringBuilder usageBuilder)
+        private StringBuilder BuildOperands(ICommand app, StringBuilder usageBuilder)
         {
             var argumentsBuilder = new StringBuilder();
 
-            var arguments = app.Arguments.Where(a => a.ShowInHelpText).ToList();
+            var arguments = app.Operands.Where(a => a.ShowInHelpText).ToList();
                         
             if (arguments.Any())
             {
+                // standard term for these in help of other tools is arguments
                 usageBuilder.Append(" [arguments]");
                 argumentsBuilder.AppendLine();
                 argumentsBuilder.AppendLine($"Arguments:{Environment.NewLine}");

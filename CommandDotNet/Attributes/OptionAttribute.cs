@@ -3,7 +3,7 @@
 namespace CommandDotNet.Attributes
 {
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property)]
-    public class OptionAttribute : ParameterBaseAttribute
+    public class OptionAttribute : Attribute
     {        
         public string ShortName { get; set; }
         
@@ -12,5 +12,7 @@ namespace CommandDotNet.Attributes
         public BooleanMode BooleanMode { get; set; }
         
         public bool Inherited { get; set; }
+
+        public string Description { get; set; }
     }
 }

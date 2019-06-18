@@ -198,32 +198,32 @@ Options:
             public TestOutputs TestOutputs { get; set; }
 
             public void ArgsDefaults(
-                [Argument] bool boolArg = true,
-                [Argument] string stringArg = "lala", 
-                [Argument] int structArg = 3, 
-                [Argument] int? structNArg = 4,
-                [Argument] DayOfWeek enumArg = DayOfWeek.Wednesday, 
-                [Argument] Uri objectArg = null,
-                [Argument] List<string> stringListArg = null)
+                [Operand] bool boolArg = true,
+                [Operand] string stringArg = "lala", 
+                [Operand] int structArg = 3, 
+                [Operand] int? structNArg = 4,
+                [Operand] DayOfWeek enumArg = DayOfWeek.Wednesday, 
+                [Operand] Uri objectArg = null,
+                [Operand] List<string> stringListArg = null)
             {
                 TestOutputs.Capture(new ParametersSampleTypesResults(
                     boolArg, stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
             }
 
             public void StructListDefaults(
-                [Argument] List<int> structListArg = null)
+                [Operand] List<int> structListArg = null)
             {
                 TestOutputs.Capture(new ParametersSampleTypesResults(structListArg));
             }
 
             public void EnumListDefaults(
-                [Argument] List<DayOfWeek> enumListArg = null)
+                [Operand] List<DayOfWeek> enumListArg = null)
             {
                 TestOutputs.Capture(new ParametersSampleTypesResults(enumListArg));
             }
 
             public void ObjectListDefaults(
-                [Argument] List<Uri> objectListArg = null)
+                [Operand] List<Uri> objectListArg = null)
             {
                 TestOutputs.Capture(new ParametersSampleTypesResults(objectListArg));
             }

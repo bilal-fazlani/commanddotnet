@@ -1,6 +1,6 @@
 ﻿namespace CommandDotNet.MicrosoftCommandLineUtils
 {
-    public interface IParameter
+    public interface IArgument
     {
         
     }

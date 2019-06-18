@@ -34,7 +34,7 @@ namespace CommandDotNet.Models
         
         public bool AllowArgumentSeparator { get; set; }
 
-        public ArgumentMode MethodArgumentMode { get; set; } = ArgumentMode.Parameter;
+        public ArgumentMode MethodArgumentMode { get; set; } = ArgumentMode.Operand;
 
         public Case Case { get; set; } = Case.DontChange;
 

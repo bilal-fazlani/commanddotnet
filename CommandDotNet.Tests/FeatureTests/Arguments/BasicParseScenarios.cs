@@ -79,7 +79,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         }
 
         [Fact(Skip = "Method params cannot be marked as required yet.  Requiredness is only possible via FluentValidator")]
-        public void PositionalArgumentsAreRequired()
+        public void OperandsAreRequired()
         {
             Verify(new Given<App>
             {
@@ -87,7 +87,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 Then =
                 {
                     ExitCode = 1,
-                    ResultsContainsTexts = {"missing positional argument 'Y'"}
+                    ResultsContainsTexts = {"missing operand 'Y'"}
                 }
             });
         }
@@ -101,7 +101,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 Then =
                 {
                     ExitCode = 1,
-                    ResultsContainsTexts = {"Unrecognized command or argument '%'"}
+                    ResultsContainsTexts = {"Unrecognized command or operand '%'"}
                 }
             });
         }
@@ -115,7 +115,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 Then =
                 {
                     ExitCode = 1,
-                    ResultsContainsTexts = {"Unrecognized command or argument '4'"}
+                    ResultsContainsTexts = {"Unrecognized command or operand '4'"}
                 }
             });
         }
@@ -126,9 +126,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             public TestOutputs TestOutputs { get; set; }
 
             public void Add(
-                [Argument(Description = "the first operand")]
+                [Operand(Description = "the first operand")]
                 int x,
-                [Argument(Description = "the second operand")]
+                [Operand(Description = "the second operand")]
                 int y,
                 [Option(ShortName = "o", LongName = "operator", Description = "the operation to apply")]
                 string operation = "+")
@@ -136,7 +136,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 TestOutputs.Capture(new AddResults { X = x, Y = y, Op = operation });
             }
 
-            public void Do([Argument] string arg)
+            public void Do([Operand] string arg)
             {
                 TestOutputs.Capture(arg);
             }

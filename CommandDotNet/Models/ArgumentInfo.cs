@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using CommandDotNet.Extensions;
@@ -35,14 +36,14 @@ namespace CommandDotNet.Models
         private ArgumentInfo(
             AppSettings settings,
             ICustomAttributeProvider attributeProvider,
-            string propertyOrArgumentName,
+            string propertyOrParameterName,
             Type type,
             object defaultValue)
         {
             Settings = settings;
 
             AttributeProvider = attributeProvider;
-            PropertyOrArgumentName = propertyOrArgumentName;
+            PropertyOrParameterName = propertyOrParameterName;
             Type = type;
             DefaultValue = defaultValue;
             
@@ -69,7 +70,11 @@ namespace CommandDotNet.Models
         
         public string AnnotatedDescription { get; internal set; }
         public bool IsMultipleType { get; }
-        public string PropertyOrArgumentName { get; }
+
+        [Obsolete("use PropertyOrParameterName instead")]
+        public string PropertyOrArgumentName => PropertyOrParameterName;
+
+        public string PropertyOrParameterName { get; }
         public bool IsPartOfModel { get; }
         public Type ModelType { get; }
         internal ValueInfo ValueInfo { get; private set; }
@@ -87,9 +92,9 @@ namespace CommandDotNet.Models
             return Type != typeof(string) && Type.IsCollection();
         }
         
-        internal void SetValue(IParameter parameter)
+        internal void SetValue(IArgument argument)
         {
-            ValueInfo = new ValueInfo(parameter);
+            ValueInfo = new ValueInfo(argument);
         }
 
         private static object GetDefaultValue(PropertyInfo propertyInfo)

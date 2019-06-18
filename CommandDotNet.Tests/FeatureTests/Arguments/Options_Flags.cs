@@ -23,10 +23,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
 Options:
 
-  -h | --help
-  Show help information
+  --flag
 
-  --flag" }
+  -h | --help
+  Show help information" }
             });
         }
 

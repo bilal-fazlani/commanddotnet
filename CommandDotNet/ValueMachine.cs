@@ -44,7 +44,7 @@ namespace CommandDotNet
         private void PromptForValue(ArgumentInfo argumentInfo)
         {
             if (!_appSettings.PromptForArgumentsIfNotProvided
-                || !(argumentInfo is CommandParameterInfo parameterInfo)
+                || !(argumentInfo is OperandArgumentInfo parameterInfo)
                 || parameterInfo.ValueInfo.HasValue
                 || !parameterInfo.DefaultValue.IsNullValue())
             {

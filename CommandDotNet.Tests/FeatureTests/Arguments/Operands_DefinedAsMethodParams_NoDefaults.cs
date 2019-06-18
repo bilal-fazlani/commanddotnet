@@ -269,32 +269,32 @@ Options:
             public TestOutputs TestOutputs { get; set; }
 
             public void ArgsNoDefault(
-                [Argument] bool boolArg,
-                [Argument] string stringArg,
-                [Argument] int structArg,
-                [Argument] int? structNArg,
-                [Argument] DayOfWeek enumArg,
-                [Argument] Uri objectArg,
-                [Argument] List<string> stringListArg)
+                [Operand] bool boolArg,
+                [Operand] string stringArg,
+                [Operand] int structArg,
+                [Operand] int? structNArg,
+                [Operand] DayOfWeek enumArg,
+                [Operand] Uri objectArg,
+                [Operand] List<string> stringListArg)
             {
                 TestOutputs.Capture(new ParametersSampleTypesResults(
                     boolArg, stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
             }
 
             public void StructListNoDefault(
-                [Argument] List<int> structListArg)
+                [Operand] List<int> structListArg)
             {
                 TestOutputs.Capture(new ParametersSampleTypesResults(structListArg));
             }
 
             public void EnumListNoDefault(
-                [Argument] List<DayOfWeek> enumListArg)
+                [Operand] List<DayOfWeek> enumListArg)
             {
                 TestOutputs.Capture(new ParametersSampleTypesResults(enumListArg));
             }
 
             public void ObjectListNoDefault(
-                [Argument] List<Uri> objectListArg)
+                [Operand] List<Uri> objectListArg)
             {
                 TestOutputs.Capture(new ParametersSampleTypesResults(objectListArg));
             }

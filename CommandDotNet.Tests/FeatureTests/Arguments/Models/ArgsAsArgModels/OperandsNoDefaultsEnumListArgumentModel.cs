@@ -6,7 +6,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels
 {
     public class OperandsNoDefaultsEnumListArgumentModel : IEnumListArgumentModel
     {
-        [Argument]
+        [Operand]
         public List<DayOfWeek> EnumListArg { get; set; }
     }
 }

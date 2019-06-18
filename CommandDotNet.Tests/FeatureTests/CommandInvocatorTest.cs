@@ -49,10 +49,10 @@ namespace CommandDotNet.Tests.FeatureTests
                 var carNumber = context.ArgsFromCli.First();
                 var ownerName = context.ArgsFromCli.Last();
 
-                carNumber.PropertyOrArgumentName.Should().Be(nameof(Car.Number));
+                carNumber.PropertyOrParameterName.Should().Be(nameof(Car.Number));
                 carNumber.ValueInfo.Value.Should().Be("1");
 
-                ownerName.PropertyOrArgumentName.Should().Be("owner");
+                ownerName.PropertyOrParameterName.Should().Be("owner");
                 ownerName.ValueInfo.Value.Should().Be("Jack");
             }
 
