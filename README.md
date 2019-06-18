@@ -26,14 +26,14 @@ Special thanks to [Drew Burlingame](https://github.com/drewburlingame) for conti
 
 - [Installation](#installation)
 - [Introduction](#introduction)
-- [Parameters](#parameters)
-    - [Arguments](#arguments)
+- [Arguments](#arguments)
+    - [Operands](#operands)
     - [Options](#options)
     - [Flags](#flags)
 - [Attributes](#attributes)
     - [ApplicationMetadata](#applicationmetadata)
     - [SubCommand](#subcommand)
-    - [Argument](#argument)
+    - [Operand](#operand)
     - [Option](#option)
 - [Constructor options](#constructor-options)
 - [Default values](#default-values)
@@ -54,6 +54,7 @@ Special thanks to [Drew Burlingame](https://github.com/drewburlingame) for conti
     - [Case](#case)
     - [Boolean mode](#boolean-mode)
         - [Flag clubbing](#flag-clubbing)
+- [Directives](#directives)
 - [Exception handling](#exception-handling)
 - [Dependency Injection](#dependency-injection) (new!)
     - [Autofac](#autofac)
@@ -119,10 +120,10 @@ dotnet example.dll --help
 OUTPUT
 
 ```bash
-Usage: dotnet example.dll [options] [command]
+Usage: dotnet example.dll [command] [options]
 
 Options:
-  -h | -? | --help  Show help information
+  -h | --help  Show help information
 
 Commands:
   Add
@@ -149,10 +150,10 @@ This should do it.
 Let's see how the help appears now.
 
 ```bash
-Usage: dotnet example.dll [options] [command]
+Usage: dotnet example.dll [command] [options]
 
 Options:
-  -h | -? | --help  Show help information
+  -h | --help  Show help information
 
 Commands:
   Add        Adds two numbers. duh!
@@ -182,7 +183,7 @@ Arguments:
   value2  Int32
 
 Options:
-  -h | -? | --help  Show help information
+  -h | --help  Show help information
 ```
 
 tada!
@@ -205,17 +206,39 @@ Answer: 60
 
 Cool. You get the gist of this library. Let's move on.
 
-## Parameters
+## Arguments
 
 <img src="./images/definitions.png" width="600px" />
 
-### Arguments
+What is referred to as an `argument` can change based on perspective.
 
-Arguments are simple as we saw already in the [introduction](#introduction). Arguments are the main parameters of the command and should be as less as possible. If you compare them to a english statement, argument is the *Subject* of the sentense. 
+From the perspective of the shell, all words on the command line are arguments.
 
-Let try an example of an english sentense `Please delete sample.docx file`
+From the perspective of a command, the only arguments are operands and options. 
 
-Now let's try and remove some extra words we don't need and convert it into command that system can understand. 
+This framework is designed from the command perspective and categorizes these words as:
+
+- Directives
+- Commands
+  - application
+  - sub-commands
+- Arguments
+  - Operands
+  - Options
+    - Flags 
+
+### Operands
+
+Operands are arguments that:
+ - are positional
+ - are not named
+ - are what the command operates on
+ 
+ Operands are simple as we saw already in the [introduction](#introduction). Operands are the main parameters of the command and should be as few as possible. If you compare them to an english statement, argument is the *Subject* of the sentense. 
+
+Let try an example of an english sentence `Please delete sample.docx file`
+
+Now let's try and remove some extra words we don't need and convert it into a command that system can understand. 
 
 Let's say our command name is `delete` and its job is to delete files. We dont need the words `please` and `file`
 
@@ -239,12 +262,12 @@ public void Delete(List<string> fileNames)
 
 ### Options
 
-Options are arguments that :
- - Are optional
- - Are named
- - May change behaviour of command
+Options are arguments that:
+ - are not positional
+ - are named
+ - change behaviour of command
 
-For instance let's just go with out example from [arguments](#arguments) section.
+For instance let's just go with out example from [operands](#operands) section.
 
 This time, the sentense is `please delete the file sample.docx tomorrow`.
 In this case, we have extra information about the operation we want to perform i.e. `time`
@@ -286,23 +309,30 @@ public void Delete(
 
 ### ApplicationMetadata
 
-You can use the `[ApplicationMetadata]` attribute on the class level like this to provide details when application is called with `help` switch.
+Use the `ApplicationMetadataAttribute` to override the name of commands and to provide additional details for the `help` option
+
+Use on the classes provide details for the application and sub-commands.  Name is ignored for applications.
 
 Example: 
 
 ```c#
-[ApplicationMetadata(Description = "This is a crappy calculator", ExtendedHelpText = "Some more help text that appears at the bottom")]
+[ApplicationMetadata(
+    Name = "calc",
+    Description = "This is a simple calculator", 
+    ExtendedHelpText = "Some more help text that appears at the bottom")]
 public class Calculator
 {
 }
 ```
 
-This attribute can also be used on a Method as shown below.
+Use on methods to provide details for commands
 
 ```c#
-[ApplicationMetadata(Description = "Subtracts value2 from value1 and prints output", 
+[ApplicationMetadata(
+    Name = "subtractValues"
+    Description = "Subtracts value2 from value1 and prints output", 
     ExtendedHelpText = "Again, some more detailed help text which has no meaning I still have to write to demostrate this feature",
-    Name = "subtractValues")]
+    )]
 public void Subtract(int value1, int value2)
 {
 }
@@ -312,20 +342,20 @@ Note that when you use ApplicationMetadata attribute on a method, you can change
 
 ### SubCommand
 
-`[SubCommand]` attribute indicates that targeted property is a SubCommand.
+`SubCommandAttribute` indicates the attributed property or nested class is a sub-command.
 
 See [Nesting commands](#nesting-commands) for examples
 
-### Argument
+### Operand
 
-Every parameter in the method is argument by default. So this this Attribute is optional and should be used only when you need to assign a different name to parameter, or add description to it.
+Every parameter in the method is an operand by default so the `OperandAttribute` is optional and should be used only when you need to assign a different name to an operand, or add a description to it, or when [MethodArgumentMode](#method-argument-mode) is set to `Option`
 
-By default, the parameter names declared in method are the argument names that appear in help. However you can change that.
+By default, the parameter names declared in method are the operand names that appear in help. However you can change that.
 
 Let's see an example-
 
 ```c#
-public void LaunchRocket([Argument(
+public void LaunchRocket([Operand(
     Name = "planet",
     Description = "Name of the planet you wish the rocket to go)] string planetName)
 ```
@@ -338,12 +368,12 @@ Arguments:
   planetName  String                                            Name of the planet you wish the rocket to go
 
 Options:
-  -h | -? | --help  Show help information
+  -h | --help  Show help information
 ```
 
 ### Option
 
-Every parameter in the method is argument by default. So if you wan't to turn a parameter into option instead of argument, use this attribute. See more info about parameters [here](#parameters)
+Every parameter in the method is an operand by default. If you want a parameter to be an option instead, use the  `OptionAttribute`.
 
 By default, the parameter names declared in method are the option names that appear in help. However you can change that. By convention, an option can have a short name and/or a longname.
 
@@ -362,8 +392,8 @@ This is what help looks like-
 Usage: dotnet example.dll LaunchRocket [options]
 
 Options:
-  -h | -? | --help  Show help information
   --planet | -p     String                         Name of the planet you wish the rocket to go
+  -h | --help  Show help information
 ```
 
 So planet name can now be passed either with `--planet` or `-p`. 
@@ -378,7 +408,7 @@ Here's table of examples:
 | planet |  |  | `--planet` |
 | planet | planet |  | `--planet` |
 | planet |  | p | `-p` |
-| planet | planet | p | `-p \| --planet` |
+| planet | planet | p | `-p | --planet` |
 | p |  |  | `-p` |
 
 
@@ -428,11 +458,11 @@ dotnet example.dll --help
 OUTPUT
 
 ```bash
-Usage: dotnet example.dll [options] [command]
+Usage: dotnet example.dll [command] [options]
 
 Options:
-  -h | -? | --help  Show help information
   --printValues     Flag
+  -h | --help  Show help information
 
 Commands:
   Add        Adds two numbers. duh!
@@ -459,7 +489,7 @@ Notes:
 
  - **You can skip to pass any parameter. It will then fallback to the default value of parameter type**
 
- - **Any parameters in contrustor are [Options](#option) by default and you can't have [Argument](#argument) attribute in constructor parameters**
+ - **Any parameters in contructor are [Options](#option) by default. You can't have [Argument](#argument) attribute in constructor parameters**
 
  - **Only one constructor is supported. If there are multiple, it will pick up first defined constructor**
 
@@ -497,7 +527,7 @@ Arguments:
   value2  Int32 | Default value: 1
 
 Options:
-  -h | -? | --help  Show help information
+  -h | --help  Show help information
 ```
 
 ## Collections
@@ -524,8 +554,8 @@ OUTPUT
 Usage: dotnet example.dll LaunchRocket [options]
 
 Options:
-  -h | -? | --help  Show help information
   -p                String (Multiple)
+  -h | --help  Show help information
 ```
 
 And this is how you pass multiple options:
@@ -555,7 +585,7 @@ Arguments:
   planets  String (Multiple)
 
 Options:
-  -h | -? | --help  Show help information
+  -h | --help  Show help information
 ```
 
 And this is how you pass multiple arguments:
@@ -584,24 +614,23 @@ Supports all types with a string constructor or where a TypeConverter is defined
 
 Also supports `List<T>`, `IEnumerable<T>` and `Nullable<T>` where T can be converted from string.  Note: `T[]` is not supported.
 
-These are applicable for both - Options and Arguments
+These are applicable for both - Options and Operands
 
-Note for arguments: 
-- There can be only one `List` argument in the method. It can be used with other non `List` type arguments or `List` type options.
-- If the method has a `List` type argument, it should be defined last in the order.
+Note for operands: 
+- There can be only one `List` operand in the method. It can be used with other non `List` type operands or `List` type options.
+- If the method has a `List` type operand, it should be defined last in the order.
 
 #### Adding support for new types
 
 In most cases, create a [TypeConverter](https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.typeconverter?view=netframework-4.8) for your type
 
-If you need 
+Implement an `IArgumentTypeDescriptor` if you need 
 
 - to override an existing TypeConverter
-- conditional logic based on argument metadata (custom attributes, etc)
+- conditional logic based on parameter metadata (custom attributes, etc)
 - the converter only for parsing parameters and not the business logic of your application
 
-Implement `ITypedArgumentTypeDescriptor` or `IGenericArgumentTypeDescriptor` and register with `AppSettings.ArgumentTypeDescriptors.Register(...)`.
-
+Register you custom descriptor with `AppSettings.ArgumentTypeDescriptors.Register(...)`.
 
 ## Modeling
 
@@ -649,9 +678,9 @@ public void SendEmail(Email email)
 }
 ```
 
-## Fluent validation for parameters
+## Fluent validation for arguments
 
-You can use [FluentValidation](https://github.com/JeremySkinner/FluentValidation) with this library to validate input parameters, provided you model your parameters into classes.
+You can use [FluentValidation](https://github.com/JeremySkinner/FluentValidation) with this library to validate arguments modelled with [IArgumentModel](#Modeling).
 
 Here's an example,
 
@@ -699,8 +728,7 @@ If the validation fails, app exits with return code 2 and prints validation erro
 ## Custom return codes
 
 Typically when a console app exits with no erros, it returns `0` exit code. If there there was an error, it return `1`. 
-But there are many possiblities and developers use this exit code to convey details about what exactly happenned. For example,
-https://msdn.microsoft.com/en-us/library/ms681381.aspx 
+But there are many possiblities and developers use this exit code to convey details about what exactly happenned. For example, [Windows system error codes](https://msdn.microsoft.com/en-us/library/ms681381.aspx) or and for linux, run the command: `errno -ls`
 
 When you write a command line application you can return a custom return code.
 
@@ -799,10 +827,10 @@ Here's how the help looks like now:
 ```bash
 Fake git application
 
-Usage: dotnet example.dll [options] [command]
+Usage: dotnet example.dll [command] [options]
 
 Options:
-  -h | -? | --help  Show help information
+  -h | --help  Show help information
 
 Commands:
   Commit  Commits all staged changes
@@ -852,10 +880,10 @@ OUTPUT
 ```bash
 Stashes all changes when executed without any arguments
 
-Usage: dotnet example.dll Stash [options] [command]
+Usage: dotnet example.dll Stash [command] [options]
 
 Options:
-  -h | -? | --help  Show help information
+  -h | --help  Show help information
 
 Commands:
   List  Lists all saved stashed changes
@@ -912,23 +940,21 @@ public class Git
 ## Settings
 
 When you create a new instance of `AppRunner<T>` you can pass an instance new `AppSettings` object.
+
 Here are the settings you can change:
 
-### Show argument details
-
-Shows type information of arguments in help text. Enabled by default.
+> note: some settings are covered in other areas of this document along with their features.
 
 ### Method argument mode
 
 Possible values : 
 
-1. Parameter (default)
+1. Operand (default)
 2. Option
 
-When method argument mode is set to parameter, all arguments of methods are treated as parameters and dont need any names to be passed through command line.
-Note that order of passing parameters matter in this mode.
+When method argument mode is `Operand`, all arguments of methods are treated as operands. They **will not** need to b named on the command line but position **will** matter.
 
-When method argument mode is set to option, all arguments of methods are treated as options and need a name to be passed.
+When method argument mode is set to `Option`, all arguments of methods are treated as options.  They **will** need to b named on the command line but position **will not** matter.
 
 Note that this is only applicable for methods and not constructors. For constructors, all arguments are options only.
 
@@ -956,11 +982,11 @@ public class SomeClass
 by default this would result into something like this:
 
 ```bash
-Usage: dotnet example.dll [options] [command]
+Usage: dotnet example.dll [command] [options]
 
 Options:
-  -h | -? | --help  Show help information
   --Url             String
+  -h | --help  Show help information
 
 Commands:
   ProcessRequest
@@ -968,7 +994,7 @@ Commands:
 Use "dotnet example.dll [command] --help" for more information about a command.
 ```
 
-Command line conventions are different from C# convetions and the usual pascal casing of method names or camel casing of parameter names may not be suitable for command line arguments.
+Command line conventions are different from C# convetions and the usual pascal casing of method names or camel casing of argument names may not be suitable for command line arguments.
 
 You can continue to develop you classes and method in normal C# conventions and tell library to tranform them into the desired casing.
 
@@ -999,11 +1025,11 @@ class Program
 The result would something like this:
 
 ```bash
-Usage: dotnet example.dll [options] [command]
+Usage: dotnet example.dll [command] [options]
 
 Options:
-  -h | -? | --help  Show help information
   --url             String
+  -h | --help  Show help information
 
 Commands:
   process-request
@@ -1015,19 +1041,19 @@ Note that this would not tranfsorm any name that you have overridden via `[Appli
 
 ### Boolean mode
 
-In this library, there are two ways to parse boolean [Options](#options). Note that this is not applicable for [Parameters](#parameters).
+In this library, there are two ways to parse boolean [Options](#options). Note that this is not applicable for [Operands](#operands).
 
 1.  **Implicit**
 
     This is the default mode.
-    In this mode, you don't pass the value `true` or `false` in the command line. These parameters are treated as flags. They are considered `true` if they are present and `false` when they are not.
+    In this mode, you don't pass the value `true` or `false` in the command line. These arguments are treated as flags. They are considered `true` if they are present and `false` when they are not.
 
     For exampple: 
     ```bash
     dotnet example.dll --printValues
     ```
 
-    In this case, value of parameter `printValues` will be true
+    In this case, value of argument `printValues` will be true
 
     and in the following exampplem,
 
@@ -1035,11 +1061,9 @@ In this library, there are two ways to parse boolean [Options](#options). Note t
     dotnet example.dll
     ```
 
-    value of parameter `printValues` will be false.
+    value of argument `printValues` will be false.
 
-    Note that, when using implicit boolean mode, it will result in an error, if the user tries to explicitly enter a value for parameter. In this instance, `dotnet example.dll --printValues true` will result into an error.
-
-    When you check the help of a command, you if you see `Flag` for a parameter, it means value is implit and does not requre an explict one.
+    Note that, when using implicit boolean mode, it will result in an error, if the user tries to explicitly enter a value for argument. In this instance, `dotnet example.dll --printValues true` will result in an error.
 
     #### Flag clubbing
 
@@ -1088,12 +1112,13 @@ In this library, there are two ways to parse boolean [Options](#options). Note t
     but `dotnet example.dll MyCommand --capturelogs` is not valid and will result into error. It will only work in Implicit boolean mode.
 
 
-    When you check the help of a command, you if you see `Boolean` it means if you wan't to make it true, you need to pass an explit value. If you don't pass one, it will default to `false` automatically. Implicit and explicit are just ways to pass the value, under the hood they are just boolean parameters.
+    When you check the help of a command, you if you see `Boolean` it means if you wan't to make it true, you need to pass an explit value. If you don't pass one, it will default to `false` automatically. Implicit and explicit are just ways to pass the value, under the hood they are just boolean arguments.
 
 ## Directives
 
 Directives are special arguments enabling cross cutting features.  We've followed the pattern defined by  [System.CommandLine](https://github.com/dotnet/command-line-api/wiki/Features-overview#debugging) to provide two directives: Debug & Parse
 
+Enable them with: 
 ```c#
 new AppSettings { EnableDirectives = true }
 ```
@@ -1102,9 +1127,9 @@ Directives must be the first argument and will be removed from further processin
 
 ### Debug
 
-Sometimes you just need to debug into a process and configuring the debug arguments in VS is too many extra steps.
+Sometimes you just need to debug into a process and configuring the debug arguments in VS is too many steps.
 
-When you specify `[debug]`, the process id will output to the console and wait for you to attach your debugger.
+When you specify `[debug]`, the app will print the process id and wait for you to attach your debugger.
 
 ### Parse
 
