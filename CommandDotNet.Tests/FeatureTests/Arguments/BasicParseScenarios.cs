@@ -87,7 +87,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 Then =
                 {
                     ExitCode = 1,
-                    ResultsContainsTexts = {"missing operand 'Y'"}
+                    ResultsContainsTexts = {"missing argument 'Y'"}
                 }
             });
         }
@@ -101,7 +101,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 Then =
                 {
                     ExitCode = 1,
-                    ResultsContainsTexts = {"Unrecognized command or operand '%'"}
+                    ResultsContainsTexts = {"Unrecognized command or argument '%'"}
                 }
             });
         }
@@ -115,7 +115,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 Then =
                 {
                     ExitCode = 1,
-                    ResultsContainsTexts = {"Unrecognized command or operand '4'"}
+                    ResultsContainsTexts = { "Unrecognized command or argument '4'" }
                 }
             });
         }

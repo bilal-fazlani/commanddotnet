@@ -26,7 +26,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 Then =
                 {
                     ExitCode = 1, // method should have been called
-                    ResultsContainsTexts = { "Unrecognized command or operand '[debug]'" }
+                    ResultsContainsTexts = { "Unrecognized command or argument '[debug]'" }
                 }
             });
         }
