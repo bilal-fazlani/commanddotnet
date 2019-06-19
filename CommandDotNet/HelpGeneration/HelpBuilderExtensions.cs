@@ -15,7 +15,7 @@ namespace CommandDotNet.HelpGeneration
     {
         public static StringBuilder AppendUsageCommandNames(this StringBuilder sb, ICommand app, AppSettings appSettings)
         {
-            var appName = GetAppName(app, appSettings);
+            var appName = GetAppName(app, appSettings.Help.UsageAppNameStyle);
 
             sb.Append(appName);
             foreach (var name in app.GetParentCommands(true).Reverse().Skip(1).Select(c => c.Name))
@@ -26,9 +26,9 @@ namespace CommandDotNet.HelpGeneration
             return sb;
         }
 
-        private static string GetAppName(ICommand app, AppSettings appSettings)
+        public static string GetAppName(ICommand app, UsageAppNameStyle usageAppNameStyle)
         {
-            switch (appSettings.Help.UsageAppNameStyle)
+            switch (usageAppNameStyle)
             {
                 case UsageAppNameStyle.Adaptive:
                     return GetAppNameAdaptive(app);
@@ -47,7 +47,7 @@ namespace CommandDotNet.HelpGeneration
                 case UsageAppNameStyle.Executable:
                     return GetAppFileName();
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(UsageAppNameStyle), $"unknown style: {appSettings.Help.UsageAppNameStyle}");
+                    throw new ArgumentOutOfRangeException(nameof(UsageAppNameStyle), $"unknown style: {usageAppNameStyle}");
             }
         }
 
