@@ -18,28 +18,34 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         private readonly AppSettings _appSettings;
         private Action _printVersion;
         private Func<int> _invoke;
-        private CommandLineApplication _parent;
+        private readonly HashSet<CommandOption> _options;
 
-        public CommandLineApplication(AppSettings appSettings)
+        public CommandLineApplication(
+            AppSettings appSettings, 
+            string name, 
+            ICustomAttributeProvider customAttributeProvider,
+            CommandLineApplication parent = null)
         {
             _appSettings = appSettings;
+            Name = name;
+            CustomAttributeProvider = customAttributeProvider;
+            Parent = parent;
             _invoke = () => 0;
 
-            Options = new HashSet<CommandOption>();
+            _options = new HashSet<CommandOption>();
             Operands = new HashSet<CommandOperand>();
             Commands = new List<ICommand>();
         }
 
-        public string Name { get; set; }
+        public string Name { get; }
         public string Description { get; set; }
         public bool ShowInHelpText => true;
         public string ExtendedHelpText { get; set; }
-        public HashSet<CommandOption> Options { get; }
         public CommandOption OptionHelp { get; private set; }
         public CommandOption OptionVersion { get; private set; }
-        public ICustomAttributeProvider CustomAttributeProvider { get; set; }
+        public ICustomAttributeProvider CustomAttributeProvider { get; }
         public HashSet<CommandOperand> Operands { get; }
-        public ICommand Parent => _parent;
+        public ICommand Parent { get; }
         public List<ICommand> Commands { get; }
 
         [Obsolete("This was used solely for help.  The functionality has been moved to help providers.")]
@@ -49,15 +55,16 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             return string.Join(" ", this.GetParentCommands(true).Reverse().Select(c => c.Name));
         }
 
-        public IEnumerable<CommandOption> GetOptions()
+        public IEnumerable<CommandOption> GetOptions(bool includeInherited = true)
         {
-            var inheritedOptions = this.GetParentCommands().SelectMany(a => a.Options.Where(o => o.Inherited));
-            return Options.Concat(inheritedOptions);
+            return includeInherited
+                ? _options.Concat(this.GetParentCommands().SelectMany(a => a._options.Where(o => o.Inherited)))
+                : _options;
         }
 
-        public CommandLineApplication Command(string name)
+        public CommandLineApplication Command(string name, ICustomAttributeProvider customAttributeProvider)
         {
-            var command = new CommandLineApplication(_appSettings) { Name = name, _parent = this };
+            var command = new CommandLineApplication(_appSettings, name, customAttributeProvider, this);
             Commands.Add(command);
             return command;
         }
@@ -76,7 +83,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 Multiple = multiple,
                 AllowedValues = allowedValues
             };
-            bool optionAdded = Options.Add(option);
+            bool optionAdded = _options.Add(option);
             if(!optionAdded)
                 throw new AppRunnerException($"Option with template `{option.Template}` already added");
             configuration(option);
