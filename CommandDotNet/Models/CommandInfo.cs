@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using CommandDotNet.Attributes;
 
@@ -31,5 +32,7 @@ namespace CommandDotNet.Models
         public string Syntax => _metadataAttribute?.Syntax;
 
         public IEnumerable<ArgumentInfo> Arguments { get; }
+
+        public ICustomAttributeProvider CustomAttributeProvider => _methodInfo;
     }
 }

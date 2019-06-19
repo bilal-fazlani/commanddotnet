@@ -51,7 +51,7 @@ namespace CommandDotNet
         {            
             foreach (CommandInfo commandInfo in _type.GetCommandInfos(_settings))
             {
-                var command = _app.Command(commandInfo.Name);
+                var command = _app.Command(commandInfo.Name, commandInfo.CustomAttributeProvider);
                 ConfigureMetadata(command, commandInfo);
                 ConfigureCommandLineApplication(command, commandInfo);
             }
