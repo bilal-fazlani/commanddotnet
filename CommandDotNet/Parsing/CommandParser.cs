@@ -8,7 +8,7 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet.Parsing
 {
-    internal partial class CommandParser
+    internal class CommandParser
     {
         private readonly AppSettings _appSettings;
         private readonly ParserContext _parserContext;
