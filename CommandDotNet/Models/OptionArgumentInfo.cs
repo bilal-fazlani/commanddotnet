@@ -11,49 +11,50 @@ namespace CommandDotNet.Models
 {
     internal class OptionArgumentInfo : ArgumentInfo
     {
+        private OptionAttribute _optionAttribute;
+
         public OptionArgumentInfo(ParameterInfo attributeProvider, AppSettings settings) : base(attributeProvider, settings)
         {
-            BooleanMode = GetBooleanMode();
-            CommandOptionType = GetCommandOptionType();
-            
-            ShortName = GetShortName();
-            LongName = GetLongName();
-            
-            Template = GetTemplate();
-            
-            AnnotatedDescription = GetAnnotatedDescription();
+            Init();
         }
         
         public OptionArgumentInfo(PropertyInfo propertyInfo, AppSettings settings) : base(propertyInfo, settings)
         {
-            BooleanMode = GetBooleanMode();
-            CommandOptionType = GetCommandOptionType();
-            
-            ShortName = GetShortName();
-            LongName = GetLongName();
-            
-            Template = GetTemplate();
-            
-            AnnotatedDescription = GetAnnotatedDescription();
+            Init();
         }
 
         public override bool IsImplicit => BooleanMode == BooleanMode.Implicit;
 
-        public CommandOptionType CommandOptionType { get; }
+        public CommandOptionType CommandOptionType { get; private set; }
         
-        public string Template { get; }
+        public string Template { get; private set; }
         
-        public BooleanMode BooleanMode { get; }
+        public BooleanMode BooleanMode { get; private set; }
         
-        public string LongName { get; }
+        public string LongName { get; private set; }
         
-        public string ShortName { get; }
+        public string ShortName { get; private set; }
 
-        public bool Inherited => AttributeProvider.GetCustomAttribute<OptionAttribute>()?.Inherited ?? false;
-        
+        public bool Inherited => _optionAttribute?.Inherited ?? false;
+
+        private void Init()
+        {
+            _optionAttribute = AttributeProvider.GetCustomAttribute<OptionAttribute>();
+
+            BooleanMode = GetBooleanMode();
+            CommandOptionType = GetCommandOptionType();
+
+            ShortName = GetShortName();
+            LongName = GetLongName();
+
+            Template = GetTemplate();
+
+            AnnotatedDescription = GetAnnotatedDescription();
+        }
+
         private string GetShortName()
         {
-            string attributeShortName = AttributeProvider.GetCustomAttribute<OptionAttribute>()?.ShortName;
+            string attributeShortName = _optionAttribute?.ShortName;
     
             if (!string.IsNullOrEmpty(attributeShortName)) //provided by user
                 return attributeShortName;
@@ -64,7 +65,7 @@ namespace CommandDotNet.Models
 
         private string GetLongName()
         {
-            string attributeLongName = AttributeProvider.GetCustomAttribute<OptionAttribute>()?.LongName;
+            string attributeLongName = _optionAttribute?.LongName;
     
             if (!string.IsNullOrEmpty(attributeLongName)) //long name attribute provided by user
                 return attributeLongName;
@@ -79,7 +80,7 @@ namespace CommandDotNet.Models
         
         private BooleanMode GetBooleanMode()
         {
-            OptionAttribute attribute = AttributeProvider.GetCustomAttribute<OptionAttribute>();
+            OptionAttribute attribute = _optionAttribute;
 
             if (attribute == null || attribute.BooleanMode == BooleanMode.Unknown)
                 return Settings.BooleanMode;
@@ -141,7 +142,7 @@ namespace CommandDotNet.Models
 
         private string GetAnnotatedDescription()
         {
-            return AttributeProvider.GetCustomAttribute<OptionAttribute>()?.Description;
+            return _optionAttribute?.Description;
         }
         
         public override string ToString()
