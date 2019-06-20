@@ -30,9 +30,9 @@ namespace CommandDotNet
                 .GetParameters()
                 .SelectMany(p =>
                 {
-                    if (isCtor && p.HasAttribute<OperandAttribute>())
+                    if (isCtor && (p.HasAttribute<OperandAttribute>() || p.HasAttribute<ArgumentAttribute>()))
                     {
-                        throw new AppRunnerException("Constructor arguments can not have [Operand] attribute. Please use [Option] attribute");
+                        throw new AppRunnerException("Constructor arguments can not have [Operand] or [Argument] attribute. Please use [Option] attribute");
                     }
                     return GetArgumentsFromParameter(p, argumentMode);
                 })

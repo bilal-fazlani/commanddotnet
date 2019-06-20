@@ -16,12 +16,14 @@ namespace CommandDotNet.Models
             AnnotatedDescription = GetAnnotatedDescription();
         }
 
-        public string Name => AttributeProvider.GetCustomAttribute<OperandAttribute>()?.Name ??
-                                   PropertyOrParameterName.ChangeCase(Settings.Case);
+        public string Name => AttributeProvider.GetCustomAttribute<OperandAttribute>()?.Name
+                              ?? AttributeProvider.GetCustomAttribute<ArgumentAttribute>()?.Name
+                              ?? PropertyOrParameterName.ChangeCase(Settings.Case);
         
         private string GetAnnotatedDescription()
         {
-            return AttributeProvider.GetCustomAttribute<OperandAttribute>()?.Description;
+            return AttributeProvider.GetCustomAttribute<OperandAttribute>()?.Description
+                ?? AttributeProvider.GetCustomAttribute<ArgumentAttribute>()?.Description;
         }
 
         public override string ToString()
