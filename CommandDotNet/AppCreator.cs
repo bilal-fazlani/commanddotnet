@@ -75,7 +75,7 @@ namespace CommandDotNet
                 var filename = Path.GetFileName(_hostAssembly.Location);
                 string version = fvi.ProductVersion;
                 app.VersionOption(
-                    "-v | --version", 
+                    Constants.VersionTemplate, 
                     () =>
                     {
                         _appSettings.Out.WriteLine(filename);
