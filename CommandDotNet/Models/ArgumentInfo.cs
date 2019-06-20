@@ -68,7 +68,7 @@ namespace CommandDotNet.Models
         
         public object DefaultValue { get; }
         
-        public string AnnotatedDescription { get; internal set; }
+        public string AnnotatedDescription { get; protected set; }
         public bool IsMultipleType { get; }
 
         [Obsolete("use PropertyOrParameterName instead")]
