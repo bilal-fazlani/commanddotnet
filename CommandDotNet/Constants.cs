@@ -3,6 +3,7 @@
     public static class Constants
     {
         public const string HelpTemplate = "-h | --help";
+        public const string VersionTemplate = "-v | --version";
 
         public static class TypeDisplayNames
         {
