@@ -1,8 +1,9 @@
-﻿namespace CommandDotNet
+﻿using CommandDotNet.Attributes;
+
+namespace CommandDotNet
 {
-    public interface IApplicationMetadata
+    public interface IApplicationMetadata: INameAndDescription
     {
-        string Description { get; }
         string ExtendedHelpText { get; }
         string Syntax { get; }
     }

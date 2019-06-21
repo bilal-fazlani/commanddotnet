@@ -130,7 +130,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 int x,
                 [Operand(Description = "the second operand")]
                 int y,
-                [Option(ShortName = "o", LongName = "operator", Description = "the operation to apply")]
+                [Option(ShortName = "o", Name = "operator", Description = "the operation to apply")]
                 string operation = "+")
             {
                 TestOutputs.Capture(new AddResults { X = x, Y = y, Op = operation });
