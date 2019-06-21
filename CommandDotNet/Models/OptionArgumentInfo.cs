@@ -65,7 +65,7 @@ namespace CommandDotNet.Models
 
         private string GetLongName()
         {
-            string attributeLongName = _optionAttribute?.LongName;
+            string attributeLongName = _optionAttribute?.Name;
     
             if (!string.IsNullOrEmpty(attributeLongName)) //long name attribute provided by user
                 return attributeLongName;
