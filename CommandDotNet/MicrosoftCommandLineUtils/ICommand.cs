@@ -10,10 +10,10 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         string Description { get; }
         bool ShowInHelpText { get; }
         string ExtendedHelpText { get; }
-        IEnumerable<CommandOption> GetOptions(bool includeInherited = true);
-        HashSet<CommandOperand> Operands { get; }
         ICommand Parent { get; }
-        List<ICommand> Commands { get; }
+        IEnumerable<ICommand> Commands { get; }
+        IEnumerable<CommandOperand> Operands { get; }
+        IEnumerable<CommandOption> GetOptions(bool includeInherited = true);
         CommandOption OptionHelp { get; }
         ICustomAttributeProvider CustomAttributeProvider { get; }
 
