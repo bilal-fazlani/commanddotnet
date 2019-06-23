@@ -90,10 +90,10 @@ namespace CommandDotNet
             operandArgument.SetValue(command.Operand(
                 operandArgument.Name,
                 operandArgument.Description,
-                _=>{},
+                operandArgument.Arity,
+                _=> {},
                 operandArgument.TypeDisplayName,
                 operandArgument.DefaultValue,
-                operandArgument.IsMultipleType,
                 operandArgument.AllowedValues));
         }
 
@@ -101,12 +101,11 @@ namespace CommandDotNet
         {
             option.SetValue(command.Option(option.Template,
                 option.Description,
-                option.CommandOptionType,
+                option.Arity,
                 _=>{},
                 option.Inherited,
                 option.TypeDisplayName,
                 option.DefaultValue,
-                option.IsMultipleType,
                 option.AllowedValues));
         }
 
@@ -126,12 +125,11 @@ namespace CommandDotNet
                 optionInfo.SetValue(_app.Option(
                     optionInfo.Template,
                     optionInfo.Description,
-                    optionInfo.CommandOptionType,
+                    optionInfo.Arity,
                     _=>{},
                     optionInfo.Inherited,
                     optionInfo.TypeDisplayName,
                     optionInfo.DefaultValue,
-                    optionInfo.IsMultipleType,
                     optionInfo.AllowedValues));
             }
             

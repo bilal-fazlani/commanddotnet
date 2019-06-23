@@ -44,7 +44,13 @@ namespace CommandDotNet.Extensions
         {
             return type.GetInterfaces().Any(x => x == typeof(IEnumerable));
         }
-        
+
+        internal static bool IsNullable(this Type type)
+        {
+            return type.IsGenericType &&
+                   type.GetGenericTypeDefinition() == typeof(Nullable<>);
+        }
+
         internal static object GetDefaultValue(this Type type)
         {
             Func<object> f = GetDefaultValue<object>;

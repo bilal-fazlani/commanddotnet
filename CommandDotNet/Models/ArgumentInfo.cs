@@ -46,7 +46,6 @@ namespace CommandDotNet.Models
             Type = type;
             DefaultValue = defaultValue;
             
-            IsMultipleType = GetIsMultipleType();
             UnderlyingType = GetUnderlyingType(Type);
             
             _typeDescriptor = Settings.ArgumentTypeDescriptors
@@ -70,8 +69,11 @@ namespace CommandDotNet.Models
         public Type UnderlyingType { get; }
         
         public object DefaultValue { get; }
-        public bool IsMultipleType { get; }
 
+        [Obsolete("Use Arity.MaximumNumberOfValues > 1 instead")]
+        public bool IsMultipleType => Arity.AllowsZeroOrMore();
+
+        public IArgumentArity Arity { get; set; }
         public string PropertyOrParameterName { get; }
         public bool IsPartOfModel { get; }
         public Type ModelType { get; }
@@ -90,11 +92,6 @@ namespace CommandDotNet.Models
 
         [Obsolete("Use Description instead")]
         public string AnnotatedDescription => Description;
-
-        private bool GetIsMultipleType()
-        {
-            return Type != typeof(string) && Type.IsCollection();
-        }
         
         internal void SetValue(IArgument argument)
         {

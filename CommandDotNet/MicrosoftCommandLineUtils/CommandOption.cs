@@ -9,10 +9,10 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 {
     public class CommandOption : IArgument
     {
-        public CommandOption(string template, CommandOptionType optionType)
+        public CommandOption(string template, IArgumentArity arity)
         {
             Template = template;
-            OptionType = optionType;
+            Arity = arity;
             Values = new List<string>();
 
             var argumentTemplate = new ArgumentTemplate(template);
@@ -25,20 +25,22 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         /// <summary>True when option is help or version</summary>
         public bool IsSystemOption { get; set; }
 
-        public string Template { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
+
+        public string Template { get; set; }
         public string ShortName { get; set; }
         public string SymbolName { get; set; }
-        public string Description { get; set; }
+        public string TypeDisplayName { get; set; }
+
         public List<string> Values { get; internal set; }
-        public CommandOptionType OptionType { get; private set; }
         public bool ShowInHelpText { get; set; } = true;
         public bool Inherited { get; set; }
-        
-        public string TypeDisplayName { get; set; }
         public object DefaultValue { get; set; }
-        public bool Multiple { get; set; }
+        public IArgumentArity Arity { get; set; }
         public List<string> AllowedValues { get; set; }
+
+        #region Obsolete Members
 
         [Obsolete("Use Name instead")]
         public string LongName
@@ -47,6 +49,9 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             set => Name = value;
         }
 
+        [Obsolete("Use Arity instead")]
+        public CommandOptionType OptionType { get; }
+
         [Obsolete("Use TypeDisplayName instead")]
         public string ValueName
         {
@@ -54,28 +59,37 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             set => TypeDisplayName = value;
         }
 
+        [Obsolete("Use Arity.MaximumNumberOfValues > 1 instead")]
+        public bool Multiple
+        {
+            get => Arity.AllowsZeroOrMore();
+            set => Arity = value ? ArgumentArity.ZeroOrMore : ArgumentArity.ExactlyOne;
+        }
+
+        #endregion
+
         public bool TryParse(string value)
         {
-            switch (OptionType)
+            if (Arity.AllowsZeroOrMore())
             {
-                case CommandOptionType.MultipleValue:
-                    Values.Add(value);
-                    break;
-                case CommandOptionType.SingleValue:
-                    if (Values.Any())
-                    {
-                        return false;
-                    }
-                    Values.Add(value);
-                    break;
-                case CommandOptionType.NoValue:
-                    if (value != null)
-                    {
-                        return false;
-                    }
-                    // Add a value to indicate that this option was specified
-                    Values.Add("on");
-                    break;
+                Values.Add(value);
+            }
+            else if (Arity.AllowsZeroOrOne())
+            {
+                if (Values.Any())
+                {
+                    return false;
+                }
+                Values.Add(value);
+            }
+            else if (Arity.AllowsNone())
+            {
+                if (value != null)
+                {
+                    return false;
+                }
+                // Add a value to indicate that this option was specified
+                Values.Add("on");
             }
             return true;
         }

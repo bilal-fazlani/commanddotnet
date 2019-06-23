@@ -69,35 +69,33 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             return command;
         }
 
-        internal CommandOption Option(string template, string description, CommandOptionType optionType, 
+        internal CommandOption Option(string template, string description, IArgumentArity arity, 
             Action<CommandOption> configuration, bool inherited,
-            string typeDisplayName, object defaultValue, bool multiple, List<string> allowedValues
+            string typeDisplayName, object defaultValue, List<string> allowedValues
             )
         {
-            var option = new CommandOption(template, optionType)
+            var option = new CommandOption(template, arity)
             {
                 Description = description,
                 Inherited = inherited,
                 DefaultValue = defaultValue,
                 TypeDisplayName = typeDisplayName,
-                Multiple = multiple,
                 AllowedValues = allowedValues
             };
             bool optionAdded = _options.Add(option);
             if(!optionAdded)
-                throw new AppRunnerException($"Option with template `{option.Template}` already added");
+                throw new AppRunnerException($"Option with template `{template}` already added");
             configuration(option);
             return option;
         }
 
         public CommandOperand Operand(
-            string name, string description, 
+            string name, string description, IArgumentArity arity, 
             Action<CommandOperand> configuration,
-            string typeDisplayName, object defaultValue, bool multiple,
-            List<string> allowedValues)
+            string typeDisplayName, object defaultValue, List<string> allowedValues)
         {
             var lastOperand = Operands.LastOrDefault();
-            if (lastOperand != null && lastOperand.MultipleValues)
+            if (lastOperand != null && lastOperand.Arity.AllowsZeroOrMore())
             {
                 var message =
                     $"The last operand '{lastOperand.Name}' accepts multiple values. No more operands can be added.";
@@ -108,7 +106,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             {
                 Name = name, 
                 Description = description, 
-                MultipleValues = multiple,
+                Arity = arity,
                 TypeDisplayName = typeDisplayName,
                 DefaultValue = defaultValue,
                 AllowedValues = allowedValues
@@ -150,7 +148,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         {
             // Help option is special because we stop parsing once we see it
             // So we store it separately for further use
-            OptionHelp = Option(template, "Show help information", CommandOptionType.NoValue, _=>{}, false, Constants.TypeDisplayNames.Flag, DBNull.Value, false, null);
+            OptionHelp = Option(template, "Show help information", ArgumentArity.Zero, _=>{}, false, Constants.TypeDisplayNames.Flag, DBNull.Value, null);
             OptionHelp.IsSystemOption = true;
         }
 
@@ -158,7 +156,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         {
             // Version option is special because we stop parsing once we see it
             // So we store it separately for further use
-            OptionVersion = Option(template, "Show version information", CommandOptionType.NoValue, _=>{}, false, Constants.TypeDisplayNames.Flag, DBNull.Value, false, null);
+            OptionVersion = Option(template, "Show version information", ArgumentArity.Zero, _=>{}, false, Constants.TypeDisplayNames.Flag, DBNull.Value, null);
             OptionVersion.IsSystemOption = true;
             _printVersion = printVersion;
         }

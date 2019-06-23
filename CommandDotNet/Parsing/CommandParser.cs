@@ -200,7 +200,7 @@ namespace CommandDotNet.Parsing
 
                 option = null;
             }
-            else if(option.OptionType == CommandOptionType.NoValue)
+            else if(option.Arity.AllowsNone())
             {
                 // No value is needed for this option
                 option.TryParse(null);
