@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using CommandDotNet.Extensions;
@@ -9,7 +8,7 @@ using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet.Models
 {
-    public abstract class ArgumentInfo
+    public abstract class ArgumentInfo : INameAndDescription
     {
         private readonly IArgumentTypeDescriptor _typeDescriptor;
 
@@ -56,7 +55,11 @@ namespace CommandDotNet.Models
 
         protected AppSettings Settings { get; }
         protected ICustomAttributeProvider AttributeProvider { get; }
-        
+
+
+        public string Name { get; protected set; }
+        public string Description { get; protected set; }
+
         public Type Type { get; }
 
         /// <summary>
@@ -67,12 +70,7 @@ namespace CommandDotNet.Models
         public Type UnderlyingType { get; }
         
         public object DefaultValue { get; }
-        
-        public string AnnotatedDescription { get; protected set; }
         public bool IsMultipleType { get; }
-
-        [Obsolete("use PropertyOrParameterName instead")]
-        public string PropertyOrArgumentName => PropertyOrParameterName;
 
         public string PropertyOrParameterName { get; }
         public bool IsPartOfModel { get; }
@@ -86,6 +84,12 @@ namespace CommandDotNet.Models
         public List<string> AllowedValues => (_typeDescriptor as IAllowedValuesTypeDescriptor)
             ?.GetAllowedValues(this)
             .ToList();
+
+        [Obsolete("use PropertyOrParameterName instead")]
+        public string PropertyOrArgumentName => PropertyOrParameterName;
+
+        [Obsolete("Use Description instead")]
+        public string AnnotatedDescription => Description;
 
         private bool GetIsMultipleType()
         {

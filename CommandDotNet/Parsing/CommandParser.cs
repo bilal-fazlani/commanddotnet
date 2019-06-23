@@ -95,7 +95,7 @@ namespace CommandDotNet.Parsing
 
             if (currentOption != null) // an option was left without a value
             {
-                throw new CommandParsingException(currentCommand, $"Missing value for option '{currentOption.LongName}'");
+                throw new CommandParsingException(currentCommand, $"Missing value for option '{currentOption.Name}'");
             }
 
             return new ParseResult(currentCommand, args, tokens, unparsedTokens: new Tokens(remainingArguments));
@@ -130,7 +130,7 @@ namespace CommandDotNet.Parsing
                     return ParseOperandResult.Succeeded;
                 }
 
-                throw new CommandParsingException(command, $"Unexpected value '{token.Value}' for option '{option.LongName}'");
+                throw new CommandParsingException(command, $"Unexpected value '{token.Value}' for option '{option.Name}'");
             }
 
             var subCommand = command.Commands
@@ -168,7 +168,7 @@ namespace CommandDotNet.Parsing
             string optionName = optionTokenType.GetName();
 
             option = optionTokenType.IsLong 
-                ? command.FindOption(o => o.LongName, optionName)
+                ? command.FindOption(o => o.Name, optionName)
                 : command.FindOption(o => o.ShortName, optionName)
                   ?? command.FindOption(o => o.SymbolName, optionName);
 
@@ -195,7 +195,7 @@ namespace CommandDotNet.Parsing
             {
                 if (!option.TryParse(optionTokenType.GetAssignedValue()))
                 {
-                    throw new CommandParsingException(command, $"Unexpected value '{token.Value}' for option '{option.LongName}'");
+                    throw new CommandParsingException(command, $"Unexpected value '{token.Value}' for option '{option.Name}'");
                 }
 
                 option = null;

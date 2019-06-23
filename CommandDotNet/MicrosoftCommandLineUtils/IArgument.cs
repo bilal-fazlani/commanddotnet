@@ -1,6 +1,6 @@
 ﻿namespace CommandDotNet.MicrosoftCommandLineUtils
 {
-    public interface IArgument
+    public interface IArgument: INameAndDescription
     {
         
     }

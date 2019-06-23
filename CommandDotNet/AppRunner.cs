@@ -63,7 +63,7 @@ namespace CommandDotNet
                 if (optionHelp != null)
                 {
                     _settings.Out.WriteLine(
-                        $"Specify --{optionHelp.LongName} for a list of available options and commands.");
+                        $"Specify --{optionHelp.Name} for a list of available options and commands.");
                 }
 
                 _settings.Error.WriteLine(e.Message + "\n");

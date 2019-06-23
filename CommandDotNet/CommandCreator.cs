@@ -89,7 +89,7 @@ namespace CommandDotNet
         {
             operandArgument.SetValue(command.Operand(
                 operandArgument.Name,
-                operandArgument.AnnotatedDescription,
+                operandArgument.Description,
                 _=>{},
                 operandArgument.TypeDisplayName,
                 operandArgument.DefaultValue,
@@ -100,7 +100,7 @@ namespace CommandDotNet
         private static void SetValueForOption(OptionArgumentInfo option, CommandLineApplication command)
         {
             option.SetValue(command.Option(option.Template,
-                option.AnnotatedDescription,
+                option.Description,
                 option.CommandOptionType,
                 _=>{},
                 option.Inherited,
@@ -125,7 +125,7 @@ namespace CommandDotNet
                 var optionInfo = (OptionArgumentInfo) argumentInfo;
                 optionInfo.SetValue(_app.Option(
                     optionInfo.Template,
-                    optionInfo.AnnotatedDescription,
+                    optionInfo.Description,
                     optionInfo.CommandOptionType,
                     _=>{},
                     optionInfo.Inherited,

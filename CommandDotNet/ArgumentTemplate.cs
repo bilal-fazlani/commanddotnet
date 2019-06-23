@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
-using CommandDotNet.Extensions;
 
 namespace CommandDotNet
 {
     public class ArgumentTemplate
     {
-        public string LongName { get; set; }
+        public string Name { get; set; }
         public string ShortName { get; set; }
         public string SymbolName { get; set; }
         public string TypeDisplayName { get; set; }
@@ -22,7 +20,7 @@ namespace CommandDotNet
             {
                 if (part.StartsWith("--"))
                 {
-                    LongName = part.Substring(2);
+                    Name = part.Substring(2);
                 }
                 else if (part.StartsWith("-"))
                 {
@@ -48,7 +46,7 @@ namespace CommandDotNet
                 }
             }
 
-            if (string.IsNullOrEmpty(LongName) && string.IsNullOrEmpty(ShortName) && string.IsNullOrEmpty(SymbolName))
+            if (string.IsNullOrEmpty(Name) && string.IsNullOrEmpty(ShortName) && string.IsNullOrEmpty(SymbolName))
             {
                 throw new ArgumentException($"Invalid template pattern '{template}' Unable to determine the name of the argument. " +
                                             $"provide either a symbol, short or long name following this pattern: -symbol|-short|--long", nameof(template));
@@ -74,12 +72,12 @@ namespace CommandDotNet
 
             AppendIfNotNull("-", ShortName);
             AppendIfNotNull("-", SymbolName);
-            AppendIfNotNull("--", LongName);
+            AppendIfNotNull("--", Name);
 
             if (sb.Length == 0)
             {
                 throw new Exception("Unable to generate template. " +
-                                    $"One of either {nameof(LongName)}, {nameof(ShortName)} or {nameof(SymbolName)} must be specified");
+                                    $"One of either {nameof(Name)}, {nameof(ShortName)} or {nameof(SymbolName)} must be specified");
             }
 
             return TypeDisplayName.IsNullOrWhitespace()

@@ -96,7 +96,7 @@ namespace CommandDotNet.HelpGeneration
                 {
                     commandsBuilder.Append("Use \"");
                     commandsBuilder.AppendUsageCommandNames(app, _appSettings);
-                    commandsBuilder.AppendLine($" [command] --{app.OptionHelp.LongName}\" for more information about a command.");
+                    commandsBuilder.AppendLine($" [command] --{app.OptionHelp.Name}\" for more information about a command.");
                 }
             }
 

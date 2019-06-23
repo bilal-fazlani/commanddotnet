@@ -28,9 +28,7 @@ namespace CommandDotNet.Models
         public string Template { get; private set; }
         
         public BooleanMode BooleanMode { get; private set; }
-        
-        public string LongName { get; private set; }
-        
+
         public string ShortName { get; private set; }
 
         public bool Inherited => _optionAttribute?.Inherited ?? false;
@@ -43,11 +41,11 @@ namespace CommandDotNet.Models
             CommandOptionType = GetCommandOptionType();
 
             ShortName = GetShortName();
-            LongName = GetLongName();
+            Name = GetLongName();
 
-            Template = new ArgumentTemplate {LongName = LongName, ShortName = ShortName}.ToString();
+            Template = new ArgumentTemplate {Name = Name, ShortName = ShortName}.ToString();
 
-            AnnotatedDescription = GetAnnotatedDescription();
+            Description = GetAnnotatedDescription();
         }
 
         private string GetShortName()
