@@ -19,8 +19,6 @@ namespace CommandDotNet.Models
             Init();
         }
 
-        public string Name { get; private set; }
-
         private void Init()
         {
             _operandAttribute = AttributeProvider.GetCustomAttribute<OperandAttribute>();
@@ -30,7 +28,7 @@ namespace CommandDotNet.Models
             }
 
             Name = GetName();
-            AnnotatedDescription = GetAnnotatedDescription();
+            Description = GetAnnotatedDescription();
         }
 
         private string GetName() => _operandAttribute?.Name ?? _argumentAttribute?.Name

@@ -16,7 +16,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             Values = new List<string>();
 
             var argumentTemplate = new ArgumentTemplate(template);
-            LongName = argumentTemplate.LongName;
+            Name = argumentTemplate.Name;
             ShortName = argumentTemplate.ShortName;
             SymbolName = argumentTemplate.SymbolName;
             TypeDisplayName = argumentTemplate.TypeDisplayName;
@@ -26,10 +26,9 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public bool IsSystemOption { get; set; }
 
         public string Template { get; set; }
+        public string Name { get; set; }
         public string ShortName { get; set; }
-        public string LongName { get; set; }
         public string SymbolName { get; set; }
-        public string ValueName { get; set; }
         public string Description { get; set; }
         public List<string> Values { get; internal set; }
         public CommandOptionType OptionType { get; private set; }
@@ -40,6 +39,20 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public object DefaultValue { get; set; }
         public bool Multiple { get; set; }
         public List<string> AllowedValues { get; set; }
+
+        [Obsolete("Use Name instead")]
+        public string LongName
+        {
+            get => Name;
+            set => Name = value;
+        }
+
+        [Obsolete("Use TypeDisplayName instead")]
+        public string ValueName
+        {
+            get => TypeDisplayName;
+            set => TypeDisplayName = value;
+        }
 
         public bool TryParse(string value)
         {

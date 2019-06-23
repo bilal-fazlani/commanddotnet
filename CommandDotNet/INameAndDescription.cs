@@ -1,4 +1,4 @@
-﻿namespace CommandDotNet.Attributes
+﻿namespace CommandDotNet
 {
     public interface INameAndDescription
     {
