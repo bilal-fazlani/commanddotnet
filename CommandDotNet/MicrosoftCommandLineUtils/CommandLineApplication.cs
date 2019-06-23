@@ -19,6 +19,8 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         private Action _printVersion;
         private Func<int> _invoke;
         private readonly HashSet<CommandOption> _options;
+        private readonly HashSet<CommandOperand> _operands;
+        private readonly List<ICommand> _commands;
 
         public CommandLineApplication(
             AppSettings appSettings, 
@@ -33,21 +35,23 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             _invoke = () => 0;
 
             _options = new HashSet<CommandOption>();
-            Operands = new HashSet<CommandOperand>();
-            Commands = new List<ICommand>();
+            _operands = new HashSet<CommandOperand>();
+            _commands = new List<ICommand>();
         }
 
         public string Name { get; }
         public string Description { get; set; }
         public bool ShowInHelpText => true;
         public string ExtendedHelpText { get; set; }
+
         public CommandOption OptionHelp { get; private set; }
         public CommandOption OptionVersion { get; private set; }
-        public ICustomAttributeProvider CustomAttributeProvider { get; }
-        public HashSet<CommandOperand> Operands { get; }
-        public ICommand Parent { get; }
-        public List<ICommand> Commands { get; }
 
+        public IEnumerable<CommandOperand> Operands => _operands;
+        public ICommand Parent { get; }
+        public IEnumerable<ICommand> Commands => _commands;
+        public ICustomAttributeProvider CustomAttributeProvider { get; }
+        
         [Obsolete("This was used solely for help.  The functionality has been moved to help providers.")]
 
         public string GetFullCommandName()
@@ -65,7 +69,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public CommandLineApplication Command(string name, ICustomAttributeProvider customAttributeProvider)
         {
             var command = new CommandLineApplication(_appSettings, name, customAttributeProvider, this);
-            Commands.Add(command);
+            _commands.Add(command);
             return command;
         }
 
@@ -111,7 +115,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 DefaultValue = defaultValue,
                 AllowedValues = allowedValues
             };
-            bool operandAdded = Operands.Add(operand);
+            bool operandAdded = _operands.Add(operand);
             if(!operandAdded)
                 throw new AppRunnerException($"Operand with name '{operand.Name}' already added");
             configuration(operand);
