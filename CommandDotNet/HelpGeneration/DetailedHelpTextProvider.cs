@@ -74,7 +74,7 @@ namespace CommandDotNet.HelpGeneration
         private StringBuilder BuildCommands(ICommand app, StringBuilder usageBuilder)
         {
             var commandsBuilder = new StringBuilder();
-            var commands = app.Commands.Where(c => c.ShowInHelpText).ToList();
+            var commands = app.Commands.ToList();
             if (commands.Any())
             {
                 usageBuilder.Append(" [command]");
@@ -107,7 +107,6 @@ namespace CommandDotNet.HelpGeneration
         {
             var optionsBuilder = new StringBuilder();
             List<CommandOption> options = app.GetOptions()
-                .Where(o => o.ShowInHelpText)
                 .OrderBy(o => o.IsSystemOption)
                 .ToList();
             if (options.Any())
@@ -143,7 +142,7 @@ namespace CommandDotNet.HelpGeneration
         {
             var argumentsBuilder = new StringBuilder();
 
-            var arguments = app.Operands.Where(a => a.ShowInHelpText).ToList();
+            var arguments = app.Operands.ToList();
                         
             if (arguments.Any())
             {

@@ -8,7 +8,6 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
     {
         string Name { get; }
         string Description { get; }
-        bool ShowInHelpText { get; }
         string ExtendedHelpText { get; }
         ICommand Parent { get; }
         IEnumerable<ICommand> Commands { get; }
@@ -17,7 +16,13 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         CommandOption OptionHelp { get; }
         ICustomAttributeProvider CustomAttributeProvider { get; }
 
+        #region Obsolete members
+
+        [Obsolete("do not use.  value is always true.")]
+        bool ShowInHelpText { get; }
         [Obsolete("This was used solely for help.  The functionality has been moved to help providers.")]
         string GetFullCommandName();
+
+        #endregion
     }
 }

@@ -15,14 +15,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         }
 
         public string Name { get; set; }
-        public bool ShowInHelpText { get; set; } = true;
         public string Description { get; set; }
-        [Obsolete("Use Arity.MaximumNumberOfValues > 1 instead")]
-        public bool MultipleValues 
-        {
-            get => Arity.AllowsZeroOrMore();
-            set => Arity = value ? ArgumentArity.ZeroOrMore : ArgumentArity.ExactlyOne;
-        }
         public IArgumentArity Arity { get; set; }
         public string TypeDisplayName { get; set; }
         public object DefaultValue { get; set; }
@@ -30,5 +23,19 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         
         public string Value => Values.FirstOrDefault();
         public List<string> Values { get; internal set; }
+
+        #region Obsolete members
+
+        [Obsolete("do not use.  value is always true.")]
+        public bool ShowInHelpText { get; set; } = true;
+
+        [Obsolete("Use Arity.MaximumNumberOfValues > 1 instead")]
+        public bool MultipleValues
+        {
+            get => Arity.AllowsZeroOrMore();
+            set => Arity = value ? ArgumentArity.ZeroOrMore : ArgumentArity.ExactlyOne;
+        }
+
+        #endregion
     }
 }
