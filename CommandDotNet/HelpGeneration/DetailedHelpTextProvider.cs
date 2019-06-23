@@ -120,7 +120,7 @@ namespace CommandDotNet.HelpGeneration
                 var helpValues = options.Select(a =>
                     new ArgumentHelpValues
                     {
-                        Template = $"{a.Template}{(a.Multiple ? " (Multiple)" : "")}",
+                        Template = $"{a.Template}{(a.Arity.AllowsZeroOrMore() ? " (Multiple)" : "")}",
                         DisplayName = a.TypeDisplayName.IsNullOrEmpty()
                             ? null
                             : $"<{a.TypeDisplayName.ToUpperInvariant()}>",

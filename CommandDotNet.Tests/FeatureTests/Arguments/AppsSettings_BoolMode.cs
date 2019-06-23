@@ -2,11 +2,12 @@ using CommandDotNet.Attributes;
 using CommandDotNet.Models;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.Utils;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class AppsSettings_BoolMode : ScenarioTestBase<AppsSettings_BoolMode>
+    public class AppsSettings_BoolMode : TestBase
     {
         private static AppSettings ImplicitBasicHelp = TestAppSettings.BasicHelp.Clone(a => a.BooleanMode = BooleanMode.Implicit);
         private static AppSettings ImplicitDetailedHelp = TestAppSettings.DetailedHelp.Clone(a => a.BooleanMode = BooleanMode.Implicit);
@@ -18,16 +19,16 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
         }
 
-        public static Scenarios Scenarios =>
-            new Scenarios
+        [Fact]
+        public void WhenExplicit_BasicHelp_DoesNotIncludeAllowedValues()
+        {
+            Verify(new Given<App>
             {
-                new Given<App>("Explicit - Basic Help - does not include allowed values")
+                And = { AppSettings = ExplicitBasicHelp },
+                WhenArgs = "Do -h",
+                Then =
                 {
-                    And = {AppSettings = ExplicitBasicHelp},
-                    WhenArgs = "Do -h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
 
 Arguments:
   operand
@@ -35,15 +36,20 @@ Arguments:
 Options:
   --option
   -h | --help  Show help information"
-                    }
-                },
-                new Given<App>("Explicit - Detailed Help - does include allowed values")
+                }
+            });
+        }
+
+        [Fact]
+        public void WhenExplicit_DetailedHelp_IncludesAllowedValues()
+        {
+            Verify(new Given<App>
+            {
+                And = { AppSettings = ExplicitDetailedHelp },
+                WhenArgs = "Do -h",
+                Then =
                 {
-                    And = {AppSettings = ExplicitDetailedHelp},
-                    WhenArgs = "Do -h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
 
 Arguments:
 
@@ -58,15 +64,20 @@ Options:
 
   -h | --help
   Show help information"
-                    }
-                },
-                new Given<App>("Implicit - Basic Help - does not include allowed values")
+                }
+            });
+        }
+
+        [Fact]
+        public void WhenImplicit_BasicHelp_DoesNotIncludeAllowedValues()
+        {
+            Verify(new Given<App>
+            {
+                And = { AppSettings = ImplicitBasicHelp },
+                WhenArgs = "Do -h",
+                Then =
                 {
-                    And = {AppSettings = ImplicitBasicHelp},
-                    WhenArgs = "Do -h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
 
 Arguments:
   operand
@@ -74,15 +85,20 @@ Arguments:
 Options:
   --option
   -h | --help  Show help information"
-                    }
-                },
-                new Given<App>("Implicit - Detailed Help - does not include allowed values for option")
+                }
+            });
+        }
+
+        [Fact]
+        public void WhenImplicit_DetailedHelp_DoesNotIncludeAllowedValuesForOption()
+        {
+            Verify(new Given<App>
+            {
+                And = { AppSettings = ImplicitDetailedHelp },
+                WhenArgs = "Do -h",
+                Then =
                 {
-                    And = {AppSettings = ImplicitDetailedHelp},
-                    WhenArgs = "Do -h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
 
 Arguments:
 
@@ -96,49 +112,74 @@ Options:
 
   -h | --help
   Show help information"
-                    }
-                },
-                new Given<App>("Implicit - exec - option is false if not specified")
+                }
+            });
+        }
+
+        [Fact]
+        public void WhenImplicit_Exec_OptionsIsFalseIfNotSpecified()
+        {
+            Verify(new Given<App>
+            {
+                And = { AppSettings = ImplicitBasicHelp },
+                // bool value 'true' is operand
+                WhenArgs = "Do true",
+                Then = { Outputs = { new Result(false, true) } }
+            });
+        }
+
+        [Fact]
+        public void WhenImplicit_Exec_OptionsIsTrueIfSpecified()
+        {
+            Verify(new Given<App>
+            {
+                And = { AppSettings = ImplicitBasicHelp },
+                // bool value 'false' is operand
+                WhenArgs = "Do --option false",
+                Then = { Outputs = { new Result(true, false) } }
+            });
+        }
+
+        [Fact]
+        public void WhenExplicit_Exec_OptionValueMustFollowTheArgument()
+        {
+            Verify(new Given<App>
+            {
+                And = { AppSettings = ExplicitBasicHelp },
+                WhenArgs = "Do2 --option 2",
+                Then =
                 {
-                    And = {AppSettings = ImplicitBasicHelp},
-                    // bool value 'true' is operand
-                    WhenArgs = "Do true",
-                    Then = {Outputs = {new Result(false, true)}}
-                },
-                new Given<App>("Implicit - exec - option is true if specified")
+                    ExitCode = 2,
+                    ResultsContainsTexts = { "'2' is not a valid Boolean" }
+                }
+            });
+        }
+
+        [Fact]
+        public void WhenExplicit_Exec_OptionValueIsRequired()
+        {
+            Verify(new Given<App>
+            {
+                And = { AppSettings = ExplicitBasicHelp },
+                WhenArgs = "Do --option",
+                Then =
                 {
-                    And = {AppSettings = ImplicitBasicHelp},
-                    // bool value 'false' is operand
-                    WhenArgs = "Do --option false",
-                    Then = {Outputs = {new Result(true, false)}}
-                },
-                new Given<App>("Explicit - exec - option value must be the next argument")
-                {
-                    And = {AppSettings = ExplicitBasicHelp},
-                    WhenArgs = "Do2 --option 2",
-                    Then =
-                    {
-                        ExitCode = 2,
-                        ResultsContainsTexts = { "'2' is not a valid Boolean" }
-                    }
-                },
-                new Given<App>("Explicit - exec - option value is required")
-                {
-                    And = {AppSettings = ExplicitBasicHelp},
-                    WhenArgs = "Do --option",
-                    Then =
-                    {
-                        ExitCode = 1,
-                        ResultsContainsTexts = { "Missing value for option 'option'" }
-                    }
-                },
-                new Given<App>("Explicit - exec - specified option value is used")
-                {
-                    And = {AppSettings = ExplicitBasicHelp},
-                    WhenArgs = "Do --option false true",
-                    Then = {Outputs = {new Result(false, true)}}
-                },
-            };
+                    ExitCode = 1,
+                    ResultsContainsTexts = { "Missing value for option 'option'" }
+                }
+            });
+        }
+
+        [Fact]
+        public void WhenExplicit_Exec_SpecifiedOptionValueIsUsed()
+        {
+            Verify(new Given<App>
+            {
+                And = { AppSettings = ExplicitBasicHelp },
+                WhenArgs = "Do --option false true",
+                Then = { Outputs = { new Result(false, true) } }
+            });
+        }
 
         public class App
         {

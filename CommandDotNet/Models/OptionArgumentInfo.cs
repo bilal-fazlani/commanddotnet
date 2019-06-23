@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Reflection;
 using CommandDotNet.Attributes;
 using CommandDotNet.Exceptions;
@@ -23,8 +23,11 @@ namespace CommandDotNet.Models
 
         public override bool IsImplicit => BooleanMode == BooleanMode.Implicit;
 
-        public CommandOptionType CommandOptionType { get; private set; }
-        
+
+        [Obsolete("Use Arity instead")]
+
+        public CommandOptionType CommandOptionType => ArgumentArity.ToCommandOptionType(Arity);
+
         public string Template { get; private set; }
         
         public BooleanMode BooleanMode { get; private set; }
@@ -38,7 +41,7 @@ namespace CommandDotNet.Models
             _optionAttribute = AttributeProvider.GetCustomAttribute<OptionAttribute>();
 
             BooleanMode = GetBooleanMode();
-            CommandOptionType = GetCommandOptionType();
+            Arity = ArgumentArity.Default(Type, BooleanMode);
 
             ShortName = GetShortName();
             Name = GetLongName();
@@ -87,21 +90,6 @@ namespace CommandDotNet.Models
                     $"BooleanMode property is set to `{attribute.BooleanMode}` for a non boolean parameter type. " +
                     $"Property name: {PropertyOrParameterName} " +
                     $"Type : {Type.Name}");
-        }
-
-        private CommandOptionType GetCommandOptionType()
-        {
-            if (typeof(IEnumerable).IsAssignableFrom(Type) && Type != typeof(string))
-            {
-                return CommandOptionType.MultipleValue;
-            }
-
-            if ((Type == typeof(bool) || Type == typeof(bool?)) && BooleanMode == BooleanMode.Implicit)
-            {
-                return CommandOptionType.NoValue;
-            }
-            
-            return CommandOptionType.SingleValue;
         }
 
         private string GetAnnotatedDescription()

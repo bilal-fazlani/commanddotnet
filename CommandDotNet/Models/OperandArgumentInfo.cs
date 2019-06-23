@@ -29,6 +29,7 @@ namespace CommandDotNet.Models
 
             Name = GetName();
             Description = GetAnnotatedDescription();
+            Arity = ArgumentArity.Default(Type, BooleanMode.Explicit);
         }
 
         private string GetName() => _operandAttribute?.Name ?? _argumentAttribute?.Name
