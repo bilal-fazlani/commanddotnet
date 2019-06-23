@@ -34,7 +34,6 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public string TypeDisplayName { get; set; }
 
         public List<string> Values { get; internal set; }
-        public bool ShowInHelpText { get; set; } = true;
         public bool Inherited { get; set; }
         public object DefaultValue { get; set; }
         public IArgumentArity Arity { get; set; }
@@ -65,6 +64,9 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             get => Arity.AllowsZeroOrMore();
             set => Arity = value ? ArgumentArity.ZeroOrMore : ArgumentArity.ExactlyOne;
         }
+
+        [Obsolete("do not use.  value is always true.")]
+        public bool ShowInHelpText { get; set; } = true;
 
         #endregion
 
