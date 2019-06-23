@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Reflection;
-using System.Text;
 using CommandDotNet.Attributes;
 using CommandDotNet.Exceptions;
 using CommandDotNet.Extensions;
@@ -47,7 +45,7 @@ namespace CommandDotNet.Models
             ShortName = GetShortName();
             LongName = GetLongName();
 
-            Template = GetTemplate();
+            Template = new ArgumentTemplate {LongName = LongName, ShortName = ShortName}.ToString();
 
             AnnotatedDescription = GetAnnotatedDescription();
         }
@@ -92,39 +90,7 @@ namespace CommandDotNet.Models
                     $"Property name: {PropertyOrParameterName} " +
                     $"Type : {Type.Name}");
         }
-        
-        private string GetTemplate()
-        {
-            StringBuilder sb = new StringBuilder();
 
-            bool shortNameAdded = false;
-            bool longNameAdded = false;
-
-            if (!string.IsNullOrWhiteSpace(ShortName))
-            {
-                sb.Append($"-{ShortName}");
-                shortNameAdded = true;
-            }
-
-            if (!string.IsNullOrWhiteSpace(LongName))
-            {
-                if (shortNameAdded)
-                {
-                    sb.Append(" | ");
-                }
-                
-                sb.Append($"--{LongName}");
-                longNameAdded = true;
-            }
-
-            if (!longNameAdded & !shortNameAdded)
-            {
-                throw new Exception("something went wrong: !longNameAdded & !shortNameAdded");
-            }
-    
-            return sb.ToString();
-        }
-        
         private CommandOptionType GetCommandOptionType()
         {
             if (typeof(IEnumerable).IsAssignableFrom(Type) && Type != typeof(string))

@@ -15,40 +15,11 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             OptionType = optionType;
             Values = new List<string>();
 
-            foreach (var part in Template.Split(new[] { ' ', '|' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                if (part.StartsWith("--"))
-                {
-                    LongName = part.Substring(2);
-                }
-                else if (part.StartsWith("-"))
-                {
-                    var optName = part.Substring(1);
-
-                    // If there is only one char and it is not an English letter, it is a symbol option (e.g. "-?")
-                    if (optName.Length == 1 && !IsEnglishLetter(optName[0]))
-                    {
-                        SymbolName = optName;
-                    }
-                    else
-                    {
-                        ShortName = optName;
-                    }
-                }
-                else if (part.StartsWith("<") && part.EndsWith(">"))
-                {
-                    ValueName = part.Substring(1, part.Length - 2);
-                }
-                else
-                {
-                    throw new ArgumentException($"Invalid template pattern '{template}'", nameof(template));
-                }
-            }
-
-            if (string.IsNullOrEmpty(LongName) && string.IsNullOrEmpty(ShortName) && string.IsNullOrEmpty(SymbolName))
-            {
-                throw new ArgumentException($"Invalid template pattern '{template}'", nameof(template));
-            }
+            var argumentTemplate = new ArgumentTemplate(template);
+            LongName = argumentTemplate.LongName;
+            ShortName = argumentTemplate.ShortName;
+            SymbolName = argumentTemplate.SymbolName;
+            TypeDisplayName = argumentTemplate.TypeDisplayName;
         }
 
         /// <summary>True when option is help or version</summary>
@@ -104,11 +75,6 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public string Value()
         {
             return HasValue() ? Values[0] : null;
-        }
-
-        private bool IsEnglishLetter(char c)
-        {
-            return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
         }
 
         public override bool Equals(object obj)
