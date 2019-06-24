@@ -77,8 +77,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             return command;
         }
 
-        internal CommandOption Option(string template, string description, IArgumentArity arity, 
-            Action<CommandOption> configuration, bool inherited,
+        internal CommandOption Option(string template, string description, IArgumentArity arity, bool inherited,
             string typeDisplayName, object defaultValue, List<string> allowedValues
             )
         {
@@ -94,13 +93,11 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             RegisterArgumentByAliases(option);
 
             _options.Add(option);
-            configuration(option);
             return option;
         }
 
         public CommandOperand Operand(
-            string name, string description, IArgumentArity arity, 
-            Action<CommandOperand> configuration,
+            string name, string description, IArgumentArity arity,
             string typeDisplayName, object defaultValue, List<string> allowedValues)
         {
             var lastOperand = Operands.LastOrDefault();
@@ -124,7 +121,6 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             RegisterArgumentByAliases(operand);
 
             _operands.Add(operand);
-            configuration(operand);
             return operand;
         }
 
@@ -165,7 +161,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         {
             // Help option is special because we stop parsing once we see it
             // So we store it separately for further use
-            OptionHelp = Option(template, "Show help information", ArgumentArity.Zero, _=>{}, false, Constants.TypeDisplayNames.Flag, DBNull.Value, null);
+            OptionHelp = Option(template, "Show help information", ArgumentArity.Zero, false, Constants.TypeDisplayNames.Flag, DBNull.Value, null);
             OptionHelp.IsSystemOption = true;
         }
 
@@ -173,7 +169,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         {
             // Version option is special because we stop parsing once we see it
             // So we store it separately for further use
-            OptionVersion = Option(template, "Show version information", ArgumentArity.Zero, _=>{}, false, Constants.TypeDisplayNames.Flag, DBNull.Value, null);
+            OptionVersion = Option(template, "Show version information", ArgumentArity.Zero, false, Constants.TypeDisplayNames.Flag, DBNull.Value, null);
             OptionVersion.IsSystemOption = true;
             _printVersion = printVersion;
         }
