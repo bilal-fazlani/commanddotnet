@@ -91,7 +91,6 @@ namespace CommandDotNet
                 operandInfo.Name,
                 operandInfo.Description,
                 operandInfo.Arity,
-                _=> {},
                 operandInfo.TypeDisplayName,
                 operandInfo.DefaultValue,
                 operandInfo.AllowedValues);
@@ -103,7 +102,6 @@ namespace CommandDotNet
             var option = command.Option(optionInfo.Template,
                 optionInfo.Description,
                 optionInfo.Arity,
-                _=>{},
                 optionInfo.Inherited,
                 optionInfo.TypeDisplayName,
                 optionInfo.DefaultValue,
