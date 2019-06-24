@@ -106,8 +106,9 @@ namespace CommandDotNet.HelpGeneration
         private  StringBuilder BuildOptions(ICommand app, StringBuilder usageBuilder)
         {
             var optionsBuilder = new StringBuilder();
-            List<CommandOption> options = app.GetOptions()
+            List<IOption> options = app.GetOptions()
                 .OrderBy(o => o.IsSystemOption)
+                .Cast<IOption>()
                 .ToList();
             if (options.Any())
             {

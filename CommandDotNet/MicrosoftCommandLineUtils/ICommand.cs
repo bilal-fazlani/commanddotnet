@@ -11,9 +11,10 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         string ExtendedHelpText { get; }
         ICommand Parent { get; }
         IEnumerable<ICommand> Commands { get; }
-        IEnumerable<CommandOperand> Operands { get; }
-        IEnumerable<CommandOption> GetOptions(bool includeInherited = true);
-        CommandOption OptionHelp { get; }
+        IEnumerable<IOperand> Operands { get; }
+        IEnumerable<IOption> GetOptions(bool includeInherited = true);
+        IOption OptionHelp { get; }
+
         ICustomAttributeProvider CustomAttributeProvider { get; }
 
         #region Obsolete members

@@ -42,10 +42,10 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public string Description { get; set; }
         public string ExtendedHelpText { get; set; }
 
-        public CommandOption OptionHelp { get; private set; }
-        public CommandOption OptionVersion { get; private set; }
+        public IOption OptionHelp { get; private set; }
+        public IOption OptionVersion { get; private set; }
 
-        public IEnumerable<CommandOperand> Operands => _operands;
+        public IEnumerable<IOperand> Operands => _operands;
         public ICommand Parent { get; }
         public IEnumerable<ICommand> Commands => _commands;
         public ICustomAttributeProvider CustomAttributeProvider { get; }
@@ -63,7 +63,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 
         #endregion
 
-        public IEnumerable<CommandOption> GetOptions(bool includeInherited = true)
+        public IEnumerable<IOption> GetOptions(bool includeInherited = true)
         {
             return includeInherited
                 ? _options.Concat(this.GetParentCommands().SelectMany(a => a._options.Where(o => o.Inherited)))
