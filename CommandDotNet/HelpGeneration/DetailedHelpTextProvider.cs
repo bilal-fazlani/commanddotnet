@@ -154,7 +154,7 @@ namespace CommandDotNet.HelpGeneration
                 var helpValues = arguments.Select(a =>
                     new ArgumentHelpValues
                     {
-                        Template = $"{a.Name}{(a.MultipleValues ? " (Multiple)" : "")}",
+                        Template = $"{a.Name}{(a.Arity.AllowsZeroOrMore() ? " (Multiple)" : "")}",
                         DisplayName = a.TypeDisplayName.IsNullOrEmpty()
                             ? null
                             : $"<{a.TypeDisplayName.ToUpperInvariant()}>",

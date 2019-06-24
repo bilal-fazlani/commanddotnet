@@ -291,7 +291,7 @@ namespace CommandDotNet.Parsing
 
             public bool MoveNext()
             {
-                if (Current == null || !Current.MultipleValues)
+                if (Current == null || !Current.Arity.AllowsZeroOrMore())
                 {
                     return _enumerator.MoveNext();
                 }
