@@ -19,7 +19,7 @@ namespace CommandDotNet.TypeDescriptors
 
         public object ParseString(ArgumentInfo argumentInfo, string value)
         {
-            var typeConverter = argumentInfo.IsMultipleType
+            var typeConverter = argumentInfo.Arity.AllowsZeroOrMore()
                 ? TypeDescriptor.GetConverter(argumentInfo.UnderlyingType)
                 : TypeDescriptor.GetConverter(argumentInfo.Type);
             return typeConverter.ConvertFrom(value);
