@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,14 @@ namespace CommandDotNet.Extensions
         internal static string ToOrderedCsv(this IEnumerable items, string separator = ",")
         {
             return items.Cast<object>().ToOrderedCsv();
+        }
+
+        internal static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
+        {
+            foreach (var item in items)
+            {
+                action(item);
+            }
         }
     }
 }

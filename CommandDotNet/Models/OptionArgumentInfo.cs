@@ -46,7 +46,7 @@ namespace CommandDotNet.Models
             ShortName = GetShortName();
             Name = GetLongName();
 
-            Template = new ArgumentTemplate {Name = Name, ShortName = ShortName}.ToString();
+            Template = new ArgumentTemplate(name:Name, shortName:ShortName).ToString();
 
             Description = GetAnnotatedDescription();
         }

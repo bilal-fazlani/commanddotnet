@@ -167,10 +167,8 @@ namespace CommandDotNet.Parsing
 
             string optionName = optionTokenType.GetName();
 
-            option = optionTokenType.IsLong 
-                ? command.FindOption(o => o.Name, optionName)
-                : command.FindOption(o => o.ShortName, optionName)
-                  ?? command.FindOption(o => o.SymbolName, optionName);
+            // TODO: use IOption for param
+            option = (CommandOption)command.FindOption(optionName);
 
             if (option == null)
             {

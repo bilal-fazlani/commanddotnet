@@ -1,17 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace CommandDotNet
 {
     public class ArgumentTemplate
     {
-        public string Name { get; set; }
-        public string ShortName { get; set; }
-        public string SymbolName { get; set; }
-        public string TypeDisplayName { get; set; }
+        public string Name { get; }
+        public string ShortName { get; }
+        public string SymbolName { get; }
+        public string TypeDisplayName { get; }
 
-        public ArgumentTemplate()
+        public ArgumentTemplate(
+            string name = null, 
+            string shortName = null, 
+            string symbolName = null, 
+            string typeDisplayName = null)
         {
+            Name = name;
+            ShortName = shortName;
+            SymbolName = symbolName;
+            TypeDisplayName = typeDisplayName;
         }
 
         public ArgumentTemplate(string template)

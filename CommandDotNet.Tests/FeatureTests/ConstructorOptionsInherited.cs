@@ -1,25 +1,26 @@
 using CommandDotNet.Attributes;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.Utils;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests
 {
-    public class ConstructorOptionsInherited : ScenarioTestBase<ConstructorOptionsInherited>
+    public class ConstructorOptionsInherited : TestBase
     {
         public ConstructorOptionsInherited(ITestOutputHelper output) : base(output)
         {
         }
 
-        public static Scenarios Scenarios =>
-            new Scenarios
+        [Fact]
+        public void HelpIncludesGlobalOptions()
+        {
+            Verify(new Given<Root>
             {
-                new Given<Root>("help includes global options")
+                WhenArgs = "-h",
+                Then =
                 {
-                    WhenArgs = "-h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll [command] [options]
+                    Result = @"Usage: dotnet testhost.dll [command] [options]
 
 Options:
 
@@ -34,14 +35,19 @@ Commands:
   Leaf
 
 Use ""dotnet testhost.dll [command] --help"" for more information about a command."
-                    }
-                },
-                new Given<Root>("help for sub-command includes local and inherited root global options")
+                }
+            });
+        }
+
+        [Fact]
+        public void HelpForSubCommandIncludesLocalAndInheritedRootGlobalOptions()
+        {
+            Verify(new Given<Root>
+            {
+                WhenArgs = "Leaf -h",
+                Then =
                 {
-                    WhenArgs = "Leaf -h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll Leaf [command] [options]
+                    Result = @"Usage: dotnet testhost.dll Leaf [command] [options]
 
 Options:
 
@@ -58,35 +64,45 @@ Commands:
   Do
 
 Use ""dotnet testhost.dll Leaf [command] --help"" for more information about a command."
-                    }
-                },
-                new Given<Root>("executing sub-command will parse and execute local global options")
+                }
+            });
+        }
+
+        [Fact]
+        public void ExecutingSubCommandWillParseAndExecuteLocalGlobalOptions()
+        {
+            Verify(new Given<Root>
+            {
+                WhenArgs = "--rootOpt root Leaf --LeafOpt leaf Do --DoOpt a b",
+                Then =
                 {
-                    WhenArgs = "--rootOpt root Leaf --LeafOpt leaf Do --DoOpt a b",
-                    Then =
+                    Outputs =
                     {
-                        Outputs =
-                        {
-                            //new RootGlobalResult{RootOpt = "root"},
-                            new LeafGlobalResult{LeafOpt = "leaf"},
-                            new LeafDoResult{DoOpt = "a", DoArg = "b"}
-                        }
-                    }
-                },
-                new Given<Root>("global option can be specified after local command")
-                {
-                    WhenArgs = "Leaf Do --LeafOpt leaf --rootOpt root --DoOpt a b",
-                    Then =
-                    {
-                        Outputs =
-                        {
-                            //new RootGlobalResult{RootOpt = "root"},
-                            new LeafGlobalResult{LeafOpt = "leaf"},
-                            new LeafDoResult{DoOpt = "a", DoArg = "b"}
-                        }
+                        //new RootGlobalResult{RootOpt = "root"},
+                        new LeafGlobalResult{LeafOpt = "leaf"},
+                        new LeafDoResult{DoOpt = "a", DoArg = "b"}
                     }
                 }
-            };
+            });
+        }
+
+        [Fact]
+        public void InheritedGlobalOptionCanBeSpecifiedAfterLocalCommand()
+        {
+            Verify(new Given<Root>
+            {
+                WhenArgs = "Leaf Do --LeafOpt leaf --rootOpt root --DoOpt a b",
+                Then =
+                {
+                    Outputs =
+                    {
+                        //new RootGlobalResult{RootOpt = "root"},
+                        new LeafGlobalResult{LeafOpt = "leaf"},
+                        new LeafDoResult{DoOpt = "a", DoArg = "b"}
+                    }
+                }
+            });
+        }
 
         public class Root
         {

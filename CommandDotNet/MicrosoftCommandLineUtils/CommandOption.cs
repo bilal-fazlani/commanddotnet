@@ -40,6 +40,16 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         /// <summary>True when option is help or version</summary>
         public bool IsSystemOption { get; set; }
 
+        public IEnumerable<string> Aliases
+        {
+            get
+            {
+                if (!Name.IsNullOrWhitespace()) yield return Name;
+                if (!ShortName.IsNullOrWhitespace()) yield return ShortName;
+                if (!SymbolName.IsNullOrWhitespace()) yield return SymbolName;
+            }
+        }
+
         #region Obsolete Members
 
         [Obsolete("Use Name instead")]
@@ -114,19 +124,9 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             return true;
         }
 
-        public override bool Equals(object obj)
+        public override string ToString()
         {
-            if (obj is CommandOption commandOption)
-            {
-                return commandOption.Template == Template;
-            }
-
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return Template?.GetHashCode() ?? 0;
+            return $"Operand: {new ArgumentTemplate(Name, ShortName, SymbolName, TypeDisplayName)}";
         }
     }
 }
