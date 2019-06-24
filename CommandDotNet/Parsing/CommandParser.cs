@@ -67,7 +67,7 @@ namespace CommandDotNet.Parsing
                                 throw new ArgumentOutOfRangeException(optionResult.ToString());
                         }
                         break;
-                    case TokenType.Operand:
+                    case TokenType.Value:
                         var operandResult = ParseOperand(token, ref currentCommand, ref currentOption, arguments);
                         switch (operandResult)
                         {
