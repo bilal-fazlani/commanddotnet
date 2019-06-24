@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace CommandDotNet.MicrosoftCommandLineUtils
 {
-    public class CommandOperand : IOperand, ISettableArgument
+    public class CommandOperand : IOperand
     {
         public CommandOperand()
         {

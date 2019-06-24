@@ -2,20 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using CommandDotNet.Extensions;
-using CommandDotNet.MicrosoftCommandLineUtils;
 
 namespace CommandDotNet.Models
 {
     internal class ValueInfo
     {
+        private readonly IArgument _argument;
+        private readonly Action<List<string>> _setValues;
 
-        private readonly ISettableArgument _argument;
-
-        private readonly bool _isOperand;
-
-        public ValueInfo(ISettableArgument argument)
+        public ValueInfo(IArgument argument, Action<List<string>> setValues)
         {
             _argument = argument ?? throw new ArgumentNullException(nameof(argument));
+            _setValues = setValues ?? throw new ArgumentNullException(nameof(setValues));
         }
 
         internal bool HasValue => _argument.Values.Any();
@@ -23,7 +21,7 @@ namespace CommandDotNet.Models
         internal List<string> Values
         {
             get => _argument.Values;
-            set => _argument.SetValues(value);
+            set => _setValues(value);
         }
 
         internal string Value => _argument.Values?.FirstOrDefault();

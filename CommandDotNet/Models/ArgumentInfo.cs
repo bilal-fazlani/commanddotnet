@@ -97,9 +97,9 @@ namespace CommandDotNet.Models
 
         #endregion
 
-        internal void SetValueInfo(ISettableArgument argument)
+        internal void SetValueInfo(IArgument argument, Action<List<string>> setValues)
         {
-            ValueInfo = new ValueInfo(argument);
+            ValueInfo = new ValueInfo(argument, setValues);
         }
 
         private static object GetDefaultValue(PropertyInfo propertyInfo)
