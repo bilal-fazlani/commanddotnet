@@ -23,6 +23,11 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public List<string> AllowedValues { get; set; }
         public List<string> Values { get; private set; }
 
+        public IEnumerable<string> Aliases
+        {
+            get { yield return Name; }
+        }
+
         public void SetValues(List<string> values)
         {
             Values = values;
@@ -44,5 +49,10 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public string Value => Values.FirstOrDefault();
 
         #endregion
+
+        public override string ToString()
+        {
+            return $"Operand: {new ArgumentTemplate(name:Name, typeDisplayName:TypeDisplayName)}";
+        }
     }
 }

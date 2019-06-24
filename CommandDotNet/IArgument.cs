@@ -9,5 +9,6 @@ namespace CommandDotNet
         object DefaultValue { get; }
         List<string> AllowedValues { get; }
         List<string> Values { get; }
+        IEnumerable<string> Aliases { get; }
     }
 }

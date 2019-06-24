@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using CommandDotNet.Exceptions;
+using CommandDotNet.Extensions;
 using CommandDotNet.HelpGeneration;
 using CommandDotNet.Models;
 using CommandDotNet.Parsing;
@@ -18,9 +19,11 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         private readonly AppSettings _appSettings;
         private Action _printVersion;
         private Func<int> _invoke;
-        private readonly HashSet<CommandOption> _options;
-        private readonly HashSet<CommandOperand> _operands;
-        private readonly List<ICommand> _commands;
+        private readonly List<CommandOption> _options = new List<CommandOption>();
+        private readonly List<CommandOperand> _operands = new List<CommandOperand>();
+        private readonly List<ICommand> _commands = new List<ICommand>();
+
+        private readonly Dictionary<string, IArgument> _argumentsByAlias = new Dictionary<string, IArgument>();
 
         public CommandLineApplication(
             AppSettings appSettings, 
@@ -33,10 +36,6 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             CustomAttributeProvider = customAttributeProvider;
             Parent = parent;
             _invoke = () => 0;
-
-            _options = new HashSet<CommandOption>();
-            _operands = new HashSet<CommandOperand>();
-            _commands = new List<ICommand>();
         }
 
         public string Name { get; }
@@ -91,9 +90,10 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 TypeDisplayName = typeDisplayName,
                 AllowedValues = allowedValues
             };
-            bool optionAdded = _options.Add(option);
-            if(!optionAdded)
-                throw new AppRunnerException($"Option with template `{template}` already added");
+
+            RegisterArgumentByAliases(option);
+
+            _options.Add(option);
             configuration(option);
             return option;
         }
@@ -120,9 +120,10 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 DefaultValue = defaultValue,
                 AllowedValues = allowedValues
             };
-            bool operandAdded = _operands.Add(operand);
-            if(!operandAdded)
-                throw new AppRunnerException($"Operand with name '{operand.Name}' already added");
+
+            RegisterArgumentByAliases(operand);
+
+            _operands.Add(operand);
             configuration(operand);
             return operand;
         }
@@ -151,6 +152,13 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             return ((CommandLineApplication)parseResult.Command)._invoke();
         }
 
+        public IOption FindOption(string alias)
+        {
+            return FindOption(this, alias, false) 
+                   ?? this.GetParentCommands()
+                       .Select(c => FindOption(c, alias, true))
+                       .FirstOrDefault(o => o != null);
+        }
 
         // Helper method that adds a help option
         public void HelpOption(string template)
@@ -182,6 +190,33 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public void ShowVersion()
         {
             this.GetRootCommand()._printVersion();
+        }
+
+        private static IOption FindOption(CommandLineApplication app, string alias, bool onlyIfInherited)
+        {
+            return app._argumentsByAlias.TryGetValue(alias, out var argument)
+                   && (argument is IOption option)
+                   && (!onlyIfInherited || option.Inherited)
+                ? (IOption)argument
+                : null;
+        }
+
+        private void RegisterArgumentByAliases(IArgument argument)
+        {
+            foreach (var parent in this.GetParentCommands(includeCurrent: true))
+            {
+                IArgument duplicatedArg = null;
+                var duplicateAlias = argument.Aliases.FirstOrDefault(a => _argumentsByAlias.TryGetValue(a, out duplicatedArg));
+
+                // the alias cannot duplicate any argument in this command or any inherited option from parent commands
+                if (duplicateAlias != null && (ReferenceEquals(parent, this) || (duplicatedArg is IOption option && option.Inherited)))
+                {
+                    throw new AppRunnerException(
+                        $"Duplicate alias detected. Attempted to add `{argument}` but `{duplicatedArg}` already exists");
+                }
+            }
+
+            argument.Aliases.ForEach(a => _argumentsByAlias.Add(a, argument));
         }
     }
 }
