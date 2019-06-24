@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace CommandDotNet.MicrosoftCommandLineUtils
 {
-    public class CommandOption : IArgument
+    public class CommandOption : IOption, ISettableArgument
     {
         public CommandOption(string template, IArgumentArity arity)
         {
@@ -22,22 +22,23 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             TypeDisplayName = argumentTemplate.TypeDisplayName;
         }
 
-        /// <summary>True when option is help or version</summary>
-        public bool IsSystemOption { get; set; }
-
         public string Name { get; set; }
         public string Description { get; set; }
+
+        public string TypeDisplayName { get; set; }
+        public IArgumentArity Arity { get; set; }
+        public object DefaultValue { get; set; }
+        public List<string> AllowedValues { get; set; }
+        public List<string> Values { get; private set; }
 
         public string Template { get; set; }
         public string ShortName { get; set; }
         public string SymbolName { get; set; }
-        public string TypeDisplayName { get; set; }
 
-        public List<string> Values { get; internal set; }
         public bool Inherited { get; set; }
-        public object DefaultValue { get; set; }
-        public IArgumentArity Arity { get; set; }
-        public List<string> AllowedValues { get; set; }
+
+        /// <summary>True when option is help or version</summary>
+        public bool IsSystemOption { get; set; }
 
         #region Obsolete Members
 
@@ -68,7 +69,24 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         [Obsolete("do not use.  value is always true.")]
         public bool ShowInHelpText { get; set; } = true;
 
+        [Obsolete("Use Values.Any() instead.")]
+        public bool HasValue()
+        {
+            return Values.Any();
+        }
+
+        [Obsolete("Use Values.FirstOrDefault() instead.")]
+        public string Value()
+        {
+            return HasValue() ? Values[0] : null;
+        }
+
         #endregion
+
+        public void SetValues(List<string> values)
+        {
+            Values = values;
+        }
 
         public bool TryParse(string value)
         {
@@ -94,16 +112,6 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 Values.Add("on");
             }
             return true;
-        }
-
-        public bool HasValue()
-        {
-            return Values.Any();
-        }
-
-        public string Value()
-        {
-            return HasValue() ? Values[0] : null;
         }
 
         public override bool Equals(object obj)

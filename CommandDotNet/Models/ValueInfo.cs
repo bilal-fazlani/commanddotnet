@@ -1,52 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using CommandDotNet.Extensions;
 using CommandDotNet.MicrosoftCommandLineUtils;
 
 namespace CommandDotNet.Models
 {
     internal class ValueInfo
     {
-        private readonly CommandOperand _commandOperand;
-        private readonly CommandOption _commandOption;
+
+        private readonly ISettableArgument _argument;
 
         private readonly bool _isOperand;
 
-        public ValueInfo(IArgument argument)
+        public ValueInfo(ISettableArgument argument)
         {
-            if (argument is CommandOperand operand)
-            {
-                _isOperand = true;
-                _commandOperand = operand;
-            }
-            else
-            {
-                _commandOption = (CommandOption) argument;
-            }
+            _argument = argument ?? throw new ArgumentNullException(nameof(argument));
         }
 
-        internal bool HasValue => _isOperand ? _commandOperand.Values.Any() : _commandOption.HasValue();
+        internal bool HasValue => _argument.Values.Any();
 
         internal List<string> Values
         {
-            get => _isOperand ? _commandOperand?.Values : _commandOption?.Values;
-            set
-            {
-                if (_isOperand)
-                {
-                    _commandOperand.Values = value;
-                }
-                else
-                {
-                    _commandOption.Values = value;
-                }
-            }
+            get => _argument.Values;
+            set => _argument.SetValues(value);
         }
 
-        internal string Value => _isOperand ? _commandOperand?.Value : _commandOption?.Value();
+        internal string Value => _argument.Values?.FirstOrDefault();
 
         public override string ToString()
         {
-            return string.Join(", ", _isOperand ? _commandOperand?.Values : _commandOption?.Values);
+            return _argument.Values.ToCsv(", ");
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace CommandDotNet.MicrosoftCommandLineUtils
 {
-    public class CommandOperand : IArgument
+    public class CommandOperand : IOperand, ISettableArgument
     {
         public CommandOperand()
         {
@@ -16,13 +16,17 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 
         public string Name { get; set; }
         public string Description { get; set; }
-        public IArgumentArity Arity { get; set; }
+
         public string TypeDisplayName { get; set; }
+        public IArgumentArity Arity { get; set; }
         public object DefaultValue { get; set; }
         public List<string> AllowedValues { get; set; }
-        
-        public string Value => Values.FirstOrDefault();
-        public List<string> Values { get; internal set; }
+        public List<string> Values { get; private set; }
+
+        public void SetValues(List<string> values)
+        {
+            Values = values;
+        }
 
         #region Obsolete members
 
@@ -35,6 +39,9 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             get => Arity.AllowsZeroOrMore();
             set => Arity = value ? ArgumentArity.ZeroOrMore : ArgumentArity.ExactlyOne;
         }
+
+        [Obsolete("Use Values.FirstOrDefault() instead.")]
+        public string Value => Values.FirstOrDefault();
 
         #endregion
     }

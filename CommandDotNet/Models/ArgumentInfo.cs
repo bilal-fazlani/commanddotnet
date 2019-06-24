@@ -93,7 +93,7 @@ namespace CommandDotNet.Models
         [Obsolete("Use Description instead")]
         public string AnnotatedDescription => Description;
         
-        internal void SetValue(IArgument argument)
+        internal void SetValueInfo(ISettableArgument argument)
         {
             ValueInfo = new ValueInfo(argument);
         }
