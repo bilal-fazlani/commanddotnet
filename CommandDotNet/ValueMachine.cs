@@ -44,26 +44,26 @@ namespace CommandDotNet
         private void PromptForValue(ArgumentInfo argumentInfo)
         {
             if (!_appSettings.PromptForArgumentsIfNotProvided
-                || !(argumentInfo is OperandArgumentInfo parameterInfo)
-                || parameterInfo.ValueInfo.HasValue
-                || !parameterInfo.DefaultValue.IsNullValue())
+                || !(argumentInfo is OperandArgumentInfo operandInfo)
+                || operandInfo.ValueInfo.HasValue
+                || !operandInfo.DefaultValue.IsNullValue())
             {
                 return;
             }
 
             List<string> inputs;
-            if (parameterInfo.IsMultipleType)
+            if (operandInfo.Arity.AllowsZeroOrMore())
             {
-                _appSettings.Out.Write($"{parameterInfo.Name} ({parameterInfo.TypeDisplayName}) [separate values by space]: ");
+                _appSettings.Out.Write($"{operandInfo.Name} ({operandInfo.TypeDisplayName}) [separate values by space]: ");
                 inputs = Console.ReadLine()?.Split(' ').ToList() ?? new List<string>();
             }
             else
             {
-                _appSettings.Out.Write($"{parameterInfo.Name} ({parameterInfo.TypeDisplayName}): ");
+                _appSettings.Out.Write($"{operandInfo.Name} ({operandInfo.TypeDisplayName}): ");
                 inputs = new List<string>{ Console.ReadLine() };
             }
 
-            parameterInfo.ValueInfo.Values = inputs;
+            operandInfo.ValueInfo.Values = inputs;
         }
     }
 }

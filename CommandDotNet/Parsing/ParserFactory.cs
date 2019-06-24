@@ -14,7 +14,7 @@ namespace CommandDotNet.Parsing
 
         public IParser CreateInstance(ArgumentInfo argumentInfo)
         {
-            return argumentInfo.IsMultipleType
+            return argumentInfo.Arity.AllowsZeroOrMore()
                 ? new ListParser(GetSingleValueParser(argumentInfo.UnderlyingType))
                 : (IParser)GetSingleValueParser(argumentInfo.Type);
         }

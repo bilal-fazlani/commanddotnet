@@ -70,9 +70,6 @@ namespace CommandDotNet.Models
         
         public object DefaultValue { get; }
 
-        [Obsolete("Use Arity.MaximumNumberOfValues > 1 instead")]
-        public bool IsMultipleType => Arity.AllowsZeroOrMore();
-
         public IArgumentArity Arity { get; set; }
         public string PropertyOrParameterName { get; }
         public bool IsPartOfModel { get; }
@@ -87,12 +84,19 @@ namespace CommandDotNet.Models
             ?.GetAllowedValues(this)
             .ToList();
 
+        #region Obsolete members
+
         [Obsolete("use PropertyOrParameterName instead")]
         public string PropertyOrArgumentName => PropertyOrParameterName;
 
         [Obsolete("Use Description instead")]
         public string AnnotatedDescription => Description;
-        
+
+        [Obsolete("Use Arity.AllowsZeroOrMore() instead")]
+        public bool IsMultipleType => Arity.AllowsZeroOrMore();
+
+        #endregion
+
         internal void SetValueInfo(ISettableArgument argument)
         {
             ValueInfo = new ValueInfo(argument);

@@ -98,7 +98,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         [Obsolete("Use Values.FirstOrDefault() instead.")]
         public string Value()
         {
-            return HasValue() ? Values[0] : null;
+            return Values.Any() ? Values[0] : null;
         }
 
         [Obsolete("Do not use. The method will be removed. Logic has been moved to CommandParser where similar logic for CommandOperand exists.")]
