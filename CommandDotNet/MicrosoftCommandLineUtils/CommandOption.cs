@@ -50,6 +50,16 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             }
         }
 
+        public void SetValues(List<string> values)
+        {
+            Values = values;
+        }
+
+        public override string ToString()
+        {
+            return $"Option: {new ArgumentTemplate(Name, ShortName, SymbolName, TypeDisplayName)}";
+        }
+
         #region Obsolete Members
 
         [Obsolete("Use Name instead")]
@@ -91,13 +101,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             return HasValue() ? Values[0] : null;
         }
 
-        #endregion
-
-        public void SetValues(List<string> values)
-        {
-            Values = values;
-        }
-
+        [Obsolete("Do not use. The method will be removed. Logic has been moved to CommandParser where similar logic for CommandOperand exists.")]
         public bool TryParse(string value)
         {
             if (Arity.AllowsZeroOrMore())
@@ -124,9 +128,6 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             return true;
         }
 
-        public override string ToString()
-        {
-            return $"Operand: {new ArgumentTemplate(Name, ShortName, SymbolName, TypeDisplayName)}";
-        }
+        #endregion
     }
 }

@@ -22,8 +22,8 @@ namespace CommandDotNet.Parsing
         public ParseResult ParseCommand(CommandLineApplication app, string[] args)
         {
             CommandLineApplication currentCommand = app;
-            CommandOption currentOption = null;
-            IEnumerator<CommandOperand> arguments = new CommandOperandEnumerator(app.Operands);
+            IOption currentOption = null;
+            IEnumerator<IOperand> arguments = new OperandEnumerator(app.Operands);
 
             var remainingArguments = new List<Token>();
 
@@ -68,7 +68,7 @@ namespace CommandDotNet.Parsing
                         }
                         break;
                     case TokenType.Value:
-                        var operandResult = ParseOperand(token, ref currentCommand, ref currentOption, arguments);
+                        var operandResult = ParseArgumentValue(token, ref currentCommand, ref currentOption, arguments);
                         switch (operandResult)
                         {
                             case ParseOperandResult.Succeeded:
@@ -77,7 +77,7 @@ namespace CommandDotNet.Parsing
                                 ignoreRemainingArguments = true;
                                 break;
                             case ParseOperandResult.NewSubCommand:
-                                arguments = new CommandOperandEnumerator(currentCommand.Operands);
+                                arguments = new OperandEnumerator(currentCommand.Operands);
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException(operandResult.ToString());
@@ -116,15 +116,15 @@ namespace CommandDotNet.Parsing
             ShowVersion,
         }
 
-        private ParseOperandResult ParseOperand(
+        private ParseOperandResult ParseArgumentValue(
             Token token, 
             ref CommandLineApplication command,
-            ref CommandOption option, 
-            IEnumerator<CommandOperand> operands)
+            ref IOption option, 
+            IEnumerator<IOperand> operands)
         {
             if (option != null)
             {
-                if (option.TryParse(token.Value))
+                if (TryAddValue(option, token.Value))
                 {
                     option = null;
                     return ParseOperandResult.Succeeded;
@@ -161,14 +161,14 @@ namespace CommandDotNet.Parsing
             return ParseOperandResult.Succeeded;
         }
 
-        private ParseOptionResult ParseOption(Token token, CommandLineApplication command, out CommandOption option)
+        private ParseOptionResult ParseOption(Token token, CommandLineApplication command, out IOption option)
         {
             var optionTokenType = token.OptionTokenType;
 
             string optionName = optionTokenType.GetName();
 
             // TODO: use IOption for param
-            option = (CommandOption)command.FindOption(optionName);
+            option = command.FindOption(optionName);
 
             if (option == null)
             {
@@ -191,7 +191,7 @@ namespace CommandDotNet.Parsing
 
             if (optionTokenType.HasValue)
             {
-                if (!option.TryParse(optionTokenType.GetAssignedValue()))
+                if (!TryAddValue(option, optionTokenType.GetAssignedValue()))
                 {
                     throw new CommandParsingException(command, $"Unexpected value '{token.Value}' for option '{option.Name}'");
                 }
@@ -201,11 +201,36 @@ namespace CommandDotNet.Parsing
             else if(option.Arity.AllowsNone())
             {
                 // No value is needed for this option
-                option.TryParse(null);
+                TryAddValue(option, null);
                 option = null;
             }
 
             return ParseOptionResult.Succeeded;
+        }
+        private static bool TryAddValue(IOption option, string value)
+        {
+            if (option.Arity.AllowsZeroOrMore())
+            {
+                option.Values.Add(value);
+            }
+            else if (option.Arity.AllowsZeroOrOne())
+            {
+                if (option.Values.Any())
+                {
+                    return false;
+                }
+                option.Values.Add(value);
+            }
+            else if (option.Arity.AllowsNone())
+            {
+                if (value != null)
+                {
+                    return false;
+                }
+                // Add a value to indicate that this option was specified
+                option.Values.Add("on");
+            }
+            return true;
         }
 
         private Tokens ApplyArgumentTransformations(Tokens args)
@@ -269,16 +294,16 @@ namespace CommandDotNet.Parsing
             return args;
         }
 
-        private class CommandOperandEnumerator : IEnumerator<CommandOperand>
+        private class OperandEnumerator : IEnumerator<IOperand>
         {
-            private readonly IEnumerator<CommandOperand> _enumerator;
+            private readonly IEnumerator<IOperand> _enumerator;
 
-            public CommandOperandEnumerator(IEnumerable<CommandOperand> enumerable)
+            public OperandEnumerator(IEnumerable<IOperand> enumerable)
             {
                 _enumerator = enumerable.GetEnumerator();
             }
 
-            public CommandOperand Current => _enumerator.Current;
+            public IOperand Current => _enumerator.Current;
 
             object IEnumerator.Current => Current;
 
@@ -295,7 +320,7 @@ namespace CommandDotNet.Parsing
                 }
 
                 // If current operand allows multiple values, we don't move forward and
-                // all later values will be added to current CommandOperand.Values
+                // all later values will be added to current IOperand.Values
                 return true;
             }
 
