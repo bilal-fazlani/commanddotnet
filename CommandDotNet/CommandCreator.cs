@@ -77,7 +77,7 @@ namespace CommandDotNet
                         SetValueForOption(option, app);
                         break;
                     case OperandArgumentInfo operand:
-                        SetValueForParameter(operand, app);
+                        SetValueForOperand(operand, app);
                         break;
                 }
             }
@@ -85,28 +85,30 @@ namespace CommandDotNet
             app.OnExecute(async () => await _commandRunner.RunCommand(commandInfo, argumentValues));
         }
 
-        private static void SetValueForParameter(OperandArgumentInfo operandArgument, CommandLineApplication command)
+        private static void SetValueForOperand(OperandArgumentInfo operandInfo, CommandLineApplication command)
         {
-            operandArgument.SetValueInfo(command.Operand(
-                operandArgument.Name,
-                operandArgument.Description,
-                operandArgument.Arity,
+            var operand = command.Operand(
+                operandInfo.Name,
+                operandInfo.Description,
+                operandInfo.Arity,
                 _=> {},
-                operandArgument.TypeDisplayName,
-                operandArgument.DefaultValue,
-                operandArgument.AllowedValues));
+                operandInfo.TypeDisplayName,
+                operandInfo.DefaultValue,
+                operandInfo.AllowedValues);
+            operandInfo.SetValueInfo(operand, operand.SetValues);
         }
 
-        private static void SetValueForOption(OptionArgumentInfo option, CommandLineApplication command)
+        private static void SetValueForOption(OptionArgumentInfo optionInfo, CommandLineApplication command)
         {
-            option.SetValueInfo(command.Option(option.Template,
-                option.Description,
-                option.Arity,
+            var option = command.Option(optionInfo.Template,
+                optionInfo.Description,
+                optionInfo.Arity,
                 _=>{},
-                option.Inherited,
-                option.TypeDisplayName,
-                option.DefaultValue,
-                option.AllowedValues));
+                optionInfo.Inherited,
+                optionInfo.TypeDisplayName,
+                optionInfo.DefaultValue,
+                optionInfo.AllowedValues);
+            optionInfo.SetValueInfo(option, option.SetValues);
         }
 
         private IEnumerable<ArgumentInfo> GetOptionValuesForConstructor()
@@ -118,20 +120,10 @@ namespace CommandDotNet
             List<ArgumentInfo> argumentInfos = new ArgumentInfoCreator(_settings)
                 .GetArgumentsFromMethod(firstCtor)
                 .ToList();
-
-            foreach (ArgumentInfo argumentInfo in argumentInfos)
-            {
-                var optionInfo = (OptionArgumentInfo) argumentInfo;
-                optionInfo.SetValueInfo(_app.Option(
-                    optionInfo.Template,
-                    optionInfo.Description,
-                    optionInfo.Arity,
-                    _=>{},
-                    optionInfo.Inherited,
-                    optionInfo.TypeDisplayName,
-                    optionInfo.DefaultValue,
-                    optionInfo.AllowedValues));
-            }
+            
+            argumentInfos
+                .Cast<OptionArgumentInfo>()
+                .ForEach(o => SetValueForOption(o, _app));
             
             return argumentInfos;
         }

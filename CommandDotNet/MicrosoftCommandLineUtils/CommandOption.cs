@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace CommandDotNet.MicrosoftCommandLineUtils
 {
-    public class CommandOption : IOption, ISettableArgument
+    public class CommandOption : IOption
     {
         public CommandOption(string template, IArgumentArity arity)
         {
