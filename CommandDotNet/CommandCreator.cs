@@ -87,7 +87,7 @@ namespace CommandDotNet
 
         private static void SetValueForParameter(OperandArgumentInfo operandArgument, CommandLineApplication command)
         {
-            operandArgument.SetValue(command.Operand(
+            operandArgument.SetValueInfo(command.Operand(
                 operandArgument.Name,
                 operandArgument.Description,
                 operandArgument.Arity,
@@ -99,7 +99,7 @@ namespace CommandDotNet
 
         private static void SetValueForOption(OptionArgumentInfo option, CommandLineApplication command)
         {
-            option.SetValue(command.Option(option.Template,
+            option.SetValueInfo(command.Option(option.Template,
                 option.Description,
                 option.Arity,
                 _=>{},
@@ -122,7 +122,7 @@ namespace CommandDotNet
             foreach (ArgumentInfo argumentInfo in argumentInfos)
             {
                 var optionInfo = (OptionArgumentInfo) argumentInfo;
-                optionInfo.SetValue(_app.Option(
+                optionInfo.SetValueInfo(_app.Option(
                     optionInfo.Template,
                     optionInfo.Description,
                     optionInfo.Arity,
