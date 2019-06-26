@@ -10,23 +10,27 @@ namespace CommandDotNet.TypeDescriptors
     public class ArgumentTypeDescriptors
     {
         private readonly List<IArgumentTypeDescriptor> _customDescriptors = new List<IArgumentTypeDescriptor>();
+
         private readonly List<IArgumentTypeDescriptor> _defaultDescriptors = new List<IArgumentTypeDescriptor>
-        {
-            new BoolTypeDescriptor(),
-            new EnumTypeDescriptor(),
-                
-            new DelegatedTypeDescriptor<string>(Constants.TypeDisplayNames.Text, (a,v) => v),
-            new DelegatedTypeDescriptor<char>(Constants.TypeDisplayNames.Character, (a,v) => char.Parse(v)),
-                
-            new DelegatedTypeDescriptor<long>(Constants.TypeDisplayNames.Number, (a, v) => long.Parse(v, CultureInfo.InvariantCulture)),
-            new DelegatedTypeDescriptor<int>(Constants.TypeDisplayNames.Number, (a, v) => int.Parse(v, CultureInfo.InvariantCulture)),
-            new DelegatedTypeDescriptor<short>(Constants.TypeDisplayNames.Number, (a, v) => short.Parse(v, CultureInfo.InvariantCulture)),
-            new DelegatedTypeDescriptor<decimal>(Constants.TypeDisplayNames.DecimalNumber, (a, v) => decimal.Parse(v, CultureInfo.InvariantCulture)),
-            new DelegatedTypeDescriptor<double>(Constants.TypeDisplayNames.DoubleNumber, (a, v) => double.Parse(v, CultureInfo.InvariantCulture)),
-            
-            new ComponentModelTypeDescriptor(),
-            new StringCtorTypeDescriptor()
-        };
+            {
+                new BoolTypeDescriptor(),
+                new EnumTypeDescriptor(),
+
+                new DelegatedTypeDescriptor<string>(Constants.TypeDisplayNames.Text, (a,v) => v),
+                new DelegatedTypeDescriptor<char>(Constants.TypeDisplayNames.Character, (a,v) => char.Parse(v)),
+
+                new DelegatedTypeDescriptor<long>(Constants.TypeDisplayNames.Number, (a, v) => long.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<int>(Constants.TypeDisplayNames.Number, (a, v) => int.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<short>(Constants.TypeDisplayNames.Number, (a, v) => short.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<decimal>(Constants.TypeDisplayNames.DecimalNumber, (a, v) => decimal.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<double>(Constants.TypeDisplayNames.DoubleNumber, (a, v) => double.Parse(v, CultureInfo.InvariantCulture)),
+
+                new ComponentModelTypeDescriptor(),
+                new StringCtorTypeDescriptor()
+            }
+            .Select(d => new ErrorReportingDescriptor(d))
+            .Cast<IArgumentTypeDescriptor>()
+            .ToList();
 
         public ArgumentTypeDescriptors()
         {
@@ -40,7 +44,7 @@ namespace CommandDotNet.TypeDescriptors
 
         public void Add(IArgumentTypeDescriptor argumentTypeDescriptor)
         {
-            _customDescriptors.Add(argumentTypeDescriptor);
+            _customDescriptors.Add(new ErrorReportingDescriptor(argumentTypeDescriptor));
         }
 
         public IArgumentTypeDescriptor GetDescriptor(Type type)

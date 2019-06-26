@@ -118,7 +118,12 @@ namespace CommandDotNet.HelpGeneration
                 optionsBuilder.AppendLine($"Options:{Environment.NewLine}");
 
                 var helpValues = options.Select(a =>
-                    new ArgumentHelpValues
+                {
+                    var allowedValues = a.TypeDisplayName.IsNullOrEmpty() || a.AllowedValues == null || !a.AllowedValues.Any()
+                        ? null
+                        : $"{Environment.NewLine}  Allowed values: {a.AllowedValues.ToCsv(", ")}";
+
+                    return new ArgumentHelpValues
                     {
                         Template = $"{a.Template}{(a.Arity.AllowsZeroOrMore() ? " (Multiple)" : "")}",
                         DisplayName = a.TypeDisplayName.IsNullOrEmpty()
@@ -128,10 +133,9 @@ namespace CommandDotNet.HelpGeneration
                         Description = a.Description.IsNullOrEmpty()
                             ? null
                             : $"{Environment.NewLine}  {a.Description}",
-                        AllowedValues = a.TypeDisplayName.IsNullOrEmpty() || a.AllowedValues == null || !a.AllowedValues.Any()
-                            ? null
-                            : $"{Environment.NewLine}  Allowed values: {a.AllowedValues.ToCsv(", ")}"
-                    }).ToList();
+                        AllowedValues = allowedValues
+                    };
+                }).ToList();
 
                 AppendArguments(optionsBuilder, helpValues);
             }
