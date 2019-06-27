@@ -28,6 +28,8 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             get { yield return Name; }
         }
 
+        public IServices Services { get; } = new Services();
+
         public void SetValues(List<string> values)
         {
             Values = values;

@@ -15,5 +15,18 @@ namespace CommandDotNet.Extensions
 
             return value;
         }
+
+        public static TValue GetValueOrDefault<TKey, TValue>(
+            this IDictionary<TKey, TValue> dictionary, TKey key, TValue defaultValue = default)
+        {
+            if (dictionary == null)
+            {
+                throw new ArgumentNullException(nameof(dictionary));
+            }
+
+            return !dictionary.TryGetValue(key, out var obj) 
+                ? defaultValue 
+                : obj;
+        }
     }
 }

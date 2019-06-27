@@ -10,5 +10,7 @@ namespace CommandDotNet
         List<string> AllowedValues { get; }
         List<string> Values { get; }
         IEnumerable<string> Aliases { get; }
+
+        IServices Services { get; }
     }
 }
