@@ -232,17 +232,11 @@ namespace CommandDotNet.Parsing
             }
             return true;
         }
-
         private Tokens ApplyArgumentTransformations(Tokens args)
         {
             if (_parserContext.ParseDirectiveEnabled)
             {
-                _appSettings.Out.WriteLine("==> received");
-                foreach (var arg in args)
-                {
-                    _appSettings.Out.WriteLine(arg.RawValue);
-                }
-                _appSettings.Out.WriteLine();
+                ReportTransformation(null, args);
             }
 
             var transformations = _parserContext.ArgumentTransformations.OrderBy(t => t.Order).AsEnumerable();
@@ -270,16 +264,11 @@ namespace CommandDotNet.Parsing
                         if (args.Count == tempArgs.Count &&
                             Enumerable.Range(0, args.Count).All(i => args[i] == tempArgs[i]))
                         {
-                            _appSettings.Out.WriteLine($"==> transformation: {transformation.Name} (no changes)");
+                            ReportTransformation(transformation.Name, null);
                         }
                         else
                         {
-                            _appSettings.Out.WriteLine($"==> transformation: {transformation.Name}");
-                            foreach (var arg in tempArgs)
-                            {
-                                _appSettings.Out.WriteLine(arg.RawValue);
-                            }
-                            _appSettings.Out.WriteLine();
+                            ReportTransformation(transformation.Name, tempArgs);
                         }
                     }
 
@@ -292,6 +281,26 @@ namespace CommandDotNet.Parsing
             }
 
             return args;
+        }
+
+        private void ReportTransformation(string name, Tokens args)
+        {
+            var maxTokenTypeNameLength = Enum.GetNames(typeof(TokenType)).Max(n => n.Length);
+
+            if (args == null)
+            {
+                _appSettings.Out.WriteLine($">>> no changes after: {name}");
+            }
+            else
+            {
+                _appSettings.Out.WriteLine(name == null ? ">>> from shell" : $">>> transformed after: {name}");
+                foreach (var arg in args)
+                {
+                    var outputFormat = $"  {{0, -{maxTokenTypeNameLength}}}: {{1}}";
+                    _appSettings.Out.WriteLine(outputFormat, arg.TokenType, arg.RawValue);
+                }
+            }
+            _appSettings.Out.WriteLine();
         }
 
         private class OperandEnumerator : IEnumerator<IOperand>
