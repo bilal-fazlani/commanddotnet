@@ -27,21 +27,21 @@ namespace CommandDotNet.Tests.FeatureTests
                 .UseArgumentTransform("test", 1,
                     tokens => new Tokens(tokens.Select(t =>
                         t.TokenType == TokenType.Value && t.Value != "Do"
-                            ? "roses".Tokenize()
+                            ? Tokenizer.TokenizeValue("roses")
                             : t)))
                 .RunInMem("[parse] Do --opt1 smells like".SplitArgs(), _output);
 
-            result.OutputShouldBe(@"==> received
-Do
---opt1
-smells
-like
-==> transformation: test
-Do
---opt1
-roses
-roses
-==> transformation: Expand clubbed flags (no changes)");
+            result.OutputShouldBe(@">>> from shell
+  Value    : Do
+  Option   : --opt1
+  Value    : smells
+  Value    : like
+>>> transformed after: test
+  Value    : Do
+  Option   : --opt1
+  Value    : roses
+  Value    : roses
+>>> no changes after: Expand clubbed flags");
         }
 
         [Fact]
@@ -51,7 +51,7 @@ roses
                 .UseArgumentTransform("test", 1, 
                     tokens => new Tokens(tokens.Select(t =>
                         t.TokenType == TokenType.Value && t.Value != "Do"
-                            ? "roses".Tokenize()
+                            ? Tokenizer.TokenizeValue("roses")
                             : t)))
                 .RunInMem("Do --opt1 smells like".SplitArgs(), _output);
 
