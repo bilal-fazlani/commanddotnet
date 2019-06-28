@@ -75,8 +75,6 @@ namespace CommandDotNet.Models
         public bool IsPartOfModel { get; }
         public Type ModelType { get; }
         internal ValueInfo ValueInfo { get; private set; }
-
-        public virtual bool IsImplicit => false;
         
         public string TypeDisplayName => _typeDescriptor.GetDisplayName(this);
 

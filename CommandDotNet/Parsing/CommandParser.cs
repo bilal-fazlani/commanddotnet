@@ -228,7 +228,7 @@ namespace CommandDotNet.Parsing
                     return false;
                 }
                 // Add a value to indicate that this option was specified
-                option.Values.Add("on");
+                option.Values.Add("true");
             }
             return true;
         }
