@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using CommandDotNet.Extensions;
-using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet.Models
@@ -81,19 +80,6 @@ namespace CommandDotNet.Models
         public List<string> AllowedValues => (_typeDescriptor as IAllowedValuesTypeDescriptor)
             ?.GetAllowedValues(this)
             .ToList();
-
-        #region Obsolete members
-
-        [Obsolete("use PropertyOrParameterName instead")]
-        public string PropertyOrArgumentName => PropertyOrParameterName;
-
-        [Obsolete("Use Description instead")]
-        public string AnnotatedDescription => Description;
-
-        [Obsolete("Use Arity.AllowsZeroOrMore() instead")]
-        public bool IsMultipleType => Arity.AllowsZeroOrMore();
-
-        #endregion
 
         internal void SetValueInfo(IArgument argument, Action<List<string>> setValues)
         {

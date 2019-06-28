@@ -3,7 +3,6 @@ using System.Reflection;
 using CommandDotNet.Attributes;
 using CommandDotNet.Exceptions;
 using CommandDotNet.Extensions;
-using CommandDotNet.MicrosoftCommandLineUtils;
 
 namespace CommandDotNet.Models
 {
@@ -20,10 +19,6 @@ namespace CommandDotNet.Models
         {
             Init();
         }
-
-
-        [Obsolete("Use Arity instead")]
-        public CommandOptionType CommandOptionType => ArgumentArity.ToCommandOptionType(Arity);
 
         public string Template { get; private set; }
         
