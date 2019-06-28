@@ -29,7 +29,7 @@ namespace CommandDotNet.Parsing
 
             var tokens = args.Tokenize(includeDirectives: _appSettings.EnableDirectives);
 
-            tokens = ApplyArgumentTransformations(tokens);
+            tokens = ApplyInputTransformations(tokens);
 
             if (_parserContext.ParseDirectiveEnabled)
             {
@@ -232,14 +232,14 @@ namespace CommandDotNet.Parsing
             }
             return true;
         }
-        private Tokens ApplyArgumentTransformations(Tokens args)
+        private Tokens ApplyInputTransformations(Tokens args)
         {
             if (_parserContext.ParseDirectiveEnabled)
             {
                 ReportTransformation(null, args);
             }
 
-            var transformations = _parserContext.ArgumentTransformations.OrderBy(t => t.Order).AsEnumerable();
+            var transformations = _parserContext.InputTransformations.OrderBy(t => t.Order).AsEnumerable();
 
             // append ExpandClubbedFlags to the end.
             // it's a feature we want to ensure is applied to all arguments
@@ -247,7 +247,7 @@ namespace CommandDotNet.Parsing
             transformations = transformations.Union(
                 new[]
             {
-                new ArgumentTransformation(
+                new InputTransformation(
                     "Expand clubbed flags",
                     int.MaxValue,
                     Tokenizer.ExpandClubbedOptions),

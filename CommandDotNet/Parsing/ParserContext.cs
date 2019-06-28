@@ -4,7 +4,7 @@ namespace CommandDotNet.Parsing
 {
     public class ParserContext
     {
-        public IEnumerable<ArgumentTransformation> ArgumentTransformations { get; internal set; }
+        public IEnumerable<InputTransformation> InputTransformations { get; internal set; }
 
         public bool ParseDirectiveEnabled { get; internal set; }
     }

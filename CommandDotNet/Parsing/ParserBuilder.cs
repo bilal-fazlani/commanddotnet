@@ -7,28 +7,28 @@ namespace CommandDotNet.Parsing
 {
     internal class ParserBuilder
     {
-        internal Dictionary<string, ArgumentTransformation> ArgumentTransformationsByName
-            = new Dictionary<string, ArgumentTransformation>();
+        private readonly Dictionary<string, InputTransformation> _inputTransformationsByName
+            = new Dictionary<string, InputTransformation>();
 
-        public void AddArgumentTransformation(string name, int order, Func<Tokens,Tokens> transformation)
+        public void AddInputTransformation(string name, int order, Func<Tokens,Tokens> transformation)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             if (transformation == null) throw new ArgumentNullException(nameof(transformation));
 
-            if (ArgumentTransformationsByName.ContainsKey(name))
+            if (_inputTransformationsByName.ContainsKey(name))
             {
                 throw new ArgumentException(
                     $"a transformation named {name} already exists. " +
-                    $"transformations={ArgumentTransformationsByName.Keys.ToOrderedCsv()}");
+                    $"transformations={_inputTransformationsByName.Keys.ToOrderedCsv()}");
             }
-            ArgumentTransformationsByName.Add(name, new ArgumentTransformation(name, order, transformation));
+            _inputTransformationsByName.Add(name, new InputTransformation(name, order, transformation));
         }
 
         public ParserContext Build()
         {
             return new ParserContext
             {
-                ArgumentTransformations = ArgumentTransformationsByName.Values.OrderBy(t => t.Order)
+                InputTransformations = _inputTransformationsByName.Values.OrderBy(t => t.Order)
             };
         }
     }
