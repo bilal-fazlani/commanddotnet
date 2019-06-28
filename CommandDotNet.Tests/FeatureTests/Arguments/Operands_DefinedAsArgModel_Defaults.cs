@@ -67,7 +67,7 @@ Arguments:
 
   ObjectArg                   <URI>          [http://google.com/]
 
-  StringListArg (Multiple)    <TEXT>         [blue,red]
+  StringListArg (Multiple)    <TEXT>         [red,blue]
 
 
 Options:
@@ -182,7 +182,7 @@ Options:
 
 Arguments:
 
-  ObjectListArg (Multiple)    <URI>    [http://github.com/,http://google.com/]
+  ObjectListArg (Multiple)    <URI>    [http://google.com/,http://github.com/]
 
 
 Options:
