@@ -2,13 +2,13 @@
 
 namespace CommandDotNet.Parsing
 {
-    public class ArgumentTransformation
+    public class InputTransformation
     {
         public string Name { get; }
         public int Order { get; }
         public Func<Tokens, Tokens> Transformation { get; }
 
-        public ArgumentTransformation(string name, int order, Func<Tokens, Tokens> transformation)
+        public InputTransformation(string name, int order, Func<Tokens, Tokens> transformation)
         {
             Name = name;
             Order = order;
@@ -17,7 +17,7 @@ namespace CommandDotNet.Parsing
 
         public override string ToString()
         {
-            return $"{nameof(ArgumentTransformation)}: {Name} ({Order})";
+            return $"{nameof(InputTransformation)}: {Name} ({Order})";
         }
     }
 }

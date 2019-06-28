@@ -179,9 +179,9 @@ namespace CommandDotNet
             return this;
         }
 
-        public AppRunner<T> UseArgumentTransform(string name, int order, Func<Tokens, Tokens> transformation)
+        public AppRunner<T> UseInputTransformation(string name, int order, Func<Tokens, Tokens> transformation)
         {
-            _parserBuilder.AddArgumentTransformation(name, order, transformation);
+            _parserBuilder.AddInputTransformation(name, order, transformation);
             return this;
         }
     }
