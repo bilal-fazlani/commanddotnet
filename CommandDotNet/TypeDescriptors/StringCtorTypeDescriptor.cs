@@ -1,14 +1,15 @@
 using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using CommandDotNet.Extensions;
 using CommandDotNet.Models;
 
 namespace CommandDotNet.TypeDescriptors
 {
     public class StringCtorTypeDescriptor : IArgumentTypeDescriptor
     {
-        private static readonly ConcurrentDictionary<Type, Converter> cache = new ConcurrentDictionary<Type, Converter>();
+        private static readonly Dictionary<Type, Converter> Cache = new Dictionary<Type, Converter>();
 
         public bool CanSupport(Type type)
         {
@@ -17,22 +18,26 @@ namespace CommandDotNet.TypeDescriptors
 
         public string GetDisplayName(ArgumentInfo argumentInfo)
         {
-            return argumentInfo.UnderlyingType.Name;
+            return GetConverter(argumentInfo).StringConstructor.GetParameters().Single().Name;
         }
 
         public object ParseString(ArgumentInfo argumentInfo, string value)
         {
-            var typeConverter = argumentInfo.Arity.AllowsZeroOrMore()
+            return GetConverter(argumentInfo).StringConstructor.Invoke(new object[]{ value });
+        }
+
+        private static Converter GetConverter(ArgumentInfo argumentInfo)
+        {
+            return argumentInfo.Arity.AllowsZeroOrMore()
                 ? GetConverter(argumentInfo.UnderlyingType)
                 : GetConverter(argumentInfo.Type);
-            return typeConverter.StringConstructor.Invoke(new []{ value });
         }
 
         private static Converter GetConverter(Type type)
         {
-            return cache.GetOrAdd(type, t =>
+            return Cache.GetOrAdd(type, t =>
             {
-                var stringCtor = type.GetConstructors().FirstOrDefault(c =>
+                var stringCtor = t.GetConstructors().FirstOrDefault(c =>
                 {
                     var parameterInfos = c.GetParameters();
                     return parameterInfos.Length == 1 && parameterInfos.First().ParameterType == typeof(string);

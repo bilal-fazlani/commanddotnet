@@ -45,7 +45,7 @@ namespace CommandDotNet
             object instance = parameters.GetOrAdd(
                 argumentInfo.ModelType.FullName, 
                 //first property of model
-                () => Activator.CreateInstance(argumentInfo.ModelType));
+                key => Activator.CreateInstance(argumentInfo.ModelType));
 
             PropertyInfo propertyInfo = argumentInfo.ModelType.GetProperty(argumentInfo.PropertyOrParameterName);
             propertyInfo.SetValue(instance, _valueMachine.GetValue(argumentInfo));

@@ -62,7 +62,7 @@ Options:
 
 Arguments:
 
-  arg    <STRINGCTOROBJECT>
+  arg    <FILENAME>
 
 
 Options:
@@ -83,7 +83,7 @@ Options:
 
 Arguments:
 
-  args (Multiple)    <STRINGCTOROBJECT>
+  args (Multiple)    <FILENAME>
 
 
 Options:
@@ -141,11 +141,11 @@ Options:
 
         public class StringCtorObject
         {
-            public string Value { get; }
+            public string Filename { get; }
 
-            public StringCtorObject(string value)
+            public StringCtorObject(string filename)
             {
-                Value = value;
+                Filename = filename;
             }
         }
     }
