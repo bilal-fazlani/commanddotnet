@@ -35,23 +35,6 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             Values = values;
         }
 
-        #region Obsolete members
-
-        [Obsolete("do not use.  value is always true.")]
-        public bool ShowInHelpText { get; set; } = true;
-
-        [Obsolete("Use Arity.MaximumNumberOfValues > 1 instead")]
-        public bool MultipleValues
-        {
-            get => Arity.AllowsZeroOrMore();
-            set => Arity = value ? ArgumentArity.ZeroOrMore : ArgumentArity.ExactlyOne;
-        }
-
-        [Obsolete("Use Values.FirstOrDefault() instead.")]
-        public string Value => Values.FirstOrDefault();
-
-        #endregion
-
         public override string ToString()
         {
             return $"Operand: {new ArgumentTemplate(name:Name, typeDisplayName:TypeDisplayName)}";

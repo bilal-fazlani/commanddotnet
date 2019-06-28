@@ -49,20 +49,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public ICommand Parent { get; }
         public IEnumerable<ICommand> Commands => _commands;
         public ICustomAttributeProvider CustomAttributeProvider { get; }
-
-        #region Obsolete members
-
-        [Obsolete("do not use.  value is always true.")]
-        public bool ShowInHelpText => true;
-
-        [Obsolete("This was used solely for help.  The functionality has been moved to help providers.")]
-        public string GetFullCommandName()
-        {
-            return string.Join(" ", this.GetParentCommands(true).Reverse().Select(c => c.Name));
-        }
-
-        #endregion
-
+        
         public IEnumerable<IOption> GetOptions(bool includeInherited = true)
         {
             return includeInherited
