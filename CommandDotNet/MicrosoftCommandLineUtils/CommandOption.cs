@@ -123,7 +123,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                     return false;
                 }
                 // Add a value to indicate that this option was specified
-                Values.Add("on");
+                Values.Add("true");
             }
             return true;
         }

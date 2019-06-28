@@ -17,23 +17,21 @@ namespace CommandDotNet.TypeDescriptors
         
         public string GetDisplayName(ArgumentInfo argumentInfo)
         {
-            return argumentInfo.IsImplicit
+            return argumentInfo.Arity.AllowsNone()
                 ? Constants.TypeDisplayNames.Flag
                 : Constants.TypeDisplayNames.Boolean;
         }
 
         public object ParseString(ArgumentInfo argumentInfo, string value)
         {
-            return argumentInfo.IsImplicit
-                ? value == "on"
-                : bool.Parse(value);
+            return bool.Parse(value);
         }
 
         public IEnumerable<string> GetAllowedValues(ArgumentInfo argumentInfo)
         {
-            return argumentInfo.IsImplicit
+            return argumentInfo.Arity.AllowsNone()
                 ? Enumerable.Empty<string>()
-                : new List<string>() {"true", "false"};
+                : new List<string> {"true", "false"};
         }
     }
 }

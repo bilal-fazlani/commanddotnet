@@ -21,11 +21,8 @@ namespace CommandDotNet.Models
             Init();
         }
 
-        public override bool IsImplicit => BooleanMode == BooleanMode.Implicit;
-
 
         [Obsolete("Use Arity instead")]
-
         public CommandOptionType CommandOptionType => ArgumentArity.ToCommandOptionType(Arity);
 
         public string Template { get; private set; }
