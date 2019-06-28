@@ -219,7 +219,7 @@ namespace CommandDotNet.HelpGeneration
 
             if (defaultValue is IEnumerable collection)
             {
-                return $"[{collection.ToOrderedCsv()}]";
+                return $"[{collection.ToCsv()}]";
             }
 
             return $"[{defaultValue}]";
