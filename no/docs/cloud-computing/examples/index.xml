@@ -1,12 +1,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Goldydocs – Praktiske eksempler</title>
-    <link>/no/docs/cloud-computing/examples/</link>
+    <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/examples/</link>
     <description>Recent content in Praktiske eksempler on Goldydocs</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Wed, 04 Jan 2017 00:00:00 +0000</lastBuildDate>
     
-	  <atom:link href="/no/docs/cloud-computing/examples/index.xml" rel="self" type="application/rss+xml" />
+	  <atom:link href="https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/examples/index.xml" rel="self" type="application/rss+xml" />
     
     
       
@@ -16,10 +16,10 @@
     
     <item>
       <title>Docs: Innsiden av monolitter: Hvordan virker det?</title>
-      <link>/no/docs/cloud-computing/examples/the-inside-of-monoliths-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/examples/the-inside-of-monoliths-how-does-it-work/</link>
       <pubDate>Fri, 06 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/examples/the-inside-of-monoliths-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/examples/the-inside-of-monoliths-how-does-it-work/</guid>
       <description>
         
         
@@ -396,10 +396,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Detaljert om kryptografi: De grunnleggende konseptene</title>
-      <link>/no/docs/cloud-computing/examples/in-depth-cryptography-the-core-concepts/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/examples/in-depth-cryptography-the-core-concepts/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/examples/in-depth-cryptography-the-core-concepts/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/examples/in-depth-cryptography-the-core-concepts/</guid>
       <description>
         
         
@@ -776,10 +776,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Detaljert om Go: Hvordan virker det?</title>
-      <link>/no/docs/cloud-computing/examples/in-depth-go-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/examples/in-depth-go-how-does-it-work/</link>
       <pubDate>Wed, 04 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/examples/in-depth-go-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/examples/in-depth-go-how-does-it-work/</guid>
       <description>
         
         

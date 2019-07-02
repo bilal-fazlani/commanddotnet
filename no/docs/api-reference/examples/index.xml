@@ -1,12 +1,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Goldydocs – Praktiske eksempler</title>
-    <link>/no/docs/api-reference/examples/</link>
+    <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/</link>
     <description>Recent content in Praktiske eksempler on Goldydocs</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Tue, 03 Jan 2017 00:00:00 +0000</lastBuildDate>
     
-	  <atom:link href="/no/docs/api-reference/examples/index.xml" rel="self" type="application/rss+xml" />
+	  <atom:link href="https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/index.xml" rel="self" type="application/rss+xml" />
     
     
       
@@ -16,10 +16,10 @@
     
     <item>
       <title>Docs: Matten til monografer: Hvordan virker det?</title>
-      <link>/no/docs/api-reference/examples/the-math-of-monographs-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/the-math-of-monographs-how-does-it-work/</link>
       <pubDate>Fri, 06 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/api-reference/examples/the-math-of-monographs-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/the-math-of-monographs-how-does-it-work/</guid>
       <description>
         
         
@@ -396,10 +396,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Detaljert om monolitter: Detaljert spesifikasjon</title>
-      <link>/no/docs/api-reference/examples/in-depth-monoliths-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/in-depth-monoliths-detailed-spec/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/api-reference/examples/in-depth-monoliths-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/in-depth-monoliths-detailed-spec/</guid>
       <description>
         
         
@@ -776,10 +776,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av kryptografi: Detaljert spesifikasjon</title>
-      <link>/no/docs/api-reference/examples/the-inside-of-cryptography-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/the-inside-of-cryptography-detailed-spec/</link>
       <pubDate>Wed, 04 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/api-reference/examples/the-inside-of-cryptography-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/the-inside-of-cryptography-detailed-spec/</guid>
       <description>
         
         
@@ -1156,10 +1156,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til Java: Hvordan virker det?</title>
-      <link>/no/docs/api-reference/examples/the-math-of-java-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/the-math-of-java-how-does-it-work/</link>
       <pubDate>Tue, 03 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/api-reference/examples/the-math-of-java-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/the-math-of-java-how-does-it-work/</guid>
       <description>
         
         
@@ -1536,10 +1536,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av mikroservicer: Hvordan virker det?</title>
-      <link>/no/docs/api-reference/examples/the-inside-of-microservices-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/the-inside-of-microservices-how-does-it-work/</link>
       <pubDate>Mon, 02 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/api-reference/examples/the-inside-of-microservices-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/the-inside-of-microservices-how-does-it-work/</guid>
       <description>
         
         

@@ -1,12 +1,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Goldydocs – Tutorials</title>
-    <link>/docs/tutorials/</link>
+    <link>https://bilal-fazlani.github.io/commanddotnet/docs/tutorials/</link>
     <description>Recent content in Tutorials on Goldydocs</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Wed, 04 Jan 2017 00:00:00 +0000</lastBuildDate>
     
-	  <atom:link href="/docs/tutorials/index.xml" rel="self" type="application/rss+xml" />
+	  <atom:link href="https://bilal-fazlani.github.io/commanddotnet/docs/tutorials/index.xml" rel="self" type="application/rss+xml" />
     
     
       
@@ -16,10 +16,10 @@
     
     <item>
       <title>Docs: Multi-Bear Domicile Setup</title>
-      <link>/docs/tutorials/multi-bear/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/docs/tutorials/multi-bear/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/docs/tutorials/multi-bear/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/docs/tutorials/multi-bear/</guid>
       <description>
         
         
@@ -404,10 +404,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Another Tutorial</title>
-      <link>/docs/tutorials/tutorial2/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/docs/tutorials/tutorial2/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/docs/tutorials/tutorial2/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/docs/tutorials/tutorial2/</guid>
       <description>
         
         

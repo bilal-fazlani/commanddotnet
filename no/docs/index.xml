@@ -1,11 +1,11 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Goldydocs – TechOS-Dokumentasjon</title>
-    <link>/no/docs/</link>
+    <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/</link>
     <description>Recent content in TechOS-Dokumentasjon on Goldydocs</description>
     <generator>Hugo -- gohugo.io</generator>
     
-	  <atom:link href="/no/docs/index.xml" rel="self" type="application/rss+xml" />
+	  <atom:link href="https://bilal-fazlani.github.io/commanddotnet/no/docs/index.xml" rel="self" type="application/rss+xml" />
     
     
       
@@ -15,10 +15,10 @@
     
     <item>
       <title>Docs: Matten til mikroservicer: Detaljert spesifikasjon</title>
-      <link>/no/docs/cloud-computing/tutorials/the-math-of-microservices-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-math-of-microservices-detailed-spec/</link>
       <pubDate>Mon, 09 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/tutorials/the-math-of-microservices-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-math-of-microservices-detailed-spec/</guid>
       <description>
         
         
@@ -395,10 +395,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Detaljert om Java: Detaljert spesifikasjon</title>
-      <link>/no/docs/cross-platform/examples/in-depth-java-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/examples/in-depth-java-detailed-spec/</link>
       <pubDate>Sun, 08 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cross-platform/examples/in-depth-java-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/examples/in-depth-java-detailed-spec/</guid>
       <description>
         
         
@@ -775,10 +775,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av monolitter: De grunnleggende konseptene</title>
-      <link>/no/docs/cross-platform/the-inside-of-monoliths-the-core-concepts/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/the-inside-of-monoliths-the-core-concepts/</link>
       <pubDate>Sun, 08 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cross-platform/the-inside-of-monoliths-the-core-concepts/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/the-inside-of-monoliths-the-core-concepts/</guid>
       <description>
         
         
@@ -1155,10 +1155,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til monolitter: Drivverket</title>
-      <link>/no/docs/cloud-computing/tutorials/the-math-of-monoliths-the-inner-workings/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-math-of-monoliths-the-inner-workings/</link>
       <pubDate>Sun, 08 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/tutorials/the-math-of-monoliths-the-inner-workings/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-math-of-monoliths-the-inner-workings/</guid>
       <description>
         
         
@@ -1535,10 +1535,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av kryptografi: Hvordan virker det?</title>
-      <link>/no/docs/content-management/the-inside-of-cryptography-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/content-management/the-inside-of-cryptography-how-does-it-work/</link>
       <pubDate>Sat, 07 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/content-management/the-inside-of-cryptography-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/content-management/the-inside-of-cryptography-how-does-it-work/</guid>
       <description>
         
         
@@ -1915,10 +1915,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av rekursjon: Drivverket</title>
-      <link>/no/docs/content-management/tutorials/the-inside-of-recursion-the-inner-workings/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/content-management/tutorials/the-inside-of-recursion-the-inner-workings/</link>
       <pubDate>Sat, 07 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/content-management/tutorials/the-inside-of-recursion-the-inner-workings/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/content-management/tutorials/the-inside-of-recursion-the-inner-workings/</guid>
       <description>
         
         
@@ -2295,10 +2295,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av rekursjon: Hvordan virker det?</title>
-      <link>/no/docs/cross-platform/the-inside-of-recursion-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/the-inside-of-recursion-how-does-it-work/</link>
       <pubDate>Sat, 07 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cross-platform/the-inside-of-recursion-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/the-inside-of-recursion-how-does-it-work/</guid>
       <description>
         
         
@@ -2675,10 +2675,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til Java: Drivverket</title>
-      <link>/no/docs/cloud-computing/tutorials/the-math-of-java-the-inner-workings/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-math-of-java-the-inner-workings/</link>
       <pubDate>Sat, 07 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/tutorials/the-math-of-java-the-inner-workings/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-math-of-java-the-inner-workings/</guid>
       <description>
         
         
@@ -3055,10 +3055,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til rekursjon: Drivverket</title>
-      <link>/no/docs/cross-platform/examples/the-math-of-recursion-the-inner-workings/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/examples/the-math-of-recursion-the-inner-workings/</link>
       <pubDate>Sat, 07 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cross-platform/examples/the-math-of-recursion-the-inner-workings/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/examples/the-math-of-recursion-the-inner-workings/</guid>
       <description>
         
         
@@ -3435,10 +3435,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Detaljert om mikroservicer: De grunnleggende konseptene</title>
-      <link>/no/docs/content-management/tutorials/in-depth-microservices-the-core-concepts/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/content-management/tutorials/in-depth-microservices-the-core-concepts/</link>
       <pubDate>Fri, 06 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/content-management/tutorials/in-depth-microservices-the-core-concepts/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/content-management/tutorials/in-depth-microservices-the-core-concepts/</guid>
       <description>
         
         
@@ -3815,10 +3815,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av Java: De grunnleggende konseptene</title>
-      <link>/no/docs/cross-platform/examples/the-inside-of-java-the-core-concepts/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/examples/the-inside-of-java-the-core-concepts/</link>
       <pubDate>Fri, 06 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cross-platform/examples/the-inside-of-java-the-core-concepts/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/examples/the-inside-of-java-the-core-concepts/</guid>
       <description>
         
         
@@ -4195,10 +4195,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av monografer: Hvordan virker det?</title>
-      <link>/no/docs/cross-platform/the-inside-of-monographs-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/the-inside-of-monographs-how-does-it-work/</link>
       <pubDate>Fri, 06 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cross-platform/the-inside-of-monographs-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/the-inside-of-monographs-how-does-it-work/</guid>
       <description>
         
         
@@ -4575,10 +4575,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av monolitter: Hvordan virker det?</title>
-      <link>/no/docs/cloud-computing/examples/the-inside-of-monoliths-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/examples/the-inside-of-monoliths-how-does-it-work/</link>
       <pubDate>Fri, 06 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/examples/the-inside-of-monoliths-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/examples/the-inside-of-monoliths-how-does-it-work/</guid>
       <description>
         
         
@@ -4955,10 +4955,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til kryptografi: Hvordan virker det?</title>
-      <link>/no/docs/cross-platform/tutorials/the-math-of-cryptography-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/tutorials/the-math-of-cryptography-how-does-it-work/</link>
       <pubDate>Fri, 06 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cross-platform/tutorials/the-math-of-cryptography-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/tutorials/the-math-of-cryptography-how-does-it-work/</guid>
       <description>
         
         
@@ -5335,10 +5335,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til monografer: Hvordan virker det?</title>
-      <link>/no/docs/api-reference/examples/the-math-of-monographs-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/the-math-of-monographs-how-does-it-work/</link>
       <pubDate>Fri, 06 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/api-reference/examples/the-math-of-monographs-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/the-math-of-monographs-how-does-it-work/</guid>
       <description>
         
         
@@ -5715,10 +5715,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til monografer: Detaljert spesifikasjon</title>
-      <link>/no/docs/cloud-computing/tutorials/the-math-of-monographs-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-math-of-monographs-detailed-spec/</link>
       <pubDate>Fri, 06 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/tutorials/the-math-of-monographs-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-math-of-monographs-detailed-spec/</guid>
       <description>
         
         
@@ -6095,10 +6095,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til monolitter: Drivverket</title>
-      <link>/no/docs/content-management/the-math-of-monoliths-the-inner-workings/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/content-management/the-math-of-monoliths-the-inner-workings/</link>
       <pubDate>Fri, 06 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/content-management/the-math-of-monoliths-the-inner-workings/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/content-management/the-math-of-monoliths-the-inner-workings/</guid>
       <description>
         
         
@@ -6475,10 +6475,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Detaljert om Go: Detaljert spesifikasjon</title>
-      <link>/no/docs/cloud-computing/in-depth-go-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/in-depth-go-detailed-spec/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/in-depth-go-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/in-depth-go-detailed-spec/</guid>
       <description>
         
         
@@ -6855,10 +6855,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Detaljert om kryptografi: De grunnleggende konseptene</title>
-      <link>/no/docs/cloud-computing/examples/in-depth-cryptography-the-core-concepts/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/examples/in-depth-cryptography-the-core-concepts/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/examples/in-depth-cryptography-the-core-concepts/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/examples/in-depth-cryptography-the-core-concepts/</guid>
       <description>
         
         
@@ -7235,10 +7235,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Detaljert om kryptografi: Detaljert spesifikasjon</title>
-      <link>/no/docs/cross-platform/in-depth-cryptography-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/in-depth-cryptography-detailed-spec/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cross-platform/in-depth-cryptography-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/in-depth-cryptography-detailed-spec/</guid>
       <description>
         
         
@@ -7615,10 +7615,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Detaljert om monolitter: Detaljert spesifikasjon</title>
-      <link>/no/docs/api-reference/examples/in-depth-monoliths-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/in-depth-monoliths-detailed-spec/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/api-reference/examples/in-depth-monoliths-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/in-depth-monoliths-detailed-spec/</guid>
       <description>
         
         
@@ -7995,10 +7995,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av kryptografi: De grunnleggende konseptene</title>
-      <link>/no/docs/content-management/tutorials/the-inside-of-cryptography-the-core-concepts/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/content-management/tutorials/the-inside-of-cryptography-the-core-concepts/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/content-management/tutorials/the-inside-of-cryptography-the-core-concepts/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/content-management/tutorials/the-inside-of-cryptography-the-core-concepts/</guid>
       <description>
         
         
@@ -8375,10 +8375,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av mikroservicer: Detaljert spesifikasjon</title>
-      <link>/no/docs/big-data/tutorials/the-inside-of-microservices-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/big-data/tutorials/the-inside-of-microservices-detailed-spec/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/big-data/tutorials/the-inside-of-microservices-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/big-data/tutorials/the-inside-of-microservices-detailed-spec/</guid>
       <description>
         
         
@@ -8755,10 +8755,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av mikroservicer: Detaljert spesifikasjon</title>
-      <link>/no/docs/cloud-computing/tutorials/the-inside-of-microservices-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-inside-of-microservices-detailed-spec/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/tutorials/the-inside-of-microservices-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-inside-of-microservices-detailed-spec/</guid>
       <description>
         
         
@@ -9135,10 +9135,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til Go: Drivverket</title>
-      <link>/no/docs/cross-platform/examples/the-math-of-go-the-inner-workings/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/examples/the-math-of-go-the-inner-workings/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cross-platform/examples/the-math-of-go-the-inner-workings/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cross-platform/examples/the-math-of-go-the-inner-workings/</guid>
       <description>
         
         
@@ -9515,10 +9515,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til mikroservicer: Hvordan virker det?</title>
-      <link>/no/docs/content-management/the-math-of-microservices-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/content-management/the-math-of-microservices-how-does-it-work/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/content-management/the-math-of-microservices-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/content-management/the-math-of-microservices-how-does-it-work/</guid>
       <description>
         
         
@@ -9895,10 +9895,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Detaljert om Go: Hvordan virker det?</title>
-      <link>/no/docs/cloud-computing/examples/in-depth-go-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/examples/in-depth-go-how-does-it-work/</link>
       <pubDate>Wed, 04 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/examples/in-depth-go-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/examples/in-depth-go-how-does-it-work/</guid>
       <description>
         
         
@@ -10275,10 +10275,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Detaljert om monolitter: Detaljert spesifikasjon</title>
-      <link>/no/docs/cloud-computing/in-depth-monoliths-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/in-depth-monoliths-detailed-spec/</link>
       <pubDate>Wed, 04 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/in-depth-monoliths-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/in-depth-monoliths-detailed-spec/</guid>
       <description>
         
         
@@ -10655,10 +10655,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av Go: Drivverket</title>
-      <link>/no/docs/cloud-computing/tutorials/the-inside-of-go-the-inner-workings/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-inside-of-go-the-inner-workings/</link>
       <pubDate>Wed, 04 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/tutorials/the-inside-of-go-the-inner-workings/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-inside-of-go-the-inner-workings/</guid>
       <description>
         
         
@@ -11035,10 +11035,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av kryptografi: Detaljert spesifikasjon</title>
-      <link>/no/docs/api-reference/examples/the-inside-of-cryptography-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/the-inside-of-cryptography-detailed-spec/</link>
       <pubDate>Wed, 04 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/api-reference/examples/the-inside-of-cryptography-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/the-inside-of-cryptography-detailed-spec/</guid>
       <description>
         
         
@@ -11415,10 +11415,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av kryptografi: Hvordan virker det?</title>
-      <link>/no/docs/big-data/tutorials/the-inside-of-cryptography-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/big-data/tutorials/the-inside-of-cryptography-how-does-it-work/</link>
       <pubDate>Wed, 04 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/big-data/tutorials/the-inside-of-cryptography-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/big-data/tutorials/the-inside-of-cryptography-how-does-it-work/</guid>
       <description>
         
         
@@ -11795,10 +11795,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av mikroservicer: De grunnleggende konseptene</title>
-      <link>/no/docs/content-management/tutorials/the-inside-of-microservices-the-core-concepts/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/content-management/tutorials/the-inside-of-microservices-the-core-concepts/</link>
       <pubDate>Wed, 04 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/content-management/tutorials/the-inside-of-microservices-the-core-concepts/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/content-management/tutorials/the-inside-of-microservices-the-core-concepts/</guid>
       <description>
         
         
@@ -12175,10 +12175,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av monografer: De grunnleggende konseptene</title>
-      <link>/no/docs/content-management/the-inside-of-monographs-the-core-concepts/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/content-management/the-inside-of-monographs-the-core-concepts/</link>
       <pubDate>Wed, 04 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/content-management/the-inside-of-monographs-the-core-concepts/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/content-management/the-inside-of-monographs-the-core-concepts/</guid>
       <description>
         
         
@@ -12555,10 +12555,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Detaljert om monografer: Drivverket</title>
-      <link>/no/docs/cloud-computing/tutorials/in-depth-monographs-the-inner-workings/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/in-depth-monographs-the-inner-workings/</link>
       <pubDate>Tue, 03 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/tutorials/in-depth-monographs-the-inner-workings/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/in-depth-monographs-the-inner-workings/</guid>
       <description>
         
         
@@ -12935,10 +12935,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av Java: Hvordan virker det?</title>
-      <link>/no/docs/cloud-computing/the-inside-of-java-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/the-inside-of-java-how-does-it-work/</link>
       <pubDate>Tue, 03 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/the-inside-of-java-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/the-inside-of-java-how-does-it-work/</guid>
       <description>
         
         
@@ -13315,10 +13315,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til Java: Hvordan virker det?</title>
-      <link>/no/docs/api-reference/examples/the-math-of-java-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/the-math-of-java-how-does-it-work/</link>
       <pubDate>Tue, 03 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/api-reference/examples/the-math-of-java-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/the-math-of-java-how-does-it-work/</guid>
       <description>
         
         
@@ -13695,10 +13695,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til kryptografi: Drivverket</title>
-      <link>/no/docs/big-data/tutorials/the-math-of-cryptography-the-inner-workings/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/big-data/tutorials/the-math-of-cryptography-the-inner-workings/</link>
       <pubDate>Tue, 03 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/big-data/tutorials/the-math-of-cryptography-the-inner-workings/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/big-data/tutorials/the-math-of-cryptography-the-inner-workings/</guid>
       <description>
         
         
@@ -14075,10 +14075,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til monolitter: Detaljert spesifikasjon</title>
-      <link>/no/docs/api-reference/the-math-of-monoliths-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/the-math-of-monoliths-detailed-spec/</link>
       <pubDate>Tue, 03 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/api-reference/the-math-of-monoliths-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/the-math-of-monoliths-detailed-spec/</guid>
       <description>
         
         
@@ -14455,10 +14455,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av Java: Drivverket</title>
-      <link>/no/docs/api-reference/the-inside-of-java-the-inner-workings/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/the-inside-of-java-the-inner-workings/</link>
       <pubDate>Mon, 02 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/api-reference/the-inside-of-java-the-inner-workings/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/the-inside-of-java-the-inner-workings/</guid>
       <description>
         
         
@@ -14835,10 +14835,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av Java: Detaljert spesifikasjon</title>
-      <link>/no/docs/big-data/tutorials/the-inside-of-java-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/big-data/tutorials/the-inside-of-java-detailed-spec/</link>
       <pubDate>Mon, 02 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/big-data/tutorials/the-inside-of-java-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/big-data/tutorials/the-inside-of-java-detailed-spec/</guid>
       <description>
         
         
@@ -15215,10 +15215,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av mikroservicer: Hvordan virker det?</title>
-      <link>/no/docs/api-reference/examples/the-inside-of-microservices-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/the-inside-of-microservices-how-does-it-work/</link>
       <pubDate>Mon, 02 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/api-reference/examples/the-inside-of-microservices-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/api-reference/examples/the-inside-of-microservices-how-does-it-work/</guid>
       <description>
         
         
@@ -15595,10 +15595,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til monografer: Hvordan virker det?</title>
-      <link>/no/docs/big-data/examples/the-math-of-monographs-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/big-data/examples/the-math-of-monographs-how-does-it-work/</link>
       <pubDate>Mon, 02 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/big-data/examples/the-math-of-monographs-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/big-data/examples/the-math-of-monographs-how-does-it-work/</guid>
       <description>
         
         
@@ -15975,10 +15975,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Detaljert om Go: Drivverket</title>
-      <link>/no/docs/big-data/tutorials/in-depth-go-the-inner-workings/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/big-data/tutorials/in-depth-go-the-inner-workings/</link>
       <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/big-data/tutorials/in-depth-go-the-inner-workings/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/big-data/tutorials/in-depth-go-the-inner-workings/</guid>
       <description>
         
         
@@ -16355,10 +16355,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til monografer: Hvordan virker det?</title>
-      <link>/no/docs/big-data/the-math-of-monographs-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/big-data/the-math-of-monographs-how-does-it-work/</link>
       <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/big-data/the-math-of-monographs-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/big-data/the-math-of-monographs-how-does-it-work/</guid>
       <description>
         
         

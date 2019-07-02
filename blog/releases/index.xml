@@ -1,12 +1,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Goldydocs – New Releases</title>
-    <link>/blog/releases/</link>
+    <link>https://bilal-fazlani.github.io/commanddotnet/blog/releases/</link>
     <description>Recent content in New Releases on Goldydocs</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Thu, 04 Jan 2018 00:00:00 +0000</lastBuildDate>
     
-	  <atom:link href="/blog/releases/index.xml" rel="self" type="application/rss+xml" />
+	  <atom:link href="https://bilal-fazlani.github.io/commanddotnet/blog/releases/index.xml" rel="self" type="application/rss+xml" />
     
     
       
@@ -16,10 +16,10 @@
     
     <item>
       <title>Blog: Another Great Release</title>
-      <link>/blog/2018/01/04/another-great-release/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/blog/2018/01/04/another-great-release/</link>
       <pubDate>Thu, 04 Jan 2018 00:00:00 +0000</pubDate>
       
-      <guid>/blog/2018/01/04/another-great-release/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/blog/2018/01/04/another-great-release/</guid>
       <description>
         
         

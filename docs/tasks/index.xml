@@ -1,12 +1,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Goldydocs – Core Tasks</title>
-    <link>/docs/tasks/</link>
+    <link>https://bilal-fazlani.github.io/commanddotnet/docs/tasks/</link>
     <description>Recent content in Core Tasks on Goldydocs</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Thu, 05 Jan 2017 00:00:00 +0000</lastBuildDate>
     
-	  <atom:link href="/docs/tasks/index.xml" rel="self" type="application/rss+xml" />
+	  <atom:link href="https://bilal-fazlani.github.io/commanddotnet/docs/tasks/index.xml" rel="self" type="application/rss+xml" />
     
     
       
@@ -16,10 +16,10 @@
     
     <item>
       <title>Docs: Bed and Chair Metrics</title>
-      <link>/docs/tasks/beds/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/docs/tasks/beds/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/docs/tasks/beds/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/docs/tasks/beds/</guid>
       <description>
         
         
@@ -404,10 +404,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Porridge Assessment</title>
-      <link>/docs/tasks/porridge/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/docs/tasks/porridge/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/docs/tasks/porridge/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/docs/tasks/porridge/</guid>
       <description>
         
         
@@ -792,10 +792,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Another Task</title>
-      <link>/docs/tasks/task/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/docs/tasks/task/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/docs/tasks/task/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/docs/tasks/task/</guid>
       <description>
         
         

@@ -1,12 +1,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Goldydocs – Steg for steg hjelpeartikler</title>
-    <link>/no/docs/cloud-computing/tutorials/</link>
+    <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/</link>
     <description>Recent content in Steg for steg hjelpeartikler on Goldydocs</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Tue, 03 Jan 2017 00:00:00 +0000</lastBuildDate>
     
-	  <atom:link href="/no/docs/cloud-computing/tutorials/index.xml" rel="self" type="application/rss+xml" />
+	  <atom:link href="https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/index.xml" rel="self" type="application/rss+xml" />
     
     
       
@@ -16,10 +16,10 @@
     
     <item>
       <title>Docs: Matten til mikroservicer: Detaljert spesifikasjon</title>
-      <link>/no/docs/cloud-computing/tutorials/the-math-of-microservices-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-math-of-microservices-detailed-spec/</link>
       <pubDate>Mon, 09 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/tutorials/the-math-of-microservices-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-math-of-microservices-detailed-spec/</guid>
       <description>
         
         
@@ -396,10 +396,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til monolitter: Drivverket</title>
-      <link>/no/docs/cloud-computing/tutorials/the-math-of-monoliths-the-inner-workings/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-math-of-monoliths-the-inner-workings/</link>
       <pubDate>Sun, 08 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/tutorials/the-math-of-monoliths-the-inner-workings/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-math-of-monoliths-the-inner-workings/</guid>
       <description>
         
         
@@ -776,10 +776,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til Java: Drivverket</title>
-      <link>/no/docs/cloud-computing/tutorials/the-math-of-java-the-inner-workings/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-math-of-java-the-inner-workings/</link>
       <pubDate>Sat, 07 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/tutorials/the-math-of-java-the-inner-workings/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-math-of-java-the-inner-workings/</guid>
       <description>
         
         
@@ -1156,10 +1156,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Matten til monografer: Detaljert spesifikasjon</title>
-      <link>/no/docs/cloud-computing/tutorials/the-math-of-monographs-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-math-of-monographs-detailed-spec/</link>
       <pubDate>Fri, 06 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/tutorials/the-math-of-monographs-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-math-of-monographs-detailed-spec/</guid>
       <description>
         
         
@@ -1536,10 +1536,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av mikroservicer: Detaljert spesifikasjon</title>
-      <link>/no/docs/cloud-computing/tutorials/the-inside-of-microservices-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-inside-of-microservices-detailed-spec/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/tutorials/the-inside-of-microservices-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-inside-of-microservices-detailed-spec/</guid>
       <description>
         
         
@@ -1916,10 +1916,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av Go: Drivverket</title>
-      <link>/no/docs/cloud-computing/tutorials/the-inside-of-go-the-inner-workings/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-inside-of-go-the-inner-workings/</link>
       <pubDate>Wed, 04 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/tutorials/the-inside-of-go-the-inner-workings/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/the-inside-of-go-the-inner-workings/</guid>
       <description>
         
         
@@ -2296,10 +2296,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Detaljert om monografer: Drivverket</title>
-      <link>/no/docs/cloud-computing/tutorials/in-depth-monographs-the-inner-workings/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/in-depth-monographs-the-inner-workings/</link>
       <pubDate>Tue, 03 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/tutorials/in-depth-monographs-the-inner-workings/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/tutorials/in-depth-monographs-the-inner-workings/</guid>
       <description>
         
         

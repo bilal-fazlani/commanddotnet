@@ -1,12 +1,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Goldydocs – News About Docsy</title>
-    <link>/blog/news/</link>
+    <link>https://bilal-fazlani.github.io/commanddotnet/blog/news/</link>
     <description>Recent content in News About Docsy on Goldydocs</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Sat, 06 Oct 2018 00:00:00 +0000</lastBuildDate>
     
-	  <atom:link href="/blog/news/index.xml" rel="self" type="application/rss+xml" />
+	  <atom:link href="https://bilal-fazlani.github.io/commanddotnet/blog/news/index.xml" rel="self" type="application/rss+xml" />
     
     
       
@@ -16,15 +16,15 @@
     
     <item>
       <title>Blog: Easy documentation with Docsy</title>
-      <link>/blog/2018/10/06/easy-documentation-with-docsy/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/blog/2018/10/06/easy-documentation-with-docsy/</link>
       <pubDate>Sat, 06 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/blog/2018/10/06/easy-documentation-with-docsy/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/blog/2018/10/06/easy-documentation-with-docsy/</guid>
       <description>
         
         
         
-        <![CDATA[<img src="/blog/2018/10/06/easy-documentation-with-docsy/featured-sunset-get_hu69849a7cdb847c2393a7b3a7f6061c86_387442_640x0_resize_catmullrom_2.png" width="640" height="253"/>]]>
+        <![CDATA[<img src="https://bilal-fazlani.github.io/commanddotnet/blog/2018/10/06/easy-documentation-with-docsy/featured-sunset-get_hu69849a7cdb847c2393a7b3a7f6061c86_387442_640x0_resize_catmullrom_2.png" width="640" height="253"/>]]>
         
         
 
@@ -44,7 +44,7 @@
 
 
 &lt;div class=&#34;card rounded p-2 td-post-card mb-4 mt-4&#34; style=&#34;max-width: 610px&#34;&gt;
-	&lt;img class=&#34;card-img-top&#34; src=&#34;/blog/2018/10/06/easy-documentation-with-docsy/featured-sunset-get_hu69849a7cdb847c2393a7b3a7f6061c86_387442_600x300_fill_catmullrom_smart1_2.png&#34; width=&#34;600&#34; height=&#34;300&#34;&gt;
+	&lt;img class=&#34;card-img-top&#34; src=&#34;https://bilal-fazlani.github.io/commanddotnet/commanddotnet/blog/2018/10/06/easy-documentation-with-docsy/featured-sunset-get_hu69849a7cdb847c2393a7b3a7f6061c86_387442_600x300_fill_catmullrom_smart1_2.png&#34; width=&#34;600&#34; height=&#34;300&#34;&gt;
 	
 	&lt;div class=&#34;card-body px-0 pt-2 pb-0&#34;&gt;
 		&lt;p class=&#34;card-text&#34;&gt;
@@ -73,7 +73,7 @@ Fetch and scale an image in the upcoming Hugo 0.43.
 
 
 &lt;div class=&#34;card rounded p-2 td-post-card mb-4 mt-4&#34; style=&#34;max-width: 610px&#34;&gt;
-	&lt;img class=&#34;card-img-top&#34; src=&#34;/blog/2018/10/06/easy-documentation-with-docsy/featured-sunset-get_hu69849a7cdb847c2393a7b3a7f6061c86_387442_600x300_fill_catmullrom_smart1_2.png&#34; width=&#34;600&#34; height=&#34;300&#34;&gt;
+	&lt;img class=&#34;card-img-top&#34; src=&#34;https://bilal-fazlani.github.io/commanddotnet/commanddotnet/blog/2018/10/06/easy-documentation-with-docsy/featured-sunset-get_hu69849a7cdb847c2393a7b3a7f6061c86_387442_600x300_fill_catmullrom_smart1_2.png&#34; width=&#34;600&#34; height=&#34;300&#34;&gt;
 	
 	&lt;div class=&#34;card-body px-0 pt-2 pb-0&#34;&gt;
 		&lt;p class=&#34;card-text&#34;&gt;
@@ -91,10 +91,10 @@ Fetch and scale an image in the upcoming Hugo 0.43.
     
     <item>
       <title>Blog: The second blog post</title>
-      <link>/blog/2018/10/06/the-second-blog-post/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/blog/2018/10/06/the-second-blog-post/</link>
       <pubDate>Sat, 06 Oct 2018 00:00:00 +0000</pubDate>
       
-      <guid>/blog/2018/10/06/the-second-blog-post/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/blog/2018/10/06/the-second-blog-post/</guid>
       <description>
         
         

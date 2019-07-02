@@ -1,12 +1,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Goldydocs – Data i skyen</title>
-    <link>/no/docs/cloud-computing/</link>
+    <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/</link>
     <description>Recent content in Data i skyen on Goldydocs</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Tue, 03 Jan 2017 00:00:00 +0000</lastBuildDate>
     
-	  <atom:link href="/no/docs/cloud-computing/index.xml" rel="self" type="application/rss+xml" />
+	  <atom:link href="https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/index.xml" rel="self" type="application/rss+xml" />
     
     
       
@@ -16,10 +16,10 @@
     
     <item>
       <title>Docs: Detaljert om Go: Detaljert spesifikasjon</title>
-      <link>/no/docs/cloud-computing/in-depth-go-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/in-depth-go-detailed-spec/</link>
       <pubDate>Thu, 05 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/in-depth-go-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/in-depth-go-detailed-spec/</guid>
       <description>
         
         
@@ -396,10 +396,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Detaljert om monolitter: Detaljert spesifikasjon</title>
-      <link>/no/docs/cloud-computing/in-depth-monoliths-detailed-spec/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/in-depth-monoliths-detailed-spec/</link>
       <pubDate>Wed, 04 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/in-depth-monoliths-detailed-spec/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/in-depth-monoliths-detailed-spec/</guid>
       <description>
         
         
@@ -776,10 +776,10 @@ This is a warning with a title.
     
     <item>
       <title>Docs: Innsiden av Java: Hvordan virker det?</title>
-      <link>/no/docs/cloud-computing/the-inside-of-java-how-does-it-work/</link>
+      <link>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/the-inside-of-java-how-does-it-work/</link>
       <pubDate>Tue, 03 Jan 2017 00:00:00 +0000</pubDate>
       
-      <guid>/no/docs/cloud-computing/the-inside-of-java-how-does-it-work/</guid>
+      <guid>https://bilal-fazlani.github.io/commanddotnet/no/docs/cloud-computing/the-inside-of-java-how-does-it-work/</guid>
       <description>
         
         

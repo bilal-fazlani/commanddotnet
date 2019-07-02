@@ -3,169 +3,169 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>/docs/overview/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/overview/</loc>
   </url>
   
   <url>
-    <loc>/docs/tasks/beds/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/tasks/beds/</loc>
     <lastmod>2017-01-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/docs/tasks/ponycopters/configuring-ponycopters/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/tasks/ponycopters/configuring-ponycopters/</loc>
     <lastmod>2017-01-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/docs/getting-started/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/getting-started/</loc>
     <lastmod>2017-01-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/docs/examples/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/examples/</loc>
     <lastmod>2017-01-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/docs/tasks/ponycopters/launching-ponycopters/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/tasks/ponycopters/launching-ponycopters/</loc>
     <lastmod>2017-01-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/docs/tutorials/multi-bear/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/tutorials/multi-bear/</loc>
     <lastmod>2017-01-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/docs/tasks/porridge/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/tasks/porridge/</loc>
     <lastmod>2017-01-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/docs/concepts/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/concepts/</loc>
   </url>
   
   <url>
-    <loc>/docs/tasks/task/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/tasks/task/</loc>
     <lastmod>2017-01-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/docs/tutorials/tutorial2/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/tutorials/tutorial2/</loc>
     <lastmod>2017-01-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/docs/tasks/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/tasks/</loc>
     <lastmod>2017-01-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/docs/tutorials/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/tutorials/</loc>
     <lastmod>2017-01-04T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/docs/reference/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/reference/</loc>
     <lastmod>2017-01-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/docs/contribution-guidelines/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/contribution-guidelines/</loc>
   </url>
   
   <url>
-    <loc>/blog/news/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/blog/news/</loc>
     <lastmod>2018-10-06T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/releases/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/blog/releases/</loc>
     <lastmod>2018-01-04T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/docs/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="no"
-                href="/no/docs/"
+                href="https://bilal-fazlani.github.io/commanddotnet/no/docs/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/docs/"
+                href="https://bilal-fazlani.github.io/commanddotnet/docs/"
                 />
   </url>
   
   <url>
-    <loc>/blog/2018/10/06/easy-documentation-with-docsy/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/blog/2018/10/06/easy-documentation-with-docsy/</loc>
     <lastmod>2018-10-06T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/</loc>
     <lastmod>2018-10-06T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="no"
-                href="/no/"
+                href="https://bilal-fazlani.github.io/commanddotnet/no/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/"
+                href="https://bilal-fazlani.github.io/commanddotnet/"
                 />
   </url>
   
   <url>
-    <loc>/blog/2018/10/06/the-second-blog-post/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/blog/2018/10/06/the-second-blog-post/</loc>
     <lastmod>2018-10-06T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/blog/2018/01/04/another-great-release/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/blog/2018/01/04/another-great-release/</loc>
     <lastmod>2018-01-04T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/docs/getting-started/example-page/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/getting-started/example-page/</loc>
     <lastmod>2017-01-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/docs/reference/parameter-reference/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/reference/parameter-reference/</loc>
     <lastmod>2017-01-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/docs/tasks/ponycopters/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/docs/tasks/ponycopters/</loc>
     <lastmod>2017-01-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/about/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/about/</loc>
   </url>
   
   <url>
-    <loc>/blog/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/blog/</loc>
   </url>
   
   <url>
-    <loc>/community/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/community/</loc>
   </url>
   
   <url>
-    <loc>/search/</loc>
+    <loc>https://bilal-fazlani.github.io/commanddotnet/search/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="no"
-                href="/no/search/"
+                href="https://bilal-fazlani.github.io/commanddotnet/no/search/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="/search/"
+                href="https://bilal-fazlani.github.io/commanddotnet/search/"
                 />
   </url>
   
