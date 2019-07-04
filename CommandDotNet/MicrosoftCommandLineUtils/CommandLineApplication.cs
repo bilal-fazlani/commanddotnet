@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using CommandDotNet.Exceptions;
 using CommandDotNet.Extensions;
 using CommandDotNet.Models;
-using CommandDotNet.Parsing;
 
 namespace CommandDotNet.MicrosoftCommandLineUtils
 {
@@ -120,23 +119,9 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             _invoke = () => invoke().Result;
         }
         
-        public int Execute(ParserContext parserContext, string[] args)
+        public int Execute()
         {
-            var directivesResult = Directives.ProcessDirectives(_appSettings, parserContext, ref args);
-            if (directivesResult.ExitCode.HasValue)
-            {
-                return directivesResult.ExitCode.Value;
-            }
-
-            var parseResult = new CommandParser(_appSettings, parserContext).ParseCommand(this, args);
-
-            // if the ExitCode has been set, the parser has determined
-            // the command should not be executed
-            if (parseResult.ExitCode.HasValue)
-            {
-                return parseResult.ExitCode.Value;
-            }
-            return ((CommandLineApplication)parseResult.Command)._invoke();
+            return _invoke();
         }
 
         public IOption FindOption(string alias)

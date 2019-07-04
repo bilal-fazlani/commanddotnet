@@ -47,7 +47,7 @@ namespace CommandDotNet
 
                 CommandLineApplication app = appCreator.CreateApplication(typeof(T), DependencyResolver);
 
-                return app.Execute(_parserBuilder.Build(), args);
+                return Execute(app, _parserBuilder.Build(), args);
             }
             catch (AppRunnerException e)
             {
@@ -149,6 +149,25 @@ namespace CommandDotNet
                 ExceptionDispatchInfo.Capture(ex.InnerException ?? ex).Throw();
                 return 1; // this will never be called
             }
+        }
+
+        private int Execute(CommandLineApplication app, ParserContext parserContext, string[] args)
+        {
+            var directivesResult = Directives.ProcessDirectives(_settings, parserContext, ref args);
+            if (directivesResult.ExitCode.HasValue)
+            {
+                return directivesResult.ExitCode.Value;
+            }
+
+            var parseResult = new CommandParser(_settings, parserContext).ParseCommand(app, args);
+
+            // if the ExitCode has been set, the parser has determined
+            // the command should not be executed
+            if (parseResult.ExitCode.HasValue)
+            {
+                return parseResult.ExitCode.Value;
+            }
+            return ((CommandLineApplication)parseResult.Command).Execute();
         }
 
         public AppRunner<T> WithCustomHelpProvider(IHelpProvider customHelpProvider)
