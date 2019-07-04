@@ -19,11 +19,11 @@ namespace CommandDotNet.Parsing
             _parserContext = parserContext;
         }
 
-        public ParseResult ParseCommand(CommandLineApplication app, string[] args)
+        public ParseResult ParseCommand(ICommand command, string[] args)
         {
-            ICommand currentCommand = app;
+            ICommand currentCommand = command;
             IOption currentOption = null;
-            IEnumerator<IOperand> arguments = new OperandEnumerator(app.Operands);
+            IEnumerator<IOperand> arguments = new OperandEnumerator(command.Operands);
 
             var remainingArguments = new List<Token>();
 
@@ -33,7 +33,7 @@ namespace CommandDotNet.Parsing
 
             if (_parserContext.ParseDirectiveEnabled)
             {
-                return new ParseResult(app, args, tokens, exitCode: 0);
+                return new ParseResult(command, args, tokens, exitCode: 0);
             }
 
             bool ignoreRemainingArguments = false;
@@ -131,9 +131,7 @@ namespace CommandDotNet.Parsing
             }
 
             var subCommand = command.Commands
-                .Where(c => c.Name.Equals(token.Value, StringComparison.OrdinalIgnoreCase))
-                .Cast<CommandLineApplication>()
-                .FirstOrDefault();
+                .FirstOrDefault(c => c.Name.Equals(token.Value, StringComparison.OrdinalIgnoreCase));
             if (subCommand != null)
             {
                 command = subCommand;
