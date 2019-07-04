@@ -12,8 +12,8 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         IEnumerable<ICommand> Commands { get; }
         IEnumerable<IOperand> Operands { get; }
         IEnumerable<IOption> GetOptions(bool includeInherited = true);
-        IOption OptionHelp { get; }
 
         ICustomAttributeProvider CustomAttributeProvider { get; }
+        IOption FindOption(string alias);
     }
 }

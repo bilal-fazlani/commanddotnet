@@ -41,7 +41,7 @@ namespace CommandDotNet
                 ConfigureMetadata(_app, applicationMetadata);
                 _app.OnExecute(() =>
                 {
-                    _app.ShowHelp();
+                    HelpService.Print(_settings, _app);
                     return Task.FromResult(0);
                 });
             }

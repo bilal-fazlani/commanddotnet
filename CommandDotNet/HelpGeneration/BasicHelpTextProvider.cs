@@ -14,19 +14,19 @@ namespace CommandDotNet.HelpGeneration
             _appSettings = appSettings;
         }
         
-        public string GetHelpText(ICommand app)
+        public string GetHelpText(ICommand command)
         {            
-            var titleBuilder = BuildTitle(app);
+            var titleBuilder = BuildTitle(command);
             
-            var usageBuilder = BuildUsage(app);
+            var usageBuilder = BuildUsage(command);
 
-            var commandsBuilder = BuildCommands(app, usageBuilder);
+            var commandsBuilder = BuildCommands(command, usageBuilder);
             
-            var operandsBuilder = BuildOperands(app, usageBuilder);
+            var operandsBuilder = BuildOperands(command, usageBuilder);
 
-            var optionsBuilder = BuildOptions(app, usageBuilder);
+            var optionsBuilder = BuildOptions(command, usageBuilder);
 
-            var extendedHelpTextBuild = BuildExtendedHelpText(app);
+            var extendedHelpTextBuild = BuildExtendedHelpText(command);
             
             if (_appSettings.AllowArgumentSeparator)
             {
@@ -43,20 +43,20 @@ namespace CommandDotNet.HelpGeneration
                 + extendedHelpTextBuild;
         }
 
-        private string BuildExtendedHelpText(ICommand app)
+        private string BuildExtendedHelpText(ICommand command)
         {
-            if (!string.IsNullOrEmpty(app.ExtendedHelpText))
+            if (!string.IsNullOrEmpty(command.ExtendedHelpText))
             {
-                return "\n" + app.ExtendedHelpText;
+                return "\n" + command.ExtendedHelpText;
             }
 
             return null;
         }
         
-        private StringBuilder BuildCommands(ICommand app, StringBuilder usageBuilder)
+        private StringBuilder BuildCommands(ICommand command, StringBuilder usageBuilder)
         {
             var commandsBuilder = new StringBuilder();
-            var commands = app.Commands.ToList();
+            var commands = command.Commands.ToList();
             if (commands.Any())
             {
                 usageBuilder.Append(" [command]");
@@ -73,22 +73,19 @@ namespace CommandDotNet.HelpGeneration
                 }
 
                 commandsBuilder.AppendLine();
-                
-                if (app.OptionHelp != null)
-                {
-                    commandsBuilder.Append("Use \"");
-                    commandsBuilder.AppendUsageCommandNames(app, _appSettings);
-                    commandsBuilder.AppendLine($" [command] --{app.OptionHelp.Name}\" for more information about a command.");
-                }
+
+                commandsBuilder.Append("Use \"");
+                commandsBuilder.AppendUsageCommandNames(command, _appSettings);
+                commandsBuilder.AppendLine($" [command] --{Constants.HelpArgumentTemplate.Name}\" for more information about a command.");
             }
 
             return commandsBuilder;
         }
 
-        private  StringBuilder BuildOptions(ICommand app, StringBuilder usageBuilder)
+        private  StringBuilder BuildOptions(ICommand command, StringBuilder usageBuilder)
         {
             var optionsBuilder = new StringBuilder();
-            var options = app.GetOptions()
+            var options = command.GetOptions()
                 .OrderBy(o => o.IsSystemOption)
                 .ToList();
             if (options.Any())
@@ -111,11 +108,11 @@ namespace CommandDotNet.HelpGeneration
             return optionsBuilder;
         }
 
-        private StringBuilder BuildOperands(ICommand app, StringBuilder usageBuilder)
+        private StringBuilder BuildOperands(ICommand command, StringBuilder usageBuilder)
         {
             var argumentsBuilder = new StringBuilder();
 
-            var arguments = app.Operands.ToList();
+            var arguments = command.Operands.ToList();
                         
             if (arguments.Any())
             {
@@ -136,17 +133,17 @@ namespace CommandDotNet.HelpGeneration
             return argumentsBuilder;
         }
 
-        private StringBuilder BuildUsage(ICommand app)
+        private StringBuilder BuildUsage(ICommand command)
         {
-            return new StringBuilder("Usage: ").AppendUsageCommandNames(app, _appSettings);
+            return new StringBuilder("Usage: ").AppendUsageCommandNames(command, _appSettings);
         }
 
-        private StringBuilder BuildTitle(ICommand app)
+        private StringBuilder BuildTitle(ICommand command)
         {
             var titleBuilder = new StringBuilder();
 
-            if (!string.IsNullOrEmpty(app.Description))
-                titleBuilder.AppendLine(app.Description + "\n");
+            if (!string.IsNullOrEmpty(command.Description))
+                titleBuilder.AppendLine(command.Description + "\n");
             return titleBuilder;
         }
     }

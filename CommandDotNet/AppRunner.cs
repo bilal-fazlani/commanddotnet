@@ -59,15 +59,11 @@ namespace CommandDotNet
             }
             catch (CommandParsingException e)
             {
-                var optionHelp = e.Command.OptionHelp;
-                if (optionHelp != null)
-                {
-                    _settings.Out.WriteLine(
-                        $"Specify --{optionHelp.Name} for a list of available options and commands.");
-                }
+                _settings.Out.WriteLine(
+                    $"Specify --{Constants.HelpArgumentTemplate.Name} for a list of available options and commands.");
 
                 _settings.Error.WriteLine(e.Message + "\n");
-                e.Command.ShowHelp();
+                HelpService.Print(_settings, e.Command);
 
 #if DEBUG
                 _settings.Error.WriteLine(e.StackTrace);
