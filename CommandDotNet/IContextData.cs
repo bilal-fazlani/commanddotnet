@@ -2,7 +2,7 @@
 
 namespace CommandDotNet
 {
-    public interface IServices
+    public interface IContextData
     {
         void Add<T>(T value);
         void Set<T>(T value);
