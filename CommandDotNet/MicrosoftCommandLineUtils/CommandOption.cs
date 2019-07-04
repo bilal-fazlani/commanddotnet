@@ -50,7 +50,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             }
         }
 
-        public IServices Services { get; } = new Services();
+        public IContextData ContextData { get; } = new ContextData();
 
         public void SetValues(List<string> values)
         {

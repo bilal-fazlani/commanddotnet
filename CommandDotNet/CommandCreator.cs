@@ -94,7 +94,7 @@ namespace CommandDotNet
                 operandInfo.TypeDisplayName,
                 operandInfo.DefaultValue,
                 operandInfo.AllowedValues);
-            operand.Services.Set<ArgumentInfo>(operandInfo);
+            operand.ContextData.Set<ArgumentInfo>(operandInfo);
             operandInfo.SetValueInfo(operand, operand.SetValues);
         }
 
@@ -107,7 +107,7 @@ namespace CommandDotNet
                 optionInfo.TypeDisplayName,
                 optionInfo.DefaultValue,
                 optionInfo.AllowedValues);
-            option.Services.Set<ArgumentInfo>(optionInfo);
+            option.ContextData.Set<ArgumentInfo>(optionInfo);
             optionInfo.SetValueInfo(option, option.SetValues);
         }
 

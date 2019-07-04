@@ -26,7 +26,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             get { yield return Name; }
         }
 
-        public IServices Services { get; } = new Services();
+        public IContextData ContextData { get; } = new ContextData();
 
         public void SetValues(List<string> values)
         {

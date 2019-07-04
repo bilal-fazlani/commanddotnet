@@ -11,6 +11,6 @@ namespace CommandDotNet
         List<string> Values { get; }
         IEnumerable<string> Aliases { get; }
 
-        IServices Services { get; }
+        IContextData ContextData { get; }
     }
 }
