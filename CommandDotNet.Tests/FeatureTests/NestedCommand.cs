@@ -8,15 +8,23 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests
 {
-    public class NestedCommand : ScenarioTestBase<NestedCommand>
+    public class NestedCommand : TestBase
     {
         public NestedCommand(ITestOutputHelper output) : base(output)
         {
         }
 
-        public static IEnumerable<IScenario> Scenarios => 
+        [Theory]
+        [MemberData(nameof(Scenarios))]
+        public void Active(IScenario scenario)
+        {
+            Verify(scenario);
+        }
+
+        public static IEnumerable<object[]> Scenarios => 
             BuildScenarios<ThreeLevelsApp>("via property")
-            .Union(BuildScenarios<NestedThreeLevelsApp>("via nested class"));
+            .Union(BuildScenarios<NestedThreeLevelsApp>("via nested class"))
+            .ToObjectArrays();
 
         public static Scenarios BuildScenarios<T>(string name) =>
             new Scenarios

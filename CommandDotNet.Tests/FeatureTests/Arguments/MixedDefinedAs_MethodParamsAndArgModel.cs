@@ -3,27 +3,30 @@ using CommandDotNet.Attributes;
 using CommandDotNet.Models;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.Utils;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class MixedDefinedAs_MethodParamsAndArgModel : ScenarioTestBase<MixedDefinedAs_MethodParamsAndArgModel>
+    public class MixedDefinedAs_MethodParamsAndArgModel : TestBase
     {
-        private static AppSettings BasicHelp = TestAppSettings.BasicHelp;
-        private static AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
+        private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
+        private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
         public MixedDefinedAs_MethodParamsAndArgModel(ITestOutputHelper output) : base(output)
         {
         }
 
-        public static Scenarios Scenarios =>
-            new Scenarios
+        [Fact]
+        public void BasicHelp_IncludesModelAndParamDefinedArgs()
+        {
+            Verify(new Given<App>
             {
-                new Given<App>("Basic Help - includes model and param defined args")
+                And = {AppSettings = BasicHelp},
+                WhenArgs = "Do -h",
+                Then =
                 {
-                    And = {AppSettings = BasicHelp},
-                    WhenArgs = "Do -h",
-                    Then = {Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
 
 Arguments:
   ModelArg
@@ -35,13 +38,19 @@ Options:
   --ModelOptionList
   --paramOption
   --paramOptionList
-  -h | --help        Show help information" }
-                },
-                new Given<App>("Detailed Help - includes model and param defined args")
-                {
-                    And = {AppSettings = DetailedHelp},
-                    WhenArgs = "Do -h",
-                    Then = {Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+  -h | --help        Show help information"
+                }
+            });
+        }
+
+        [Fact]
+        public void DetailedHelp_IncludesModelAndParamDefinedArgs()
+        {
+            Verify(new Given<App>
+            {
+                And = { AppSettings = DetailedHelp },
+                WhenArgs = "Do -h",
+                Then = { Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
 
 Arguments:
 
@@ -64,57 +73,67 @@ Options:
 
   -h | --help
   Show help information" }
-                },
-                new Given<App>("exec - maps to all args")
+            });
+        }
+
+        [Fact]
+        public void Exec_MapsToAllArgs()
+        {
+            Verify(new Given<App>
+            {
+                And = { AppSettings = BasicHelp },
+                WhenArgs = "Do --ModelOption moA --ModelOptionList moB --ModelOptionList moC " +
+                           "--paramOption poA --paramOptionList poB --paramOptionList poC " +
+                           "red green blue orange",
+                Then =
                 {
-                    And = {AppSettings = BasicHelp},
-                    WhenArgs = "Do --ModelOption moA --ModelOptionList moB --ModelOptionList moC " +
-                               "--paramOption poA --paramOptionList poB --paramOptionList poC " +
-                               "red green blue orange",
-                    Then =
+                    Outputs =
                     {
-                        Outputs =
+                        new Model
                         {
-                            new Model
-                            {
-                                ModelOption = "moA",
-                                ModelOptionList = new List<string>{"moB", "moC"},
-                                ModelArg = "red"
-                            },
-                            new Params
-                            {
-                                ParamOption = "poA", 
-                                ParamOptionList = new List<string>{"poB", "poC"},
-                                ParamArg = "green",
-                                ParamArgList = new List<string>{"blue", "orange"}
-                            }
-                        }
-                    }
-                },
-                new Given<App>("exec - options can be included after arguments")
-                {
-                    And = {AppSettings = BasicHelp},
-                    WhenArgs = "Do --paramOptionList poB --paramOptionList poC " +
-                               "red --paramOptionList poD green --paramOptionList poE " +
-                               "blue --paramOptionList poF orange --paramOptionList poG",
-                    Then =
-                    {
-                        Outputs =
+                            ModelOption = "moA",
+                            ModelOptionList = new List<string>{"moB", "moC"},
+                            ModelArg = "red"
+                        },
+                        new Params
                         {
-                            new Model
-                            {
-                                ModelArg = "red"
-                            },
-                            new Params
-                            {
-                                ParamOptionList = new List<string>{"poB", "poC", "poD", "poE", "poF", "poG"},
-                                ParamArg = "green",
-                                ParamArgList = new List<string>{"blue", "orange"}
-                            }
+                            ParamOption = "poA",
+                            ParamOptionList = new List<string>{"poB", "poC"},
+                            ParamArg = "green",
+                            ParamArgList = new List<string>{"blue", "orange"}
                         }
                     }
                 }
-            };
+            });
+        }
+
+        [Fact]
+        public void Exec_OptionsCanBeIncludedAfterArguments()
+        {
+            Verify(new Given<App>
+            {
+                And = { AppSettings = BasicHelp },
+                WhenArgs = "Do --paramOptionList poB --paramOptionList poC " +
+                           "red --paramOptionList poD green --paramOptionList poE " +
+                           "blue --paramOptionList poF orange --paramOptionList poG",
+                Then =
+                {
+                    Outputs =
+                    {
+                        new Model
+                        {
+                            ModelArg = "red"
+                        },
+                        new Params
+                        {
+                            ParamOptionList = new List<string>{"poB", "poC", "poD", "poE", "poF", "poG"},
+                            ParamArg = "green",
+                            ParamArgList = new List<string>{"blue", "orange"}
+                        }
+                    }
+                }
+            });
+        }
 
         public class App
         {

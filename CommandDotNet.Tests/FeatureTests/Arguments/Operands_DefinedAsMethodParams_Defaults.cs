@@ -6,27 +6,28 @@ using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsParams;
 using CommandDotNet.Tests.Utils;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class Operands_DefinedAsMethodParams_Defaults : ScenarioTestBase<Operands_DefinedAsMethodParams_Defaults>
+    public class Operands_DefinedAsMethodParams_Defaults : TestBase
     {
-        private static AppSettings BasicHelp = TestAppSettings.BasicHelp;
-        private static AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
+        private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
+        private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
         public Operands_DefinedAsMethodParams_Defaults(ITestOutputHelper output) : base(output)
         {
         }
 
-        public static Scenarios Scenarios =>
-            new Scenarios
+        [Fact]
+        public void SampleTypes_BasicHelp()
+        {
+            Verify(new Given<OperandsDefaults>
             {
-                new Given<OperandsDefaults>("SampleTypes - Basic Help")
-                {
-                    And = {AppSettings = BasicHelp},
-                    WhenArgs = "ArgsDefaults -h",
-                    Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments] [options]
+                And = { AppSettings = BasicHelp },
+                WhenArgs = "ArgsDefaults -h",
+                Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments] [options]
 
 Arguments:
   boolArg
@@ -39,12 +40,17 @@ Arguments:
 
 Options:
   -h | --help  Show help information" }
-                },
-                new Given<OperandsDefaults>("SampleTypes - Detailed Help")
-                {
-                    And = {AppSettings = DetailedHelp},
-                    WhenArgs = "ArgsDefaults -h",
-                    Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments] [options]
+            });
+        }
+
+        [Fact]
+        public void SampleTypes_DetailedHelp()
+        {
+            Verify(new Given<OperandsDefaults>
+            {
+                And = { AppSettings = DetailedHelp },
+                WhenArgs = "ArgsDefaults -h",
+                Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments] [options]
 
 Arguments:
 
@@ -69,24 +75,34 @@ Options:
 
   -h | --help
   Show help information" }
-                },
-                new Given<OperandsDefaults>("StructList - Basic Help")
-                {
-                    And = {AppSettings = BasicHelp},
-                    WhenArgs = "StructListDefaults -h",
-                    Then = { Result = @"Usage: dotnet testhost.dll StructListDefaults [arguments] [options]
+            });
+        }
+
+        [Fact]
+        public void StructList_BasicHelp()
+        {
+            Verify(new Given<OperandsDefaults>
+            {
+                And = { AppSettings = BasicHelp },
+                WhenArgs = "StructListDefaults -h",
+                Then = { Result = @"Usage: dotnet testhost.dll StructListDefaults [arguments] [options]
 
 Arguments:
   structListArg
 
 Options:
   -h | --help  Show help information" }
-                },
-                new Given<OperandsDefaults>("StructList - Detailed Help")
-                {
-                    And = {AppSettings = DetailedHelp},
-                    WhenArgs = "StructListDefaults -h",
-                    Then = { Result = @"Usage: dotnet testhost.dll StructListDefaults [arguments] [options]
+            });
+        }
+
+        [Fact]
+        public void StructList_DetailedHelp()
+        {
+            Verify(new Given<OperandsDefaults>
+            {
+                And = { AppSettings = DetailedHelp },
+                WhenArgs = "StructListDefaults -h",
+                Then = { Result = @"Usage: dotnet testhost.dll StructListDefaults [arguments] [options]
 
 Arguments:
 
@@ -97,24 +113,34 @@ Options:
 
   -h | --help
   Show help information" }
-                },
-                new Given<OperandsDefaults>("EnumList - Basic Help")
-                {
-                    And = {AppSettings = BasicHelp},
-                    WhenArgs = "EnumListDefaults -h",
-                    Then = { Result = @"Usage: dotnet testhost.dll EnumListDefaults [arguments] [options]
+            });
+        }
+
+        [Fact]
+        public void EnumList_BasicHelp()
+        {
+            Verify(new Given<OperandsDefaults>
+            {
+                And = { AppSettings = BasicHelp },
+                WhenArgs = "EnumListDefaults -h",
+                Then = { Result = @"Usage: dotnet testhost.dll EnumListDefaults [arguments] [options]
 
 Arguments:
   enumListArg
 
 Options:
   -h | --help  Show help information" }
-                },
-                new Given<OperandsDefaults>("EnumList - Detailed Help")
-                {
-                    And = {AppSettings = DetailedHelp},
-                    WhenArgs = "EnumListDefaults -h",
-                    Then = { Result = @"Usage: dotnet testhost.dll EnumListDefaults [arguments] [options]
+            });
+        }
+
+        [Fact]
+        public void EnumList_DetailedHelp()
+        {
+            Verify(new Given<OperandsDefaults>
+            {
+                And = { AppSettings = DetailedHelp },
+                WhenArgs = "EnumListDefaults -h",
+                Then = { Result = @"Usage: dotnet testhost.dll EnumListDefaults [arguments] [options]
 
 Arguments:
 
@@ -126,24 +152,34 @@ Options:
 
   -h | --help
   Show help information" }
-                },
-                new Given<OperandsDefaults>("ObjectList - Basic Help")
-                {
-                    And = {AppSettings = BasicHelp},
-                    WhenArgs = "ObjectListDefaults -h",
-                    Then = { Result = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments] [options]
+            });
+        }
+
+        [Fact]
+        public void ObjectList_BasicHelp()
+        {
+            Verify(new Given<OperandsDefaults>
+            {
+                And = { AppSettings = BasicHelp },
+                WhenArgs = "ObjectListDefaults -h",
+                Then = { Result = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments] [options]
 
 Arguments:
   objectListArg
 
 Options:
   -h | --help  Show help information" }
-                },
-                new Given<OperandsDefaults>("ObjectList - Detailed Help")
-                {
-                    And = {AppSettings = DetailedHelp},
-                    WhenArgs = "ObjectListDefaults -h",
-                    Then = { Result = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments] [options]
+            });
+        }
+
+        [Fact]
+        public void ObjectList_DetailedHelp()
+        {
+            Verify(new Given<OperandsDefaults>
+            {
+                And = { AppSettings = DetailedHelp },
+                WhenArgs = "ObjectListDefaults -h",
+                Then = { Result = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments] [options]
 
 Arguments:
 
@@ -154,43 +190,53 @@ Options:
 
   -h | --help
   Show help information" }
-                },
-                new Given<OperandsDefaults>("SampleTypes - Exec - positional")
+            });
+        }
+
+        [Fact]
+        public void SampleTypes_Exec_Positional()
+        {
+            Verify(new Given<OperandsDefaults>
+            {
+                WhenArgs = "ArgsDefaults true green 1 2 Monday http://google.com yellow orange",
+                Then =
                 {
-                    WhenArgs = "ArgsDefaults true green 1 2 Monday http://google.com yellow orange",
-                    Then =
+                    Outputs = { new ParametersSampleTypesResults
                     {
-                        Outputs = { new ParametersSampleTypesResults
+                        BoolArg = true,
+                        StringArg = "green",
+                        StructArg = 1,
+                        StructNArg = 2,
+                        EnumArg = DayOfWeek.Monday,
+                        ObjectArg = new Uri("http://google.com"),
+                        StringListArg = new List<string>{"yellow", "orange"}
+                    } }
+                }
+            });
+        }
+
+        [Fact]
+        public void SampleTypes_Exec_OperandsNotRequired_UsesDefaults()
+        {
+            Verify(new Given<OperandsDefaults>
+            {
+                WhenArgs = "ArgsDefaults",
+                Then =
+                {
+                    Outputs =
+                    {
+                        new ParametersSampleTypesResults
                         {
                             BoolArg = true,
-                            StringArg = "green",
-                            StructArg = 1,
-                            StructNArg = 2,
-                            EnumArg = DayOfWeek.Monday,
-                            ObjectArg = new Uri("http://google.com"),
-                            StringListArg = new List<string>{"yellow", "orange"}
-                        } }
-                    }
-                },
-                new Given<OperandsDefaults>("SampleTypes - Exec - operands not required - uses defaults")
-                {
-                    WhenArgs = "ArgsDefaults",
-                    Then =
-                    {
-                        Outputs =
-                        {
-                            new ParametersSampleTypesResults
-                            {
-                                BoolArg = true,
-                                StringArg = "lala",
-                                StructArg = 3,
-                                StructNArg = 4,
-                                EnumArg = DayOfWeek.Wednesday,
-                            }
+                            StringArg = "lala",
+                            StructArg = 3,
+                            StructNArg = 4,
+                            EnumArg = DayOfWeek.Wednesday,
                         }
                     }
-                },
-            };
+                }
+            });
+        }
 
         private class OperandsDefaults : IArgsDefaultsSampleTypesMethod
         {
