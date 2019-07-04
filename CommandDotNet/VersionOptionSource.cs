@@ -8,8 +8,31 @@ using CommandDotNet.Models;
 
 namespace CommandDotNet
 {
-    internal class VersionService
+    internal class VersionOptionSource : IOptionSource
     {
+        private readonly AppSettings _appSettings;
+
+        public VersionOptionSource(AppSettings appSettings)
+        {
+            _appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
+        }
+
+        public void AddOption(ICommandBuilder commandBuilder)
+        {
+            if (_appSettings.EnableVersionOption && commandBuilder.IsRootCommand())
+            {
+                var option = new CommandOption(Constants.VersionTemplate, ArgumentArity.Zero)
+                {
+                    Description = "Show version information",
+                    TypeDisplayName = Constants.TypeDisplayNames.Flag,
+                    IsSystemOption = true,
+                    InvokeAsCommand = () => Print(_appSettings)
+                };
+
+                commandBuilder.AddArgument(option);
+            }
+        }
+        
         public static void Print(AppSettings appSettings)
         {
             if (!appSettings.EnableVersionOption)

@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CommandDotNet.MicrosoftCommandLineUtils
 {
@@ -27,7 +26,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 
         public string TypeDisplayName { get; set; }
         public IArgumentArity Arity { get; set; }
-        public object DefaultValue { get; set; }
+        public object DefaultValue { get; set; } = DBNull.Value;
         public List<string> AllowedValues { get; set; }
         public List<string> Values { get; private set; }
 
@@ -39,6 +38,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 
         /// <summary>True when option is help or version</summary>
         public bool IsSystemOption { get; set; }
+        public Action InvokeAsCommand { get; set; }
 
         public IEnumerable<string> Aliases
         {

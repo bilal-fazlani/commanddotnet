@@ -13,10 +13,17 @@ namespace CommandDotNet
     internal class AppCreator
     {
         private readonly AppSettings _appSettings;
+        private readonly IOptionSource[] _optionSources;
 
         public AppCreator(AppSettings appSettings)
         {
             _appSettings = appSettings;
+
+            _optionSources = new IOptionSource[]
+            {
+                new HelpOptionSource(_appSettings),
+                new VersionOptionSource(_appSettings)
+            };
         }
 
         public CommandLineApplication CreateApplication(
@@ -26,23 +33,17 @@ namespace CommandDotNet
         {
             bool isRootApp = parentApplication == null;
 
-            CommandLineApplication app;
-
             var applicationAttribute = type.GetCustomAttribute<ApplicationMetadataAttribute>(false);
 
             string appName = applicationAttribute?.Name ?? type.Name.ChangeCase(_appSettings.Case);
 
-            if (isRootApp)
-            {
-                app = new CommandLineApplication(_appSettings, appName, type);
-                AddVersion(app);
-            }
-            else
-            {
-                app = parentApplication.Command(appName, type);
-            }
+            var app = isRootApp 
+                ? new CommandLineApplication(_appSettings, appName, type) 
+                : parentApplication.Command(appName, type);
 
-            CommandCreator commandCreator = new CommandCreator(type, app, dependencyResolver, _appSettings);
+            //_optionSources.ForEach(s => s.AddOption(app));
+
+            CommandCreator commandCreator = new CommandCreator(type, app, dependencyResolver, _appSettings, _optionSources);
             
             commandCreator.CreateDefaultCommand(applicationAttribute);
 
@@ -51,14 +52,6 @@ namespace CommandDotNet
             CreateSubApplications(type, app, dependencyResolver);
 
             return app;
-        }
-
-        private void AddVersion(CommandLineApplication app)
-        {
-            if (_appSettings.EnableVersionOption)
-            {
-                app.VersionOption(Constants.VersionTemplate);
-            }
         }
         
         private void CreateSubApplications(Type type,
