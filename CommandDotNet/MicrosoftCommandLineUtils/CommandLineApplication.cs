@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using CommandDotNet.Exceptions;
 using CommandDotNet.Extensions;
-using CommandDotNet.HelpGeneration;
 using CommandDotNet.Models;
 using CommandDotNet.Parsing;
 
@@ -17,10 +16,9 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
     internal class CommandLineApplication : ICommand
     {
         private readonly AppSettings _appSettings;
-        private Action _printVersion;
         private Func<int> _invoke;
-        private readonly List<CommandOption> _options = new List<CommandOption>();
-        private readonly List<CommandOperand> _operands = new List<CommandOperand>();
+        private readonly List<IOption> _options = new List<IOption>();
+        private readonly List<IOperand> _operands = new List<IOperand>();
         private readonly List<ICommand> _commands = new List<ICommand>();
 
         private readonly Dictionary<string, IArgument> _argumentsByAlias = new Dictionary<string, IArgument>();
@@ -42,9 +40,6 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         public string Description { get; set; }
         public string ExtendedHelpText { get; set; }
 
-        public IOption OptionHelp { get; private set; }
-        public IOption OptionVersion { get; private set; }
-
         public IEnumerable<IOperand> Operands => _operands;
         public ICommand Parent { get; }
         public IEnumerable<ICommand> Commands => _commands;
@@ -65,8 +60,7 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         }
 
         internal CommandOption Option(string template, string description, IArgumentArity arity, bool inherited,
-            string typeDisplayName, object defaultValue, List<string> allowedValues
-            )
+            string typeDisplayName, object defaultValue, List<string> allowedValues, bool isSystemOption = false)
         {
             var option = new CommandOption(template, arity)
             {
@@ -74,7 +68,8 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 Inherited = inherited,
                 DefaultValue = defaultValue,
                 TypeDisplayName = typeDisplayName,
-                AllowedValues = allowedValues
+                AllowedValues = allowedValues,
+                IsSystemOption = isSystemOption
             };
 
             RegisterArgumentByAliases(option);
@@ -148,31 +143,16 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
         {
             // Help option is special because we stop parsing once we see it
             // So we store it separately for further use
-            OptionHelp = Option(template, "Show help information", ArgumentArity.Zero, false, Constants.TypeDisplayNames.Flag, DBNull.Value, null);
-            OptionHelp.IsSystemOption = true;
+            Option(template, "Show help information", ArgumentArity.Zero, false, 
+                Constants.TypeDisplayNames.Flag, DBNull.Value, null, isSystemOption: true);
         }
 
-        internal void VersionOption(string template, Action printVersion)
+        internal void VersionOption(string template)
         {
             // Version option is special because we stop parsing once we see it
             // So we store it separately for further use
-            OptionVersion = Option(template, "Show version information", ArgumentArity.Zero, false, Constants.TypeDisplayNames.Flag, DBNull.Value, null);
-            OptionVersion.IsSystemOption = true;
-            _printVersion = printVersion;
-        }
-
-        // Helper method that adds a version option
-
-        // Show full help
-        public void ShowHelp()
-        {
-            IHelpProvider helpTextProvider = HelpTextProviderFactory.Create(_appSettings);
-            _appSettings.Out.WriteLine(helpTextProvider.GetHelpText(this));
-        }
-
-        public void ShowVersion()
-        {
-            this.GetRootCommand()._printVersion();
+            Option(template, "Show version information", ArgumentArity.Zero, false, 
+                Constants.TypeDisplayNames.Flag, DBNull.Value, null, isSystemOption: true);
         }
 
         private static IOption FindOption(CommandLineApplication app, string alias, bool onlyIfInherited)

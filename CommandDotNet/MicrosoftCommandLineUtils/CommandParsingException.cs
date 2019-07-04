@@ -7,12 +7,12 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 {
     internal class CommandParsingException : Exception
     {
-        public CommandParsingException(CommandLineApplication command, string message)
+        public ICommand Command { get; }
+
+        public CommandParsingException(ICommand command, string message)
             : base(message)
         {
             Command = command;
         }
-
-        public CommandLineApplication Command { get; }
     }
 }

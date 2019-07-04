@@ -5,6 +5,9 @@
         public const string HelpTemplate = "-h | --help";
         public const string VersionTemplate = "-v | --version";
 
+        public static readonly ArgumentTemplate HelpArgumentTemplate = new ArgumentTemplate(HelpTemplate);
+        public static readonly ArgumentTemplate VersionArgumentTemplate = new ArgumentTemplate(VersionTemplate);
+
         public static class TypeDisplayNames
         {
             public const string Flag = null;

@@ -4,6 +4,6 @@ namespace CommandDotNet.HelpGeneration
 {
     public interface IHelpProvider
     {
-        string GetHelpText(ICommand app);
+        string GetHelpText(ICommand command);
     }
 }

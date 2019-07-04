@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using CommandDotNet.Attributes;
-using CommandDotNet.Exceptions;
 using CommandDotNet.Extensions;
 using CommandDotNet.MicrosoftCommandLineUtils;
 using CommandDotNet.Models;
@@ -16,12 +13,10 @@ namespace CommandDotNet
     internal class AppCreator
     {
         private readonly AppSettings _appSettings;
-        private readonly Assembly _hostAssembly;
 
         public AppCreator(AppSettings appSettings)
         {
             _appSettings = appSettings;
-            _hostAssembly = Assembly.GetEntryAssembly();
         }
 
         public CommandLineApplication CreateApplication(
@@ -62,25 +57,7 @@ namespace CommandDotNet
         {
             if (_appSettings.EnableVersionOption)
             {
-                if (_hostAssembly == null)
-                {
-                    throw new AppRunnerException(
-                        "Unable to determine version because Assembly.GetEntryAssembly() is null. " +
-                        "This is a known issue when running unit tests in .net framework. " +
-                        "Consider disabling for test runs. " +
-                        "https://tinyurl.com/y6rnjqsg");
-                }
-                
-                FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(_hostAssembly.Location);
-                var filename = Path.GetFileName(_hostAssembly.Location);
-                string version = fvi.ProductVersion;
-                app.VersionOption(
-                    Constants.VersionTemplate, 
-                    () =>
-                    {
-                        _appSettings.Out.WriteLine(filename);
-                        _appSettings.Out.WriteLine(version);
-                    });
+                app.VersionOption(Constants.VersionTemplate);
             }
         }
         

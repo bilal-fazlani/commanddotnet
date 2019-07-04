@@ -21,7 +21,7 @@ namespace CommandDotNet.Parsing
 
         public ParseResult ParseCommand(CommandLineApplication app, string[] args)
         {
-            CommandLineApplication currentCommand = app;
+            ICommand currentCommand = app;
             IOption currentOption = null;
             IEnumerator<IOperand> arguments = new OperandEnumerator(app.Operands);
 
@@ -58,10 +58,10 @@ namespace CommandDotNet.Parsing
                                 ignoreRemainingArguments = true;
                                 break;
                             case ParseOptionResult.ShowHelp:
-                                currentCommand.ShowHelp();
+                                HelpService.Print(_appSettings, currentCommand);
                                 return new ParseResult(currentCommand, args, tokens, exitCode: 0);
                             case ParseOptionResult.ShowVersion:
-                                app.ShowVersion();
+                                VersionService.Print(_appSettings);
                                 return new ParseResult(currentCommand, args, tokens, exitCode: 0);
                             default:
                                 throw new ArgumentOutOfRangeException(optionResult.ToString());
@@ -118,7 +118,7 @@ namespace CommandDotNet.Parsing
 
         private ParseOperandResult ParseArgumentValue(
             Token token, 
-            ref CommandLineApplication command,
+            ref ICommand command,
             ref IOption option, 
             IEnumerator<IOperand> operands)
         {
@@ -161,7 +161,7 @@ namespace CommandDotNet.Parsing
             return ParseOperandResult.Succeeded;
         }
 
-        private ParseOptionResult ParseOption(Token token, CommandLineApplication command, out IOption option)
+        private ParseOptionResult ParseOption(Token token, ICommand command, out IOption option)
         {
             var optionTokenType = token.OptionTokenType;
 
@@ -179,12 +179,12 @@ namespace CommandDotNet.Parsing
                 return ParseOptionResult.UnexpectedArgument;
             }
 
-            if (ReferenceEquals(option, command.OptionHelp))
+            if (option.Name == Constants.HelpArgumentTemplate.Name)
             {
                 return ParseOptionResult.ShowHelp;
             }
 
-            if (ReferenceEquals(option, command.OptionVersion))
+            if (option.Name == Constants.VersionArgumentTemplate.Name)
             {
                 return ParseOptionResult.ShowVersion;
             }
