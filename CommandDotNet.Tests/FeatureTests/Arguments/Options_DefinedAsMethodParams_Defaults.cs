@@ -6,29 +6,30 @@ using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsParams;
 using CommandDotNet.Tests.Utils;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class Options_DefinedAsMethodParams_Defaults : ScenarioTestBase<Options_DefinedAsMethodParams_Defaults>
+    public class Options_DefinedAsMethodParams_Defaults : TestBase
     {
-        private static AppSettings BasicHelp = TestAppSettings.BasicHelp;
-        private static AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
+        private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
+        private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
         public Options_DefinedAsMethodParams_Defaults(ITestOutputHelper output) : base(output)
         {
         }
 
-        public static Scenarios Scenarios =>
-            new Scenarios
+        [Fact]
+        public void SampleTypes_BasicHelp()
+        {
+            Verify(new Given<OptionsDefaults>
             {
-                new Given<OptionsDefaults>("SampleTypes - Basic Help")
+                And = { AppSettings = BasicHelp },
+                WhenArgs = "ArgsDefaults -h",
+                Then =
                 {
-                    And = {AppSettings = BasicHelp},
-                    WhenArgs = "ArgsDefaults -h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
+                    Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
 Options:
   --boolArg
@@ -39,15 +40,20 @@ Options:
   --objectArg
   --stringListArg
   -h | --help      Show help information"
-                    }
-                },
-                new Given<OptionsDefaults>("SampleTypes - Detailed Help")
+                }
+            });
+        }
+
+        [Fact]
+        public void SampleTypes_DetailedHelp()
+        {
+            Verify(new Given<OptionsDefaults>
+            {
+                And = { AppSettings = DetailedHelp },
+                WhenArgs = "ArgsDefaults -h",
+                Then =
                 {
-                    And = {AppSettings = DetailedHelp},
-                    WhenArgs = "ArgsDefaults -h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
+                    Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
 Options:
 
@@ -68,28 +74,38 @@ Options:
 
   -h | --help
   Show help information"
-                    }
-                },
-                new Given<OptionsDefaults>("StructList - Basic Help")
+                }
+            });
+        }
+
+        [Fact]
+        public void StructList_BasicHelp()
+        {
+            Verify(new Given<OptionsDefaults>
+            {
+                And = { AppSettings = BasicHelp },
+                WhenArgs = "StructListDefaults -h",
+                Then =
                 {
-                    And = {AppSettings = BasicHelp},
-                    WhenArgs = "StructListDefaults -h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll StructListDefaults [options]
+                    Result = @"Usage: dotnet testhost.dll StructListDefaults [options]
 
 Options:
   --structListArg
   -h | --help      Show help information"
-                    }
-                },
-                new Given<OptionsDefaults>("StructList - Detailed Help")
+                }
+            });
+        }
+
+        [Fact]
+        public void StructList_DetailedHelp()
+        {
+            Verify(new Given<OptionsDefaults>
+            {
+                And = { AppSettings = DetailedHelp },
+                WhenArgs = "StructListDefaults -h",
+                Then =
                 {
-                    And = {AppSettings = DetailedHelp},
-                    WhenArgs = "StructListDefaults -h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll StructListDefaults [options]
+                    Result = @"Usage: dotnet testhost.dll StructListDefaults [options]
 
 Options:
 
@@ -97,28 +113,38 @@ Options:
 
   -h | --help
   Show help information"
-                    }
-                },
-                new Given<OptionsDefaults>("EnumList - Basic Help")
+                }
+            });
+        }
+
+        [Fact]
+        public void EnumList_BasicHelp()
+        {
+            Verify(new Given<OptionsDefaults>
+            {
+                And = { AppSettings = BasicHelp },
+                WhenArgs = "EnumListDefaults -h",
+                Then =
                 {
-                    And = {AppSettings = BasicHelp},
-                    WhenArgs = "EnumListDefaults -h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll EnumListDefaults [options]
+                    Result = @"Usage: dotnet testhost.dll EnumListDefaults [options]
 
 Options:
   --enumListArg
   -h | --help    Show help information"
-                    }
-                },
-                new Given<OptionsDefaults>("EnumList - Detailed Help")
+                }
+            });
+        }
+
+        [Fact]
+        public void EnumList_DetailedHelp()
+        {
+            Verify(new Given<OptionsDefaults>
+            {
+                And = { AppSettings = DetailedHelp },
+                WhenArgs = "EnumListDefaults -h",
+                Then =
                 {
-                    And = {AppSettings = DetailedHelp},
-                    WhenArgs = "EnumListDefaults -h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll EnumListDefaults [options]
+                    Result = @"Usage: dotnet testhost.dll EnumListDefaults [options]
 
 Options:
 
@@ -127,28 +153,38 @@ Options:
 
   -h | --help
   Show help information"
-                    }
-                },
-                new Given<OptionsDefaults>("ObjectList - Basic Help")
+                }
+            });
+        }
+
+        [Fact]
+        public void ObjectList_BasicHelp()
+        {
+            Verify(new Given<OptionsDefaults>
+            {
+                And = { AppSettings = BasicHelp },
+                WhenArgs = "ObjectListDefaults -h",
+                Then =
                 {
-                    And = {AppSettings = BasicHelp},
-                    WhenArgs = "ObjectListDefaults -h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll ObjectListDefaults [options]
+                    Result = @"Usage: dotnet testhost.dll ObjectListDefaults [options]
 
 Options:
   --objectListArg
   -h | --help      Show help information"
-                    }
-                },
-                new Given<OptionsDefaults>("ObjectList - Detailed Help")
+                }
+            });
+        }
+
+        [Fact]
+        public void ObjectList_DetailedHelp()
+        {
+            Verify(new Given<OptionsDefaults>
+            {
+                And = { AppSettings = DetailedHelp },
+                WhenArgs = "ObjectListDefaults -h",
+                Then =
                 {
-                    And = {AppSettings = DetailedHelp},
-                    WhenArgs = "ObjectListDefaults -h",
-                    Then =
-                    {
-                        Result = @"Usage: dotnet testhost.dll ObjectListDefaults [options]
+                    Result = @"Usage: dotnet testhost.dll ObjectListDefaults [options]
 
 Options:
 
@@ -156,95 +192,120 @@ Options:
 
   -h | --help
   Show help information"
-                    }
-                },
-                new Given<OptionsDefaults>("SampleTypes - Exec - named")
+                }
+            });
+        }
+
+        [Fact]
+        public void SampleTypes_Exec_Named()
+        {
+            Verify(new Given<OptionsDefaults>
+            {
+                WhenArgs = "ArgsDefaults --stringArg green --structArg 1 --structNArg 2 --enumArg Monday " +
+                           "--objectArg http://google.com --stringListArg yellow --stringListArg orange",
+                Then =
                 {
-                    WhenArgs = "ArgsDefaults --stringArg green --structArg 1 --structNArg 2 --enumArg Monday " +
-                               "--objectArg http://google.com --stringListArg yellow --stringListArg orange",
-                    Then =
+                    Outputs =
                     {
-                        Outputs =
+                        new ParametersSampleTypesResults
                         {
-                            new ParametersSampleTypesResults
+                            BoolArg = true,
+                            StringArg = "green",
+                            StructArg = 1,
+                            StructNArg = 2,
+                            EnumArg = DayOfWeek.Monday,
+                            ObjectArg = new Uri("http://google.com"),
+                            StringListArg = new List<string> {"yellow", "orange"}
+                        }
+                    }
+                }
+            });
+        }
+
+        [Fact]
+        public void SampleTypes_Exec_OptionsNotRequired_UsesDefaults()
+        {
+            Verify(new Given<OptionsDefaults>
+            {
+                WhenArgs = "ArgsDefaults",
+                Then =
+                {
+                    Outputs =
+                    {
+                        new ParametersSampleTypesResults
+                        {
+                            BoolArg = true,
+                            StringArg = "lala",
+                            StructArg = 3,
+                            StructNArg = 4,
+                            EnumArg = DayOfWeek.Wednesday,
+                        }
+                    }
+                }
+            });
+        }
+
+        [Fact]
+        public void StructList_Exec_Named()
+        {
+            Verify(new Given<OptionsDefaults>
+            {
+                WhenArgs = "StructListDefaults --structListArg 23 --structListArg 5 --structListArg 7",
+                Then =
+                {
+                    Outputs =
+                    {
+                        new ParametersSampleTypesResults
+                        {
+                            StructListArg = new List<int>{23,5,7}
+                        }
+                    }
+                }
+            });
+        }
+
+        [Fact]
+        public void EnumList_Exec_Named()
+        {
+            Verify(new Given<OptionsDefaults>
+            {
+                WhenArgs = "EnumListDefaults --enumListArg Friday --enumListArg Tuesday --enumListArg Thursday",
+                Then =
+                {
+                    Outputs =
+                    {
+                        new ParametersSampleTypesResults
+                        {
+                            EnumListArg = new List<DayOfWeek>{DayOfWeek.Friday, DayOfWeek.Tuesday, DayOfWeek.Thursday}
+                        }
+                    }
+                }
+            });
+        }
+
+        [Fact]
+        public void ObjectList_Exec_Named()
+        {
+            Verify(new Given<OptionsDefaults>
+            {
+                WhenArgs = "ObjectListDefaults --objectListArg http://google.com --objectListArg http://apple.com --objectListArg http://github.com",
+                Then =
+                {
+                    Outputs =
+                    {
+                        new ParametersSampleTypesResults
+                        {
+                            ObjectListArg = new List<Uri>
                             {
-                                BoolArg = true,
-                                StringArg = "green",
-                                StructArg = 1,
-                                StructNArg = 2,
-                                EnumArg = DayOfWeek.Monday,
-                                ObjectArg = new Uri("http://google.com"),
-                                StringListArg = new List<string> {"yellow", "orange"}
+                                new Uri("http://google.com"),
+                                new Uri("http://apple.com"),
+                                new Uri("http://github.com"),
                             }
                         }
                     }
-                },
-                new Given<OptionsDefaults>("SampleTypes - Exec - options not required - uses defaults")
-                {
-                    WhenArgs = "ArgsDefaults",
-                    Then =
-                    {
-                        Outputs =
-                        {
-                            new ParametersSampleTypesResults
-                            {
-                                BoolArg = true,
-                                StringArg = "lala",
-                                StructArg = 3,
-                                StructNArg = 4,
-                                EnumArg = DayOfWeek.Wednesday,
-                            }
-                        }
-                    }
-                },
-                new Given<OptionsDefaults>("StructList - Exec - named")
-                {
-                    WhenArgs = "StructListDefaults --structListArg 23 --structListArg 5 --structListArg 7",
-                    Then =
-                    {
-                        Outputs =
-                        {
-                            new ParametersSampleTypesResults
-                            {
-                                StructListArg = new List<int>{23,5,7}
-                            }
-                        }
-                    }
-                },
-                new Given<OptionsDefaults>("EnumList - Exec - named")
-                {
-                    WhenArgs = "EnumListDefaults --enumListArg Friday --enumListArg Tuesday --enumListArg Thursday",
-                    Then =
-                    {
-                        Outputs =
-                        {
-                            new ParametersSampleTypesResults
-                            {
-                                EnumListArg = new List<DayOfWeek>{DayOfWeek.Friday, DayOfWeek.Tuesday, DayOfWeek.Thursday}
-                            }
-                        }
-                    }
-                },
-                new Given<OptionsDefaults>("ObjectList - Exec - named")
-                {
-                    WhenArgs = "ObjectListDefaults --objectListArg http://google.com --objectListArg http://apple.com --objectListArg http://github.com",
-                    Then =
-                    {
-                        Outputs =
-                        {
-                            new ParametersSampleTypesResults
-                            {
-                                ObjectListArg = new List<Uri>
-                                {
-                                    new Uri("http://google.com"),
-                                    new Uri("http://apple.com"),
-                                    new Uri("http://github.com"),
-                                }
-                            }
-                        }
-                    }
-                },
-            };
+                }
+            });
+        }
 
         private class OptionsDefaults : IArgsDefaultsSampleTypesMethod
         {

@@ -5,11 +5,12 @@ using CommandDotNet.Models;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
 using CommandDotNet.Tests.Utils;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class Options_DefinedAsArgModel_NoDefaults : ScenarioTestBase<Options_DefinedAsArgModel_NoDefaults>
+    public class Options_DefinedAsArgModel_NoDefaults : TestBase
     {
         private static AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
@@ -18,14 +19,14 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
         }
 
-        public static Scenarios Scenarios =>
-            new Scenarios
+        [Fact]
+        public void SampleTypes_BasicHelp()
+        {
+            Verify(new Given<OptionsNoDefaults>
             {
-                new Given<OptionsNoDefaults>("SampleTypes - Basic Help")
-                {
-                    And = {AppSettings = BasicHelp},
-                    WhenArgs = "ArgsDefaults -h",
-                    Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
+                And = { AppSettings = BasicHelp },
+                WhenArgs = "ArgsDefaults -h",
+                Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
 Options:
   --BoolArg
@@ -39,12 +40,17 @@ Options:
   --EnumListArg
   --ObjectListArg
   -h | --help      Show help information" }
-                },
-                new Given<OptionsNoDefaults>("SampleTypes - Detailed Help")
-                {
-                    And = {AppSettings = DetailedHelp},
-                    WhenArgs = "ArgsDefaults -h",
-                    Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
+            });
+        }
+
+        [Fact]
+        public void SampleTypes_DetailedHelp()
+        {
+            Verify(new Given<OptionsNoDefaults>
+            {
+                And = { AppSettings = DetailedHelp },
+                WhenArgs = "ArgsDefaults -h",
+                Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
 Options:
 
@@ -72,44 +78,54 @@ Options:
 
   -h | --help
   Show help information" }
-                },
-                new Given<OptionsNoDefaults>("SampleTypes - Exec - named")
+            });
+        }
+
+        [Fact]
+        public void SampleTypes_Exec_Named()
+        {
+            Verify(new Given<OptionsNoDefaults>
+            {
+                WhenArgs = "ArgsDefaults --StringArg green --StructArg 1 --StructNArg 2 " +
+                           "--EnumArg Monday --ObjectArg http://google.com " +
+                           "--StringListArg yellow --StringListArg orange " +
+                           "--StructListArg 23 --StructListArg 5 " +
+                           "--EnumListArg Friday --EnumListArg Tuesday " +
+                           "--ObjectListArg http://apple.com --ObjectListArg http://github.com",
+                Then =
                 {
-                    WhenArgs = "ArgsDefaults --StringArg green --StructArg 1 --StructNArg 2 " +
-                               "--EnumArg Monday --ObjectArg http://google.com " +
-                               "--StringListArg yellow --StringListArg orange " +
-                               "--StructListArg 23 --StructListArg 5 " +
-                               "--EnumListArg Friday --EnumListArg Tuesday " +
-                               "--ObjectListArg http://apple.com --ObjectListArg http://github.com",
-                    Then =
+                    Outputs = { new OptionsNoDefaultsSampleTypesModel
                     {
-                        Outputs = { new OptionsNoDefaultsSampleTypesModel
+                        StringArg = "green",
+                        StructArg = 1,
+                        StructNArg = 2,
+                        EnumArg = DayOfWeek.Monday,
+                        ObjectArg = new Uri("http://google.com"),
+                        StringListArg = new List<string>{"yellow", "orange"},
+                        StructListArg = new List<int>{23,5},
+                        EnumListArg = new List<DayOfWeek>{DayOfWeek.Friday, DayOfWeek.Tuesday},
+                        ObjectListArg = new List<Uri>
                         {
-                            StringArg = "green",
-                            StructArg = 1,
-                            StructNArg = 2,
-                            EnumArg = DayOfWeek.Monday,
-                            ObjectArg = new Uri("http://google.com"),
-                            StringListArg = new List<string>{"yellow", "orange"},
-                            StructListArg = new List<int>{23,5},
-                            EnumListArg = new List<DayOfWeek>{DayOfWeek.Friday, DayOfWeek.Tuesday},
-                            ObjectListArg = new List<Uri>
-                            {
-                                new Uri("http://apple.com"),
-                                new Uri("http://github.com"),
-                            }
-                        } }
-                    }
-                },
-                new Given<OptionsNoDefaults>("SampleTypes - Exec - options not required")
+                            new Uri("http://apple.com"),
+                            new Uri("http://github.com"),
+                        }
+                    } }
+                }
+            });
+        }
+
+        [Fact]
+        public void SampleTypes_Exec_OptionsNotRequired()
+        {
+            Verify(new Given<OptionsNoDefaults>
+            {
+                WhenArgs = "ArgsDefaults",
+                Then =
                 {
-                    WhenArgs = "ArgsDefaults",
-                    Then =
-                    {
-                        Outputs = { new OptionsNoDefaultsSampleTypesModel() }
-                    }
-                },
-            };
+                    Outputs = { new OptionsNoDefaultsSampleTypesModel() }
+                }
+            });
+        }
 
         private class OptionsNoDefaults
         {

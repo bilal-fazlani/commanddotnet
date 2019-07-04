@@ -2,27 +2,28 @@ using CommandDotNet.Attributes;
 using CommandDotNet.Models;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.Utils;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class NestedArgModel : ScenarioTestBase<NestedArgModel>
+    public class NestedArgModel : TestBase
     {
-        private static AppSettings BasicHelp = TestAppSettings.BasicHelp;
-        private static AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
+        private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
+        private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
         public NestedArgModel(ITestOutputHelper output) : base(output)
         {
         }
 
-        public static Scenarios Scenarios =>
-            new Scenarios
+        [Fact]
+        public void NestedModel_BasicHelp_IncludesNestedOperandsAndOptions()
+        {
+            Verify(new Given<NestedModelApp>
             {
-                new Given<NestedModelApp>("Nested Model - Basic Help - includes nested operands and options")
-                {
-                    And = {AppSettings = BasicHelp},
-                    WhenArgs = "Do -h",
-                    Then = {Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                And = { AppSettings = BasicHelp },
+                WhenArgs = "Do -h",
+                Then = { Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
 
 Arguments:
   Operand1
@@ -32,12 +33,17 @@ Options:
   --Option1
   --Option2
   -h | --help  Show help information" }
-                },
-                new Given<NestedModelApp>("Nested Model - Detailed Help - includes nested operands and options")
-                {
-                    And = {AppSettings = DetailedHelp},
-                    WhenArgs = "Do -h",
-                    Then = {Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+            });
+        }
+
+        [Fact]
+        public void NestedModel_DetailedHelp_IncludesNestedOperandsAndOptions()
+        {
+            Verify(new Given<NestedModelApp>
+            {
+                And = { AppSettings = DetailedHelp },
+                WhenArgs = "Do -h",
+                Then = { Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
 
 Arguments:
 
@@ -54,24 +60,29 @@ Options:
 
   -h | --help
   Show help information" }
-                },
-                new Given<NestedModelApp>("Nested Model - exec - maps nested operands and options")
+            });
+        }
+
+        [Fact]
+        public void NestedModel_Exec_MapsNestedOperandsAndOptions()
+        {
+            Verify(new Given<NestedModelApp>
+            {
+                And = { AppSettings = BasicHelp },
+                WhenArgs = "Do --Option1 aaa --Option2 bbb ccc ddd",
+                Then =
                 {
-                    And = {AppSettings = BasicHelp},
-                    WhenArgs = "Do --Option1 aaa --Option2 bbb ccc ddd",
-                    Then =
+                    Outputs =
                     {
-                        Outputs =
+                        new ParentModel
                         {
-                            new ParentModel
-                            {
-                                Option1 = "aaa", Operand1 = "ccc",
-                                NestedModel = new NestedModel {Option2 = "bbb", Operand2 = "ddd"}
-                            }
+                            Option1 = "aaa", Operand1 = "ccc",
+                            NestedModel = new NestedModel {Option2 = "bbb", Operand2 = "ddd"}
                         }
                     }
                 }
-            };
+            });
+        }
 
         public class NestedModelApp
         {

@@ -4,14 +4,15 @@ using CommandDotNet.Models;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.Utils;
 using CommandDotNet.TypeDescriptors;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests
 {
-    public class CustomArgumentTypeDescriptors : ScenarioTestBase<CustomArgumentTypeDescriptors>
+    public class CustomArgumentTypeDescriptors : TestBase
     {
-        private static AppSettings BasicHelpWithDescriptor = new AppSettings { Help = { TextStyle = HelpTextStyle.Basic }, EnableVersionOption = false };
-        private static AppSettings DetailedHelpWithDescriptor = new AppSettings { Help = { TextStyle = HelpTextStyle.Detailed }, EnableVersionOption = false };
+        private static readonly AppSettings BasicHelpWithDescriptor = new AppSettings { Help = { TextStyle = HelpTextStyle.Basic }, EnableVersionOption = false };
+        private static readonly AppSettings DetailedHelpWithDescriptor = new AppSettings { Help = { TextStyle = HelpTextStyle.Detailed }, EnableVersionOption = false };
 
         public CustomArgumentTypeDescriptors(ITestOutputHelper output) : base(output)
         {
@@ -20,26 +21,31 @@ namespace CommandDotNet.Tests.FeatureTests
             DetailedHelpWithDescriptor.ArgumentTypeDescriptors.Add(descriptor);
         }
 
-        public static Scenarios Scenarios =>
-            new Scenarios
+        [Fact]
+        public void BasicHelp_IncludesParam()
+        {
+            Verify(new Given<App>
             {
-                new Given<App>("Basic Help - includes param")
-                {
-                    And = {AppSettings = BasicHelpWithDescriptor},
-                    WhenArgs = "Do -h",
-                    Then = {Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                And = { AppSettings = BasicHelpWithDescriptor },
+                WhenArgs = "Do -h",
+                Then = { Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
 
 Arguments:
   square
 
 Options:
   -h | --help  Show help information" }
-                },
-                new Given<App>("Detailed Help - includes param and display name from descriptor")
-                {
-                    And = {AppSettings = DetailedHelpWithDescriptor},
-                    WhenArgs = "Do -h",
-                    Then = {Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+            });
+        }
+
+        [Fact]
+        public void DetailedHelp_IncludesParamAndDisplayNameFromDecriptor()
+        {
+            Verify(new Given<App>
+            {
+                And = { AppSettings = DetailedHelpWithDescriptor },
+                WhenArgs = "Do -h",
+                Then = { Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
 
 Arguments:
 
@@ -50,25 +56,35 @@ Options:
 
   -h | --help
   Show help information" }
-                },
-                new Given<App>("exec - parses argument using descriptor")
+            });
+        }
+
+        [Fact]
+        public void Exec_ParseArgumentUsingDescriptor()
+        {
+            Verify(new Given<App>
+            {
+                And = { AppSettings = BasicHelpWithDescriptor },
+                WhenArgs = "Do 2x3",
+                Then = { Outputs = { new Square { Length = 2, Width = 3 } } }
+            });
+        }
+
+        [Fact]
+        public void Exec_FailsWithClearMessageWhenDescriptorIsNotRegistered()
+        {
+            Verify(new Given<App>
+            {
+                WhenArgs = "Do ",
+                Then =
                 {
-                    And = {AppSettings = BasicHelpWithDescriptor},
-                    WhenArgs = "Do 2x3",
-                    Then = {Outputs = { new Square{Length = 2, Width = 3} }}
-                },
-                new Given<App>("exec - fails with clear message when descriptor is not registered")
-                {
-                    WhenArgs = "Do ",
-                    Then =
-                    {
-                        ExitCode = 2,
-                        Result = "type : CommandDotNet.Tests.FeatureTests.CustomArgumentTypeDescriptors+Square is not supported. " +
-                                 "If it's an argument model, inherit from IArgumentModel, " +
-                                 "otherwise implement a TypeConverter or IArgumentTypeDescriptor to support this type."
-                    }
-                },
-            };
+                    ExitCode = 2,
+                    Result = "type : CommandDotNet.Tests.FeatureTests.CustomArgumentTypeDescriptors+Square is not supported. " +
+                             "If it's an argument model, inherit from IArgumentModel, " +
+                             "otherwise implement a TypeConverter or IArgumentTypeDescriptor to support this type."
+                }
+            });
+        }
 
         public class App
         {
