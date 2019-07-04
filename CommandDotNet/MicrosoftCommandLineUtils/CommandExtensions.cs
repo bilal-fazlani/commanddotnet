@@ -5,6 +5,11 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
 {
     public static class CommandExtensions
     {
+        public static bool IsRootCommand<T>(this T command) where T : ICommand
+        {
+            return command.Parent == null;
+        }
+
         public static T GetRootCommand<T>(this T command) where T : ICommand
         {
             return command.GetParentCommands(true).Last();

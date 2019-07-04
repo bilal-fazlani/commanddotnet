@@ -13,14 +13,17 @@ namespace CommandDotNet
         private readonly Type _type;
         private readonly CommandLineApplication _app;
         private readonly AppSettings _settings;
+        private readonly IOptionSource[] _optionSources;
         private readonly CommandRunner _commandRunner;
 
-        public CommandCreator(Type type, CommandLineApplication app, IDependencyResolver dependencyResolver, AppSettings settings)
+        public CommandCreator(Type type, CommandLineApplication app, IDependencyResolver dependencyResolver,
+            AppSettings settings, IOptionSource[] optionSources)
         {
             _type = type;
             _app = app;
             _settings = settings;
-            
+            _optionSources = optionSources;
+
             //get values for constructor params
             IEnumerable<ArgumentInfo> constructorValues = GetOptionValuesForConstructor();
             
@@ -41,7 +44,7 @@ namespace CommandDotNet
                 ConfigureMetadata(_app, applicationMetadata);
                 _app.OnExecute(() =>
                 {
-                    HelpService.Print(_settings, _app);
+                    HelpOptionSource.Print(_settings, _app);
                     return Task.FromResult(0);
                 });
             }
@@ -57,11 +60,11 @@ namespace CommandDotNet
             }
         }
 
-        private static void ConfigureMetadata(CommandLineApplication app, IApplicationMetadata applicationMetadata)
+        private void ConfigureMetadata(CommandLineApplication app, IApplicationMetadata applicationMetadata)
         {
             app.Description = applicationMetadata?.Description;
             app.ExtendedHelpText = applicationMetadata?.ExtendedHelpText;
-            app.HelpOption(Constants.HelpTemplate);
+            _optionSources.ForEach(s => s.AddOption(app));
         }
 
         private void ConfigureCommandLineApplication(CommandLineApplication app, CommandInfo commandInfo)

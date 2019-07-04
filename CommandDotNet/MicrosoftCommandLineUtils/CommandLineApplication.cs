@@ -13,7 +13,7 @@ using CommandDotNet.Parsing;
 
 namespace CommandDotNet.MicrosoftCommandLineUtils
 {
-    internal class CommandLineApplication : ICommand
+    internal class CommandLineApplication : ICommandBuilder
     {
         private readonly AppSettings _appSettings;
         private Func<int> _invoke;
@@ -72,13 +72,11 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 IsSystemOption = isSystemOption
             };
 
-            RegisterArgumentByAliases(option);
-
-            _options.Add(option);
+            AddArgument(option);
             return option;
         }
 
-        public CommandOperand Operand(
+        internal CommandOperand Operand(
             string name, string description, IArgumentArity arity,
             string typeDisplayName, object defaultValue, List<string> allowedValues)
         {
@@ -99,11 +97,22 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                 DefaultValue = defaultValue,
                 AllowedValues = allowedValues
             };
-
-            RegisterArgumentByAliases(operand);
-
-            _operands.Add(operand);
+            AddArgument(operand);
             return operand;
+        }
+
+        public void AddArgument(IArgument argument)
+        {
+            RegisterArgumentByAliases(argument);
+
+            if (argument is IOperand operand)
+            {
+                _operands.Add(operand);
+            }
+            if (argument is IOption option)
+            {
+                _options.Add(option);
+            }
         }
 
         public void OnExecute(Func<Task<int>> invoke)
@@ -138,23 +147,6 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
                        .FirstOrDefault(o => o != null);
         }
 
-        // Helper method that adds a help option
-        public void HelpOption(string template)
-        {
-            // Help option is special because we stop parsing once we see it
-            // So we store it separately for further use
-            Option(template, "Show help information", ArgumentArity.Zero, false, 
-                Constants.TypeDisplayNames.Flag, DBNull.Value, null, isSystemOption: true);
-        }
-
-        internal void VersionOption(string template)
-        {
-            // Version option is special because we stop parsing once we see it
-            // So we store it separately for further use
-            Option(template, "Show version information", ArgumentArity.Zero, false, 
-                Constants.TypeDisplayNames.Flag, DBNull.Value, null, isSystemOption: true);
-        }
-
         private static IOption FindOption(CommandLineApplication app, string alias, bool onlyIfInherited)
         {
             return app._argumentsByAlias.TryGetValue(alias, out var argument)
@@ -180,6 +172,14 @@ namespace CommandDotNet.MicrosoftCommandLineUtils
             }
 
             argument.Aliases.ForEach(a => _argumentsByAlias.Add(a, argument));
+        }
+
+        public override string ToString()
+        {
+            return $"{nameof(CommandLineApplication)}:{Name} " +
+                   $"operands:{_operands.Select(o => o.Name).ToCsv()} " +
+                   $"options:{_options.Select(o => o.Name).ToCsv()} " +
+                   $"commands:{_commands.Select(c => c.Name).ToCsv()}";
         }
     }
 }

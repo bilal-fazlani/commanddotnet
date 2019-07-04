@@ -53,16 +53,15 @@ namespace CommandDotNet.Parsing
                         switch (optionResult)
                         {
                             case ParseOptionResult.Succeeded:
+                                if (currentOption?.InvokeAsCommand != null)
+                                {
+                                    currentOption.InvokeAsCommand();
+                                    return new ParseResult(currentCommand, args, tokens, exitCode: 0);
+                                }
                                 break;
                             case ParseOptionResult.UnexpectedArgument:
                                 ignoreRemainingArguments = true;
                                 break;
-                            case ParseOptionResult.ShowHelp:
-                                HelpService.Print(_appSettings, currentCommand);
-                                return new ParseResult(currentCommand, args, tokens, exitCode: 0);
-                            case ParseOptionResult.ShowVersion:
-                                VersionService.Print(_appSettings);
-                                return new ParseResult(currentCommand, args, tokens, exitCode: 0);
                             default:
                                 throw new ArgumentOutOfRangeException(optionResult.ToString());
                         }
@@ -111,9 +110,7 @@ namespace CommandDotNet.Parsing
         private enum ParseOptionResult
         {
             Succeeded,
-            UnexpectedArgument,
-            ShowHelp,
-            ShowVersion,
+            UnexpectedArgument
         }
 
         private ParseOperandResult ParseArgumentValue(
@@ -179,16 +176,10 @@ namespace CommandDotNet.Parsing
                 return ParseOptionResult.UnexpectedArgument;
             }
 
-            if (option.Name == Constants.HelpArgumentTemplate.Name)
+            if (option.IsSystemOption)
             {
-                return ParseOptionResult.ShowHelp;
+                return ParseOptionResult.Succeeded;
             }
-
-            if (option.Name == Constants.VersionArgumentTemplate.Name)
-            {
-                return ParseOptionResult.ShowVersion;
-            }
-
             if (optionTokenType.HasValue)
             {
                 if (!TryAddValue(option, optionTokenType.GetAssignedValue()))

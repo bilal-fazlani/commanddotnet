@@ -63,7 +63,7 @@ namespace CommandDotNet
                     $"Specify --{Constants.HelpArgumentTemplate.Name} for a list of available options and commands.");
 
                 _settings.Error.WriteLine(e.Message + "\n");
-                HelpService.Print(_settings, e.Command);
+                HelpOptionSource.Print(_settings, e.Command);
 
 #if DEBUG
                 _settings.Error.WriteLine(e.StackTrace);
