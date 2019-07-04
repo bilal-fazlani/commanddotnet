@@ -10,6 +10,7 @@ namespace CommandDotNet.Parsing
         public Tokens Tokens { get; }
         public int? ExitCode { get; }
         public Tokens UnparsedTokens { get; }
+        public IContextData ContextData { get; } = new ContextData();
 
         public ParseResult(
             ICommand command,
