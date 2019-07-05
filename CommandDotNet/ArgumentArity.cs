@@ -1,6 +1,5 @@
 ﻿using System;
 using CommandDotNet.Extensions;
-using CommandDotNet.MicrosoftCommandLineUtils;
 
 namespace CommandDotNet
 {
@@ -52,30 +51,6 @@ namespace CommandDotNet
             }
 
             return ZeroOrOne;
-        }
-        
-        public static CommandOptionType ToCommandOptionType(IArgumentArity arity)
-        {
-            return arity.AllowsZeroOrMore()
-                ? CommandOptionType.MultipleValue
-                : arity.AllowsZeroOrOne()
-                    ? CommandOptionType.SingleValue
-                    : CommandOptionType.NoValue;
-        }
-
-        public static IArgumentArity FromCommandOptionType(CommandOptionType optionType)
-        {
-            switch (optionType)
-            {
-                case CommandOptionType.MultipleValue:
-                    return ZeroOrMore;
-                case CommandOptionType.SingleValue:
-                    return ZeroOrOne;
-                case CommandOptionType.NoValue:
-                    return Zero;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(optionType), optionType, null);
-            }
         }
     }
 }

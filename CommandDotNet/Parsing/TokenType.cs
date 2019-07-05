@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CommandDotNet.Parsing
+﻿namespace CommandDotNet.Parsing
 {
     public enum TokenType
     {

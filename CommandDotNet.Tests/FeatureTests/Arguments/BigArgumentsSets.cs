@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using CommandDotNet.Attributes;
 using CommandDotNet.Extensions;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.Utils;

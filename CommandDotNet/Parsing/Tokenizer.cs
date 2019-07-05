@@ -5,9 +5,9 @@ namespace CommandDotNet.Parsing
 {
     public static class Tokenizer
     {
-        public static Tokens Tokenize(this IEnumerable<string> args, bool includeDirectives = false)
+        public static TokenCollection Tokenize(this IEnumerable<string> args, bool includeDirectives = false)
         {
-            return new Tokens(ParseTokens(args, includeDirectives));
+            return new TokenCollection(ParseTokens(args, includeDirectives));
         }
 
         public static Token Tokenize(string arg, bool includeDirectives = false)
@@ -70,9 +70,9 @@ namespace CommandDotNet.Parsing
             return new Token(arg, arg, TokenType.Value);
         }
 
-        public static Tokens ExpandClubbedOptions(this Tokens tokens)
+        public static TokenCollection ExpandClubbedOptions(this TokenCollection tokenCollection)
         {
-            return new Tokens(tokens.SelectMany(ExpandClubbedOption));
+            return new TokenCollection(tokenCollection.SelectMany(ExpandClubbedOption));
         }
 
         private static IEnumerable<Token> ExpandClubbedOption(Token token)

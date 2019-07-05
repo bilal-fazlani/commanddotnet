@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using CommandDotNet.ClassModeling;
 using CommandDotNet.Extensions;
-using CommandDotNet.Models;
 
 namespace CommandDotNet.TypeDescriptors
 {

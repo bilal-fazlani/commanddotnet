@@ -2,9 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using CommandDotNet.Exceptions;
-using CommandDotNet.MicrosoftCommandLineUtils;
-using CommandDotNet.Models;
 
 namespace CommandDotNet.Parsing
 {
@@ -21,24 +18,23 @@ namespace CommandDotNet.Parsing
 
         public ParseResult ParseCommand(ICommand command, string[] args)
         {
+            TokenCollection tokenCollection = args.Tokenize(includeDirectives: _appSettings.EnableDirectives);
+
+            tokenCollection = ApplyInputTransformations(tokenCollection);
+
+            if (_parserContext.ParseDirectiveEnabled)
+            {
+                return new ParseResult(command, args, tokenCollection, exitCode: 0);
+            }
+
+            bool ignoreRemainingArguments = false;
+            var remainingArguments = new List<Token>();
+
             ICommand currentCommand = command;
             IOption currentOption = null;
             IEnumerator<IOperand> arguments = new OperandEnumerator(command.Operands);
 
-            var remainingArguments = new List<Token>();
-
-            var tokens = args.Tokenize(includeDirectives: _appSettings.EnableDirectives);
-
-            tokens = ApplyInputTransformations(tokens);
-
-            if (_parserContext.ParseDirectiveEnabled)
-            {
-                return new ParseResult(command, args, tokens, exitCode: 0);
-            }
-
-            bool ignoreRemainingArguments = false;
-
-            foreach (var token in tokens)
+            foreach (var token in tokenCollection)
             {
                 if (ignoreRemainingArguments)
                 {
@@ -56,7 +52,7 @@ namespace CommandDotNet.Parsing
                                 if (currentOption?.InvokeAsCommand != null)
                                 {
                                     currentOption.InvokeAsCommand();
-                                    return new ParseResult(currentCommand, args, tokens, exitCode: 0);
+                                    return new ParseResult(currentCommand, args, tokenCollection, exitCode: 0);
                                 }
                                 break;
                             case ParseOptionResult.UnexpectedArgument:
@@ -97,7 +93,7 @@ namespace CommandDotNet.Parsing
                 throw new CommandParsingException(currentCommand, $"Missing value for option '{currentOption.Name}'");
             }
 
-            return new ParseResult(currentCommand, args, tokens, unparsedTokens: new Tokens(remainingArguments));
+            return new ParseResult(currentCommand, args, tokenCollection, unparsedTokenCollection: new TokenCollection(remainingArguments));
         }
 
         private enum ParseOperandResult
@@ -221,7 +217,7 @@ namespace CommandDotNet.Parsing
             }
             return true;
         }
-        private Tokens ApplyInputTransformations(Tokens args)
+        private TokenCollection ApplyInputTransformations(TokenCollection args)
         {
             if (_parserContext.ParseDirectiveEnabled)
             {
@@ -272,7 +268,7 @@ namespace CommandDotNet.Parsing
             return args;
         }
 
-        private void ReportTransformation(string name, Tokens args)
+        private void ReportTransformation(string name, TokenCollection args)
         {
             var maxTokenTypeNameLength = Enum.GetNames(typeof(TokenType)).Max(n => n.Length);
 

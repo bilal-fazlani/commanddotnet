@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using CommandDotNet.Attributes;
 using FluentAssertions;
 using Xunit;
 

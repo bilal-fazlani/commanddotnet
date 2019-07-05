@@ -1,6 +1,6 @@
 using System;
-using CommandDotNet.Attributes;
-using CommandDotNet.Models;
+using CommandDotNet.ClassModeling;
+using CommandDotNet.Help;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.Utils;
 using CommandDotNet.TypeDescriptors;

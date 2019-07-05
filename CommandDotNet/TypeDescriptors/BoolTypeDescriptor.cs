@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommandDotNet.Models;
+using CommandDotNet.ClassModeling;
 
 namespace CommandDotNet.TypeDescriptors
 {

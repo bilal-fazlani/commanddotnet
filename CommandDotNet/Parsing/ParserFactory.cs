@@ -1,5 +1,5 @@
 ﻿using System;
-using CommandDotNet.Models;
+using CommandDotNet.ClassModeling;
 
 namespace CommandDotNet.Parsing
 {

@@ -6,9 +6,9 @@ namespace CommandDotNet.Parsing
     {
         public string Name { get; }
         public int Order { get; }
-        public Func<Tokens, Tokens> Transformation { get; }
+        public Func<TokenCollection, TokenCollection> Transformation { get; }
 
-        public InputTransformation(string name, int order, Func<Tokens, Tokens> transformation)
+        public InputTransformation(string name, int order, Func<TokenCollection, TokenCollection> transformation)
         {
             Name = name;
             Order = order;

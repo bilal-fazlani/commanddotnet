@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using CommandDotNet.Attributes;
 using FluentValidation;
 using FluentValidation.Attributes;
 using Newtonsoft.Json;

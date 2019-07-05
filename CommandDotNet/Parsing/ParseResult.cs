@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using CommandDotNet.MicrosoftCommandLineUtils;
 
 namespace CommandDotNet.Parsing
 {
@@ -7,23 +6,23 @@ namespace CommandDotNet.Parsing
     {
         public ICommand Command { get; }
         public string[] OriginalArgs { get; }
-        public Tokens Tokens { get; }
+        public TokenCollection TokenCollection { get; }
         public int? ExitCode { get; }
-        public Tokens UnparsedTokens { get; }
+        public TokenCollection UnparsedTokenCollection { get; }
         public IContextData ContextData { get; } = new ContextData();
 
         public ParseResult(
             ICommand command,
             string[] originalArgs,
-            Tokens tokens,
+            TokenCollection tokenCollection,
             int? exitCode = null,
-            Tokens unparsedTokens = null)
+            TokenCollection unparsedTokenCollection = null)
         {
             Command = command;
             OriginalArgs = originalArgs;
-            Tokens = tokens;
+            TokenCollection = tokenCollection;
             ExitCode = exitCode;
-            UnparsedTokens = unparsedTokens ?? new Tokens(Enumerable.Empty<Token>());
+            UnparsedTokenCollection = unparsedTokenCollection ?? new TokenCollection(Enumerable.Empty<Token>());
         }
     }
 }

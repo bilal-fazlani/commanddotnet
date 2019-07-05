@@ -1,4 +1,3 @@
-using CommandDotNet.Models;
 using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet.Tests.Utils

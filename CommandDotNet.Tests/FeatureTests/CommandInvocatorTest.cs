@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
-using CommandDotNet.Attributes;
-using CommandDotNet.CommandInvoker;
+using CommandDotNet.Invocation;
 using CommandDotNet.Tests.Utils;
 using FluentAssertions;
 using Xunit;

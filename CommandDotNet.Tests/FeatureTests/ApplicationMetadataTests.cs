@@ -1,6 +1,4 @@
-﻿using CommandDotNet.Attributes;
-using CommandDotNet.Models;
-using CommandDotNet.Tests.ScenarioFramework;
+﻿using CommandDotNet.Tests.ScenarioFramework;
 using Xunit;
 using Xunit.Abstractions;
 

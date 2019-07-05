@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using CommandDotNet.Models;
 
 namespace CommandDotNet.Tests.ScenarioFramework
 {

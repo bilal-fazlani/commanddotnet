@@ -1,5 +1,4 @@
 using System;
-using CommandDotNet.Attributes;
 
 namespace CommandDotNet.Example.Issues
 {

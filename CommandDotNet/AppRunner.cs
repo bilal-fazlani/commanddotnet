@@ -4,11 +4,11 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
-using CommandDotNet.CommandInvoker;
-using CommandDotNet.Exceptions;
-using CommandDotNet.HelpGeneration;
-using CommandDotNet.MicrosoftCommandLineUtils;
-using CommandDotNet.Models;
+using CommandDotNet.Builders;
+using CommandDotNet.ClassModeling;
+using CommandDotNet.Directives;
+using CommandDotNet.Help;
+using CommandDotNet.Invocation;
 using CommandDotNet.Parsing;
 
 [assembly: InternalsVisibleTo("CommandDotNet.Tests")]
@@ -43,11 +43,7 @@ namespace CommandDotNet
         {
             try
             {
-                AppCreator appCreator = new AppCreator(_settings);
-
-                CommandLineApplication app = appCreator.CreateApplication(typeof(T), DependencyResolver);
-
-                return Execute(app, _parserBuilder.Build(), args);
+                return Execute(_parserBuilder.Build(), args);
             }
             catch (AppRunnerException e)
             {
@@ -151,15 +147,18 @@ namespace CommandDotNet
             }
         }
 
-        private int Execute(CommandLineApplication app, ParserContext parserContext, string[] args)
+        private int Execute(ParserContext parserContext, string[] args)
         {
-            var directivesResult = Directives.ProcessDirectives(_settings, parserContext, ref args);
+            var directivesResult = DirectiveRunner.ProcessDirectives(_settings, parserContext, ref args);
             if (directivesResult.ExitCode.HasValue)
             {
                 return directivesResult.ExitCode.Value;
             }
 
-            var parseResult = new CommandParser(_settings, parserContext).ParseCommand(app, args);
+            AppCreator appCreator = new AppCreator(_settings);
+            Command rootCommand = appCreator.CreateRootCommand(typeof(T), DependencyResolver);
+
+            var parseResult = new CommandParser(_settings, parserContext).ParseCommand(rootCommand, args);
 
             // if the ExitCode has been set, the parser has determined
             // the command should not be executed
@@ -167,7 +166,7 @@ namespace CommandDotNet
             {
                 return parseResult.ExitCode.Value;
             }
-            return ((CommandLineApplication)parseResult.Command).Execute();
+            return ((Command)parseResult.Command).Execute();
         }
 
         public AppRunner<T> WithCustomHelpProvider(IHelpProvider customHelpProvider)
@@ -194,7 +193,7 @@ namespace CommandDotNet
             return this;
         }
 
-        public AppRunner<T> UseInputTransformation(string name, int order, Func<Tokens, Tokens> transformation)
+        public AppRunner<T> UseInputTransformation(string name, int order, Func<TokenCollection, TokenCollection> transformation)
         {
             _parserBuilder.AddInputTransformation(name, order, transformation);
             return this;

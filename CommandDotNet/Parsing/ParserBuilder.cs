@@ -10,7 +10,7 @@ namespace CommandDotNet.Parsing
         private readonly Dictionary<string, InputTransformation> _inputTransformationsByName
             = new Dictionary<string, InputTransformation>();
 
-        public void AddInputTransformation(string name, int order, Func<Tokens,Tokens> transformation)
+        public void AddInputTransformation(string name, int order, Func<TokenCollection,TokenCollection> transformation)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             if (transformation == null) throw new ArgumentNullException(nameof(transformation));

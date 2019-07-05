@@ -1,6 +1,4 @@
 ﻿using System.Linq;
-using CommandDotNet.Attributes;
-using CommandDotNet.Models;
 using CommandDotNet.Parsing;
 using CommandDotNet.Tests.Utils;
 using FluentAssertions;
@@ -25,7 +23,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             var result = new AppRunner<App>(DirectivesEnabled)
                 .UseInputTransformation("test", 1,
-                    tokens => new Tokens(tokens.Select(t =>
+                    tokens => new TokenCollection(tokens.Select(t =>
                         t.TokenType == TokenType.Value && t.Value != "Do"
                             ? Tokenizer.TokenizeValue("roses")
                             : t)))
@@ -49,7 +47,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             var result = new AppRunner<App>()
                 .UseInputTransformation("test", 1, 
-                    tokens => new Tokens(tokens.Select(t =>
+                    tokens => new TokenCollection(tokens.Select(t =>
                         t.TokenType == TokenType.Value && t.Value != "Do"
                             ? Tokenizer.TokenizeValue("roses")
                             : t)))

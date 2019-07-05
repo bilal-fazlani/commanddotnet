@@ -1,6 +1,5 @@
-﻿using CommandDotNet.Attributes;
-using CommandDotNet.Example.Issues;
-using CommandDotNet.Models;
+﻿using CommandDotNet.Example.Issues;
+using CommandDotNet.Help;
 
 namespace CommandDotNet.Example
 {

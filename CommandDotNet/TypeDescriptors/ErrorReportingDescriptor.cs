@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommandDotNet.Exceptions;
-using CommandDotNet.Models;
+using CommandDotNet.ClassModeling;
+using CommandDotNet.Parsing;
 
 namespace CommandDotNet.TypeDescriptors
 {

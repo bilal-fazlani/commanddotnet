@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using CommandDotNet.Models;
+using CommandDotNet.Help;
 using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet.Tests

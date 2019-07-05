@@ -1,4 +1,3 @@
-using CommandDotNet.Attributes;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.Utils;
 using Xunit;

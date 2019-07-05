@@ -1,6 +1,4 @@
-﻿using CommandDotNet.Attributes;
-using CommandDotNet.Models;
-using CommandDotNet.Tests.Utils;
+﻿using CommandDotNet.Tests.Utils;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;

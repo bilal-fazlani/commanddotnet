@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using CommandDotNet.Attributes;
-using CommandDotNet.Models;
+using CommandDotNet.ClassModeling;
 
 namespace CommandDotNet.Extensions
 {

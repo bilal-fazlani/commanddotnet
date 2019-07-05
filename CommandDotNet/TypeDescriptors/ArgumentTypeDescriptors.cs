@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using CommandDotNet.Exceptions;
+using CommandDotNet.Parsing;
 
 namespace CommandDotNet.TypeDescriptors
 {

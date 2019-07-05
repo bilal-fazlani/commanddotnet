@@ -1,6 +1,6 @@
 using System;
 using System.ComponentModel;
-using CommandDotNet.Models;
+using CommandDotNet.ClassModeling;
 
 namespace CommandDotNet.TypeDescriptors
 {

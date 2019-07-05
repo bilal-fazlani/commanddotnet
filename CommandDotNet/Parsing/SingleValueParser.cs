@@ -1,6 +1,5 @@
 ﻿using System;
-using CommandDotNet.Exceptions;
-using CommandDotNet.Models;
+using CommandDotNet.ClassModeling;
 using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet.Parsing

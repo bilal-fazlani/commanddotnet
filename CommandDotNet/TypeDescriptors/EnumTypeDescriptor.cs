@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using CommandDotNet.Models;
+using CommandDotNet.ClassModeling;
 
 namespace CommandDotNet.TypeDescriptors
 {

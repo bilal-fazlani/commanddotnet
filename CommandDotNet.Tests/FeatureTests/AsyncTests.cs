@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using CommandDotNet.Attributes;
 using CommandDotNet.Tests.Utils;
 using FluentAssertions;
 using Xunit;

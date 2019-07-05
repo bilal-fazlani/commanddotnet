@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
-using CommandDotNet.Attributes;
 
 namespace CommandDotNet.Example
 {

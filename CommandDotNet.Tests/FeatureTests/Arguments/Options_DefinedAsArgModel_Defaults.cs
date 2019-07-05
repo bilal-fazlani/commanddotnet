@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using CommandDotNet.Attributes;
-using CommandDotNet.Models;
-using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
+using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.Utils;
 using Xunit;
 using Xunit.Abstractions;
