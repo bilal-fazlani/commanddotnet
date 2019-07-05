@@ -10,6 +10,8 @@ namespace CommandDotNet
 {
     internal class VersionOptionSource : IOptionSource
     {
+        public const string VersionTemplate = "-v | --version";
+
         private readonly AppSettings _appSettings;
 
         public VersionOptionSource(AppSettings appSettings)
@@ -21,7 +23,7 @@ namespace CommandDotNet
         {
             if (_appSettings.EnableVersionOption && commandBuilder.IsRootCommand())
             {
-                var option = new CommandOption(Constants.VersionTemplate, ArgumentArity.Zero)
+                var option = new CommandOption(VersionTemplate, ArgumentArity.Zero)
                 {
                     Description = "Show version information",
                     TypeDisplayName = Constants.TypeDisplayNames.Flag,
