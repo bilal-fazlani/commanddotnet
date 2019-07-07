@@ -23,7 +23,7 @@ namespace CommandDotNet.Parsing
             IOption currentOption = null;
             IEnumerator<IOperand> arguments = new OperandEnumerator(command.Operands);
 
-            foreach (var token in executionResult.FinalTokens.Arguments)
+            foreach (var token in executionResult.Tokens.Arguments)
             {
                 switch (token.TokenType)
                 {
@@ -40,7 +40,7 @@ namespace CommandDotNet.Parsing
                                     return;
                                 }
                                 break;
-                            case ParseOptionResult.UnexpectedArgument:
+                            case ParseOptionResult.UnknownOption:
                                 remainingArguments.Add(token.Value);
                                 break;
                             default:
@@ -79,6 +79,8 @@ namespace CommandDotNet.Parsing
                 }
             }
 
+            remainingArguments.AddRange(executionResult.Tokens.Separated.Select(t => t.RawValue));
+
             if (currentOption != null) // an option was left without a value
             {
                 throw new CommandParsingException(currentCommand, $"Missing value for option '{currentOption.Name}'");
@@ -97,7 +99,7 @@ namespace CommandDotNet.Parsing
         private enum ParseOptionResult
         {
             Succeeded,
-            UnexpectedArgument
+            UnknownOption
         }
 
         private ParseOperandResult ParseArgumentValue(
@@ -114,7 +116,7 @@ namespace CommandDotNet.Parsing
                     return ParseOperandResult.Succeeded;
                 }
 
-                throw new CommandParsingException(command, $"Unexpected value '{token.Value}' for option '{option.Name}'");
+                throw new CommandParsingException(command, $"Unexpected value '{token.RawValue}' for option '{option.Name}'");
             }
 
             var subCommand = command.Commands
@@ -158,23 +160,22 @@ namespace CommandDotNet.Parsing
                 {
                     throw new CommandParsingException(command, $"Unrecognized option '{token.RawValue}'");
                 }
-                return ParseOptionResult.UnexpectedArgument;
+                return ParseOptionResult.UnknownOption;
             }
 
             if (option.IsSystemOption)
             {
                 return ParseOptionResult.Succeeded;
             }
+            if (optionTokenType.IsClubbed)
+            {
+                throw new AppRunnerException($"ExpandClubbedOptions transformation should have expanded all clubbed tokens: {token}");
+            }
             if (optionTokenType.HasValue)
             {
-                if (!TryAddValue(option, optionTokenType.GetAssignedValue()))
-                {
-                    throw new CommandParsingException(command, $"Unexpected value '{token.Value}' for option '{option.Name}'");
-                }
-
-                option = null;
+                throw new AppRunnerException($"SplitOptionAssignments transformation should have split values from all option tokens: {token}");
             }
-            else if(option.Arity.AllowsNone())
+            if(option.Arity.AllowsNone())
             {
                 // No value is needed for this option
                 TryAddValue(option, null);

@@ -29,17 +29,19 @@ namespace CommandDotNet.Tests.FeatureTests
                             : t)))
                 .RunInMem("[parse] Do --opt1 smells like".SplitArgs(), _output);
 
-            result.OutputShouldBe(@">>> from shell
+            result.OutputShouldBe(@"use [parse:verbose] to see results after each transformation
+>>> from shell
+  Directive: [parse]
   Value    : Do
   Option   : --opt1
   Value    : smells
   Value    : like
->>> transformed after: test
+>>> transformed after: test > expand-clubbed-flags > split-option-assignments
+  Directive: [parse]
   Value    : Do
   Option   : --opt1
   Value    : roses
-  Value    : roses
->>> no changes after: Expand clubbed flags");
+  Value    : roses");
         }
 
         [Fact]

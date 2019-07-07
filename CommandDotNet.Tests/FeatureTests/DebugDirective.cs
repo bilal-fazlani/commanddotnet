@@ -13,7 +13,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public DebugDirective(ITestOutputHelper output) : base(output)
         {
             // skip waiting for debugger to connect
-            DirectiveRunner.InTestHarness = true;
+            DirectivePipeline.InTestHarness = true;
         }
 
         [Fact]

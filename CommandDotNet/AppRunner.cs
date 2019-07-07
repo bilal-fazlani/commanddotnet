@@ -43,7 +43,7 @@ namespace CommandDotNet
         {
             try
             {
-                return Execute(_parserBuilder.Build(), args);
+                return Execute(args);
             }
             catch (AppRunnerException e)
             {
@@ -147,34 +147,33 @@ namespace CommandDotNet
             }
         }
 
-        private int Execute(ParserContext parserContext, string[] args)
+        private int Execute(string[] args)
         {
-            var directivesResult = DirectiveRunner.ProcessDirectives(_settings, parserContext, ref args);
-            if (directivesResult.ExitCode.HasValue)
-            {
-                return directivesResult.ExitCode.Value;
-            }
+            var tokens = args.Tokenize(includeDirectives: _settings.EnableDirectives);
+            var executionResult = new ExecutionResult(args, tokens);
 
-            AppCreator appCreator = new AppCreator(_settings);
-            Command rootCommand = appCreator.CreateRootCommand(typeof(T), DependencyResolver);
+            var parserContext = _parserBuilder.Build(executionResult);
 
-            var executionResult = new ExecutionResult(args){RootCommand = rootCommand};
-
-            new InputTokenizer(_settings, parserContext).Tokenize(executionResult);
+            new DirectivePipeline(_settings, parserContext).ProcessDirectives(executionResult);
             if (executionResult.ShouldExit)
             {
                 return executionResult.ExitCode;
             }
-            if (parserContext.ParseDirectiveEnabled)
+
+            new TokenizerPipeline(parserContext).Tokenize(executionResult);
+            if (executionResult.ShouldExit)
             {
-                return 0;
+                return executionResult.ExitCode;
             }
 
+            AppCreator appCreator = new AppCreator(_settings);
+            Command rootCommand = appCreator.CreateRootCommand(typeof(T), DependencyResolver);
             new CommandParser(_settings).ParseCommand(executionResult, rootCommand);
             if (executionResult.ShouldExit)
             {
                 return executionResult.ExitCode;
             }
+
             return ((Command)executionResult.ParseResult.Command).Execute();
         }
 

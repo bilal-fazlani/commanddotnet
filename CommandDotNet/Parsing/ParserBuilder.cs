@@ -24,9 +24,9 @@ namespace CommandDotNet.Parsing
             _inputTransformationsByName.Add(name, new InputTransformation(name, order, transformation));
         }
 
-        public ParserContext Build()
+        public ParserContext Build(ExecutionResult executionResult)
         {
-            return new ParserContext
+            return new ParserContext(executionResult)
             {
                 InputTransformations = _inputTransformationsByName.Values.OrderBy(t => t.Order)
             };

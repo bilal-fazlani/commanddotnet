@@ -9,6 +9,8 @@
         public bool HasValue { get; }
         public int AssignmentIndex { get; }
 
+        public string GetPrefix() => IsLong ? "--" : "-";
+
         public string GetName() => HasValue
             ? _value.Substring(0, AssignmentIndex)
             : _value;
@@ -24,14 +26,13 @@
         public OptionTokenType(
             string value,
             bool isLong = false, 
-            bool isShort = false, 
             bool isClubbed = false, 
             bool hasValue = false, 
             int assignmentIndex = -1)
         {
             _value = value;
             IsLong = isLong;
-            IsShort = isShort;
+            IsShort = !isLong;
             IsClubbed = isClubbed;
             HasValue = hasValue;
             AssignmentIndex = assignmentIndex;

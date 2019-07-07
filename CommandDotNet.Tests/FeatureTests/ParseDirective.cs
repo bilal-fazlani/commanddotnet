@@ -6,7 +6,7 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class ParseDirective : TestBase
     {
-        private readonly AppSettings DirectivesEnabled = TestAppSettings.TestDefault.Clone(s => s.EnableDirectives = true);
+        private static readonly AppSettings DirectivesEnabled = TestAppSettings.TestDefault.Clone(s => s.EnableDirectives = true);
 
         public ParseDirective(ITestOutputHelper output) : base(output)
         {
@@ -18,23 +18,26 @@ namespace CommandDotNet.Tests.FeatureTests
             Verify(new Given<App>
             {
                 And = { AppSettings = DirectivesEnabled },
-                WhenArgs = "[parse] some -ab args to echo",
+                WhenArgs = "[parse:verbose] some -ab args to echo",
                 Then =
                 {
                     ExitCode = 0, // method should not have been called
                     Result = @">>> from shell
+  Directive: [parse:verbose]
   Value    : some
   Option   : -ab
   Value    : args
   Value    : to
   Value    : echo
->>> transformed after: Expand clubbed flags
+>>> transformed after: expand-clubbed-flags
+  Directive: [parse:verbose]
   Value    : some
   Option   : -a
   Option   : -b
   Value    : args
   Value    : to
-  Value    : echo"
+  Value    : echo
+>>> no changes after: split-option-assignments"
                 }
             });
         }
@@ -45,16 +48,18 @@ namespace CommandDotNet.Tests.FeatureTests
             Verify(new Given<App>
             {
                 And = { AppSettings = DirectivesEnabled },
-                WhenArgs = "[parse] some args to echo",
+                WhenArgs = "[parse:verbose] some args to echo",
                 Then =
                 {
                     ExitCode = 0, // method should not have been called
                     Result = @">>> from shell
+  Directive: [parse:verbose]
   Value    : some
   Value    : args
   Value    : to
   Value    : echo
->>> no changes after: Expand clubbed flags"
+>>> no changes after: expand-clubbed-flags
+>>> no changes after: split-option-assignments"
                 }
             });
         }
@@ -64,6 +69,7 @@ namespace CommandDotNet.Tests.FeatureTests
             public int some(
                 [Option(ShortName = "a")] bool opt1,
                 [Option(ShortName = "b")] bool opt2,
+                [Option(ShortName = "val")] string optionValue,
                 string args, string to, string echo)
             {
                 return 5;

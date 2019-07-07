@@ -18,5 +18,10 @@
             TokenType = tokenType;
             OptionTokenType = optionTokenType;
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(Token)}:{TokenType}>{RawValue}";
+        }
     }
 }

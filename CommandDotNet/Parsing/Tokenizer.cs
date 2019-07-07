@@ -60,8 +60,8 @@ namespace CommandDotNet.Parsing
             var hasValue = assignmentIndex > 0;
             var isClubbed = isShortOption && !hasValue && value.Length > 1;
 
-            token = new Token(arg, arg.Substring(isShortOption ? 1 : 2), TokenType.Option,
-                new OptionTokenType(value, isLongOption, isShortOption, isClubbed, hasValue, assignmentIndex));
+            token = new Token(arg, value, TokenType.Option,
+                new OptionTokenType(value, isLongOption, isClubbed, hasValue, assignmentIndex));
             return true;
         }
 
@@ -75,6 +75,30 @@ namespace CommandDotNet.Parsing
             return new TokenCollection(tokenCollection.SelectMany(ExpandClubbedOption));
         }
 
+        public static TokenCollection SplitOptionAssignments(this TokenCollection tokenCollection)
+        {
+            return new TokenCollection(tokenCollection.SelectMany(SplitOptionAssignment));
+        }
+
+        private static IEnumerable<Token> SplitOptionAssignment(Token token)
+        {
+            if (token.TokenType == TokenType.Option && token.OptionTokenType.HasValue)
+            {
+                var prefix = token.OptionTokenType.GetPrefix();
+                var optionName = token.OptionTokenType.GetName();
+                var value = token.OptionTokenType.GetAssignedValue();
+
+                yield return new Token(
+                    $"{prefix}{optionName}", optionName, TokenType.Option, 
+                    new OptionTokenType(optionName, token.OptionTokenType.IsLong, false, false));
+                yield return new Token(value, value, TokenType.Value);
+            }
+            else
+            {
+                yield return token;
+            }
+        }
+
         private static IEnumerable<Token> ExpandClubbedOption(Token token)
         {
             if (token.TokenType == TokenType.Option && token.OptionTokenType.IsClubbed)
@@ -82,7 +106,7 @@ namespace CommandDotNet.Parsing
                 foreach (var flag in token.Value.ToCharArray())
                 {
                     var value = flag.ToString();
-                    yield return new Token($"-{value}", value, TokenType.Option, new OptionTokenType(value, isShort: true));
+                    yield return new Token($"-{value}", value, TokenType.Option, new OptionTokenType(value, isLong: false));
                 }
             }
             else
