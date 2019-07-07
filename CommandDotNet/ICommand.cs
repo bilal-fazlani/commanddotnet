@@ -5,8 +5,6 @@ namespace CommandDotNet
 {
     public interface ICommand : INameAndDescription
     {
-        string Name { get; }
-        string Description { get; }
         string ExtendedHelpText { get; }
         ICommand Parent { get; }
         IEnumerable<ICommand> Commands { get; }

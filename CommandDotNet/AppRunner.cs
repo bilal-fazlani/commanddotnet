@@ -158,15 +158,24 @@ namespace CommandDotNet
             AppCreator appCreator = new AppCreator(_settings);
             Command rootCommand = appCreator.CreateRootCommand(typeof(T), DependencyResolver);
 
-            var parseResult = new CommandParser(_settings, parserContext).ParseCommand(rootCommand, args);
+            var executionResult = new ExecutionResult(args){RootCommand = rootCommand};
 
-            // if the ExitCode has been set, the parser has determined
-            // the command should not be executed
-            if (parseResult.ExitCode.HasValue)
+            new InputTokenizer(_settings, parserContext).Tokenize(executionResult);
+            if (executionResult.ShouldExit)
             {
-                return parseResult.ExitCode.Value;
+                return executionResult.ExitCode;
             }
-            return ((Command)parseResult.Command).Execute();
+            if (parserContext.ParseDirectiveEnabled)
+            {
+                return 0;
+            }
+
+            new CommandParser(_settings).ParseCommand(executionResult, rootCommand);
+            if (executionResult.ShouldExit)
+            {
+                return executionResult.ExitCode;
+            }
+            return ((Command)executionResult.ParseResult.Command).Execute();
         }
 
         public AppRunner<T> WithCustomHelpProvider(IHelpProvider customHelpProvider)

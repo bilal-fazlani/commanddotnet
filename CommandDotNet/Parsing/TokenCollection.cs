@@ -1,33 +1,68 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace CommandDotNet.Parsing
 {
     public class TokenCollection : IReadOnlyCollection<Token>
     {
-        private readonly List<Token> _tokens = new List<Token>();
+        private readonly List<Token> _directives = new List<Token>();
+        private readonly List<Token> _arguments = new List<Token>();
+        private readonly List<Token> _separated = new List<Token>();
+        private readonly List<Token> _combined = new List<Token>();
 
-        public int SeparatorIndex { get; set; } = -1;
+        public int Count => _combined.Count;
 
-        public int Count => _tokens.Count;
+        public IReadOnlyCollection<Token> Directives => _directives.AsReadOnly();
+        public IReadOnlyCollection<Token> Arguments => _arguments.AsReadOnly();
+        public IReadOnlyCollection<Token> Separated => _separated.AsReadOnly();
 
         public TokenCollection(IEnumerable<Token> tokens)
         {
+            var directives = _directives;
+            var parsed = _arguments;
             foreach (var token in tokens)
             {
-                if (token.TokenType == TokenType.Separator)
+                switch (token.TokenType)
                 {
-                    SeparatorIndex = _tokens.Count;
+                    case TokenType.Directive:
+                        directives.Add(token);
+                        _combined.Add(token);
+                        break;
+                    case TokenType.Option:
+                        parsed.Add(token);
+                        _combined.Add(token);
+                        break;
+                    case TokenType.Value:
+                        parsed.Add(token);
+                        _combined.Add(token);
+                        break;
+                    case TokenType.Separator:
+                        if (directives != _separated)
+                        {
+                            directives = _separated;
+                            parsed = _separated;
+                        }
+                        else
+                        {
+                            // if multiple separators are provided
+                            //   assume nested command execution and 
+                            //   retain the additional separators
+                            _separated.Add(token);
+                            _combined.Add(token);
+                        }
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
-                _tokens.Add(token);
             }
         }
 
-        public Token this[int index] => _tokens[index];
+        public Token this[int index] => _combined[index];
 
         public IEnumerator<Token> GetEnumerator()
         {
-            return _tokens.GetEnumerator();
+            return _combined.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

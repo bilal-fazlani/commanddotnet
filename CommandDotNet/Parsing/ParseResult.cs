@@ -1,28 +1,19 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 namespace CommandDotNet.Parsing
 {
     public class ParseResult
     {
         public ICommand Command { get; }
-        public string[] OriginalArgs { get; }
-        public TokenCollection TokenCollection { get; }
-        public int? ExitCode { get; }
-        public TokenCollection UnparsedTokenCollection { get; }
-        public IContextData ContextData { get; } = new ContextData();
+        public IReadOnlyCollection<string> RemainingArguments { get; }
 
         public ParseResult(
             ICommand command,
-            string[] originalArgs,
-            TokenCollection tokenCollection,
-            int? exitCode = null,
-            TokenCollection unparsedTokenCollection = null)
+            IReadOnlyCollection<string> remainingArguments)
         {
-            Command = command;
-            OriginalArgs = originalArgs;
-            TokenCollection = tokenCollection;
-            ExitCode = exitCode;
-            UnparsedTokenCollection = unparsedTokenCollection ?? new TokenCollection(Enumerable.Empty<Token>());
+            Command = command ?? throw new ArgumentNullException(nameof(command));
+            RemainingArguments = remainingArguments ?? new List<string>().AsReadOnly();
         }
     }
 }

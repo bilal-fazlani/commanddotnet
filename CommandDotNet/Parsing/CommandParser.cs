@@ -8,40 +8,23 @@ namespace CommandDotNet.Parsing
     internal class CommandParser
     {
         private readonly AppSettings _appSettings;
-        private readonly ParserContext _parserContext;
 
-        public CommandParser(AppSettings appSettings, ParserContext parserContext)
+        public CommandParser(AppSettings appSettings)
         {
-            _appSettings = appSettings;
-            _parserContext = parserContext;
+            _appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
         }
 
-        public ParseResult ParseCommand(ICommand command, string[] args)
+        public void ParseCommand(ExecutionResult executionResult, ICommand command)
         {
-            TokenCollection tokenCollection = args.Tokenize(includeDirectives: _appSettings.EnableDirectives);
-
-            tokenCollection = ApplyInputTransformations(tokenCollection);
-
-            if (_parserContext.ParseDirectiveEnabled)
-            {
-                return new ParseResult(command, args, tokenCollection, exitCode: 0);
-            }
-
             bool ignoreRemainingArguments = false;
-            var remainingArguments = new List<Token>();
+            var remainingArguments = new List<string>();
 
             ICommand currentCommand = command;
             IOption currentOption = null;
             IEnumerator<IOperand> arguments = new OperandEnumerator(command.Operands);
 
-            foreach (var token in tokenCollection)
+            foreach (var token in executionResult.FinalTokens.Arguments)
             {
-                if (ignoreRemainingArguments)
-                {
-                    remainingArguments.Add(token);
-                    continue;
-                }
-
                 switch (token.TokenType)
                 {
                     case TokenType.Option:
@@ -52,35 +35,43 @@ namespace CommandDotNet.Parsing
                                 if (currentOption?.InvokeAsCommand != null)
                                 {
                                     currentOption.InvokeAsCommand();
-                                    return new ParseResult(currentCommand, args, tokenCollection, exitCode: 0);
+                                    executionResult.ParseResult = new ParseResult(currentCommand, null);
+                                    executionResult.ShouldExitWithCode(0);
+                                    return;
                                 }
                                 break;
                             case ParseOptionResult.UnexpectedArgument:
-                                ignoreRemainingArguments = true;
+                                remainingArguments.Add(token.Value);
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException(optionResult.ToString());
                         }
                         break;
                     case TokenType.Value:
-                        var operandResult = ParseArgumentValue(token, ref currentCommand, ref currentOption, arguments);
-                        switch (operandResult)
+                        if (ignoreRemainingArguments && currentOption == null)
                         {
-                            case ParseOperandResult.Succeeded:
-                                break;
-                            case ParseOperandResult.UnexpectedArgument:
-                                ignoreRemainingArguments = true;
-                                break;
-                            case ParseOperandResult.NewSubCommand:
-                                arguments = new OperandEnumerator(currentCommand.Operands);
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException(operandResult.ToString());
+                            remainingArguments.Add(token.Value);
+                        }
+                        else
+                        {
+                            var operandResult = ParseArgumentValue(token, ref currentCommand, ref currentOption, arguments);
+                            switch (operandResult)
+                            {
+                                case ParseOperandResult.Succeeded:
+                                    break;
+                                case ParseOperandResult.UnexpectedArgument:
+                                    ignoreRemainingArguments = true;
+                                    break;
+                                case ParseOperandResult.NewSubCommand:
+                                    arguments = new OperandEnumerator(currentCommand.Operands);
+                                    break;
+                                default:
+                                    throw new ArgumentOutOfRangeException(operandResult.ToString());
+                            }
                         }
                         break;
                     case TokenType.Separator:
-                        ignoreRemainingArguments = true;
-                        break;
+                        throw new ArgumentOutOfRangeException($"The argument list should have already had the separator removed: {token.RawValue}");
                     case TokenType.Directive:
                         throw new ArgumentOutOfRangeException($"Directives should have already been processed and removed: {token.RawValue}");
                     default:
@@ -93,7 +84,7 @@ namespace CommandDotNet.Parsing
                 throw new CommandParsingException(currentCommand, $"Missing value for option '{currentOption.Name}'");
             }
 
-            return new ParseResult(currentCommand, args, tokenCollection, unparsedTokenCollection: new TokenCollection(remainingArguments));
+            executionResult.ParseResult = new ParseResult(currentCommand, remainingArguments.AsReadOnly());
         }
 
         private enum ParseOperandResult
@@ -216,76 +207,6 @@ namespace CommandDotNet.Parsing
                 option.Values.Add("true");
             }
             return true;
-        }
-        private TokenCollection ApplyInputTransformations(TokenCollection args)
-        {
-            if (_parserContext.ParseDirectiveEnabled)
-            {
-                ReportTransformation(null, args);
-            }
-
-            var transformations = _parserContext.InputTransformations.OrderBy(t => t.Order).AsEnumerable();
-
-            // append ExpandClubbedFlags to the end.
-            // it's a feature we want to ensure is applied to all arguments
-            // to prevent cases later where short clubbed options aren't found
-            transformations = transformations.Union(
-                new[]
-            {
-                new InputTransformation(
-                    "Expand clubbed flags",
-                    int.MaxValue,
-                    Tokenizer.ExpandClubbedOptions),
-            });
-
-            foreach (var transformation in transformations)
-            {
-                try
-                {
-                    var tempArgs = transformation.Transformation(args);
-
-                    if (_parserContext.ParseDirectiveEnabled)
-                    {
-                        if (args.Count == tempArgs.Count &&
-                            Enumerable.Range(0, args.Count).All(i => args[i] == tempArgs[i]))
-                        {
-                            ReportTransformation(transformation.Name, null);
-                        }
-                        else
-                        {
-                            ReportTransformation(transformation.Name, tempArgs);
-                        }
-                    }
-
-                    args = tempArgs;
-                }
-                catch (Exception e)
-                {
-                    throw new AppRunnerException($"transformation failure for: {transformation}", e);
-                }
-            }
-
-            return args;
-        }
-
-        private void ReportTransformation(string name, TokenCollection args)
-        {
-            var maxTokenTypeNameLength = Enum.GetNames(typeof(TokenType)).Max(n => n.Length);
-
-            if (args == null)
-            {
-                _appSettings.Out.WriteLine($">>> no changes after: {name}");
-            }
-            else
-            {
-                _appSettings.Out.WriteLine(name == null ? ">>> from shell" : $">>> transformed after: {name}");
-                foreach (var arg in args)
-                {
-                    var outputFormat = $"  {{0, -{maxTokenTypeNameLength}}}: {{1}}";
-                    _appSettings.Out.WriteLine(outputFormat, arg.TokenType, arg.RawValue);
-                }
-            }
-            _appSettings.Out.WriteLine();
         }
 
         private class OperandEnumerator : IEnumerator<IOperand>
