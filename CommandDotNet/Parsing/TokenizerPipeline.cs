@@ -5,30 +5,22 @@ namespace CommandDotNet.Parsing
 {
     internal class TokenizerPipeline
     {
-        private readonly ParserContext _parserContext;
-            
-        public TokenizerPipeline(ParserContext parserContext)
-        {
-            _parserContext = parserContext ?? throw new ArgumentNullException(nameof(parserContext));
-        }
-
         public void Tokenize(ExecutionResult executionResult)
         {
-            InsertSystemTransformations();
-            executionResult.Tokens = ApplyInputTransformations(executionResult.OriginalTokens);
-            _parserContext.TokenizationCompleted();
+            InsertSystemTransformations(executionResult.ParserConfig);
+            executionResult.Tokens = ApplyInputTransformations(executionResult.Tokens, executionResult.ParserConfig);
+            executionResult.ParserConfig.Events.TokenizationCompleted();
         }
 
-        private TokenCollection ApplyInputTransformations(TokenCollection args)
+        private TokenCollection ApplyInputTransformations(TokenCollection tokens, ParserConfig parserConfig)
         {
-            _parserContext.InputTransformations = _parserContext.InputTransformations.OrderBy(t => t.Order).AsEnumerable();
-            foreach (var transformation in _parserContext.InputTransformations)
+            foreach (var transformation in parserConfig.InputTransformations)
             {
                 try
                 {
-                    var tempArgs = transformation.Transformation(args);
-                    _parserContext.InputTransformation(transformation, args, tempArgs);
-                    args = tempArgs;
+                    var tempArgs = transformation.Transformation(tokens);
+                    parserConfig.Events.InputTransformation(transformation, tokens, tempArgs);
+                    tokens = tempArgs;
                 }
                 catch (Exception e)
                 {
@@ -36,15 +28,16 @@ namespace CommandDotNet.Parsing
                 }
             }
 
-            return args;
+            return tokens;
         }
 
-        private void InsertSystemTransformations()
+        private void InsertSystemTransformations(ParserConfig parserConfig)
         {
+            parserConfig.InputTransformations = parserConfig.InputTransformations.OrderBy(t => t.Order).AsEnumerable();
             // append system transformations to the end.
-            // these are features we want to ensure is applied to all arguments
-            // parsing logic depends on these being processed
-            _parserContext.InputTransformations = _parserContext.InputTransformations.Union(
+            // these are features we want to ensure are applied to all arguments
+            // because parsing logic depends on these being processed
+            parserConfig.InputTransformations = parserConfig.InputTransformations.Union(
                 new[]
                 {
                     new InputTransformation(

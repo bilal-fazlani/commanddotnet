@@ -149,18 +149,24 @@ namespace CommandDotNet
 
         private int Execute(string[] args)
         {
-            var tokens = args.Tokenize(includeDirectives: _settings.EnableDirectives);
-            var executionResult = new ExecutionResult(args, tokens);
-
-            var parserContext = _parserBuilder.Build(executionResult);
-
-            new DirectivePipeline(_settings, parserContext).ProcessDirectives(executionResult);
-            if (executionResult.ShouldExit)
+            if (_settings.EnableDirectives)
             {
-                return executionResult.ExitCode;
+                _parserBuilder.AddMiddleware(DebugDirective.Execute, 0);
+                _parserBuilder.AddMiddleware(ParseDirective.Execute, 1);
             }
 
-            new TokenizerPipeline(parserContext).Tokenize(executionResult);
+            _parserBuilder.AddMiddleware(ExecuteTheRest, 1);
+
+
+            var tokens = args.Tokenize(includeDirectives: _settings.EnableDirectives);
+            var executionResult = new ExecutionResult(args, tokens, _settings);
+            executionResult.ParserConfig = _parserBuilder.Build(executionResult);
+            return InvokeMiddleware(executionResult);
+        }
+
+        private int ExecuteTheRest(ExecutionResult executionResult, Func<ExecutionResult, int> next)
+        {
+            new TokenizerPipeline().Tokenize(executionResult);
             if (executionResult.ShouldExit)
             {
                 return executionResult.ExitCode;
@@ -174,7 +180,20 @@ namespace CommandDotNet
                 return executionResult.ExitCode;
             }
 
-            return ((Command)executionResult.ParseResult.Command).Execute();
+            return ((Command) executionResult.ParseResult.Command).Execute();
+        }
+
+        private static int InvokeMiddleware(ExecutionResult executionResult)
+        {
+            var middlewares = executionResult.ParserConfig.MiddlewarePipeline;
+
+            var middlewareChain = middlewares.Aggregate(
+                (first, second) =>
+                    (ctx, next) =>
+                        first(ctx,
+                            c => second(c, next)));
+
+            return middlewareChain(executionResult, ctx => ctx.ExitCode);
         }
 
         public AppRunner<T> WithCustomHelpProvider(IHelpProvider customHelpProvider)

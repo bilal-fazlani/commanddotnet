@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using CommandDotNet.Parsing;
+﻿using CommandDotNet.Parsing;
 
 namespace CommandDotNet
 {
@@ -8,20 +7,23 @@ namespace CommandDotNet
         public bool ShouldExit { get; private set; }
         public int ExitCode { get; private set; }
 
-        public string[] OriginalArgs { get; }
-        public TokenCollection OriginalTokens { get; }
+        public OriginalInput Original { get; }
 
         public TokenCollection Tokens { get; set; }
 
+        public ParserConfig ParserConfig { get; set; }
+
         public ParseResult ParseResult { get; set; }
+
+        public AppSettings AppSettings { get; }
 
         public IContextData ContextData { get; } = new ContextData();
 
-        public ExecutionResult(string[] originalArgs, TokenCollection originalTokens)
+        public ExecutionResult(string[] originalArgs, TokenCollection originalTokens, AppSettings appSettings)
         {
-            OriginalArgs = originalArgs;
-            OriginalTokens = originalTokens;
+            Original = new OriginalInput(originalArgs, originalTokens);
             Tokens = originalTokens;
+            AppSettings = appSettings;
         }
 
         public void ShouldExitWithCode(int exitCode)

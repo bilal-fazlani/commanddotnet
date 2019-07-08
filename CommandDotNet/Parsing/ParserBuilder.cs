@@ -5,8 +5,15 @@ using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Parsing
 {
+    // TODO: return Task
+    public delegate int ExecutionMiddleware(
+        ExecutionResult context,
+        Func<ExecutionResult, int> next);
+
     internal class ParserBuilder
     {
+        private readonly List<(ExecutionMiddleware middleware, int order)> _middlewares = new List<(ExecutionMiddleware middleware, int order)>();
+
         private readonly Dictionary<string, InputTransformation> _inputTransformationsByName
             = new Dictionary<string, InputTransformation>();
 
@@ -24,11 +31,17 @@ namespace CommandDotNet.Parsing
             _inputTransformationsByName.Add(name, new InputTransformation(name, order, transformation));
         }
 
-        public ParserContext Build(ExecutionResult executionResult)
+        public void AddMiddleware(ExecutionMiddleware middleware, int order)
         {
-            return new ParserContext(executionResult)
+            _middlewares.Add((middleware, order));
+        }
+
+        public ParserConfig Build(ExecutionResult executionResult)
+        {
+            return new ParserConfig(executionResult)
             {
-                InputTransformations = _inputTransformationsByName.Values.OrderBy(t => t.Order)
+                MiddlewarePipeline = _middlewares.OrderBy(m => m.order).Select(m => m.middleware).ToArray(),
+                InputTransformations = _inputTransformationsByName.Values.OrderBy(t => t.Order).ToArray()
             };
         }
     }
