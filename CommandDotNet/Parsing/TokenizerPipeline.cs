@@ -3,16 +3,18 @@ using System.Linq;
 
 namespace CommandDotNet.Parsing
 {
-    internal class TokenizerPipeline
+    internal static class TokenizerPipeline
     {
-        public void Tokenize(ExecutionResult executionResult)
+        public static int Tokenize(ExecutionResult executionResult, Func<ExecutionResult, int> next)
         {
             InsertSystemTransformations(executionResult.ParserConfig);
             executionResult.Tokens = ApplyInputTransformations(executionResult.Tokens, executionResult.ParserConfig);
             executionResult.ParserConfig.Events.TokenizationCompleted();
+
+            return next(executionResult);
         }
 
-        private TokenCollection ApplyInputTransformations(TokenCollection tokens, ParserConfig parserConfig)
+        private static TokenCollection ApplyInputTransformations(TokenCollection tokens, ParserConfig parserConfig)
         {
             foreach (var transformation in parserConfig.InputTransformations)
             {
@@ -31,7 +33,7 @@ namespace CommandDotNet.Parsing
             return tokens;
         }
 
-        private void InsertSystemTransformations(ParserConfig parserConfig)
+        private static void InsertSystemTransformations(ParserConfig parserConfig)
         {
             parserConfig.InputTransformations = parserConfig.InputTransformations.OrderBy(t => t.Order).AsEnumerable();
             // append system transformations to the end.

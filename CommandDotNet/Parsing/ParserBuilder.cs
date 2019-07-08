@@ -10,6 +10,15 @@ namespace CommandDotNet.Parsing
         ExecutionResult context,
         Func<ExecutionResult, int> next);
 
+    public enum MiddlewareStages
+    {
+        Configuration = 100,
+        Directives = Configuration + 100,
+        Tokenize = Directives + 100,
+        Parsing = Tokenize + 100,
+        Invocation = Parsing + 100,
+    }
+
     internal class ParserBuilder
     {
         private readonly List<(ExecutionMiddleware middleware, int order)> _middlewares = new List<(ExecutionMiddleware middleware, int order)>();
@@ -29,6 +38,11 @@ namespace CommandDotNet.Parsing
                     $"transformations={_inputTransformationsByName.Keys.ToOrderedCsv()}");
             }
             _inputTransformationsByName.Add(name, new InputTransformation(name, order, transformation));
+        }
+
+        public void AddMiddlewareInStage(ExecutionMiddleware middleware, MiddlewareStages stage, int orderWithinStage = 0)
+        {
+            AddMiddleware(middleware, (int)stage + orderWithinStage);
         }
 
         public void AddMiddleware(ExecutionMiddleware middleware, int order)

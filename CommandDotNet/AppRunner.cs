@@ -151,47 +151,43 @@ namespace CommandDotNet
         {
             if (_settings.EnableDirectives)
             {
-                _parserBuilder.AddMiddleware(DebugDirective.Execute, 0);
-                _parserBuilder.AddMiddleware(ParseDirective.Execute, 1);
+                _parserBuilder.AddMiddlewareInStage(DebugDirective.Execute, MiddlewareStages.Directives, 0);
+                _parserBuilder.AddMiddlewareInStage(ParseDirective.Execute, MiddlewareStages.Directives, 1);
             }
 
-            _parserBuilder.AddMiddleware(ExecuteTheRest, 1);
-
+            _parserBuilder.AddMiddlewareInStage(TokenizerPipeline.Tokenize, MiddlewareStages.Tokenize);
+            _parserBuilder.AddMiddlewareInStage(ParseCommand, MiddlewareStages.Parsing);
+            _parserBuilder.AddMiddlewareInStage(Execute, MiddlewareStages.Invocation);
 
             var tokens = args.Tokenize(includeDirectives: _settings.EnableDirectives);
             var executionResult = new ExecutionResult(args, tokens, _settings);
             executionResult.ParserConfig = _parserBuilder.Build(executionResult);
+
             return InvokeMiddleware(executionResult);
         }
 
-        private int ExecuteTheRest(ExecutionResult executionResult, Func<ExecutionResult, int> next)
+        private int ParseCommand(ExecutionResult executionResult, Func<ExecutionResult, int> next)
         {
-            new TokenizerPipeline().Tokenize(executionResult);
-            if (executionResult.ShouldExit)
-            {
-                return executionResult.ExitCode;
-            }
-
             AppCreator appCreator = new AppCreator(_settings);
             Command rootCommand = appCreator.CreateRootCommand(typeof(T), DependencyResolver);
             new CommandParser(_settings).ParseCommand(executionResult, rootCommand);
-            if (executionResult.ShouldExit)
-            {
-                return executionResult.ExitCode;
-            }
+            return next(executionResult);
+        }
 
+        private int Execute(ExecutionResult executionResult, Func<ExecutionResult, int> next)
+        {
             return ((Command) executionResult.ParseResult.Command).Execute();
         }
 
         private static int InvokeMiddleware(ExecutionResult executionResult)
         {
-            var middlewares = executionResult.ParserConfig.MiddlewarePipeline;
+            var pipeline = executionResult.ParserConfig.MiddlewarePipeline;
 
-            var middlewareChain = middlewares.Aggregate(
+            var middlewareChain = pipeline.Aggregate(
                 (first, second) =>
                     (ctx, next) =>
-                        first(ctx,
-                            c => second(c, next)));
+                        first(ctx, c =>
+                            ctx.ShouldExit ? ctx.ExitCode : second(c, next)));
 
             return middlewareChain(executionResult, ctx => ctx.ExitCode);
         }
