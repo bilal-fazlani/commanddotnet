@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using CommandDotNet.Execution;
 
 namespace CommandDotNet.Directives
 {
-    internal class DebugDirective
+    internal static class DebugDirective
     {
         // this is obviously not the ideal design.  major code smell.
         // but... it meets our needs simply until we have settled
@@ -13,15 +14,15 @@ namespace CommandDotNet.Directives
         internal static bool InTestHarness { private get; set; }
 
         // adapted from https://github.com/dotnet/command-line-api directives
-        public static int Execute(ExecutionResult executionResult, Func<ExecutionResult, int> next)
+        public static int Execute(ExecutionContext executionContext, Func<ExecutionContext, int> next)
         {
-            if (executionResult.Tokens.TryGetDirective("debug", out string value))
+            if (executionContext.Tokens.TryGetDirective("debug", out string value))
             {
                 var process = Process.GetCurrentProcess();
 
                 var processId = process.Id;
 
-                executionResult.AppSettings.Out.WriteLine($"Attach your debugger to process {processId} ({process.ProcessName}).");
+                executionContext.AppSettings.Out.WriteLine($"Attach your debugger to process {processId} ({process.ProcessName}).");
 
                 while (!InTestHarness && !Debugger.IsAttached)
                 {
@@ -29,7 +30,7 @@ namespace CommandDotNet.Directives
                 }
             }
 
-            return next(executionResult);
+            return next(executionContext);
         }
     }
 }

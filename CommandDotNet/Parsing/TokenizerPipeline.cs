@@ -1,27 +1,28 @@
 ﻿using System;
 using System.Linq;
+using CommandDotNet.Execution;
 
 namespace CommandDotNet.Parsing
 {
     internal static class TokenizerPipeline
     {
-        public static int Tokenize(ExecutionResult executionResult, Func<ExecutionResult, int> next)
+        public static int Tokenize(ExecutionContext executionContext, Func<ExecutionContext, int> next)
         {
-            InsertSystemTransformations(executionResult.ParserConfig);
-            executionResult.Tokens = ApplyInputTransformations(executionResult.Tokens, executionResult.ParserConfig);
-            executionResult.ParserConfig.Events.TokenizationCompleted();
+            InsertSystemTransformations(executionContext.ExecutionConfig);
+            executionContext.Tokens = ApplyInputTransformations(executionContext.Tokens, executionContext.ExecutionConfig);
+            executionContext.ExecutionConfig.Events.TokenizationCompleted();
 
-            return next(executionResult);
+            return next(executionContext);
         }
 
-        private static TokenCollection ApplyInputTransformations(TokenCollection tokens, ParserConfig parserConfig)
+        private static TokenCollection ApplyInputTransformations(TokenCollection tokens, ExecutionConfig executionConfig)
         {
-            foreach (var transformation in parserConfig.InputTransformations)
+            foreach (var transformation in executionConfig.InputTransformations)
             {
                 try
                 {
                     var tempArgs = transformation.Transformation(tokens);
-                    parserConfig.Events.InputTransformation(transformation, tokens, tempArgs);
+                    executionConfig.Events.InputTransformation(transformation, tokens, tempArgs);
                     tokens = tempArgs;
                 }
                 catch (Exception e)
@@ -33,13 +34,13 @@ namespace CommandDotNet.Parsing
             return tokens;
         }
 
-        private static void InsertSystemTransformations(ParserConfig parserConfig)
+        private static void InsertSystemTransformations(ExecutionConfig executionConfig)
         {
-            parserConfig.InputTransformations = parserConfig.InputTransformations.OrderBy(t => t.Order).AsEnumerable();
+            executionConfig.InputTransformations = executionConfig.InputTransformations.OrderBy(t => t.Order).AsEnumerable();
             // append system transformations to the end.
             // these are features we want to ensure are applied to all arguments
             // because parsing logic depends on these being processed
-            parserConfig.InputTransformations = parserConfig.InputTransformations.Union(
+            executionConfig.InputTransformations = executionConfig.InputTransformations.Union(
                 new[]
                 {
                     new InputTransformation(

@@ -1,8 +1,8 @@
 ﻿using CommandDotNet.Parsing;
 
-namespace CommandDotNet
+namespace CommandDotNet.Execution
 {
-    public class ExecutionResult
+    public class ExecutionContext
     {
         public bool ShouldExit { get; private set; }
         public int ExitCode { get; private set; }
@@ -11,7 +11,7 @@ namespace CommandDotNet
 
         public TokenCollection Tokens { get; set; }
 
-        public ParserConfig ParserConfig { get; set; }
+        public ExecutionConfig ExecutionConfig { get; set; }
 
         public ParseResult ParseResult { get; set; }
 
@@ -19,7 +19,7 @@ namespace CommandDotNet
 
         public IContextData ContextData { get; } = new ContextData();
 
-        public ExecutionResult(string[] originalArgs, TokenCollection originalTokens, AppSettings appSettings)
+        public ExecutionContext(string[] originalArgs, TokenCollection originalTokens, AppSettings appSettings)
         {
             Original = new OriginalInput(originalArgs, originalTokens);
             Tokens = originalTokens;

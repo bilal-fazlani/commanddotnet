@@ -1,20 +1,21 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Parsing;
 
 namespace CommandDotNet.Directives
 {
-    internal class ParseDirective
+    internal static class ParseDirective
     {
         // adapted from https://github.com/dotnet/command-line-api directives
-        public static int Execute(ExecutionResult executionResult, Func<ExecutionResult, int> next)
+        public static int Execute(ExecutionContext executionContext, Func<ExecutionContext, int> next)
         {
-            if (executionResult.Tokens.TryGetDirective("parse", out string value))
+            if (executionContext.Tokens.TryGetDirective("parse", out string value))
             {
-                var parserContext = executionResult.ParserConfig;
-                var consoleOut = executionResult.AppSettings.Out;
+                var parserContext = executionContext.ExecutionConfig;
+                var consoleOut = executionContext.AppSettings.Out;
 
                 var parts = value.Split(":".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 var verbose = parts.Length > 1 && parts[1].Equals("verbose", StringComparison.OrdinalIgnoreCase);
@@ -24,7 +25,7 @@ namespace CommandDotNet.Directives
                     consoleOut.WriteLine("use [parse:verbose] to see results after each transformation");
                 }
 
-                ReportTransformation(consoleOut, executionResult.Tokens, ">>> from shell");
+                ReportTransformation(consoleOut, executionContext.Tokens, ">>> from shell");
 
                 if (verbose)
                 {
@@ -43,17 +44,17 @@ namespace CommandDotNet.Directives
                 }
                 else
                 {
-                    parserContext.Events.OnTokenizationCompleted += result =>
+                    parserContext.Events.OnTokenizationCompleted += ctx =>
                     {
                         var transformations = parserContext.InputTransformations.Select(t => t.Name).ToCsv(" > ");
-                        ReportTransformation(consoleOut, result.Tokens, $">>> transformed after: {transformations}");
+                        ReportTransformation(consoleOut, ctx.Tokens, $">>> transformed after: {transformations}");
                     };
                 }
 
-                parserContext.Events.OnTokenizationCompleted += result => result.ShouldExitWithCode(0);
+                parserContext.Events.OnTokenizationCompleted += ctx => ctx.ShouldExitWithCode(0);
             }
 
-            return next(executionResult);
+            return next(executionContext);
         }
 
         private static void ReportTransformation(TextWriter consoleOut, TokenCollection args, string description)

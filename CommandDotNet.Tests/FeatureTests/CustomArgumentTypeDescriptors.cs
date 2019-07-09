@@ -80,8 +80,8 @@ Options:
                 {
                     ExitCode = 2,
                     Result = "type : CommandDotNet.Tests.FeatureTests.CustomArgumentTypeDescriptors+Square is not supported. " +
-                             "If it's an argument model, inherit from IArgumentModel, " +
-                             "otherwise implement a TypeConverter or IArgumentTypeDescriptor to support this type."
+                             "If it's an argument model, inherit from IArgumentModel. " +
+                             "Otherwise, to support this type, implement a TypeConverter or IArgumentTypeDescriptor or add a constructor with a single string parameter."
                 }
             });
         }

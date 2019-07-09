@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using CommandDotNet.Execution;
 
 namespace CommandDotNet.Parsing
 {
@@ -14,7 +15,7 @@ namespace CommandDotNet.Parsing
             _appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
         }
 
-        public void ParseCommand(ExecutionResult executionResult, ICommand command)
+        public void ParseCommand(ExecutionContext executionContext, ICommand command)
         {
             bool ignoreRemainingArguments = false;
             var remainingArguments = new List<string>();
@@ -23,7 +24,7 @@ namespace CommandDotNet.Parsing
             IOption currentOption = null;
             IEnumerator<IOperand> arguments = new OperandEnumerator(command.Operands);
 
-            foreach (var token in executionResult.Tokens.Arguments)
+            foreach (var token in executionContext.Tokens.Arguments)
             {
                 switch (token.TokenType)
                 {
@@ -35,8 +36,8 @@ namespace CommandDotNet.Parsing
                                 if (currentOption?.InvokeAsCommand != null)
                                 {
                                     currentOption.InvokeAsCommand();
-                                    executionResult.ParseResult = new ParseResult(currentCommand, null);
-                                    executionResult.ShouldExitWithCode(0);
+                                    executionContext.ParseResult = new ParseResult(currentCommand, null);
+                                    executionContext.ShouldExitWithCode(0);
                                     return;
                                 }
                                 break;
@@ -79,14 +80,14 @@ namespace CommandDotNet.Parsing
                 }
             }
 
-            remainingArguments.AddRange(executionResult.Tokens.Separated.Select(t => t.RawValue));
+            remainingArguments.AddRange(executionContext.Tokens.Separated.Select(t => t.RawValue));
 
             if (currentOption != null) // an option was left without a value
             {
                 throw new CommandParsingException(currentCommand, $"Missing value for option '{currentOption.Name}'");
             }
 
-            executionResult.ParseResult = new ParseResult(currentCommand, remainingArguments.AsReadOnly());
+            executionContext.ParseResult = new ParseResult(currentCommand, remainingArguments.AsReadOnly());
         }
 
         private enum ParseOperandResult

@@ -7,6 +7,7 @@ using System.Runtime.ExceptionServices;
 using CommandDotNet.Builders;
 using CommandDotNet.ClassModeling;
 using CommandDotNet.Directives;
+using CommandDotNet.Execution;
 using CommandDotNet.Help;
 using CommandDotNet.Invocation;
 using CommandDotNet.Parsing;
@@ -24,7 +25,7 @@ namespace CommandDotNet
         internal IDependencyResolver DependencyResolver;
 
         private readonly AppSettings _settings;
-        private readonly ParserBuilder _parserBuilder = new ParserBuilder();
+        private readonly ExecutionBuilder _executionBuilder = new ExecutionBuilder();
 
         public AppRunner(AppSettings settings = null)
         {
@@ -151,37 +152,37 @@ namespace CommandDotNet
         {
             if (_settings.EnableDirectives)
             {
-                _parserBuilder.AddMiddlewareInStage(DebugDirective.Execute, MiddlewareStages.Configuration, 0);
-                _parserBuilder.AddMiddlewareInStage(ParseDirective.Execute, MiddlewareStages.Tokenize, -2);
+                _executionBuilder.AddMiddlewareInStage(DebugDirective.Execute, MiddlewareStages.Configuration, 0);
+                _executionBuilder.AddMiddlewareInStage(ParseDirective.Execute, MiddlewareStages.Tokenize, -2);
             }
 
-            _parserBuilder.AddMiddlewareInStage(TokenizerPipeline.Tokenize, MiddlewareStages.Tokenize, -1);
-            _parserBuilder.AddMiddlewareInStage(ParseCommand, MiddlewareStages.Parsing);
-            _parserBuilder.AddMiddlewareInStage(Execute, MiddlewareStages.Invocation);
+            _executionBuilder.AddMiddlewareInStage(TokenizerPipeline.Tokenize, MiddlewareStages.Tokenize, -1);
+            _executionBuilder.AddMiddlewareInStage(ParseCommand, MiddlewareStages.Parsing);
+            _executionBuilder.AddMiddlewareInStage(Execute, MiddlewareStages.Invocation);
 
             var tokens = args.Tokenize(includeDirectives: _settings.EnableDirectives);
-            var executionResult = new ExecutionResult(args, tokens, _settings);
-            executionResult.ParserConfig = _parserBuilder.Build(executionResult);
+            var executionResult = new ExecutionContext(args, tokens, _settings);
+            executionResult.ExecutionConfig = _executionBuilder.Build(executionResult);
 
             return InvokeMiddleware(executionResult);
         }
 
-        private int ParseCommand(ExecutionResult executionResult, Func<ExecutionResult, int> next)
+        private int ParseCommand(ExecutionContext executionContext, Func<ExecutionContext, int> next)
         {
             AppCreator appCreator = new AppCreator(_settings);
             Command rootCommand = appCreator.CreateRootCommand(typeof(T), DependencyResolver);
-            new CommandParser(_settings).ParseCommand(executionResult, rootCommand);
-            return next(executionResult);
+            new CommandParser(_settings).ParseCommand(executionContext, rootCommand);
+            return next(executionContext);
         }
 
-        private int Execute(ExecutionResult executionResult, Func<ExecutionResult, int> next)
+        private int Execute(ExecutionContext executionContext, Func<ExecutionContext, int> next)
         {
-            return ((Command) executionResult.ParseResult.Command).Execute();
+            return ((Command) executionContext.ParseResult.Command).Execute();
         }
 
-        private static int InvokeMiddleware(ExecutionResult executionResult)
+        private static int InvokeMiddleware(ExecutionContext executionContext)
         {
-            var pipeline = executionResult.ParserConfig.MiddlewarePipeline;
+            var pipeline = executionContext.ExecutionConfig.MiddlewarePipeline;
 
             var middlewareChain = pipeline.Aggregate(
                 (first, second) =>
@@ -189,7 +190,7 @@ namespace CommandDotNet
                         first(ctx, c =>
                             ctx.ShouldExit ? ctx.ExitCode : second(c, next)));
 
-            return middlewareChain(executionResult, ctx => ctx.ExitCode);
+            return middlewareChain(executionContext, ctx => ctx.ExitCode);
         }
 
         public AppRunner<T> WithCustomHelpProvider(IHelpProvider customHelpProvider)
@@ -218,7 +219,7 @@ namespace CommandDotNet
 
         public AppRunner<T> UseInputTransformation(string name, int order, Func<TokenCollection, TokenCollection> transformation)
         {
-            _parserBuilder.AddInputTransformation(name, order, transformation);
+            _executionBuilder.AddInputTransformation(name, order, transformation);
             return this;
         }
     }

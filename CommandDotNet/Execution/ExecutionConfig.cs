@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
+using CommandDotNet.Parsing;
 
-namespace CommandDotNet.Parsing
+namespace CommandDotNet.Execution
 {
-    public class ParserConfig
+    public class ExecutionConfig
     {
         public ParserEvents Events { get; }
 
-        public ParserConfig(ExecutionResult executionResult)
+        public ExecutionConfig(ExecutionContext executionContext)
         {
-            Events = new ParserEvents(executionResult);
+            Events = new ParserEvents(executionContext);
         }
 
         internal IEnumerable<ExecutionMiddleware> MiddlewarePipeline { get; set; }

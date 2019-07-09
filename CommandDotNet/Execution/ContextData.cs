@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using CommandDotNet.Extensions;
 
-namespace CommandDotNet
+namespace CommandDotNet.Execution
 {
     internal class ContextData : IContextData
     {

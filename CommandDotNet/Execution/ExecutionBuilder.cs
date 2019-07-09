@@ -2,23 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using CommandDotNet.Extensions;
+using CommandDotNet.Parsing;
 
-namespace CommandDotNet.Parsing
+namespace CommandDotNet.Execution
 {
-    // TODO: return Task
-    public delegate int ExecutionMiddleware(
-        ExecutionResult context,
-        Func<ExecutionResult, int> next);
-
-    public enum MiddlewareStages
-    {
-        Configuration = 100,
-        Tokenize = Configuration + 100,
-        Parsing = Tokenize + 100,
-        Invocation = Parsing + 100,
-    }
-
-    internal class ParserBuilder
+    internal class ExecutionBuilder
     {
         private readonly List<(ExecutionMiddleware middleware, int order)> _middlewares = new List<(ExecutionMiddleware middleware, int order)>();
 
@@ -49,9 +37,9 @@ namespace CommandDotNet.Parsing
             _middlewares.Add((middleware, order));
         }
 
-        public ParserConfig Build(ExecutionResult executionResult)
+        public ExecutionConfig Build(ExecutionContext executionContext)
         {
-            return new ParserConfig(executionResult)
+            return new ExecutionConfig(executionContext)
             {
                 MiddlewarePipeline = _middlewares.OrderBy(m => m.order).Select(m => m.middleware).ToArray(),
                 InputTransformations = _inputTransformationsByName.Values.OrderBy(t => t.Order).ToArray()

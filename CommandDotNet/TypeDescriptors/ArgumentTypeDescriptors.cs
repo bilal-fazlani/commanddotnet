@@ -57,7 +57,7 @@ namespace CommandDotNet.TypeDescriptors
         {
             return GetDescriptor(type) ?? throw new ValueParsingException(
                        $"type : {type} is not supported. If it's an argument model, " +
-                       $"inherit from {nameof(IArgumentModel)}.  Otherwise, to support this type, " +
+                       $"inherit from {nameof(IArgumentModel)}. Otherwise, to support this type, " +
                        $"implement a {nameof(TypeConverter)} or {nameof(IArgumentTypeDescriptor)} " +
                        "or add a constructor with a single string parameter.");
         }
