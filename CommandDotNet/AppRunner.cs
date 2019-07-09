@@ -151,11 +151,11 @@ namespace CommandDotNet
         {
             if (_settings.EnableDirectives)
             {
-                _parserBuilder.AddMiddlewareInStage(DebugDirective.Execute, MiddlewareStages.Directives, 0);
-                _parserBuilder.AddMiddlewareInStage(ParseDirective.Execute, MiddlewareStages.Directives, 1);
+                _parserBuilder.AddMiddlewareInStage(DebugDirective.Execute, MiddlewareStages.Configuration, 0);
+                _parserBuilder.AddMiddlewareInStage(ParseDirective.Execute, MiddlewareStages.Tokenize, -2);
             }
 
-            _parserBuilder.AddMiddlewareInStage(TokenizerPipeline.Tokenize, MiddlewareStages.Tokenize);
+            _parserBuilder.AddMiddlewareInStage(TokenizerPipeline.Tokenize, MiddlewareStages.Tokenize, -1);
             _parserBuilder.AddMiddlewareInStage(ParseCommand, MiddlewareStages.Parsing);
             _parserBuilder.AddMiddlewareInStage(Execute, MiddlewareStages.Invocation);
 

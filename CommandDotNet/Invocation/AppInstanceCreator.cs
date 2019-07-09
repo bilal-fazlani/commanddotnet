@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using CommandDotNet.Builders;
 using CommandDotNet.ClassModeling;
 using CommandDotNet.Extensions;
@@ -38,7 +37,7 @@ namespace CommandDotNet.Invocation
             object instance = Activator.CreateInstance(type, mergedValues);
 
             //detect injection properties
-            List<PropertyInfo> properties = Enumerable.ToList<PropertyInfo>(type.GetDeclaredProperties<InjectPropertyAttribute>());
+            var properties = type.GetDeclaredProperties<InjectPropertyAttribute>().ToList();
             
             if (properties.Any())
             {
