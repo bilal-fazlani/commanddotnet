@@ -62,7 +62,9 @@ namespace CommandDotNet.Parsing
                 inputs = new List<string>{ Console.ReadLine() };
             }
 
-            operandInfo.ValueInfo.Values = inputs;
+            var values = operandInfo.ValueInfo.Values;
+            values.Clear();
+            values.AddRange(inputs);
         }
     }
 }

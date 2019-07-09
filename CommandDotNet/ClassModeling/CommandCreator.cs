@@ -98,7 +98,6 @@ namespace CommandDotNet.ClassModeling
                 operandInfo.DefaultValue,
                 operandInfo.AllowedValues);
             operand.ContextData.Set<ArgumentInfo>(operandInfo);
-            operandInfo.SetValueInfo(operand, operand.SetValues);
         }
 
         private static void SetValueForOption(OptionArgumentInfo optionInfo, Command command)
@@ -111,7 +110,6 @@ namespace CommandDotNet.ClassModeling
                 optionInfo.DefaultValue,
                 optionInfo.AllowedValues);
             option.ContextData.Set<ArgumentInfo>(optionInfo);
-            optionInfo.SetValueInfo(option, option.SetValues);
         }
 
         private IEnumerable<ArgumentInfo> GetOptionValuesForConstructor()

@@ -53,8 +53,7 @@ namespace CommandDotNet.ClassModeling
 
         protected AppSettings Settings { get; }
         protected ICustomAttributeProvider AttributeProvider { get; }
-
-
+        
         public string Name { get; protected set; }
         public string Description { get; protected set; }
 
@@ -73,18 +72,13 @@ namespace CommandDotNet.ClassModeling
         public string PropertyOrParameterName { get; }
         public bool IsPartOfModel { get; }
         public Type ModelType { get; }
-        internal ValueInfo ValueInfo { get; private set; }
-        
+        internal ValueInfo ValueInfo { get; } = new ValueInfo();
+
         public string TypeDisplayName => _typeDescriptor.GetDisplayName(this);
 
         public List<string> AllowedValues => (_typeDescriptor as IAllowedValuesTypeDescriptor)
             ?.GetAllowedValues(this)
             .ToList();
-
-        internal void SetValueInfo(IArgument argument, Action<List<string>> setValues)
-        {
-            ValueInfo = new ValueInfo(argument, setValues);
-        }
 
         private static object GetDefaultValue(PropertyInfo propertyInfo)
         {

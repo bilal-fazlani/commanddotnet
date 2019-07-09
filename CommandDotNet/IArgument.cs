@@ -8,7 +8,6 @@ namespace CommandDotNet
         IArgumentArity Arity { get; }
         object DefaultValue { get; }
         List<string> AllowedValues { get; }
-        List<string> Values { get; }
         IEnumerable<string> Aliases { get; }
 
         IContextData ContextData { get; }

@@ -42,7 +42,7 @@ namespace CommandDotNet.ClassModeling
 
         public override string ToString()
         {
-            return $"{Name} | '{ValueInfo?.Value ?? "empty"}' | {TypeDisplayName}";
+            return $"{nameof(OperandArgumentInfo)}:{Name} - {TypeDisplayName}";
         }
     }
 }

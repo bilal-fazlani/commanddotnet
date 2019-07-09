@@ -88,7 +88,7 @@ namespace CommandDotNet.ClassModeling
         
         public override string ToString()
         {
-            return $"{PropertyOrParameterName} | '{ValueInfo?.Value ?? "empty"}' | {TypeDisplayName} | {Template}";
+            return $"{nameof(OptionArgumentInfo)}:{PropertyOrParameterName} - {TypeDisplayName} - {Template}";
         }
     }
 }
