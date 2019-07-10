@@ -158,7 +158,9 @@ namespace CommandDotNet
 
             _executionBuilder.AddMiddlewareInStage(TokenizerPipeline.Tokenize, MiddlewareStages.Tokenize, -1);
             _executionBuilder.AddMiddlewareInStage(ParseCommand, MiddlewareStages.Parsing);
-            _executionBuilder.AddMiddlewareInStage(Execute, MiddlewareStages.Invocation);
+            _executionBuilder.AddMiddlewareInStage(HelpOptionSource.HelpMiddleware, MiddlewareStages.Invocation, 100);
+            _executionBuilder.AddMiddlewareInStage(VersionOptionSource.VersionMiddleware, MiddlewareStages.Invocation, 200);
+            _executionBuilder.AddMiddlewareInStage(CommandRunner.Execute, MiddlewareStages.Invocation, 300);
 
             var tokens = args.Tokenize(includeDirectives: _settings.EnableDirectives);
             var executionResult = new ExecutionContext(args, tokens, _settings);
@@ -173,11 +175,6 @@ namespace CommandDotNet
             Command rootCommand = appCreator.CreateRootCommand(typeof(T), DependencyResolver);
             new CommandParser(_settings).ParseCommand(executionContext, rootCommand);
             return next(executionContext);
-        }
-
-        private int Execute(ExecutionContext executionContext, Func<ExecutionContext, int> next)
-        {
-            return ((Command) executionContext.ParseResult.Command).Execute();
         }
 
         private static int InvokeMiddleware(ExecutionContext executionContext)

@@ -50,16 +50,6 @@ namespace CommandDotNet.Parsing
                         switch (optionResult)
                         {
                             case ParseOptionResult.Succeeded:
-                                if (currentOption?.InvokeAsCommand != null)
-                                {
-                                    currentOption.InvokeAsCommand();
-                                    executionContext.ParseResult = new ParseResult(
-                                        currentCommand, 
-                                        null, 
-                                        argumentValues.Values.ToList().AsReadOnly());
-                                    executionContext.ShouldExitWithCode(0);
-                                    return;
-                                }
                                 break;
                             case ParseOptionResult.UnknownOption:
                                 remainingArguments.Add(token.Value);
@@ -191,10 +181,6 @@ namespace CommandDotNet.Parsing
                 return ParseOptionResult.UnknownOption;
             }
 
-            if (option.IsSystemOption)
-            {
-                return ParseOptionResult.Succeeded;
-            }
             if (optionTokenType.IsClubbed)
             {
                 throw new AppRunnerException($"ExpandClubbedOptions transformation should have expanded all clubbed tokens: {token}");

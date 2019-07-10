@@ -7,7 +7,7 @@ namespace CommandDotNet.Parsing
     public class ParseResult
     {
         public ICommand Command { get; }
-        public ReadOnlyCollection<ArgumentValues> Values { get; set; }
+        public IReadOnlyCollection<ArgumentValues> Values { get; set; }
         public IReadOnlyCollection<string> RemainingArguments { get; }
 
         public ParseResult(ICommand command,

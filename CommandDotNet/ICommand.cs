@@ -12,6 +12,7 @@ namespace CommandDotNet
         IEnumerable<IOption> GetOptions(bool includeInherited = true);
 
         ICustomAttributeProvider CustomAttributeProvider { get; }
+        IContextData ContextData { get; }
         IOption FindOption(string alias);
     }
 }

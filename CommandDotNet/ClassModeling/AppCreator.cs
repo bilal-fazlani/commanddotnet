@@ -19,7 +19,7 @@ namespace CommandDotNet.ClassModeling
 
             _optionSources = new IOptionSource[]
             {
-                new HelpOptionSource(_appSettings),
+                new HelpOptionSource(),
                 new VersionOptionSource(_appSettings)
             };
         }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Builders;
 using CommandDotNet.ClassModeling;
+using CommandDotNet.Execution;
 using CommandDotNet.Parsing;
 
 namespace CommandDotNet.Invocation
@@ -32,14 +34,22 @@ namespace CommandDotNet.Invocation
             _appInstanceCreator = new AppInstanceCreator(appSettings);
         }
 
-        public async Task<int> RunCommand(
-            CommandInfo commandInfo,
-            List<ArgumentInfo> parameterValues)
+
+        internal static int Execute(ExecutionContext executionContext, Func<ExecutionContext, int> next)
         {
-            parameterValues = parameterValues ?? new List<ArgumentInfo>();
+            var command = executionContext.ParseResult.Command;
+            var commandInfo = command.ContextData.Get<CommandInfo>();
+            var commandRunner = command.ContextData.Get<CommandRunner>();
+
+            return commandRunner.RunCommand(commandInfo).Result;
+        }
+
+        private async Task<int> RunCommand(CommandInfo commandInfo)
+        {
+            var argumentInfos = commandInfo.Arguments.ToList();
 
             //get values for method invocation
-            object[] mergedParameters = _argumentMerger.Merge(parameterValues);
+            object[] mergedParameters = _argumentMerger.Merge(argumentInfos);
                 
             //validate all parameters
             foreach (dynamic param in mergedParameters)
@@ -55,7 +65,7 @@ namespace CommandDotNet.Invocation
                 CommandInfo = commandInfo,
                 ParamsForCommandMethod = mergedParameters,
                 Instance = instance,
-                ArgsFromCli = parameterValues
+                ArgsFromCli = argumentInfos
             };
 
             object returnedObject = _appSettings.CommandInvoker.Invoke(commandInvocation);

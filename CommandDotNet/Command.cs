@@ -1,12 +1,11 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using CommandDotNet.Builders;
+using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 
 namespace CommandDotNet
@@ -14,7 +13,6 @@ namespace CommandDotNet
     internal class Command : ICommand, ICommandBuilder
     {
         private readonly AppSettings _appSettings;
-        private Func<int> _invoke;
         private readonly List<IOption> _options = new List<IOption>();
         private readonly List<IOperand> _operands = new List<IOperand>();
         private readonly List<ICommand> _commands = new List<ICommand>();
@@ -31,7 +29,6 @@ namespace CommandDotNet
             Name = name;
             CustomAttributeProvider = customAttributeProvider;
             Parent = parent;
-            _invoke = () => 0;
         }
 
         public string Name { get; }
@@ -42,7 +39,8 @@ namespace CommandDotNet
         public ICommand Parent { get; }
         public IEnumerable<ICommand> Commands => _commands;
         public ICustomAttributeProvider CustomAttributeProvider { get; }
-        
+        public IContextData ContextData { get; } = new ContextData();
+
         public IEnumerable<IOption> GetOptions(bool includeInherited = true)
         {
             return includeInherited
@@ -113,16 +111,6 @@ namespace CommandDotNet
             {
                 _options.Add(option);
             }
-        }
-
-        public void OnExecute(Func<Task<int>> invoke)
-        {
-            _invoke = () => invoke().Result;
-        }
-        
-        public int Execute()
-        {
-            return _invoke();
         }
 
         public IOption FindOption(string alias)

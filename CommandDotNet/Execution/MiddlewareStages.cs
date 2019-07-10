@@ -2,9 +2,9 @@
 {
     public enum MiddlewareStages
     {
-        Configuration = 100,
-        Tokenize = Configuration + 100,
-        Parsing = Tokenize + 100,
-        Invocation = Parsing + 100,
+        Configuration = 1000,
+        Tokenize = Configuration + 1000,
+        Parsing = Tokenize + 1000,
+        Invocation = Parsing + 1000,
     }
 }

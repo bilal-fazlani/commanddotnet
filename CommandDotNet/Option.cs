@@ -39,7 +39,6 @@ namespace CommandDotNet
 
         /// <summary>True when option is help or version</summary>
         public bool IsSystemOption { get; set; }
-        public Action InvokeAsCommand { get; set; }
 
         public IEnumerable<string> Aliases
         {

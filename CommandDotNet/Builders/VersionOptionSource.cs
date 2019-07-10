@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using CommandDotNet.Execution;
 
 namespace CommandDotNet.Builders
 {
     internal class VersionOptionSource : IOptionSource
     {
-        public const string VersionTemplate = "-v | --version";
+        private const string VersionOptionName = "version";
+        private const string VersionTemplate = "-v | --" + VersionOptionName;
 
         private readonly AppSettings _appSettings;
 
@@ -25,14 +28,25 @@ namespace CommandDotNet.Builders
                     Description = "Show version information",
                     TypeDisplayName = Constants.TypeDisplayNames.Flag,
                     IsSystemOption = true,
-                    InvokeAsCommand = () => Print(_appSettings)
+                    Arity = ArgumentArity.Zero
                 };
 
                 commandBuilder.AddArgument(option);
             }
         }
-        
-        public static void Print(AppSettings appSettings)
+
+        internal static int VersionMiddleware(ExecutionContext executionContext, Func<ExecutionContext, int> next)
+        {
+            if (executionContext.ParseResult.Values.Any(v => v.Argument.Name == VersionOptionName))
+            {
+                Print(executionContext.AppSettings);
+                return 0;
+            }
+
+            return next(executionContext);
+        }
+
+        private static void Print(AppSettings appSettings)
         {
             if (!appSettings.EnableVersionOption)
             {

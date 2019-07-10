@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Builders;
+using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Invocation;
 
@@ -42,11 +43,6 @@ namespace CommandDotNet.ClassModeling
             else
             {
                 ConfigureMetadata(_command, applicationMetadata);
-                _command.OnExecute(() =>
-                {
-                    HelpOptionSource.Print(_settings, _command);
-                    return Task.FromResult(0);
-                });
             }
         }
 
@@ -69,26 +65,27 @@ namespace CommandDotNet.ClassModeling
 
         private void ConfigureCommand(Command command, CommandInfo commandInfo)
         {
-            List<ArgumentInfo> argumentValues = new List<ArgumentInfo>();
+            List<ArgumentInfo> argumentInfos = new List<ArgumentInfo>();
 
             foreach (ArgumentInfo argument in commandInfo.Arguments)
             {
-                argumentValues.Add(argument);
+                argumentInfos.Add(argument);
                 switch (argument)
                 {
                     case OptionArgumentInfo option:
-                        SetValueForOption(option, command);
+                        AddOption(option, command);
                         break;
                     case OperandArgumentInfo operand:
-                        SetValueForOperand(operand, command);
+                        AddOperand(operand, command);
                         break;
                 }
             }
 
-            command.OnExecute(async () => await _commandRunner.RunCommand(commandInfo, argumentValues));
+            command.ContextData.Add(commandInfo);
+            command.ContextData.Add(_commandRunner);
         }
 
-        private static void SetValueForOperand(OperandArgumentInfo operandInfo, Command command)
+        private static void AddOperand(OperandArgumentInfo operandInfo, Command command)
         {
             var operand = command.AddOperand(
                 operandInfo.Name,
@@ -100,7 +97,7 @@ namespace CommandDotNet.ClassModeling
             operand.ContextData.Set<ArgumentInfo>(operandInfo);
         }
 
-        private static void SetValueForOption(OptionArgumentInfo optionInfo, Command command)
+        private static void AddOption(OptionArgumentInfo optionInfo, Command command)
         {
             var option = command.AddOption(optionInfo.Template,
                 optionInfo.Description,
@@ -124,7 +121,7 @@ namespace CommandDotNet.ClassModeling
             
             argumentInfos
                 .Cast<OptionArgumentInfo>()
-                .ForEach(o => SetValueForOption(o, _command));
+                .ForEach(o => AddOption(o, _command));
             
             return argumentInfos;
         }
