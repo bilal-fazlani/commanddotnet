@@ -163,23 +163,23 @@ namespace CommandDotNet
             _executionBuilder.AddMiddlewareInStage(CommandRunner.InvokeMiddleware, MiddlewareStages.Invocation, 300);
 
             var tokens = args.Tokenize(includeDirectives: _settings.EnableDirectives);
-            var executionResult = new ExecutionContext(args, tokens, _settings);
+            var executionResult = new CommandContext(args, tokens, _settings);
             executionResult.ExecutionConfig = _executionBuilder.Build(executionResult);
 
             return InvokeMiddleware(executionResult);
         }
 
-        private int ParseMiddleware(ExecutionContext executionContext, Func<ExecutionContext, int> next)
+        private int ParseMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
         {
             AppCreator appCreator = new AppCreator(_settings);
             Command rootCommand = appCreator.CreateRootCommand(typeof(T), DependencyResolver);
-            new CommandParser(_settings).ParseCommand(executionContext, rootCommand);
-            return next(executionContext);
+            new CommandParser(_settings).ParseCommand(commandContext, rootCommand);
+            return next(commandContext);
         }
 
-        private static int InvokeMiddleware(ExecutionContext executionContext)
+        private static int InvokeMiddleware(CommandContext commandContext)
         {
-            var pipeline = executionContext.ExecutionConfig.MiddlewarePipeline;
+            var pipeline = commandContext.ExecutionConfig.MiddlewarePipeline;
 
             var middlewareChain = pipeline.Aggregate(
                 (first, second) =>
@@ -187,7 +187,7 @@ namespace CommandDotNet
                         first(ctx, c =>
                             ctx.ShouldExit ? ctx.ExitCode : second(c, next)));
 
-            return middlewareChain(executionContext, ctx => ctx.ExitCode);
+            return middlewareChain(commandContext, ctx => ctx.ExitCode);
         }
 
         public AppRunner<T> WithCustomHelpProvider(IHelpProvider customHelpProvider)

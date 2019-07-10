@@ -20,15 +20,15 @@ namespace CommandDotNet.Builders
             commandBuilder.AddArgument(option);
         }
         
-        internal static int HelpMiddleware(ExecutionContext executionContext, Func<ExecutionContext, int> next)
+        internal static int HelpMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
         {
-            if (executionContext.ParseResult.Values.Any(v => v.Argument.Name == Constants.HelpArgumentTemplate.Name))
+            if (commandContext.ParseResult.Values.Any(v => v.Argument.Name == Constants.HelpArgumentTemplate.Name))
             {
-                Print(executionContext.AppSettings, executionContext.ParseResult.Command);
+                Print(commandContext.AppSettings, commandContext.ParseResult.Command);
                 return 0;
             }
 
-            return next(executionContext);
+            return next(commandContext);
         }
 
         public static void Print(AppSettings appSettings, ICommand command)

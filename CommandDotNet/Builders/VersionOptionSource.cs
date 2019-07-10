@@ -35,15 +35,15 @@ namespace CommandDotNet.Builders
             }
         }
 
-        internal static int VersionMiddleware(ExecutionContext executionContext, Func<ExecutionContext, int> next)
+        internal static int VersionMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
         {
-            if (executionContext.ParseResult.Values.Any(v => v.Argument.Name == VersionOptionName))
+            if (commandContext.ParseResult.Values.Any(v => v.Argument.Name == VersionOptionName))
             {
-                Print(executionContext.AppSettings);
+                Print(commandContext.AppSettings);
                 return 0;
             }
 
-            return next(executionContext);
+            return next(commandContext);
         }
 
         private static void Print(AppSettings appSettings)

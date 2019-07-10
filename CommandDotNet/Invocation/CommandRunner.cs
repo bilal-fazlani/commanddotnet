@@ -35,9 +35,9 @@ namespace CommandDotNet.Invocation
         }
 
 
-        internal static int InvokeMiddleware(ExecutionContext executionContext, Func<ExecutionContext, int> next)
+        internal static int InvokeMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
         {
-            var command = executionContext.ParseResult.Command;
+            var command = commandContext.ParseResult.Command;
             var commandInfo = command.ContextData.Get<CommandInfo>();
             var commandRunner = command.ContextData.Get<CommandRunner>();
 

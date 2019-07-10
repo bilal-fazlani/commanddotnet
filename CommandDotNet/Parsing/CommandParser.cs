@@ -17,7 +17,7 @@ namespace CommandDotNet.Parsing
             _appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
         }
 
-        public void ParseCommand(ExecutionContext executionContext, ICommand command)
+        public void ParseCommand(CommandContext commandContext, ICommand command)
         {
             bool ignoreRemainingArguments = false;
             var remainingArguments = new List<string>();
@@ -39,7 +39,7 @@ namespace CommandDotNet.Parsing
                 return argValue.Values;
             }
 
-            foreach (var token in executionContext.Tokens.Arguments)
+            foreach (var token in commandContext.Tokens.Arguments)
             {
                 switch (token.TokenType)
                 {
@@ -92,13 +92,13 @@ namespace CommandDotNet.Parsing
                 }
             }
 
-            remainingArguments.AddRange(executionContext.Tokens.Separated.Select(t => t.RawValue));
+            remainingArguments.AddRange(commandContext.Tokens.Separated.Select(t => t.RawValue));
 
             if (currentOption != null) // an option was left without a value
             {
                 throw new CommandParsingException(currentCommand, $"Missing value for option '{currentOption.Name}'");
             }
-            executionContext.ParseResult = new ParseResult(
+            commandContext.ParseResult = new ParseResult(
                 currentCommand, 
                 remainingArguments.AsReadOnly(), 
                 argumentValues.Values.ToList().AsReadOnly());

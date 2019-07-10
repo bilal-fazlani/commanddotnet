@@ -10,12 +10,12 @@ namespace CommandDotNet.Directives
     internal static class ParseDirective
     {
         // adapted from https://github.com/dotnet/command-line-api directives
-        public static int ParseMiddleware(ExecutionContext executionContext, Func<ExecutionContext, int> next)
+        public static int ParseMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
         {
-            if (executionContext.Tokens.TryGetDirective("parse", out string value))
+            if (commandContext.Tokens.TryGetDirective("parse", out string value))
             {
-                var parserContext = executionContext.ExecutionConfig;
-                var consoleOut = executionContext.AppSettings.Out;
+                var parserContext = commandContext.ExecutionConfig;
+                var consoleOut = commandContext.AppSettings.Out;
 
                 var parts = value.Split(":".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 var verbose = parts.Length > 1 && parts[1].Equals("verbose", StringComparison.OrdinalIgnoreCase);
@@ -25,7 +25,7 @@ namespace CommandDotNet.Directives
                     consoleOut.WriteLine("use [parse:verbose] to see results after each transformation");
                 }
 
-                ReportTransformation(consoleOut, executionContext.Tokens, ">>> from shell");
+                ReportTransformation(consoleOut, commandContext.Tokens, ">>> from shell");
 
                 if (verbose)
                 {
@@ -54,7 +54,7 @@ namespace CommandDotNet.Directives
                 parserContext.Events.OnTokenizationCompleted += ctx => ctx.ShouldExitWithCode(0);
             }
 
-            return next(executionContext);
+            return next(commandContext);
         }
 
         private static void ReportTransformation(TextWriter consoleOut, TokenCollection args, string description)

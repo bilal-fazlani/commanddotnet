@@ -14,15 +14,15 @@ namespace CommandDotNet.Directives
         internal static bool InTestHarness { private get; set; }
 
         // adapted from https://github.com/dotnet/command-line-api directives
-        public static int DebugMiddleware(ExecutionContext executionContext, Func<ExecutionContext, int> next)
+        public static int DebugMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
         {
-            if (executionContext.Tokens.TryGetDirective("debug", out string value))
+            if (commandContext.Tokens.TryGetDirective("debug", out string value))
             {
                 var process = Process.GetCurrentProcess();
 
                 var processId = process.Id;
 
-                executionContext.AppSettings.Out.WriteLine($"Attach your debugger to process {processId} ({process.ProcessName}).");
+                commandContext.AppSettings.Out.WriteLine($"Attach your debugger to process {processId} ({process.ProcessName}).");
 
                 while (!InTestHarness && !Debugger.IsAttached)
                 {
@@ -30,7 +30,7 @@ namespace CommandDotNet.Directives
                 }
             }
 
-            return next(executionContext);
+            return next(commandContext);
         }
     }
 }

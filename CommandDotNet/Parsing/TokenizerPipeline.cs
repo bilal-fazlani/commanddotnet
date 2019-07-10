@@ -6,13 +6,13 @@ namespace CommandDotNet.Parsing
 {
     internal static class TokenizerPipeline
     {
-        public static int TokenizeMiddleware(ExecutionContext executionContext, Func<ExecutionContext, int> next)
+        public static int TokenizeMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
         {
-            InsertSystemTransformations(executionContext.ExecutionConfig);
-            executionContext.Tokens = ApplyInputTransformations(executionContext.Tokens, executionContext.ExecutionConfig);
-            executionContext.ExecutionConfig.Events.TokenizationCompleted();
+            InsertSystemTransformations(commandContext.ExecutionConfig);
+            commandContext.Tokens = ApplyInputTransformations(commandContext.Tokens, commandContext.ExecutionConfig);
+            commandContext.ExecutionConfig.Events.TokenizationCompleted();
 
-            return next(executionContext);
+            return next(commandContext);
         }
 
         private static TokenCollection ApplyInputTransformations(TokenCollection tokens, ExecutionConfig executionConfig)

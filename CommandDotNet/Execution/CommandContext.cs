@@ -2,7 +2,7 @@
 
 namespace CommandDotNet.Execution
 {
-    public class ExecutionContext
+    public class CommandContext
     {
         public bool ShouldExit { get; private set; }
         public int ExitCode { get; private set; }
@@ -19,7 +19,7 @@ namespace CommandDotNet.Execution
 
         public IContextData ContextData { get; } = new ContextData();
 
-        public ExecutionContext(string[] originalArgs, TokenCollection originalTokens, AppSettings appSettings)
+        public CommandContext(string[] originalArgs, TokenCollection originalTokens, AppSettings appSettings)
         {
             Original = new OriginalInput(originalArgs, originalTokens);
             Tokens = originalTokens;

@@ -7,9 +7,9 @@ namespace CommandDotNet.Execution
     {
         public ParserEvents Events { get; }
 
-        public ExecutionConfig(ExecutionContext executionContext)
+        public ExecutionConfig(CommandContext commandContext)
         {
-            Events = new ParserEvents(executionContext);
+            Events = new ParserEvents(commandContext);
         }
 
         internal IEnumerable<ExecutionMiddleware> MiddlewarePipeline { get; set; }

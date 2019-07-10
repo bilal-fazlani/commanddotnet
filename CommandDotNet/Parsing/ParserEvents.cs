@@ -5,30 +5,30 @@ namespace CommandDotNet.Parsing
 {
     public class ParserEvents
     {
-        private readonly ExecutionContext _executionContext;
+        private readonly CommandContext _commandContext;
 
 
         public event Action<(
-            ExecutionContext executionResult,
+            CommandContext executionResult,
             InputTransformation transformation,
             TokenCollection pre,
             TokenCollection post)> OnInputTransformation;
 
-        public event Action<ExecutionContext> OnTokenizationCompleted;
+        public event Action<CommandContext> OnTokenizationCompleted;
 
-        public ParserEvents(ExecutionContext executionContext)
+        public ParserEvents(CommandContext commandContext)
         {
-            _executionContext = executionContext;
+            _commandContext = commandContext;
         }
 
         internal void InputTransformation(InputTransformation transformation, TokenCollection pre, TokenCollection post)
         {
-            OnInputTransformation?.Invoke((_executionContext, transformation, pre, post));
+            OnInputTransformation?.Invoke((_commandContext, transformation, pre, post));
         }
 
         internal void TokenizationCompleted()
         {
-            OnTokenizationCompleted?.Invoke(_executionContext);
+            OnTokenizationCompleted?.Invoke(_commandContext);
         }
     }
 }
