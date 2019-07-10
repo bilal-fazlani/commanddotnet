@@ -6,3 +6,6 @@ output
 CommandDotNet.sln.DotSettings.user
 .vs/
 *.ncrunchsolution.user
+public
+docs/_build/
+documentation/
