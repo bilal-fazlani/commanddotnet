@@ -10,7 +10,7 @@ namespace CommandDotNet.Directives
     internal static class ParseDirective
     {
         // adapted from https://github.com/dotnet/command-line-api directives
-        public static int Execute(ExecutionContext executionContext, Func<ExecutionContext, int> next)
+        public static int ParseMiddleware(ExecutionContext executionContext, Func<ExecutionContext, int> next)
         {
             if (executionContext.Tokens.TryGetDirective("parse", out string value))
             {

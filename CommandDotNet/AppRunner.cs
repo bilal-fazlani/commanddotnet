@@ -152,15 +152,15 @@ namespace CommandDotNet
         {
             if (_settings.EnableDirectives)
             {
-                _executionBuilder.AddMiddlewareInStage(DebugDirective.Execute, MiddlewareStages.Configuration, 0);
-                _executionBuilder.AddMiddlewareInStage(ParseDirective.Execute, MiddlewareStages.Tokenize, -2);
+                _executionBuilder.AddMiddlewareInStage(DebugDirective.DebugMiddleware, MiddlewareStages.Configuration, 0);
+                _executionBuilder.AddMiddlewareInStage(ParseDirective.ParseMiddleware, MiddlewareStages.Tokenize, -2);
             }
 
-            _executionBuilder.AddMiddlewareInStage(TokenizerPipeline.Tokenize, MiddlewareStages.Tokenize, -1);
-            _executionBuilder.AddMiddlewareInStage(ParseCommand, MiddlewareStages.Parsing);
+            _executionBuilder.AddMiddlewareInStage(TokenizerPipeline.TokenizeMiddleware, MiddlewareStages.Tokenize, -1);
+            _executionBuilder.AddMiddlewareInStage(ParseMiddleware, MiddlewareStages.Parsing);
             _executionBuilder.AddMiddlewareInStage(HelpOptionSource.HelpMiddleware, MiddlewareStages.Invocation, 100);
             _executionBuilder.AddMiddlewareInStage(VersionOptionSource.VersionMiddleware, MiddlewareStages.Invocation, 200);
-            _executionBuilder.AddMiddlewareInStage(CommandRunner.Execute, MiddlewareStages.Invocation, 300);
+            _executionBuilder.AddMiddlewareInStage(CommandRunner.InvokeMiddleware, MiddlewareStages.Invocation, 300);
 
             var tokens = args.Tokenize(includeDirectives: _settings.EnableDirectives);
             var executionResult = new ExecutionContext(args, tokens, _settings);
@@ -169,7 +169,7 @@ namespace CommandDotNet
             return InvokeMiddleware(executionResult);
         }
 
-        private int ParseCommand(ExecutionContext executionContext, Func<ExecutionContext, int> next)
+        private int ParseMiddleware(ExecutionContext executionContext, Func<ExecutionContext, int> next)
         {
             AppCreator appCreator = new AppCreator(_settings);
             Command rootCommand = appCreator.CreateRootCommand(typeof(T), DependencyResolver);
