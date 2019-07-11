@@ -65,4 +65,4 @@ extra:
     - type: 'linkedin'
       link: 'https://www.linkedin.com/in/bilal-fazlani/'
   
-extra_css: [css/superfences.css]
+extra_css: ['commanddotnet/superfences.css', 'superfences.css']
