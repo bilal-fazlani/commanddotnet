@@ -4,7 +4,7 @@ namespace CommandDotNet
 {
     public interface IArgument: INameAndDescription
     {
-        string TypeDisplayName { get; }
+        ITypeInfo TypeInfo { get; }
         IArgumentArity Arity { get; }
         object DefaultValue { get; }
         List<string> AllowedValues { get; }

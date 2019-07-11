@@ -103,6 +103,7 @@ namespace CommandDotNet.ClassModeling
         private static void AddOperand(OperandArgumentInfo operandInfo, Command command)
         {
             var operand = command.AddOperand(
+                operandInfo.Type,
                 operandInfo.Name,
                 operandInfo.Description,
                 operandInfo.Arity,
@@ -114,7 +115,9 @@ namespace CommandDotNet.ClassModeling
 
         private static void AddOption(OptionArgumentInfo optionInfo, Command command)
         {
-            var option = command.AddOption(optionInfo.Template,
+            var option = command.AddOption(
+                optionInfo.Type, 
+                optionInfo.Template,
                 optionInfo.Description,
                 optionInfo.Arity,
                 optionInfo.Inherited,

@@ -114,16 +114,16 @@ namespace CommandDotNet.Help
 
                 var helpValues = options.Select(a =>
                 {
-                    var allowedValues = a.TypeDisplayName.IsNullOrEmpty() || a.AllowedValues == null || !a.AllowedValues.Any()
+                    var allowedValues = a.TypeInfo.DisplayName.IsNullOrEmpty() || a.AllowedValues == null || !a.AllowedValues.Any()
                         ? null
                         : $"{Environment.NewLine}  Allowed values: {a.AllowedValues.ToCsv(", ")}";
 
                     return new ArgumentHelpValues
                     {
                         Template = $"{a.Template}{(a.Arity.AllowsZeroOrMore() ? " (Multiple)" : "")}",
-                        DisplayName = a.TypeDisplayName.IsNullOrEmpty()
+                        DisplayName = a.TypeInfo.DisplayName.IsNullOrEmpty()
                             ? null
-                            : $"<{a.TypeDisplayName.ToUpperInvariant()}>",
+                            : $"<{a.TypeInfo.DisplayName.ToUpperInvariant()}>",
                         DefaultValue = GetDefaultValueString(a.DefaultValue),
                         Description = a.Description.IsNullOrEmpty()
                             ? null
@@ -155,14 +155,14 @@ namespace CommandDotNet.Help
                     new ArgumentHelpValues
                     {
                         Template = $"{a.Name}{(a.Arity.AllowsZeroOrMore() ? " (Multiple)" : "")}",
-                        DisplayName = a.TypeDisplayName.IsNullOrEmpty()
+                        DisplayName = a.TypeInfo.DisplayName.IsNullOrEmpty()
                             ? null
-                            : $"<{a.TypeDisplayName.ToUpperInvariant()}>",
+                            : $"<{a.TypeInfo.DisplayName.ToUpperInvariant()}>",
                         DefaultValue = GetDefaultValueString(a.DefaultValue),
                         Description = a.Description.IsNullOrEmpty()
                             ? null
                             : $"{Environment.NewLine}  {a.Description}",
-                        AllowedValues = a.TypeDisplayName.IsNullOrEmpty() || a.AllowedValues == null || !a.AllowedValues.Any()
+                        AllowedValues = a.TypeInfo.DisplayName.IsNullOrEmpty() || a.AllowedValues == null || !a.AllowedValues.Any()
                             ? null
                             : $"{Environment.NewLine}  Allowed values: {a.AllowedValues.ToCsv(", ")}"
                     }).ToList();

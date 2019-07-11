@@ -12,7 +12,12 @@ namespace CommandDotNet.Builders
             var option = new Option(Constants.HelpTemplate, ArgumentArity.Zero)
             {
                 Description = "Show help information",
-                TypeDisplayName = Constants.TypeDisplayNames.Flag,
+                TypeInfo = new TypeInfo
+                {
+                    Type = typeof(bool),
+                    UnderlyingType = typeof(bool),
+                    DisplayName = Constants.TypeDisplayNames.Flag
+                },
                 IsSystemOption = true,
                 Arity = ArgumentArity.Zero
             };

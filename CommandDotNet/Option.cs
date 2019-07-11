@@ -19,13 +19,14 @@ namespace CommandDotNet
             Name = argumentTemplate.Name;
             ShortName = argumentTemplate.ShortName;
             SymbolName = argumentTemplate.SymbolName;
-            TypeDisplayName = argumentTemplate.TypeDisplayName;
+            TypeInfo = new TypeInfo {DisplayName = argumentTemplate.TypeDisplayName};
         }
 
         public string Name { get; set; }
         public string Description { get; set; }
+        
+        public ITypeInfo TypeInfo { get; set; }
 
-        public string TypeDisplayName { get; set; }
         public IArgumentArity Arity { get; set; }
         public object DefaultValue { get; set; } = DBNull.Value;
         public List<string> AllowedValues { get; set; }
@@ -59,7 +60,7 @@ namespace CommandDotNet
 
         public override string ToString()
         {
-            return $"Option: {new ArgumentTemplate(Name, ShortName, SymbolName, TypeDisplayName)}";
+            return $"Option: {new ArgumentTemplate(Name, ShortName, SymbolName, TypeInfo.DisplayName)}";
         }
     }
 }

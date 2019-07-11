@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -87,7 +88,7 @@ namespace CommandDotNet
             return command;
         }
 
-        internal Option AddOption(string template, string description, IArgumentArity arity, bool inherited,
+        internal Option AddOption(Type type, string template, string description, IArgumentArity arity, bool inherited,
             string typeDisplayName, object defaultValue, List<string> allowedValues, bool isSystemOption = false)
         {
             var option = new Option(template, arity)
@@ -95,7 +96,12 @@ namespace CommandDotNet
                 Description = description,
                 Inherited = inherited,
                 DefaultValue = defaultValue,
-                TypeDisplayName = typeDisplayName,
+                TypeInfo = new TypeInfo
+                {
+                    Type = type, 
+                    UnderlyingType = type.GetUnderlyingType(),
+                    DisplayName = typeDisplayName
+                },
                 AllowedValues = allowedValues,
                 IsSystemOption = isSystemOption
             };
@@ -104,7 +110,7 @@ namespace CommandDotNet
             return option;
         }
 
-        internal Operand AddOperand(
+        internal Operand AddOperand(Type type,
             string name, string description, IArgumentArity arity,
             string typeDisplayName, object defaultValue, List<string> allowedValues)
         {
@@ -113,7 +119,12 @@ namespace CommandDotNet
                 Name = name, 
                 Description = description, 
                 Arity = arity,
-                TypeDisplayName = typeDisplayName,
+                TypeInfo = new TypeInfo
+                {
+                    Type = type,
+                    UnderlyingType = type.GetUnderlyingType(),
+                    DisplayName = typeDisplayName
+                },
                 DefaultValue = defaultValue,
                 AllowedValues = allowedValues
             };
