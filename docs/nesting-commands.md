@@ -1,6 +1,6 @@
 You can nest commands. Let's take `git` for example
 
-`git` has a command called stash. When you execute `git stash`, it stashes all the chages. But stash has further commands like, `git stash pop`, `git stash list`, etc.
+`git` has a command called stash. When you execute `git stash`, it stashes all the changes. But stash has further commands like, `git stash pop`, `git stash list`, etc.
 
 Let's try and mimic the same behavior using CommandDotNet:
 
@@ -125,7 +125,7 @@ stash popped
 
 ***Alternative***
 
-If you like to store your sub commands as external .cs files, you can that too with `[SubCommand]` attribute.
+If you like to store your sub commands as external `.cs` files, you can that too with `[SubCommand]` attribute.
 
 ```c#
     [ApplicationMetadata(Description = "Stashes all changes when executed without any arguments")]

@@ -22,7 +22,8 @@ public void Subtract(int value1, int value2)
 }
 ```
 
-Note that when you use ApplicationMetadata attribute on a method, you can change the name of the command that is different from method name.
+!!! tip
+    When you use ApplicationMetadata attribute on a method, you can change the name of the command that is different from method name.
 
 ### SubCommand
 
@@ -59,7 +60,7 @@ Options:
 
 Every parameter in the method is argument by default. So if you wan't to turn a parameter into option instead of argument, use this attribute. See more info about parameters [here](#parameters)
 
-By default, the parameter names declared in method are the option names that appear in help. However you can change that. By convention, an option can have a short name and/or a longname.
+By default, the parameter names declared in method are the option names that appear in help. However you can change that. By convention, an option can have a short name and/or a long name.
 
 Let's see an example-
 

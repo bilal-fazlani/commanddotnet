@@ -34,6 +34,9 @@ google_analytics:
   - 'UA-39358317-3'
   - 'auto'
 
+markdown_extensions:
+  - admonition
+
 # Customization
 extra:
   disqus: 'command-dot-net'

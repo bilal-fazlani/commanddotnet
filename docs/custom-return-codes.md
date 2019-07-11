@@ -16,4 +16,5 @@ public int ReturnCode()
 
 So now when I call this method from console `dotnet example.dll return`, the command ends with an exit code of 5.
 
-**Note that your main method's return type should be int for this to work**
+!!! important
+    Main method's return type should be int for this to work

@@ -1,6 +1,20 @@
 ## Installation
 
-From nuget: https://www.nuget.org/packages/CommandDotNet
+CommandDotNet can be installed from [nuget.org](https://www.nuget.org/packages/CommandDotNet/)
+
+.NET CLI
+
+```bash
+dotnet add package CommandDotNet
+```
+
+Or
+
+Nuget Package Manager
+
+```bash
+Install-Package CommandDotNet
+```
 
 ## Let's build a calculator
 
