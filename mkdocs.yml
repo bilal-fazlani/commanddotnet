@@ -1,6 +1,7 @@
 site_name: CommandDotNet
 repo_name: 'bilal-fazlani/commanddotnet'
 repo_url: 'https://github.com/bilal-fazlani/commanddotnet'
+site_url: https://bilal-fazlani.github.io/commanddotnet
 nav:
     - Introduction: index.md
     - Getting Started: getting-started.md
