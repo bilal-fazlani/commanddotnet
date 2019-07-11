@@ -59,6 +59,8 @@
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
     
+      <link rel="stylesheet" href="../../css/superfences.css">
+    
     
   </head>
   
@@ -582,14 +584,13 @@
 <div class="codehilite"><pre><span></span><span class="k">new</span> <span class="n">AppSettings</span> <span class="p">{</span> <span class="n">EnableDirectives</span> <span class="p">=</span> <span class="k">true</span> <span class="p">}</span>
 </pre></div>
 
-
 <p>Directives must be the first argument and will be removed from further processing.</p>
 <h3 id="debug">Debug</h3>
 <p>Sometimes you just need to debug into a process and configuring the debug arguments in VS is too many extra steps.</p>
-<p>When you specify <code>[debug]</code>, the process id will output to the console and wait for you to attach your debugger.</p>
+<p>When you specify <code class="codehilite">[debug]</code>, the process id will output to the console and wait for you to attach your debugger.</p>
 <h3 id="parse">Parse</h3>
 <p>Rules for including spaces in arguments and escaping special characters differ from shell to shell.  Sometimes it's not clear why arguments aren't mapping correctly.</p>
-<p>When you specify <code>[parse]</code>, the process will exit immediately after printing each argument onto a new line.  This enables you to catch cases where the shell did not parse your arguments as expected.</p>
+<p>When you specify <code class="codehilite">[parse]</code>, the process will exit immediately after printing each argument onto a new line.  This enables you to catch cases where the shell did not parse your arguments as expected.</p>
                 
                   
                 

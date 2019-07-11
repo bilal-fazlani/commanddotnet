@@ -59,6 +59,8 @@
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
     
+      <link rel="stylesheet" href="../../css/superfences.css">
+    
     
   </head>
   
@@ -560,7 +562,7 @@
                 
                   <h1>Constructor Options</h1>
                 
-                <p>Let's say we want to add a class level field which is useful in both Addtion and Subtraction. So now the class looks something like this-</p>
+                <p>Let's say we want to add a class level field which is useful in both Addition and Subtraction. So now the class looks something like this-</p>
 <div class="codehilite"><pre><span></span><span class="k">public</span> <span class="k">class</span> <span class="nc">Calculator</span>
 <span class="p">{</span>
     <span class="k">private</span> <span class="k">readonly</span> <span class="kt">bool</span> <span class="n">_printValues</span><span class="p">;</span>
@@ -591,12 +593,10 @@
 <span class="p">}</span>
 </pre></div>
 
-
 <p>Let's see what the help command output looks like now</p>
 <p>INPUT</p>
 <div class="codehilite"><pre><span></span>dotnet example.dll --help
 </pre></div>
-
 
 <p>OUTPUT</p>
 <div class="codehilite"><pre><span></span>Usage: dotnet example.dll <span class="o">[</span>options<span class="o">]</span> <span class="o">[</span>command<span class="o">]</span>
@@ -612,20 +612,16 @@ Commands:
 Use <span class="s2">&quot;dotnet example.dll [command] --help&quot;</span> <span class="k">for</span> more information about a command.
 </pre></div>
 
-
 <p>Let's try and invoke it</p>
 <p>INPUT </p>
 <div class="codehilite"><pre><span></span>dotnet example.dll --printValues Subtract <span class="m">30</span> <span class="m">5</span>
 </pre></div>
 
-
 <p>OUTPUT</p>
-<div class="codehilite"><pre><span></span>value1 : <span class="m">30</span>, value2: <span class="m">5</span>
+<p><div class="codehilite"><pre><span></span>value1 : <span class="m">30</span>, value2: <span class="m">5</span>
 Answer: <span class="m">25</span>
 </pre></div>
-
-
-<p>Notes:</p>
+Notes:</p>
 <ul>
 <li>
 <p><strong>You can skip to pass any parameter. It will then fallback to the default value of parameter type</strong></p>
@@ -638,7 +634,7 @@ Answer: <span class="m">25</span>
 </li>
 </ul>
 <h3 id="inherited">Inherited</h3>
-<p><code>[Options]</code> attribute has a property called <code>Inherited</code>. This is particularly useful when used with constructor options. When set to true, that option is can be passed to commands as well.</p>
+<p><code class="codehilite">[Options]</code> attribute has a property called <code class="codehilite">Inherited</code>. This is particularly useful when used with constructor options. When set to true, that option is can be passed to commands as well.</p>
                 
                   
                 

@@ -59,6 +59,8 @@
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
     
+      <link rel="stylesheet" href="../../css/superfences.css">
+    
     
   </head>
   
@@ -480,8 +482,8 @@
                 
                   <h1>Nesting commands</h1>
                 
-                <p>You can nest commands. Let's take <code>git</code> for example</p>
-<p><code>git</code> has a command called stash. When you execute <code>git stash</code>, it stashes all the changes. But stash has further commands like, <code>git stash pop</code>, <code>git stash list</code>, etc.</p>
+                <p>You can nest commands. Let's take <code class="codehilite">git</code> for example</p>
+<p><code class="codehilite">git</code> has a command called stash. When you execute <code class="codehilite">git stash</code>, it stashes all the changes. But stash has further commands like, <code class="codehilite">git stash pop</code>, <code class="codehilite">git stash list</code>, etc.</p>
 <p>Let's try and mimic the same behavior using CommandDotNet:</p>
 <div class="codehilite"><pre><span></span><span class="na">[ApplicationMetadata(Description = &quot;Fake git application&quot;)]</span>
 <span class="k">public</span> <span class="k">class</span> <span class="nc">Git</span>
@@ -517,7 +519,6 @@
 <span class="p">}</span>
 </pre></div>
 
-
 <p>Here's how the help looks like now:</p>
 <div class="codehilite"><pre><span></span>Fake git application
 
@@ -533,34 +534,28 @@ Commands:
 Use <span class="s2">&quot;dotnet example.dll [command] --help&quot;</span> <span class="k">for</span> more information about a command.
 </pre></div>
 
-
 <p>Here's  how the interaction looks like:</p>
 <p>INPUT</p>
 <div class="codehilite"><pre><span></span>dotnet example.dll commit -m <span class="s2">&quot;some refactoring&quot;</span>
 </pre></div>
 
-
 <p>OUTPUT</p>
 <div class="codehilite"><pre><span></span>Commit successful
 </pre></div>
-
 
 <hr />
 <p>INPUT</p>
 <div class="codehilite"><pre><span></span>dotnet example.dll stash
 </pre></div>
 
-
 <p>OUTPUT</p>
 <div class="codehilite"><pre><span></span>changes stashed
 </pre></div>
-
 
 <hr />
 <p>INPUT</p>
 <div class="codehilite"><pre><span></span>dotnet example.dll stash --help
 </pre></div>
-
 
 <p>OUTPUT</p>
 <div class="codehilite"><pre><span></span>Stashes all changes when executed without any arguments
@@ -577,20 +572,17 @@ Commands:
 Use <span class="s2">&quot;Stash [command] --help&quot;</span> <span class="k">for</span> more information about a command.
 </pre></div>
 
-
 <hr />
 <p>INPUT</p>
 <div class="codehilite"><pre><span></span>dotnet example.dll stash pop
 </pre></div>
 
-
 <p>OUTPUT</p>
 <div class="codehilite"><pre><span></span>stash popped
 </pre></div>
 
-
 <p><strong><em>Alternative</em></strong></p>
-<p>If you like to store your sub commands as external <code>.cs</code> files, you can that too with <code>[SubCommand]</code> attribute.</p>
+<p>If you like to store your sub commands as external <code class="codehilite"><span class="na">.cs</span></code> files, you can that too with <code class="codehilite">[SubCommand]</code> attribute.</p>
 <div class="codehilite"><pre><span></span><span class="na">    [ApplicationMetadata(Description = &quot;Stashes all changes when executed without any arguments&quot;)]</span>
     <span class="k">public</span> <span class="k">class</span> <span class="nc">Stash</span>
     <span class="p">{</span>
@@ -601,7 +593,6 @@ Use <span class="s2">&quot;Stash [command] --help&quot;</span> <span class="k">f
         <span class="p">}</span>
     <span class="p">}</span>
 </pre></div>
-
 
 <div class="codehilite"><pre><span></span><span class="na">[ApplicationMetadata(Description = &quot;Fake git application&quot;)]</span>
 <span class="k">public</span> <span class="k">class</span> <span class="nc">Git</span>

@@ -59,6 +59,8 @@
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
     
+      <link rel="stylesheet" href="../../css/superfences.css">
+    
     
   </head>
   
@@ -562,25 +564,25 @@
                 
                 <p>Supports all types with a string constructor or where a TypeConverter is defined that can convert from a string.  Includes, but not limited to:</p>
 <ul>
-<li><code>string</code></li>
-<li><code>char</code></li>
-<li><code>bool</code></li>
-<li><code>enum</code></li>
-<li><code>short</code></li>
-<li><code>int</code></li>
-<li><code>long</code></li>
-<li><code>decimal</code></li>
-<li><code>double</code></li>
-<li><code>Guid</code></li>
-<li><code>Uri</code></li>
-<li><code>FileInfo</code></li>
-<li><code>DirectoryInfo</code></li>
+<li><code class="codehilite">string</code></li>
+<li><code class="codehilite">char</code></li>
+<li><code class="codehilite">bool</code></li>
+<li><code class="codehilite"><span class="k">enum</span></code></li>
+<li><code class="codehilite">short</code></li>
+<li><code class="codehilite">int</code></li>
+<li><code class="codehilite">long</code></li>
+<li><code class="codehilite">decimal</code></li>
+<li><code class="codehilite">double</code></li>
+<li><code class="codehilite">Guid</code></li>
+<li><code class="codehilite">Uri</code></li>
+<li><code class="codehilite">FileInfo</code></li>
+<li><code class="codehilite">DirectoryInfo</code></li>
 </ul>
-<p>Also supports <code>List&lt;T&gt;</code>, <code>IEnumerable&lt;T&gt;</code> and <code>Nullable&lt;T&gt;</code> where T can be converted from string.  Note: <code>T[]</code> is not supported.</p>
+<p>Also supports <code class="codehilite">List&lt;T&gt;</code>, <code class="codehilite">IEnumerable&lt;T&gt;</code> and <code class="codehilite">Nullable&lt;T&gt;</code> where T can be converted from string.  Note: <code class="codehilite">T[]</code> is not supported.</p>
 <p>These are applicable for both - Options and Arguments</p>
 <p>Note for arguments: 
-- There can be only one <code>List</code> argument in the method. It can be used with other non <code>List</code> type arguments or <code>List</code> type options.
-- If the method has a <code>List</code> type argument, it should be defined last in the order.</p>
+- There can be only one <code class="codehilite">List</code> argument in the method. It can be used with other non <code class="codehilite">List</code> type arguments or <code class="codehilite">List</code> type options.
+- If the method has a <code class="codehilite">List</code> type argument, it should be defined last in the order.</p>
 <h3 id="adding-support-for-new-types">Adding support for new types</h3>
 <p>In most cases, create a <a href="https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.typeconverter?view=netframework-4.8">TypeConverter</a> for your type</p>
 <p>If you need </p>
@@ -589,7 +591,7 @@
 <li>conditional logic based on argument metadata (custom attributes, etc)</li>
 <li>the converter only for parsing parameters and not the business logic of your application</li>
 </ul>
-<p>Implement <code>ITypedArgumentTypeDescriptor</code> or <code>IGenericArgumentTypeDescriptor</code> and register with <code>AppSettings.ArgumentTypeDescriptors.Register(...)</code>.</p>
+<p>Implement <code class="codehilite">ITypedArgumentTypeDescriptor</code> or <code class="codehilite">IGenericArgumentTypeDescriptor</code> and register with <code class="codehilite">AppSettings.ArgumentTypeDescriptors.Register(...)</code>.</p>
                 
                   
                 

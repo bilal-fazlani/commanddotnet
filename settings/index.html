@@ -59,6 +59,8 @@
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
     
+      <link rel="stylesheet" href="../../css/superfences.css">
+    
     
   </head>
   
@@ -680,7 +682,7 @@
                 
                   <h1>Settings</h1>
                 
-                <p>When you create a new instance of <code>AppRunner&lt;T&gt;</code> you can pass an instance new <code>AppSettings</code> object.
+                <p>When you create a new instance of <code class="codehilite">AppRunner&lt;T&gt;</code> you can pass an instance new <code class="codehilite">AppSettings</code> object.
 Here are the settings you can change:</p>
 <h3 id="show-argument-details">Show argument details</h3>
 <p>Shows type information of arguments in help text. Enabled by default.</p>
@@ -717,7 +719,6 @@ Here are the settings you can change:</p>
 <span class="p">}</span>
 </pre></div>
 
-
 <p>by default this would result into something like this:</p>
 <div class="codehilite"><pre><span></span>Usage: dotnet example.dll <span class="o">[</span>options<span class="o">]</span> <span class="o">[</span>command<span class="o">]</span>
 
@@ -730,7 +731,6 @@ Commands:
 
 Use <span class="s2">&quot;dotnet example.dll [command] --help&quot;</span> <span class="k">for</span> more information about a command.
 </pre></div>
-
 
 <p>Command line conventions are different from C# conventions and the usual pascal casing of method names or camel casing of parameter names may not be suitable for command line arguments.</p>
 <p>You can continue to develop you classes and method in normal C# conventions and tell library to transform them into the desired casing.</p>
@@ -756,7 +756,6 @@ Use <span class="s2">&quot;dotnet example.dll [command] --help&quot;</span> <spa
 <span class="p">}</span>
 </pre></div>
 
-
 <p>The result would something like this:</p>
 <div class="codehilite"><pre><span></span>Usage: dotnet example.dll <span class="o">[</span>options<span class="o">]</span> <span class="o">[</span>command<span class="o">]</span>
 
@@ -770,66 +769,58 @@ Commands:
 Use <span class="s2">&quot;dotnet example.dll [command] --help&quot;</span> <span class="k">for</span> more information about a command.
 </pre></div>
 
-
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This would not transform any name that you have overridden via <code>[ApplicationMetadata]</code>, <code>[Option]</code> or <code>[Argument]</code> attributes.</p>
+<p>This would not transform any name that you have overridden via <code class="codehilite">[ApplicationMetadata]</code>, <code class="codehilite">[Option]</code> or <code class="codehilite">[Argument]</code> attributes.</p>
 </div>
 <h3 id="boolean-mode">Boolean mode</h3>
 <p>In this library, there are two ways to parse boolean <a href="#options">Options</a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Boolean mod is applicable only for <code>Options</code> and not for <code>Arguments</code> </p>
+<p>Boolean mod is applicable only for <code class="codehilite">Options</code> and not for <code class="codehilite">Arguments</code> </p>
 </div>
 <h4 id="1-implicit">1.  <strong>Implicit</strong></h4>
 <p>This is the default mode.
-In this mode, you don't pass the value <code>true</code> or <code>false</code> in the command line. These parameters are treated as flags. They are considered <code>true</code> if they are present and <code>false</code> when they are not.</p>
-<p>For example: </p>
+In this mode, you don't pass the value <code class="codehilite">true</code> or <code class="codehilite">false</code> in the command line. These parameters are treated as flags. They are considered <code class="codehilite">true</code> if they are present and <code class="codehilite">false</code> when they are not.</p>
+<p>For example: 
 <div class="codehilite"><pre><span></span>dotnet example.dll --printValues
-</pre></div>
-
-
-<p>In this case, value of parameter <code>printValues</code> will be true</p>
+</pre></div></p>
+<p>In this case, value of parameter <code class="codehilite">printValues</code> will be true</p>
 <p>and in the following example,</p>
 <div class="codehilite"><pre><span></span>dotnet example.dll
 </pre></div>
 
-
-<p>value of parameter <code>printValues</code> will be false.</p>
+<p>value of parameter <code class="codehilite">printValues</code> will be false.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When using implicit boolean mode, it will result in an error, if the user tries to explicitly enter a value for parameter. In this instance, <code>dotnet example.dll --printValues true</code> will result into an error.</p>
+<p>When using implicit boolean mode, it will result in an error, if the user tries to explicitly enter a value for parameter. In this instance, <code class="codehilite">dotnet example.dll --printValues true</code> will result into an error.</p>
 </div>
-<p>When you check the help of a command, you if you see <code>Flag</code> for a parameter, it means value is implit and does not require an explicit one.</p>
+<p>When you check the help of a command, you if you see <code class="codehilite">Flag</code> for a parameter, it means value is implit and does not require an explicit one.</p>
 <h5 id="flag-clubbing">Flag clubbing</h5>
 <p>Clubbing of one letter <a href="#options">options</a> is supported. For example,</p>
 <p>If a command has multiple <a href="#boolean-mode">boolean flags</a> <a href="#options">options</a> like:</p>
 <div class="codehilite"><pre><span></span><span class="k">public</span> <span class="k">void</span> <span class="nf">Print</span><span class="p">([</span><span class="n">Option</span><span class="p">(</span><span class="n">ShortName</span><span class="p">=</span><span class="s">&quot;c&quot;</span><span class="p">)]</span><span class="kt">bool</span> <span class="n">qwerty</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">e</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">x</span><span class="p">){</span> <span class="p">}</span>
 </pre></div>
 
-
 <p>These can be passed either as</p>
 <div class="codehilite"><pre><span></span>dotnet example.dll print -c -e -x
 </pre></div>
-
 
 <p>OR</p>
 <div class="codehilite"><pre><span></span>dotnet example.dll print -ecx
 </pre></div>
 
-
 <h4 id="2-explicit">2. Explicit</h4>
-<p>If you want users to explicitly enter true or false, you need to set the boolean mode explicit. You can do that, by using the <code>[Argument]</code> attribute as shown below:</p>
+<p>If you want users to explicitly enter true or false, you need to set the boolean mode explicit. You can do that, by using the <code class="codehilite">[Argument]</code> attribute as shown below:</p>
 <div class="codehilite"><pre><span></span><span class="k">public</span> <span class="k">void</span> <span class="nf">MyCommand</span><span class="p">([</span><span class="n">Argument</span><span class="p">(</span><span class="n">BooleanMode</span> <span class="p">=</span> <span class="n">BooleanMode</span><span class="p">.</span><span class="n">Explicit</span><span class="p">)]</span><span class="kt">bool</span> <span class="n">capturelogs</span><span class="p">)</span>
 <span class="p">{</span>
 
 <span class="p">}</span>
 </pre></div>
 
-
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>You can set <code>BooleanMode = BooleanMode.Implicit</code> or <code>BooleanMode = BooleanMode.Explicit</code> only for <code>bool</code> or <code>bool?</code> type options.</p>
+<p>You can set <code class="codehilite">BooleanMode = BooleanMode.Implicit</code> or <code class="codehilite">BooleanMode = BooleanMode.Explicit</code> only for <code class="codehilite">bool</code> or <code class="codehilite">bool?</code> type options.</p>
 </div>
 <p>When you use explicit boolean mode, these scenarios are valid:</p>
 <div class="codehilite"><pre><span></span>dotnet example.dll MyCommand
@@ -837,9 +828,8 @@ dotnet example.dll MyCommand --capturelogs <span class="nb">false</span>
 dotnet example.dll MyCommand --capturelogs <span class="nb">true</span>
 </pre></div>
 
-
-<p>but <code>dotnet example.dll MyCommand --capturelogs</code> is not valid and will result into error. It will only work in Implicit boolean mode.</p>
-<p>When you check the help of a command, and you see <code>Boolean</code> it means if you wan't to make it true, you need to pass an explicit value. If you don't pass one, it will default to <code>false</code> automatically. Implicit and explicit are just ways to pass the value, under the hood they are just boolean parameters.</p>
+<p>but <code class="codehilite">dotnet example.dll MyCommand --capturelogs</code> is not valid and will result into error. It will only work in Implicit boolean mode.</p>
+<p>When you check the help of a command, and you see <code class="codehilite">Boolean</code> it means if you wan't to make it true, you need to pass an explicit value. If you don't pass one, it will default to <code class="codehilite">false</code> automatically. Implicit and explicit are just ways to pass the value, under the hood they are just boolean parameters.</p>
                 
                   
                 

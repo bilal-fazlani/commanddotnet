@@ -59,6 +59,8 @@
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
     
+      <link rel="stylesheet" href="../../css/superfences.css">
+    
     
   </head>
   
@@ -481,21 +483,18 @@
                   <h1>Default values</h1>
                 
                 <p>C# supports default values for parameters and so does this library.</p>
-<p>Let's make some changes to Calculator to add a new Command - <code>Divide</code>. And let's default value2 to 1 when user doesn't provide a value.
-This will prevent the calculator from crahsing because of <code>DivideByZeroException</code></p>
+<p>Let's make some changes to Calculator to add a new Command - <code class="codehilite">Divide</code>. And let's default value2 to 1 when user doesn't provide a value.
+This will prevent the calculator from crashing because of <code class="codehilite">DivideByZeroException</code></p>
 <div class="codehilite"><pre><span></span><span class="k">public</span> <span class="k">void</span> <span class="nf">Divide</span><span class="p">(</span><span class="kt">int</span> <span class="n">value1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value2</span> <span class="p">=</span> <span class="m">1</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">&quot;Answer: {value1 / value2}&quot;</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 
-
 <p>Here's how help looks like:</p>
-<p>INPUT </p>
+<p>INPUT 
 <div class="codehilite"><pre><span></span>dotnet example.dll Divide --help 
-</pre></div>
-
-
+</pre></div></p>
 <p>OUTPUT</p>
 <div class="codehilite"><pre><span></span>Usage: dotnet example.dll Divide <span class="o">[</span>arguments<span class="o">]</span> <span class="o">[</span>options<span class="o">]</span>
 

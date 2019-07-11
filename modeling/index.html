@@ -59,6 +59,8 @@
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
     
+      <link rel="stylesheet" href="../../css/superfences.css">
+    
     
   </head>
   
@@ -487,11 +489,9 @@
 <span class="p">}</span>
 </pre></div>
 
-
 <p>this can turns into:</p>
 <div class="codehilite"><pre><span></span>send --subject hi -a <span class="s2">&quot;myFile.txt&quot;</span> -a <span class="s2">&quot;important.docx&quot;</span> --body <span class="s2">&quot;just wanted you to review these files&quot;</span> bilal@bilal.com john@john.com
 </pre></div>
-
 
 <p>but the same can be achieved with :</p>
 <div class="codehilite"><pre><span></span><span class="k">public</span> <span class="k">class</span> <span class="nc">Email</span> <span class="p">:</span> <span class="n">IArgumentModel</span>
@@ -510,7 +510,6 @@
     <span class="k">public</span> <span class="kt">string</span> <span class="n">To</span> <span class="p">{</span><span class="k">get</span><span class="p">;</span><span class="k">set</span><span class="p">;}</span>
 <span class="p">}</span>
 </pre></div>
-
 
 <p>and</p>
 <div class="codehilite"><pre><span></span><span class="na">[ApplicationMetadata(Name=&quot;send&quot;, Description=&quot;sends email&quot;)]</span>

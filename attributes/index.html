@@ -59,6 +59,8 @@
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
     
+      <link rel="stylesheet" href="../../css/superfences.css">
+    
     
   </head>
   
@@ -615,14 +617,13 @@
                   <h1>Attributes</h1>
                 
                 <h3 id="applicationmetadata">ApplicationMetadata</h3>
-<p>You can use the <code>[ApplicationMetadata]</code> attribute on the class level like this to provide details when application is called with <code>help</code> switch.</p>
+<p>You can use the <code class="codehilite">[ApplicationMetadata]</code> attribute on the class level like this to provide details when application is called with <code class="codehilite">help</code> switch.</p>
 <p>Example: </p>
 <div class="codehilite"><pre><span></span><span class="na">[ApplicationMetadata(Description = &quot;This is a crappy calculator&quot;, ExtendedHelpText = &quot;Some more help text that appears at the bottom&quot;)]</span>
 <span class="k">public</span> <span class="k">class</span> <span class="nc">Calculator</span>
 <span class="p">{</span>
 <span class="p">}</span>
 </pre></div>
-
 
 <p>This attribute can also be used on a Method as shown below.</p>
 <div class="codehilite"><pre><span></span><span class="na">[ApplicationMetadata(Description = &quot;Subtracts value2 from value1 and prints output&quot;, </span>
@@ -633,25 +634,22 @@
 <span class="p">}</span>
 </pre></div>
 
-
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>When you use ApplicationMetadata attribute on a method, you can change the name of the command that is different from method name.</p>
 </div>
 <h3 id="subcommand">SubCommand</h3>
-<p><code>[SubCommand]</code> attribute indicates that targeted property is a SubCommand.</p>
+<p><code class="codehilite">[SubCommand]</code> attribute indicates that targeted property is a SubCommand.</p>
 <p>See <a href="#nesting-commands">Nesting commands</a> for examples</p>
 <h3 id="argument">Argument</h3>
 <p>Every parameter in the method is argument by default. So this this Attribute is optional and should be used only when you need to assign a different name to parameter, or add description to it.</p>
 <p>By default, the parameter names declared in method are the argument names that appear in help. However you can change that.</p>
 <p>Let's see an example-</p>
-<div class="codehilite"><pre><span></span><span class="k">public</span> <span class="k">void</span> <span class="nf">LaunchRocket</span><span class="p">([</span><span class="n">Argument</span><span class="p">(</span>
+<p><div class="codehilite"><pre><span></span><span class="k">public</span> <span class="k">void</span> <span class="nf">LaunchRocket</span><span class="p">([</span><span class="n">Argument</span><span class="p">(</span>
     <span class="n">Name</span> <span class="p">=</span> <span class="s">&quot;planet&quot;</span><span class="p">,</span>
     <span class="n">Description</span> <span class="p">=</span> <span class="s">&quot;Name of the planet you wish the rocket to go)] string planetName)</span>
 </pre></div>
-
-
-<p>This is what help looks like-</p>
+This is what help looks like-</p>
 <div class="codehilite"><pre><span></span>Usage: dotnet example.dll LaunchRocket <span class="o">[</span>arguments<span class="o">]</span> <span class="o">[</span>options<span class="o">]</span>
 
 Arguments:
@@ -660,7 +658,6 @@ Arguments:
 Options:
   -h <span class="p">|</span> -? <span class="p">|</span> --help  Show <span class="nb">help</span> information
 </pre></div>
-
 
 <h3 id="option">Option</h3>
 <p>Every parameter in the method is argument by default. So if you wan't to turn a parameter into option instead of argument, use this attribute. See more info about parameters <a href="#parameters">here</a></p>
@@ -672,7 +669,6 @@ Options:
     <span class="n">Description</span> <span class="p">=</span> <span class="s">&quot;Name of the planet you wish the rocket to go&quot;</span><span class="p">)]</span> <span class="kt">string</span> <span class="n">planetName</span><span class="p">)</span>
 </pre></div>
 
-
 <p>This is what help looks like-</p>
 <div class="codehilite"><pre><span></span>Usage: dotnet example.dll LaunchRocket <span class="o">[</span>options<span class="o">]</span>
 
@@ -681,8 +677,7 @@ Options:
   --planet <span class="p">|</span> -p     String                         Name of the planet you wish the rocket to go
 </pre></div>
 
-
-<p>So planet name can now be passed either with <code>--planet</code> or <code>-p</code>. 
+<p>So planet name can now be passed either with <code class="codehilite">--planet</code> or <code class="codehilite">-p</code>. 
 LongName, ShortName and Description are optional. </p>
 <p>When you don't specify a long name and a short name for an option, it uses the method parameter name by default as long name. In case the method parameter name is just one letter, it will be treated as short name.</p>
 <p>Here's table of examples:</p>
@@ -700,31 +695,31 @@ LongName, ShortName and Description are optional. </p>
 <td>planet</td>
 <td></td>
 <td></td>
-<td><code>--planet</code></td>
+<td><code class="codehilite">--planet</code></td>
 </tr>
 <tr>
 <td>planet</td>
 <td>planet</td>
 <td></td>
-<td><code>--planet</code></td>
+<td><code class="codehilite">--planet</code></td>
 </tr>
 <tr>
 <td>planet</td>
 <td></td>
 <td>p</td>
-<td><code>-p</code></td>
+<td><code class="codehilite">-p</code></td>
 </tr>
 <tr>
 <td>planet</td>
 <td>planet</td>
 <td>p</td>
-<td><code>-p | --planet</code></td>
+<td><code class="codehilite">-p | --planet</code></td>
 </tr>
 <tr>
 <td>p</td>
 <td></td>
 <td></td>
-<td><code>-p</code></td>
+<td><code class="codehilite">-p</code></td>
 </tr>
 </tbody>
 </table>

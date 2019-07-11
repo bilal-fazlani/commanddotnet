@@ -59,6 +59,8 @@
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
     
+      <link rel="stylesheet" href="../../css/superfences.css">
+    
     
   </head>
   
@@ -593,8 +595,7 @@
 <span class="p">}</span>
 </pre></div>
 
-
-<p>Without dependency injection, app will have to create an instance of <code>Service</code> manually:</p>
+<p>Without dependency injection, app will have to create an instance of <code class="codehilite">Service</code> manually:</p>
 <div class="codehilite"><pre><span></span><span class="k">public</span> <span class="k">class</span> <span class="nc">App</span>
 <span class="p">{</span>
     <span class="k">public</span> <span class="k">void</span> <span class="nf">PrintServiceValue</span><span class="p">()</span>
@@ -605,9 +606,8 @@
 <span class="p">}</span>
 </pre></div>
 
-
-<p>This looks simple now but because the <code>Service</code> class constructor doesn't have any construtor parameters but if it had, it would have been difficult for <code>App</code> to create the instance of <code>Service</code>.</p>
-<p>Another reason why you might want to use dependency injection is testable code. This is how <code>App</code> looks like with "Property injection"</p>
+<p>This looks simple now but because the <code class="codehilite">Service</code> class constructor doesn't have any constructor parameters but if it had, it would have been difficult for <code class="codehilite">App</code> to create the instance of <code class="codehilite">Service</code>.</p>
+<p>Another reason why you might want to use dependency injection is testable code. This is how <code class="codehilite">App</code> looks like with "Property injection"</p>
 <div class="codehilite"><pre><span></span><span class="k">public</span> <span class="k">class</span> <span class="nc">App</span>
 <span class="p">{</span>
 <span class="na">    [InjectProperty]</span>
@@ -620,11 +620,10 @@
 <span class="p">}</span>
 </pre></div>
 
-
-<p>The benefit here is that you can mock IService and just test the behaviour of <code>App</code> without worrying about <code>Service</code> class.</p>
+<p>The benefit here is that you can mock IService and just test the behavior of <code class="codehilite">App</code> without worrying about <code class="codehilite">Service</code> class.</p>
 <p>CommandDotNet supports two IoC frameworks - Autofac &amp; Microsoft</p>
 <h3 id="autofac">Autofac</h3>
-<p>In order to use autofac, you need to install an additional integration nuget package : https://www.nuget.org/packages/CommandDotNet.IoC.Autofac/</p>
+<p>In order to use autofac, you need to install an additional integration nuget package : <a href="https://www.nuget.org/packages/CommandDotNet.IoC.Autofac/">https://www.nuget.org/packages/CommandDotNet.IoC.Autofac/</a></p>
 <p>This how you can use the package:</p>
 <div class="codehilite"><pre><span></span><span class="k">static</span> <span class="kt">int</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
 <span class="p">{</span>
@@ -638,9 +637,8 @@
 <span class="p">}</span>
 </pre></div>
 
-
 <h3 id="microsoft">Microsoft</h3>
-<p>In order to use microsoft dependency injection, you need to install an additional integration nuget package : https://www.nuget.org/packages/CommandDotNet.IoC.MicrosoftDependencyInjection/</p>
+<p>In order to use Microsoft Dependency Injection, you need to install an additional integration nuget package : <a href="https://www.nuget.org/packages/CommandDotNet.IoC.MicrosoftDependencyInjection/">https://www.nuget.org/packages/CommandDotNet.IoC.MicrosoftDependencyInjection/</a></p>
 <p>This how you can use the package:</p>
 <div class="codehilite"><pre><span></span><span class="k">static</span> <span class="kt">int</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
 <span class="p">{</span>
