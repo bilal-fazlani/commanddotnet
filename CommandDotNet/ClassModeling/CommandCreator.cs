@@ -33,7 +33,7 @@ namespace CommandDotNet.ClassModeling
 
         public void CreateDefaultCommand(IApplicationMetadata applicationMetadata)
         {
-            CommandInfo defaultCommandInfo = _type.GetDefaultCommandInfo(_settings);
+            CommandInfo defaultCommandInfo = GetDefaultCommandInfo(_type, _settings);
 
             if (defaultCommandInfo != null)
             {
@@ -48,12 +48,27 @@ namespace CommandDotNet.ClassModeling
 
         public void CreateCommands()
         {            
-            foreach (CommandInfo commandInfo in _type.GetCommandInfos(_settings))
+            foreach (CommandInfo commandInfo in GetCommandInfos(_type, _settings))
             {
                 var command = _command.AddCommand(commandInfo.Name, commandInfo.CustomAttributeProvider);
                 ConfigureMetadata(command, commandInfo);
                 ConfigureCommand(command, commandInfo);
             }
+        }
+
+        private static IEnumerable<CommandInfo> GetCommandInfos(Type type, AppSettings settings)
+        {
+            return type.GetDeclaredMethods()
+                .Where(m => !m.HasAttribute<DefaultMethodAttribute>())
+                .Select(mi => new CommandInfo(mi, settings));
+        }
+
+        private static CommandInfo GetDefaultCommandInfo(Type type, AppSettings settings)
+        {
+            return type.GetDeclaredMethods()
+                .Where(m => m.HasAttribute<DefaultMethodAttribute>())
+                .Select(mi => new CommandInfo(mi, settings))
+                .FirstOrDefault();
         }
 
         private void ConfigureMetadata(Command command, IApplicationMetadata applicationMetadata)

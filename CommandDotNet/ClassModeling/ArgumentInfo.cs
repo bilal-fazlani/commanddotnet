@@ -45,7 +45,7 @@ namespace CommandDotNet.ClassModeling
             Type = type;
             DefaultValue = defaultValue;
             
-            UnderlyingType = GetUnderlyingType(Type);
+            UnderlyingType = Type.GetUnderlyingType();
             
             _typeDescriptor = Settings.ArgumentTypeDescriptors
                 .GetDescriptorOrThrow(UnderlyingType);
@@ -90,13 +90,6 @@ namespace CommandDotNet.ClassModeling
             }
 
             return defaultValue;
-        }
-
-        private static Type GetUnderlyingType(Type type)
-        {
-            return Nullable.GetUnderlyingType(type) 
-                   ?? type.GetListUnderlyingType() 
-                   ?? type;
         }
     }
 }

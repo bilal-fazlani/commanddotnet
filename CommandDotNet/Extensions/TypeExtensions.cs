@@ -4,32 +4,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using CommandDotNet.ClassModeling;
 
 namespace CommandDotNet.Extensions
 {
     internal static class TypeExtensions
     {
-        internal static IEnumerable<CommandInfo> GetCommandInfos(this Type type, AppSettings settings)
-        {
-            return type.GetDeclaredMethods()
-                .Where(m => !m.HasAttribute<DefaultMethodAttribute>())
-                .Select(mi => new CommandInfo(mi, settings));
-        }
-
-        internal static CommandInfo GetDefaultCommandInfo(this Type type, AppSettings settings)
-        {
-            return type.GetDeclaredMethods()
-                .Where(m => m.HasAttribute<DefaultMethodAttribute>())
-                .Select(mi => new CommandInfo(mi, settings))
-                .FirstOrDefault();
-        }
-
-        private static IEnumerable<MethodInfo> GetDeclaredMethods(this Type type)
+        internal static IEnumerable<MethodInfo> GetDeclaredMethods(this Type type)
         {
             return type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(m => !m.IsSpecialName)
                 .Where(m => !typeof(IDisposable).IsAssignableFrom(type) || m.Name != "Dispose");
+        }
+
+        internal static Type GetUnderlyingType(this Type type)
+        {
+            return Nullable.GetUnderlyingType(type)
+                   ?? type.GetListUnderlyingType()
+                   ?? type;
         }
 
         internal static Type GetListUnderlyingType(this Type type)

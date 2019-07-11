@@ -37,9 +37,9 @@ namespace CommandDotNet.Execution
             _middlewares.Add((middleware, order));
         }
 
-        public ExecutionConfig Build(CommandContext commandContext)
+        public ExecutionConfig Build()
         {
-            return new ExecutionConfig(commandContext)
+            return new ExecutionConfig
             {
                 MiddlewarePipeline = _middlewares.OrderBy(m => m.order).Select(m => m.middleware).ToArray(),
                 InputTransformations = _inputTransformationsByName.Values.OrderBy(t => t.Order).ToArray()

@@ -163,8 +163,10 @@ namespace CommandDotNet
             _executionBuilder.AddMiddlewareInStage(CommandRunner.InvokeMiddleware, MiddlewareStages.Invocation, 300);
 
             var tokens = args.Tokenize(includeDirectives: _settings.EnableDirectives);
-            var executionResult = new CommandContext(args, tokens, _settings);
-            executionResult.ExecutionConfig = _executionBuilder.Build(executionResult);
+            var executionResult = new CommandContext(args, tokens, _settings)
+            {
+                ExecutionConfig = _executionBuilder.Build()
+            };
 
             return InvokeMiddleware(executionResult);
         }

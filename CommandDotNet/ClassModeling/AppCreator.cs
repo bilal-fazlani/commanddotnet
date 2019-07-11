@@ -41,7 +41,7 @@ namespace CommandDotNet.ClassModeling
             string appName = applicationAttribute?.Name ?? type.Name.ChangeCase(_appSettings.Case);
 
             var command = isRootCommand 
-                ? new Command(_appSettings, appName, type) 
+                ? new Command(appName, type) 
                 : parentCommand.AddCommand(appName, type);
 
             CommandCreator commandCreator = new CommandCreator(type, command, dependencyResolver, _appSettings, _optionSources);

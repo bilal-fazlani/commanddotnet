@@ -12,20 +12,16 @@ namespace CommandDotNet
 {
     internal class Command : ICommand, ICommandBuilder
     {
-        private readonly AppSettings _appSettings;
         private readonly List<IOption> _options = new List<IOption>();
         private readonly List<IOperand> _operands = new List<IOperand>();
         private readonly List<ICommand> _commands = new List<ICommand>();
 
         private readonly Dictionary<string, IArgument> _argumentsByAlias = new Dictionary<string, IArgument>();
 
-        public Command(
-            AppSettings appSettings, 
-            string name, 
+        public Command(string name, 
             ICustomAttributeProvider customAttributeProvider,
-            Command parent = null)
+            ICommand parent = null)
         {
-            _appSettings = appSettings;
             Name = name;
             CustomAttributeProvider = customAttributeProvider;
             Parent = parent;
@@ -36,10 +32,38 @@ namespace CommandDotNet
         public string ExtendedHelpText { get; set; }
 
         public IEnumerable<IOperand> Operands => _operands;
-        public ICommand Parent { get; }
+        public ICommand Parent { get; private set; }
         public IEnumerable<ICommand> Commands => _commands;
         public ICustomAttributeProvider CustomAttributeProvider { get; }
         public IContextData ContextData { get; } = new ContextData();
+
+        ICommand ICommandBuilder.Command => this;
+        
+        public void AddSubCommand(ICommand command)
+        {
+            _commands.Add(command);
+        }
+
+        public void AddArgument(IArgument argument)
+        {
+            RegisterArgumentByAliases(argument);
+
+            if (argument is IOperand operand)
+            {
+                var lastOperand = Operands.LastOrDefault();
+                if (lastOperand != null && lastOperand.Arity.AllowsZeroOrMore())
+                {
+                    var message =
+                        $"The last operand '{lastOperand.Name}' accepts multiple values. No more operands can be added.";
+                    throw new AppRunnerException(message);
+                }
+                _operands.Add(operand);
+            }
+            if (argument is IOption option)
+            {
+                _options.Add(option);
+            }
+        }
 
         public IEnumerable<IOption> GetOptions(bool includeInherited = true)
         {
@@ -48,10 +72,18 @@ namespace CommandDotNet
                 : _options;
         }
 
-        public Command AddCommand(string name, ICustomAttributeProvider customAttributeProvider)
+        public IOption FindOption(string alias)
         {
-            var command = new Command(_appSettings, name, customAttributeProvider, this);
-            _commands.Add(command);
+            return FindOption(this, alias, false)
+                   ?? this.GetParentCommands()
+                       .Select(c => FindOption(c, alias, true))
+                       .FirstOrDefault(o => o != null);
+        }
+
+        internal Command AddCommand(string name, ICustomAttributeProvider customAttributeProvider)
+        {
+            var command = new Command(name, customAttributeProvider, this);
+            AddSubCommand(command);
             return command;
         }
 
@@ -76,14 +108,6 @@ namespace CommandDotNet
             string name, string description, IArgumentArity arity,
             string typeDisplayName, object defaultValue, List<string> allowedValues)
         {
-            var lastOperand = Operands.LastOrDefault();
-            if (lastOperand != null && lastOperand.Arity.AllowsZeroOrMore())
-            {
-                var message =
-                    $"The last operand '{lastOperand.Name}' accepts multiple values. No more operands can be added.";
-                throw new AppRunnerException(message);
-            }
-
             var operand = new Operand
             {
                 Name = name, 
@@ -93,32 +117,9 @@ namespace CommandDotNet
                 DefaultValue = defaultValue,
                 AllowedValues = allowedValues
             };
+
             AddArgument(operand);
             return operand;
-        }
-
-        ICommand ICommandBuilder.Command => this;
-
-        public void AddArgument(IArgument argument)
-        {
-            RegisterArgumentByAliases(argument);
-
-            if (argument is IOperand operand)
-            {
-                _operands.Add(operand);
-            }
-            if (argument is IOption option)
-            {
-                _options.Add(option);
-            }
-        }
-
-        public IOption FindOption(string alias)
-        {
-            return FindOption(this, alias, false) 
-                   ?? this.GetParentCommands()
-                       .Select(c => FindOption(c, alias, true))
-                       .FirstOrDefault(o => o != null);
         }
 
         private static IOption FindOption(Command command, string alias, bool onlyIfInherited)

@@ -14,7 +14,7 @@ namespace CommandDotNet.Directives
         {
             if (commandContext.Tokens.TryGetDirective("parse", out string value))
             {
-                var parserContext = commandContext.ExecutionConfig;
+                var executionConfig = commandContext.ExecutionConfig;
                 var consoleOut = commandContext.AppSettings.Out;
 
                 var parts = value.Split(":".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
@@ -29,7 +29,7 @@ namespace CommandDotNet.Directives
 
                 if (verbose)
                 {
-                    parserContext.Events.OnInputTransformation += tuple =>
+                    executionConfig.Events.OnInputTransformation += tuple =>
                     {
                         if (tuple.pre.Count == tuple.post.Count &&
                             Enumerable.Range(0, tuple.pre.Count).All(i => tuple.pre[i] == tuple.post[i]))
@@ -44,14 +44,14 @@ namespace CommandDotNet.Directives
                 }
                 else
                 {
-                    parserContext.Events.OnTokenizationCompleted += ctx =>
+                    executionConfig.Events.OnTokenizationCompleted += ctx =>
                     {
-                        var transformations = parserContext.InputTransformations.Select(t => t.Name).ToCsv(" > ");
+                        var transformations = executionConfig.InputTransformations.Select(t => t.Name).ToCsv(" > ");
                         ReportTransformation(consoleOut, ctx.Tokens, $">>> transformed after: {transformations}");
                     };
                 }
 
-                parserContext.Events.OnTokenizationCompleted += ctx => ctx.ShouldExitWithCode(0);
+                executionConfig.Events.OnTokenizationCompleted += ctx => ctx.ShouldExitWithCode(0);
             }
 
             return next(commandContext);

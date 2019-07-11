@@ -7,6 +7,11 @@ namespace CommandDotNet.Extensions
 {
     internal static class EnumerableExtensions
     {
+        internal static IEnumerable<T> ToEnumerable<T>(this T instance)
+        {
+            yield return instance;
+        }
+
         public static string ToCsv(this IEnumerable<string> items, string separator = ",")
         {
             return string.Join(separator, items);
