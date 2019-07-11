@@ -690,10 +690,16 @@ Here are the settings you can change:</p>
 <li>Parameter (default)</li>
 <li>Option</li>
 </ol>
-<p>When method argument mode is set to parameter, all arguments of methods are treated as parameters and dont need any names to be passed through command line.
-Note that order of passing parameters matter in this mode.</p>
+<p>When method argument mode is set to parameter, all arguments of methods are treated as parameters and don't need any names to be passed through command line.</p>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>Order of passing parameters matter in this mode</p>
+</div>
 <p>When method argument mode is set to option, all arguments of methods are treated as options and need a name to be passed.</p>
-<p>Note that this is only applicable for methods and not constructors. For constructors, all arguments are options only.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>This is only applicable for methods and not constructors. For constructors, all arguments are options only</p>
+</div>
 <h3 id="enable-version-option">Enable version option</h3>
 <p>True by default. It adds an additional option to the root command. It shows version of the application.</p>
 <h3 id="case">Case</h3>
@@ -724,8 +730,8 @@ Commands:
 Use &quot;dotnet example.dll [command] --help&quot; for more information about a command.
 </code></pre>
 
-<p>Command line conventions are different from C# convetions and the usual pascal casing of method names or camel casing of parameter names may not be suitable for command line arguments.</p>
-<p>You can continue to develop you classes and method in normal C# conventions and tell library to tranform them into the desired casing.</p>
+<p>Command line conventions are different from C# conventions and the usual pascal casing of method names or camel casing of parameter names may not be suitable for command line arguments.</p>
+<p>You can continue to develop you classes and method in normal C# conventions and tell library to transform them into the desired casing.</p>
 <p>There are 5 modes available:</p>
 <ol>
 <li>DontChange</li>
@@ -761,78 +767,68 @@ Commands:
 Use &quot;dotnet example.dll [command] --help&quot; for more information about a command.
 </code></pre>
 
-<p>Note that this would not tranfsorm any name that you have overridden via <code>[ApplicationMetadata]</code>, <code>[Option]</code> or <code>[Argument]</code> attributes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This would not transform any name that you have overridden via <code>[ApplicationMetadata]</code>, <code>[Option]</code> or <code>[Argument]</code> attributes.</p>
+</div>
 <h3 id="boolean-mode">Boolean mode</h3>
-<p>In this library, there are two ways to parse boolean <a href="#options">Options</a>. Note that this is not applicable for <a href="#parameters">Parameters</a>.</p>
+<p>In this library, there are two ways to parse boolean <a href="#options">Options</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Boolean mod is applicable only for <code>Options</code> and not for <code>Arguments</code> </p>
+</div>
 <h4 id="1-implicit">1.  <strong>Implicit</strong></h4>
-<pre><code>This is the default mode.
-In this mode, you don't pass the value `true` or `false` in the command line. These parameters are treated as flags. They are considered `true` if they are present and `false` when they are not.
-
-For exampple: 
-```bash
-dotnet example.dll --printValues
-```
-
-In this case, value of parameter `printValues` will be true
-
-and in the following exampplem,
-
-```bash
-dotnet example.dll
-```
-
-value of parameter `printValues` will be false.
-
-Note that, when using implicit boolean mode, it will result in an error, if the user tries to explicitly enter a value for parameter. In this instance, `dotnet example.dll --printValues true` will result into an error.
-
-When you check the help of a command, you if you see `Flag` for a parameter, it means value is implit and does not requre an explict one.
+<p>This is the default mode.
+In this mode, you don't pass the value <code>true</code> or <code>false</code> in the command line. These parameters are treated as flags. They are considered <code>true</code> if they are present and <code>false</code> when they are not.</p>
+<p>For example: </p>
+<pre><code class="bash">dotnet example.dll --printValues
 </code></pre>
+
+<p>In this case, value of parameter <code>printValues</code> will be true</p>
+<p>and in the following example,</p>
+<pre><code class="bash">dotnet example.dll
+</code></pre>
+
+<p>value of parameter <code>printValues</code> will be false.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When using implicit boolean mode, it will result in an error, if the user tries to explicitly enter a value for parameter. In this instance, <code>dotnet example.dll --printValues true</code> will result into an error.</p>
+</div>
+<p>When you check the help of a command, you if you see <code>Flag</code> for a parameter, it means value is implit and does not require an explicit one.</p>
 <h5 id="flag-clubbing">Flag clubbing</h5>
-<pre><code>Clubbing of one letter [options](#options) is supported. For example,
-
-If a command has multiple [boolean flags](#boolean-mode) [options](#options) like:
-
-```c#
-public void Print([Option(ShortName="c")]bool qwerty, bool e, bool x){ }
-```
-
-These can be passed either as
-
-```bash
-dotnet example.dll print -c -e -x
-```
-
-OR
-
-```bash
-dotnet example.dll print -ecx
-```
+<p>Clubbing of one letter <a href="#options">options</a> is supported. For example,</p>
+<p>If a command has multiple <a href="#boolean-mode">boolean flags</a> <a href="#options">options</a> like:</p>
+<pre><code class="c#">public void Print([Option(ShortName=&quot;c&quot;)]bool qwerty, bool e, bool x){ }
 </code></pre>
-<h4 id="2-explicit">2. Explicit</h4>
-<pre><code>If you want users to explicitly enter true or false, you need to set the boolean mode explicit. You can do that, by using the `[Argument]` attribute as shown below:
 
-```c#
-public void MyCommand([Argument(BooleanMode = BooleanMode.Explicit)]bool capturelogs)
+<p>These can be passed either as</p>
+<pre><code class="bash">dotnet example.dll print -c -e -x
+</code></pre>
+
+<p>OR</p>
+<pre><code class="bash">dotnet example.dll print -ecx
+</code></pre>
+
+<h4 id="2-explicit">2. Explicit</h4>
+<p>If you want users to explicitly enter true or false, you need to set the boolean mode explicit. You can do that, by using the <code>[Argument]</code> attribute as shown below:</p>
+<pre><code class="c#">public void MyCommand([Argument(BooleanMode = BooleanMode.Explicit)]bool capturelogs)
 {
 
 }
-```
+</code></pre>
 
-Note that you can only set `BooleanMode = BooleanMode.Explicit` or even `BooleanMode = BooleanMode.Explicit` for `bool` / `bool?` type parameters.
-
-When you use explicit boolean mode, these scenarios are valid:
-
-```bash
-dotnet example.dll MyCommand
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can set <code>BooleanMode = BooleanMode.Implicit</code> or <code>BooleanMode = BooleanMode.Explicit</code> only for <code>bool</code> or <code>bool?</code> type options.</p>
+</div>
+<p>When you use explicit boolean mode, these scenarios are valid:</p>
+<pre><code class="bash">dotnet example.dll MyCommand
 dotnet example.dll MyCommand --capturelogs false
 dotnet example.dll MyCommand --capturelogs true
-```
-
-but `dotnet example.dll MyCommand --capturelogs` is not valid and will result into error. It will only work in Implicit boolean mode.
-
-
-When you check the help of a command, you if you see `Boolean` it means if you wan't to make it true, you need to pass an explit value. If you don't pass one, it will default to `false` automatically. Implicit and explicit are just ways to pass the value, under the hood they are just boolean parameters.
 </code></pre>
+
+<p>but <code>dotnet example.dll MyCommand --capturelogs</code> is not valid and will result into error. It will only work in Implicit boolean mode.</p>
+<p>When you check the help of a command, and you see <code>Boolean</code> it means if you wan't to make it true, you need to pass an explicit value. If you don't pass one, it will default to <code>false</code> automatically. Implicit and explicit are just ways to pass the value, under the hood they are just boolean parameters.</p>
                 
                   
                 

@@ -481,7 +481,7 @@
                   <h1>Nesting commands</h1>
                 
                 <p>You can nest commands. Let's take <code>git</code> for example</p>
-<p><code>git</code> has a command called stash. When you execute <code>git stash</code>, it stashes all the chages. But stash has further commands like, <code>git stash pop</code>, <code>git stash list</code>, etc.</p>
+<p><code>git</code> has a command called stash. When you execute <code>git stash</code>, it stashes all the changes. But stash has further commands like, <code>git stash pop</code>, <code>git stash list</code>, etc.</p>
 <p>Let's try and mimic the same behavior using CommandDotNet:</p>
 <pre><code class="c#">[ApplicationMetadata(Description = &quot;Fake git application&quot;)]
 public class Git
@@ -580,7 +580,7 @@ Use &quot;Stash [command] --help&quot; for more information about a command.
 </code></pre>
 
 <p><strong><em>Alternative</em></strong></p>
-<p>If you like to store your sub commands as external .cs files, you can that too with <code>[SubCommand]</code> attribute.</p>
+<p>If you like to store your sub commands as external <code>.cs</code> files, you can that too with <code>[SubCommand]</code> attribute.</p>
 <pre><code class="c#">    [ApplicationMetadata(Description = &quot;Stashes all changes when executed without any arguments&quot;)]
     public class Stash
     {
