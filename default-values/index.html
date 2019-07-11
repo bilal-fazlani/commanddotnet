@@ -483,27 +483,29 @@
                 <p>C# supports default values for parameters and so does this library.</p>
 <p>Let's make some changes to Calculator to add a new Command - <code>Divide</code>. And let's default value2 to 1 when user doesn't provide a value.
 This will prevent the calculator from crahsing because of <code>DivideByZeroException</code></p>
-<pre><code class="c#">public void Divide(int value1, int value2 = 1)
-{
-    Console.WriteLine($&quot;Answer: {value1 / value2}&quot;);
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><span class="k">public</span> <span class="k">void</span> <span class="nf">Divide</span><span class="p">(</span><span class="kt">int</span> <span class="n">value1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value2</span> <span class="p">=</span> <span class="m">1</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">&quot;Answer: {value1 / value2}&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
 
 <p>Here's how help looks like:</p>
 <p>INPUT </p>
-<pre><code class="bash">dotnet example.dll Divide --help 
-</code></pre>
+<div class="codehilite"><pre><span></span>dotnet example.dll Divide --help 
+</pre></div>
+
 
 <p>OUTPUT</p>
-<pre><code class="bash">Usage: dotnet example.dll Divide [arguments] [options]
+<div class="codehilite"><pre><span></span>Usage: dotnet example.dll Divide <span class="o">[</span>arguments<span class="o">]</span> <span class="o">[</span>options<span class="o">]</span>
 
 Arguments:
   value1  Int32
-  value2  Int32 | Default value: 1
+  value2  Int32 <span class="p">|</span> Default value: <span class="m">1</span>
 
 Options:
-  -h | -? | --help  Show help information
-</code></pre>
+  -h <span class="p">|</span> -? <span class="p">|</span> --help  Show <span class="nb">help</span> information
+</pre></div>
                 
                   
                 

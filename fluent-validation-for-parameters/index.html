@@ -482,43 +482,44 @@
                 
                 <p>You can use <a href="https://github.com/JeremySkinner/FluentValidation">FluentValidation</a> with this library to validate input parameters, provided you model your parameters into classes.</p>
 <p>Here's an example,</p>
-<pre><code class="c#">    class Program
-    {
-        static int Main(string[] args)
-        {
-            AppRunner&lt;ValidationApp&gt; appRunner = new AppRunner&lt;ValidationApp&gt;();
-            return appRunner.Run(args);
-        }
-    }
-    public class ValidationApp
-    {
-        public void ValidateModel(PersonModel person)
-        {
-            string content = JsonConvert.SerializeObject(person, Formatting.Indented);
-            Console.WriteLine(content);
-        }
-    }
+<div class="codehilite"><pre><span></span>    <span class="k">class</span> <span class="nc">Program</span>
+    <span class="p">{</span>
+        <span class="k">static</span> <span class="kt">int</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">AppRunner</span><span class="p">&lt;</span><span class="n">ValidationApp</span><span class="p">&gt;</span> <span class="n">appRunner</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AppRunner</span><span class="p">&lt;</span><span class="n">ValidationApp</span><span class="p">&gt;();</span>
+            <span class="k">return</span> <span class="n">appRunner</span><span class="p">.</span><span class="n">Run</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">ValidationApp</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">ValidateModel</span><span class="p">(</span><span class="n">PersonModel</span> <span class="n">person</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">string</span> <span class="n">content</span> <span class="p">=</span> <span class="n">JsonConvert</span><span class="p">.</span><span class="n">SerializeObject</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">Formatting</span><span class="p">.</span><span class="n">Indented</span><span class="p">);</span>
+            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">content</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    [Validator(typeof(PersonValidator))]
-    public class PersonModel : IArgumentModel
-    {
-        public int Id { get; set; }
+<span class="na">    [Validator(typeof(PersonValidator))]</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">PersonModel</span> <span class="p">:</span> <span class="n">IArgumentModel</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-        public string Name { get; set; }
+        <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-        public string Email { get; set; }
-    }
+        <span class="k">public</span> <span class="kt">string</span> <span class="n">Email</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
 
-    public class PersonValidator : AbstractValidator&lt;PersonModel&gt;
-    {
-        public PersonValidator()
-        {
-            RuleFor(x =&gt; x.Id).GreaterThan(0);
-            RuleFor(x =&gt; x.Name).NotEmpty();
-            RuleFor(x =&gt; x.Email).NotEmpty().EmailAddress();
-        }
-    }
-</code></pre>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">PersonValidator</span> <span class="p">:</span> <span class="n">AbstractValidator</span><span class="p">&lt;</span><span class="n">PersonModel</span><span class="p">&gt;</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="nf">PersonValidator</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Id</span><span class="p">).</span><span class="n">GreaterThan</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
+            <span class="n">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Name</span><span class="p">).</span><span class="n">NotEmpty</span><span class="p">();</span>
+            <span class="n">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Email</span><span class="p">).</span><span class="n">NotEmpty</span><span class="p">().</span><span class="n">EmailAddress</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+
 
 <p>If the validation fails, app exits with return code 2 and prints validation error messages on screen.</p>
                 

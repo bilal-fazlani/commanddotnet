@@ -480,42 +480,45 @@
                 
                   <h1>Modeling</h1>
                 
-                <pre><code class="c#">[ApplicationMetadata(Name=&quot;send&quot;, Description=&quot;sends email&quot;)]
-public void SendEmail([Option]string subject, [Option(ShortName=&quot;a&quot;)]List&lt;string&gt; attachments, [Option]string body, string from, string to)
-{
+                <div class="codehilite"><pre><span></span><span class="na">[ApplicationMetadata(Name=&quot;send&quot;, Description=&quot;sends email&quot;)]</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">SendEmail</span><span class="p">([</span><span class="n">Option</span><span class="p">]</span><span class="kt">string</span> <span class="n">subject</span><span class="p">,</span> <span class="p">[</span><span class="n">Option</span><span class="p">(</span><span class="n">ShortName</span><span class="p">=</span><span class="s">&quot;a&quot;</span><span class="p">)]</span><span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">attachments</span><span class="p">,</span> <span class="p">[</span><span class="n">Option</span><span class="p">]</span><span class="kt">string</span> <span class="n">body</span><span class="p">,</span> <span class="kt">string</span> <span class="k">from</span><span class="p">,</span> <span class="kt">string</span> <span class="n">to</span><span class="p">)</span>
+<span class="p">{</span>
 
-}
-</code></pre>
+<span class="p">}</span>
+</pre></div>
+
 
 <p>this can turns into:</p>
-<pre><code class="bash">send --subject hi -a &quot;myFile.txt&quot; -a &quot;important.docx&quot; --body &quot;just wanted you to review these files&quot; bilal@bilal.com john@john.com
-</code></pre>
+<div class="codehilite"><pre><span></span>send --subject hi -a <span class="s2">&quot;myFile.txt&quot;</span> -a <span class="s2">&quot;important.docx&quot;</span> --body <span class="s2">&quot;just wanted you to review these files&quot;</span> bilal@bilal.com john@john.com
+</pre></div>
+
 
 <p>but the same can be achieved with :</p>
-<pre><code class="c#">public class Email : IArgumentModel
-{
-    [Option]
-    public string Subject {get;set;}
+<div class="codehilite"><pre><span></span><span class="k">public</span> <span class="k">class</span> <span class="nc">Email</span> <span class="p">:</span> <span class="n">IArgumentModel</span>
+<span class="p">{</span>
+<span class="na">    [Option]</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Subject</span> <span class="p">{</span><span class="k">get</span><span class="p">;</span><span class="k">set</span><span class="p">;}</span>
 
-    [Option(ShortName=&quot;a&quot;)]
-    public List&lt;string&gt; Attachments {get;set;}
+<span class="na">    [Option(ShortName=&quot;a&quot;)]</span>
+    <span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">Attachments</span> <span class="p">{</span><span class="k">get</span><span class="p">;</span><span class="k">set</span><span class="p">;}</span>
 
-    [Option]
-    public string Body {get;set;}
+<span class="na">    [Option]</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Body</span> <span class="p">{</span><span class="k">get</span><span class="p">;</span><span class="k">set</span><span class="p">;}</span>
 
-    public string From {get;set;}
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">From</span> <span class="p">{</span><span class="k">get</span><span class="p">;</span><span class="k">set</span><span class="p">;}</span>
 
-    public string To {get;set;}
-}
-</code></pre>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">To</span> <span class="p">{</span><span class="k">get</span><span class="p">;</span><span class="k">set</span><span class="p">;}</span>
+<span class="p">}</span>
+</pre></div>
+
 
 <p>and</p>
-<pre><code class="c#">[ApplicationMetadata(Name=&quot;send&quot;, Description=&quot;sends email&quot;)]
-public void SendEmail(Email email)
-{
+<div class="codehilite"><pre><span></span><span class="na">[ApplicationMetadata(Name=&quot;send&quot;, Description=&quot;sends email&quot;)]</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">SendEmail</span><span class="p">(</span><span class="n">Email</span> <span class="n">email</span><span class="p">)</span>
+<span class="p">{</span>
 
-}
-</code></pre>
+<span class="p">}</span>
+</pre></div>
                 
                   
                 

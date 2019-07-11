@@ -481,16 +481,16 @@
                   <h1>Exception handling</h1>
                 
                 <p>Any exception that is thrown from the method or constructor is thrown as is. You can catch it over the <code>AppRunner&lt;T&gt;.Run()</code> method otherwise exception will be unhandled and application will crash.</p>
-<pre><code class="c#">try
-{
-    AppRunner&lt;Calculator&gt; appRunner = new AppRunner&lt;Calculator&gt;();
-    return appRunner.Run(args);
-}
-catch(MyBusinessException ex)
-{
-    Console.WriteLine(ex.Message);
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><span class="k">try</span>
+<span class="p">{</span>
+    <span class="n">AppRunner</span><span class="p">&lt;</span><span class="n">Calculator</span><span class="p">&gt;</span> <span class="n">appRunner</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AppRunner</span><span class="p">&lt;</span><span class="n">Calculator</span><span class="p">&gt;();</span>
+    <span class="k">return</span> <span class="n">appRunner</span><span class="p">.</span><span class="n">Run</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="p">(</span><span class="n">MyBusinessException</span> <span class="n">ex</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
                 
                   
                 

@@ -483,128 +483,139 @@
                 <p>You can nest commands. Let's take <code>git</code> for example</p>
 <p><code>git</code> has a command called stash. When you execute <code>git stash</code>, it stashes all the changes. But stash has further commands like, <code>git stash pop</code>, <code>git stash list</code>, etc.</p>
 <p>Let's try and mimic the same behavior using CommandDotNet:</p>
-<pre><code class="c#">[ApplicationMetadata(Description = &quot;Fake git application&quot;)]
-public class Git
-{
-    [ApplicationMetadata(Description = &quot;Commits all staged changes&quot;)]
-    public void Commit([Option(ShortName = &quot;m&quot;)]string commitMessage)
-    {
-        Console.WriteLine(&quot;Commit successful&quot;);
-    }
+<div class="codehilite"><pre><span></span><span class="na">[ApplicationMetadata(Description = &quot;Fake git application&quot;)]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Git</span>
+<span class="p">{</span>
+<span class="na">    [ApplicationMetadata(Description = &quot;Commits all staged changes&quot;)]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Commit</span><span class="p">([</span><span class="n">Option</span><span class="p">(</span><span class="n">ShortName</span> <span class="p">=</span> <span class="s">&quot;m&quot;</span><span class="p">)]</span><span class="kt">string</span> <span class="n">commitMessage</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Commit successful&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    [ApplicationMetadata(Description = &quot;Stashes all changes when executed without any arguments&quot;)]
-    [SubCommand]
-    public class Stash
-    {
-        [DefaultMethod]
-        public void StashDefaultCommand()
-        {
-            Console.WriteLine($&quot;changes stashed&quot;);
-        }
+<span class="na">    [ApplicationMetadata(Description = &quot;Stashes all changes when executed without any arguments&quot;)]</span>
+<span class="na">    [SubCommand]</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">Stash</span>
+    <span class="p">{</span>
+<span class="na">        [DefaultMethod]</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">StashDefaultCommand</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">&quot;changes stashed&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
 
-        [ApplicationMetadata(Description = &quot;Applies last stashed changes&quot;)]
-        public void Pop()
-        {
-            Console.WriteLine($&quot;stash popped&quot;);
-        }
+<span class="na">        [ApplicationMetadata(Description = &quot;Applies last stashed changes&quot;)]</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Pop</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">&quot;stash popped&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
 
-        [ApplicationMetadata(Description = &quot;Lists all stashed changes&quot;)]
-        public void List()
-        {
-            Console.WriteLine($&quot;here's the list of stash&quot;);
-        }
-    }
-}
-</code></pre>
+<span class="na">        [ApplicationMetadata(Description = &quot;Lists all stashed changes&quot;)]</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">List</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">&quot;here&#39;s the list of stash&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
 
 <p>Here's how the help looks like now:</p>
-<pre><code class="bash">Fake git application
+<div class="codehilite"><pre><span></span>Fake git application
 
-Usage: dotnet example.dll [options] [command]
+Usage: dotnet example.dll <span class="o">[</span>options<span class="o">]</span> <span class="o">[</span>command<span class="o">]</span>
 
 Options:
-  -h | -? | --help  Show help information
+  -h <span class="p">|</span> -? <span class="p">|</span> --help  Show <span class="nb">help</span> information
 
 Commands:
   Commit  Commits all staged changes
   Stash   Stashes all changes when executed without any arguments
 
-Use &quot;dotnet example.dll [command] --help&quot; for more information about a command.
-</code></pre>
+Use <span class="s2">&quot;dotnet example.dll [command] --help&quot;</span> <span class="k">for</span> more information about a command.
+</pre></div>
+
 
 <p>Here's  how the interaction looks like:</p>
 <p>INPUT</p>
-<pre><code class="bash">dotnet example.dll commit -m &quot;some refactoring&quot;
-</code></pre>
+<div class="codehilite"><pre><span></span>dotnet example.dll commit -m <span class="s2">&quot;some refactoring&quot;</span>
+</pre></div>
+
 
 <p>OUTPUT</p>
-<pre><code class="bash">Commit successful
-</code></pre>
+<div class="codehilite"><pre><span></span>Commit successful
+</pre></div>
+
 
 <hr />
 <p>INPUT</p>
-<pre><code class="bash">dotnet example.dll stash
-</code></pre>
+<div class="codehilite"><pre><span></span>dotnet example.dll stash
+</pre></div>
+
 
 <p>OUTPUT</p>
-<pre><code class="bash">changes stashed
-</code></pre>
+<div class="codehilite"><pre><span></span>changes stashed
+</pre></div>
+
 
 <hr />
 <p>INPUT</p>
-<pre><code class="bash">dotnet example.dll stash --help
-</code></pre>
+<div class="codehilite"><pre><span></span>dotnet example.dll stash --help
+</pre></div>
+
 
 <p>OUTPUT</p>
-<pre><code class="bash">Stashes all changes when executed without any arguments
+<div class="codehilite"><pre><span></span>Stashes all changes when executed without any arguments
 
-Usage: dotnet example.dll Stash [options] [command]
+Usage: dotnet example.dll Stash <span class="o">[</span>options<span class="o">]</span> <span class="o">[</span>command<span class="o">]</span>
 
 Options:
-  -h | -? | --help  Show help information
+  -h <span class="p">|</span> -? <span class="p">|</span> --help  Show <span class="nb">help</span> information
 
 Commands:
   List  Lists all saved stashed changes
   Pop   Applies last stashed changes
 
-Use &quot;Stash [command] --help&quot; for more information about a command.
-</code></pre>
+Use <span class="s2">&quot;Stash [command] --help&quot;</span> <span class="k">for</span> more information about a command.
+</pre></div>
+
 
 <hr />
 <p>INPUT</p>
-<pre><code class="bash">dotnet example.dll stash pop
-</code></pre>
+<div class="codehilite"><pre><span></span>dotnet example.dll stash pop
+</pre></div>
+
 
 <p>OUTPUT</p>
-<pre><code class="bash">stash popped
-</code></pre>
+<div class="codehilite"><pre><span></span>stash popped
+</pre></div>
+
 
 <p><strong><em>Alternative</em></strong></p>
 <p>If you like to store your sub commands as external <code>.cs</code> files, you can that too with <code>[SubCommand]</code> attribute.</p>
-<pre><code class="c#">    [ApplicationMetadata(Description = &quot;Stashes all changes when executed without any arguments&quot;)]
-    public class Stash
-    {
-        [ApplicationMetadata(Description = &quot;Applies last stashed changes&quot;)]
-        public void Pop()
-        {
-            Console.WriteLine($&quot;stash popped&quot;);
-        }
-    }
-</code></pre>
+<div class="codehilite"><pre><span></span><span class="na">    [ApplicationMetadata(Description = &quot;Stashes all changes when executed without any arguments&quot;)]</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">Stash</span>
+    <span class="p">{</span>
+<span class="na">        [ApplicationMetadata(Description = &quot;Applies last stashed changes&quot;)]</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Pop</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">&quot;stash popped&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
 
-<pre><code class="c#">[ApplicationMetadata(Description = &quot;Fake git application&quot;)]
-public class Git
-{
-    [SubCommand]
-    public Stash Stash {get;set;} // Stash class is saved in a seperate file
 
-    [ApplicationMetadata(Description = &quot;Commits all staged changes&quot;)]
-    public void Commit([Option(ShortName = &quot;m&quot;)]string commitMessage)
-    {
-        Console.WriteLine(&quot;Commit successful&quot;);
-    }
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><span class="na">[ApplicationMetadata(Description = &quot;Fake git application&quot;)]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">Git</span>
+<span class="p">{</span>
+<span class="na">    [SubCommand]</span>
+    <span class="k">public</span> <span class="n">Stash</span> <span class="n">Stash</span> <span class="p">{</span><span class="k">get</span><span class="p">;</span><span class="k">set</span><span class="p">;}</span> <span class="c1">// Stash class is saved in a seperate file</span>
+
+<span class="na">    [ApplicationMetadata(Description = &quot;Commits all staged changes&quot;)]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Commit</span><span class="p">([</span><span class="n">Option</span><span class="p">(</span><span class="n">ShortName</span> <span class="p">=</span> <span class="s">&quot;m&quot;</span><span class="p">)]</span><span class="kt">string</span> <span class="n">commitMessage</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;Commit successful&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
                 
                   
                 

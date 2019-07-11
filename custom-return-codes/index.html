@@ -485,12 +485,13 @@ But there are many possiblities and developers use this exit code to convey deta
 https://msdn.microsoft.com/en-us/library/ms681381.aspx </p>
 <p>When you write a command line application you can return a custom return code.</p>
 <p>I added a new method in my Calculator to accept a number as input and exit the application with that number as exit code.</p>
-<pre><code class="c#">[ApplicationMetadata(Description = &quot;Return with code 5&quot;, Name = &quot;return&quot;)]
-public int ReturnCode()
-{
-    return 5;
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><span class="na">[ApplicationMetadata(Description = &quot;Return with code 5&quot;, Name = &quot;return&quot;)]</span>
+<span class="k">public</span> <span class="kt">int</span> <span class="nf">ReturnCode</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="m">5</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
 
 <p>So now when I call this method from console <code>dotnet example.dll return</code>, the command ends with an exit code of 5.</p>
 <div class="admonition important">

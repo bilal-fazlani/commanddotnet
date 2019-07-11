@@ -561,64 +561,69 @@
                   <h1>Constructor Options</h1>
                 
                 <p>Let's say we want to add a class level field which is useful in both Addtion and Subtraction. So now the class looks something like this-</p>
-<pre><code class="c#">public class Calculator
-{
-    private readonly bool _printValues;
+<div class="codehilite"><pre><span></span><span class="k">public</span> <span class="k">class</span> <span class="nc">Calculator</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">bool</span> <span class="n">_printValues</span><span class="p">;</span>
 
-    public Calculator(bool printValues)
-    {
-        _printValues = printValues;
-    }
+    <span class="k">public</span> <span class="nf">Calculator</span><span class="p">(</span><span class="kt">bool</span> <span class="n">printValues</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_printValues</span> <span class="p">=</span> <span class="n">printValues</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    [ApplicationMetadata(Description = &quot;Adds two numbers. duh!&quot;)]
-    public void Add(int value1, int value2)
-    {
-        if (_printValues)
-        {
-            Console.WriteLine($&quot;value1 : {value1}, value2: {value2}&quot;);
-        }
-        Console.WriteLine($&quot;Answer:  {value1 + value2}&quot;);
-    }
+<span class="na">    [ApplicationMetadata(Description = &quot;Adds two numbers. duh!&quot;)]</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Add</span><span class="p">(</span><span class="kt">int</span> <span class="n">value1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_printValues</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">&quot;value1 : {value1}, value2: {value2}&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">&quot;Answer:  {value1 + value2}&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    public void Subtract(int value1, int value2)
-    {
-        if (_printValues)
-        {
-            Console.WriteLine($&quot;value1 : {value1}, value2: {value2}&quot;);
-        }
-        Console.WriteLine($&quot;Answer: {value1 - value2}&quot;);
-    }
-}
-</code></pre>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Subtract</span><span class="p">(</span><span class="kt">int</span> <span class="n">value1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_printValues</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">&quot;value1 : {value1}, value2: {value2}&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">&quot;Answer: {value1 - value2}&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
 
 <p>Let's see what the help command output looks like now</p>
 <p>INPUT</p>
-<pre><code class="bash">dotnet example.dll --help
-</code></pre>
+<div class="codehilite"><pre><span></span>dotnet example.dll --help
+</pre></div>
+
 
 <p>OUTPUT</p>
-<pre><code class="bash">Usage: dotnet example.dll [options] [command]
+<div class="codehilite"><pre><span></span>Usage: dotnet example.dll <span class="o">[</span>options<span class="o">]</span> <span class="o">[</span>command<span class="o">]</span>
 
 Options:
-  -h | -? | --help  Show help information
+  -h <span class="p">|</span> -? <span class="p">|</span> --help  Show <span class="nb">help</span> information
   --printValues     Flag
 
 Commands:
   Add        Adds two numbers. duh!
   Subtract
 
-Use &quot;dotnet example.dll [command] --help&quot; for more information about a command.
-</code></pre>
+Use <span class="s2">&quot;dotnet example.dll [command] --help&quot;</span> <span class="k">for</span> more information about a command.
+</pre></div>
+
 
 <p>Let's try and invoke it</p>
 <p>INPUT </p>
-<pre><code class="bash">dotnet example.dll --printValues Subtract 30 5
-</code></pre>
+<div class="codehilite"><pre><span></span>dotnet example.dll --printValues Subtract <span class="m">30</span> <span class="m">5</span>
+</pre></div>
+
 
 <p>OUTPUT</p>
-<pre><code class="bash">value1 : 30, value2: 5
-Answer: 25
-</code></pre>
+<div class="codehilite"><pre><span></span>value1 : <span class="m">30</span>, value2: <span class="m">5</span>
+Answer: <span class="m">25</span>
+</pre></div>
+
 
 <p>Notes:</p>
 <ul>

@@ -605,13 +605,15 @@
 <p>So we are left with <code>delete sample.docx</code></p>
 <p><code>delete</code> here is the name of command and sample.docx is the subject and hence the argument.</p>
 <p>C# method for the same would look like</p>
-<pre><code class="c#">public void Delete(string fileName)
-</code></pre>
+<div class="codehilite"><pre><span></span><span class="k">public</span> <span class="k">void</span> <span class="nf">Delete</span><span class="p">(</span><span class="kt">string</span> <span class="n">fileName</span><span class="p">)</span>
+</pre></div>
+
 
 <p>We can have multiple subjects for instance, <code>please delete sample.docx and number.xls</code>. That would turn into <code>delete sample.docx number.xls</code></p>
 <p>C# method for the same would look like</p>
-<pre><code class="c#">public void Delete(List&lt;string&gt; fileNames)
-</code></pre>
+<div class="codehilite"><pre><span></span><span class="k">public</span> <span class="k">void</span> <span class="nf">Delete</span><span class="p">(</span><span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">fileNames</span><span class="p">)</span>
+</pre></div>
+
 
 <h3 id="options">Options</h3>
 <p>Options are arguments that :
@@ -625,8 +627,9 @@ The command is still <code>delete</code>, the subject(argument) is still <code>s
 <p>Let's see how we can translate into a cli command</p>
 <p><code>delete sample.docx --time tomorrow</code></p>
 <p>C# method for the same would look like</p>
-<pre><code class="c#">public void Delete(string fileName, [Option]string time = &quot;Now&quot;)
-</code></pre>
+<div class="codehilite"><pre><span></span><span class="k">public</span> <span class="k">void</span> <span class="nf">Delete</span><span class="p">(</span><span class="kt">string</span> <span class="n">fileName</span><span class="p">,</span> <span class="p">[</span><span class="n">Option</span><span class="p">]</span><span class="kt">string</span> <span class="n">time</span> <span class="p">=</span> <span class="s">&quot;Now&quot;</span><span class="p">)</span>
+</pre></div>
+
 
 <h3 id="flags">Flags</h3>
 <p>Flags are very similar to options except for the fact they are aways boolean (&amp; false by default) and don't need an explicit value. If a flag is present, its true, otherwise it's false.</p>
@@ -639,11 +642,11 @@ Safely here means that delete it only if no process is using it. It's naturally 
 </div>
 <p>Notice that we din't pass any value for <code>--safely</code> option. This is flag and it's value will be true since we have passed it.</p>
 <p>C# method for the same would look like</p>
-<pre><code class="c#">public void Delete(
-    string fileName, 
-    [Option]bool safely, 
-    [Option]string time = &quot;Now&quot;)
-</code></pre>
+<div class="codehilite"><pre><span></span><span class="k">public</span> <span class="k">void</span> <span class="nf">Delete</span><span class="p">(</span>
+    <span class="kt">string</span> <span class="n">fileName</span><span class="p">,</span> 
+<span class="na">    [Option]</span><span class="kt">bool</span> <span class="n">safely</span><span class="p">,</span> 
+<span class="na">    [Option]</span><span class="kt">string</span> <span class="n">time</span> <span class="p">=</span> <span class="s">&quot;Now&quot;</span><span class="p">)</span>
+</pre></div>
                 
                   
                 

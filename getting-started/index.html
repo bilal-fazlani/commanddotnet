@@ -581,13 +581,15 @@
                 <h2 id="installation">Installation</h2>
 <p>CommandDotNet can be installed from <a href="https://www.nuget.org/packages/CommandDotNet/">nuget.org</a></p>
 <p>.NET CLI</p>
-<pre><code class="bash">dotnet add package CommandDotNet
-</code></pre>
+<div class="codehilite"><pre><span></span>dotnet add package CommandDotNet
+</pre></div>
+
 
 <p>Or</p>
 <p>Nuget Package Manager</p>
-<pre><code class="bash">Install-Package CommandDotNet
-</code></pre>
+<div class="codehilite"><pre><span></span>Install-Package CommandDotNet
+</pre></div>
+
 
 <h2 id="lets-build-a-calculator">Let's build a calculator</h2>
 <p>Let's say you want to create a calculator console application which can perform 2 operations:</p>
@@ -597,102 +599,110 @@
 </ol>
 <p>It prints the results on console.</p>
 <p>Let's begin with creating the class</p>
-<pre><code class="c#">public class Calculator
-{
-    public void Add(int value1, int value2)
-    {
-        Console.WriteLine($&quot;Answer:  {value1 + value2}&quot;);
-    }
+<div class="codehilite"><pre><span></span><span class="k">public</span> <span class="k">class</span> <span class="nc">Calculator</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Add</span><span class="p">(</span><span class="kt">int</span> <span class="n">value1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">&quot;Answer:  {value1 + value2}&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    public void Subtract(int value1, int value2)
-    {
-        Console.WriteLine($&quot;Answer:  {value1 - value2}&quot;);
-    }
-}
-</code></pre>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Subtract</span><span class="p">(</span><span class="kt">int</span> <span class="n">value1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">&quot;Answer:  {value1 - value2}&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
 
 <p>Now that we have our calculator ready, let's see about how we can call it from command line.</p>
-<pre><code class="c#">class Program
-{
-    static int Main(string[] args)
-    {
-        AppRunner&lt;Calculator&gt; appRunner = new AppRunner&lt;Calculator&gt;();
-        return appRunner.Run(args);
-    }
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Program</span>
+<span class="p">{</span>
+    <span class="k">static</span> <span class="kt">int</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">AppRunner</span><span class="p">&lt;</span><span class="n">Calculator</span><span class="p">&gt;</span> <span class="n">appRunner</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AppRunner</span><span class="p">&lt;</span><span class="n">Calculator</span><span class="p">&gt;();</span>
+        <span class="k">return</span> <span class="n">appRunner</span><span class="p">.</span><span class="n">Run</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
 
 <p>Assuming our application's name is <code>example.dll</code></p>
 <p>let's try and run this app from command line using dotnet</p>
 <p>INPUT</p>
-<pre><code class="bash">dotnet example.dll --help
-</code></pre>
+<div class="codehilite"><pre><span></span>dotnet example.dll --help
+</pre></div>
+
 
 <p>OUTPUT</p>
-<pre><code class="bash">Usage: dotnet example.dll [options] [command]
+<div class="codehilite"><pre><span></span>Usage: dotnet example.dll <span class="o">[</span>options<span class="o">]</span> <span class="o">[</span>command<span class="o">]</span>
 
 Options:
-  -h | -? | --help  Show help information
+  -h <span class="p">|</span> -? <span class="p">|</span> --help  Show <span class="nb">help</span> information
 
 Commands:
   Add
   Subtract
 
-Use &quot;dotnet example.dll [command] --help&quot; for more information about a command.
+Use <span class="s2">&quot;dotnet example.dll [command] --help&quot;</span> <span class="k">for</span> more information about a command.
+</pre></div>
 
-</code></pre>
 
 <p>Voila!</p>
 <p>So, as you might have already guessed, it is detecting methods of the calculator class. How about adding some helpful description.</p>
-<pre><code class="c#">[ApplicationMetadata(Description = &quot;Adds two numbers. duh!&quot;)]
-public void Add(int value1, int value2)
-{
-    Console.WriteLine($&quot;Answer: {value1 + value2}&quot;);
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><span class="na">[ApplicationMetadata(Description = &quot;Adds two numbers. duh!&quot;)]</span>
+<span class="k">public</span> <span class="k">void</span> <span class="nf">Add</span><span class="p">(</span><span class="kt">int</span> <span class="n">value1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="err">$</span><span class="s">&quot;Answer: {value1 + value2}&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
 
 <p>This should do it.</p>
 <p>Let's see how the help appears now.</p>
-<pre><code class="bash">Usage: dotnet example.dll [options] [command]
+<div class="codehilite"><pre><span></span>Usage: dotnet example.dll <span class="o">[</span>options<span class="o">]</span> <span class="o">[</span>command<span class="o">]</span>
 
 Options:
-  -h | -? | --help  Show help information
+  -h <span class="p">|</span> -? <span class="p">|</span> --help  Show <span class="nb">help</span> information
 
 Commands:
   Add        Adds two numbers. duh!
   Subtract
 
-Use &quot;dotnet example.dll [command] --help&quot; for more information about a command.
+Use <span class="s2">&quot;dotnet example.dll [command] --help&quot;</span> <span class="k">for</span> more information about a command.
+</pre></div>
 
-</code></pre>
 
 <p>Awesome. Descriptions are not required but can be very useful depending upon the complexity of your app and the audience. </p>
 <p>Now let's try to see if we can get further help for the add command.</p>
 <p>INPUT</p>
-<pre><code class="bash">dotnet example.dll Add --help
-</code></pre>
+<div class="codehilite"><pre><span></span>dotnet example.dll Add --help
+</pre></div>
+
 
 <p>OUTPUT</p>
-<pre><code class="bash">Usage: dotnet example.dll Add [arguments] [options]
+<div class="codehilite"><pre><span></span>Usage: dotnet example.dll Add <span class="o">[</span>arguments<span class="o">]</span> <span class="o">[</span>options<span class="o">]</span>
 
 Arguments:
   value1  Int32
   value2  Int32
 
 Options:
-  -h | -? | --help  Show help information
-</code></pre>
+  -h <span class="p">|</span> -? <span class="p">|</span> --help  Show <span class="nb">help</span> information
+</pre></div>
+
 
 <p>tada!</p>
 <p>Ok, so here, it show what parameters are required for addition and their type.</p>
 <p>Let's try and add two numbers.</p>
 <p>INPUT</p>
-<pre><code class="bash">dotnet example.dll Add 40 20
-</code></pre>
+<div class="codehilite"><pre><span></span>dotnet example.dll Add <span class="m">40</span> <span class="m">20</span>
+</pre></div>
+
 
 <p>OUTPUT</p>
-<pre><code class="bash">Answer: 60
-</code></pre>
+<div class="codehilite"><pre><span></span>Answer: <span class="m">60</span>
+</pre></div>
+
 
 <p>Cool. You get the gist of this library. Let's move on.</p>
                 

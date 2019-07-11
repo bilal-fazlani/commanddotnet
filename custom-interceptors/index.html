@@ -503,28 +503,28 @@
                 
                 <h1 id="custom-interceptors-before-method-execution">Custom interceptors before method execution</h1>
 <p>Invoking the command method can be customized by implementing ICommandInvoker and registering the an instance with AppRunner.WithCommandInvoker. The WithCommandInvoker method provides the default implementation so it can be wrapped using the <a href="https://en.wikipedia.org/wiki/Decorator_pattern">Decorator Pattern</a>.</p>
-<pre><code class="c#">static int Main(string[] args)
-{
-     AppRunner&lt;CustomCommandInvokerApp&gt; appRunner = new AppRunner&lt;CustomCommandInvokerApp&gt;().WithCommandInvoker(inner =&gt; new CustomCommandInvoker(inner));
-     return appRunner.Run(args);
-}
+<div class="codehilite"><pre><span></span><span class="k">static</span> <span class="kt">int</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+<span class="p">{</span>
+     <span class="n">AppRunner</span><span class="p">&lt;</span><span class="n">CustomCommandInvokerApp</span><span class="p">&gt;</span> <span class="n">appRunner</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AppRunner</span><span class="p">&lt;</span><span class="n">CustomCommandInvokerApp</span><span class="p">&gt;().</span><span class="n">WithCommandInvoker</span><span class="p">(</span><span class="n">inner</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="n">CustomCommandInvoker</span><span class="p">(</span><span class="n">inner</span><span class="p">));</span>
+     <span class="k">return</span> <span class="n">appRunner</span><span class="p">.</span><span class="n">Run</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
+<span class="p">}</span>
 
-public class CustomCommandInvoker : ICommandInvoker
-{
-    private readonly ICommandInvoker _inner;
+<span class="k">public</span> <span class="k">class</span> <span class="nc">CustomCommandInvoker</span> <span class="p">:</span> <span class="n">ICommandInvoker</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">ICommandInvoker</span> <span class="n">_inner</span><span class="p">;</span>
 
-    public CustomCommandInvoker(ICommandInvoker inner)
-    {
-        _inner = inner;
-    }
+    <span class="k">public</span> <span class="nf">CustomCommandInvoker</span><span class="p">(</span><span class="n">ICommandInvoker</span> <span class="n">inner</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_inner</span> <span class="p">=</span> <span class="n">inner</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    public object Invoke(CommandInvocation commandInvocation)
-    {
-        // Your custom code here
-        return _inner.Invoke(commandInvocation);
-    }
-}
-</code></pre>
+    <span class="k">public</span> <span class="kt">object</span> <span class="nf">Invoke</span><span class="p">(</span><span class="n">CommandInvocation</span> <span class="n">commandInvocation</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// Your custom code here</span>
+        <span class="k">return</span> <span class="n">_inner</span><span class="p">.</span><span class="n">Invoke</span><span class="p">(</span><span class="n">commandInvocation</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
                 
                   
                 
