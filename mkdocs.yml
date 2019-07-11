@@ -1,0 +1,45 @@
+site_name: CommandDotNet
+repo_name: 'bilal-fazlani/commanddotnet'
+repo_url: 'https://github.com/bilal-fazlani/commanddotnet'
+nav:
+    - Introduction: index.md
+    - Getting Started: getting-started.md
+    - Parameters: parameters.md
+    - Attributes: attributes.md
+    - Constructor Options: constructor-options.md
+    - Default values: default-values.md
+    - Collections: collections.md
+    - Supported parameter types: supported-parameter-types.md
+    - Modeling: modeling.md
+    - Fluent validation for parameters: fluent-validation-for-parameters.md
+    - Custom return codes: custom-return-codes.md
+    - Default method: default-method.md
+    - Async methods: async-methods.md
+    - Nesting commands: nesting-commands.md
+    - Settings: settings.md
+    - Directives: directives.md
+    - Exception handling: exception-handling.md
+    - Dependency Injection: dependency-injection.md
+    - Custom interceptors: custom-interceptors.md
+# theme: readthedocs
+theme:
+  name: 'material'
+  palette:
+    primary: 'indigo'
+    accent: 'pink'  
+  logo: 'img/logo.png'
+
+google_analytics:
+  - 'UA-39358317-3'
+  - 'auto'
+
+# Customization
+extra:
+  disqus: 'command-dot-net'
+  social:
+    - type: 'github'
+      link: 'https://github.com/bilal-fazlani'
+    - type: 'twitter'
+      link: 'https://twitter.com/bilal_fazlani'
+    - type: 'linkedin'
+      link: 'https://www.linkedin.com/in/bilal-fazlani/'
