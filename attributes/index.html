@@ -31,18 +31,18 @@
       
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
-      <link rel="shortcut icon" href="assets/images/favicon.png">
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.4.0">
     
     
       
-        <title>CommandDotNet</title>
+        <title>Attributes - CommandDotNet</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/application.0284f74d.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application.0284f74d.css">
       
-        <link rel="stylesheet" href="assets/stylesheets/application-palette.01803549.css">
+        <link rel="stylesheet" href="../assets/stylesheets/application-palette.01803549.css">
       
       
         
@@ -51,7 +51,7 @@
       
     
     
-      <script src="assets/javascripts/modernizr.74668098.js"></script>
+      <script src="../assets/javascripts/modernizr.74668098.js"></script>
     
     
       
@@ -60,7 +60,7 @@
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
-    <link rel="stylesheet" href="assets/fonts/material-icons.css">
+    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
     
     
     
@@ -110,7 +110,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#introduction" tabindex="1" class="md-skip">
+      <a href="#applicationmetadata" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -119,9 +119,9 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="." title="CommandDotNet" class="md-header-nav__button md-logo">
+        <a href=".." title="CommandDotNet" class="md-header-nav__button md-logo">
           
-            <img src="img/logo.png" width="24" height="24">
+            <img src="../img/logo.png" width="24" height="24">
           
         </a>
       </div>
@@ -136,7 +136,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Introduction
+                Attributes
               
             </span>
           
@@ -211,9 +211,9 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="." title="CommandDotNet" class="md-nav__button md-logo">
+    <a href=".." title="CommandDotNet" class="md-nav__button md-logo">
       
-        <img src="img/logo.png" width="48" height="48">
+        <img src="../img/logo.png" width="48" height="48">
       
     </a>
     CommandDotNet
@@ -245,6 +245,42 @@
       
       
 
+
+  <li class="md-nav__item">
+    <a href=".." title="Introduction" class="md-nav__link">
+      Introduction
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../getting-started/" title="Getting Started" class="md-nav__link">
+      Getting Started
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../parameters/" title="Parameters" class="md-nav__link">
+      Parameters
+    </a>
+  </li>
+
+    
+      
+      
+      
+
   
 
 
@@ -252,30 +288,47 @@
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
     
-      
-    
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
-        Introduction
+        Attributes
       </label>
     
-    <a href="." title="Introduction" class="md-nav__link md-nav__link--active">
-      Introduction
+    <a href="./" title="Attributes" class="md-nav__link md-nav__link--active">
+      Attributes
     </a>
     
       
 <nav class="md-nav md-nav--secondary">
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#credits" title="Credits 🎉" class="md-nav__link">
-    Credits 🎉
+  <a href="#applicationmetadata" title="ApplicationMetadata" class="md-nav__link">
+    ApplicationMetadata
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#subcommand" title="SubCommand" class="md-nav__link">
+    SubCommand
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#argument" title="Argument" class="md-nav__link">
+    Argument
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#option" title="Option" class="md-nav__link">
+    Option
   </a>
   
 </li>
@@ -283,6 +336,12 @@
       
       
       
+      
+        <li class="md-nav__item">
+          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+            Comments
+          </a>
+        </li>
       
     </ul>
   
@@ -297,43 +356,7 @@
 
 
   <li class="md-nav__item">
-    <a href="getting-started/" title="Getting Started" class="md-nav__link">
-      Getting Started
-    </a>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item">
-    <a href="parameters/" title="Parameters" class="md-nav__link">
-      Parameters
-    </a>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item">
-    <a href="attributes/" title="Attributes" class="md-nav__link">
-      Attributes
-    </a>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item">
-    <a href="constructor-options/" title="Constructor Options" class="md-nav__link">
+    <a href="../constructor-options/" title="Constructor Options" class="md-nav__link">
       Constructor Options
     </a>
   </li>
@@ -345,7 +368,7 @@
 
 
   <li class="md-nav__item">
-    <a href="default-values/" title="Default values" class="md-nav__link">
+    <a href="../default-values/" title="Default values" class="md-nav__link">
       Default values
     </a>
   </li>
@@ -357,7 +380,7 @@
 
 
   <li class="md-nav__item">
-    <a href="collections/" title="Collections" class="md-nav__link">
+    <a href="../collections/" title="Collections" class="md-nav__link">
       Collections
     </a>
   </li>
@@ -369,7 +392,7 @@
 
 
   <li class="md-nav__item">
-    <a href="supported-parameter-types/" title="Supported parameter types" class="md-nav__link">
+    <a href="../supported-parameter-types/" title="Supported parameter types" class="md-nav__link">
       Supported parameter types
     </a>
   </li>
@@ -381,7 +404,7 @@
 
 
   <li class="md-nav__item">
-    <a href="modeling/" title="Modeling" class="md-nav__link">
+    <a href="../modeling/" title="Modeling" class="md-nav__link">
       Modeling
     </a>
   </li>
@@ -393,7 +416,7 @@
 
 
   <li class="md-nav__item">
-    <a href="fluent-validation-for-parameters/" title="Fluent validation for parameters" class="md-nav__link">
+    <a href="../fluent-validation-for-parameters/" title="Fluent validation for parameters" class="md-nav__link">
       Fluent validation for parameters
     </a>
   </li>
@@ -405,7 +428,7 @@
 
 
   <li class="md-nav__item">
-    <a href="custom-return-codes/" title="Custom return codes" class="md-nav__link">
+    <a href="../custom-return-codes/" title="Custom return codes" class="md-nav__link">
       Custom return codes
     </a>
   </li>
@@ -417,7 +440,7 @@
 
 
   <li class="md-nav__item">
-    <a href="default-method/" title="Default method" class="md-nav__link">
+    <a href="../default-method/" title="Default method" class="md-nav__link">
       Default method
     </a>
   </li>
@@ -429,7 +452,7 @@
 
 
   <li class="md-nav__item">
-    <a href="async-methods/" title="Async methods" class="md-nav__link">
+    <a href="../async-methods/" title="Async methods" class="md-nav__link">
       Async methods
     </a>
   </li>
@@ -441,7 +464,7 @@
 
 
   <li class="md-nav__item">
-    <a href="nesting-commands/" title="Nesting commands" class="md-nav__link">
+    <a href="../nesting-commands/" title="Nesting commands" class="md-nav__link">
       Nesting commands
     </a>
   </li>
@@ -453,7 +476,7 @@
 
 
   <li class="md-nav__item">
-    <a href="settings/" title="Settings" class="md-nav__link">
+    <a href="../settings/" title="Settings" class="md-nav__link">
       Settings
     </a>
   </li>
@@ -465,7 +488,7 @@
 
 
   <li class="md-nav__item">
-    <a href="directives/" title="Directives" class="md-nav__link">
+    <a href="../directives/" title="Directives" class="md-nav__link">
       Directives
     </a>
   </li>
@@ -477,7 +500,7 @@
 
 
   <li class="md-nav__item">
-    <a href="exception-handling/" title="Exception handling" class="md-nav__link">
+    <a href="../exception-handling/" title="Exception handling" class="md-nav__link">
       Exception handling
     </a>
   </li>
@@ -489,7 +512,7 @@
 
 
   <li class="md-nav__item">
-    <a href="dependency-injection/" title="Dependency Injection" class="md-nav__link">
+    <a href="../dependency-injection/" title="Dependency Injection" class="md-nav__link">
       Dependency Injection
     </a>
   </li>
@@ -501,7 +524,7 @@
 
 
   <li class="md-nav__item">
-    <a href="custom-interceptors/" title="Custom interceptors" class="md-nav__link">
+    <a href="../custom-interceptors/" title="Custom interceptors" class="md-nav__link">
       Custom interceptors
     </a>
   </li>
@@ -521,15 +544,34 @@
 <nav class="md-nav md-nav--secondary">
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#credits" title="Credits 🎉" class="md-nav__link">
-    Credits 🎉
+  <a href="#applicationmetadata" title="ApplicationMetadata" class="md-nav__link">
+    ApplicationMetadata
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#subcommand" title="SubCommand" class="md-nav__link">
+    SubCommand
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#argument" title="Argument" class="md-nav__link">
+    Argument
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#option" title="Option" class="md-nav__link">
+    Option
   </a>
   
 </li>
@@ -537,6 +579,12 @@
       
       
       
+      
+        <li class="md-nav__item">
+          <a href="#__comments" title="Comments" class="md-nav__link md-nav__link--active">
+            Comments
+          </a>
+        </li>
       
     </ul>
   
@@ -550,19 +598,116 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/bilal-fazlani/commanddotnet/edit/master/docs/index.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/bilal-fazlani/commanddotnet/edit/master/docs/attributes.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <p><img alt="logo" src="img/logo.png" /></p>
-<p><a href="https://www.nuget.org/packages/CommandDotNet"><img alt="NuGet Pre Release" src="https://img.shields.io/nuget/vpre/CommandDotNet.svg" /></a>  <a href="https://www.nuget.org/packages/CommandDotNet"><img alt="NuGet" src="https://img.shields.io/nuget/dt/CommandDotNet.svg" /></a>
-<a href="https://travis-ci.com/bilal-fazlani/commanddotnet"><img alt="Build Status" src="https://travis-ci.com/bilal-fazlani/commanddotnet.svg?branch=master" /></a>
-<a href=""><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/bilal-fazlani/CommandDotNet.svg" /></a></p>
-<h1 id="introduction">Introduction</h1>
-<p><strong><em>Model your command line application interface in a class</em></strong></p>
-<p>The purpose of this <strong>framework</strong> is to let developers focus on the core logic of command line application and forget about how arguments are <strong>parsed</strong> &amp; <strong>validated</strong>. This library also let's you structure your CLI app into a hierarchy of commands and subcommands and <strong>invokes appropriate methods</strong> in your app based on user input.</p>
-<p>It provides <strong>out of the box CLI help</strong> with full customization options.</p>
-<h2 id="credits">Credits 🎉</h2>
-<p>Special thanks to <a href="https://github.com/drewburlingame">Drew Burlingame</a> for continuous support and contributions</p>
+                  <h1>Attributes</h1>
+                
+                <h3 id="applicationmetadata">ApplicationMetadata</h3>
+<p>You can use the <code>[ApplicationMetadata]</code> attribute on the class level like this to provide details when application is called with <code>help</code> switch.</p>
+<p>Example: </p>
+<pre><code class="c#">[ApplicationMetadata(Description = &quot;This is a crappy calculator&quot;, ExtendedHelpText = &quot;Some more help text that appears at the bottom&quot;)]
+public class Calculator
+{
+}
+</code></pre>
+
+<p>This attribute can also be used on a Method as shown below.</p>
+<pre><code class="c#">[ApplicationMetadata(Description = &quot;Subtracts value2 from value1 and prints output&quot;, 
+    ExtendedHelpText = &quot;Again, some more detailed help text which has no meaning I still have to write to demostrate this feature&quot;,
+    Name = &quot;subtractValues&quot;)]
+public void Subtract(int value1, int value2)
+{
+}
+</code></pre>
+
+<p>Note that when you use ApplicationMetadata attribute on a method, you can change the name of the command that is different from method name.</p>
+<h3 id="subcommand">SubCommand</h3>
+<p><code>[SubCommand]</code> attribute indicates that targeted property is a SubCommand.</p>
+<p>See <a href="#nesting-commands">Nesting commands</a> for examples</p>
+<h3 id="argument">Argument</h3>
+<p>Every parameter in the method is argument by default. So this this Attribute is optional and should be used only when you need to assign a different name to parameter, or add description to it.</p>
+<p>By default, the parameter names declared in method are the argument names that appear in help. However you can change that.</p>
+<p>Let's see an example-</p>
+<pre><code class="c#">public void LaunchRocket([Argument(
+    Name = &quot;planet&quot;,
+    Description = &quot;Name of the planet you wish the rocket to go)] string planetName)
+</code></pre>
+
+<p>This is what help looks like-</p>
+<pre><code class="bash">Usage: dotnet example.dll LaunchRocket [arguments] [options]
+
+Arguments:
+  planetName  String                                            Name of the planet you wish the rocket to go
+
+Options:
+  -h | -? | --help  Show help information
+</code></pre>
+
+<h3 id="option">Option</h3>
+<p>Every parameter in the method is argument by default. So if you wan't to turn a parameter into option instead of argument, use this attribute. See more info about parameters <a href="#parameters">here</a></p>
+<p>By default, the parameter names declared in method are the option names that appear in help. However you can change that. By convention, an option can have a short name and/or a longname.</p>
+<p>Let's see an example-</p>
+<pre><code class="c#">public void LaunchRocket([Option(
+    LongName = &quot;planet&quot;, 
+    ShortName = &quot;p&quot;, 
+    Description = &quot;Name of the planet you wish the rocket to go&quot;)] string planetName)
+</code></pre>
+
+<p>This is what help looks like-</p>
+<pre><code class="bash">Usage: dotnet example.dll LaunchRocket [options]
+
+Options:
+  -h | -? | --help  Show help information
+  --planet | -p     String                         Name of the planet you wish the rocket to go
+</code></pre>
+
+<p>So planet name can now be passed either with <code>--planet</code> or <code>-p</code>. 
+LongName, ShortName and Description are optional. </p>
+<p>When you don't specify a long name and a short name for an option, it uses the method parameter name by default as long name. In case the method parameter name is just one letter, it will be treated as short name.</p>
+<p>Here's table of examples:</p>
+<table>
+<thead>
+<tr>
+<th>Method parameter name</th>
+<th>Longname</th>
+<th>Shortname</th>
+<th>Generated template</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>planet</td>
+<td></td>
+<td></td>
+<td><code>--planet</code></td>
+</tr>
+<tr>
+<td>planet</td>
+<td>planet</td>
+<td></td>
+<td><code>--planet</code></td>
+</tr>
+<tr>
+<td>planet</td>
+<td></td>
+<td>p</td>
+<td><code>-p</code></td>
+</tr>
+<tr>
+<td>planet</td>
+<td>planet</td>
+<td>p</td>
+<td><code>-p \| --planet</code></td>
+</tr>
+<tr>
+<td>p</td>
+<td></td>
+<td></td>
+<td><code>-p</code></td>
+</tr>
+</tbody>
+</table>
                 
                   
                 
@@ -570,6 +715,22 @@
               
                 
 
+
+  <h2 id="__comments">Comments</h2>
+  <div id="disqus_thread"></div>
+  <script>
+    var disqus_config = function () {
+      this.page.url = "None";
+      this.page.identifier =
+        "None";
+    };
+    (function() {
+      var d = document, s = d.createElement("script");
+      s.src = "//command-dot-net.disqus.com/embed.js";
+      s.setAttribute("data-timestamp", +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
 
               
             </article>
@@ -583,14 +744,28 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
+          <a href="../parameters/" title="Parameters" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Parameters
+              </span>
+            </div>
+          </a>
         
-          <a href="getting-started/" title="Getting Started" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+        
+          <a href="../constructor-options/" title="Constructor Options" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Getting Started
+                Constructor Options
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
@@ -613,7 +788,7 @@
       </div>
       
   <div class="md-footer-social">
-    <link rel="stylesheet" href="assets/fonts/font-awesome.css">
+    <link rel="stylesheet" href="../assets/fonts/font-awesome.css">
     
       <a href="https://github.com/bilal-fazlani" class="md-footer-social__link fa fa-github"></a>
     
@@ -629,9 +804,9 @@
       
     </div>
     
-      <script src="assets/javascripts/application.245445c6.js"></script>
+      <script src="../assets/javascripts/application.245445c6.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:"."}})</script>
+      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
       
     
   </body>
