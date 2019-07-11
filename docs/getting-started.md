@@ -2,17 +2,11 @@
 
 CommandDotNet can be installed from [nuget.org](https://www.nuget.org/packages/CommandDotNet/)
 
-.NET CLI
-
-```bash
+``` bash tab=".NET CLI"
 dotnet add package CommandDotNet
 ```
 
-Or
-
-Nuget Package Manager
-
-```bash
+``` bash tab="Nuget Package Manager"
 Install-Package CommandDotNet
 ```
 

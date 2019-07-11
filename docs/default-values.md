@@ -1,7 +1,7 @@
 C# supports default values for parameters and so does this library.
 
 Let's make some changes to Calculator to add a new Command - `Divide`. And let's default value2 to 1 when user doesn't provide a value.
-This will prevent the calculator from crahsing because of `DivideByZeroException`
+This will prevent the calculator from crashing because of `DivideByZeroException`
 
 ```c#
 public void Divide(int value1, int value2 = 1)

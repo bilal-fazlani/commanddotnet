@@ -28,7 +28,7 @@ public class App
 }
 ```
 
-This looks simple now but because the `Service` class constructor doesn't have any construtor parameters but if it had, it would have been difficult for `App` to create the instance of `Service`.
+This looks simple now but because the `Service` class constructor doesn't have any constructor parameters but if it had, it would have been difficult for `App` to create the instance of `Service`.
 
 Another reason why you might want to use dependency injection is testable code. This is how `App` looks like with "Property injection"
 
@@ -45,7 +45,7 @@ public class App
 }
 ```
 
-The benefit here is that you can mock IService and just test the behaviour of `App` without worrying about `Service` class.
+The benefit here is that you can mock IService and just test the behavior of `App` without worrying about `Service` class.
 
 CommandDotNet supports two IoC frameworks - Autofac & Microsoft
 
@@ -70,7 +70,7 @@ static int Main(string[] args)
 
 ### Microsoft
 
-In order to use microsoft dependency injection, you need to install an additional integration nuget package : https://www.nuget.org/packages/CommandDotNet.IoC.MicrosoftDependencyInjection/
+In order to use Microsoft Dependency Injection, you need to install an additional integration nuget package : https://www.nuget.org/packages/CommandDotNet.IoC.MicrosoftDependencyInjection/
 
 This how you can use the package:
 

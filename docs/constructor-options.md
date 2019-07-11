@@ -1,4 +1,4 @@
-Let's say we want to add a class level field which is useful in both Addtion and Subtraction. So now the class looks something like this-
+Let's say we want to add a class level field which is useful in both Addition and Subtraction. So now the class looks something like this-
 
 ```c#
 public class Calculator
