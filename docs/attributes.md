@@ -92,5 +92,5 @@ Here's table of examples:
 | planet |  |  | `--planet` |
 | planet | planet |  | `--planet` |
 | planet |  | p | `-p` |
-| planet | planet | p | `-p \| --planet` |
+| planet | planet | p | `-p | --planet` |
 | p |  |  | `-p` |
