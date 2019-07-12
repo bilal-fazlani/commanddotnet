@@ -42,7 +42,7 @@ namespace CommandDotNet.Builders
 
         internal static int VersionMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
         {
-            if (commandContext.ParseResult.Values.Any(v => v.Argument.Name == VersionOptionName))
+            if (commandContext.ParseResult.ValuesByArgument.Any(v => v.Key.Name == VersionOptionName))
             {
                 Print(commandContext.AppSettings);
                 return 0;

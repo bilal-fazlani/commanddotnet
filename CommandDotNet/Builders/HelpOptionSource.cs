@@ -27,7 +27,7 @@ namespace CommandDotNet.Builders
         
         internal static int HelpMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
         {
-            if (commandContext.ParseResult.Values.Any(v => v.Argument.Name == Constants.HelpArgumentTemplate.Name))
+            if (commandContext.ParseResult.ValuesByArgument.Any(v => v.Key.Name == Constants.HelpArgumentTemplate.Name))
             {
                 Print(commandContext.AppSettings, commandContext.ParseResult.Command);
                 return 0;

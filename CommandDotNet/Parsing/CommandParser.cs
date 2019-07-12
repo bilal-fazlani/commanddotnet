@@ -20,23 +20,23 @@ namespace CommandDotNet.Parsing
         public void ParseCommand(CommandContext commandContext, ICommand command)
         {
             bool ignoreRemainingArguments = false;
-            var remainingArguments = new List<string>();
+            var remainingArguments = new List<Token>();
 
             ICommand currentCommand = command;
             IOption currentOption = null;
             IEnumerator<IOperand> operands = new OperandEnumerator(command.Operands);
 
-            var argumentValues = new Dictionary<string, ArgumentValues>();
+            var argumentValues = new Dictionary<IArgument, List<string>>();
             List<string> GetArgValue(IArgument argument)
             {
-                var argValue = argumentValues.GetOrAdd(argument.Aliases.First(), k =>
+                return argumentValues.GetOrAdd(argument, k =>
                 {
                     // link values w/ ValueInfo until we can remove it completely
-                    var argumentInfo = argument.ContextData.Get<ArgumentInfo>();
-                    var values = argumentInfo != null ? argumentInfo.ValueInfo.Values : new List<string>();
-                    return new ArgumentValues(argument, values);
+                    var argInfo = argument.ContextData.Get<ArgumentInfo>();
+                    return argInfo != null 
+                        ? argInfo.ValueInfo.Values 
+                        : new List<string>();
                 });
-                return argValue.Values;
             }
 
             foreach (var token in commandContext.Tokens.Arguments)
@@ -52,7 +52,7 @@ namespace CommandDotNet.Parsing
                             case ParseOptionResult.Succeeded:
                                 break;
                             case ParseOptionResult.UnknownOption:
-                                remainingArguments.Add(token.Value);
+                                remainingArguments.Add(token);
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException(optionResult.ToString());
@@ -61,7 +61,7 @@ namespace CommandDotNet.Parsing
                     case TokenType.Value:
                         if (ignoreRemainingArguments && currentOption == null)
                         {
-                            remainingArguments.Add(token.Value);
+                            remainingArguments.Add(token);
                         }
                         else
                         {
@@ -92,16 +92,16 @@ namespace CommandDotNet.Parsing
                 }
             }
 
-            remainingArguments.AddRange(commandContext.Tokens.Separated.Select(t => t.RawValue));
-
             if (currentOption != null) // an option was left without a value
             {
                 throw new CommandParsingException(currentCommand, $"Missing value for option '{currentOption.Name}'");
             }
+
             commandContext.ParseResult = new ParseResult(
                 currentCommand, 
-                remainingArguments.AsReadOnly(), 
-                argumentValues.Values.ToList().AsReadOnly());
+                remainingArguments,
+                commandContext.Tokens.Separated,
+                argumentValues);
         }
 
         private enum ParseOperandResult

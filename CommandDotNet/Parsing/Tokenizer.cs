@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Parsing
 {
@@ -68,6 +69,23 @@ namespace CommandDotNet.Parsing
         public static Token TokenizeValue(string arg)
         {
             return new Token(arg, arg, TokenType.Value);
+        }
+
+        public static string[] ToArgsArray(this TokenCollection tokens)
+        {
+            var results = tokens.Directives.Select(t => t.RawValue)
+                .Union(tokens.Arguments.Select(t => t.RawValue));
+            if (tokens.Separated.Any())
+            {
+                results = results.Union("--".ToEnumerable())
+                    .Union(tokens.Separated.Select(t => t.RawValue));
+            }
+            return results.ToArray();
+        }
+
+        public static string[] ToArgsArray(this IEnumerable<Token> tokens)
+        {
+            return tokens.Select(t => t.RawValue).ToArray();
         }
 
         public static TokenCollection ExpandClubbedOptions(this TokenCollection tokenCollection)
