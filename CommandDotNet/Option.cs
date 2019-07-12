@@ -22,7 +22,7 @@ namespace CommandDotNet
             TypeInfo = new TypeInfo {DisplayName = argumentTemplate.TypeDisplayName};
         }
 
-        public string Name { get; set; }
+        public string Name { get; }
         public string Description { get; set; }
         
         public ITypeInfo TypeInfo { get; set; }
@@ -32,9 +32,9 @@ namespace CommandDotNet
         public List<string> AllowedValues { get; set; }
         public List<string> Values { get; private set; }
 
-        public string Template { get; set; }
-        public string ShortName { get; set; }
-        public string SymbolName { get; set; }
+        public string Template { get; }
+        public string ShortName { get; }
+        public string SymbolName { get; }
 
         public bool Inherited { get; set; }
 
@@ -61,6 +61,44 @@ namespace CommandDotNet
         public override string ToString()
         {
             return $"Option: {new ArgumentTemplate(Name, ShortName, SymbolName, TypeInfo.DisplayName)}";
+        }
+
+        protected bool Equals(Option other)
+        {
+            return string.Equals(Name, other.Name) 
+                   && string.Equals(ShortName, other.ShortName) 
+                   && string.Equals(SymbolName, other.SymbolName);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((Option) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (Name != null ? Name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (ShortName != null ? ShortName.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (SymbolName != null ? SymbolName.GetHashCode() : 0);
+                return hashCode;
+            }
         }
     }
 }

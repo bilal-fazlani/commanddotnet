@@ -8,12 +8,13 @@ namespace CommandDotNet
 {
     public class Operand : IOperand
     {
-        public Operand()
+        public Operand(string name)
         {
+            Name = name;
             Values = new List<string>();
         }
 
-        public string Name { get; set; }
+        public string Name { get; }
         public string Description { get; set; }
 
         public ITypeInfo TypeInfo { get; set; }
@@ -37,6 +38,36 @@ namespace CommandDotNet
         public override string ToString()
         {
             return $"Operand: {new ArgumentTemplate(name:Name, typeDisplayName:TypeInfo.DisplayName)}";
+        }
+
+        protected bool Equals(Operand other)
+        {
+            return string.Equals(Name, other.Name);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((Operand) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return (Name != null ? Name.GetHashCode() : 0);
         }
     }
 }

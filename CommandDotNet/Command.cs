@@ -33,7 +33,7 @@ namespace CommandDotNet
         public string ExtendedHelpText { get; set; }
 
         public IEnumerable<IOperand> Operands => _operands;
-        public ICommand Parent { get; private set; }
+        public ICommand Parent { get; }
         public IEnumerable<ICommand> Commands => _commands;
         public ICustomAttributeProvider CustomAttributeProvider { get; }
         public IContextData ContextData { get; } = new ContextData();
@@ -114,9 +114,8 @@ namespace CommandDotNet
             string name, string description, IArgumentArity arity,
             string typeDisplayName, object defaultValue, List<string> allowedValues)
         {
-            var operand = new Operand
+            var operand = new Operand(name)
             {
-                Name = name, 
                 Description = description, 
                 Arity = arity,
                 TypeInfo = new TypeInfo
@@ -166,6 +165,40 @@ namespace CommandDotNet
                    $"operands:{_operands.Select(o => o.Name).ToCsv()} " +
                    $"options:{_options.Select(o => o.Name).ToCsv()} " +
                    $"commands:{_commands.Select(c => c.Name).ToCsv()}";
+        }
+
+        protected bool Equals(Command other)
+        {
+            return string.Equals(Name, other.Name) 
+                   && Equals(Parent, other.Parent);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return Equals((Command) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((Name != null ? Name.GetHashCode() : 0) * 397) ^ (Parent != null ? Parent.GetHashCode() : 0);
+            }
         }
     }
 }
