@@ -11,19 +11,24 @@ namespace CommandDotNet.Execution
 
         public TokenCollection Tokens { get; set; }
 
-        public ExecutionConfig ExecutionConfig { get; set; }
-
         public ParseResult ParseResult { get; set; }
-
+        
+        public ExecutionConfig ExecutionConfig { get; }
+        
         public AppSettings AppSettings { get; }
 
         public IContextData ContextData { get; } = new ContextData();
 
-        public CommandContext(string[] originalArgs, TokenCollection originalTokens, AppSettings appSettings)
+        public CommandContext(
+            string[] originalArgs, 
+            TokenCollection originalTokens, 
+            AppSettings appSettings,
+            ExecutionConfig executionConfig)
         {
             Original = new OriginalInput(originalArgs, originalTokens);
             Tokens = originalTokens;
             AppSettings = appSettings;
+            ExecutionConfig = executionConfig;
         }
 
         public void ShouldExitWithCode(int exitCode)
