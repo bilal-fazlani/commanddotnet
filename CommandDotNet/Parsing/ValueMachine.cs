@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CommandDotNet.ClassModeling;
+﻿using CommandDotNet.ClassModeling;
 using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Parsing
@@ -19,8 +16,6 @@ namespace CommandDotNet.Parsing
 
         public object GetValue(ArgumentInfo argumentInfo)
         {
-            PromptForValue(argumentInfo);
-            
             //when user has provided a value
             if (argumentInfo.ValueInfo.HasValue && argumentInfo.ValueInfo.Value != null)
             {
@@ -38,33 +33,6 @@ namespace CommandDotNet.Parsing
 
             //when there no value from input and no default value, return default value of the type
             return argumentInfo.Type.GetDefaultValue();
-        }
-
-        private void PromptForValue(ArgumentInfo argumentInfo)
-        {
-            if (!_appSettings.PromptForMissingOperands
-                || !(argumentInfo is OperandArgumentInfo operandInfo)
-                || operandInfo.ValueInfo.HasValue
-                || !operandInfo.DefaultValue.IsNullValue())
-            {
-                return;
-            }
-
-            List<string> inputs;
-            if (operandInfo.Arity.AllowsZeroOrMore())
-            {
-                _appSettings.Console.Out.Write($"{operandInfo.Name} ({operandInfo.TypeDisplayName}) [separate values by space]: ");
-                inputs = _appSettings.Console.In.ReadLine()?.Split(' ').ToList() ?? new List<string>();
-            }
-            else
-            {
-                _appSettings.Console.Out.Write($"{operandInfo.Name} ({operandInfo.TypeDisplayName}): ");
-                inputs = new List<string>{ _appSettings.Console.In.ReadLine() };
-            }
-
-            var values = operandInfo.ValueInfo.Values;
-            values.Clear();
-            values.AddRange(inputs);
         }
     }
 }

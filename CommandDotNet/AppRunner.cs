@@ -160,6 +160,10 @@ namespace CommandDotNet
             _executionBuilder.AddMiddlewareInStage(ParseMiddleware, MiddlewareStages.Parsing);
             _executionBuilder.AddMiddlewareInStage(HelpOptionSource.HelpMiddleware, MiddlewareStages.Invocation, 100);
             _executionBuilder.AddMiddlewareInStage(VersionOptionSource.VersionMiddleware, MiddlewareStages.Invocation, 200);
+            if (_settings.PromptForMissingOperands)
+            {
+                _executionBuilder.AddMiddlewareInStage(ValuePromptMiddleware.PromptForMissingOperands, MiddlewareStages.Invocation, 300);
+            }
             _executionBuilder.AddMiddlewareInStage(CommandRunner.InvokeMiddleware, MiddlewareStages.Invocation, 300);
 
             var tokens = args.Tokenize(includeDirectives: _settings.EnableDirectives);

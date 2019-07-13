@@ -8,17 +8,17 @@ namespace CommandDotNet.Parsing
         public ICommand Command { get; }
         public IReadOnlyCollection<Token> RemainingArguments { get; }
         public IReadOnlyCollection<Token> SeparatedArguments { get; }
-        public Dictionary<IArgument, List<string>> ValuesByArgument { get; }
+        public ArgumentValues ArgumentValues { get; }
 
         public ParseResult(ICommand command,
             IReadOnlyCollection<Token> remainingArguments,
             IReadOnlyCollection<Token> separatedArguments,
-            Dictionary<IArgument, List<string>> valuesByArgument)
+            ArgumentValues argumentValues)
         {
             Command = command ?? throw new ArgumentNullException(nameof(command));
             RemainingArguments = remainingArguments ?? new List<Token>();
             SeparatedArguments = separatedArguments ?? new List<Token>();
-            ValuesByArgument = valuesByArgument;
+            ArgumentValues = argumentValues;
         }
     }
 }

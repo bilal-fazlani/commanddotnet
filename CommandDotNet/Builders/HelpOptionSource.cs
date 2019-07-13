@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using CommandDotNet.Execution;
 using CommandDotNet.Help;
 
@@ -27,7 +26,7 @@ namespace CommandDotNet.Builders
         
         internal static int HelpMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
         {
-            if (commandContext.ParseResult.ValuesByArgument.Any(v => v.Key.Name == Constants.HelpArgumentTemplate.Name))
+            if (commandContext.ParseResult.ArgumentValues.Contains(Constants.HelpArgumentTemplate.Name))
             {
                 Print(commandContext.AppSettings, commandContext.ParseResult.Command);
                 return 0;

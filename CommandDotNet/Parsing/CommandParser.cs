@@ -2,9 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using CommandDotNet.ClassModeling;
 using CommandDotNet.Execution;
-using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Parsing
 {
@@ -26,18 +24,7 @@ namespace CommandDotNet.Parsing
             IOption currentOption = null;
             IEnumerator<IOperand> operands = new OperandEnumerator(command.Operands);
 
-            var argumentValues = new Dictionary<IArgument, List<string>>();
-            List<string> GetArgValue(IArgument argument)
-            {
-                return argumentValues.GetOrAdd(argument, k =>
-                {
-                    // link values w/ ValueInfo until we can remove it completely
-                    var argInfo = argument.ContextData.Get<ArgumentInfo>();
-                    return argInfo != null 
-                        ? argInfo.ValueInfo.Values 
-                        : new List<string>();
-                });
-            }
+            var argumentValues = new ArgumentValues();
 
             foreach (var token in commandContext.Tokens.Arguments)
             {
@@ -45,7 +32,7 @@ namespace CommandDotNet.Parsing
                 {
                     case TokenType.Option:
                         var optionResult = ParseOption(
-                            token, currentCommand, out currentOption, GetArgValue);
+                            token, currentCommand, out currentOption, argumentValues.GetArgValues);
 
                         switch (optionResult)
                         {
@@ -66,7 +53,7 @@ namespace CommandDotNet.Parsing
                         else
                         {
                             var operandResult = ParseArgumentValue(
-                                token, ref currentCommand, ref currentOption, operands, GetArgValue);
+                                token, ref currentCommand, ref currentOption, operands, argumentValues.GetArgValues);
 
                             switch (operandResult)
                             {

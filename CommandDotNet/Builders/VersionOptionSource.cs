@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using CommandDotNet.Execution;
 
@@ -42,7 +41,7 @@ namespace CommandDotNet.Builders
 
         internal static int VersionMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
         {
-            if (commandContext.ParseResult.ValuesByArgument.Any(v => v.Key.Name == VersionOptionName))
+            if (commandContext.ParseResult.ArgumentValues.Contains(VersionOptionName))
             {
                 Print(commandContext.AppSettings);
                 return 0;
