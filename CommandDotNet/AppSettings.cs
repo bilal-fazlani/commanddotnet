@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using CommandDotNet.Help;
 using CommandDotNet.Invocation;
 using CommandDotNet.Rendering;
@@ -42,14 +41,14 @@ namespace CommandDotNet
 
         public bool EnableDirectives { get; set; }
 
-        [Obsolete("Use correctly spelled PromptForArgumentsIfNotProvided")]
+        [Obsolete("Use correctly spelled PromptForMissingOperands")]
         public bool PrompForArgumentsIfNotProvided
         {
-            get => PromptForArgumentsIfNotProvided;
-            set => PromptForArgumentsIfNotProvided = value;
+            get => PromptForMissingOperands;
+            set => PromptForMissingOperands = value;
         }
 
-        public bool PromptForArgumentsIfNotProvided { get; set; }
+        public bool PromptForMissingOperands { get; set; }
 
         public AppHelpSettings Help { get; set; } = new AppHelpSettings();
 

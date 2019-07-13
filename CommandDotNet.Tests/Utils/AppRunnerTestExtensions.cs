@@ -24,16 +24,17 @@ namespace CommandDotNet.Tests.Utils
             // scenarios don't pass testOutputHelper because that framework
             // print the AppRunnerResult.ConsoleOut so it's not necessary
             // to capture output directly to XUnit
-            return (AppRunnerResult)runInMemMethod.Invoke(null, new[] { runner, args, null, dependencies });
+            return (AppRunnerResult)runInMemMethod.Invoke(null, new[] { runner, args, null, dependencies, null });
         }
 
         public static AppRunnerResult RunInMem<T>(
             this AppRunner<T> runner, 
-            string[] args, 
+            string[] args,
             ITestOutputHelper testOutputHelper,
-            IEnumerable<object> dependencies = null) where T : class
+            IEnumerable<object> dependencies = null,
+            Func<TestConsole, string> onReadLine = null) where T : class
         {
-            var testConsole = new TestConsole();
+            var testConsole = new TestConsole(onReadLine);
             runner.OverrideConsole(testConsole);
 
             var resolver = new TestDependencyResolver();

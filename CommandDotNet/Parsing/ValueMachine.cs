@@ -42,7 +42,7 @@ namespace CommandDotNet.Parsing
 
         private void PromptForValue(ArgumentInfo argumentInfo)
         {
-            if (!_appSettings.PromptForArgumentsIfNotProvided
+            if (!_appSettings.PromptForMissingOperands
                 || !(argumentInfo is OperandArgumentInfo operandInfo)
                 || operandInfo.ValueInfo.HasValue
                 || !operandInfo.DefaultValue.IsNullValue())
@@ -54,12 +54,12 @@ namespace CommandDotNet.Parsing
             if (operandInfo.Arity.AllowsZeroOrMore())
             {
                 _appSettings.Console.Out.Write($"{operandInfo.Name} ({operandInfo.TypeDisplayName}) [separate values by space]: ");
-                inputs = Console.ReadLine()?.Split(' ').ToList() ?? new List<string>();
+                inputs = _appSettings.Console.In.ReadLine()?.Split(' ').ToList() ?? new List<string>();
             }
             else
             {
                 _appSettings.Console.Out.Write($"{operandInfo.Name} ({operandInfo.TypeDisplayName}): ");
-                inputs = new List<string>{ Console.ReadLine() };
+                inputs = new List<string>{ _appSettings.Console.In.ReadLine() };
             }
 
             var values = operandInfo.ValueInfo.Values;

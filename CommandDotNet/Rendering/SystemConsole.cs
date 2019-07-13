@@ -13,6 +13,7 @@ namespace CommandDotNet.Rendering
         {
             Error = StandardStreamWriter.Create(Console.Error);
             Out = StandardStreamWriter.Create(Console.Out);
+            In = StandardStreamReader.Create(Console.In);
         }
 
         public IStandardStreamWriter Error { get; }
@@ -22,6 +23,8 @@ namespace CommandDotNet.Rendering
         public IStandardStreamWriter Out { get; }
 
         public bool IsOutputRedirected => Console.IsOutputRedirected;
+
+        public IStandardStreamReader In { get; }
 
         public bool IsInputRedirected => Console.IsInputRedirected;
     }

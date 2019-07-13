@@ -32,6 +32,8 @@ namespace CommandDotNet.Rendering
 
     public interface IStandardIn : IStandardStream
     {
+        IStandardStreamReader In { get; }
+
         bool IsInputRedirected { get; }
     }
 
@@ -42,5 +44,6 @@ namespace CommandDotNet.Rendering
 
     public interface IStandardStreamReader : IStandardStream
     {
+        string ReadLine();
     }
 }
