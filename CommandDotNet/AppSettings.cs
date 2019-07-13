@@ -2,6 +2,7 @@
 using System.IO;
 using CommandDotNet.Help;
 using CommandDotNet.Invocation;
+using CommandDotNet.Rendering;
 using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet
@@ -64,8 +65,7 @@ namespace CommandDotNet
         internal IHelpProvider CustomHelpProvider { get; set; }
 
         internal ICommandInvoker CommandInvoker { get; set; } = new DefaultCommandInvoker();
-        
-        internal TextWriter Out { get; set; } = Console.Out;
-        internal TextWriter Error { get; set; } = Console.Error;
+
+        internal IConsole Console { get; set; } = new SystemConsole();
     }
 }

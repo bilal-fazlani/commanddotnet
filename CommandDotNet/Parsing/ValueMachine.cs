@@ -53,12 +53,12 @@ namespace CommandDotNet.Parsing
             List<string> inputs;
             if (operandInfo.Arity.AllowsZeroOrMore())
             {
-                _appSettings.Out.Write($"{operandInfo.Name} ({operandInfo.TypeDisplayName}) [separate values by space]: ");
+                _appSettings.Console.Out.Write($"{operandInfo.Name} ({operandInfo.TypeDisplayName}) [separate values by space]: ");
                 inputs = Console.ReadLine()?.Split(' ').ToList() ?? new List<string>();
             }
             else
             {
-                _appSettings.Out.Write($"{operandInfo.Name} ({operandInfo.TypeDisplayName}): ");
+                _appSettings.Console.Out.Write($"{operandInfo.Name} ({operandInfo.TypeDisplayName}): ");
                 inputs = new List<string>{ Console.ReadLine() };
             }
 

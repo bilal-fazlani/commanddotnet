@@ -1,9 +1,9 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Parsing;
+using CommandDotNet.Rendering;
 
 namespace CommandDotNet.Directives
 {
@@ -15,17 +15,17 @@ namespace CommandDotNet.Directives
             if (commandContext.Tokens.TryGetDirective("parse", out string value))
             {
                 var executionConfig = commandContext.ExecutionConfig;
-                var consoleOut = commandContext.AppSettings.Out;
+                var console = commandContext.Console;
 
                 var parts = value.Split(":".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                 var verbose = parts.Length > 1 && parts[1].Equals("verbose", StringComparison.OrdinalIgnoreCase);
 
                 if (!verbose)
                 {
-                    consoleOut.WriteLine("use [parse:verbose] to see results after each transformation");
+                    console.Out.WriteLine("use [parse:verbose] to see results after each transformation");
                 }
 
-                ReportTransformation(consoleOut, commandContext.Tokens, ">>> from shell");
+                ReportTransformation(console, commandContext.Tokens, ">>> from shell");
 
                 if (verbose)
                 {
@@ -34,11 +34,11 @@ namespace CommandDotNet.Directives
                         if (tuple.pre.Count == tuple.post.Count &&
                             Enumerable.Range(0, tuple.pre.Count).All(i => tuple.pre[i] == tuple.post[i]))
                         {
-                            ReportTransformation(consoleOut, null, $">>> no changes after: {tuple.transformation.Name}");
+                            ReportTransformation(console, null, $">>> no changes after: {tuple.transformation.Name}");
                         }
                         else
                         {
-                            ReportTransformation(consoleOut, tuple.post, $">>> transformed after: {tuple.transformation.Name}");
+                            ReportTransformation(console, tuple.post, $">>> transformed after: {tuple.transformation.Name}");
                         }
                     };
                 }
@@ -47,7 +47,7 @@ namespace CommandDotNet.Directives
                     executionConfig.Events.OnTokenizationCompleted += ctx =>
                     {
                         var transformations = executionConfig.InputTransformations.Select(t => t.Name).ToCsv(" > ");
-                        ReportTransformation(consoleOut, ctx.Tokens, $">>> transformed after: {transformations}");
+                        ReportTransformation(console, ctx.Tokens, $">>> transformed after: {transformations}");
                     };
                 }
 
@@ -57,9 +57,9 @@ namespace CommandDotNet.Directives
             return next(commandContext);
         }
 
-        private static void ReportTransformation(TextWriter consoleOut, TokenCollection args, string description)
+        private static void ReportTransformation(IConsole consoleOut, TokenCollection args, string description)
         {
-            consoleOut.WriteLine(description);
+            consoleOut.Out.WriteLine(description);
 
             if (args != null)
             {
@@ -68,11 +68,9 @@ namespace CommandDotNet.Directives
                 foreach (var arg in args)
                 {
                     var outputFormat = $"  {{0, -{maxTokenTypeNameLength}}}: {{1}}";
-                    consoleOut.WriteLine(outputFormat, arg.TokenType, arg.RawValue);
+                    consoleOut.Out.WriteLine(string.Format(outputFormat, arg.TokenType, arg.RawValue));
                 }
             }
-
-            consoleOut.WriteLine();
         }
     }
 }

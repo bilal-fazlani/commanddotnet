@@ -1,4 +1,5 @@
 ﻿using CommandDotNet.Parsing;
+using CommandDotNet.Rendering;
 
 namespace CommandDotNet.Execution
 {
@@ -16,6 +17,8 @@ namespace CommandDotNet.Execution
         public ExecutionConfig ExecutionConfig { get; }
         
         public AppSettings AppSettings { get; }
+
+        public IConsole Console => AppSettings.Console;
 
         public IContextData ContextData { get; } = new ContextData();
 

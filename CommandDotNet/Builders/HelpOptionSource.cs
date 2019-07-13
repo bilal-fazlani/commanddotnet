@@ -39,7 +39,7 @@ namespace CommandDotNet.Builders
         public static void Print(AppSettings appSettings, ICommand command)
         {
             IHelpProvider helpTextProvider = HelpTextProviderFactory.Create(appSettings);
-            appSettings.Out.WriteLine(helpTextProvider.GetHelpText(command));
+            appSettings.Console.Out.WriteLine(helpTextProvider.GetHelpText(command));
         }
     }
 }

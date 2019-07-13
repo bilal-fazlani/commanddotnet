@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -11,6 +10,7 @@ using CommandDotNet.Execution;
 using CommandDotNet.Help;
 using CommandDotNet.Invocation;
 using CommandDotNet.Parsing;
+using CommandDotNet.Rendering;
 
 [assembly: InternalsVisibleTo("CommandDotNet.Tests")]
 
@@ -48,29 +48,29 @@ namespace CommandDotNet
             }
             catch (AppRunnerException e)
             {
-                _settings.Error.WriteLine(e.Message + "\n");
+                _settings.Console.Error.WriteLine(e.Message + "\n");
 #if DEBUG
-                _settings.Error.WriteLine(e.StackTrace);
+                _settings.Console.Error.WriteLine(e.StackTrace);
 #endif
                 return 1;
             }
             catch (CommandParsingException e)
             {
-                _settings.Out.WriteLine(
+                _settings.Console.Out.WriteLine(
                     $"Specify --{Constants.HelpArgumentTemplate.Name} for a list of available options and commands.");
 
-                _settings.Error.WriteLine(e.Message + "\n");
+                _settings.Console.Error.WriteLine(e.Message + "\n");
                 HelpOptionSource.Print(_settings, e.Command);
 
 #if DEBUG
-                _settings.Error.WriteLine(e.StackTrace);
+                _settings.Console.Error.WriteLine(e.StackTrace);
 #endif
 
                 return 1;
             }
             catch (ValueParsingException e)
             {
-                _settings.Error.WriteLine(e.Message + "\n");
+                _settings.Console.Error.WriteLine(e.Message + "\n");
                 return 2;
             }
             catch (AggregateException e) when (e.InnerExceptions.Any(x => x.GetBaseException() is AppRunnerException) ||
@@ -79,11 +79,11 @@ namespace CommandDotNet
             {
                 foreach (var innerException in e.InnerExceptions)
                 {
-                    _settings.Error.WriteLine(innerException.GetBaseException().Message + "\n");
+                    _settings.Console.Error.WriteLine(innerException.GetBaseException().Message + "\n");
 #if DEBUG
-                    _settings.Error.WriteLine(innerException.GetBaseException().StackTrace);
+                    _settings.Console.Error.WriteLine(innerException.GetBaseException().StackTrace);
                     if (e.InnerExceptions.Count > 1)
-                        _settings.Error.WriteLine("-----------------------------------------------------------------");
+                        _settings.Console.Error.WriteLine("-----------------------------------------------------------------");
 #endif
                 }
 
@@ -99,7 +99,7 @@ namespace CommandDotNet
 
                 foreach (var failure in validationException.ValidationResult.Errors)
                 {
-                    _settings.Out.WriteLine(failure.ErrorMessage);
+                    _settings.Console.Out.WriteLine(failure.ErrorMessage);
                 }
 
                 return 2;
@@ -112,7 +112,7 @@ namespace CommandDotNet
                     (ValueParsingException) e.InnerExceptions.FirstOrDefault(x =>
                         x.GetBaseException() is ValueParsingException);
 
-                _settings.Error.WriteLine(valueParsingException.Message + "\n");
+                _settings.Console.Error.WriteLine(valueParsingException.Message + "\n");
 
                 return 2;
             }
@@ -136,7 +136,7 @@ namespace CommandDotNet
             {
                 foreach (var failure in ex.ValidationResult.Errors)
                 {
-                    _settings.Out.WriteLine(failure.ErrorMessage);
+                    _settings.Console.Out.WriteLine(failure.ErrorMessage);
                 }
 
                 return 2;
@@ -201,15 +201,9 @@ namespace CommandDotNet
             return this;
         }
 
-        public AppRunner<T> OverrideConsoleOut(TextWriter writer)
+        public AppRunner<T> OverrideConsole(IConsole console)
         {
-            _settings.Out = writer;
-            return this;
-        }
-
-        public AppRunner<T> OverrideConsoleError(TextWriter writer)
-        {
-            _settings.Error = writer;
+            _settings.Console = console;
             return this;
         }
 

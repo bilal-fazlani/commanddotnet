@@ -22,7 +22,7 @@ namespace CommandDotNet.Directives
 
                 var processId = process.Id;
 
-                commandContext.AppSettings.Out.WriteLine($"Attach your debugger to process {processId} ({process.ProcessName}).");
+                commandContext.Console.Out.WriteLine($"Attach your debugger to process {processId} ({process.ProcessName}).");
 
                 while (!InTestHarness && !Debugger.IsAttached)
                 {

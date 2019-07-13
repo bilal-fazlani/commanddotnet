@@ -69,10 +69,10 @@ namespace CommandDotNet.Builders
             }
 
             var filename = Path.GetFileName(hostAssembly.Location);
-            appSettings.Out.WriteLine(filename);
+            appSettings.Console.Out.WriteLine(filename);
 
             var fvi = FileVersionInfo.GetVersionInfo(hostAssembly.Location);
-            appSettings.Out.WriteLine(fvi.ProductVersion);
+            appSettings.Console.Out.WriteLine(fvi.ProductVersion);
         }
     }
 }

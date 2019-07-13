@@ -33,9 +33,8 @@ namespace CommandDotNet.Tests.Utils
             ITestOutputHelper testOutputHelper,
             IEnumerable<object> dependencies = null) where T : class
         {
-            var consoleOut = new TestConsoleWriter(testOutputHelper);
-            runner.OverrideConsoleOut(consoleOut);
-            runner.OverrideConsoleError(consoleOut);
+            var testConsole = new TestConsole();
+            runner.OverrideConsole(testConsole);
 
             var resolver = new TestDependencyResolver();
             foreach (var dependency in dependencies ?? Enumerable.Empty<object>())
@@ -48,7 +47,12 @@ namespace CommandDotNet.Tests.Utils
             resolver.Register(outputs);
 
             var exitCode = runner.Run(args);
-            return new AppRunnerResult(exitCode, consoleOut.ToString(), outputs);
+            var consoleOut = testConsole.Joined.ToString();
+            
+            // output to console to help debugging failed tests
+            testOutputHelper?.WriteLine(consoleOut);
+
+            return new AppRunnerResult(exitCode, consoleOut, outputs);
         }
     }
 }
