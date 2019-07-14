@@ -158,6 +158,10 @@ namespace CommandDotNet
                         var value = parser.Parse(argumentDef.Argument, values);
                         argumentDef.SetValue(value);
                     }
+                    else if (argumentDef.HasDefaultValue)
+                    {
+                        argumentDef.SetValue(argumentDef.DefaultValue);
+                    }
                 }
             }
             return next(commandContext);
