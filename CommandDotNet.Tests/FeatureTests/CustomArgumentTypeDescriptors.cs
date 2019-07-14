@@ -127,6 +127,16 @@ Options:
             {
                 return Square.Parse(value);
             }
+
+            public string GetDisplayName(IArgument argument)
+            {
+                return $"!!{nameof(Square)}!!";
+            }
+
+            public object ParseString(IArgument argument, string value)
+            {
+                return Square.Parse(value);
+            }
         }
     }
 }

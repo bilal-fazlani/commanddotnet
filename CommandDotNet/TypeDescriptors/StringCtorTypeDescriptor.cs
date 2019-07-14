@@ -26,11 +26,28 @@ namespace CommandDotNet.TypeDescriptors
             return GetConverter(argumentInfo).StringConstructor.Invoke(new object[]{ value });
         }
 
+        public string GetDisplayName(IArgument argument)
+        {
+            return GetConverter(argument).StringConstructor.GetParameters().Single().Name;
+        }
+
+        public object ParseString(IArgument argument, string value)
+        {
+            return GetConverter(argument).StringConstructor.Invoke(new object[] { value });
+        }
+
         private static Converter GetConverter(ArgumentInfo argumentInfo)
         {
             return argumentInfo.Arity.AllowsZeroOrMore()
                 ? GetConverter(argumentInfo.UnderlyingType)
                 : GetConverter(argumentInfo.Type);
+        }
+
+        private static Converter GetConverter(IArgument argument)
+        {
+            return argument.Arity.AllowsZeroOrMore()
+                ? GetConverter(argument.TypeInfo.UnderlyingType)
+                : GetConverter(argument.TypeInfo.Type);
         }
 
         private static Converter GetConverter(Type type)

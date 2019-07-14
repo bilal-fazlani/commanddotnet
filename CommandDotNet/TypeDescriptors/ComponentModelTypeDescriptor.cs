@@ -24,5 +24,18 @@ namespace CommandDotNet.TypeDescriptors
                 : TypeDescriptor.GetConverter(argumentInfo.Type);
             return typeConverter.ConvertFrom(value);
         }
+
+        public string GetDisplayName(IArgument argument)
+        {
+            return argument.TypeInfo.UnderlyingType.Name;
+        }
+
+        public object ParseString(IArgument argument, string value)
+        {
+            var typeConverter = argument.Arity.AllowsZeroOrMore()
+                ? TypeDescriptor.GetConverter(argument.TypeInfo.UnderlyingType)
+                : TypeDescriptor.GetConverter(argument.TypeInfo.Type);
+            return typeConverter.ConvertFrom(value);
+        }
     }
 }

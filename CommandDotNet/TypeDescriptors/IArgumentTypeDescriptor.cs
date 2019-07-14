@@ -8,5 +8,7 @@ namespace CommandDotNet.TypeDescriptors
         bool CanSupport(Type type);
         string GetDisplayName(ArgumentInfo argumentInfo);
         object ParseString(ArgumentInfo argumentInfo, string value);
+        string GetDisplayName(IArgument argument);
+        object ParseString(IArgument argument, string value);
     }
 }

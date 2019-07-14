@@ -9,5 +9,6 @@ namespace CommandDotNet.TypeDescriptors
     public interface IAllowedValuesTypeDescriptor
     {
         IEnumerable<string> GetAllowedValues(ArgumentInfo argumentInfo);
+        IEnumerable<string> GetAllowedValues(IArgument argument);
     }
 }

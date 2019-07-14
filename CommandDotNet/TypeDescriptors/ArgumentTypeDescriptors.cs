@@ -16,14 +16,14 @@ namespace CommandDotNet.TypeDescriptors
                 new BoolTypeDescriptor(),
                 new EnumTypeDescriptor(),
 
-                new DelegatedTypeDescriptor<string>(Constants.TypeDisplayNames.Text, (a,v) => v),
-                new DelegatedTypeDescriptor<char>(Constants.TypeDisplayNames.Character, (a,v) => char.Parse(v)),
+                new DelegatedTypeDescriptor<string>(Constants.TypeDisplayNames.Text, v => v),
+                new DelegatedTypeDescriptor<char>(Constants.TypeDisplayNames.Character, v => char.Parse(v)),
 
-                new DelegatedTypeDescriptor<long>(Constants.TypeDisplayNames.Number, (a, v) => long.Parse(v, CultureInfo.InvariantCulture)),
-                new DelegatedTypeDescriptor<int>(Constants.TypeDisplayNames.Number, (a, v) => int.Parse(v, CultureInfo.InvariantCulture)),
-                new DelegatedTypeDescriptor<short>(Constants.TypeDisplayNames.Number, (a, v) => short.Parse(v, CultureInfo.InvariantCulture)),
-                new DelegatedTypeDescriptor<decimal>(Constants.TypeDisplayNames.DecimalNumber, (a, v) => decimal.Parse(v, CultureInfo.InvariantCulture)),
-                new DelegatedTypeDescriptor<double>(Constants.TypeDisplayNames.DoubleNumber, (a, v) => double.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<long>(Constants.TypeDisplayNames.Number, v => long.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<int>(Constants.TypeDisplayNames.Number, v => int.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<short>(Constants.TypeDisplayNames.Number, v => short.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<decimal>(Constants.TypeDisplayNames.DecimalNumber, v => decimal.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<double>(Constants.TypeDisplayNames.DoubleNumber, v => double.Parse(v, CultureInfo.InvariantCulture)),
 
                 new ComponentModelTypeDescriptor(),
                 new StringCtorTypeDescriptor()
