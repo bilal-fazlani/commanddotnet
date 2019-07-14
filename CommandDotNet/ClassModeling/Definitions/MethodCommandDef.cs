@@ -13,7 +13,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         public ICustomAttributeProvider CustomAttributeProvider => _method;
         public bool IsExecutable => true;
         public IReadOnlyCollection<IArgumentDef> Arguments { get; }
-        public IReadOnlyCollection<ICommandDef> SubCommands => new List<ICommandDef>().AsReadOnly();
+        public IReadOnlyCollection<ICommandDef> SubCommands { get; } = new List<ICommandDef>().AsReadOnly();
         public IMethodDef InstantiateMethodDef { get; }
         public IMethodDef InvokeMethodDef { get; }
         public ICommand Command { get; set; }
@@ -21,12 +21,11 @@ namespace CommandDotNet.ClassModeling.Definitions
         public MethodCommandDef(MethodBase method, IMethodDef instantiateMethodDef, ExecutionConfig executionConfig)
         {
             _method = method;
-            InstantiateMethodDef = instantiateMethodDef;
-            InvokeMethodDef = new MethodDef(method, executionConfig);
-
-            Arguments = InvokeMethodDef.ArgumentDefs;
 
             Name = method.BuildName(executionConfig);
+            InstantiateMethodDef = instantiateMethodDef;
+            InvokeMethodDef = new MethodDef(method, executionConfig);
+            Arguments = InvokeMethodDef.ArgumentDefs;
         }
     }
 }

@@ -47,7 +47,6 @@ namespace CommandDotNet.ClassModeling.Definitions
                     UnderlyingType = underlyingType,
                 }
             );
-            argument.ContextData.Set(argumentDef);
             argumentDef.Argument = argument;
 
             var typeDescriptor = executionConfig.AppSettings.ArgumentTypeDescriptors.GetDescriptorOrThrow(underlyingType);
