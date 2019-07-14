@@ -4,9 +4,17 @@ using CommandDotNet.Help;
 
 namespace CommandDotNet.Builders
 {
-    internal class HelpOptionSource : IOptionSource
+    internal static class HelpMiddleware
     {
-        public void AddOption(ICommandBuilder commandBuilder)
+        internal static ExecutionBuilder UseHelpMiddleware(this ExecutionBuilder builder, int orderWithinParsingStage)
+        {
+            builder.BuildEvents.OnCommandCreated += AddHelpOption;
+            builder.AddMiddlewareInStage(DisplayHelpIfSpecified, MiddlewareStages.Parsing, orderWithinParsingStage);
+
+            return builder;
+        }
+
+        private static void AddHelpOption(BuildEvents.CommandCreatedEventArgs args)
         {
             var option = new Option(Constants.HelpTemplate, ArgumentArity.Zero)
             {
@@ -21,10 +29,10 @@ namespace CommandDotNet.Builders
                 Arity = ArgumentArity.Zero
             };
 
-            commandBuilder.AddArgument(option);
+            args.CommandBuilder.AddArgument(option);
         }
-        
-        internal static int HelpMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
+
+        private static int DisplayHelpIfSpecified(CommandContext commandContext, Func<CommandContext, int> next)
         {
             if (commandContext.ParseResult.ArgumentValues.Contains(Constants.HelpArgumentTemplate.Name))
             {

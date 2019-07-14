@@ -15,14 +15,14 @@ namespace CommandDotNet.Parsing
             _appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
         }
 
-        public void ParseCommand(CommandContext commandContext, ICommand command)
+        public void ParseCommand(CommandContext commandContext)
         {
             bool ignoreRemainingArguments = false;
             var remainingArguments = new List<Token>();
 
-            ICommand currentCommand = command;
+            ICommand currentCommand = commandContext.CurrentCommand;
             IOption currentOption = null;
-            IEnumerator<IOperand> operands = new OperandEnumerator(command.Operands);
+            IEnumerator<IOperand> operands = new OperandEnumerator(currentCommand.Operands);
 
             var argumentValues = new ArgumentValues();
 
@@ -32,7 +32,7 @@ namespace CommandDotNet.Parsing
                 {
                     case TokenType.Option:
                         var optionResult = ParseOption(
-                            token, currentCommand, out currentOption, argumentValues.GetArgValues);
+                            token, currentCommand, out currentOption, argumentValues.GetOrAdd);
 
                         switch (optionResult)
                         {
@@ -53,7 +53,8 @@ namespace CommandDotNet.Parsing
                         else
                         {
                             var operandResult = ParseArgumentValue(
-                                token, ref currentCommand, ref currentOption, operands, argumentValues.GetArgValues);
+                                token, ref currentCommand, ref currentOption, operands, argumentValues.GetOrAdd);
+                            commandContext.CurrentCommand = currentCommand;
 
                             switch (operandResult)
                             {

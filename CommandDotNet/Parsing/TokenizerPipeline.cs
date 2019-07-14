@@ -10,7 +10,7 @@ namespace CommandDotNet.Parsing
         {
             InsertSystemTransformations(commandContext.ExecutionConfig);
             commandContext.Tokens = ApplyInputTransformations(commandContext);
-            commandContext.ExecutionConfig.Events.TokenizationCompleted(commandContext);
+            commandContext.ExecutionConfig.ParseEvents.TokenizationCompleted(commandContext);
 
             return next(commandContext);
         }
@@ -24,7 +24,7 @@ namespace CommandDotNet.Parsing
                 try
                 {
                     var tempArgs = transformation.Transformation(tokens);
-                    executionConfig.Events.InputTransformation(commandContext, transformation, tokens, tempArgs);
+                    executionConfig.ParseEvents.InputTransformation(commandContext, transformation, tokens, tempArgs);
                     tokens = tempArgs;
                 }
                 catch (Exception e)

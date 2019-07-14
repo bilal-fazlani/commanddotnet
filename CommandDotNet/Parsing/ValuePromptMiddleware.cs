@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
@@ -20,7 +19,7 @@ namespace CommandDotNet.Parsing
                 .Where(a => !argumentValues.Contains(a) && a.DefaultValue.IsNullValue())
                 .Select(a => new { arg = a, values = PromptForValues(a, console) })
                 .Where(i => i.values.Count > 0)
-                .ForEach(i => argumentValues.GetArgValues(i.arg).AddRange(i.values));
+                .ForEach(i => argumentValues.GetOrAdd(i.arg).AddRange(i.values));
 
             return next(commandContext);
         }

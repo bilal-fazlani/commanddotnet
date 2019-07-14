@@ -12,6 +12,8 @@ namespace CommandDotNet.Execution
 
         public TokenCollection Tokens { get; set; }
 
+        public ICommand CurrentCommand { get; set; }
+
         public ParseResult ParseResult { get; set; }
         
         public ExecutionConfig ExecutionConfig { get; }

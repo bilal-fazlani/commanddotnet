@@ -9,7 +9,7 @@ namespace CommandDotNet.Parsing
         private readonly Dictionary<IArgument, List<string>> _valuesByArgument = new Dictionary<IArgument, List<string>>();
         private readonly Dictionary<string, IArgument> _argumentsByAlias = new Dictionary<string, IArgument>();
 
-        public List<string> GetArgValues(IArgument argument)
+        public List<string> GetOrAdd(IArgument argument)
         {
             return _valuesByArgument.GetOrAdd(argument, arg =>
             {
@@ -21,6 +21,21 @@ namespace CommandDotNet.Parsing
                     ? argInfo.ValueInfo.Values
                     : new List<string>();
             });
+        }
+
+        public bool TryGetValues(IArgument argument, out List<string> values)
+        {
+            return _valuesByArgument.TryGetValue(argument, out values);
+        }
+
+        public bool TryGetValues(string alias, out List<string> values)
+        {
+            if (_argumentsByAlias.TryGetValue(alias, out var argument))
+            {
+                return TryGetValues(argument, out values);
+            }
+            values = null;
+            return false;
         }
 
         public bool Contains(IArgument argument)

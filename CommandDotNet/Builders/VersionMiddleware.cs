@@ -6,40 +6,43 @@ using CommandDotNet.Execution;
 
 namespace CommandDotNet.Builders
 {
-    internal class VersionOptionSource : IOptionSource
+    internal static class VersionMiddleware
     {
         private const string VersionOptionName = "version";
         private const string VersionTemplate = "-v | --" + VersionOptionName;
-
-        private readonly AppSettings _appSettings;
-
-        public VersionOptionSource(AppSettings appSettings)
+        
+        internal static ExecutionBuilder UseVersionMiddleware(this ExecutionBuilder builder, int orderWithinParsingStage)
         {
-            _appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
+            builder.BuildEvents.OnCommandCreated += AddVersionOption;
+            builder.AddMiddlewareInStage(DisplayVersionIfSpecified, MiddlewareStages.Parsing, orderWithinParsingStage);
+
+            return builder;
         }
 
-        public void AddOption(ICommandBuilder commandBuilder)
+        private static void AddVersionOption(BuildEvents.CommandCreatedEventArgs args)
         {
-            if (_appSettings.EnableVersionOption && commandBuilder.Command.IsRootCommand())
+            if (!args.CommandBuilder.Command.IsRootCommand())
             {
-                var option = new Option(VersionTemplate, ArgumentArity.Zero)
-                {
-                    Description = "Show version information",
-                    TypeInfo = new TypeInfo
-                    {
-                        Type = typeof(bool),
-                        UnderlyingType = typeof(bool),
-                        DisplayName = Constants.TypeDisplayNames.Flag
-                    },
-                    IsSystemOption = true,
-                    Arity = ArgumentArity.Zero
-                };
-
-                commandBuilder.AddArgument(option);
+                return;
             }
+
+            var option = new Option(VersionTemplate, ArgumentArity.Zero)
+            {
+                Description = "Show version information",
+                TypeInfo = new TypeInfo
+                {
+                    Type = typeof(bool),
+                    UnderlyingType = typeof(bool),
+                    DisplayName = Constants.TypeDisplayNames.Flag
+                },
+                IsSystemOption = true,
+                Arity = ArgumentArity.Zero
+            };
+
+            args.CommandBuilder.AddArgument(option);
         }
 
-        internal static int VersionMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
+        private static int DisplayVersionIfSpecified(CommandContext commandContext, Func<CommandContext, int> next)
         {
             if (commandContext.ParseResult.ArgumentValues.Contains(VersionOptionName))
             {

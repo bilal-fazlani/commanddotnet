@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using CommandDotNet.Builders;
 using CommandDotNet.ClassModeling;
+using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Directives;
 using CommandDotNet.Execution;
 using CommandDotNet.Help;
@@ -60,7 +61,7 @@ namespace CommandDotNet
                     $"Specify --{Constants.HelpArgumentTemplate.Name} for a list of available options and commands.");
 
                 _settings.Console.Error.WriteLine(e.Message + "\n");
-                HelpOptionSource.Print(_settings, e.Command);
+                HelpMiddleware.Print(_settings, e.Command);
 
 #if DEBUG
                 _settings.Console.Error.WriteLine(e.StackTrace);
@@ -157,28 +158,40 @@ namespace CommandDotNet
             }
 
             _executionBuilder.AddMiddlewareInStage(TokenizerPipeline.TokenizeMiddleware, MiddlewareStages.Tokenize, -1);
+            _executionBuilder.AddMiddlewareInStage(BuildMiddleware, MiddlewareStages.Building);
             _executionBuilder.AddMiddlewareInStage(ParseMiddleware, MiddlewareStages.Parsing);
-            _executionBuilder.AddMiddlewareInStage(HelpOptionSource.HelpMiddleware, MiddlewareStages.Invocation, 100);
-            _executionBuilder.AddMiddlewareInStage(VersionOptionSource.VersionMiddleware, MiddlewareStages.Invocation, 200);
             if (_settings.PromptForMissingOperands)
             {
                 _executionBuilder.AddMiddlewareInStage(ValuePromptMiddleware.PromptForMissingOperands, MiddlewareStages.Invocation, 300);
             }
             _executionBuilder.AddMiddlewareInStage(CommandRunner.InvokeMiddleware, MiddlewareStages.Invocation, 300);
+            _executionBuilder.AddMiddlewareInStage(ClassCommandDef.InvokeMiddleware, MiddlewareStages.Invocation, 400);
+
+            _executionBuilder.UseHelpMiddleware(100);
+            if (_settings.EnableVersionOption)
+            {
+                _executionBuilder.UseVersionMiddleware(200);
+            }
 
             var tokens = args.Tokenize(includeDirectives: _settings.EnableDirectives);
-            var executionResult = new CommandContext(args, tokens, _settings, _executionBuilder.Build());
+            var executionResult = new CommandContext(args, tokens, _settings, _executionBuilder.Build(_settings, DependencyResolver));
 
             return InvokeMiddleware(executionResult);
         }
 
-        private int ParseMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
+        private int BuildMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
         {
             AppCreator appCreator = new AppCreator(_settings);
-            Command rootCommand = appCreator.CreateRootCommand(typeof(T), DependencyResolver);
-            new CommandParser(_settings).ParseCommand(commandContext, rootCommand);
+            commandContext.CurrentCommand = appCreator.CreateRootCommand(typeof(T), commandContext);
             return next(commandContext);
         }
+
+        private int ParseMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
+        {
+            new CommandParser(_settings).ParseCommand(commandContext);
+            return next(commandContext);
+        }
+
 
         private static int InvokeMiddleware(CommandContext commandContext)
         {

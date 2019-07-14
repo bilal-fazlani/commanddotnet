@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using CommandDotNet.Builders;
+using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 
 namespace CommandDotNet.ClassModeling
@@ -11,27 +11,21 @@ namespace CommandDotNet.ClassModeling
     internal class AppCreator
     {
         private readonly AppSettings _appSettings;
-        private readonly IOptionSource[] _optionSources;
 
         public AppCreator(AppSettings appSettings)
         {
             _appSettings = appSettings;
-
-            _optionSources = new IOptionSource[]
-            {
-                new HelpOptionSource(),
-                new VersionOptionSource(_appSettings)
-            };
         }
 
-        public Command CreateRootCommand(Type type, IDependencyResolver dependencyResolver)
-        {
-            return CreateCommand(type, dependencyResolver, null);
+        public ICommand CreateRootCommand(Type type, CommandContext commandContext)
+        { 
+            return CreateCommand(type, commandContext, null);
+            // return new ClassCommandDef(type, executionConfig).ToCommand(null, executionConfig);
         }
 
         private Command CreateCommand(
             Type type,
-            IDependencyResolver dependencyResolver,
+            CommandContext commandContext,
             Command parentCommand)
         {
             bool isRootCommand = parentCommand == null;
@@ -44,20 +38,20 @@ namespace CommandDotNet.ClassModeling
                 ? new Command(appName, type) 
                 : parentCommand.AddCommand(appName, type);
 
-            CommandCreator commandCreator = new CommandCreator(type, command, dependencyResolver, _appSettings, _optionSources);
+            CommandCreator commandCreator = new CommandCreator(type, command, commandContext);
             
             commandCreator.CreateDefaultCommand(applicationAttribute);
 
             commandCreator.CreateCommands();
 
-            CreateSubApplications(type, command, dependencyResolver);
+            CreateSubApplications(type, command, commandContext);
 
             return command;
         }
         
         private void CreateSubApplications(Type type,
             Command parentApplication,
-            IDependencyResolver dependencyResolver)
+            CommandContext commandContext)
         {
             IEnumerable<Type> propertySubmodules = 
                 type.GetDeclaredProperties<SubCommandAttribute>()
@@ -77,7 +71,7 @@ namespace CommandDotNet.ClassModeling
                 //       this accounts for ~10% of the run time across all feature tests
 
                 AppCreator appCreator = new AppCreator(_appSettings);
-                appCreator.CreateCommand(submoduleType, dependencyResolver, parentApplication);
+                appCreator.CreateCommand(submoduleType, commandContext, parentApplication);
             }
         }
     }

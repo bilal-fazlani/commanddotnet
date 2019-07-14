@@ -29,29 +29,29 @@ namespace CommandDotNet.Directives
 
                 if (verbose)
                 {
-                    executionConfig.Events.OnInputTransformation += tuple =>
+                    executionConfig.ParseEvents.OnInputTransformation += args =>
                     {
-                        if (tuple.pre.Count == tuple.post.Count &&
-                            Enumerable.Range(0, tuple.pre.Count).All(i => tuple.pre[i] == tuple.post[i]))
+                        if (args.Pre.Count == args.Post.Count &&
+                            Enumerable.Range(0, args.Pre.Count).All(i => args.Pre[i] == args.Post[i]))
                         {
-                            ReportTransformation(console, null, $">>> no changes after: {tuple.transformation.Name}");
+                            ReportTransformation(console, null, $">>> no changes after: {args.Transformation.Name}");
                         }
                         else
                         {
-                            ReportTransformation(console, tuple.post, $">>> transformed after: {tuple.transformation.Name}");
+                            ReportTransformation(console, args.Post, $">>> transformed after: {args.Transformation.Name}");
                         }
                     };
                 }
                 else
                 {
-                    executionConfig.Events.OnTokenizationCompleted += ctx =>
+                    executionConfig.ParseEvents.OnTokenizationCompleted += args =>
                     {
                         var transformations = executionConfig.InputTransformations.Select(t => t.Name).ToCsv(" > ");
-                        ReportTransformation(console, ctx.Tokens, $">>> transformed after: {transformations}");
+                        ReportTransformation(console, args.CommandContext.Tokens, $">>> transformed after: {transformations}");
                     };
                 }
 
-                executionConfig.Events.OnTokenizationCompleted += ctx => ctx.ShouldExitWithCode(0);
+                executionConfig.ParseEvents.OnTokenizationCompleted += args => args.CommandContext.ShouldExitWithCode(0);
             }
 
             return next(commandContext);

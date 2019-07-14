@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommandDotNet.Builders;
 using CommandDotNet.Extensions;
 using CommandDotNet.Parsing;
 
@@ -12,6 +13,8 @@ namespace CommandDotNet.Execution
 
         private readonly Dictionary<string, InputTransformation> _inputTransformationsByName
             = new Dictionary<string, InputTransformation>();
+        public ParseEvents ParseEvents { get; } = new ParseEvents();
+        public BuildEvents BuildEvents { get; } = new BuildEvents();
 
         public void AddInputTransformation(string name, int order, Func<TokenCollection,TokenCollection> transformation)
         {
@@ -37,9 +40,9 @@ namespace CommandDotNet.Execution
             _middlewares.Add((middleware, order));
         }
 
-        public ExecutionConfig Build()
+        public ExecutionConfig Build(AppSettings appSettings, IDependencyResolver dependencyResolver)
         {
-            return new ExecutionConfig
+            return new ExecutionConfig(appSettings, dependencyResolver, ParseEvents, BuildEvents)
             {
                 MiddlewarePipeline = _middlewares.OrderBy(m => m.order).Select(m => m.middleware).ToArray(),
                 InputTransformations = _inputTransformationsByName.Values.OrderBy(t => t.Order).ToArray()

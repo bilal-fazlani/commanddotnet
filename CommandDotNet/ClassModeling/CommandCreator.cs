@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using CommandDotNet.Builders;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
@@ -13,22 +12,21 @@ namespace CommandDotNet.ClassModeling
     {
         private readonly Type _type;
         private readonly Command _command;
+        private readonly CommandContext _commandContext;
         private readonly AppSettings _settings;
-        private readonly IOptionSource[] _optionSources;
         private readonly CommandRunner _commandRunner;
 
-        public CommandCreator(Type type, Command command, IDependencyResolver dependencyResolver,
-            AppSettings settings, IOptionSource[] optionSources)
+        public CommandCreator(Type type, Command command, CommandContext commandContext)
         {
             _type = type;
             _command = command;
-            _settings = settings;
-            _optionSources = optionSources;
+            _commandContext = commandContext;
+            _settings = commandContext.AppSettings;
 
             //get values for constructor params
             IEnumerable<ArgumentInfo> constructorValues = GetOptionValuesForConstructor();
             
-            _commandRunner = new CommandRunner(type, constructorValues, dependencyResolver, settings);
+            _commandRunner = new CommandRunner(type, constructorValues, commandContext.ExecutionConfig.DependencyResolver, _settings);
         }
 
         public void CreateDefaultCommand(IApplicationMetadata applicationMetadata)
@@ -75,7 +73,7 @@ namespace CommandDotNet.ClassModeling
         {
             command.Description = applicationMetadata?.Description;
             command.ExtendedHelpText = applicationMetadata?.ExtendedHelpText;
-            _optionSources.ForEach(s => s.AddOption(command));
+            _commandContext.ExecutionConfig.BuildEvents.CommandCreated(_commandContext, command);
         }
 
         private void ConfigureCommand(Command command, CommandInfo commandInfo)
