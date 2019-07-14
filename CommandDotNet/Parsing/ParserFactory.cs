@@ -1,5 +1,4 @@
 ﻿using System;
-using CommandDotNet.ClassModeling;
 
 namespace CommandDotNet.Parsing
 {
@@ -10,13 +9,6 @@ namespace CommandDotNet.Parsing
         public ParserFactory(AppSettings appSettings)
         {
             _appSettings = appSettings;
-        }
-
-        public IParser CreateInstance(ArgumentInfo argumentInfo)
-        {
-            return argumentInfo.Arity.AllowsZeroOrMore()
-                ? new ListParser(GetSingleValueParser(argumentInfo.UnderlyingType))
-                : (IParser)GetSingleValueParser(argumentInfo.Type);
         }
 
         public IParser CreateInstance(IArgument argument)

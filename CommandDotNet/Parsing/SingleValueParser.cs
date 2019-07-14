@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommandDotNet.ClassModeling;
 using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet.Parsing
@@ -20,12 +19,6 @@ namespace CommandDotNet.Parsing
             return ParseString(argument, values.SingleOrDefault());
         }
 
-        public dynamic Parse(ArgumentInfo argumentInfo)
-        {
-            var value = argumentInfo.ValueInfo.Value;
-            return ParseString(argumentInfo, value);
-        }
-
         public object ParseString(IArgument argument, string value)
         {
             try
@@ -41,24 +34,6 @@ namespace CommandDotNet.Parsing
             {
                 throw new ValueParsingException(
                     $"'{value}' is not a valid {_argumentTypeDescriptor.GetDisplayName(argument)}");
-            }
-        }
-
-        public dynamic ParseString(ArgumentInfo argumentInfo, string value)
-        {
-            try
-            {
-                return _argumentTypeDescriptor.ParseString(argumentInfo, value);
-            }
-            catch (FormatException)
-            {
-                throw new ValueParsingException(
-                    $"'{value}' is not a valid {_argumentTypeDescriptor.GetDisplayName(argumentInfo)}");
-            }
-            catch (ArgumentException)
-            {
-                throw new ValueParsingException(
-                    $"'{value}' is not a valid {_argumentTypeDescriptor.GetDisplayName(argumentInfo)}");
             }
         }
     }

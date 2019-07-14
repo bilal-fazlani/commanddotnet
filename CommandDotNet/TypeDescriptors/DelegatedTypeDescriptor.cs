@@ -1,5 +1,4 @@
 using System;
-using CommandDotNet.ClassModeling;
 
 namespace CommandDotNet.TypeDescriptors
 {
@@ -17,16 +16,6 @@ namespace CommandDotNet.TypeDescriptors
         public bool CanSupport(Type type)
         {
             return type == typeof(T);
-        }
-
-        public string GetDisplayName(ArgumentInfo argumentInfo)
-        {
-            return _displayName;
-        }
-
-        public object ParseString(ArgumentInfo argumentInfo, string value)
-        {
-            return _parseValueDelegate(value);
         }
 
         public string GetDisplayName(IArgument argument)

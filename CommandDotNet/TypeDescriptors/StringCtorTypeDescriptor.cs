@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using CommandDotNet.ClassModeling;
 using CommandDotNet.Extensions;
 
 namespace CommandDotNet.TypeDescriptors
@@ -16,16 +15,6 @@ namespace CommandDotNet.TypeDescriptors
             return GetConverter(type).CanConvert;
         }
 
-        public string GetDisplayName(ArgumentInfo argumentInfo)
-        {
-            return GetConverter(argumentInfo).StringConstructor.GetParameters().Single().Name;
-        }
-
-        public object ParseString(ArgumentInfo argumentInfo, string value)
-        {
-            return GetConverter(argumentInfo).StringConstructor.Invoke(new object[]{ value });
-        }
-
         public string GetDisplayName(IArgument argument)
         {
             return GetConverter(argument).StringConstructor.GetParameters().Single().Name;
@@ -34,13 +23,6 @@ namespace CommandDotNet.TypeDescriptors
         public object ParseString(IArgument argument, string value)
         {
             return GetConverter(argument).StringConstructor.Invoke(new object[] { value });
-        }
-
-        private static Converter GetConverter(ArgumentInfo argumentInfo)
-        {
-            return argumentInfo.Arity.AllowsZeroOrMore()
-                ? GetConverter(argumentInfo.UnderlyingType)
-                : GetConverter(argumentInfo.Type);
         }
 
         private static Converter GetConverter(IArgument argument)

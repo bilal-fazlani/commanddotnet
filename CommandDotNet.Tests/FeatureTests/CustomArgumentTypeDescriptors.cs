@@ -1,5 +1,4 @@
 using System;
-using CommandDotNet.ClassModeling;
 using CommandDotNet.Help;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.Utils;
@@ -116,16 +115,6 @@ Options:
             public bool CanSupport(Type type)
             {
                 return type == typeof(Square);
-            }
-
-            public string GetDisplayName(ArgumentInfo argumentInfo)
-            {
-                return $"!!{nameof(Square)}!!";
-            }
-
-            public object ParseString(ArgumentInfo argumentInfo, string value)
-            {
-                return Square.Parse(value);
             }
 
             public string GetDisplayName(IArgument argument)
