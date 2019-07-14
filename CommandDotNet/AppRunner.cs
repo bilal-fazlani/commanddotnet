@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using CommandDotNet.Builders;
 using CommandDotNet.ClassModeling;
@@ -44,7 +42,17 @@ namespace CommandDotNet
         /// it will return 0 in case of success and 1 in case of unhandled exception</returns>
         public int Run(params string[] args)
         {
-            return RunAsync(args).Result;
+            try
+            {
+                return RunAsync(args).Result;
+            }
+            catch (Exception e)
+            {
+                var exitCode = e.HandleException(
+                    _settings.Console,
+                    cmd => HelpMiddleware.Print(_settings, cmd));
+                return exitCode;
+            }
         }
 
         /// <summary>
@@ -53,111 +61,18 @@ namespace CommandDotNet
         /// <param name="args">Command line arguments</param>
         /// <returns>If target method returns int, this method will return that value. Else, 
         /// it will return 0 in case of success and 1 in case of unhandled exception</returns>
-        public Task<int> RunAsync(params string[] args)
+        public async Task<int> RunAsync(params string[] args)
         {
             try
             {
-                return Execute(args);
+                return await Execute(args);
             }
-            catch (AppRunnerException e)
+            catch (Exception e)
             {
-                _settings.Console.Error.WriteLine(e.Message + "\n");
-#if DEBUG
-                _settings.Console.Error.WriteLine(e.StackTrace);
-#endif
-                return Task.FromResult(1);
-            }
-            catch (CommandParsingException e)
-            {
-                _settings.Console.Out.WriteLine(
-                    $"Specify --{Constants.HelpArgumentTemplate.Name} for a list of available options and commands.");
-
-                _settings.Console.Error.WriteLine(e.Message + "\n");
-                HelpMiddleware.Print(_settings, e.Command);
-
-#if DEBUG
-                _settings.Console.Error.WriteLine(e.StackTrace);
-#endif
-
-                return Task.FromResult(1);
-            }
-            catch (ValueParsingException e)
-            {
-                _settings.Console.Error.WriteLine(e.Message + "\n");
-                return Task.FromResult(2);
-            }
-            catch (AggregateException e) when (e.InnerExceptions.Any(x => x.GetBaseException() is AppRunnerException) ||
-                                               e.InnerExceptions.Any(x =>
-                                                   x.GetBaseException() is CommandParsingException))
-            {
-                foreach (var innerException in e.InnerExceptions)
-                {
-                    _settings.Console.Error.WriteLine(innerException.GetBaseException().Message + "\n");
-#if DEBUG
-                    _settings.Console.Error.WriteLine(innerException.GetBaseException().StackTrace);
-                    if (e.InnerExceptions.Count > 1)
-                        _settings.Console.Error.WriteLine("-----------------------------------------------------------------");
-#endif
-                }
-
-                return Task.FromResult(1);
-            }
-            catch (AggregateException e) when (e.InnerExceptions.Any(x =>
-                x.GetBaseException() is ArgumentValidationException))
-
-            {
-                ArgumentValidationException validationException =
-                    (ArgumentValidationException) e.InnerExceptions.FirstOrDefault(x =>
-                        x.GetBaseException() is ArgumentValidationException);
-
-                foreach (var failure in validationException.ValidationResult.Errors)
-                {
-                    _settings.Console.Out.WriteLine(failure.ErrorMessage);
-                }
-
-                return Task.FromResult(2);
-            }
-            catch (AggregateException e) when (e.InnerExceptions.Any(x => x.GetBaseException() is ValueParsingException)
-            )
-
-            {
-                ValueParsingException valueParsingException =
-                    (ValueParsingException) e.InnerExceptions.FirstOrDefault(x =>
-                        x.GetBaseException() is ValueParsingException);
-
-                _settings.Console.Error.WriteLine(valueParsingException.Message + "\n");
-
-                return Task.FromResult(2);
-            }
-            catch (AggregateException e) when (e.InnerExceptions.Any(x => x is TargetInvocationException))
-            {
-                TargetInvocationException ex =
-                    (TargetInvocationException) e.InnerExceptions.SingleOrDefault(x => x is TargetInvocationException);
-                ExceptionDispatchInfo.Capture(ex.InnerException ?? ex).Throw();
-                return Task.FromResult(1); // this will never be called
-            }
-            catch (AggregateException e)
-            {
-                foreach (Exception innerException in e.InnerExceptions)
-                {
-                    ExceptionDispatchInfo.Capture(innerException).Throw();
-                }
-
-                return Task.FromResult(1); // this will never be called if there is any inner exception
-            }
-            catch (ArgumentValidationException ex)
-            {
-                foreach (var failure in ex.ValidationResult.Errors)
-                {
-                    _settings.Console.Out.WriteLine(failure.ErrorMessage);
-                }
-
-                return Task.FromResult(2);
-            }
-            catch (TargetInvocationException ex)
-            {
-                ExceptionDispatchInfo.Capture(ex.InnerException ?? ex).Throw();
-                return Task.FromResult(1); // this will never be called
+                var exitCode = e.HandleException(
+                    _settings.Console, 
+                    cmd => HelpMiddleware.Print(_settings, cmd));
+                return exitCode;
             }
         }
 
