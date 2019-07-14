@@ -21,7 +21,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public bool IsExecutable => _defaultCommandDef.IsExecutable;
 
-        public IReadOnlyCollection<IArgumentDef> Arguments => _defaultCommandDef.Arguments;
+        public IReadOnlyCollection<IArgumentDef> Arguments { get; }
 
         public IReadOnlyCollection<ICommandDef> SubCommands => _subCommands.Value;
 
@@ -48,6 +48,8 @@ namespace CommandDotNet.ClassModeling.Definitions
             _defaultCommandDef = GetDefaultMethod();
 
             InstantiateMethodDef = BuildCtorMethod();
+
+            Arguments = _defaultCommandDef.Arguments.Union(InstantiateMethodDef.ArgumentDefs).ToArray();
 
             // lazy loading prevents walking the entire hierarchy of sub-commands
             _subCommands = new Lazy<List<ICommandDef>>(GetSubCommands);

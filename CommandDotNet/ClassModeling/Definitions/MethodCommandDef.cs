@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using CommandDotNet.Execution;
 
@@ -11,7 +12,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         public string Name { get; }
         public ICustomAttributeProvider CustomAttributeProvider => _method;
         public bool IsExecutable => true;
-        public IReadOnlyCollection<IArgumentDef> Arguments => InvokeMethodDef.ArgumentDefs;
+        public IReadOnlyCollection<IArgumentDef> Arguments { get; }
         public IReadOnlyCollection<ICommandDef> SubCommands => new List<ICommandDef>().AsReadOnly();
         public IMethodDef InstantiateMethodDef { get; }
         public IMethodDef InvokeMethodDef { get; }
@@ -22,6 +23,8 @@ namespace CommandDotNet.ClassModeling.Definitions
             _method = method;
             InstantiateMethodDef = instantiateMethodDef;
             InvokeMethodDef = new MethodDef(method, executionConfig);
+
+            Arguments = InvokeMethodDef.ArgumentDefs;
 
             Name = method.BuildName(executionConfig);
         }
