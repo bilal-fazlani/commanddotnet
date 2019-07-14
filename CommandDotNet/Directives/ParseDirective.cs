@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Parsing;
@@ -10,7 +11,7 @@ namespace CommandDotNet.Directives
     internal static class ParseDirective
     {
         // adapted from https://github.com/dotnet/command-line-api directives
-        public static int ParseMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
+        public static Task<int> ParseMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             if (commandContext.Tokens.TryGetDirective("parse", out string value))
             {

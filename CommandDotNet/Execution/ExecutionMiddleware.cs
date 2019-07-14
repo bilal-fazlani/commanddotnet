@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace CommandDotNet.Execution
 {
-    public delegate int ExecutionMiddleware(
+    public delegate Task<int> ExecutionMiddleware(
         CommandContext context,
-        Func<CommandContext, int> next);
+        Func<CommandContext, Task<int>> next);
 }

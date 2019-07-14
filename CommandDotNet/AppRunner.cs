@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
+using System.Threading.Tasks;
 using CommandDotNet.Builders;
 using CommandDotNet.ClassModeling;
 using CommandDotNet.ClassModeling.Definitions;
@@ -43,6 +44,17 @@ namespace CommandDotNet
         /// it will return 0 in case of success and 1 in case of unhandled exception</returns>
         public int Run(params string[] args)
         {
+            return RunAsync(args).Result;
+        }
+
+        /// <summary>
+        /// Executes the specified command with given parameters
+        /// </summary>
+        /// <param name="args">Command line arguments</param>
+        /// <returns>If target method returns int, this method will return that value. Else, 
+        /// it will return 0 in case of success and 1 in case of unhandled exception</returns>
+        public Task<int> RunAsync(params string[] args)
+        {
             try
             {
                 return Execute(args);
@@ -53,7 +65,7 @@ namespace CommandDotNet
 #if DEBUG
                 _settings.Console.Error.WriteLine(e.StackTrace);
 #endif
-                return 1;
+                return Task.FromResult(1);
             }
             catch (CommandParsingException e)
             {
@@ -67,12 +79,12 @@ namespace CommandDotNet
                 _settings.Console.Error.WriteLine(e.StackTrace);
 #endif
 
-                return 1;
+                return Task.FromResult(1);
             }
             catch (ValueParsingException e)
             {
                 _settings.Console.Error.WriteLine(e.Message + "\n");
-                return 2;
+                return Task.FromResult(2);
             }
             catch (AggregateException e) when (e.InnerExceptions.Any(x => x.GetBaseException() is AppRunnerException) ||
                                                e.InnerExceptions.Any(x =>
@@ -88,7 +100,7 @@ namespace CommandDotNet
 #endif
                 }
 
-                return 1;
+                return Task.FromResult(1);
             }
             catch (AggregateException e) when (e.InnerExceptions.Any(x =>
                 x.GetBaseException() is ArgumentValidationException))
@@ -103,7 +115,7 @@ namespace CommandDotNet
                     _settings.Console.Out.WriteLine(failure.ErrorMessage);
                 }
 
-                return 2;
+                return Task.FromResult(2);
             }
             catch (AggregateException e) when (e.InnerExceptions.Any(x => x.GetBaseException() is ValueParsingException)
             )
@@ -115,14 +127,14 @@ namespace CommandDotNet
 
                 _settings.Console.Error.WriteLine(valueParsingException.Message + "\n");
 
-                return 2;
+                return Task.FromResult(2);
             }
             catch (AggregateException e) when (e.InnerExceptions.Any(x => x is TargetInvocationException))
             {
                 TargetInvocationException ex =
                     (TargetInvocationException) e.InnerExceptions.SingleOrDefault(x => x is TargetInvocationException);
                 ExceptionDispatchInfo.Capture(ex.InnerException ?? ex).Throw();
-                return 1; // this will never be called
+                return Task.FromResult(1); // this will never be called
             }
             catch (AggregateException e)
             {
@@ -131,7 +143,7 @@ namespace CommandDotNet
                     ExceptionDispatchInfo.Capture(innerException).Throw();
                 }
 
-                return 1; // this will never be called if there is any inner exception
+                return Task.FromResult(1); // this will never be called if there is any inner exception
             }
             catch (ArgumentValidationException ex)
             {
@@ -140,16 +152,16 @@ namespace CommandDotNet
                     _settings.Console.Out.WriteLine(failure.ErrorMessage);
                 }
 
-                return 2;
+                return Task.FromResult(2);
             }
             catch (TargetInvocationException ex)
             {
                 ExceptionDispatchInfo.Capture(ex.InnerException ?? ex).Throw();
-                return 1; // this will never be called
+                return Task.FromResult(1); // this will never be called
             }
         }
 
-        private int Execute(string[] args)
+        private Task<int> Execute(string[] args)
         {
             if (_settings.EnableDirectives)
             {
@@ -187,19 +199,19 @@ namespace CommandDotNet
             return InvokeMiddleware(executionResult);
         }
 
-        private int BuildMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
+        private Task<int> BuildMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             commandContext.CurrentCommand = ClassCommandDef.CreateRootCommand(typeof(T), commandContext);
             return next(commandContext);
         }
 
-        private int ParseMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
+        private Task<int> ParseMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             new CommandParser(_settings).ParseCommand(commandContext);
             return next(commandContext);
         }
 
-        private int SetInvocationContextMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
+        private Task<int> SetInvocationContextMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             var commandDef = commandContext.CurrentCommand.ContextData.Get<ICommandDef>();
             if (commandDef != null)
@@ -212,7 +224,7 @@ namespace CommandDotNet
             return next(commandContext);
         }
 
-        private int SetValuesMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
+        private Task<int> SetValuesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             var commandDef = commandContext.CurrentCommand.ContextData.Get<ICommandDef>();
             if (commandDef != null)
@@ -237,7 +249,7 @@ namespace CommandDotNet
         }
 
 
-        private int ValidateModelsMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
+        private Task<int> ValidateModelsMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             var commandDef = commandContext.CurrentCommand.ContextData.Get<ICommandDef>();
             if (commandDef != null)
@@ -256,7 +268,7 @@ namespace CommandDotNet
             return next(commandContext);
         }
 
-        private int CreateInstancesMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
+        private async Task<int> CreateInstancesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             var command = commandContext.ParseResult.Command;
             var commandDef = command.ContextData.Get<ICommandDef>();
@@ -268,7 +280,7 @@ namespace CommandDotNet
 
             try
             {
-                return next(commandContext);
+                return await next(commandContext);
             }
             finally
             {
@@ -282,7 +294,7 @@ namespace CommandDotNet
             }
         }
 
-        private int InjectDependenciesMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
+        private Task<int> InjectDependenciesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             var instance = commandContext.InvocationContext.Instance;
             var dependencyResolver = commandContext.ExecutionConfig.DependencyResolver;
@@ -311,16 +323,34 @@ namespace CommandDotNet
             return next(commandContext);
         }
 
-        private int InvokeCommandDefMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
+        private Task<int> InvokeCommandDefMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             var ctx = commandContext.InvocationContext;
 
             var result = ctx.CommandInvocation.Invoke(ctx.Instance);
-            return result == null ? 0 : (int)result;
+            return GetResultCodeAsync(result, commandContext);
+        }
+
+        internal static async Task<int> GetResultCodeAsync(object value, CommandContext commandContext)
+        {
+            switch (value)
+            {
+                case Task<int> resultCodeTask:
+                    return await resultCodeTask;
+                case Task task:
+                    await task;
+                    return commandContext.ExitCode;
+                case int resultCode:
+                    return resultCode;
+                case null:
+                    return commandContext.ExitCode;
+                default:
+                    throw new NotSupportedException();
+            }
         }
 
 
-        private static int InvokeMiddleware(CommandContext commandContext)
+        private static Task<int> InvokeMiddleware(CommandContext commandContext)
         {
             var pipeline = commandContext.ExecutionConfig.MiddlewarePipeline;
 
@@ -328,9 +358,9 @@ namespace CommandDotNet
                 (first, second) =>
                     (ctx, next) =>
                         first(ctx, c =>
-                            ctx.ShouldExit ? ctx.ExitCode : second(c, next)));
+                            ctx.ShouldExit ? Task.FromResult(ctx.ExitCode) : second(c, next)));
 
-            return middlewareChain(commandContext, ctx => ctx.ExitCode);
+            return middlewareChain(commandContext, ctx => Task.FromResult(ctx.ExitCode));
         }
 
         public AppRunner<T> WithCustomHelpProvider(IHelpProvider customHelpProvider)

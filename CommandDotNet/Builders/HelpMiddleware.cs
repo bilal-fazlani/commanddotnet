@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Help;
 
@@ -32,12 +33,12 @@ namespace CommandDotNet.Builders
             args.CommandBuilder.AddArgument(option);
         }
 
-        private static int DisplayHelpIfSpecified(CommandContext commandContext, Func<CommandContext, int> next)
+        private static Task<int> DisplayHelpIfSpecified(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             if (commandContext.ParseResult.ArgumentValues.Contains(Constants.HelpArgumentTemplate.Name))
             {
                 Print(commandContext.AppSettings, commandContext.ParseResult.Command);
-                return 0;
+                return Task.FromResult(0);
             }
 
             return next(commandContext);

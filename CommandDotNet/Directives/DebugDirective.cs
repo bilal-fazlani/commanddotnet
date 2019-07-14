@@ -14,7 +14,7 @@ namespace CommandDotNet.Directives
         internal static bool InTestHarness { private get; set; }
 
         // adapted from https://github.com/dotnet/command-line-api directives
-        public static int DebugMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
+        public static Task<int> DebugMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             if (commandContext.Tokens.TryGetDirective("debug", out string value))
             {

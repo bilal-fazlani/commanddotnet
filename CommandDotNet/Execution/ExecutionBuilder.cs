@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CommandDotNet.Builders;
 using CommandDotNet.Extensions;
 using CommandDotNet.Parsing;

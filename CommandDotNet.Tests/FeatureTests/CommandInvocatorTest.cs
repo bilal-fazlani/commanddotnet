@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Tests.Utils;
 using FluentAssertions;
@@ -20,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void CanReadAndModifyParamValues()
         {
-            int BeforeInvocation(CommandContext context, Func<CommandContext, int> next)
+            Task<int> BeforeInvocation(CommandContext context, Func<CommandContext, Task<int>> next)
             {
                 var values = context.InvocationContext.CommandInvocation.ParameterValues;
                 values.Length.Should().Be(2);
@@ -45,7 +46,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void CanReadAndModifyArgumentValues()
         {
-            int BeforeSetValues(CommandContext context, Func<CommandContext, int> next)
+            Task<int> BeforeSetValues(CommandContext context, Func<CommandContext, Task<int>> next)
             {
                 var args = context.InvocationContext.CommandInvocation.Arguments;
                 args.Count.Should().Be(2);
@@ -77,7 +78,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void CanReadCurrentCommand()
         {
-            int BeforeInvocation(CommandContext context, Func<CommandContext, int> next)
+            Task<int> BeforeInvocation(CommandContext context, Func<CommandContext, Task<int>> next)
             {
                 context.CurrentCommand.Should().NotBeNull();
                 context.CurrentCommand.Name.Should().Be(nameof(App.NotifyOwner));
@@ -92,7 +93,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             var guid = Guid.NewGuid();
 
-            int BeforeInvocation(CommandContext context, Func<CommandContext, int> next)
+            Task<int> BeforeInvocation(CommandContext context, Func<CommandContext, Task<int>> next)
             {
                 var instance = context.InvocationContext.Instance;
                 instance.Should().NotBeNull();

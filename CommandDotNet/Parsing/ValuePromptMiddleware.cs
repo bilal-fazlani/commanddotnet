@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Rendering;
@@ -9,7 +10,7 @@ namespace CommandDotNet.Parsing
 {
     internal static class ValuePromptMiddleware
     {
-        internal static int PromptForMissingOperands(CommandContext commandContext, Func<CommandContext, int> next)
+        internal static Task<int> PromptForMissingOperands(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             var command = commandContext.ParseResult.Command;
             var argumentValues = commandContext.ParseResult.ArgumentValues;

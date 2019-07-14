@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using CommandDotNet.Execution;
 
 namespace CommandDotNet.Builders
@@ -42,12 +43,12 @@ namespace CommandDotNet.Builders
             args.CommandBuilder.AddArgument(option);
         }
 
-        private static int DisplayVersionIfSpecified(CommandContext commandContext, Func<CommandContext, int> next)
+        private static Task<int> DisplayVersionIfSpecified(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             if (commandContext.ParseResult.ArgumentValues.Contains(VersionOptionName))
             {
                 Print(commandContext.AppSettings);
-                return 0;
+                return Task.FromResult(0);
             }
 
             return next(commandContext);

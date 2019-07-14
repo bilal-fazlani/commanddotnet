@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using CommandDotNet.Execution;
 
 namespace CommandDotNet.Parsing
 {
     internal static class TokenizerPipeline
     {
-        public static int TokenizeMiddleware(CommandContext commandContext, Func<CommandContext, int> next)
+        public static Task<int> TokenizeMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             InsertSystemTransformations(commandContext.ExecutionConfig);
             commandContext.Tokens = ApplyInputTransformations(commandContext);
