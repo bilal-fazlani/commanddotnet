@@ -11,7 +11,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         bool HasDefaultValue { get; }
         object DefaultValue { get; }
         ICustomAttributeProvider Attributes { get; }
-        void SetValue(object value);
         IArgument Argument { get; set; }
+        void SetValue(object value);
     }
 }

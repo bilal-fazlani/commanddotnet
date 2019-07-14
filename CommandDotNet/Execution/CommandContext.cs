@@ -17,7 +17,9 @@ namespace CommandDotNet.Execution
         public ParseResult ParseResult { get; set; }
         
         public ExecutionConfig ExecutionConfig { get; }
-        
+
+        public InvocationContext InvocationContext { get; } = new InvocationContext();
+
         public AppSettings AppSettings { get; }
 
         public IConsole Console => AppSettings.Console;

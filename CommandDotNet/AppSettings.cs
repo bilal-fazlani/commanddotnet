@@ -1,6 +1,5 @@
 ﻿using System;
 using CommandDotNet.Help;
-using CommandDotNet.Invocation;
 using CommandDotNet.Rendering;
 using CommandDotNet.TypeDescriptors;
 
@@ -62,8 +61,6 @@ namespace CommandDotNet
         public ArgumentTypeDescriptors ArgumentTypeDescriptors { get; internal set; } = new ArgumentTypeDescriptors();
         
         internal IHelpProvider CustomHelpProvider { get; set; }
-
-        internal ICommandInvoker CommandInvoker { get; set; } = new DefaultCommandInvoker();
 
         internal IConsole Console { get; set; } = new SystemConsole();
     }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using CommandDotNet.Execution;
 
 namespace CommandDotNet.ClassModeling.Definitions
 {
@@ -11,7 +10,8 @@ namespace CommandDotNet.ClassModeling.Definitions
         bool IsExecutable { get; }
         IReadOnlyCollection<IArgumentDef> Arguments { get; }
         IReadOnlyCollection<ICommandDef> SubCommands { get; }
-        object Instantiate(CommandContext commandContext);
-        object Invoke(CommandContext commandContext, object instance);
+        IMethodDef InstantiateMethodDef { get; }
+        IMethodDef InvokeMethodDef { get; }
+        ICommand Command { get; set; }
     }
 }

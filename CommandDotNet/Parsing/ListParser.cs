@@ -14,6 +14,20 @@ namespace CommandDotNet.Parsing
             _singleValueParser = singleValueParser;
         }
 
+        public object Parse(IArgument argument, List<string> values)
+        {
+            Type listType = typeof(List<>).MakeGenericType(argument.TypeInfo.UnderlyingType);
+            IList listInstance = (IList)Activator.CreateInstance(listType);
+
+            foreach (string stringValue in values)
+            {
+                dynamic value = _singleValueParser.ParseString(argument, stringValue);
+                listInstance.Add(value);
+            }
+
+            return listInstance;
+        }
+
         public dynamic Parse(ArgumentInfo argumentInfo)
         {
             Type listType = typeof(List<>).MakeGenericType(argumentInfo.UnderlyingType);

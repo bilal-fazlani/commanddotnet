@@ -16,10 +16,8 @@ namespace CommandDotNet.ClassModeling
             _dependencyResolver = dependencyResolver;
         }
 
-        public void ValidateModel(dynamic model)
+        public void ValidateModel(IArgumentModel model)
         {
-            if (!(model is IArgumentModel)) return;
-            
             Type modelType = model.GetType();
 
             Type declaredValidatorType = modelType.GetCustomAttribute<ValidatorAttribute>()?.ValidatorType;

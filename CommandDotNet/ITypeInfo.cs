@@ -6,6 +6,6 @@ namespace CommandDotNet
     {
         Type Type { get; }
         Type UnderlyingType { get; }
-        string DisplayName { get; }
+        string DisplayName { get; set; }
     }
 }

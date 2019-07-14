@@ -7,7 +7,7 @@ namespace CommandDotNet
         ITypeInfo TypeInfo { get; }
         IArgumentArity Arity { get; }
         object DefaultValue { get; }
-        List<string> AllowedValues { get; }
+        List<string> AllowedValues { get; set; }
         IEnumerable<string> Aliases { get; }
 
         IContextData ContextData { get; }

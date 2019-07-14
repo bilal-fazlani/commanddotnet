@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using CommandDotNet.Invocation;
+using CommandDotNet.Execution;
 using CommandDotNet.Tests.Utils;
 using FluentAssertions;
 using Xunit;
@@ -18,21 +18,24 @@ namespace CommandDotNet.Tests.FeatureTests
         }
 
         [Fact]
-        public void InvokerCanReadAndModifyParamsForCommandMethod()
+        public void CanReadAndModifyParamValues()
         {
-            void ActionBeforeInvocation(CommandInvocation context)
+            int BeforeInvocation(CommandContext context, Func<CommandContext, int> next)
             {
-                context.ParamsForCommandMethod.Length.Should().Be(2);
-                var invokedCar = (Car) context.ParamsForCommandMethod[0];
-                var invokedOwner = (string) context.ParamsForCommandMethod[1];
+                var values = context.InvocationContext.CommandInvocation.ParameterValues;
+                values.Length.Should().Be(2);
+                var invokedCar = (Car) values[0];
+                var invokedOwner = (string)values[1];
 
                 invokedCar.Number.Should().Be(1);
                 invokedCar.Number = 2;
                 invokedOwner.Should().Be("Jack");
-                context.ParamsForCommandMethod[1] = "Jill";
+                values[1] = "Jill";
+
+                return next(context);
             }
 
-            var result = RunInMem(ActionBeforeInvocation,1, "Jack");
+            var result = RunInMem(1, "Jack", BeforeInvocation);
 
             result.ExitCode.Should().Be(5);
             result.TestOutputs.Get<Car>().Number.Should().Be(2);
@@ -40,88 +43,89 @@ namespace CommandDotNet.Tests.FeatureTests
         }
 
         [Fact]
-        public void InvokerCanReadArgsFromCli()
+        public void CanReadAndModifyArgumentValues()
         {
-            void ActionBeforeInvocation(CommandInvocation context)
+            int BeforeSetValues(CommandContext context, Func<CommandContext, int> next)
             {
-                context.ArgsFromCli.Count.Should().Be(2);
-                var carNumber = context.ArgsFromCli.First();
-                var ownerName = context.ArgsFromCli.Last();
+                var args = context.InvocationContext.CommandInvocation.Arguments;
+                args.Count.Should().Be(2);
+                var carNumber = args.First();
+                var ownerName = args.Last();
 
-                carNumber.PropertyOrParameterName.Should().Be(nameof(Car.Number));
-                carNumber.ValueInfo.Value.Should().Be("1");
+                carNumber.Name.Should().Be(nameof(Car.Number));
+                ownerName.Name.Should().Be("owner");
 
-                ownerName.PropertyOrParameterName.Should().Be("owner");
-                ownerName.ValueInfo.Value.Should().Be("Jack");
+                var resultArgumentValues = context.ParseResult.ArgumentValues;
+
+                resultArgumentValues.TryGetValues(carNumber, out var carNumberValues).Should().BeTrue();
+                carNumberValues.Single().Should().Be("1");
+
+                resultArgumentValues.TryGetValues(ownerName, out var ownerNameValues).Should().BeTrue();
+                ownerNameValues.Single().Should().Be("Jack");
+                ownerNameValues[0] = "Jill";
+
+                return next(context);
             }
 
-            var result = RunInMem(ActionBeforeInvocation, 1, "Jack");
+            var result = RunInMem(1, "Jack", beforeSetValues: BeforeSetValues);
+
+            result.ExitCode.Should().Be(5);
+            result.TestOutputs.Get<Car>().Number.Should().Be(1);
+            result.TestOutputs.Get<string>().Should().Be("Jill");
         }
 
         [Fact]
-        public void InvokerCanReadCommandInfo()
+        public void CanReadCurrentCommand()
         {
-            void ActionBeforeInvocation(CommandInvocation context)
+            int BeforeInvocation(CommandContext context, Func<CommandContext, int> next)
             {
-                context.CommandInfo.Should().NotBeNull();
-                context.CommandInfo.MethodName.Should().Be(nameof(App.NotifyOwner));
+                context.CurrentCommand.Should().NotBeNull();
+                context.CurrentCommand.Name.Should().Be(nameof(App.NotifyOwner));
+                return next(context);
             }
 
-            var result = RunInMem(ActionBeforeInvocation, 1, "Jack");
+            var result = RunInMem(1, "Jack", BeforeInvocation);
         }
 
         [Fact]
-        public void InvokerCanReadAndActOnInstance()
+        public void CanReadAndActOnInstance()
         {
             var guid = Guid.NewGuid();
 
-            void ActionBeforeInvocation(CommandInvocation context)
+            int BeforeInvocation(CommandContext context, Func<CommandContext, int> next)
             {
-                context.Instance.Should().NotBeNull();
-                var app = (App) context.Instance;
+                var instance = context.InvocationContext.Instance;
+                instance.Should().NotBeNull();
+                var app = (App)instance;
 
                 app.TestOutputs.Capture(guid);
-                context.CommandInfo.MethodName.Should().Be(nameof(App.NotifyOwner));
+                return next(context);
             }
 
-            var result = RunInMem(ActionBeforeInvocation, 1, "Jack");
+            var result = RunInMem(1, "Jack", BeforeInvocation);
             result.TestOutputs.Get<Guid>().Should().Be(guid);
         }
 
-        private AppRunnerResult RunInMem(Action<CommandInvocation> actionBeforeInvocation, int carNumber, string ownerName)
+        private AppRunnerResult RunInMem(int carNumber, string ownerName, 
+            ExecutionMiddleware beforeInvocation = null, 
+            ExecutionMiddleware beforeSetValues = null)
         {
-            bool invokerWasCalled = false;
+            var appRunner = new AppRunner<App>();
 
-            var result = new AppRunner<App>()
-                .WithCommandInvoker(inner => new Invoker(inner, invoker =>
-                {
-                    invokerWasCalled = true;
-                    actionBeforeInvocation(invoker);
-                }))
-                .RunInMem($"NotifyOwner --Number {carNumber} --owner {ownerName}".SplitArgs(), _testOutputHelper);
-            invokerWasCalled.Should().BeTrue();
-
-            return result;
-        }
-
-        public class Invoker : ICommandInvoker
-        {
-            private readonly ICommandInvoker _inner;
-            private readonly Action<CommandInvocation> _actionBeforeInvocation;
-
-            public Invoker(ICommandInvoker inner, Action<CommandInvocation> actionBeforeInvocation)
+            if (beforeInvocation != null)
             {
-                _inner = inner;
-                _actionBeforeInvocation = actionBeforeInvocation;
+                // TODO: middleware ordering like this is brittle
+                appRunner.AddMiddlewareInStage(beforeInvocation, MiddlewareStages.Invocation, 10);
+            }
+            if (beforeSetValues != null)
+            {
+                appRunner.AddMiddlewareInStage(beforeSetValues, MiddlewareStages.Parsing, 490);
             }
 
-            public object Invoke(CommandInvocation commandInvocation)
-            {
-                _actionBeforeInvocation(commandInvocation);
-                return _inner.Invoke(commandInvocation);
-            }
+            var args = $"NotifyOwner --Number {carNumber} --owner {ownerName}".SplitArgs();
+            return appRunner.RunInMem(args, _testOutputHelper);
         }
-
+        
         public class App
         {
             [InjectProperty]

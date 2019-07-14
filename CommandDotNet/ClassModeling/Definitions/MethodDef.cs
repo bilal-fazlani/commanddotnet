@@ -7,52 +7,81 @@ using CommandDotNet.Extensions;
 
 namespace CommandDotNet.ClassModeling.Definitions
 {
-    internal class MethodDef
+    internal class MethodDef : IMethodDef
     {
-        private readonly MethodBase _method;
         private readonly ExecutionConfig _executionConfig;
-        private readonly Lazy<IReadOnlyCollection<IArgumentDef>> _arguments;
+        private IReadOnlyCollection<IArgumentDef> _argumentDefs;
+        private IReadOnlyCollection<IArgument> _arguments;
+        private ParameterInfo[] _parameters;
         private object[] _values;
 
-        public IReadOnlyCollection<IArgumentDef> Arguments => _arguments.Value;
+        public MethodBase MethodBase { get; }
+
+        public IReadOnlyCollection<IArgumentDef> ArgumentDefs => EnsureInitialized(() => _argumentDefs);
+
+        public IReadOnlyCollection<IArgument> Arguments => EnsureInitialized(ref _arguments,
+            () => ArgumentDefs.Select(a => a.Argument).ToList().AsReadOnly());
+
+        public IReadOnlyCollection<ParameterInfo> Parameters => EnsureInitialized(() => _parameters);
+
+        public object[] ParameterValues => EnsureInitialized(() => _values);
 
         public MethodDef(MethodBase method, ExecutionConfig executionConfig)
         {
-            _method = method ?? throw new ArgumentNullException(nameof(method));
+            MethodBase = method ?? throw new ArgumentNullException(nameof(method));
             _executionConfig = executionConfig ?? throw new ArgumentNullException(nameof(executionConfig));
-
-            _arguments = new Lazy<IReadOnlyCollection<IArgumentDef>>(BuildArguments);
         }
 
         public object Invoke(object instance)
         {
             // TODO: make async
             // TODO: pass execution context
-            return _method is ConstructorInfo ctor
+            return MethodBase is ConstructorInfo ctor
                 ? ctor.Invoke(_values)
-                : _method.Invoke(instance, _values);
+                : MethodBase.Invoke(instance, _values);
         }
 
-        private IReadOnlyCollection<IArgumentDef> BuildArguments()
+        private T EnsureInitialized<T>(ref T current, Func<T> getValues)
         {
-            var isCtor = _method is ConstructorInfo;
+            if (current == null)
+            {
+                current = getValues();
+            }
+
+            return current;
+        }
+
+        private T EnsureInitialized<T>(Func<T> getValues)
+        {
+            if (_argumentDefs == null)
+            {
+                Initialize();
+            }
+            return getValues();
+        }
+
+        private void Initialize()
+        {
+            _parameters = MethodBase.GetParameters();
+
+            var isCtor = MethodBase is ConstructorInfo;
 
             var argumentMode = isCtor
                 ? ArgumentMode.Option
                 : _executionConfig.AppSettings.MethodArgumentMode;
-
-            var parametersByName = _method.GetParameters().ToDictionary(
+            
+            _values = new object[_parameters.Length];
+            
+            var parametersByName = _parameters.ToDictionary(
                 p => p.Name,
                 p => (param: p, args: GetArgsFromParameter(p, argumentMode).ToList()));
-
-            _values = new object[parametersByName.Count];
 
             var arguments = parametersByName.Values
                 .OrderBy(v => v.param.Position)
                 .SelectMany(p => p.args)
                 .ToList();
 
-            return arguments.AsReadOnly();
+            _argumentDefs = arguments.AsReadOnly();
         }
 
         private IEnumerable<IArgumentDef> GetArgsFromParameter(ParameterInfo parameterInfo, ArgumentMode argumentMode) =>
@@ -105,8 +134,8 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public override string ToString()
         {
-            return $"{_method.GetType().Name}:{_method.DeclaringType.Name}.{_method.Name}(" +
-                   $"{_method.GetParameters().Select(p => $"{p.ParameterType} {p.Name}").ToCsv()})";
+            return $"{MethodBase.GetType().Name}:{MethodBase.DeclaringType.Name}.{MethodBase.Name}(" +
+                   $"{MethodBase.GetParameters().Select(p => $"{p.ParameterType} {p.Name}").ToCsv()})";
         }
     }
 }

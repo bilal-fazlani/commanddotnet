@@ -19,6 +19,13 @@ namespace CommandDotNet.Parsing
                 : (IParser)GetSingleValueParser(argumentInfo.Type);
         }
 
+        public IParser CreateInstance(IArgument argument)
+        {
+            return argument.Arity.AllowsZeroOrMore()
+                ? new ListParser(GetSingleValueParser(argument.TypeInfo.UnderlyingType))
+                : (IParser)GetSingleValueParser(argument.TypeInfo.Type);
+        }
+
         internal SingleValueParser GetSingleValueParser(Type argumentType)
         {
             var descriptor = _appSettings.ArgumentTypeDescriptors.GetDescriptorOrThrow(argumentType);

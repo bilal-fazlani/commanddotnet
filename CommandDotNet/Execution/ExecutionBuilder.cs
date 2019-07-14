@@ -9,7 +9,8 @@ namespace CommandDotNet.Execution
 {
     internal class ExecutionBuilder
     {
-        private readonly List<(ExecutionMiddleware middleware, int order)> _middlewares = new List<(ExecutionMiddleware middleware, int order)>();
+        private readonly SortedDictionary<MiddlewareStages, List<(ExecutionMiddleware middleware, int order)>> _middlewaresByStage = 
+            new SortedDictionary<MiddlewareStages, List<(ExecutionMiddleware middleware, int order)>>();
 
         private readonly Dictionary<string, InputTransformation> _inputTransformationsByName
             = new Dictionary<string, InputTransformation>();
@@ -32,19 +33,20 @@ namespace CommandDotNet.Execution
 
         public void AddMiddlewareInStage(ExecutionMiddleware middleware, MiddlewareStages stage, int orderWithinStage = 0)
         {
-            AddMiddleware(middleware, (int)stage + orderWithinStage);
-        }
-
-        public void AddMiddleware(ExecutionMiddleware middleware, int order)
-        {
-            _middlewares.Add((middleware, order));
+            _middlewaresByStage
+                .GetOrAdd(stage, s => new List<(ExecutionMiddleware middleware, int order)>())
+                .Add((middleware, orderWithinStage));
         }
 
         public ExecutionConfig Build(AppSettings appSettings, IDependencyResolver dependencyResolver)
         {
             return new ExecutionConfig(appSettings, dependencyResolver, ParseEvents, BuildEvents)
             {
-                MiddlewarePipeline = _middlewares.OrderBy(m => m.order).Select(m => m.middleware).ToArray(),
+                MiddlewarePipeline = _middlewaresByStage
+                    .SelectMany(kvp => kvp.Value.Select(v => new {stage = kvp.Key, v.order, v.middleware}) )
+                    .OrderBy(m => m.stage)
+                    .ThenBy(m => m.order)
+                    .Select(m => m.middleware).ToArray(),
                 InputTransformations = _inputTransformationsByName.Values.OrderBy(t => t.Order).ToArray()
             };
         }
