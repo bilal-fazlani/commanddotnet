@@ -18,6 +18,7 @@ namespace CommandDotNet
 
         public BuildEvents BuildEvents { get; } = new BuildEvents();
         public ParseEvents ParseEvents { get; } = new ParseEvents();
+        public IContextData ContextData { get; } = new ContextData();
 
         public void AddInputTransformation(string name, int order, Func<TokenCollection,TokenCollection> transformation)
         {
@@ -43,7 +44,7 @@ namespace CommandDotNet
 
         public ExecutionConfig Build(AppSettings appSettings, IDependencyResolver dependencyResolver)
         {
-            return new ExecutionConfig(appSettings, dependencyResolver, ParseEvents, BuildEvents)
+            return new ExecutionConfig(appSettings, dependencyResolver, ParseEvents, BuildEvents, ContextData)
             {
                 MiddlewarePipeline = _middlewareByStage
                     .SelectMany(kvp => kvp.Value.Select(v => new {stage = kvp.Key, v.order, v.middleware}) )
