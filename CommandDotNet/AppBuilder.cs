@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using CommandDotNet.Builders;
+using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Parsing;
 
-namespace CommandDotNet.Execution
+namespace CommandDotNet
 {
-    internal class ExecutionBuilder
+    internal class AppBuilder
     {
-        private readonly SortedDictionary<MiddlewareStages, List<(ExecutionMiddleware middleware, int order)>> _middlewaresByStage = 
+        private readonly SortedDictionary<MiddlewareStages, List<(ExecutionMiddleware middleware, int order)>> _middlewareByStage = 
             new SortedDictionary<MiddlewareStages, List<(ExecutionMiddleware middleware, int order)>>();
 
-        private readonly Dictionary<string, InputTransformation> _inputTransformationsByName
-            = new Dictionary<string, InputTransformation>();
-        public ParseEvents ParseEvents { get; } = new ParseEvents();
+        private readonly Dictionary<string, InputTransformation> _inputTransformationsByName = 
+            new Dictionary<string, InputTransformation>();
+
         public BuildEvents BuildEvents { get; } = new BuildEvents();
+        public ParseEvents ParseEvents { get; } = new ParseEvents();
 
         public void AddInputTransformation(string name, int order, Func<TokenCollection,TokenCollection> transformation)
         {
@@ -32,18 +33,19 @@ namespace CommandDotNet.Execution
             _inputTransformationsByName.Add(name, new InputTransformation(name, order, transformation));
         }
 
-        public void AddMiddlewareInStage(ExecutionMiddleware middleware, MiddlewareStages stage, int orderWithinStage = 0)
+        public void AddMiddlewareInStage(ExecutionMiddleware middleware, MiddlewareStages stage, int? orderWithinStage = null)
         {
-            _middlewaresByStage
-                .GetOrAdd(stage, s => new List<(ExecutionMiddleware middleware, int order)>())
-                .Add((middleware, orderWithinStage));
+            var values = _middlewareByStage
+                .GetOrAdd(stage, s => new List<(ExecutionMiddleware middleware, int order)>());
+            
+            values.Add((middleware, orderWithinStage ?? values.Count));
         }
 
         public ExecutionConfig Build(AppSettings appSettings, IDependencyResolver dependencyResolver)
         {
             return new ExecutionConfig(appSettings, dependencyResolver, ParseEvents, BuildEvents)
             {
-                MiddlewarePipeline = _middlewaresByStage
+                MiddlewarePipeline = _middlewareByStage
                     .SelectMany(kvp => kvp.Value.Select(v => new {stage = kvp.Key, v.order, v.middleware}) )
                     .OrderBy(m => m.stage)
                     .ThenBy(m => m.order)

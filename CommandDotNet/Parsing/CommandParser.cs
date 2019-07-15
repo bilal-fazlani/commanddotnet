@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CommandDotNet.Execution;
 
 namespace CommandDotNet.Parsing
@@ -15,7 +16,13 @@ namespace CommandDotNet.Parsing
             _appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
         }
 
-        public void ParseCommand(CommandContext commandContext)
+        internal static Task<int> ParseMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        {
+            new CommandParser(commandContext.AppSettings).ParseCommand(commandContext);
+            return next(commandContext);
+        }
+
+        private void ParseCommand(CommandContext commandContext)
         {
             bool ignoreRemainingArguments = false;
             var remainingArguments = new List<Token>();

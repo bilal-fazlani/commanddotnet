@@ -13,8 +13,15 @@ namespace CommandDotNet.Directives
         // i.e. middleware pipeline
         internal static bool InTestHarness { private get; set; }
 
+        internal static AppBuilder UseDebugDirective(this AppBuilder appBuilder)
+        {
+            appBuilder.AddMiddlewareInStage(AttachDebugger, MiddlewareStages.PreTransformInput, int.MinValue);
+
+            return appBuilder;
+        }
+
         // adapted from https://github.com/dotnet/command-line-api directives
-        public static Task<int> DebugMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        public static Task<int> AttachDebugger(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             if (commandContext.Tokens.TryGetDirective("debug", out string value))
             {

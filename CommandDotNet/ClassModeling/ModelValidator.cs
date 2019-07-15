@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using CommandDotNet.Builders;
+using CommandDotNet.ClassModeling.Definitions;
+using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using FluentValidation;
 using FluentValidation.Attributes;
@@ -9,6 +13,9 @@ namespace CommandDotNet.ClassModeling
 {
     public class ModelValidator
     {
+        // TODO: move FluentValidation into a separate repo & nuget package?
+        //       there are other ways to do validation that could also
+        //       be applied to parameters
         private readonly IDependencyResolver _dependencyResolver;
 
         public ModelValidator(IDependencyResolver dependencyResolver)
@@ -16,7 +23,26 @@ namespace CommandDotNet.ClassModeling
             _dependencyResolver = dependencyResolver;
         }
 
-        public void ValidateModel(IArgumentModel model)
+        internal static Task<int> ValidateModelsMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        {
+            var commandDef = commandContext.CurrentCommand.ContextData.Get<ICommandDef>();
+            if (commandDef != null)
+            {
+                var modelValidator = new ModelValidator(commandContext.ExecutionConfig.DependencyResolver);
+
+                // TODO: move to Context object
+                var instantiateValues = commandDef.InstantiateMethodDef.ParameterValues;
+                var invokeValues = commandDef.InvokeMethodDef.ParameterValues;
+
+                foreach (var model in instantiateValues.Union(invokeValues).OfType<IArgumentModel>())
+                {
+                    modelValidator.ValidateModel(model);
+                }
+            }
+            return next(commandContext);
+        }
+
+        private void ValidateModel(IArgumentModel model)
         {
             Type modelType = model.GetType();
 

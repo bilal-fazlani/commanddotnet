@@ -5,9 +5,6 @@ namespace CommandDotNet.Execution
 {
     public class CommandContext
     {
-        public bool ShouldExit { get; private set; }
-        public int ExitCode { get; private set; }
-
         public OriginalInput Original { get; }
 
         public TokenCollection Tokens { get; set; }
@@ -36,12 +33,6 @@ namespace CommandDotNet.Execution
             Tokens = originalTokens;
             AppSettings = appSettings;
             ExecutionConfig = executionConfig;
-        }
-
-        public void ShouldExitWithCode(int exitCode)
-        {
-            ShouldExit = true;
-            ExitCode = exitCode;
         }
     }
 }

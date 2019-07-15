@@ -2,10 +2,15 @@
 {
     public enum MiddlewareStages
     {
-        Configuration,
-        Tokenize,
-        Building,
-        Parsing,
-        Invocation
+        PreTransformInput,
+        TransformInput,
+        PostTransformInputPreBuild,
+        Build,
+        PostBuildPreParseInput,
+        ParseInput,
+        PostParseInputPreBindValues,
+        BindValues,
+        PostBindValuesPreInvoke,
+        Invoke
     }
 }

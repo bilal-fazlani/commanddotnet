@@ -10,8 +10,16 @@ namespace CommandDotNet.Directives
 {
     internal static class ParseDirective
     {
+        internal static AppBuilder UseParseDirective(this AppBuilder appBuilder)
+        {
+            appBuilder.AddMiddlewareInStage(Report, MiddlewareStages.PreTransformInput);
+            appBuilder.AddMiddlewareInStage(ExitAfterReport, MiddlewareStages.TransformInput, int.MaxValue);
+
+            return appBuilder;
+        }
+
         // adapted from https://github.com/dotnet/command-line-api directives
-        public static Task<int> ParseMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        private static Task<int> Report(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             if (commandContext.Tokens.TryGetDirective("parse", out string value))
             {
@@ -51,11 +59,16 @@ namespace CommandDotNet.Directives
                         ReportTransformation(console, args.CommandContext.Tokens, $">>> transformed after: {transformations}");
                     };
                 }
-
-                executionConfig.ParseEvents.OnTokenizationCompleted += args => args.CommandContext.ShouldExitWithCode(0);
             }
 
             return next(commandContext);
+        }
+
+        private static Task<int> ExitAfterReport(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        {
+            return commandContext.Tokens.TryGetDirective("parse", out string value)
+                ? Task.FromResult(0)
+                : next(commandContext);
         }
 
         private static void ReportTransformation(IConsole consoleOut, TokenCollection args, string description)

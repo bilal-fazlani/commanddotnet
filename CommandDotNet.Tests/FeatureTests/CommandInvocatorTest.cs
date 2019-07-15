@@ -68,7 +68,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 return next(context);
             }
 
-            var result = RunInMem(1, "Jack", beforeSetValues: BeforeSetValues);
+            var result = RunInMem(1, "Jack", preBindValues: BeforeSetValues);
 
             result.ExitCode.Should().Be(5);
             result.TestOutputs.Get<Car>().Number.Should().Be(1);
@@ -108,19 +108,19 @@ namespace CommandDotNet.Tests.FeatureTests
         }
 
         private AppRunnerResult RunInMem(int carNumber, string ownerName, 
-            ExecutionMiddleware beforeInvocation = null, 
-            ExecutionMiddleware beforeSetValues = null)
+            ExecutionMiddleware postBindValues = null, 
+            ExecutionMiddleware preBindValues = null)
         {
             var appRunner = new AppRunner<App>();
 
-            if (beforeInvocation != null)
+            if (postBindValues != null)
             {
                 // TODO: middleware ordering like this is brittle
-                appRunner.AddMiddlewareInStage(beforeInvocation, MiddlewareStages.Invocation, 10);
+                appRunner.AddMiddlewareInStage(postBindValues, MiddlewareStages.PostBindValuesPreInvoke, int.MaxValue);
             }
-            if (beforeSetValues != null)
+            if (preBindValues != null)
             {
-                appRunner.AddMiddlewareInStage(beforeSetValues, MiddlewareStages.Parsing, 490);
+                appRunner.AddMiddlewareInStage(preBindValues, MiddlewareStages.PostParseInputPreBindValues, int.MaxValue);
             }
 
             var args = $"NotifyOwner --Number {carNumber} --owner {ownerName}".SplitArgs();

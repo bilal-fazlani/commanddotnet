@@ -5,7 +5,6 @@ using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using CommandDotNet.Builders;
 using CommandDotNet.ClassModeling;
-using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Directives;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
@@ -26,7 +25,7 @@ namespace CommandDotNet
         internal IDependencyResolver DependencyResolver;
 
         private readonly AppSettings _settings;
-        private readonly ExecutionBuilder _executionBuilder = new ExecutionBuilder();
+        private readonly AppBuilder _appBuilder = new AppBuilder();
 
         public AppRunner(AppSettings settings = null)
         {
@@ -49,9 +48,8 @@ namespace CommandDotNet
             }
             catch (Exception e)
             {
-                var exitCode = HandleException(e, _settings.Console,
+                return HandleException(e, _settings.Console,
                     cmd => HelpMiddleware.Print(_settings, cmd));
-                return exitCode;
             }
         }
 
@@ -69,11 +67,65 @@ namespace CommandDotNet
             }
             catch (Exception e)
             {
-                var exitCode = HandleException(e, _settings.Console, 
+                return HandleException(e, _settings.Console, 
                     cmd => HelpMiddleware.Print(_settings, cmd));
-                return exitCode;
             }
         }
+
+        private Task<int> Execute(string[] args)
+        {
+            AddCoreMiddleware();
+            AddOptionalMiddleware();
+
+            var tokens = args.Tokenize(includeDirectives: _settings.EnableDirectives);
+            var executionResult = new CommandContext(args, tokens, _settings, _appBuilder.Build(_settings, DependencyResolver));
+
+            return InvokeMiddleware(executionResult);
+        }
+
+        private void AddCoreMiddleware()
+        {
+            _appBuilder.AddMiddlewareInStage(TokenizerPipeline.TokenizeMiddleware, MiddlewareStages.TransformInput, -1);
+            _appBuilder.AddMiddlewareInStage(CommandParser.ParseMiddleware, MiddlewareStages.ParseInput);
+            _appBuilder.UseClassDefMiddleware<T>();
+            _appBuilder.UseHelpMiddleware();
+
+            // TODO: add middleware between stages to validate CommandContext is exiting a stage with required data populated
+            //       i.e. ParseResult should be fully populated after Parse stage
+            //            Invocation contexts should be fully populated after BindValues stage
+            //            (when ctor options are moved to a middleware method, invocation context should be populated in Parse stage)
+        }
+
+        private void AddOptionalMiddleware()
+        {
+            if (_settings.EnableDirectives)
+            {
+                _appBuilder.UseDebugDirective();
+                _appBuilder.UseParseDirective();
+            }
+
+            if (_settings.EnableVersionOption)
+            {
+                _appBuilder.UseVersionMiddleware();
+            }
+
+            if (_settings.PromptForMissingOperands)
+            {
+                _appBuilder.AddMiddlewareInStage(ValuePromptMiddleware.PromptForMissingOperands,
+                    MiddlewareStages.PostParseInputPreBindValues);
+            }
+
+            // TODO: move FluentValidation into a separate repo & nuget package?
+            //       there are other ways to do validation that could also
+            //       be applied to parameters
+            _appBuilder.AddMiddlewareInStage(ModelValidator.ValidateModelsMiddleware, MiddlewareStages.PostBindValuesPreInvoke);
+
+            if (DependencyResolver != null)
+            {
+                _appBuilder.AddMiddlewareInStage(DependencyResolveMiddleware.InjectDependencies, MiddlewareStages.PostBindValuesPreInvoke);
+            }
+        }
+
         private static int HandleException(Exception ex, IConsole console, Action<ICommand> printHelp)
         {
             ex = ex.EscapeWrappers();
@@ -108,202 +160,7 @@ namespace CommandDotNet
                     ExceptionDispatchInfo.Capture(ex).Throw();
                     return 1; // this will only be called if there are no inner exceptions
             }
-
-            return 0;
         }
-
-        private Task<int> Execute(string[] args)
-        {
-            if (_settings.EnableDirectives)
-            {
-                _executionBuilder.AddMiddlewareInStage(DebugDirective.DebugMiddleware, MiddlewareStages.Configuration, 0);
-                _executionBuilder.AddMiddlewareInStage(ParseDirective.ParseMiddleware, MiddlewareStages.Tokenize, -2);
-            }
-
-            _executionBuilder.AddMiddlewareInStage(TokenizerPipeline.TokenizeMiddleware, MiddlewareStages.Tokenize, -1);
-            _executionBuilder.AddMiddlewareInStage(BuildMiddleware, MiddlewareStages.Building);
-            _executionBuilder.AddMiddlewareInStage(ParseMiddleware, MiddlewareStages.Parsing);
-            if (_settings.PromptForMissingOperands)
-            {
-                _executionBuilder.AddMiddlewareInStage(ValuePromptMiddleware.PromptForMissingOperands, MiddlewareStages.Parsing, 300);
-            }
-
-            // TODO: add middleware between stages to validate CommandContext is exiting a stage with required data populated
-            //       i.e. ParseResult should be fully populated after Parse stage
-
-            _executionBuilder.AddMiddlewareInStage(SetInvocationContextMiddleware, MiddlewareStages.Parsing, 400);
-            _executionBuilder.AddMiddlewareInStage(SetValuesMiddleware, MiddlewareStages.Parsing, 500);
-            _executionBuilder.AddMiddlewareInStage(ValidateModelsMiddleware, MiddlewareStages.Parsing, 600);
-            _executionBuilder.AddMiddlewareInStage(CreateInstancesMiddleware, MiddlewareStages.Invocation, -500);
-            _executionBuilder.AddMiddlewareInStage(InjectDependenciesMiddleware, MiddlewareStages.Invocation, -400);
-            _executionBuilder.AddMiddlewareInStage(InvokeCommandDefMiddleware, MiddlewareStages.Invocation, int.MaxValue);
-
-            _executionBuilder.UseHelpMiddleware(100);
-            if (_settings.EnableVersionOption)
-            {
-                _executionBuilder.UseVersionMiddleware(200);
-            }
-
-            var tokens = args.Tokenize(includeDirectives: _settings.EnableDirectives);
-            var executionResult = new CommandContext(args, tokens, _settings, _executionBuilder.Build(_settings, DependencyResolver));
-
-            return InvokeMiddleware(executionResult);
-        }
-
-        private Task<int> BuildMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
-        {
-            commandContext.CurrentCommand = ClassCommandDef.CreateRootCommand(typeof(T), commandContext);
-            return next(commandContext);
-        }
-
-        private Task<int> ParseMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
-        {
-            new CommandParser(_settings).ParseCommand(commandContext);
-            return next(commandContext);
-        }
-
-        private Task<int> SetInvocationContextMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
-        {
-            var commandDef = commandContext.CurrentCommand.ContextData.Get<ICommandDef>();
-            if (commandDef != null)
-            {
-                var ctx = commandContext.InvocationContext;
-                ctx.InstantiateInvocation = commandDef.InstantiateMethodDef;
-                ctx.CommandInvocation = commandDef.InvokeMethodDef;
-            }
-
-            return next(commandContext);
-        }
-
-        private Task<int> SetValuesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
-        {
-            var commandDef = commandContext.CurrentCommand.ContextData.Get<ICommandDef>();
-            if (commandDef != null)
-            {
-                var argumentValues = commandContext.ParseResult.ArgumentValues;
-                var parserFactory = new ParserFactory(commandContext.AppSettings);
-
-                // TODO: move to Context object
-                var instantiateArgs = commandDef.InstantiateMethodDef.ArgumentDefs;
-                var invokeArgs = commandDef.InvokeMethodDef.ArgumentDefs;
-                foreach (var argumentDef in instantiateArgs.Union(invokeArgs))
-                {
-                    if (argumentValues.TryGetValues(argumentDef.Argument, out var values))
-                    {
-                        var parser = parserFactory.CreateInstance(argumentDef.Argument);
-                        var value = parser.Parse(argumentDef.Argument, values);
-                        argumentDef.SetValue(value);
-                    }
-                    else if (argumentDef.HasDefaultValue)
-                    {
-                        argumentDef.SetValue(argumentDef.DefaultValue);
-                    }
-                }
-            }
-            return next(commandContext);
-        }
-
-
-        private Task<int> ValidateModelsMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
-        {
-            var commandDef = commandContext.CurrentCommand.ContextData.Get<ICommandDef>();
-            if (commandDef != null)
-            {
-                var modelValidator = new ModelValidator(commandContext.ExecutionConfig.DependencyResolver);
-
-                // TODO: move to Context object
-                var instantiateValues = commandDef.InstantiateMethodDef.ParameterValues;
-                var invokeValues = commandDef.InvokeMethodDef.ParameterValues;
-
-                foreach (var model in instantiateValues.Union(invokeValues).OfType<IArgumentModel>())
-                {
-                    modelValidator.ValidateModel(model);
-                }
-            }
-            return next(commandContext);
-        }
-
-        private async Task<int> CreateInstancesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
-        {
-            var command = commandContext.ParseResult.Command;
-            var commandDef = command.ContextData.Get<ICommandDef>();
-
-            if (commandDef != null)
-            {
-                commandContext.InvocationContext.Instance = commandDef.InstantiateMethodDef.Invoke(null);
-            }
-
-            try
-            {
-                return await next(commandContext);
-            }
-            finally
-            {
-                // TODO: remove this when the instance is managed by DI
-                //       and we can move creation of instance into an
-                //       internal implementation of IDependencyResolver
-                if (commandContext.InvocationContext.Instance is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
-            }
-        }
-
-        private Task<int> InjectDependenciesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
-        {
-            var instance = commandContext.InvocationContext.Instance;
-            var dependencyResolver = commandContext.ExecutionConfig.DependencyResolver;
-            if (instance != null)
-            {
-                //detect injection properties
-                var properties = instance.GetType().GetDeclaredProperties<InjectPropertyAttribute>().ToList();
-
-                if (properties.Any())
-                {
-                    if (dependencyResolver != null)
-                    {
-                        foreach (var propertyInfo in properties)
-                        {
-                            propertyInfo.SetValue(instance, dependencyResolver.Resolve(propertyInfo.PropertyType));
-                        }
-                    }
-                    else // there are some properties but there is no dependency resolver set
-                    {
-                        throw new AppRunnerException("Dependency resolver is not set for injecting properties. " +
-                                                     "Please use an IoC framework'");
-                    }
-                }
-            }
-
-            return next(commandContext);
-        }
-
-        private Task<int> InvokeCommandDefMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
-        {
-            var ctx = commandContext.InvocationContext;
-
-            var result = ctx.CommandInvocation.Invoke(ctx.Instance);
-            return GetResultCodeAsync(result, commandContext);
-        }
-
-        internal static async Task<int> GetResultCodeAsync(object value, CommandContext commandContext)
-        {
-            switch (value)
-            {
-                case Task<int> resultCodeTask:
-                    return await resultCodeTask;
-                case Task task:
-                    await task;
-                    return commandContext.ExitCode;
-                case int resultCode:
-                    return resultCode;
-                case null:
-                    return commandContext.ExitCode;
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-
 
         private static Task<int> InvokeMiddleware(CommandContext commandContext)
         {
@@ -312,10 +169,9 @@ namespace CommandDotNet
             var middlewareChain = pipeline.Aggregate(
                 (first, second) =>
                     (ctx, next) =>
-                        first(ctx, c =>
-                            ctx.ShouldExit ? Task.FromResult(ctx.ExitCode) : second(c, next)));
+                        first(ctx, c => second(c, next)));
 
-            return middlewareChain(commandContext, ctx => Task.FromResult(ctx.ExitCode));
+            return middlewareChain(commandContext, ctx => Task.FromResult(0));
         }
 
         public AppRunner<T> WithCustomHelpProvider(IHelpProvider customHelpProvider)
@@ -324,9 +180,9 @@ namespace CommandDotNet
             return this;
         }
 
-        public AppRunner<T> AddMiddlewareInStage(ExecutionMiddleware middleware, MiddlewareStages stage, int orderWithinStage = 0)
+        public AppRunner<T> AddMiddlewareInStage(ExecutionMiddleware middleware, MiddlewareStages stage, int? orderWithinStage = null)
         {
-            _executionBuilder.AddMiddlewareInStage(middleware, stage, orderWithinStage);
+            _appBuilder.AddMiddlewareInStage(middleware, stage, orderWithinStage);
             return this;
         }
 
@@ -338,7 +194,7 @@ namespace CommandDotNet
 
         public AppRunner<T> UseInputTransformation(string name, int order, Func<TokenCollection, TokenCollection> transformation)
         {
-            _executionBuilder.AddInputTransformation(name, order, transformation);
+            _appBuilder.AddInputTransformation(name, order, transformation);
             return this;
         }
     }

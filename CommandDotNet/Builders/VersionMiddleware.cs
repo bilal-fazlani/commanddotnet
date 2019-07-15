@@ -12,10 +12,10 @@ namespace CommandDotNet.Builders
         private const string VersionOptionName = "version";
         private const string VersionTemplate = "-v | --" + VersionOptionName;
         
-        internal static ExecutionBuilder UseVersionMiddleware(this ExecutionBuilder builder, int orderWithinParsingStage)
+        internal static AppBuilder UseVersionMiddleware(this AppBuilder builder)
         {
             builder.BuildEvents.OnCommandCreated += AddVersionOption;
-            builder.AddMiddlewareInStage(DisplayVersionIfSpecified, MiddlewareStages.Parsing, orderWithinParsingStage);
+            builder.AddMiddlewareInStage(DisplayVersionIfSpecified, MiddlewareStages.PostParseInputPreBindValues);
 
             return builder;
         }

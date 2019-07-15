@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
+using CommandDotNet.Builders;
 using CommandDotNet.Execution;
-using CommandDotNet.Help;
 
-namespace CommandDotNet.Builders
+namespace CommandDotNet.Help
 {
     internal static class HelpMiddleware
     {
-        internal static ExecutionBuilder UseHelpMiddleware(this ExecutionBuilder builder, int orderWithinParsingStage)
+        internal static AppBuilder UseHelpMiddleware(this AppBuilder builder)
         {
             builder.BuildEvents.OnCommandCreated += AddHelpOption;
-            builder.AddMiddlewareInStage(DisplayHelpIfSpecified, MiddlewareStages.Parsing, orderWithinParsingStage);
+            builder.AddMiddlewareInStage(DisplayHelpIfSpecified, MiddlewareStages.PostParseInputPreBindValues);
 
             return builder;
         }
