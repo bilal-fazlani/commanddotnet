@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using CommandDotNet.Builders;
 using CommandDotNet.ClassModeling;
@@ -48,8 +49,7 @@ namespace CommandDotNet
             }
             catch (Exception e)
             {
-                var exitCode = e.HandleException(
-                    _settings.Console,
+                var exitCode = HandleException(e, _settings.Console,
                     cmd => HelpMiddleware.Print(_settings, cmd));
                 return exitCode;
             }
@@ -69,11 +69,47 @@ namespace CommandDotNet
             }
             catch (Exception e)
             {
-                var exitCode = e.HandleException(
-                    _settings.Console, 
+                var exitCode = HandleException(e, _settings.Console, 
                     cmd => HelpMiddleware.Print(_settings, cmd));
                 return exitCode;
             }
+        }
+        private static int HandleException(Exception ex, IConsole console, Action<ICommand> printHelp)
+        {
+            ex = ex.EscapeWrappers();
+            switch (ex)
+            {
+                case AppRunnerException appEx:
+                    console.Error.WriteLine(appEx.Message);
+                    appEx.PrintStackTrace(console);
+                    console.Error.WriteLine();
+                    return 1;
+                case CommandParsingException cpEx:
+                    console.Error.WriteLine(cpEx.Message);
+                    cpEx.PrintStackTrace(console);
+                    console.Error.WriteLine();
+                    printHelp(cpEx.Command);
+                    return 1;
+                case ArgumentValidationException avEx:
+                    foreach (var error in avEx.ValidationResult.Errors)
+                    {
+                        console.Out.WriteLine(error.ErrorMessage);
+                    }
+                    console.Error.WriteLine();
+                    return 2;
+                case ValueParsingException vpEx:
+                    console.Error.WriteLine(vpEx.Message);
+                    console.Error.WriteLine();
+                    return 2;
+                case AggregateException aggEx:
+                    ExceptionDispatchInfo.Capture(aggEx).Throw();
+                    return 1; // this will only be called if there are no inner exceptions
+                default:
+                    ExceptionDispatchInfo.Capture(ex).Throw();
+                    return 1; // this will only be called if there are no inner exceptions
+            }
+
+            return 0;
         }
 
         private Task<int> Execute(string[] args)
