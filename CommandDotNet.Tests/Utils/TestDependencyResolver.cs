@@ -6,11 +6,16 @@ namespace CommandDotNet.Tests.Utils
 {
     public class TestDependencyResolver : IDependencyResolver
     {
-        private Dictionary<Type, object> _services = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, object> _services = new Dictionary<Type, object>();
         
         public object Resolve(Type type)
         {
             return _services[type];
+        }
+
+        public bool TryResolve(Type type, out object item)
+        {
+            return _services.TryGetValue(type, out item);
         }
 
         public void Register(object service)
