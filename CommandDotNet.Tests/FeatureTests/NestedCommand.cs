@@ -28,6 +28,27 @@ namespace CommandDotNet.Tests.FeatureTests
         public static Scenarios BuildScenarios<T>(string name) =>
             new Scenarios
             {
+                new Given<T>($"{name} - no args (implicit help) includes 1st level commands and 2nd level app")
+                {
+                    WhenArgs = null,
+                    Then =
+                    {
+                        Result = @"Usage: dotnet testhost.dll [command] [options]
+
+Options:
+
+  -h | --help
+  Show help information
+
+
+Commands:
+
+  Do1
+  Second
+
+Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+                    }
+                },
                 new Given<T>($"{name} - help includes 1st level commands and 2nd level app")
                 {
                     WhenArgs = "-h",

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Execution;
+using CommandDotNet.Help;
 using CommandDotNet.Parsing;
 
 namespace CommandDotNet.ClassModeling
@@ -13,6 +14,7 @@ namespace CommandDotNet.ClassModeling
         {
             appBuilder.AddMiddlewareInStage(BuildMiddleware<TRootCommandType>, MiddlewareStages.Build);
             appBuilder.AddMiddlewareInStage(SetInvocationContextMiddleware, MiddlewareStages.ParseInput);
+            appBuilder.AddMiddlewareInStage(DisplayHelpIfCommandIsNotExecutable, MiddlewareStages.BindValues);
             appBuilder.AddMiddlewareInStage(SetValuesMiddleware, MiddlewareStages.BindValues);
             appBuilder.AddMiddlewareInStage(CreateInstancesMiddleware, MiddlewareStages.BindValues);
             appBuilder.AddMiddlewareInStage(InvokeCommandDefMiddleware, MiddlewareStages.Invoke, int.MaxValue);
@@ -33,6 +35,21 @@ namespace CommandDotNet.ClassModeling
                 var ctx = commandContext.InvocationContext;
                 ctx.InstantiateInvocation = commandDef.InstantiateMethodDef;
                 ctx.CommandInvocation = commandDef.InvokeMethodDef;
+            }
+
+            return next(commandContext);
+        }
+
+        private static Task<int> DisplayHelpIfCommandIsNotExecutable(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        {
+            var commandDef = commandContext.CurrentCommand.ContextData.Get<ICommandDef>();
+            if (commandDef != null)
+            {
+                if (!commandDef.IsExecutable)
+                {
+                    HelpMiddleware.Print(commandContext.AppSettings, commandDef.Command);
+                    return Task.FromResult(0);
+                }
             }
 
             return next(commandContext);
