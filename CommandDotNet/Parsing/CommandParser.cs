@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
+using CommandDotNet.Extensions;
+using CommandDotNet.Help;
 
 namespace CommandDotNet.Parsing
 {
@@ -18,7 +20,19 @@ namespace CommandDotNet.Parsing
 
         internal static Task<int> ParseMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            new CommandParser(commandContext.AppSettings).ParseCommand(commandContext);
+            try
+            {
+                new CommandParser(commandContext.AppSettings).ParseCommand(commandContext);
+            }
+            catch (CommandParsingException ex)
+            {
+                var console = commandContext.AppSettings.Console;
+                console.Error.WriteLine(ex.Message);
+                ex.PrintStackTrace(console);
+                console.Error.WriteLine();
+                HelpMiddleware.Print(commandContext.AppSettings, ex.Command);
+                return Task.FromResult(1);
+            }
             return next(commandContext);
         }
 

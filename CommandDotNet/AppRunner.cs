@@ -136,12 +136,7 @@ namespace CommandDotNet
                     appEx.PrintStackTrace(console);
                     console.Error.WriteLine();
                     return 1;
-                case CommandParsingException cpEx:
-                    console.Error.WriteLine(cpEx.Message);
-                    cpEx.PrintStackTrace(console);
-                    console.Error.WriteLine();
-                    printHelp(cpEx.Command);
-                    return 1;
+                // TODO: move this to the correct middleware
                 case ValueParsingException vpEx:
                     console.Error.WriteLine(vpEx.Message);
                     console.Error.WriteLine();
