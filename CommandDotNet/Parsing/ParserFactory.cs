@@ -1,4 +1,5 @@
 ﻿using System;
+using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet.Parsing
 {
@@ -14,15 +15,13 @@ namespace CommandDotNet.Parsing
         public IParser CreateInstance(IArgument argument)
         {
             return argument.Arity.AllowsZeroOrMore()
-                ? new ListParser(GetSingleValueParser(argument.TypeInfo.UnderlyingType))
-                : (IParser)GetSingleValueParser(argument.TypeInfo.Type);
+                ? new ListParser(GetDescriptor(argument.TypeInfo.UnderlyingType))
+                : (IParser)new SingleValueParser(GetDescriptor(argument.TypeInfo.Type));
         }
 
-        internal SingleValueParser GetSingleValueParser(Type argumentType)
+        private IArgumentTypeDescriptor GetDescriptor(Type argumentType)
         {
-            var descriptor = _appSettings.ArgumentTypeDescriptors.GetDescriptorOrThrow(argumentType);
-            SingleValueParser singleValueParser = new SingleValueParser(descriptor);
-            return singleValueParser;
+            return _appSettings.ArgumentTypeDescriptors.GetDescriptorOrThrow(argumentType);
         }
     }
 }

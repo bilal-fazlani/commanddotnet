@@ -77,10 +77,10 @@ Options:
                 WhenArgs = "Do ",
                 Then =
                 {
-                    ExitCode = 2,
-                    Result = "type : CommandDotNet.Tests.FeatureTests.CustomArgumentTypeDescriptors+Square is not supported. " +
-                             "If it's an argument model, inherit from IArgumentModel. " +
-                             "Otherwise, to support this type, implement a TypeConverter or IArgumentTypeDescriptor or add a constructor with a single string parameter."
+                    ExitCode = 1,
+                    ResultsContainsTexts = { "type : CommandDotNet.Tests.FeatureTests.CustomArgumentTypeDescriptors+Square is not supported. " +
+                                             "If it's an argument model, inherit from IArgumentModel. " +
+                                             "Otherwise, to support this type, implement a TypeConverter or IArgumentTypeDescriptor or add a constructor with a single string parameter." }
                 }
             });
         }

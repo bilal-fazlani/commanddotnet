@@ -21,20 +21,7 @@ namespace CommandDotNet.Parsing
 
         public object ParseString(IArgument argument, string value)
         {
-            try
-            {
-                return _argumentTypeDescriptor.ParseString(argument, value);
-            }
-            catch (FormatException)
-            {
-                throw new ValueParsingException(
-                    $"'{value}' is not a valid {_argumentTypeDescriptor.GetDisplayName(argument)}");
-            }
-            catch (ArgumentException)
-            {
-                throw new ValueParsingException(
-                    $"'{value}' is not a valid {_argumentTypeDescriptor.GetDisplayName(argument)}");
-            }
+            return _argumentTypeDescriptor.ParseString(argument, value);
         }
     }
 }

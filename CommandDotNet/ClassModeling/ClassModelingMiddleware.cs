@@ -43,6 +43,7 @@ namespace CommandDotNet.ClassModeling
             var commandDef = commandContext.CurrentCommand.ContextData.Get<ICommandDef>();
             if (commandDef != null)
             {
+                var console = commandContext.Console;
                 var argumentValues = commandContext.ParseResult.ArgumentValues;
                 var parserFactory = new ParserFactory(commandContext.AppSettings);
 
@@ -54,7 +55,17 @@ namespace CommandDotNet.ClassModeling
                     if (argumentValues.TryGetValues(argumentDef.Argument, out var values))
                     {
                         var parser = parserFactory.CreateInstance(argumentDef.Argument);
-                        var value = parser.Parse(argumentDef.Argument, values);
+                        object value;
+                        try
+                        {
+                            value = parser.Parse(argumentDef.Argument, values);
+                        }
+                        catch (ValueParsingException ex)
+                        {
+                            console.Error.WriteLine(ex.Message);
+                            console.Error.WriteLine();
+                            return Task.FromResult(2);
+                        }
                         argumentDef.SetValue(value);
                     }
                     else if (argumentDef.HasDefaultValue)

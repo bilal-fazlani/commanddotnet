@@ -136,11 +136,6 @@ namespace CommandDotNet
                     appEx.PrintStackTrace(console);
                     console.Error.WriteLine();
                     return 1;
-                // TODO: move this to the correct middleware
-                case ValueParsingException vpEx:
-                    console.Error.WriteLine(vpEx.Message);
-                    console.Error.WriteLine();
-                    return 2;
                 case AggregateException aggEx:
                     ExceptionDispatchInfo.Capture(aggEx).Throw();
                     return 1; // this will only be called if there are no inner exceptions

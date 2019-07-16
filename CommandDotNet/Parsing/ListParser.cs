@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet.Parsing
 {
     internal class ListParser : IParser
     {
-        private readonly SingleValueParser _singleValueParser;
+        private readonly IArgumentTypeDescriptor _argumentTypeDescriptor;
 
-        public ListParser(SingleValueParser singleValueParser)
+        public ListParser(IArgumentTypeDescriptor argumentTypeDescriptor)
         {
-            _singleValueParser = singleValueParser;
+            _argumentTypeDescriptor = argumentTypeDescriptor;
         }
 
         public object Parse(IArgument argument, List<string> values)
@@ -20,7 +21,7 @@ namespace CommandDotNet.Parsing
 
             foreach (string stringValue in values)
             {
-                dynamic value = _singleValueParser.ParseString(argument, stringValue);
+                dynamic value = _argumentTypeDescriptor.ParseString(argument, stringValue);
                 listInstance.Add(value);
             }
 

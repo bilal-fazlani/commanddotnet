@@ -55,7 +55,7 @@ namespace CommandDotNet.TypeDescriptors
 
         public IArgumentTypeDescriptor GetDescriptorOrThrow(Type type)
         {
-            return GetDescriptor(type) ?? throw new ValueParsingException(
+            return GetDescriptor(type) ?? throw new AppRunnerException(
                        $"type : {type} is not supported. If it's an argument model, " +
                        $"inherit from {nameof(IArgumentModel)}. Otherwise, to support this type, " +
                        $"implement a {nameof(TypeConverter)} or {nameof(IArgumentTypeDescriptor)} " +
