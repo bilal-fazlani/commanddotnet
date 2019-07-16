@@ -44,16 +44,14 @@ Here's how the help looks like now:
 ```bash
 Fake git application
 
-Usage: dotnet example.dll [options] [command]
-
-Options:
-  -h | -? | --help  Show help information
+Usage: git [command]
 
 Commands:
+
   Commit  Commits all staged changes
   Stash   Stashes all changes when executed without any arguments
 
-Use "dotnet example.dll [command] --help" for more information about a command.
+Use "git [command] --help" for more information about a command.
 ```
 
 Here's  how the interaction looks like:
@@ -97,16 +95,14 @@ OUTPUT
 ```bash
 Stashes all changes when executed without any arguments
 
-Usage: dotnet example.dll Stash [options] [command]
-
-Options:
-  -h | -? | --help  Show help information
+Usage: git Stash [command]
 
 Commands:
-  List  Lists all saved stashed changes
+
+  List  Lists all stashed changes
   Pop   Applies last stashed changes
 
-Use "Stash [command] --help" for more information about a command.
+Use "git Stash [command] --help" for more information about a command.
 ```
 
 ---

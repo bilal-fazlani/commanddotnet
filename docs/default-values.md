@@ -20,12 +20,11 @@ dotnet example.dll Divide --help
 OUTPUT
 
 ```bash
-Usage: dotnet example.dll Divide [arguments] [options]
+Usage: dotnet CommandDotNet.Example.dll Divide [arguments]
 
 Arguments:
-  value1  Int32
-  value2  Int32 | Default value: 1
 
-Options:
-  -h | -? | --help  Show help information
+  value1    <NUMBER>
+
+  value2    <NUMBER>    [1]
 ```

@@ -40,20 +40,19 @@ By default, the parameter names declared in method are the argument names that a
 Let's see an example-
 
 ```c#
-public void LaunchRocket([Argument(
+public void LaunchRocket([Operand(
     Name = "planet",
-    Description = "Name of the planet you wish the rocket to go)] string planetName)
+    Description = "Name of the planet you wish the rocket to go")] string planetName)
 ```
 This is what help looks like-
 
 ```bash
-Usage: dotnet example.dll LaunchRocket [arguments] [options]
+Usage: dotnet CommandDotNet.Example.dll LaunchRocket [arguments]
 
 Arguments:
-  planetName  String                                            Name of the planet you wish the rocket to go
 
-Options:
-  -h | -? | --help  Show help information
+  planet    <TEXT>
+  Name of the planet you wish the rocket to go
 ```
 
 ### Option
@@ -66,7 +65,7 @@ Let's see an example-
 
 ```c#
 public void LaunchRocket([Option(
-    LongName = "planet", 
+    Name = "planet", 
     ShortName = "p", 
     Description = "Name of the planet you wish the rocket to go")] string planetName)
 ```
@@ -74,11 +73,12 @@ public void LaunchRocket([Option(
 This is what help looks like-
 
 ```bash
-Usage: dotnet example.dll LaunchRocket [options]
+Usage: dotnet CommandDotNet.Example.dll LaunchRocket [options]
 
 Options:
-  -h | -? | --help  Show help information
-  --planet | -p     String                         Name of the planet you wish the rocket to go
+
+  -p|--planet    <TEXT>
+  Name of the planet you wish the rocket to go
 ```
 
 So planet name can now be passed either with `--planet` or `-p`. 

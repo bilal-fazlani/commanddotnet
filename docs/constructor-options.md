@@ -42,17 +42,19 @@ dotnet example.dll --help
 OUTPUT
 
 ```bash
-Usage: dotnet example.dll [options] [command]
+Usage: dotnet CommandDotNet.Example.dll [command] [options]                                   
 
-Options:
-  -h | -? | --help  Show help information
-  --printValues     Flag
+Options:                                                                                      
 
-Commands:
-  Add        Adds two numbers. duh!
-  Subtract
+  --printValues                                                               
 
-Use "dotnet example.dll [command] --help" for more information about a command.
+
+Commands:                                                                                     
+
+  Add       Adds two numbers. duh!                                                            
+  Subtract                                                                                    
+
+Use "dotnet CommandDotNet.Example.dll [command] --help" for more information about a command. 
 ```
 
 Let's try and invoke it

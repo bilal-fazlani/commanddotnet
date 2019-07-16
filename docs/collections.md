@@ -17,11 +17,11 @@ dotnet example.dll LaunchRocket --help
 OUTPUT
 
 ```bash
-Usage: dotnet example.dll LaunchRocket [options]
+Usage: dotnet CommandDotNet.Example.dll LaunchRocket [options]
 
 Options:
-  -h | -? | --help  Show help information
-  -p                String (Multiple)
+
+  -p|--planets (Multiple)    <TEXT>
 ```
 
 And this is how you pass multiple options:
@@ -45,13 +45,11 @@ dotnet example.dll LaunchRocket --help
 OUTPUT
 
 ```bash
-Usage: dotnet example.dll LaunchRocket [arguments] [options]
+Usage: dotnet CommandDotNet.Example.dll LaunchRocket [arguments]
 
 Arguments:
-  planets  String (Multiple)
 
-Options:
-  -h | -? | --help  Show help information
+  planets (Multiple)    <TEXT>
 ```
 
 And this is how you pass multiple arguments:

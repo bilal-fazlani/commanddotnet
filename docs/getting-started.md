@@ -63,16 +63,14 @@ dotnet example.dll --help
 OUTPUT
 
 ```bash
-Usage: dotnet example.dll [options] [command]
-
-Options:
-  -h | -? | --help  Show help information
+Usage: dotnet CommandDotNet.Example.dll [command]
 
 Commands:
+
   Add
   Subtract
 
-Use "dotnet example.dll [command] --help" for more information about a command.
+Use "dotnet CommandDotNet.Example.dll [command] --help" for more information about a command.
 
 ```
 
@@ -93,16 +91,14 @@ This should do it.
 Let's see how the help appears now.
 
 ```bash
-Usage: dotnet example.dll [options] [command]
-
-Options:
-  -h | -? | --help  Show help information
+Usage: dotnet CommandDotNet.Example.dll [command]
 
 Commands:
-  Add        Adds two numbers. duh!
+
+  Add       Adds two numbers. duh!
   Subtract
 
-Use "dotnet example.dll [command] --help" for more information about a command.
+Use "dotnet CommandDotNet.Example.dll [command] --help" for more information about a command.
 
 ```
 
@@ -119,14 +115,15 @@ dotnet example.dll Add --help
 OUTPUT
 
 ```bash
-Usage: dotnet example.dll Add [arguments] [options]
+Adds two numbers. duh!
+
+Usage: dotnet CommandDotNet.Example.dll Add [arguments]
 
 Arguments:
-  value1  Int32
-  value2  Int32
 
-Options:
-  -h | -? | --help  Show help information
+  value1    <NUMBER>
+
+  value2    <NUMBER>
 ```
 
 tada!

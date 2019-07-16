@@ -46,16 +46,18 @@ public class SomeClass
 by default this would result into something like this:
 
 ```bash
-Usage: dotnet example.dll [options] [command]
+Usage: dotnet CommandDotNet.Example.dll [command] [options]
 
 Options:
-  -h | -? | --help  Show help information
-  --Url             String
+
+  --Url    <TEXT>
+
 
 Commands:
+
   ProcessRequest
 
-Use "dotnet example.dll [command] --help" for more information about a command.
+Use "dotnet CommandDotNet.Example.dll [command] --help" for more information about a command.
 ```
 
 Command line conventions are different from C# conventions and the usual pascal casing of method names or camel casing of parameter names may not be suitable for command line arguments.
@@ -89,16 +91,18 @@ class Program
 The result would something like this:
 
 ```bash
-Usage: dotnet example.dll [options] [command]
+Usage: dotnet CommandDotNet.Example.dll [command] [options]
 
 Options:
-  -h | -? | --help  Show help information
-  --url             String
+
+  --url    <TEXT>
+
 
 Commands:
+
   process-request
 
-Use "dotnet example.dll [command] --help" for more information about a command.
+Use "dotnet CommandDotNet.Example.dll [command] --help" for more information about a command.
 ```
 
 !!! note

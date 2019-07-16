@@ -1,4 +1,6 @@
-﻿using CommandDotNet.Example.Issues;
+﻿using System;
+using CommandDotNet.Example.DocExamples;
+using CommandDotNet.Example.Issues;
 using CommandDotNet.Help;
 
 namespace CommandDotNet.Example
@@ -7,23 +9,34 @@ namespace CommandDotNet.Example
     {
         static int Main(string[] args)
         {
+            // return RunDocExample(args);
             // return Run<GitApplication>(args);
             return Run<Examples>(args);
         }
 
-        private static int Run<TApp>(string[] args) where TApp : class
+        private static int Run<TApp>(string[] args, Action<AppSettings> config = null) where TApp : class
         {
-            AppRunner<TApp> appRunner = new AppRunner<TApp>(new AppSettings
+            var appSettings = new AppSettings
             {
-                Case = Case.KebabCase,
                 EnableDirectives = true,
                 EnableVersionOption = true,
                 Help =
                 {
                     TextStyle = HelpTextStyle.Detailed
                 }
+            };
+            config?.Invoke(appSettings);
+            return new AppRunner<TApp>(appSettings).Run(args);
+        }
+
+        private static int RunDocExample(string[] args)
+        {
+            return Run<SomeClass>(args, s =>
+            {
+                s.EnableVersionOption = false;
+                // s.Help.UsageAppNameStyle = UsageAppNameStyle.GlobalTool;
+                s.Case = Case.KebabCase;
             });
-            return appRunner.Run(args);
         }
 
         public class Examples
