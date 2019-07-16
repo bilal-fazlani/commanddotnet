@@ -31,7 +31,7 @@ Options:
             var result = new AppRunner<App>(TestAppSettings.DetailedHelp.Clone(s => s.Help.PrintHelpOption = true))
                 .RunInMem("Do -h".SplitArgs(), _testOutputHelper);
 
-            result.OutputContains(@"Usage: dotnet testhost.dll Do [options]
+            result.OutputShouldBe(@"Usage: dotnet testhost.dll Do [options]
 
 Options:
 
