@@ -50,9 +50,10 @@ Options:
                 WhenArgs = "Save",
                 Then = { 
                     ExitCode = 2,
-                    Result = @"'Id' must be greater than '0'.
-'Name' should not be empty.
-'Email' should not be empty." }
+                    Result = @"'Person' is invalid
+  'Id' must be greater than '0'.
+  'Name' should not be empty.
+  'Email' should not be empty." }
             };
             _verifier.VerifyScenario(scenario);
         }
@@ -66,9 +67,10 @@ Options:
                 WhenArgs = "Save",
                 Then = {
                     ExitCode = 2,
-                    Result = @"'Id' must be greater than '0'.
-'Name' should not be empty.
-'Email' should not be empty." }
+                    Result = @"'Person' is invalid
+  'Id' must be greater than '0'.
+  'Name' should not be empty.
+  'Email' should not be empty." }
             };
             _verifier.VerifyScenario(scenario);
         }

@@ -142,13 +142,6 @@ namespace CommandDotNet
                     console.Error.WriteLine();
                     printHelp(cpEx.Command);
                     return 1;
-                case ArgumentValidationException avEx:
-                    foreach (var error in avEx.ValidationResult.Errors)
-                    {
-                        console.Out.WriteLine(error.ErrorMessage);
-                    }
-                    console.Error.WriteLine();
-                    return 2;
                 case ValueParsingException vpEx:
                     console.Error.WriteLine(vpEx.Message);
                     console.Error.WriteLine();

@@ -34,15 +34,33 @@ namespace CommandDotNet.ClassModeling
                 var instantiateValues = commandDef.InstantiateMethodDef.ParameterValues;
                 var invokeValues = commandDef.InvokeMethodDef.ParameterValues;
 
-                foreach (var model in instantiateValues.Union(invokeValues).OfType<IArgumentModel>())
+                var failureResults = instantiateValues.Union(invokeValues)
+                    .OfType<IArgumentModel>()
+                    .Select(model =>new {model, result=modelValidator.ValidateModel(model)})
+                    .Where(v => v.result != null && !v.result.IsValid)
+                    .ToList();
+
+                if (failureResults.Any())
                 {
-                    modelValidator.ValidateModel(model);
+                    var console = commandContext.Console;
+
+                    failureResults.ForEach(f =>
+                    {
+                        console.Out.WriteLine($"'{f.model.GetType().Name}' is invalid");
+                        foreach (var error in f.result.Errors)
+                        {
+                            console.Out.WriteLine($"  {error.ErrorMessage}");
+                        }
+                    });
+                    console.Error.WriteLine();
+
+                    return Task.FromResult(2);
                 }
             }
             return next(commandContext);
         }
 
-        private void ValidateModel(IArgumentModel model)
+        private ValidationResult ValidateModel(IArgumentModel model)
         {
             Type modelType = model.GetType();
 
@@ -64,13 +82,10 @@ namespace CommandDotNet.ClassModeling
                                                  "This exception could also occur if default constructor threw an exception", e);
                 }
 
-                ValidationResult validationResult = ((IValidator)validator).Validate(model);
-
-                if (!validationResult.IsValid)
-                {
-                    throw new ArgumentValidationException(validationResult);
-                }
+                return ((IValidator)validator).Validate(model);
             }
+
+            return null;
         }
     }
 }
