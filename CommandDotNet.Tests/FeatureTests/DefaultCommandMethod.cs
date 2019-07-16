@@ -8,8 +8,8 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class DefaultCommandMethod : TestBase
     {
-        private static AppSettings BasicHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Basic }, EnableVersionOption = false };
-        private static AppSettings DetailedHelp = new AppSettings { Help = { TextStyle = HelpTextStyle.Detailed }, EnableVersionOption = false };
+        private static AppSettings BasicHelp = TestAppSettings.BasicHelp.Clone(a => a.EnableVersionOption = false);
+        private static AppSettings DetailedHelp = TestAppSettings.DetailedHelp.Clone(a => a.EnableVersionOption = false);
         
         public DefaultCommandMethod(ITestOutputHelper output) : base(output)
         {
@@ -24,10 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 WhenArgs = "-h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll [command] [options]
-
-Options:
-  -h | --help  Show help information
+                    Result = @"Usage: dotnet testhost.dll [command]
 
 Commands:
   AnotherCommand
@@ -46,13 +43,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 WhenArgs = "-h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll [command] [options]
-
-Options:
-
-  -h | --help
-  Show help information
-
+                    Result = @"Usage: dotnet testhost.dll [command]
 
 Commands:
 
@@ -72,13 +63,10 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 WhenArgs = "-h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll [command] [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll [command] [arguments]
 
 Arguments:
   text  some text
-
-Options:
-  -h | --help  Show help information
 
 Commands:
   AnotherCommand
@@ -97,18 +85,12 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 WhenArgs = "-h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll [command] [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll [command] [arguments]
 
 Arguments:
 
   text    <TEXT>
   some text
-
-
-Options:
-
-  -h | --help
-  Show help information
 
 
 Commands:

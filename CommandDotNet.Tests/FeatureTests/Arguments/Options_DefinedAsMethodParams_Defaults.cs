@@ -36,8 +36,7 @@ Options:
   --structNArg
   --enumArg
   --objectArg
-  --stringListArg
-  -h | --help      Show help information"
+  --stringListArg"
                 }
             });
         }
@@ -68,10 +67,7 @@ Options:
 
   --objectArg                   <URI>
 
-  --stringListArg (Multiple)    <TEXT>
-
-  -h | --help
-  Show help information"
+  --stringListArg (Multiple)    <TEXT>"
                 }
             });
         }
@@ -88,8 +84,7 @@ Options:
                     Result = @"Usage: dotnet testhost.dll StructListDefaults [options]
 
 Options:
-  --structListArg
-  -h | --help      Show help information"
+  --structListArg"
                 }
             });
         }
@@ -107,10 +102,7 @@ Options:
 
 Options:
 
-  --structListArg (Multiple)    <NUMBER>
-
-  -h | --help
-  Show help information"
+  --structListArg (Multiple)    <NUMBER>"
                 }
             });
         }
@@ -127,8 +119,7 @@ Options:
                     Result = @"Usage: dotnet testhost.dll EnumListDefaults [options]
 
 Options:
-  --enumListArg
-  -h | --help    Show help information"
+  --enumListArg"
                 }
             });
         }
@@ -147,10 +138,7 @@ Options:
 Options:
 
   --enumListArg (Multiple)    <DAYOFWEEK>
-  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
-
-  -h | --help
-  Show help information"
+  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
                 }
             });
         }
@@ -167,8 +155,7 @@ Options:
                     Result = @"Usage: dotnet testhost.dll ObjectListDefaults [options]
 
 Options:
-  --objectListArg
-  -h | --help      Show help information"
+  --objectListArg"
                 }
             });
         }
@@ -186,10 +173,7 @@ Options:
 
 Options:
 
-  --objectListArg (Multiple)    <URI>
-
-  -h | --help
-  Show help information"
+  --objectListArg (Multiple)    <URI>"
                 }
             });
         }

@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             {
                 And = { AppSettings = BasicHelp },
                 WhenArgs = "ArgsDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments] [options]
+                Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
 
 Arguments:
   BoolArg
@@ -33,10 +33,7 @@ Arguments:
   StructNArg
   EnumArg
   ObjectArg
-  StringListArg
-
-Options:
-  -h | --help  Show help information" }
+  StringListArg" }
             });
         }
 
@@ -47,7 +44,7 @@ Options:
             {
                 And = { AppSettings = DetailedHelp },
                 WhenArgs = "ArgsDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments] [options]
+                Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
 
 Arguments:
 
@@ -65,13 +62,7 @@ Arguments:
 
   ObjectArg                   <URI>          [http://google.com/]
 
-  StringListArg (Multiple)    <TEXT>         [red,blue]
-
-
-Options:
-
-  -h | --help
-  Show help information" }
+  StringListArg (Multiple)    <TEXT>         [red,blue]" }
             });
         }
 
@@ -82,13 +73,10 @@ Options:
             {
                 And = { AppSettings = BasicHelp },
                 WhenArgs = "StructListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll StructListDefaults [arguments] [options]
+                Then = { Result = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
 
 Arguments:
-  StructListArg
-
-Options:
-  -h | --help  Show help information" }
+  StructListArg" }
             });
         }
 
@@ -99,17 +87,11 @@ Options:
             {
                 And = { AppSettings = DetailedHelp },
                 WhenArgs = "StructListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll StructListDefaults [arguments] [options]
+                Then = { Result = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
 
 Arguments:
 
-  StructListArg (Multiple)    <NUMBER>    [3,4]
-
-
-Options:
-
-  -h | --help
-  Show help information" }
+  StructListArg (Multiple)    <NUMBER>    [3,4]" }
             });
         }
 
@@ -120,13 +102,10 @@ Options:
             {
                 And = { AppSettings = BasicHelp },
                 WhenArgs = "EnumListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll EnumListDefaults [arguments] [options]
+                Then = { Result = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
 
 Arguments:
-  EnumListArg
-
-Options:
-  -h | --help  Show help information" }
+  EnumListArg" }
             });
         }
 
@@ -137,18 +116,12 @@ Options:
             {
                 And = { AppSettings = DetailedHelp },
                 WhenArgs = "EnumListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll EnumListDefaults [arguments] [options]
+                Then = { Result = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
 
 Arguments:
 
   EnumListArg (Multiple)    <DAYOFWEEK>    [Monday,Tuesday]
-  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
-
-
-Options:
-
-  -h | --help
-  Show help information" }
+  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday" }
             });
         }
 
@@ -159,13 +132,10 @@ Options:
             {
                 And = { AppSettings = BasicHelp },
                 WhenArgs = "ObjectListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments] [options]
+                Then = { Result = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
 
 Arguments:
-  ObjectListArg
-
-Options:
-  -h | --help  Show help information" }
+  ObjectListArg" }
             });
         }
 
@@ -176,17 +146,11 @@ Options:
             {
                 And = { AppSettings = DetailedHelp },
                 WhenArgs = "ObjectListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments] [options]
+                Then = { Result = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
 
 Arguments:
 
-  ObjectListArg (Multiple)    <URI>    [http://google.com/,http://github.com/]
-
-
-Options:
-
-  -h | --help
-  Show help information" }
+  ObjectListArg (Multiple)    <URI>    [http://google.com/,http://github.com/]" }
             });
         }
 

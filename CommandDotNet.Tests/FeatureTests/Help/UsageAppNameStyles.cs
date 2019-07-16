@@ -3,7 +3,7 @@ using CommandDotNet.Tests.ScenarioFramework;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests
+namespace CommandDotNet.Tests.FeatureTests.Help
 {
     public class UsageAppNameStyles : TestBase
     {

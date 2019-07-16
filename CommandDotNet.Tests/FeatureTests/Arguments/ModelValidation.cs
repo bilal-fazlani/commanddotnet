@@ -23,7 +23,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             {
                 WhenArgs = "Save -h",
                 Then = {
-                    Result = @"Usage: dotnet testhost.dll Save [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll Save [arguments]
 
 Arguments:
 
@@ -31,13 +31,7 @@ Arguments:
 
   Name     <TEXT>        
 
-  Email    <TEXT>        
-
-
-Options:
-
-  -h | --help          
-  Show help information" }
+  Email    <TEXT>" }
             };
             _verifier.VerifyScenario(scenario);
         }

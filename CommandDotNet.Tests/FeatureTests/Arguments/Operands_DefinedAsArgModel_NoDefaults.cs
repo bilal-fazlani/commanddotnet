@@ -26,7 +26,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 WhenArgs = "ArgsNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments]
 
 Arguments:
   BoolArg
@@ -35,10 +35,7 @@ Arguments:
   StructNArg
   EnumArg
   ObjectArg
-  StringListArg
-
-Options:
-  -h | --help  Show help information"
+  StringListArg"
                 }
             });
         }
@@ -52,7 +49,7 @@ Options:
                 WhenArgs = "ArgsNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments]
 
 Arguments:
 
@@ -70,13 +67,7 @@ Arguments:
 
   ObjectArg                   <URI>
 
-  StringListArg (Multiple)    <TEXT>
-
-
-Options:
-
-  -h | --help
-  Show help information"
+  StringListArg (Multiple)    <TEXT>"
                 }
             });
         }
@@ -90,13 +81,10 @@ Options:
                 WhenArgs = "StructListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll StructListNoDefault [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll StructListNoDefault [arguments]
 
 Arguments:
-  StructListArg
-
-Options:
-  -h | --help  Show help information"
+  StructListArg"
                 }
             });
         }
@@ -110,17 +98,11 @@ Options:
                 WhenArgs = "StructListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll StructListNoDefault [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll StructListNoDefault [arguments]
 
 Arguments:
 
-  StructListArg (Multiple)    <NUMBER>
-
-
-Options:
-
-  -h | --help
-  Show help information"
+  StructListArg (Multiple)    <NUMBER>"
                 }
             });
         }
@@ -134,13 +116,10 @@ Options:
                 WhenArgs = "EnumListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments]
 
 Arguments:
-  EnumListArg
-
-Options:
-  -h | --help  Show help information"
+  EnumListArg"
                 }
             });
         }
@@ -154,18 +133,12 @@ Options:
                 WhenArgs = "EnumListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments]
 
 Arguments:
 
   EnumListArg (Multiple)    <DAYOFWEEK>
-  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
-
-
-Options:
-
-  -h | --help
-  Show help information"
+  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
                 }
             });
         }
@@ -179,13 +152,10 @@ Options:
                 WhenArgs = "ObjectListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments]
 
 Arguments:
-  ObjectListArg
-
-Options:
-  -h | --help  Show help information"
+  ObjectListArg"
                 }
             });
         }
@@ -199,17 +169,11 @@ Options:
                 WhenArgs = "ObjectListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments]
 
 Arguments:
 
-  ObjectListArg (Multiple)    <URI>
-
-
-Options:
-
-  -h | --help
-  Show help information"
+  ObjectListArg (Multiple)    <URI>"
                 }
             });
         }

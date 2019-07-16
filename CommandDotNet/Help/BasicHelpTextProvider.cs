@@ -84,6 +84,7 @@ namespace CommandDotNet.Help
         {
             var optionsBuilder = new StringBuilder();
             var options = command.GetOptions()
+                .Where(o => _appSettings.Help.PrintHelpOption || o.Name != Constants.HelpArgumentTemplate.Name)
                 .OrderBy(o => o.IsSystemOption)
                 .ToList();
             if (options.Any())

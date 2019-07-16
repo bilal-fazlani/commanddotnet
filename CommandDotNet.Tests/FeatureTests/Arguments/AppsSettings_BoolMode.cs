@@ -32,8 +32,7 @@ Arguments:
   operand
 
 Options:
-  --option
-  -h | --help  Show help information"
+  --option"
                 }
             });
         }
@@ -57,11 +56,8 @@ Arguments:
 
 Options:
 
-  --option       <BOOLEAN>
-  Allowed values: true, false
-
-  -h | --help
-  Show help information"
+  --option    <BOOLEAN>
+  Allowed values: true, false"
                 }
             });
         }
@@ -81,8 +77,7 @@ Arguments:
   operand
 
 Options:
-  --option
-  -h | --help  Show help information"
+  --option"
                 }
             });
         }
@@ -106,10 +101,7 @@ Arguments:
 
 Options:
 
-  --option
-
-  -h | --help
-  Show help information"
+  --option"
                 }
             });
         }

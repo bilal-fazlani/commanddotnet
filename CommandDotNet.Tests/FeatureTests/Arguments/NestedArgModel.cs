@@ -29,8 +29,7 @@ Arguments:
 
 Options:
   --Option1
-  --Option2
-  -h | --help  Show help information" }
+  --Option2" }
             });
         }
 
@@ -52,12 +51,9 @@ Arguments:
 
 Options:
 
-  --Option1      <TEXT>
+  --Option1    <TEXT>
 
-  --Option2      <TEXT>
-
-  -h | --help
-  Show help information" }
+  --Option2    <TEXT>" }
             });
         }
 

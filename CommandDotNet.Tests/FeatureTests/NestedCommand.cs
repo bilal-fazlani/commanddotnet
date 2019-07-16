@@ -33,13 +33,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     WhenArgs = null,
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll [command] [options]
-
-Options:
-
-  -h | --help
-  Show help information
-
+                        Result = @"Usage: dotnet testhost.dll [command]
 
 Commands:
 
@@ -54,13 +48,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "-h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll [command] [options]
-
-Options:
-
-  -h | --help
-  Show help information
-
+                        Result = @"Usage: dotnet testhost.dll [command]
 
 Commands:
 
@@ -75,13 +63,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "Second -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Second [command] [options]
-
-Options:
-
-  -h | --help
-  Show help information
-
+                        Result = @"Usage: dotnet testhost.dll Second [command]
 
 Commands:
 
@@ -96,13 +78,7 @@ Use ""dotnet testhost.dll Second [command] --help"" for more information about a
                     WhenArgs = "Second Third -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Second Third [command] [options]
-
-Options:
-
-  -h | --help
-  Show help information
-
+                        Result = @"Usage: dotnet testhost.dll Second Third [command]
 
 Commands:
 

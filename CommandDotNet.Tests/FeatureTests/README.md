@@ -82,11 +82,6 @@ new Given<FlagApp>("help")
         // example of #1
         Result =  @"Usage: dotnet testhost.dll club [options]
 
-Options:
-
-  -h | --help
-  Show help information
-
   -f",
         // ... or ...
         // example of #2

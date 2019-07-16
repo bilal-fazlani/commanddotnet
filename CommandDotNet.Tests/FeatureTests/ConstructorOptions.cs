@@ -23,10 +23,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
 Options:
 
-  --rootOpt      <TEXT>
-
-  -h | --help
-  Show help information
+  --rootOpt    <TEXT>
 
 
 Commands:
@@ -50,10 +47,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
 
 Options:
 
-  --LeafOpt      <TEXT>
-
-  -h | --help
-  Show help information
+  --LeafOpt    <TEXT>
 
 
 Commands:

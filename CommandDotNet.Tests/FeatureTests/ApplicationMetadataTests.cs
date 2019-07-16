@@ -22,10 +22,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 WhenArgs = "-h",
                 Then = { Result = @"app description
 
-Usage: SomeApp [command] [options]
-
-Options:
-  -h | --help  Show help information
+Usage: SomeApp [command]
 
 Commands:
   somecommand  cmd description
@@ -46,13 +43,7 @@ app extended help" }
                 WhenArgs = "-h",
                 Then = { Result = @"app description
 
-Usage: SomeApp [command] [options]
-
-Options:
-
-  -h | --help
-  Show help information
-
+Usage: SomeApp [command]
 
 Commands:
 
@@ -74,10 +65,7 @@ app extended help" }
                 WhenArgs = "SubApp -h",
                 Then = { Result = @"sub-app description
 
-Usage: SomeApp SubApp [command] [options]
-
-Options:
-  -h | --help  Show help information
+Usage: SomeApp SubApp [command]
 
 Commands:
   subdo
@@ -97,13 +85,7 @@ sub-app extended help" }
                 WhenArgs = "SubApp -h",
                 Then = { Result = @"sub-app description
 
-Usage: SomeApp SubApp [command] [options]
-
-Options:
-
-  -h | --help
-  Show help information
-
+Usage: SomeApp SubApp [command]
 
 Commands:
 
@@ -124,13 +106,10 @@ sub-app extended help" }
                 WhenArgs = "somecommand -h",
                 Then = { Result = @"cmd description
 
-Usage: SomeApp somecommand [arguments] [options]
+Usage: SomeApp somecommand [arguments]
 
 Arguments:
   value
-
-Options:
-  -h | --help  Show help information
 
 cmd extended help" }
             });
@@ -145,17 +124,11 @@ cmd extended help" }
                 WhenArgs = "somecommand -h",
                 Then = { Result = @"cmd description
 
-Usage: SomeApp somecommand [arguments] [options]
+Usage: SomeApp somecommand [arguments]
 
 Arguments:
 
   value    <NUMBER>
-
-
-Options:
-
-  -h | --help
-  Show help information
 
 
 cmd extended help" }

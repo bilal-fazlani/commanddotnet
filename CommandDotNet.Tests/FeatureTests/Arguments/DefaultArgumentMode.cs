@@ -28,8 +28,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     {
                         @"Options:
   --ctorDefault  
-  --ctorOption
-  -h | --help    Show help information"
+  --ctorOption"
                     }
                 }
             });
@@ -51,8 +50,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
   operand
   argument",
                         @"Options:
-  --option
-  -h | --help  Show help information"
+  --option"
                     }
                 }
             });
@@ -74,8 +72,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
   Operand
   Argument",
                         @"Options:
-  --Option
-  -h | --help  Show help information"
+  --Option"
                     }
                 }
             });
@@ -95,8 +92,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     {
                         @"Options:
   --ctorDefault  
-  --ctorOption
-  -h | --help    Show help information"
+  --ctorOption"
                     }
                 }
             });
@@ -118,8 +114,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
   argument",
                         @"Options:
   --default
-  --option
-  -h | --help  Show help information"
+  --option"
                     }
                 }
             });
@@ -141,8 +136,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
   Argument",
                         @"Options:
   --Default
-  --Option
-  -h | --help  Show help information"
+  --Option"
                     }
                 }
             });
@@ -162,8 +156,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     {
                         @"Options:
   --ctorDefault  
-  --ctorOption
-  -h | --help    Show help information"
+  --ctorOption"
                     }
                 }
             });
@@ -185,8 +178,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
   operand
   argument",
                         @"Options:
-  --option
-  -h | --help  Show help information"
+  --option"
                     }
                 }
             });
@@ -208,8 +200,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
   Operand
   Argument",
                         @"Options:
-  --Option
-  -h | --help  Show help information"
+  --Option"
                     }
                 }
             });

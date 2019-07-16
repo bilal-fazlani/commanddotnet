@@ -102,8 +102,8 @@ namespace CommandDotNet.Help
         {
             var optionsBuilder = new StringBuilder();
             List<IOption> options = command.GetOptions()
+                .Where(o => _appSettings.Help.PrintHelpOption || o.Name != Constants.HelpArgumentTemplate.Name)
                 .OrderBy(o => o.IsSystemOption)
-                .Cast<IOption>()
                 .ToList();
             if (options.Any())
             {

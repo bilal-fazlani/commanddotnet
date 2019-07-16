@@ -22,13 +22,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             {
                 And = {AppSettings = BasicHelp},
                 WhenArgs = "Do -h",
-                Then = {Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                Then = {Result = @"Usage: dotnet testhost.dll Do [arguments]
 
 Arguments:
-  arg
-
-Options:
-  -h | --help  Show help information" }
+  arg" }
             });
         }
 
@@ -39,13 +36,10 @@ Options:
             {
                 And = { AppSettings = BasicHelp },
                 WhenArgs = "DoList -h",
-                Then = { Result = @"Usage: dotnet testhost.dll DoList [arguments] [options]
+                Then = { Result = @"Usage: dotnet testhost.dll DoList [arguments]
 
 Arguments:
-  args
-
-Options:
-  -h | --help  Show help information" }
+  args" }
             });
         }
 
@@ -56,17 +50,11 @@ Options:
             {
                 And = {AppSettings = DetailedHelp},
                 WhenArgs = "Do -h",
-                Then = {Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                Then = {Result = @"Usage: dotnet testhost.dll Do [arguments]
 
 Arguments:
 
-  arg    <FILENAME>
-
-
-Options:
-
-  -h | --help
-  Show help information" }
+  arg    <FILENAME>" }
             });
         }
 
@@ -77,17 +65,11 @@ Options:
             {
                 And = { AppSettings = DetailedHelp },
                 WhenArgs = "DoList -h",
-                Then = { Result = @"Usage: dotnet testhost.dll DoList [arguments] [options]
+                Then = { Result = @"Usage: dotnet testhost.dll DoList [arguments]
 
 Arguments:
 
-  args (Multiple)    <FILENAME>
-
-
-Options:
-
-  -h | --help
-  Show help information" }
+  args (Multiple)    <FILENAME>" }
             });
         }
 

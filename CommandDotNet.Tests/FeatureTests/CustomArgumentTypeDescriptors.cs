@@ -10,8 +10,8 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class CustomArgumentTypeDescriptors : TestBase
     {
-        private static readonly AppSettings BasicHelpWithDescriptor = new AppSettings { Help = { TextStyle = HelpTextStyle.Basic }, EnableVersionOption = false };
-        private static readonly AppSettings DetailedHelpWithDescriptor = new AppSettings { Help = { TextStyle = HelpTextStyle.Detailed }, EnableVersionOption = false };
+        private static readonly AppSettings BasicHelpWithDescriptor = TestAppSettings.BasicHelp.Clone(a => a.EnableVersionOption = true);
+        private static readonly AppSettings DetailedHelpWithDescriptor = TestAppSettings.DetailedHelp.Clone(a => a.EnableVersionOption = true);
 
         public CustomArgumentTypeDescriptors(ITestOutputHelper output) : base(output)
         {
@@ -27,13 +27,10 @@ namespace CommandDotNet.Tests.FeatureTests
             {
                 And = { AppSettings = BasicHelpWithDescriptor },
                 WhenArgs = "Do -h",
-                Then = { Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                Then = { Result = @"Usage: dotnet testhost.dll Do [arguments]
 
 Arguments:
-  square
-
-Options:
-  -h | --help  Show help information" }
+  square" }
             });
         }
 
@@ -44,17 +41,11 @@ Options:
             {
                 And = { AppSettings = DetailedHelpWithDescriptor },
                 WhenArgs = "Do -h",
-                Then = { Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                Then = { Result = @"Usage: dotnet testhost.dll Do [arguments]
 
 Arguments:
 
-  square    <!!SQUARE!!>
-
-
-Options:
-
-  -h | --help
-  Show help information" }
+  square    <!!SQUARE!!>" }
             });
         }
 
