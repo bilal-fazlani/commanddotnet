@@ -4,24 +4,27 @@ repo_url: 'https://github.com/bilal-fazlani/commanddotnet'
 site_url: https://bilal-fazlani.github.io/commanddotnet
 nav:
     - Introduction: index.md
-    - Getting Started: getting-started.md
-    - Parameters: parameters.md
-    - Attributes: attributes.md
-    - Constructor Options: constructor-options.md
-    - Default values: default-values.md
-    - Collections: collections.md
-    - Supported parameter types: supported-parameter-types.md
-    - Modeling: modeling.md
-    - Fluent validation for parameters: fluent-validation-for-parameters.md
-    - Custom return codes: custom-return-codes.md
-    - Default method: default-method.md
-    - Async methods: async-methods.md
-    - Nesting commands: nesting-commands.md
-    - Settings: settings.md
-    - Directives: directives.md
-    - Exception handling: exception-handling.md
-    - Dependency Injection: dependency-injection.md
-    - Custom interceptors: custom-interceptors.md
+    - Quick Start: quick-start.md
+    - Defining Commands:
+      - Parameters: parameters.md
+      - Attributes: attributes.md
+      - Constructors: constructors.md
+      - Default method: default-method.md
+      - Default values: default-values.md
+      - Collections: collections.md
+      - Argument Models: argument-models.md
+      - Async methods: async-methods.md
+      - Custom return codes: custom-return-codes.md
+      - Nesting commands: nesting-commands.md
+      - Exceptions: exceptions.md
+    - Extras:
+      - Directives: directives.md
+      - Fluent validation for parameters: fluent-validation-for-parameters.md
+      - Settings: settings.md
+    - Extensibility:
+      - Dependency Injection: dependency-injection.md
+      - Parameter types: parameter-types.md
+      - Custom interceptors: custom-interceptors.md
 # theme: readthedocs
 theme:
   name: 'material'
