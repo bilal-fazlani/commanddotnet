@@ -45,5 +45,6 @@ namespace CommandDotNet.Rendering
     public interface IStandardStreamReader : IStandardStream
     {
         string ReadLine();
+        string ReadToEnd();
     }
 }

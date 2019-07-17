@@ -28,6 +28,11 @@ namespace CommandDotNet
             {
                 return _reader.ReadLine();
             }
+
+            public string ReadToEnd()
+            {
+                return _reader.ReadToEnd();
+            }
         }
     }
 }

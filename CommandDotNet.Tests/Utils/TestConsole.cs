@@ -12,7 +12,9 @@ namespace CommandDotNet.Tests.Utils
 {
     public class TestConsole : IConsole
     {
-        public TestConsole(Func<TestConsole, string> onReadLine = null)
+        public TestConsole(
+            Func<TestConsole, string> onReadLine = null,
+            Func<TestConsole, string> onReadToEnd = null)
         {
             var joined = new StandardStreamWriter();
             Joined = joined;
@@ -24,6 +26,14 @@ namespace CommandDotNet.Tests.Utils
                 // write to joined output so it can be logged for debugging
                 joined.WriteLine();
                 joined.WriteLine($"onReadLine > {input}");
+                joined.WriteLine();
+                return input;
+            }, () =>
+            {
+                var input = onReadToEnd(this);
+                // write to joined output so it can be logged for debugging
+                joined.WriteLine();
+                joined.WriteLine($"onReadToEnd > {input}");
                 joined.WriteLine();
                 return input;
             });
@@ -46,15 +56,22 @@ namespace CommandDotNet.Tests.Utils
         internal class StandardStreamReader : IStandardStreamReader
         {
             private readonly Func<string> _onReadLine;
+            private readonly Func<string> _onReadToEnd;
 
-            public StandardStreamReader(Func<string> onReadLine)
+            public StandardStreamReader(Func<string> onReadLine, Func<string> onReadToEnd)
             {
                 _onReadLine = onReadLine;
+                _onReadToEnd = onReadToEnd;
             }
 
             public string ReadLine()
             {
                 return _onReadLine();
+            }
+
+            public string ReadToEnd()
+            {
+                return _onReadToEnd();
             }
         }
 
