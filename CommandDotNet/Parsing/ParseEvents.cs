@@ -26,27 +26,27 @@ namespace CommandDotNet.Parsing
 
             public TokenizationCompletedEventArgs(CommandContext commandContext)
             {
-                this.CommandContext = commandContext ?? throw new ArgumentNullException(nameof(commandContext));
+                CommandContext = commandContext ?? throw new ArgumentNullException(nameof(commandContext));
             }
         }
 
         public class OnInputTransformationEventArgs : EventArgs
         {
-            public CommandContext ExecutionResult { get; }
+            public CommandContext CommandContext { get; }
             public InputTransformation Transformation { get; }
             public TokenCollection Pre { get; }
             public TokenCollection Post { get; }
 
             public OnInputTransformationEventArgs(
-                CommandContext executionResult,
+                CommandContext commandContext,
                 InputTransformation transformation,
                 TokenCollection pre,
                 TokenCollection post)
             {
-                this.ExecutionResult = executionResult ?? throw new ArgumentNullException(nameof(executionResult));
-                this.Transformation = transformation ?? throw new ArgumentNullException(nameof(transformation));
-                this.Pre = pre ?? throw new ArgumentNullException(nameof(pre));
-                this.Post = post ?? throw new ArgumentNullException(nameof(post));
+                CommandContext = commandContext ?? throw new ArgumentNullException(nameof(commandContext));
+                Transformation = transformation ?? throw new ArgumentNullException(nameof(transformation));
+                Pre = pre ?? throw new ArgumentNullException(nameof(pre));
+                Post = post ?? throw new ArgumentNullException(nameof(post));
             }
         }
     }

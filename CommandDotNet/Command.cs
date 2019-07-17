@@ -1,7 +1,6 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -81,63 +80,12 @@ namespace CommandDotNet
                        .FirstOrDefault(o => o != null);
         }
 
-        internal Command AddCommand(string name, ICustomAttributeProvider customAttributeProvider)
-        {
-            var command = new Command(name, customAttributeProvider, this);
-            AddSubCommand(command);
-            return command;
-        }
-
-        internal Option AddOption(Type type, string template, string description, IArgumentArity arity, bool inherited,
-            string typeDisplayName, object defaultValue, List<string> allowedValues, bool isSystemOption = false)
-        {
-            var option = new Option(template, arity)
-            {
-                Description = description,
-                Inherited = inherited,
-                DefaultValue = defaultValue,
-                TypeInfo = new TypeInfo
-                {
-                    Type = type, 
-                    UnderlyingType = type.GetUnderlyingType(),
-                    DisplayName = typeDisplayName
-                },
-                AllowedValues = allowedValues,
-                IsSystemOption = isSystemOption
-            };
-
-            AddArgument(option);
-            return option;
-        }
-
-        internal Operand AddOperand(Type type,
-            string name, string description, IArgumentArity arity,
-            string typeDisplayName, object defaultValue, List<string> allowedValues)
-        {
-            var operand = new Operand(name)
-            {
-                Description = description, 
-                Arity = arity,
-                TypeInfo = new TypeInfo
-                {
-                    Type = type,
-                    UnderlyingType = type.GetUnderlyingType(),
-                    DisplayName = typeDisplayName
-                },
-                DefaultValue = defaultValue,
-                AllowedValues = allowedValues
-            };
-
-            AddArgument(operand);
-            return operand;
-        }
-
         private static IOption FindOption(Command command, string alias, bool onlyIfInherited)
         {
             return command._argumentsByAlias.TryGetValue(alias, out var argument)
                    && (argument is IOption option)
                    && (!onlyIfInherited || option.Inherited)
-                ? (IOption)argument
+                ? option
                 : null;
         }
 
@@ -167,7 +115,7 @@ namespace CommandDotNet
                    $"commands:{_commands.Select(c => c.Name).ToCsv()}";
         }
 
-        protected bool Equals(Command other)
+        private bool Equals(Command other)
         {
             return string.Equals(Name, other.Name) 
                    && Equals(Parent, other.Parent);

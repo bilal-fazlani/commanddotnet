@@ -108,7 +108,7 @@ namespace CommandDotNet.Parsing
 
                 yield return new Token(
                     $"{prefix}{optionName}", optionName, TokenType.Option, 
-                    new OptionTokenType(optionName, token.OptionTokenType.IsLong, false, false));
+                    new OptionTokenType(optionName, token.OptionTokenType.IsLong));
                 yield return new Token(value, value, TokenType.Value);
             }
             else
@@ -124,7 +124,7 @@ namespace CommandDotNet.Parsing
                 foreach (var flag in token.Value.ToCharArray())
                 {
                     var value = flag.ToString();
-                    yield return new Token($"-{value}", value, TokenType.Option, new OptionTokenType(value, isLong: false));
+                    yield return new Token($"-{value}", value, TokenType.Option, new OptionTokenType(value));
                 }
             }
             else

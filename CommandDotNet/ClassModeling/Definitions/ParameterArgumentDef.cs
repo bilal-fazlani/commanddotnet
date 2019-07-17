@@ -7,7 +7,6 @@ namespace CommandDotNet.ClassModeling.Definitions
     internal class ParameterArgumentDef : IArgumentDef
     {
         private readonly ParameterInfo _parameterInfo;
-        private readonly ExecutionConfig _executionConfig;
         private readonly Action<object> _assignValue;
 
         public ArgumentType ArgumentType { get; }
@@ -31,7 +30,6 @@ namespace CommandDotNet.ClassModeling.Definitions
             Action<object> assignValue)
         {
             _parameterInfo = parameterInfo ?? throw new ArgumentNullException(nameof(parameterInfo));
-            _executionConfig = executionConfig ?? throw new ArgumentNullException(nameof(executionConfig));
             _assignValue = assignValue ?? throw new ArgumentNullException(nameof(assignValue));
 
             ArgumentType = argumentType;

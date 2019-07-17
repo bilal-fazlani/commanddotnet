@@ -48,8 +48,7 @@ namespace CommandDotNet
             }
             catch (Exception e)
             {
-                return HandleException(e, _settings.Console,
-                    cmd => HelpMiddleware.Print(_settings, cmd));
+                return HandleException(e, _settings.Console);
             }
         }
 
@@ -67,8 +66,7 @@ namespace CommandDotNet
             }
             catch (Exception e)
             {
-                return HandleException(e, _settings.Console, 
-                    cmd => HelpMiddleware.Print(_settings, cmd));
+                return HandleException(e, _settings.Console);
             }
         }
 
@@ -78,9 +76,9 @@ namespace CommandDotNet
             AddOptionalMiddleware();
 
             var tokens = args.Tokenize(includeDirectives: _settings.EnableDirectives);
-            var executionResult = new CommandContext(args, tokens, _settings, _appBuilder.Build(_settings, DependencyResolver));
+            var commandContext = new CommandContext(args, tokens, _settings, _appBuilder.Build(_settings, DependencyResolver));
 
-            return InvokeMiddleware(executionResult);
+            return InvokeMiddleware(commandContext);
         }
 
         private void AddCoreMiddleware()
@@ -126,7 +124,7 @@ namespace CommandDotNet
             }
         }
 
-        private static int HandleException(Exception ex, IConsole console, Action<ICommand> printHelp)
+        private static int HandleException(Exception ex, IConsole console)
         {
             ex = ex.EscapeWrappers();
             switch (ex)
@@ -178,6 +176,12 @@ namespace CommandDotNet
         public AppRunner<T> UseInputTransformation(string name, int order, Func<TokenCollection, TokenCollection> transformation)
         {
             _appBuilder.AddInputTransformation(name, order, transformation);
+            return this;
+        }
+
+        public AppRunner<T> UseDependencyResolver(IDependencyResolver dependencyResolver)
+        {
+            DependencyResolver = dependencyResolver;
             return this;
         }
     }

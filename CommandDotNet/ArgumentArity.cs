@@ -42,12 +42,12 @@ namespace CommandDotNet
         {
             if (type != typeof(string) && type.IsCollection())
             {
-                return ArgumentArity.ZeroOrMore;
+                return ZeroOrMore;
             }
 
             if ((type == typeof(bool) || type == typeof(bool?)) && booleanMode == BooleanMode.Implicit)
             {
-                return ArgumentArity.Zero;
+                return Zero;
             }
 
             return ZeroOrOne;

@@ -38,7 +38,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 .Command;
         }
 
-        public ClassCommandDef(Type classType, CommandContext commandContext)
+        private ClassCommandDef(Type classType, CommandContext commandContext)
         {
             _classType = classType ?? throw new ArgumentNullException(nameof(classType));
             _commandContext = commandContext ?? throw new ArgumentNullException(nameof(commandContext));

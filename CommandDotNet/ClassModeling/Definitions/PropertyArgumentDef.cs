@@ -7,22 +7,8 @@ namespace CommandDotNet.ClassModeling.Definitions
 {
     internal class PropertyArgumentDef : IArgumentDef
     {
-        private readonly PropertyInfo _propertyInfo;
         private readonly object _modelInstance;
-
-        public ArgumentType ArgumentType { get; }
-
-        public string Name { get; }
-
-        public Type Type => _propertyInfo.PropertyType;
-
-        public bool HasDefaultValue { get; }
-
-        public object DefaultValue { get; }
-
-        public IArgument Argument { get; set; }
-
-        public ICustomAttributeProvider Attributes => _propertyInfo;
+        private readonly PropertyInfo _propertyInfo;
 
         public PropertyArgumentDef(
             PropertyInfo propertyInfo,
@@ -49,6 +35,20 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             HasDefaultValue = DefaultValue != DBNull.Value;
         }
+
+        public ArgumentType ArgumentType { get; }
+
+        public string Name { get; }
+
+        public Type Type => _propertyInfo.PropertyType;
+
+        public bool HasDefaultValue { get; }
+
+        public object DefaultValue { get; }
+
+        public IArgument Argument { get; set; }
+
+        public ICustomAttributeProvider Attributes => _propertyInfo;
 
         public void SetValue(object value)
         {

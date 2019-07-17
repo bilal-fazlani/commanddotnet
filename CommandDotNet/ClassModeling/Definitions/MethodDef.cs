@@ -134,7 +134,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public override string ToString()
         {
-            return $"{MethodBase.GetType().Name}:{MethodBase.DeclaringType.Name}.{MethodBase.Name}(" +
+            return $"{MethodBase.GetType().Name}:{MethodBase?.DeclaringType?.Name}.{MethodBase.Name}(" +
                    $"{MethodBase.GetParameters().Select(p => $"{p.ParameterType} {p.Name}").ToCsv()})";
         }
     }

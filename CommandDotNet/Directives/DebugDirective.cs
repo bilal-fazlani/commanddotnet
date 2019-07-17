@@ -21,9 +21,9 @@ namespace CommandDotNet.Directives
         }
 
         // adapted from https://github.com/dotnet/command-line-api directives
-        public static Task<int> AttachDebugger(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        private static Task<int> AttachDebugger(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            if (commandContext.Tokens.TryGetDirective("debug", out string value))
+            if (commandContext.Tokens.TryGetDirective("debug", out _))
             {
                 var waitForDebuggerToAttach = commandContext.ExecutionConfig.ContextData.Get<DebugDirectiveContext>().WaitForDebuggerToAttach;
                 var process = Process.GetCurrentProcess();

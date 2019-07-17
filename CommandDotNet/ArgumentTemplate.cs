@@ -57,7 +57,7 @@ namespace CommandDotNet
             if (string.IsNullOrEmpty(Name) && string.IsNullOrEmpty(ShortName) && string.IsNullOrEmpty(SymbolName))
             {
                 throw new ArgumentException($"Invalid template pattern '{template}' Unable to determine the name of the argument. " +
-                                            $"provide either a symbol, short or long name following this pattern: -symbol|-short|--long", nameof(template));
+                                            "provide either a symbol, short or long name following this pattern: -symbol|-short|--long", nameof(template));
             }
         }
 

@@ -16,12 +16,8 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         internal static string BuildName(this MemberInfo memberInfo, ExecutionConfig executionConfig)
         {
-            var nameFromAttr = memberInfo.GetCustomAttributes().OfType<INameAndDescription>()?.FirstOrDefault()?.Name;
-            
-            var appSettings = executionConfig.AppSettings;
-            var acase = appSettings.Case;
-
-            var nameFromMethod = memberInfo.Name.ChangeCase(acase);
+            var nameFromAttr = memberInfo.GetCustomAttributes().OfType<INameAndDescription>().FirstOrDefault()?.Name;
+            var nameFromMethod = memberInfo.Name.ChangeCase(executionConfig.AppSettings.Case);
             return nameFromAttr ?? nameFromMethod;
         }
 

@@ -41,7 +41,7 @@ namespace CommandDotNet.Extensions
 
         internal static string ToOrderedCsv(this IEnumerable items, string separator = ",")
         {
-            return items.Cast<object>().ToOrderedCsv();
+            return items.Cast<object>().ToOrderedCsv(separator);
         }
 
         internal static void ForEach<T>(this IEnumerable<T> items, Action<T> action)

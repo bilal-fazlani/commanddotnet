@@ -3,20 +3,21 @@
     public class OptionTokenType
     {
         private readonly string _value;
+        private readonly int _assignmentIndex;
+
         public bool IsLong { get; }
-        public bool IsShort { get; }
+        public bool IsShort => !IsLong;
         public bool IsClubbed { get; }
         public bool HasValue { get; }
-        public int AssignmentIndex { get; }
 
         public string GetPrefix() => IsLong ? "--" : "-";
 
         public string GetName() => HasValue
-            ? _value.Substring(0, AssignmentIndex)
+            ? _value.Substring(0, _assignmentIndex)
             : _value;
 
         public string GetAssignedValue() => HasValue
-            ? _value.Substring(AssignmentIndex + 1)
+            ? _value.Substring(_assignmentIndex + 1)
             : null;
 
         /*
@@ -32,10 +33,9 @@
         {
             _value = value;
             IsLong = isLong;
-            IsShort = !isLong;
             IsClubbed = isClubbed;
             HasValue = hasValue;
-            AssignmentIndex = assignmentIndex;
+            _assignmentIndex = assignmentIndex;
         }
     }
 }

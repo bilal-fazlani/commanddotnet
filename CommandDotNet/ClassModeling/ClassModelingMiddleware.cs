@@ -125,7 +125,7 @@ namespace CommandDotNet.ClassModeling
             var ctx = commandContext.InvocationContext;
 
             var result = ctx.CommandInvocation.Invoke(ctx.Instance);
-            return result.GetResultCodeAsync(commandContext);
+            return result.GetResultCodeAsync();
         }
     }
 }

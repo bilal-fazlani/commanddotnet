@@ -66,7 +66,7 @@ namespace CommandDotNet.Directives
 
         private static Task<int> ExitAfterReport(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            return commandContext.Tokens.TryGetDirective("parse", out string value)
+            return commandContext.Tokens.TryGetDirective("parse", out _)
                 ? Task.FromResult(0)
                 : next(commandContext);
         }

@@ -13,7 +13,6 @@ namespace CommandDotNet
         {
             Template = template;
             Arity = arity;
-            Values = new List<string>();
 
             var argumentTemplate = new ArgumentTemplate(template);
             Name = argumentTemplate.Name;
@@ -30,7 +29,6 @@ namespace CommandDotNet
         public IArgumentArity Arity { get; set; }
         public object DefaultValue { get; set; } = DBNull.Value;
         public List<string> AllowedValues { get; set; }
-        public List<string> Values { get; private set; }
 
         public string Template { get; }
         public string ShortName { get; }
@@ -53,17 +51,12 @@ namespace CommandDotNet
 
         public IContextData ContextData { get; } = new ContextData();
 
-        public void SetValues(List<string> values)
-        {
-            Values = values;
-        }
-
         public override string ToString()
         {
             return $"Option: {new ArgumentTemplate(Name, ShortName, SymbolName, TypeInfo.DisplayName)}";
         }
 
-        protected bool Equals(Option other)
+        private bool Equals(Option other)
         {
             return string.Equals(Name, other.Name) 
                    && string.Equals(ShortName, other.ShortName) 

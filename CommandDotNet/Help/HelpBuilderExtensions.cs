@@ -22,7 +22,7 @@ namespace CommandDotNet.Help
             return sb;
         }
 
-        public static string GetAppName(ICommand command, UsageAppNameStyle usageAppNameStyle)
+        private static string GetAppName(ICommand command, UsageAppNameStyle usageAppNameStyle)
         {
             switch (usageAppNameStyle)
             {
@@ -37,7 +37,7 @@ namespace CommandDotNet.Help
                         throw new AppRunnerException(
                             $"Invalid configuration: {nameof(ApplicationMetadataAttribute)}.{nameof(ApplicationMetadataAttribute.Name)} " +
                             $"is required for the root command when {nameof(UsageAppNameStyle)}.{nameof(UsageAppNameStyle.GlobalTool)} " +
-                            $"is specified.");
+                            "is specified.");
                     }
                     return rootAppName;
                 case UsageAppNameStyle.Executable:

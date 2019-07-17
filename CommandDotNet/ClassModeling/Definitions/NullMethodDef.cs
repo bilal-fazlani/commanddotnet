@@ -13,7 +13,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         }
 
         public IReadOnlyCollection<IArgumentDef> ArgumentDefs { get; } = new IArgumentDef[0];
-        public MethodBase MethodBase { get; }
+        public MethodBase MethodBase { get; } = null;
         public IReadOnlyCollection<IArgument> Arguments { get; } = new IArgument[0];
         public IReadOnlyCollection<ParameterInfo> Parameters { get; } = new ParameterInfo[0];
         public object[] ParameterValues { get; } = new object[0];

@@ -5,6 +5,11 @@ namespace CommandDotNet.ClassModeling.Definitions
 {
     internal class NullCommandDef : ICommandDef
     {
+        public NullCommandDef(string name)
+        {
+            Name = name;
+        }
+
         public string Name { get; }
         public ICustomAttributeProvider CustomAttributeProvider => null;
         public bool IsExecutable => false;
@@ -13,10 +18,5 @@ namespace CommandDotNet.ClassModeling.Definitions
         public IMethodDef InstantiateMethodDef { get; } = NullMethodDef.Instance;
         public IMethodDef InvokeMethodDef { get; } = NullMethodDef.Instance;
         public ICommand Command { get; set; }
-
-        public NullCommandDef(string name)
-        {
-            Name = name;
-        }
     }
 }

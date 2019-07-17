@@ -11,7 +11,6 @@ namespace CommandDotNet
         public Operand(string name)
         {
             Name = name;
-            Values = new List<string>();
         }
 
         public string Name { get; }
@@ -21,7 +20,6 @@ namespace CommandDotNet
         public IArgumentArity Arity { get; set; }
         public object DefaultValue { get; set; }
         public List<string> AllowedValues { get; set; }
-        public List<string> Values { get; private set; }
 
         public IEnumerable<string> Aliases
         {
@@ -30,17 +28,12 @@ namespace CommandDotNet
 
         public IContextData ContextData { get; } = new ContextData();
 
-        public void SetValues(List<string> values)
-        {
-            Values = values;
-        }
-
         public override string ToString()
         {
             return $"Operand: {new ArgumentTemplate(name:Name, typeDisplayName:TypeInfo.DisplayName)}";
         }
 
-        protected bool Equals(Operand other)
+        private bool Equals(Operand other)
         {
             return string.Equals(Name, other.Name);
         }

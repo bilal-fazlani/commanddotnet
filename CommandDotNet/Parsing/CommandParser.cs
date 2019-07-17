@@ -13,7 +13,7 @@ namespace CommandDotNet.Parsing
     {
         private readonly AppSettings _appSettings;
 
-        public CommandParser(AppSettings appSettings)
+        private CommandParser(AppSettings appSettings)
         {
             _appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
         }

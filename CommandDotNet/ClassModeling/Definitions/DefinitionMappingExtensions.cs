@@ -68,7 +68,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             if (argumentDef.ArgumentType == ArgumentType.Operand)
             {
                 var operandAttr = argumentDef.Attributes.GetCustomAttribute<OperandAttribute>() 
-                                  ?? (INameAndDescription) argumentDef.Attributes.GetCustomAttribute<ArgumentAttribute>(); ;
+                                  ?? (INameAndDescription) argumentDef.Attributes.GetCustomAttribute<ArgumentAttribute>();
                 return new Operand(operandAttr?.Name ?? argumentDef.Name)
                 {
                     Description = operandAttr?.Description,
