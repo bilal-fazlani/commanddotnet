@@ -10,7 +10,7 @@ namespace CommandDotNet
         IEnumerable<ICommand> Commands { get; }
         IEnumerable<IOperand> Operands { get; }
 
-        ICustomAttributeProvider CustomAttributeProvider { get; }
+        ICustomAttributeProvider CustomAttributes { get; }
         IContextData ContextData { get; }
         IEnumerable<IOption> GetOptions(bool includeInherited = true);
         IOption FindOption(string alias);

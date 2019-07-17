@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 
 namespace CommandDotNet
 {
@@ -10,6 +11,7 @@ namespace CommandDotNet
         List<string> AllowedValues { get; set; }
         IEnumerable<string> Aliases { get; }
 
+        ICustomAttributeProvider CustomAttributes { get; }
         IContextData ContextData { get; }
     }
 }

@@ -23,7 +23,7 @@ namespace CommandDotNet
             ICommand parent = null)
         {
             Name = name;
-            CustomAttributeProvider = customAttributeProvider;
+            CustomAttributes = customAttributeProvider;
             Parent = parent;
         }
 
@@ -34,7 +34,7 @@ namespace CommandDotNet
         public IEnumerable<IOperand> Operands => _operands;
         public ICommand Parent { get; }
         public IEnumerable<ICommand> Commands => _commands;
-        public ICustomAttributeProvider CustomAttributeProvider { get; }
+        public ICustomAttributeProvider CustomAttributes { get; }
         public IContextData ContextData { get; } = new ContextData();
 
         ICommand ICommandBuilder.Command => this;

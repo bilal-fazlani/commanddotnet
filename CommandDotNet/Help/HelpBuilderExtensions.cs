@@ -75,7 +75,7 @@ namespace CommandDotNet.Help
 
         private static string GetRootAppName(ICommand command)
         {
-            return command.GetRootCommand().CustomAttributeProvider?.GetCustomAttribute<ApplicationMetadataAttribute>()?.Name;
+            return command.GetRootCommand().CustomAttributes?.GetCustomAttribute<ApplicationMetadataAttribute>()?.Name;
         }
 
         private static string GetAppFileName()
