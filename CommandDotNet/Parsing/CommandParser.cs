@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
-using CommandDotNet.Extensions;
 using CommandDotNet.Help;
 
 namespace CommandDotNet.Parsing
@@ -28,7 +27,6 @@ namespace CommandDotNet.Parsing
             {
                 var console = commandContext.AppSettings.Console;
                 console.Error.WriteLine(ex.Message);
-                ex.PrintStackTrace(console);
                 console.Error.WriteLine();
                 HelpMiddleware.Print(commandContext.AppSettings, ex.Command);
                 return Task.FromResult(1);

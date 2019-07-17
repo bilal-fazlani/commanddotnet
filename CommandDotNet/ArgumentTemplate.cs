@@ -7,18 +7,15 @@ namespace CommandDotNet
     {
         public string Name { get; }
         public string ShortName { get; }
-        public string SymbolName { get; }
         public string TypeDisplayName { get; }
 
         public ArgumentTemplate(
             string name = null, 
-            string shortName = null, 
-            string symbolName = null, 
+            string shortName = null,
             string typeDisplayName = null)
         {
             Name = name;
             ShortName = shortName;
-            SymbolName = symbolName;
             TypeDisplayName = typeDisplayName;
         }
 
@@ -33,16 +30,7 @@ namespace CommandDotNet
                 else if (part.StartsWith("-"))
                 {
                     var optName = part.Substring(1);
-
-                    // If there is only one char and it is not an English letter, it is a symbol option (e.g. "-?")
-                    if (optName.Length == 1 && !IsEnglishLetter(optName[0]))
-                    {
-                        SymbolName = optName;
-                    }
-                    else
-                    {
-                        ShortName = optName;
-                    }
+                    ShortName = optName;
                 }
                 else if (part.StartsWith("<") && part.EndsWith(">"))
                 {
@@ -54,7 +42,7 @@ namespace CommandDotNet
                 }
             }
 
-            if (string.IsNullOrEmpty(Name) && string.IsNullOrEmpty(ShortName) && string.IsNullOrEmpty(SymbolName))
+            if (string.IsNullOrEmpty(Name) && string.IsNullOrEmpty(ShortName))
             {
                 throw new ArgumentException($"Invalid template pattern '{template}' Unable to determine the name of the argument. " +
                                             "provide either a symbol, short or long name following this pattern: -symbol|-short|--long", nameof(template));
@@ -79,13 +67,12 @@ namespace CommandDotNet
             }
 
             AppendIfNotNull("-", ShortName);
-            AppendIfNotNull("-", SymbolName);
             AppendIfNotNull("--", Name);
 
             if (sb.Length == 0)
             {
                 throw new Exception("Unable to generate template. " +
-                                    $"One of either {nameof(Name)}, {nameof(ShortName)} or {nameof(SymbolName)} must be specified");
+                                    $"One of either {nameof(Name)} or {nameof(ShortName)} must be specified");
             }
 
             return TypeDisplayName.IsNullOrWhitespace()
