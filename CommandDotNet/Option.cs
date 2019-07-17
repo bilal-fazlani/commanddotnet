@@ -52,6 +52,8 @@ namespace CommandDotNet
 
         public ICustomAttributeProvider CustomAttributes { get; }
 
+        public ICustomAttributeProvider CustomAttributes { get; }
+
         public IContextData ContextData { get; } = new ContextData();
 
         public override string ToString()
