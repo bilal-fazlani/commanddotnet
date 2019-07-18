@@ -82,7 +82,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             var argumentArity = ArgumentArity.Default(argumentDef.Type, GetOptionBooleanMode(argumentDef, executionConfig.AppSettings.BooleanMode, optionAttr));
             return new Option(
                 new ArgumentTemplate(optionAttr?.Name ?? argumentDef.Name, optionAttr?.ShortName).ToString(),
-                argumentArity, argumentDef.Attributes)
+                argumentArity, customAttributeProvider: argumentDef.Attributes)
             {
                 Description = optionAttr?.Description,
                 Inherited = optionAttr?.Inherited ?? false,

@@ -19,19 +19,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void GivenPipedInputAndNoExplicitValue_PipedInputIsAppended()
         {
             var result = new AppRunner<App>().RunInMem(
-                "PipeList".SplitArgs(), _testOutputHelper, 
+                $"{nameof(App.List)}".SplitArgs(), _testOutputHelper, 
                 pipedInput: new[] {"aaa", "bbb"});
-
-            result.ExitCode.Should().Be(0);
-            result.TestOutputs.Get<List<string>>().Should().BeEquivalentTo("aaa", "bbb");
-        }
-
-        [Fact]
-        public void GivenNoPipedInputAndExplicitValue_ExplicitValueIsMapped()
-        {
-            var result = new AppRunner<App>().RunInMem(
-                "PipeList aaa bbb".SplitArgs(), _testOutputHelper,
-                pipedInput: null);
 
             result.ExitCode.Should().Be(0);
             result.TestOutputs.Get<List<string>>().Should().BeEquivalentTo("aaa", "bbb");
@@ -41,7 +30,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void GivenPipedInputAndExplicitValue_AppendsPipedToExplicit()
         {
             var result = new AppRunner<App>().RunInMem(
-                "PipeList aaa bbb".SplitArgs(), _testOutputHelper,
+                $"{nameof(App.List)} aaa bbb".SplitArgs(), _testOutputHelper,
                 pipedInput: new[] { "ccc", "ddd" });
 
             result.ExitCode.Should().Be(0);
@@ -49,69 +38,27 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         }
 
         [Fact]
-        public void GivenNoPipedInputAndNoExplicitValue_NoValuesMapped()
+        public void GivenNoListArg_PipedInputIsIgnored()
         {
             var result = new AppRunner<App>().RunInMem(
-                "PipeList".SplitArgs(), _testOutputHelper,
-                pipedInput: null);
+                $"{nameof(App.Single)} single".SplitArgs(), _testOutputHelper,
+                pipedInput: new[] { "aaa" });
 
             result.ExitCode.Should().Be(0);
+            result.TestOutputs.Get<string>().Should().Be("single");
             result.TestOutputs.Get<List<string>>().Should().BeNull();
         }
 
         [Fact]
-        public void GivenNoOperandsEnablePipedInput_InputIsNotMapped()
+        public void GivenSingleAndListArg_AndNoArgValuesExplicitlyProvided_PipedInputAppendedToListArg()
         {
             var result = new AppRunner<App>().RunInMem(
-                "NoPiping".SplitArgs(), _testOutputHelper,
-                pipedInput: null);
+                $"{nameof(App.SingleAndList)}".SplitArgs(), _testOutputHelper,
+                pipedInput: new[] { "aaa", "bbb" });
 
             result.ExitCode.Should().Be(0);
             result.TestOutputs.Get<string>().Should().BeNull();
-        }
-        
-        [Fact]
-        public void GivenPipedInputAsList_AllValuesAreAppended()
-        {
-            var result = new AppRunner<App>().RunInMem(
-                "PipeList".SplitArgs(), _testOutputHelper,
-                pipedInput: new[] { "aaa", "bbb" });
-
-            result.ExitCode.Should().Be(0);
             result.TestOutputs.Get<List<string>>().Should().BeEquivalentTo("aaa", "bbb");
-        }
-
-        [Fact]
-        public void GivenPipedInputAsSingle_AllValuesAreAppended()
-        {
-            var result = new AppRunner<App>().RunInMem(
-                "PipeList".SplitArgs(), _testOutputHelper,
-                pipedInput: new[] { "aaa" });
-
-            result.ExitCode.Should().Be(0);
-            result.TestOutputs.Get<List<string>>().Should().BeEquivalentTo("aaa");
-        }
-
-        [Fact]
-        public void InvalidConfig_SingleValueOperandEnablePipedInput_ReturnsError()
-        {
-            var result = new AppRunner<App>().RunInMem(
-                "InvalidPipeSingle".SplitArgs(), _testOutputHelper,
-                pipedInput: new[] { "aaa", "bbb" });
-
-            result.ExitCode.Should().Be(1);
-            result.OutputShouldBe("Piped input can only be enabled for multi-value operands. `argument` is not multi-value.");
-        }
-
-        [Fact]
-        public void InvalidConfig_MultipleOperandsEnablePipedInput_ReturnsError()
-        {
-            var result = new AppRunner<App>().RunInMem(
-                "InvalidMultiArg".SplitArgs(), _testOutputHelper,
-                pipedInput: new[] { "aaa", "bbb" });
-
-            result.ExitCode.Should().Be(1);
-            result.OutputShouldBe("only one operand can enable piped input. enabled operands:arg1,pipedArgs");
         }
 
         public class App
@@ -119,30 +66,20 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             [InjectProperty]
             public TestOutputs TestOutputs { get; set; }
 
-            public void NoPiping(string argument)
+            public void Single([Operand] string singleArg)
             {
-                TestOutputs.CaptureIfNotNull(argument);
+                TestOutputs.CaptureIfNotNull(singleArg);
             }
 
-            public int InvalidPipeSingle([Operand(AppendPipedInput = true)] string argument)
+            public void List([Operand] List<string> listArgs)
             {
-                return 5;
+                TestOutputs.CaptureIfNotNull(listArgs);
             }
 
-            public void PipeList([Operand(AppendPipedInput = true)] List<string> arguments)
+            public void SingleAndList([Operand] string singleArg, [Operand] List<string> listArgs)
             {
-                TestOutputs.CaptureIfNotNull(arguments);
-            }
-
-            public void MultiArg([Operand] string arg1, [Operand(AppendPipedInput = true)] List<string> pipedArgs)
-            {
-                TestOutputs.CaptureIfNotNull(arg1);
-                TestOutputs.CaptureIfNotNull(pipedArgs);
-            }
-
-            public int InvalidMultiArg([Operand(AppendPipedInput = true)] string arg1, [Operand(AppendPipedInput = true)] List<string> pipedArgs)
-            {
-                return 5;
+                TestOutputs.CaptureIfNotNull(singleArg);
+                TestOutputs.CaptureIfNotNull(listArgs);
             }
         }
     }

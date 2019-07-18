@@ -6,7 +6,7 @@ namespace CommandDotNet.Example
     [ApplicationMetadata(Name = "pipes", Description = "example of accepting piped input")]
     public class PipesApp
     {
-        public void Echo([Operand(AppendPipedInput = true)] List<string> inputs, [Option] int times = 1)
+        public void Echo([Operand] List<string> inputs, [Option] int times = 1)
         {
             if (inputs == null)
             {
