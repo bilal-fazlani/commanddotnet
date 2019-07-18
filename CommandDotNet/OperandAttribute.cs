@@ -7,5 +7,6 @@ namespace CommandDotNet
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public bool AppendPipedInput { get; set; }
     }
 }

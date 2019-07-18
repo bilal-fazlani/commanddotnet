@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
@@ -123,13 +124,15 @@ namespace CommandDotNet
             _appBuilder.AddMiddlewareInStage(ModelValidator.ValidateModelsMiddleware,
                 MiddlewareStages.PostBindValuesPreInvoke);
 
+            _appBuilder.EnablePipedInput();
+
             if (DependencyResolver != null)
             {
                 _appBuilder.AddMiddlewareInStage(DependencyResolveMiddleware.InjectDependencies,
                     MiddlewareStages.PostBindValuesPreInvoke);
             }
         }
-
+        
         private static int HandleException(Exception ex, IConsole console)
         {
             ex = ex.EscapeWrappers();

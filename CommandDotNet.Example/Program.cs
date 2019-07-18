@@ -52,6 +52,9 @@ namespace CommandDotNet.Example
 
             [SubCommand]
             public IssueApps IssueApps { get; set; }
+
+            [SubCommand]
+            public PipesApp PipesApp { get; set; }
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using CommandDotNet.Extensions;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.Utils
@@ -24,7 +25,7 @@ namespace CommandDotNet.Tests.Utils
             // scenarios don't pass testOutputHelper because that framework
             // print the AppRunnerResult.ConsoleOut so it's not necessary
             // to capture output directly to XUnit
-            return (AppRunnerResult)runInMemMethod.Invoke(null, new[] { runner, args, null, dependencies, null });
+            return (AppRunnerResult)runInMemMethod.Invoke(null, new[] { runner, args, null, dependencies, null, null });
         }
 
         public static AppRunnerResult RunInMem<T>(
@@ -32,9 +33,15 @@ namespace CommandDotNet.Tests.Utils
             string[] args,
             ITestOutputHelper testOutputHelper,
             IEnumerable<object> dependencies = null,
-            Func<TestConsole, string> onReadLine = null) where T : class
+            Func<TestConsole, string> onReadLine = null,
+            IEnumerable<string> pipedInput = null) where T : class
         {
-            var testConsole = new TestConsole(onReadLine);
+            var testConsole = new TestConsole(
+                onReadLine,
+                pipedInput == null
+                    ? (Func<TestConsole, string>) null
+                    : console => pipedInput?.ToCsv(Environment.NewLine));
+                    
             runner.UseConsole(testConsole);
 
             var resolver = new TestDependencyResolver();
