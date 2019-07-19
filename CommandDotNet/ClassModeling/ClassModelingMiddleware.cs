@@ -23,13 +23,13 @@ namespace CommandDotNet.ClassModeling
 
         private static Task<int> BuildMiddleware<TRootCommandType>(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            commandContext.CurrentCommand = ClassCommandDef.CreateRootCommand(typeof(TRootCommandType), commandContext);
+            commandContext.RootCommand = ClassCommandDef.CreateRootCommand(typeof(TRootCommandType), commandContext);
             return next(commandContext);
         }
 
         private static Task<int> SetInvocationContextMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            var commandDef = commandContext.CurrentCommand.ContextData.Get<ICommandDef>();
+            var commandDef = commandContext.ParseResult.TargetCommand.ContextData.Get<ICommandDef>();
             if (commandDef != null)
             {
                 var ctx = commandContext.InvocationContext;
@@ -42,7 +42,7 @@ namespace CommandDotNet.ClassModeling
 
         private static Task<int> DisplayHelpIfCommandIsNotExecutable(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            var commandDef = commandContext.CurrentCommand.ContextData.Get<ICommandDef>();
+            var commandDef = commandContext.ParseResult.TargetCommand.ContextData.Get<ICommandDef>();
             if (commandDef != null)
             {
                 if (!commandDef.IsExecutable)
@@ -57,7 +57,7 @@ namespace CommandDotNet.ClassModeling
 
         private static Task<int> SetValuesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            var commandDef = commandContext.CurrentCommand.ContextData.Get<ICommandDef>();
+            var commandDef = commandContext.ParseResult.TargetCommand.ContextData.Get<ICommandDef>();
             if (commandDef != null)
             {
                 var console = commandContext.Console;
@@ -96,7 +96,7 @@ namespace CommandDotNet.ClassModeling
 
         private static async Task<int> CreateInstancesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            var command = commandContext.ParseResult.Command;
+            var command = commandContext.ParseResult.TargetCommand;
             var commandDef = command.ContextData.Get<ICommandDef>();
 
             if (commandDef != null)

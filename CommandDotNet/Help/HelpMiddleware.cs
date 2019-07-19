@@ -37,7 +37,7 @@ namespace CommandDotNet.Help
         {
             if (commandContext.ParseResult.ArgumentValues.Contains(Constants.HelpArgumentTemplate.Name))
             {
-                Print(commandContext.AppSettings, commandContext.ParseResult.Command);
+                Print(commandContext.AppSettings, commandContext.ParseResult.TargetCommand);
                 return Task.FromResult(0);
             }
 

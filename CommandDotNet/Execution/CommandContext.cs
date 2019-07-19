@@ -9,7 +9,7 @@ namespace CommandDotNet.Execution
 
         public TokenCollection Tokens { get; set; }
 
-        public ICommand CurrentCommand { get; set; }
+        public ICommand RootCommand { get; set; }
 
         public ParseResult ParseResult { get; set; }
         

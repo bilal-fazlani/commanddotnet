@@ -18,7 +18,7 @@ namespace CommandDotNet
 
         public BuildEvents BuildEvents { get; } = new BuildEvents();
         public ParseEvents ParseEvents { get; } = new ParseEvents();
-        public IContextData ContextData { get; } = new ContextData();
+        public ContextData ContextData { get; } = new ContextData();
 
         public void AddInputTransformation(string name, int order, Func<TokenCollection,TokenCollection> transformation)
         {

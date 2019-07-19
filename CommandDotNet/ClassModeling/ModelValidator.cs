@@ -25,7 +25,7 @@ namespace CommandDotNet.ClassModeling
 
         internal static Task<int> ValidateModelsMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            var commandDef = commandContext.CurrentCommand.ContextData.Get<ICommandDef>();
+            var commandDef = commandContext.ParseResult.TargetCommand.ContextData.Get<ICommandDef>();
             if (commandDef != null)
             {
                 var modelValidator = new ModelValidator(commandContext.ExecutionConfig.DependencyResolver);

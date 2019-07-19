@@ -35,7 +35,7 @@ namespace CommandDotNet.Tests.Utils
             Func<TestConsole, string> onReadLine = null) where T : class
         {
             var testConsole = new TestConsole(onReadLine);
-            runner.OverrideConsole(testConsole);
+            runner.UseConsole(testConsole);
 
             var resolver = new TestDependencyResolver();
             foreach (var dependency in dependencies ?? Enumerable.Empty<object>())

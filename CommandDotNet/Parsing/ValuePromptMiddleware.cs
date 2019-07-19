@@ -12,7 +12,7 @@ namespace CommandDotNet.Parsing
     {
         internal static Task<int> PromptForMissingOperands(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            var command = commandContext.ParseResult.Command;
+            var command = commandContext.ParseResult.TargetCommand;
             var argumentValues = commandContext.ParseResult.ArgumentValues;
             var console = commandContext.AppSettings.Console;
 
