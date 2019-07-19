@@ -80,8 +80,8 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             Task<int> BeforeInvocation(CommandContext context, Func<CommandContext, Task<int>> next)
             {
-                context.CurrentCommand.Should().NotBeNull();
-                context.CurrentCommand.Name.Should().Be(nameof(App.NotifyOwner));
+                context.ParseResult.TargetCommand.Should().NotBeNull();
+                context.ParseResult.TargetCommand.Name.Should().Be(nameof(App.NotifyOwner));
                 return next(context);
             }
 
@@ -116,11 +116,11 @@ namespace CommandDotNet.Tests.FeatureTests
             if (postBindValues != null)
             {
                 // TODO: middleware ordering like this is brittle
-                appRunner.AddMiddlewareInStage(postBindValues, MiddlewareStages.PostBindValuesPreInvoke, int.MaxValue);
+                appRunner.UseMiddleware(postBindValues, MiddlewareStages.PostBindValuesPreInvoke, int.MaxValue);
             }
             if (preBindValues != null)
             {
-                appRunner.AddMiddlewareInStage(preBindValues, MiddlewareStages.PostParseInputPreBindValues, int.MaxValue);
+                appRunner.UseMiddleware(preBindValues, MiddlewareStages.PostParseInputPreBindValues, int.MaxValue);
             }
 
             var args = $"NotifyOwner --Number {carNumber} --owner {ownerName}".SplitArgs();

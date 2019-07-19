@@ -17,7 +17,9 @@ using CommandDotNet.Rendering;
 namespace CommandDotNet
 {
     /// <summary>
-    /// Creates a new instance of AppRunner
+    /// AppRunner is the entry class for this library.
+    /// Use this class to define settings and behaviors
+    /// and to execute the Type that defines your commands.
     /// </summary>
     /// <typeparam name="T">Type of the application</typeparam>
     public class AppRunner<T> where T : class
@@ -76,7 +78,9 @@ namespace CommandDotNet
             AddOptionalMiddleware();
 
             var tokens = args.Tokenize(includeDirectives: _settings.EnableDirectives);
-            var commandContext = new CommandContext(args, tokens, _settings, _appBuilder.Build(_settings, DependencyResolver));
+            var commandContext = new CommandContext(
+                args, tokens, _settings,
+                _appBuilder.Build(_settings, DependencyResolver));
 
             return InvokeMiddleware(commandContext);
         }
@@ -116,11 +120,13 @@ namespace CommandDotNet
             // TODO: move FluentValidation into a separate repo & nuget package?
             //       there are other ways to do validation that could also
             //       be applied to parameters
-            _appBuilder.AddMiddlewareInStage(ModelValidator.ValidateModelsMiddleware, MiddlewareStages.PostBindValuesPreInvoke);
+            _appBuilder.AddMiddlewareInStage(ModelValidator.ValidateModelsMiddleware,
+                MiddlewareStages.PostBindValuesPreInvoke);
 
             if (DependencyResolver != null)
             {
-                _appBuilder.AddMiddlewareInStage(DependencyResolveMiddleware.InjectDependencies, MiddlewareStages.PostBindValuesPreInvoke);
+                _appBuilder.AddMiddlewareInStage(DependencyResolveMiddleware.InjectDependencies,
+                    MiddlewareStages.PostBindValuesPreInvoke);
             }
         }
 
@@ -155,34 +161,59 @@ namespace CommandDotNet
             return middlewareChain(commandContext, ctx => Task.FromResult(0));
         }
 
-        public AppRunner<T> WithCustomHelpProvider(IHelpProvider customHelpProvider)
+        /// <summary>
+        /// Replace the internal help provider with given help provider
+        /// </summary>
+        public AppRunner<T> UseCustomHelpProvider(IHelpProvider customHelpProvider)
         {
             _settings.CustomHelpProvider = customHelpProvider;
             return this;
         }
 
-        public AppRunner<T> AddMiddlewareInStage(ExecutionMiddleware middleware, MiddlewareStages stage, int? orderWithinStage = null)
+        /// <summary>
+        /// Adds the middleware to the pipeline in the specified <see cref="MiddlewareStages"/>.
+        /// Use <see cref="orderWithinStage"/> to specify order in relation
+        /// to other middleware within the same stage.
+        /// </summary>
+        public AppRunner<T> UseMiddleware(ExecutionMiddleware middleware, MiddlewareStages stage,
+            int? orderWithinStage = null)
         {
             _appBuilder.AddMiddlewareInStage(middleware, stage, orderWithinStage);
             return this;
         }
 
-        public AppRunner<T> OverrideConsole(IConsole console)
-        {
-            _settings.Console = console;
-            return this;
-        }
-
-        public AppRunner<T> UseInputTransformation(string name, int order, Func<TokenCollection, TokenCollection> transformation)
+        /// <summary>
+        /// Adds the transformation to the list of transformations applied to tokens
+        /// before they are parsed into commands and arguments
+        /// </summary>
+        public AppRunner<T> UseInputTransformation(string name, int order,
+            Func<TokenCollection, TokenCollection> transformation)
         {
             _appBuilder.AddInputTransformation(name, order, transformation);
             return this;
         }
 
+        /// <summary>
+        /// Configures the app to use the resolver to create instances of
+        /// properties decorated with <see cref="InjectPropertyAttribute"/>
+        /// </summary>
         public AppRunner<T> UseDependencyResolver(IDependencyResolver dependencyResolver)
         {
             DependencyResolver = dependencyResolver;
             return this;
+        }
+
+        /// <summary>Replace the internal system console with provided console</summary>
+        public AppRunner<T> UseConsole(IConsole console)
+        {
+            _settings.Console = console;
+            return this;
+        }
+
+        [Obsolete("Use UseCustomHelpProvider instead")]
+        public AppRunner<T> WithCustomHelpProvider(IHelpProvider customHelpProvider)
+        {
+            return UseCustomHelpProvider(customHelpProvider);
         }
     }
 }

@@ -41,7 +41,7 @@ namespace CommandDotNet.Parsing
             bool ignoreRemainingArguments = false;
             var remainingArguments = new List<Token>();
 
-            ICommand currentCommand = commandContext.CurrentCommand;
+            ICommand currentCommand = commandContext.RootCommand;
             IOption currentOption = null;
             IEnumerator<IOperand> operands = new OperandEnumerator(currentCommand.Operands);
 
@@ -75,7 +75,6 @@ namespace CommandDotNet.Parsing
                         {
                             var operandResult = ParseArgumentValue(
                                 token, ref currentCommand, ref currentOption, operands, argumentValues.GetOrAdd);
-                            commandContext.CurrentCommand = currentCommand;
 
                             switch (operandResult)
                             {
