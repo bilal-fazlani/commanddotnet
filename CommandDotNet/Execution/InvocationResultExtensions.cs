@@ -19,7 +19,7 @@ namespace CommandDotNet.Execution
                 case null:
                     return 0;
                 default:
-                    throw new NotSupportedException();
+                    throw new NotSupportedException($"Unexpected value type: {value} ({value.GetType()})");
             }
         }
     }
