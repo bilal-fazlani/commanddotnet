@@ -1,4 +1,4 @@
-You can use [FluentValidation](https://github.com/JeremySkinner/FluentValidation) with this library to validate input parameters, provided you model your parameters into classes.
+You can use [FluentValidation](https://github.com/JeremySkinner/FluentValidation) with this library to validate [argument models](argument-models.md).
 
 Here's an example,
 
