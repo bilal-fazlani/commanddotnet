@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,17 +11,17 @@ using CommandDotNet.Extensions;
 
 namespace CommandDotNet
 {
-    internal class Command : ICommand, ICommandBuilder
+    public class Command : ICommandBuilder, INameAndDescription
     {
-        private readonly List<IOption> _options = new List<IOption>();
-        private readonly List<IOperand> _operands = new List<IOperand>();
-        private readonly List<ICommand> _commands = new List<ICommand>();
+        private readonly List<Option> _options = new List<Option>();
+        private readonly List<Operand> _operands = new List<Operand>();
+        private readonly List<Command> _commands = new List<Command>();
 
         private readonly Dictionary<string, IArgument> _argumentsByAlias = new Dictionary<string, IArgument>();
 
         public Command(string name, 
             ICustomAttributeProvider customAttributeProvider,
-            ICommand parent = null)
+            Command parent = null)
         {
             Name = name;
             CustomAttributeProvider = customAttributeProvider;
@@ -31,62 +32,103 @@ namespace CommandDotNet
         public string Description { get; set; }
         public string ExtendedHelpText { get; set; }
 
-        public IEnumerable<IOperand> Operands => _operands;
-        public ICommand Parent { get; }
-        public IEnumerable<ICommand> Commands => _commands;
+        public IEnumerable<Operand> Operands => _operands;
+        public Command Parent { get; }
+        public IEnumerable<Command> Commands => _commands;
         public ICustomAttributeProvider CustomAttributeProvider { get; }
         public IContextData ContextData { get; } = new ContextData();
 
-        ICommand ICommandBuilder.Command => this;
+        Command ICommandBuilder.Command => this;
         
-        public void AddSubCommand(ICommand command)
+        public void AddSubCommand(Command command)
         {
+            if (command == null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+
             _commands.Add(command);
         }
 
         public void AddArgument(IArgument argument)
         {
-            RegisterArgumentByAliases(argument);
+            if (argument == null)
+            {
+                throw new ArgumentNullException(nameof(argument));
+            }
 
-            if (argument is IOperand operand)
+            switch (argument)
             {
-                var lastOperand = Operands.LastOrDefault();
-                if (lastOperand != null && lastOperand.Arity.AllowsZeroOrMore())
-                {
-                    var message =
-                        $"The last operand '{lastOperand.Name}' accepts multiple values. No more operands can be added.";
-                    throw new AppRunnerException(message);
-                }
-                _operands.Add(operand);
+                case Operand operand:
+                    AddOperand(operand);
+                    break;
+                case Option option:
+                    AddOption(option);
+                    break;
+                default:
+                    throw new ArgumentException(
+                        $"argument type must be `{typeof(Operand)}` or `{typeof(Option)}` but was `{argument.GetType()}`. " +
+                        $"If `{argument.GetType()}` was created for extensibility, " +
+                        $"consider using {nameof(ContextData)} to store service classes instead.");
             }
-            if (argument is IOption option)
-            {
-                _options.Add(option);
-            }
+
+            RegisterArgumentByAliases(argument);
         }
 
-        public IEnumerable<IOption> GetOptions(bool includeInherited = true)
+        public IEnumerable<Option> GetOptions(bool includeInherited = true)
         {
             return includeInherited
                 ? _options.Concat(this.GetParentCommands().SelectMany(a => a._options.Where(o => o.Inherited)))
                 : _options;
         }
 
-        public IOption FindOption(string alias)
+        public Option FindOption(string alias)
         {
+            if (alias == null)
+            {
+                throw new ArgumentNullException(nameof(alias));
+            }
+
             return FindOption(this, alias, false)
                    ?? this.GetParentCommands()
                        .Select(c => FindOption(c, alias, true))
                        .FirstOrDefault(o => o != null);
         }
 
-        private static IOption FindOption(Command command, string alias, bool onlyIfInherited)
+        private static Option FindOption(Command command, string alias, bool onlyIfInherited)
         {
             return command._argumentsByAlias.TryGetValue(alias, out var argument)
-                   && (argument is IOption option)
+                   && (argument is Option option)
                    && (!onlyIfInherited || option.Inherited)
                 ? option
                 : null;
+        }
+
+        private void AddOperand(Operand operand)
+        {
+            if (operand == null)
+            {
+                throw new ArgumentNullException(nameof(operand));
+            }
+
+            var lastOperand = Operands.LastOrDefault();
+            if (lastOperand != null && lastOperand.Arity.AllowsZeroOrMore())
+            {
+                var message =
+                    $"The last operand '{lastOperand.Name}' accepts multiple values. No more operands can be added.";
+                throw new AppRunnerException(message);
+            }
+            _operands.Add(operand);
+        }
+
+        private void AddOption(Option option)
+        {
+            if (option == null)
+            {
+                throw new ArgumentNullException(nameof(option));
+            }
+
+            _options.Add(option);
         }
 
         private void RegisterArgumentByAliases(IArgument argument)
@@ -97,7 +139,7 @@ namespace CommandDotNet
                 var duplicateAlias = argument.Aliases.FirstOrDefault(a => _argumentsByAlias.TryGetValue(a, out duplicatedArg));
 
                 // the alias cannot duplicate any argument in this command or any inherited option from parent commands
-                if (duplicateAlias != null && (ReferenceEquals(parent, this) || (duplicatedArg is IOption option && option.Inherited)))
+                if (duplicateAlias != null && (ReferenceEquals(parent, this) || (duplicatedArg is Option option && option.Inherited)))
                 {
                     throw new AppRunnerException(
                         $"Duplicate alias detected. Attempted to add `{argument}` but `{duplicatedArg}` already exists");

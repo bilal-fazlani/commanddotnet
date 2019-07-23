@@ -6,7 +6,7 @@ using CommandDotNet.Execution;
 
 namespace CommandDotNet
 {
-    public class Operand : IOperand
+    public class Operand : IArgument
     {
         public Operand(string name)
         {

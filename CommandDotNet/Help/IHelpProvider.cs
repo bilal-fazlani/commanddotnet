@@ -2,6 +2,6 @@
 {
     public interface IHelpProvider
     {
-        string GetHelpText(ICommand command);
+        string GetHelpText(Command command);
     }
 }

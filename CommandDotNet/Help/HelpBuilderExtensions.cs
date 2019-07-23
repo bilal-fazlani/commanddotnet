@@ -9,7 +9,7 @@ namespace CommandDotNet.Help
 {
     internal static class HelpBuilderExtensions
     {
-        public static StringBuilder AppendUsageCommandNames(this StringBuilder sb, ICommand command, AppSettings appSettings)
+        public static StringBuilder AppendUsageCommandNames(this StringBuilder sb, Command command, AppSettings appSettings)
         {
             var appName = GetAppName(command, appSettings.Help.UsageAppNameStyle);
 
@@ -22,7 +22,7 @@ namespace CommandDotNet.Help
             return sb;
         }
 
-        private static string GetAppName(ICommand command, UsageAppNameStyle usageAppNameStyle)
+        private static string GetAppName(Command command, UsageAppNameStyle usageAppNameStyle)
         {
             switch (usageAppNameStyle)
             {
@@ -47,7 +47,7 @@ namespace CommandDotNet.Help
             }
         }
 
-        private static string GetAppNameAdaptive(ICommand command)
+        private static string GetAppNameAdaptive(Command command)
         {
             var rootAppName = GetRootAppName(command);
             if (rootAppName != null)
@@ -73,7 +73,7 @@ namespace CommandDotNet.Help
             return "...";
         }
 
-        private static string GetRootAppName(ICommand command)
+        private static string GetRootAppName(Command command)
         {
             return command.GetRootCommand().CustomAttributeProvider?.GetCustomAttribute<ApplicationMetadataAttribute>()?.Name;
         }

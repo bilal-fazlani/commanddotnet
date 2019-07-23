@@ -8,7 +8,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 {
     internal static class DefinitionMappingExtensions
     {
-        internal static ICommandBuilder ToCommand(this ICommandDef commandDef, ICommand parent, CommandContext commandContext)
+        internal static ICommandBuilder ToCommand(this ICommandDef commandDef, Command parent, CommandContext commandContext)
         {
             var command = new Command(commandDef.Name, commandDef.CustomAttributeProvider, parent);
             command.ContextData.Set(commandDef);

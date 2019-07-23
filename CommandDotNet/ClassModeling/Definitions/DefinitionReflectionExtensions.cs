@@ -16,9 +16,8 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         internal static string BuildName(this MemberInfo memberInfo, ExecutionConfig executionConfig)
         {
-            var nameFromAttr = memberInfo.GetCustomAttributes().OfType<INameAndDescription>().FirstOrDefault()?.Name;
-            var nameFromMethod = memberInfo.Name.ChangeCase(executionConfig.AppSettings.Case);
-            return nameFromAttr ?? nameFromMethod;
+            return memberInfo.GetCustomAttributes().OfType<INameAndDescription>().FirstOrDefault()?.Name 
+                   ?? memberInfo.Name.ChangeCase(executionConfig.AppSettings.Case);
         }
 
         internal static bool IsOption(this ICustomAttributeProvider attributeProvider, ArgumentMode argumentMode)

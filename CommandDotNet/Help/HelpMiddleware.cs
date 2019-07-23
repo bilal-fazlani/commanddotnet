@@ -44,7 +44,7 @@ namespace CommandDotNet.Help
             return next(commandContext);
         }
 
-        public static void Print(AppSettings appSettings, ICommand command)
+        public static void Print(AppSettings appSettings, Command command)
         {
             IHelpProvider helpTextProvider = HelpTextProviderFactory.Create(appSettings);
             appSettings.Console.Out.WriteLine(helpTextProvider.GetHelpText(command));

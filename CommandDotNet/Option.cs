@@ -7,7 +7,7 @@ using CommandDotNet.Execution;
 
 namespace CommandDotNet
 {
-    public class Option : IOption
+    public class Option : IArgument
     {
         public Option(string template, IArgumentArity arity)
         {
