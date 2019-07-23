@@ -9,7 +9,7 @@ using CommandDotNet.Execution;
 
 namespace CommandDotNet
 {
-    public class Option : IOption
+    public class Option : IArgument
     {
         private readonly HashSet<string> _aliases;
         

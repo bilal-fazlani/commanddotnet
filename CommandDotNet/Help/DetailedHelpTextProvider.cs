@@ -16,7 +16,7 @@ namespace CommandDotNet.Help
             _appSettings = appSettings;
         }
         
-        public string GetHelpText(ICommand command)
+        public string GetHelpText(Command command)
         {            
             var titleBuilder = BuildTitle(command);
             
@@ -45,12 +45,12 @@ namespace CommandDotNet.Help
                 + extendedHelpTextBuild;
         }
 
-        private StringBuilder BuildUsage(ICommand command)
+        private StringBuilder BuildUsage(Command command)
         {
             return new StringBuilder("Usage: ").AppendUsageCommandNames(command, _appSettings);
         }
 
-        private StringBuilder BuildTitle(ICommand command)
+        private StringBuilder BuildTitle(Command command)
         {
             var titleBuilder = new StringBuilder();
 
@@ -59,7 +59,7 @@ namespace CommandDotNet.Help
             return titleBuilder;
         }
 
-        private string BuildExtendedHelpText(ICommand command)
+        private string BuildExtendedHelpText(Command command)
         {
             if (!string.IsNullOrEmpty(command.ExtendedHelpText))
             {
@@ -69,7 +69,7 @@ namespace CommandDotNet.Help
             return null;
         }
 
-        private StringBuilder BuildCommands(ICommand command, StringBuilder usageBuilder)
+        private StringBuilder BuildCommands(Command command, StringBuilder usageBuilder)
         {
             var commandsBuilder = new StringBuilder();
             var commands = command.Commands.ToList();
@@ -98,10 +98,10 @@ namespace CommandDotNet.Help
             return commandsBuilder;
         }
 
-        private  StringBuilder BuildOptions(ICommand command, StringBuilder usageBuilder)
+        private  StringBuilder BuildOptions(Command command, StringBuilder usageBuilder)
         {
             var optionsBuilder = new StringBuilder();
-            List<IOption> options = command.GetOptions()
+            List<Option> options = command.GetOptions()
                 .Where(o => _appSettings.Help.PrintHelpOption || o.Name != Constants.HelpArgumentTemplate.Name)
                 .OrderBy(o => o.IsSystemOption)
                 .ToList();
@@ -138,7 +138,7 @@ namespace CommandDotNet.Help
             return optionsBuilder;
         }
 
-        private StringBuilder BuildOperands(ICommand command, StringBuilder usageBuilder)
+        private StringBuilder BuildOperands(Command command, StringBuilder usageBuilder)
         {
             var argumentsBuilder = new StringBuilder();
 

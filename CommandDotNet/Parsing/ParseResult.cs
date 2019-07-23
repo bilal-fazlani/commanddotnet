@@ -5,12 +5,12 @@ namespace CommandDotNet.Parsing
 {
     public class ParseResult
     {
-        public ICommand TargetCommand { get; }
+        public Command TargetCommand { get; }
         public IReadOnlyCollection<Token> RemainingArguments { get; }
         public IReadOnlyCollection<Token> SeparatedArguments { get; }
         public ArgumentValues ArgumentValues { get; }
 
-        public ParseResult(ICommand command,
+        public ParseResult(Command command,
             IReadOnlyCollection<Token> remainingArguments,
             IReadOnlyCollection<Token> separatedArguments,
             ArgumentValues argumentValues)

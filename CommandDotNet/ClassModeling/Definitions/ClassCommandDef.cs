@@ -29,9 +29,9 @@ namespace CommandDotNet.ClassModeling.Definitions
         
         public IMethodDef InvokeMethodDef => _defaultCommandDef.InvokeMethodDef;
 
-        public ICommand Command { get; set; }
+        public Command Command { get; set; }
 
-        public static ICommand CreateRootCommand(Type classType, CommandContext commandContext)
+        public static Command CreateRootCommand(Type classType, CommandContext commandContext)
         {
             return new ClassCommandDef(classType, commandContext)
                 .ToCommand(null, commandContext)
