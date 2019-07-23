@@ -69,7 +69,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             {
                 var operandAttr = argumentDef.Attributes.GetCustomAttribute<OperandAttribute>() 
                                   ?? (INameAndDescription) argumentDef.Attributes.GetCustomAttribute<ArgumentAttribute>();
-                return new Operand(operandAttr?.Name ?? argumentDef.Name)
+                return new Operand(operandAttr?.Name ?? argumentDef.Name, argumentDef.Attributes)
                 {
                     Description = operandAttr?.Description,
                     Arity = ArgumentArity.Default(argumentDef.Type, BooleanMode.Explicit),
@@ -82,7 +82,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             var argumentArity = ArgumentArity.Default(argumentDef.Type, GetOptionBooleanMode(argumentDef, executionConfig.AppSettings.BooleanMode, optionAttr));
             return new Option(
                 new ArgumentTemplate(optionAttr?.Name ?? argumentDef.Name, optionAttr?.ShortName).ToString(),
-                argumentArity)
+                argumentArity, customAttributeProvider: argumentDef.Attributes)
             {
                 Description = optionAttr?.Description,
                 Inherited = optionAttr?.Inherited ?? false,

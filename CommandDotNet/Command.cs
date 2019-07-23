@@ -23,7 +23,7 @@ namespace CommandDotNet
             ICommand parent = null)
         {
             Name = name;
-            CustomAttributeProvider = customAttributeProvider;
+            CustomAttributes = customAttributeProvider;
             Parent = parent;
         }
 
@@ -34,7 +34,7 @@ namespace CommandDotNet
         public IEnumerable<IOperand> Operands => _operands;
         public ICommand Parent { get; }
         public IEnumerable<ICommand> Commands => _commands;
-        public ICustomAttributeProvider CustomAttributeProvider { get; }
+        public ICustomAttributeProvider CustomAttributes { get; }
         public IContextData ContextData { get; } = new ContextData();
 
         ICommand ICommandBuilder.Command => this;
@@ -53,8 +53,9 @@ namespace CommandDotNet
                 var lastOperand = Operands.LastOrDefault();
                 if (lastOperand != null && lastOperand.Arity.AllowsZeroOrMore())
                 {
-                    var message =
-                        $"The last operand '{lastOperand.Name}' accepts multiple values. No more operands can be added.";
+                    var message = $"Cannot add argument `{argument.Name}` to command `{this}`. " +
+                                  $"The last operand added `{lastOperand.Name}` accepts multiple values. " +
+                                  $"Only one multi-value operand is allowed and it must be the last operand.";
                     throw new AppRunnerException(message);
                 }
                 _operands.Add(operand);
@@ -100,7 +101,7 @@ namespace CommandDotNet
                 if (duplicateAlias != null && (ReferenceEquals(parent, this) || (duplicatedArg is IOption option && option.Inherited)))
                 {
                     throw new AppRunnerException(
-                        $"Duplicate alias detected. Attempted to add `{argument}` but `{duplicatedArg}` already exists");
+                        $"Duplicate alias detected. Attempted to add `{argument}` to `{this}` but `{duplicatedArg}` already exists");
                 }
             }
 

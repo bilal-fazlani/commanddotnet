@@ -7,6 +7,15 @@ namespace CommandDotNet.Tests.Utils
     {
         public Dictionary<Type, object> Outputs { get; } = new Dictionary<Type, object>();
 
+        public void CaptureIfNotNull(object value)
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            Capture(value);
+        }
         public void Capture(object value)
         {
             // arguments should only be captured once.  don't allow overwrites.

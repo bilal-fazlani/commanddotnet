@@ -12,49 +12,70 @@ namespace CommandDotNet.Tests.Utils
 {
     public class TestConsole : IConsole
     {
-        public TestConsole(Func<TestConsole, string> onReadLine = null)
+        public TestConsole(
+            Func<TestConsole, string> onReadLine = null,
+            Func<TestConsole, string> onReadToEnd = null)
         {
+            IsInputRedirected = onReadToEnd != null;
+
             var joined = new StandardStreamWriter();
             Joined = joined;
             Out = new StandardStreamWriter(joined);
             Error = new StandardStreamWriter(joined);
-            In = new StandardStreamReader(() =>
-            {
-                var input = onReadLine(this);
-                // write to joined output so it can be logged for debugging
-                joined.WriteLine();
-                joined.WriteLine($"onReadLine > {input}");
-                joined.WriteLine();
-                return input;
-            });
+            In = new StandardStreamReader(
+                () =>
+                {
+                    var input = onReadLine?.Invoke(this);
+                    // write to joined output so it can be logged for debugging
+                    joined.WriteLine();
+                    joined.WriteLine($"IConsole.ReadLine > {input}");
+                    joined.WriteLine();
+                    return input;
+                },
+                () =>
+                {
+                    var input = onReadToEnd?.Invoke(this);
+                    // write to joined output so it can be logged for debugging
+                    joined.WriteLine();
+                    joined.WriteLine($"IConsole.ReadToEnd > {input}");
+                    joined.WriteLine();
+                    return input;
+                });
         }
 
-        public IStandardStreamWriter Error { get; protected set; }
+        public IStandardStreamWriter Error { get; }
 
-        public IStandardStreamWriter Out { get; protected set; }
+        public IStandardStreamWriter Out { get; }
 
-        public IStandardStreamWriter Joined { get; protected set; }
+        public IStandardStreamWriter Joined { get; }
 
-        public bool IsOutputRedirected { get; protected set; }
+        public bool IsOutputRedirected { get; }
 
-        public bool IsErrorRedirected { get; protected set; }
+        public bool IsErrorRedirected { get; }
 
         public IStandardStreamReader In { get; }
 
-        public bool IsInputRedirected { get; protected set; }
+        public bool IsInputRedirected { get; }
 
         internal class StandardStreamReader : IStandardStreamReader
         {
             private readonly Func<string> _onReadLine;
+            private readonly Func<string> _onReadToEnd;
 
-            public StandardStreamReader(Func<string> onReadLine)
+            public StandardStreamReader(Func<string> onReadLine, Func<string> onReadToEnd)
             {
                 _onReadLine = onReadLine;
+                _onReadToEnd = onReadToEnd;
             }
 
             public string ReadLine()
             {
-                return _onReadLine();
+                return _onReadLine?.Invoke();
+            }
+
+            public string ReadToEnd()
+            {
+                return _onReadToEnd?.Invoke();
             }
         }
 

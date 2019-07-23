@@ -3,6 +3,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
+using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Execution;
 
 namespace CommandDotNet
@@ -10,11 +12,12 @@ namespace CommandDotNet
     public class Option : IOption
     {
         private readonly HashSet<string> _aliases;
-
-        public Option(string template, IArgumentArity arity, IEnumerable<string> aliases = null)
+        
+        public Option(string template, IArgumentArity arity, IEnumerable<string> aliases = null, ICustomAttributeProvider customAttributeProvider = null)
         {
             Template = template;
             Arity = arity;
+            CustomAttributes = customAttributeProvider ?? NullCustomAttributeProvider.Instance;
 
             var argumentTemplate = new ArgumentTemplate(template);
             Name = argumentTemplate.Name;
@@ -46,6 +49,8 @@ namespace CommandDotNet
         public bool IsSystemOption { get; set; }
 
         public IEnumerable<string> Aliases => _aliases;
+
+        public ICustomAttributeProvider CustomAttributes { get; }
 
         public IContextData ContextData { get; } = new ContextData();
 

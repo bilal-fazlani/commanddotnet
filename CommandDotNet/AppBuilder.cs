@@ -34,12 +34,14 @@ namespace CommandDotNet
             _inputTransformationsByName.Add(name, new InputTransformation(name, order, transformation));
         }
 
-        public void AddMiddlewareInStage(ExecutionMiddleware middleware, MiddlewareStages stage, int? orderWithinStage = null)
+        public AppBuilder AddMiddlewareInStage(ExecutionMiddleware middleware, MiddlewareStages stage, int? orderWithinStage = null)
         {
             var values = _middlewareByStage
                 .GetOrAdd(stage, s => new List<(ExecutionMiddleware middleware, int order)>());
             
             values.Add((middleware, orderWithinStage ?? values.Count));
+
+            return this;
         }
 
         public ExecutionConfig Build(AppSettings appSettings, IDependencyResolver dependencyResolver)

@@ -2,15 +2,18 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System.Collections.Generic;
+using System.Reflection;
+using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Execution;
 
 namespace CommandDotNet
 {
     public class Operand : IOperand
     {
-        public Operand(string name)
+        public Operand(string name, ICustomAttributeProvider customAttributeProvider = null)
         {
             Name = name;
+            CustomAttributes = customAttributeProvider ?? NullCustomAttributeProvider.Instance;
         }
 
         public string Name { get; }
@@ -25,6 +28,8 @@ namespace CommandDotNet
         {
             get { yield return Name; }
         }
+
+        public ICustomAttributeProvider CustomAttributes { get; }
 
         public IContextData ContextData { get; } = new ContextData();
 
