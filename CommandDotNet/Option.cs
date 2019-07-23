@@ -9,7 +9,9 @@ namespace CommandDotNet
 {
     public class Option : IOption
     {
-        public Option(string template, IArgumentArity arity)
+        private readonly HashSet<string> _aliases;
+
+        public Option(string template, IArgumentArity arity, IEnumerable<string> aliases = null)
         {
             Template = template;
             Arity = arity;
@@ -17,8 +19,13 @@ namespace CommandDotNet
             var argumentTemplate = new ArgumentTemplate(template);
             Name = argumentTemplate.Name;
             ShortName = argumentTemplate.ShortName;
-            SymbolName = argumentTemplate.SymbolName;
             TypeInfo = new TypeInfo {DisplayName = argumentTemplate.TypeDisplayName};
+
+            _aliases = aliases == null
+                ? new HashSet<string>()
+                : new HashSet<string>(aliases);
+            if (!Name.IsNullOrWhitespace()) _aliases.Add(Name);
+            if (!ShortName.IsNullOrWhitespace()) _aliases.Add(ShortName);
         }
 
         public string Name { get; }
@@ -32,35 +39,25 @@ namespace CommandDotNet
 
         public string Template { get; }
         public string ShortName { get; }
-        public string SymbolName { get; }
 
         public bool Inherited { get; set; }
 
         /// <summary>True when option is help or version</summary>
         public bool IsSystemOption { get; set; }
 
-        public IEnumerable<string> Aliases
-        {
-            get
-            {
-                if (!Name.IsNullOrWhitespace()) yield return Name;
-                if (!ShortName.IsNullOrWhitespace()) yield return ShortName;
-                if (!SymbolName.IsNullOrWhitespace()) yield return SymbolName;
-            }
-        }
+        public IEnumerable<string> Aliases => _aliases;
 
         public IContextData ContextData { get; } = new ContextData();
 
         public override string ToString()
         {
-            return $"Option: {new ArgumentTemplate(Name, ShortName, SymbolName, TypeInfo.DisplayName)}";
+            return $"Option: {new ArgumentTemplate(Name, ShortName, TypeInfo.DisplayName)}";
         }
 
         private bool Equals(Option other)
         {
             return string.Equals(Name, other.Name) 
-                   && string.Equals(ShortName, other.ShortName) 
-                   && string.Equals(SymbolName, other.SymbolName);
+                   && string.Equals(ShortName, other.ShortName);
         }
 
         public override bool Equals(object obj)
@@ -89,7 +86,6 @@ namespace CommandDotNet
             {
                 var hashCode = (Name != null ? Name.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (ShortName != null ? ShortName.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (SymbolName != null ? SymbolName.GetHashCode() : 0);
                 return hashCode;
             }
         }

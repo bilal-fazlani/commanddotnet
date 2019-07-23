@@ -17,7 +17,7 @@ namespace CommandDotNet.Help
 
         private static void AddHelpOption(BuildEvents.CommandCreatedEventArgs args)
         {
-            var option = new Option(Constants.HelpTemplate, ArgumentArity.Zero)
+            var option = new Option(Constants.HelpTemplate, ArgumentArity.Zero, aliases: new []{"?"})
             {
                 Description = "Show help information",
                 TypeInfo = new TypeInfo
