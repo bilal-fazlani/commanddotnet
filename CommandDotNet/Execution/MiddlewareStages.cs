@@ -20,8 +20,8 @@ namespace CommandDotNet.Execution
         PreTransformInput,
 
         /// <summary>
-        /// In the <see cref="TransformInput"/> stage, all InputTransformations have been applied to <see cref="CommandContext.Tokens"/>.<br/>
-        /// Any modifications to <see cref="CommandContext.Tokens"/> after this stage will not be reported by the
+        /// In the <see cref="TransformInput"/> stage, all InputTransformations have been applied to <see cref="CommandContext.Tokens"/>.
+        /// Any transformations to <see cref="CommandContext.Tokens"/> applied after this stage will not be reported by the
         /// parse directive.
         /// <br/>Guarantees:<br/>
         /// - <see cref="CommandContext.Tokens"/> is the result of all InputTransformations<br/>
