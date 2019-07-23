@@ -5,16 +5,16 @@ namespace CommandDotNet
 {
     public class ArgumentTemplate
     {
-        public string Name { get; }
+        public string LongName { get; }
         public string ShortName { get; }
         public string TypeDisplayName { get; }
 
         public ArgumentTemplate(
-            string name = null, 
+            string longName = null, 
             string shortName = null,
             string typeDisplayName = null)
         {
-            Name = name;
+            LongName = longName;
             ShortName = shortName;
             TypeDisplayName = typeDisplayName;
         }
@@ -25,7 +25,7 @@ namespace CommandDotNet
             {
                 if (part.StartsWith("--"))
                 {
-                    Name = part.Substring(2);
+                    LongName = part.Substring(2);
                 }
                 else if (part.StartsWith("-"))
                 {
@@ -42,7 +42,7 @@ namespace CommandDotNet
                 }
             }
 
-            if (string.IsNullOrEmpty(Name) && string.IsNullOrEmpty(ShortName))
+            if (LongName.IsNullOrWhitespace() && ShortName.IsNullOrWhitespace())
             {
                 throw new ArgumentException($"Invalid template pattern '{template}' Unable to determine the name of the argument. " +
                                             "provide either a symbol, short or long name following this pattern: -symbol|-short|--long", nameof(template));
@@ -67,12 +67,12 @@ namespace CommandDotNet
             }
 
             AppendIfNotNull("-", ShortName);
-            AppendIfNotNull("--", Name);
+            AppendIfNotNull("--", LongName);
 
             if (sb.Length == 0)
             {
                 throw new Exception("Unable to generate template. " +
-                                    $"One of either {nameof(Name)} or {nameof(ShortName)} must be specified");
+                                    $"One of either {nameof(LongName)} or {nameof(ShortName)} must be specified");
             }
 
             return TypeDisplayName.IsNullOrWhitespace()

@@ -35,7 +35,7 @@ namespace CommandDotNet
 
         public override string ToString()
         {
-            return $"Operand: {new ArgumentTemplate(name:Name, typeDisplayName:TypeInfo.DisplayName)}";
+            return $"Operand: {new ArgumentTemplate(longName:Name, typeDisplayName:TypeInfo.DisplayName)}";
         }
 
         private bool Equals(Operand other)

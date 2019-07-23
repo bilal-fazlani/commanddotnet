@@ -92,7 +92,7 @@ namespace CommandDotNet.Help
 
                 commandsBuilder.Append("Use \"");
                 commandsBuilder.AppendUsageCommandNames(command, _appSettings);
-                commandsBuilder.AppendLine($" [command] --{Constants.HelpArgumentTemplate.Name}\" for more information about a command.");
+                commandsBuilder.AppendLine($" [command] --{Constants.HelpArgumentTemplate.LongName}\" for more information about a command.");
             }
 
             return commandsBuilder;
@@ -102,7 +102,7 @@ namespace CommandDotNet.Help
         {
             var optionsBuilder = new StringBuilder();
             List<Option> options = command.GetOptions()
-                .Where(o => _appSettings.Help.PrintHelpOption || o.Name != Constants.HelpArgumentTemplate.Name)
+                .Where(o => _appSettings.Help.PrintHelpOption || o.LongName != Constants.HelpArgumentTemplate.LongName)
                 .OrderBy(o => o.IsSystemOption)
                 .ToList();
             if (options.Any())
