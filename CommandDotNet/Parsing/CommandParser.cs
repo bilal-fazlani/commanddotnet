@@ -39,9 +39,9 @@ namespace CommandDotNet.Parsing
             bool ignoreRemainingArguments = false;
             var remainingArguments = new List<Token>();
 
-            ICommand currentCommand = commandContext.RootCommand;
-            IOption currentOption = null;
-            IEnumerator<IOperand> operands = new OperandEnumerator(currentCommand.Operands);
+            Command currentCommand = commandContext.RootCommand;
+            Option currentOption = null;
+            IEnumerator<Operand> operands = new OperandEnumerator(currentCommand.Operands);
 
             var argumentValues = new ArgumentValues();
 
@@ -124,9 +124,9 @@ namespace CommandDotNet.Parsing
         }
 
         private ParseOperandResult ParseArgumentValue(Token token,
-            ref ICommand command,
-            ref IOption option,
-            IEnumerator<IOperand> operands, 
+            ref Command command,
+            ref Option option,
+            IEnumerator<Operand> operands, 
             Func<IArgument,List<string>> getArgValues)
         {
             if (option != null)
@@ -167,8 +167,8 @@ namespace CommandDotNet.Parsing
         }
 
         private ParseOptionResult ParseOption(Token token, 
-            ICommand command, 
-            out IOption option,
+            Command command, 
+            out Option option,
             Func<IArgument, List<string>> getArgValues)
         {
             var optionTokenType = token.OptionTokenType;
@@ -204,7 +204,7 @@ namespace CommandDotNet.Parsing
 
             return ParseOptionResult.Succeeded;
         }
-        private static bool TryAddValue(IOption option, string value, Func<IArgument, List<string>> getArgValues)
+        private static bool TryAddValue(Option option, string value, Func<IArgument, List<string>> getArgValues)
         {
             if (option.Arity.AllowsZeroOrMore())
             {
@@ -230,16 +230,16 @@ namespace CommandDotNet.Parsing
             return true;
         }
 
-        private class OperandEnumerator : IEnumerator<IOperand>
+        private class OperandEnumerator : IEnumerator<Operand>
         {
-            private readonly IEnumerator<IOperand> _enumerator;
+            private readonly IEnumerator<Operand> _enumerator;
 
-            public OperandEnumerator(IEnumerable<IOperand> enumerable)
+            public OperandEnumerator(IEnumerable<Operand> enumerable)
             {
                 _enumerator = enumerable.GetEnumerator();
             }
 
-            public IOperand Current => _enumerator.Current;
+            public Operand Current => _enumerator.Current;
 
             object IEnumerator.Current => Current;
 

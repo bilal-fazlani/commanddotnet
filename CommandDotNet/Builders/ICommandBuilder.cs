@@ -2,8 +2,8 @@
 {
     public interface ICommandBuilder
     {
-        ICommand Command { get; }
-        void AddSubCommand(ICommand command);
+        Command Command { get; }
+        void AddSubCommand(Command command);
         void AddArgument(IArgument argument);
     }
 }

@@ -7,9 +7,9 @@ namespace CommandDotNet.Parsing
 {
     internal class CommandParsingException : Exception
     {
-        public ICommand Command { get; }
+        public Command Command { get; }
 
-        public CommandParsingException(ICommand command, string message)
+        public CommandParsingException(Command command, string message)
             : base(message)
         {
             Command = command;
