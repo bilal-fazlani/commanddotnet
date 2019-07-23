@@ -12,6 +12,6 @@ namespace CommandDotNet.ClassModeling.Definitions
         IReadOnlyCollection<ICommandDef> SubCommands { get; }
         IMethodDef InstantiateMethodDef { get; }
         IMethodDef InvokeMethodDef { get; }
-        ICommand Command { get; set; }
+        Command Command { get; set; }
     }
 }

@@ -9,7 +9,7 @@ using CommandDotNet.Execution;
 
 namespace CommandDotNet
 {
-    public class Option : IOption
+    public class Option : IArgument
     {
         private readonly HashSet<string> _aliases;
         
@@ -49,8 +49,6 @@ namespace CommandDotNet
         public bool IsSystemOption { get; set; }
 
         public IEnumerable<string> Aliases => _aliases;
-
-        public ICustomAttributeProvider CustomAttributes { get; }
 
         public ICustomAttributeProvider CustomAttributes { get; }
 

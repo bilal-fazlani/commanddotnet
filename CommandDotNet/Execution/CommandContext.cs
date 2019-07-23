@@ -20,7 +20,7 @@ namespace CommandDotNet.Execution
         /// The root command for the type specified in <see cref="AppRunner{T}"/>. 
         /// This is populated in the <see cref="MiddlewareStages.Build"/> stage.
         /// </summary>
-        public ICommand RootCommand { get; set; }
+        public Command RootCommand { get; set; }
 
         /// <summary>
         /// The results of the <see cref="MiddlewareStages.ParseInput"/> stage.

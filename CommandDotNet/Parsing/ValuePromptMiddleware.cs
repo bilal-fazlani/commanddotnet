@@ -25,7 +25,7 @@ namespace CommandDotNet.Parsing
             return next(commandContext);
         }
 
-        private static List<string> PromptForValues(IOperand argument, IConsole console)
+        private static List<string> PromptForValues(Operand argument, IConsole console)
         {
             List<string> inputs;
             if (argument.Arity.AllowsZeroOrMore())
