@@ -39,7 +39,7 @@ namespace CommandDotNet
 
         public IArgumentArity Arity { get; set; }
         public object DefaultValue { get; set; } = DBNull.Value;
-        public List<string> AllowedValues { get; set; }
+        public IReadOnlyCollection<string> AllowedValues { get; set; }
 
         public string Template { get; }
         public string ShortName { get; }
@@ -54,7 +54,7 @@ namespace CommandDotNet
         /// </summary>
         public bool IsSystemOption { get; set; }
 
-        public IEnumerable<string> Aliases => _aliases;
+        public IReadOnlyCollection<string> Aliases => _aliases;
 
         public ICustomAttributeProvider CustomAttributes { get; }
 

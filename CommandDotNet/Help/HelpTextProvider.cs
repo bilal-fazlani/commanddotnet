@@ -57,7 +57,7 @@ namespace CommandDotNet.Help
 
         /// <summary>How subcommands are shown in the usage example</summary>
         protected virtual string UsageSubcommand(Command command) =>
-            command.Commands.Any()
+            command.Subcommands.Any()
                 ? "[command]"
                 : null;
 
@@ -114,7 +114,7 @@ namespace CommandDotNet.Help
         /// <summary>returns the body of the subcommands section</summary>
         protected virtual string SectionSubcommands(Command command)
         {
-            var commands = command.Commands.ToList();
+            var commands = command.Subcommands.ToList();
 
             if (!commands.Any())
             {

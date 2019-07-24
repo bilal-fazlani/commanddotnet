@@ -13,6 +13,7 @@ namespace CommandDotNet
         public Operand(string name, ICustomAttributeProvider customAttributeProvider = null)
         {
             Name = name;
+            Aliases = new[] {name};
             CustomAttributes = customAttributeProvider ?? NullCustomAttributeProvider.Instance;
         }
 
@@ -22,12 +23,9 @@ namespace CommandDotNet
         public ITypeInfo TypeInfo { get; set; }
         public IArgumentArity Arity { get; set; }
         public object DefaultValue { get; set; }
-        public List<string> AllowedValues { get; set; }
+        public IReadOnlyCollection<string> AllowedValues { get; set; }
 
-        public IEnumerable<string> Aliases
-        {
-            get { yield return Name; }
-        }
+        public IReadOnlyCollection<string> Aliases { get; }
 
         public ICustomAttributeProvider CustomAttributes { get; }
 

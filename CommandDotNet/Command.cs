@@ -32,9 +32,9 @@ namespace CommandDotNet
         public string Description { get; set; }
         public string ExtendedHelpText { get; set; }
 
-        public IEnumerable<Operand> Operands => _operands;
+        public IReadOnlyCollection<Operand> Operands => _operands.AsReadOnly();
         public Command Parent { get; }
-        public IEnumerable<Command> Commands => _commands;
+        public IReadOnlyCollection<Command> Subcommands => _commands.AsReadOnly();
         public ICustomAttributeProvider CustomAttributes { get; }
         public IContextData ContextData { get; } = new ContextData();
 
@@ -75,11 +75,11 @@ namespace CommandDotNet
             RegisterArgumentByAliases(argument);
         }
 
-        public IEnumerable<Option> GetOptions(bool includeInherited = true)
+        public IReadOnlyCollection<Option> GetOptions(bool includeInherited = true)
         {
             return includeInherited
-                ? _options.Concat(this.GetParentCommands().SelectMany(a => a._options.Where(o => o.Inherited)))
-                : _options;
+                ? _options.Concat(this.GetParentCommands().SelectMany(a => a._options.Where(o => o.Inherited))).ToList().AsReadOnly()
+                : _options.ToList().AsReadOnly();
         }
 
         public Option FindOption(string alias)

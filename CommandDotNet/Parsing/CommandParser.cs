@@ -140,7 +140,7 @@ namespace CommandDotNet.Parsing
                 throw new CommandParsingException(command, $"Unexpected value '{token.RawValue}' for option '{option.Name}'");
             }
 
-            var subCommand = command.Commands
+            var subCommand = command.Subcommands
                 .FirstOrDefault(c => c.Name.Equals(token.Value, StringComparison.OrdinalIgnoreCase));
             if (subCommand != null)
             {
