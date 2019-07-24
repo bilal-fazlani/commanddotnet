@@ -27,11 +27,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
 Arguments:
 
-  Id       <NUMBER>      
+  Id     <NUMBER>      
 
-  Name     <TEXT>        
+  Name   <TEXT>        
 
-  Email    <TEXT>" }
+  Email  <TEXT>" }
             };
             _verifier.VerifyScenario(scenario);
         }

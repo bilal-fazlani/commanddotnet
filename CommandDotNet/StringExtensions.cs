@@ -1,8 +1,9 @@
-﻿using Humanizer;
+﻿using System;
+using Humanizer;
 
 namespace CommandDotNet
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         public static string ChangeCase(this string value, Case @case)
         {
@@ -23,14 +24,17 @@ namespace CommandDotNet
             }
         }
 
-        public static bool IsNullOrEmpty(this string value)
-        {
-            return string.IsNullOrEmpty(value);
-        }
+        internal static bool IsNullOrEmpty(this string value) => 
+            string.IsNullOrEmpty(value);
 
-        public static bool IsNullOrWhitespace(this string value)
-        {
-            return string.IsNullOrWhiteSpace(value);
-        }
+        internal static bool IsNullOrWhitespace(this string value) => 
+            string.IsNullOrWhiteSpace(value);
+
+        internal static string UnlessNullOrWhitespace(this string value, Func<string, string> map = null) =>
+            value.IsNullOrWhitespace()
+                ? null
+                : map == null
+                    ? value
+                    : map(value);
     }
 }

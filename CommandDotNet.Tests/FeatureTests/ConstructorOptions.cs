@@ -23,8 +23,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
 Options:
 
-  --rootOpt    <TEXT>
-
+  --rootOpt  <TEXT>
 
 Commands:
 
@@ -47,8 +46,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
 
 Options:
 
-  --LeafOpt    <TEXT>
-
+  --LeafOpt  <TEXT>
 
 Commands:
 

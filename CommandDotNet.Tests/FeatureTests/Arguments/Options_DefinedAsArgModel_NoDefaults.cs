@@ -53,25 +53,25 @@ Options:
 
   --BoolArg
 
-  --StringArg                   <TEXT>
+  --StringArg                 <TEXT>
 
-  --StructArg                   <NUMBER>
+  --StructArg                 <NUMBER>
 
-  --StructNArg                  <NUMBER>
+  --StructNArg                <NUMBER>
 
-  --EnumArg                     <DAYOFWEEK>
+  --EnumArg                   <DAYOFWEEK>
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
-  --ObjectArg                   <URI>
+  --ObjectArg                 <URI>
 
-  --StringListArg (Multiple)    <TEXT>
+  --StringListArg (Multiple)  <TEXT>
 
-  --StructListArg (Multiple)    <NUMBER>
+  --StructListArg (Multiple)  <NUMBER>
 
-  --EnumListArg (Multiple)      <DAYOFWEEK>
+  --EnumListArg (Multiple)    <DAYOFWEEK>
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
-  --ObjectListArg (Multiple)    <URI>" }
+  --ObjectListArg (Multiple)  <URI>" }
             });
         }
 

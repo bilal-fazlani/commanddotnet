@@ -51,27 +51,27 @@ Options:
 
 Options:
 
-  --BoolArg                                    [True]
+  --BoolArg                                [True]
 
-  --StringArg                   <TEXT>         [lala]
+  --StringArg                 <TEXT>       [lala]
 
-  --StructArg                   <NUMBER>       [3]
+  --StructArg                 <NUMBER>     [3]
 
-  --StructNArg                  <NUMBER>       [4]
+  --StructNArg                <NUMBER>     [4]
 
-  --EnumArg                     <DAYOFWEEK>    [Tuesday]
+  --EnumArg                   <DAYOFWEEK>  [Tuesday]
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
-  --ObjectArg                   <URI>          [http://google.com/]
+  --ObjectArg                 <URI>        [http://google.com/]
 
-  --StringListArg (Multiple)    <TEXT>         [red,blue]
+  --StringListArg (Multiple)  <TEXT>       [red,blue]
 
-  --StructListArg (Multiple)    <NUMBER>       [3,4]
+  --StructListArg (Multiple)  <NUMBER>     [3,4]
 
-  --EnumListArg (Multiple)      <DAYOFWEEK>    [Monday,Tuesday]
+  --EnumListArg (Multiple)    <DAYOFWEEK>  [Monday,Tuesday]
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
-  --ObjectListArg (Multiple)    <URI>          [http://google.com/,http://github.com/]" }
+  --ObjectListArg (Multiple)  <URI>        [http://google.com/,http://github.com/]" }
             });
         }
 

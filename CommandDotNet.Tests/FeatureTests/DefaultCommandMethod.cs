@@ -89,9 +89,8 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
 
 Arguments:
 
-  text    <TEXT>
+  text  <TEXT>
   some text
-
 
 Commands:
 

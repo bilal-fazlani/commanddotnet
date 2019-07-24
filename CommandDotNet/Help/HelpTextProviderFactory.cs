@@ -14,9 +14,9 @@
                 case HelpTextStyle.Basic:
                     return new BasicHelpTextProvider(appSettings);
                 case HelpTextStyle.Detailed:
-                    return new DetailedHelpTextProvider(appSettings);
+                    return new HelpTextProvider(appSettings);
                 default:
-                    return new BasicHelpTextProvider(appSettings);
+                    return new HelpTextProvider(appSettings);
             }
         }
     }

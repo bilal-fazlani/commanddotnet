@@ -50,13 +50,12 @@ Options:
 
 Arguments:
 
-  operand    <BOOLEAN>
+  operand  <BOOLEAN>
   Allowed values: true, false
-
 
 Options:
 
-  --option    <BOOLEAN>
+  --option  <BOOLEAN>
   Allowed values: true, false"
                 }
             });
@@ -95,9 +94,8 @@ Options:
 
 Arguments:
 
-  operand    <BOOLEAN>
+  operand  <BOOLEAN>
   Allowed values: true, false
-
 
 Options:
 

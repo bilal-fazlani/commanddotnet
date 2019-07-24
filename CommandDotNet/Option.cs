@@ -47,7 +47,11 @@ namespace CommandDotNet
 
         public bool Inherited { get; set; }
 
-        /// <summary>True when option is help or version</summary>
+        /// <summary>
+        /// True when option is not defined in class model
+        /// but is instead added via middleware.<br/>
+        /// eg. Help and Version
+        /// </summary>
         public bool IsSystemOption { get; set; }
 
         public IEnumerable<string> Aliases => _aliases;

@@ -56,18 +56,18 @@ Options:
 
   --boolArg
 
-  --stringArg                   <TEXT>
+  --stringArg                 <TEXT>
 
-  --structArg                   <NUMBER>
+  --structArg                 <NUMBER>
 
-  --structNArg                  <NUMBER>
+  --structNArg                <NUMBER>
 
-  --enumArg                     <DAYOFWEEK>
+  --enumArg                   <DAYOFWEEK>
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
-  --objectArg                   <URI>
+  --objectArg                 <URI>
 
-  --stringListArg (Multiple)    <TEXT>"
+  --stringListArg (Multiple)  <TEXT>"
                 }
             });
         }
@@ -102,7 +102,7 @@ Options:
 
 Options:
 
-  --structListArg (Multiple)    <NUMBER>"
+  --structListArg (Multiple)  <NUMBER>"
                 }
             });
         }
@@ -137,7 +137,7 @@ Options:
 
 Options:
 
-  --enumListArg (Multiple)    <DAYOFWEEK>
+  --enumListArg (Multiple)  <DAYOFWEEK>
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
                 }
             });
@@ -173,7 +173,7 @@ Options:
 
 Options:
 
-  --objectListArg (Multiple)    <URI>"
+  --objectListArg (Multiple)  <URI>"
                 }
             });
         }
