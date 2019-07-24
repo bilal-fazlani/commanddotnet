@@ -81,7 +81,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             var optionAttr = argumentDef.Attributes.GetCustomAttribute<OptionAttribute>();
             var argumentArity = ArgumentArity.Default(argumentDef.Type, GetOptionBooleanMode(argumentDef, executionConfig.AppSettings.BooleanMode, optionAttr));
             return new Option(
-                new ArgumentTemplate(optionAttr?.Name ?? argumentDef.Name, optionAttr?.ShortName).ToString(),
+                new ArgumentTemplate(optionAttr?.LongName ?? argumentDef.Name, optionAttr?.ShortName).ToString(),
                 argumentArity, customAttributeProvider: argumentDef.Attributes)
             {
                 Description = optionAttr?.Description,

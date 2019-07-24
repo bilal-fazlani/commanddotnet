@@ -10,7 +10,7 @@ namespace CommandDotNet.Example.DocExamples
         { }
 
         public void LaunchRocket2([Option(
-            Name = "planet",
+            LongName = "planet",
             ShortName = "p",
             Description = "Name of the planet you wish the rocket to go")] string planetName)
         { }

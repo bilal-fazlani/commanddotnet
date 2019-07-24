@@ -20,18 +20,19 @@ namespace CommandDotNet
             CustomAttributes = customAttributeProvider ?? NullCustomAttributeProvider.Instance;
 
             var argumentTemplate = new ArgumentTemplate(template);
-            Name = argumentTemplate.Name;
+            LongName = argumentTemplate.LongName;
             ShortName = argumentTemplate.ShortName;
+
             TypeInfo = new TypeInfo {DisplayName = argumentTemplate.TypeDisplayName};
 
             _aliases = aliases == null
                 ? new HashSet<string>()
                 : new HashSet<string>(aliases);
-            if (!Name.IsNullOrWhitespace()) _aliases.Add(Name);
+            if (!LongName.IsNullOrWhitespace()) _aliases.Add(LongName);
             if (!ShortName.IsNullOrWhitespace()) _aliases.Add(ShortName);
         }
 
-        public string Name { get; }
+        public string Name => LongName ?? ShortName;
         public string Description { get; set; }
         
         public ITypeInfo TypeInfo { get; set; }
@@ -42,6 +43,7 @@ namespace CommandDotNet
 
         public string Template { get; }
         public string ShortName { get; }
+        public string LongName { get; }
 
         public bool Inherited { get; set; }
 
@@ -56,12 +58,12 @@ namespace CommandDotNet
 
         public override string ToString()
         {
-            return $"Option: {new ArgumentTemplate(Name, ShortName, TypeInfo.DisplayName)}";
+            return $"Option: {new ArgumentTemplate(LongName, ShortName, TypeInfo.DisplayName)}";
         }
 
         private bool Equals(Option other)
         {
-            return string.Equals(Name, other.Name) 
+            return string.Equals(LongName, other.LongName) 
                    && string.Equals(ShortName, other.ShortName);
         }
 
@@ -89,7 +91,7 @@ namespace CommandDotNet
         {
             unchecked
             {
-                var hashCode = (Name != null ? Name.GetHashCode() : 0);
+                var hashCode = (LongName != null ? LongName.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ (ShortName != null ? ShortName.GetHashCode() : 0);
                 return hashCode;
             }

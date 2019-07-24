@@ -7,14 +7,9 @@ namespace CommandDotNet
     {        
         public string ShortName { get; set; }
         
-        [Obsolete("Use Name instead")]
-        public string LongName
-        {
-            get => Name; 
-            set => Name = value;
-        }
+        public string LongName { get; set; }
 
-        public string Name { get; set; }
+        string INameAndDescription.Name => LongName ?? ShortName;
 
         public BooleanMode BooleanMode { get; set; }
         

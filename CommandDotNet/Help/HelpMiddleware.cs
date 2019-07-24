@@ -35,7 +35,7 @@ namespace CommandDotNet.Help
 
         private static Task<int> DisplayHelpIfSpecified(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            if (commandContext.ParseResult.ArgumentValues.Contains(Constants.HelpArgumentTemplate.Name))
+            if (commandContext.ParseResult.ArgumentValues.Contains(Constants.HelpArgumentTemplate.LongName))
             {
                 Print(commandContext.AppSettings, commandContext.ParseResult.TargetCommand);
                 return Task.FromResult(0);

@@ -70,7 +70,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 return 10;
             }
 
-            public int Send([Option] string messageName, [Option(Name = "Sender")] string senderName,
+            public int Send([Option] string messageName, [Option(LongName = "Sender")] string senderName,
                 [Option(ShortName = "P")] int priority, [Option]int c)
             {
                 return messageName == "m" && senderName == "s" && priority == 3 && c == 4 ? 10 : 1;
