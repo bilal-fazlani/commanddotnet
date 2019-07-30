@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
@@ -18,20 +17,33 @@ using CommandDotNet.Rendering;
 namespace CommandDotNet
 {
     /// <summary>
+    /// AppRunner is the entry class for this library.<br/>
+    /// Use this class to define settings and behaviors
+    /// and to execute the Type that defines your commands.<br/>
+    /// This is a convenience class for simpler declaration of RootCommandType
+    /// </summary>
+    /// <typeparam name="TRootCommandType">Type of the application</typeparam>
+    public class AppRunner<TRootCommandType> : AppRunner where TRootCommandType : class
+    {
+        public AppRunner(AppSettings settings = null) : base(typeof(TRootCommandType), settings) { }
+    }
+
+    /// <summary>
     /// AppRunner is the entry class for this library.
     /// Use this class to define settings and behaviors
     /// and to execute the Type that defines your commands.
     /// </summary>
-    /// <typeparam name="T">Type of the application</typeparam>
-    public class AppRunner<T> where T : class
+    public class AppRunner
     {
         internal IDependencyResolver DependencyResolver;
 
+        private readonly Type _rootCommandType;
         private readonly AppSettings _settings;
-        private readonly AppBuilder _appBuilder = new AppBuilder();
+        private readonly AppBuilder _appBuilder = new AppBuilder(); 
 
-        public AppRunner(AppSettings settings = null)
+        public AppRunner(Type rootCommandType, AppSettings settings = null)
         {
+            _rootCommandType = rootCommandType ?? throw new ArgumentNullException(nameof(rootCommandType));
             _settings = settings ?? new AppSettings();
 
             // TODO: add .rsp file transformation as an extension option
@@ -90,7 +102,7 @@ namespace CommandDotNet
         {
             _appBuilder.AddMiddlewareInStage(TokenizerPipeline.TokenizeMiddleware, MiddlewareStages.TransformInput, -1);
             _appBuilder.AddMiddlewareInStage(CommandParser.ParseMiddleware, MiddlewareStages.ParseInput);
-            _appBuilder.UseClassDefMiddleware<T>();
+            _appBuilder.UseClassDefMiddleware(_rootCommandType);
             _appBuilder.UseHelpMiddleware();
 
             // TODO: add middleware between stages to validate CommandContext is exiting a stage with required data populated
@@ -132,7 +144,7 @@ namespace CommandDotNet
                     MiddlewareStages.PostBindValuesPreInvoke);
             }
         }
-        
+
         private static int HandleException(Exception ex, IConsole console)
         {
             ex = ex.EscapeWrappers();
@@ -167,7 +179,7 @@ namespace CommandDotNet
         /// <summary>
         /// Replace the internal help provider with given help provider
         /// </summary>
-        public AppRunner<T> UseCustomHelpProvider(IHelpProvider customHelpProvider)
+        public AppRunner UseCustomHelpProvider(IHelpProvider customHelpProvider)
         {
             _settings.CustomHelpProvider = customHelpProvider;
             return this;
@@ -178,7 +190,7 @@ namespace CommandDotNet
         /// Use <see cref="orderWithinStage"/> to specify order in relation
         /// to other middleware within the same stage.
         /// </summary>
-        public AppRunner<T> UseMiddleware(ExecutionMiddleware middleware, MiddlewareStages stage,
+        public AppRunner UseMiddleware(ExecutionMiddleware middleware, MiddlewareStages stage,
             int? orderWithinStage = null)
         {
             _appBuilder.AddMiddlewareInStage(middleware, stage, orderWithinStage);
@@ -189,7 +201,7 @@ namespace CommandDotNet
         /// Adds the transformation to the list of transformations applied to tokens
         /// before they are parsed into commands and arguments
         /// </summary>
-        public AppRunner<T> UseInputTransformation(string name, int order,
+        public AppRunner UseInputTransformation(string name, int order,
             Func<TokenCollection, TokenCollection> transformation)
         {
             _appBuilder.AddInputTransformation(name, order, transformation);
@@ -200,23 +212,24 @@ namespace CommandDotNet
         /// Configures the app to use the resolver to create instances of
         /// properties decorated with <see cref="InjectPropertyAttribute"/>
         /// </summary>
-        public AppRunner<T> UseDependencyResolver(IDependencyResolver dependencyResolver)
+        public AppRunner UseDependencyResolver(IDependencyResolver dependencyResolver)
         {
             DependencyResolver = dependencyResolver;
             return this;
         }
 
         /// <summary>Replace the internal system console with provided console</summary>
-        public AppRunner<T> UseConsole(IConsole console)
+        public AppRunner UseConsole(IConsole console)
         {
             _settings.Console = console;
             return this;
         }
 
         [Obsolete("Use UseCustomHelpProvider instead")]
-        public AppRunner<T> WithCustomHelpProvider(IHelpProvider customHelpProvider)
+        public AppRunner WithCustomHelpProvider(IHelpProvider customHelpProvider)
         {
             return UseCustomHelpProvider(customHelpProvider);
         }
+
     }
 }

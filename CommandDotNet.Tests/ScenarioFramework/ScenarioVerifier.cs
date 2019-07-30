@@ -33,8 +33,19 @@ namespace CommandDotNet.Tests.ScenarioFramework
             AppRunnerResult results = null;
             try
             {
-                var args = scenario.WhenArgsArray ?? scenario.WhenArgs.SplitArgs();
-                results = scenario.AppType.RunAppInMem(args, scenario.And.AppSettings, scenario.And.Dependencies);
+                // scenarios don't pass testOutputHelper because that framework
+                // print the AppRunnerResult.ConsoleOut so it's not necessary
+                // to capture output directly to XUnit
+                results = new AppRunner(
+                        scenario.AppType, 
+                        scenario.And.AppSettings ?? TestAppSettings.TestDefault)
+                    .RunInMem(
+                        scenario.WhenArgsArray ?? scenario.WhenArgs.SplitArgs(), 
+                        null, 
+                        scenario.And.Dependencies, 
+                        null, 
+                        null);
+
                 AssertExitCodeAndErrorMessage(scenario, results);
 
                 if (scenario.Then.Result != null)

@@ -10,9 +10,9 @@ namespace CommandDotNet.ClassModeling
 {
     internal static class ClassModelingMiddleware
     {
-        internal static AppBuilder UseClassDefMiddleware<TRootCommandType>(this AppBuilder appBuilder)
+        internal static AppBuilder UseClassDefMiddleware(this AppBuilder appBuilder, Type rootCommandType)
         {
-            appBuilder.AddMiddlewareInStage(BuildMiddleware<TRootCommandType>, MiddlewareStages.Build);
+            appBuilder.AddMiddlewareInStage((context, next) => BuildMiddleware(rootCommandType, context, next), MiddlewareStages.Build);
             appBuilder.AddMiddlewareInStage(SetInvocationContextMiddleware, MiddlewareStages.ParseInput);
             appBuilder.AddMiddlewareInStage(DisplayHelpIfCommandIsNotExecutable, MiddlewareStages.BindValues);
             appBuilder.AddMiddlewareInStage(SetValuesMiddleware, MiddlewareStages.BindValues);
@@ -21,9 +21,9 @@ namespace CommandDotNet.ClassModeling
             return appBuilder;
         }
 
-        private static Task<int> BuildMiddleware<TRootCommandType>(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        private static Task<int> BuildMiddleware(Type rootCommandType, CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            commandContext.RootCommand = ClassCommandDef.CreateRootCommand(typeof(TRootCommandType), commandContext);
+            commandContext.RootCommand = ClassCommandDef.CreateRootCommand(rootCommandType, commandContext);
             return next(commandContext);
         }
 
