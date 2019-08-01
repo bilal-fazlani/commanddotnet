@@ -64,7 +64,6 @@ namespace CommandDotNet.ClassModeling
                 var argumentValues = commandContext.ParseResult.ArgumentValues;
                 var parserFactory = new ParserFactory(commandContext.AppSettings);
 
-                // TODO: move to Context object
                 var instantiateArgs = commandDef.InstantiateMethodDef.ArgumentDefs;
                 var invokeArgs = commandDef.InvokeMethodDef.ArgumentDefs;
                 foreach (var argumentDef in instantiateArgs.Union(invokeArgs))

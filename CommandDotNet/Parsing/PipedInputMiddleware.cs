@@ -18,7 +18,7 @@ namespace CommandDotNet.Parsing
         {
             if (ctx.Console.IsInputRedirected)
             {
-                // only supporting the list operand for a command gives us a few benefits
+                // supporting only the list operand for a command gives us a few benefits
                 // 1. there can be only one list operand per command.
                 //    no need to enforce this only one argument has EnablePipedInput=true
                 // 2. no need to handle case where a single value operand has EnablePipedInput=true

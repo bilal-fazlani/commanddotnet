@@ -13,7 +13,7 @@ namespace CommandDotNet.Extensions
         {
             return type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(m => !m.IsSpecialName)
-                .Where(m => !typeof(IDisposable).IsAssignableFrom(type) || m.Name != "Dispose");
+                .Where(m => !typeof(IDisposable).IsAssignableFrom(type) || m.Name != nameof(IDisposable.Dispose));
         }
 
         internal static Type GetUnderlyingType(this Type type)

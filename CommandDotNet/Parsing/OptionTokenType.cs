@@ -10,20 +10,6 @@
         public bool IsClubbed { get; }
         public bool HasValue { get; }
 
-        public string GetPrefix() => IsLong ? "--" : "-";
-
-        public string GetName() => HasValue
-            ? _value.Substring(0, _assignmentIndex)
-            : _value;
-
-        public string GetAssignedValue() => HasValue
-            ? _value.Substring(_assignmentIndex + 1)
-            : null;
-
-        /*
-         * Value.Substring(0, optionTokenType.AssignmentIndex)
-         */
-
         public OptionTokenType(
             string value,
             bool isLong = false, 
@@ -37,5 +23,17 @@
             HasValue = hasValue;
             _assignmentIndex = assignmentIndex;
         }
+
+        public string GetPrefix() => IsLong ? "--" : "-";
+
+        public string GetName() => HasValue
+            ? _value.Substring(0, _assignmentIndex)
+            : _value;
+
+        public string GetAssignedValue() => HasValue
+            ? _value.Substring(_assignmentIndex + 1)
+            : null;
+
+
     }
 }
