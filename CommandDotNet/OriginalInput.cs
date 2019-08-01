@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using CommandDotNet.Parsing;
+using CommandDotNet.Tokens;
 
 namespace CommandDotNet
 {

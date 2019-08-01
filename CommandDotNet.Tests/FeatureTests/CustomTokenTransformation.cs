@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using CommandDotNet.Parsing;
 using CommandDotNet.Tests.Utils;
+using CommandDotNet.Tokens;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;

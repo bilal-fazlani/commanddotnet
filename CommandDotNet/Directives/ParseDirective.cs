@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
-using CommandDotNet.Parsing;
 using CommandDotNet.Rendering;
+using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Directives
 {

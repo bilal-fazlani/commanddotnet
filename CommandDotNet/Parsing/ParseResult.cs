@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Parsing
 {

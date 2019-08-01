@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
 
-namespace CommandDotNet.Parsing
+namespace CommandDotNet.Tokens
 {
     internal static class TokenizerPipeline
     {

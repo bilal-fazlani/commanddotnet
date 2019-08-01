@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using CommandDotNet.Parsing;
+using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Directives
 {

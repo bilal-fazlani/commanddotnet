@@ -1,4 +1,6 @@
-﻿namespace CommandDotNet.Parsing
+﻿using CommandDotNet.Parsing;
+
+namespace CommandDotNet.Tokens
 {
     public class Token
     {

@@ -15,7 +15,7 @@ namespace CommandDotNet.ClassModeling
             appBuilder.AddMiddlewareInStage((context, next) => BuildMiddleware(rootCommandType, context, next), MiddlewareStages.Build);
             appBuilder.AddMiddlewareInStage(SetInvocationContextMiddleware, MiddlewareStages.ParseInput);
             appBuilder.AddMiddlewareInStage(DisplayHelpIfCommandIsNotExecutable, MiddlewareStages.BindValues);
-            appBuilder.AddMiddlewareInStage(SetValuesMiddleware, MiddlewareStages.BindValues);
+            appBuilder.AddMiddlewareInStage(BindValuesMiddleware, MiddlewareStages.BindValues);
             appBuilder.AddMiddlewareInStage(CreateInstancesMiddleware, MiddlewareStages.BindValues);
             appBuilder.AddMiddlewareInStage(InvokeCommandDefMiddleware, MiddlewareStages.Invoke, int.MaxValue);
             return appBuilder;
@@ -55,7 +55,7 @@ namespace CommandDotNet.ClassModeling
             return next(commandContext);
         }
 
-        private static Task<int> SetValuesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        private static Task<int> BindValuesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             var commandDef = commandContext.ParseResult.TargetCommand.ContextData.Get<ICommandDef>();
             if (commandDef != null)

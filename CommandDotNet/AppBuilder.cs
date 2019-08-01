@@ -5,6 +5,7 @@ using CommandDotNet.Builders;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Parsing;
+using CommandDotNet.Tokens;
 
 namespace CommandDotNet
 {

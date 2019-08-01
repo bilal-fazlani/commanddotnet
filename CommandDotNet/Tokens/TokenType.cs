@@ -1,4 +1,4 @@
-﻿namespace CommandDotNet.Parsing
+﻿namespace CommandDotNet.Tokens
 {
     public enum TokenType
     {

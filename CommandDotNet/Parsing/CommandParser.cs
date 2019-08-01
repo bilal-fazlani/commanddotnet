@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Help;
+using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Parsing
 {

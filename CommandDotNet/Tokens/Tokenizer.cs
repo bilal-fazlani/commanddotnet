@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using CommandDotNet.Extensions;
+using CommandDotNet.Parsing;
 
-namespace CommandDotNet.Parsing
+namespace CommandDotNet.Tokens
 {
     public static class Tokenizer
     {

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace CommandDotNet.Parsing
+namespace CommandDotNet.Tokens
 {
     public class TokenCollection : IReadOnlyCollection<Token>
     {

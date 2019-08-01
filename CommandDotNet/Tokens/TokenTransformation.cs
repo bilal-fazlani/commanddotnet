@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CommandDotNet.Parsing
+namespace CommandDotNet.Tokens
 {
     public class TokenTransformation
     {
