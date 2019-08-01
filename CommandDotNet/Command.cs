@@ -5,13 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using CommandDotNet.Builders;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 
 namespace CommandDotNet
 {
-    public class Command : ICommandBuilder, INameAndDescription
+    public class Command : INameAndDescription
     {
         private readonly List<Option> _options = new List<Option>();
         private readonly List<Operand> _operands = new List<Operand>();
@@ -37,43 +36,6 @@ namespace CommandDotNet
         public IReadOnlyCollection<Command> Subcommands => _commands.AsReadOnly();
         public ICustomAttributeProvider CustomAttributes { get; }
         public IContextData ContextData { get; } = new ContextData();
-
-        Command ICommandBuilder.Command => this;
-        
-        public void AddSubCommand(Command command)
-        {
-            if (command == null)
-            {
-                throw new ArgumentNullException(nameof(command));
-            }
-
-            _commands.Add(command);
-        }
-
-        public void AddArgument(IArgument argument)
-        {
-            if (argument == null)
-            {
-                throw new ArgumentNullException(nameof(argument));
-            }
-
-            switch (argument)
-            {
-                case Operand operand:
-                    AddOperand(operand);
-                    break;
-                case Option option:
-                    AddOption(option);
-                    break;
-                default:
-                    throw new ArgumentException(
-                        $"argument type must be `{typeof(Operand)}` or `{typeof(Option)}` but was `{argument.GetType()}`. " +
-                        $"If `{argument.GetType()}` was created for extensibility, " +
-                        $"consider using {nameof(ContextData)} to store service classes instead.");
-            }
-
-            RegisterArgumentByAliases(argument);
-        }
 
         public IReadOnlyCollection<Option> GetOptions(bool includeInherited = true)
         {
@@ -102,6 +64,41 @@ namespace CommandDotNet
                    && (!onlyIfInherited || option.Inherited)
                 ? option
                 : null;
+        }
+
+        internal void AddSubCommand(Command command)
+        {
+            if (command == null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+
+            _commands.Add(command);
+        }
+
+        internal void AddArgument(IArgument argument)
+        {
+            if (argument == null)
+            {
+                throw new ArgumentNullException(nameof(argument));
+            }
+
+            switch (argument)
+            {
+                case Operand operand:
+                    AddOperand(operand);
+                    break;
+                case Option option:
+                    AddOption(option);
+                    break;
+                default:
+                    throw new ArgumentException(
+                        $"argument type must be `{typeof(Operand)}` or `{typeof(Option)}` but was `{argument.GetType()}`. " +
+                        $"If `{argument.GetType()}` was created for extensibility, " +
+                        $"consider using {nameof(ContextData)} to store service classes instead.");
+            }
+
+            RegisterArgumentByAliases(argument);
         }
 
         private void AddOperand(Operand operand)

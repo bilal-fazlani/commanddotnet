@@ -21,16 +21,18 @@ namespace CommandDotNet.ClassModeling.Definitions
                 command.ExtendedHelpText = metadataAttribute.ExtendedHelpText;
             }
 
+            var commandBuilder = new CommandBuilder(command);
+
             commandDef.Arguments
                 .Select(a => a.ToArgument(commandContext.ExecutionConfig))
-                .ForEach(a => command.AddArgument(a));
+                .ForEach(commandBuilder.AddArgument);
 
-            commandContext.ExecutionConfig.BuildEvents.CommandCreated(commandContext, command);
+            commandContext.ExecutionConfig.BuildEvents.CommandCreated(commandContext, commandBuilder);
 
             commandDef.SubCommands
-                .Select(c => c.ToCommand(command, commandContext))
-                .ForEach(c => command.AddSubCommand(c.Command));
-            return command;
+                .Select(c => c.ToCommand(command, commandContext).Command)
+                .ForEach(commandBuilder.AddSubCommand);
+            return commandBuilder;
         }
 
         private static IArgument ToArgument(this IArgumentDef argumentDef, ExecutionConfig executionConfig)
