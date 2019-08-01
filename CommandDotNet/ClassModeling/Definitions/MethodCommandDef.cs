@@ -17,13 +17,13 @@ namespace CommandDotNet.ClassModeling.Definitions
         public IMethodDef InvokeMethodDef { get; }
         public Command Command { get; set; }
         
-        public MethodCommandDef(MethodBase method, IMethodDef instantiateMethodDef, ExecutionConfig executionConfig)
+        public MethodCommandDef(MethodBase method, IMethodDef instantiateMethodDef, AppConfig appConfig)
         {
             _method = method;
 
-            Name = method.BuildName(executionConfig);
+            Name = method.BuildName(appConfig);
             InstantiateMethodDef = instantiateMethodDef;
-            InvokeMethodDef = new MethodDef(method, executionConfig);
+            InvokeMethodDef = new MethodDef(method, appConfig);
             Arguments = InvokeMethodDef.ArgumentDefs;
         }
     }

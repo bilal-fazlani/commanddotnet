@@ -43,7 +43,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             _classType = classType ?? throw new ArgumentNullException(nameof(classType));
             _commandContext = commandContext ?? throw new ArgumentNullException(nameof(commandContext));
 
-            Name = classType.BuildName(commandContext.ExecutionConfig);
+            Name = classType.BuildName(commandContext.AppConfig);
 
             _defaultCommandDef = GetDefaultMethod();
 
@@ -59,7 +59,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         {
             var firstCtor = _classType.GetConstructors().FirstOrDefault();
 
-            var methodInfo = new MethodDef(firstCtor, _commandContext.ExecutionConfig);
+            var methodInfo = new MethodDef(firstCtor, _commandContext.AppConfig);
 
             if (methodInfo.ArgumentDefs.Any(a => a.ArgumentType == ArgumentType.Operand))
             {
@@ -75,7 +75,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             var defaultMethod = _classType.GetDeclaredMethods().FirstOrDefault(m => m.HasAttribute<DefaultMethodAttribute>());
             return defaultMethod == null
                 ? (ICommandDef)new NullCommandDef(Name)
-                : new MethodCommandDef(defaultMethod, InstantiateMethodDef, _commandContext.ExecutionConfig);
+                : new MethodCommandDef(defaultMethod, InstantiateMethodDef, _commandContext.AppConfig);
         }
 
         private List<ICommandDef> GetSubCommands() => GetLocalSubCommands().Union(GetNestedSubCommands()).ToList();
@@ -84,7 +84,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         {
             return _classType.GetDeclaredMethods()
                 .Where(m => !m.HasAttribute<DefaultMethodAttribute>())
-                .Select(m => new MethodCommandDef(m, InstantiateMethodDef, _commandContext.ExecutionConfig));
+                .Select(m => new MethodCommandDef(m, InstantiateMethodDef, _commandContext.AppConfig));
         }
 
         private IEnumerable<ICommandDef> GetNestedSubCommands()

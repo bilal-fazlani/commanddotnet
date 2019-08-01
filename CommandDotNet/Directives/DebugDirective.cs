@@ -25,7 +25,7 @@ namespace CommandDotNet.Directives
         {
             if (commandContext.Tokens.TryGetDirective("debug", out _))
             {
-                var waitForDebuggerToAttach = commandContext.ExecutionConfig.ContextData.Get<DebugDirectiveContext>().WaitForDebuggerToAttach;
+                var waitForDebuggerToAttach = commandContext.AppConfig.ContextData.Get<DebugDirectiveContext>().WaitForDebuggerToAttach;
                 var process = Process.GetCurrentProcess();
 
                 var processId = process.Id;

@@ -26,7 +26,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         public ParameterArgumentDef(
             ParameterInfo parameterInfo,
             ArgumentType argumentType,
-            ExecutionConfig executionConfig,
+            AppConfig appConfig,
             Action<object> assignValue)
         {
             _parameterInfo = parameterInfo ?? throw new ArgumentNullException(nameof(parameterInfo));
@@ -34,7 +34,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             ArgumentType = argumentType;
 
-            Name = parameterInfo.BuildName(executionConfig);
+            Name = parameterInfo.BuildName(appConfig);
         }
 
         public void SetValue(object value)

@@ -11,7 +11,7 @@ namespace CommandDotNet.Builders
         internal static Task<int> InjectDependencies(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             var instance = commandContext.InvocationContext.Instance;
-            var dependencyResolver = commandContext.ExecutionConfig.DependencyResolver;
+            var dependencyResolver = commandContext.AppConfig.DependencyResolver;
             if (instance != null)
             {
                 //detect injection properties

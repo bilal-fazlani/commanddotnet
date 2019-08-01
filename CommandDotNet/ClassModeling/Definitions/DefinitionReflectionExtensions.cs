@@ -8,16 +8,16 @@ namespace CommandDotNet.ClassModeling.Definitions
 {
     internal static class DefinitionReflectionExtensions
     {
-        internal static string BuildName(this ParameterInfo parameterInfo, ExecutionConfig executionConfig)
+        internal static string BuildName(this ParameterInfo parameterInfo, AppConfig appConfig)
         {
             return parameterInfo.GetCustomAttributes().OfType<INameAndDescription>().FirstOrDefault()?.Name
-                   ?? parameterInfo.Name.ChangeCase(executionConfig.AppSettings.Case);
+                   ?? parameterInfo.Name.ChangeCase(appConfig.AppSettings.Case);
         }
 
-        internal static string BuildName(this MemberInfo memberInfo, ExecutionConfig executionConfig)
+        internal static string BuildName(this MemberInfo memberInfo, AppConfig appConfig)
         {
             var nameFromAttr = memberInfo.GetCustomAttributes().OfType<INameAndDescription>().FirstOrDefault()?.Name;
-            var nameFromMethod = memberInfo.Name.ChangeCase(executionConfig.AppSettings.Case);
+            var nameFromMethod = memberInfo.Name.ChangeCase(appConfig.AppSettings.Case);
             return nameFromAttr ?? nameFromMethod;
         }
 

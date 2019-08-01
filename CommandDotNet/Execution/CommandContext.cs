@@ -35,7 +35,7 @@ namespace CommandDotNet.Execution
         /// </summary>
         public InvocationContext InvocationContext { get; } = new InvocationContext();
 
-        public ExecutionConfig ExecutionConfig { get; }
+        public AppConfig AppConfig { get; }
 
         public AppSettings AppSettings { get; }
 
@@ -47,12 +47,12 @@ namespace CommandDotNet.Execution
             string[] originalArgs, 
             TokenCollection originalTokens, 
             AppSettings appSettings,
-            ExecutionConfig executionConfig)
+            AppConfig appConfig)
         {
             Original = new OriginalInput(originalArgs, originalTokens);
             Tokens = originalTokens;
             AppSettings = appSettings;
-            ExecutionConfig = executionConfig;
+            AppConfig = appConfig;
         }
     }
 }

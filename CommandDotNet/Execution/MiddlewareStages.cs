@@ -15,7 +15,7 @@ namespace CommandDotNet.Execution
         /// - <see cref="CommandContext.Original"/> is populated<br/>
         /// - <see cref="CommandContext.Tokens"/> is set to <see cref="OriginalInput.Tokens"/>.
         ///  The first pass of Tokenization has been performed but <see cref="TokenTransformation"/>s have not been applied.<br/>
-        /// - <see cref="CommandContext.ExecutionConfig"/>, <see cref="CommandContext.AppSettings"/>
+        /// - <see cref="CommandContext.AppConfig"/>, <see cref="CommandContext.AppSettings"/>
         ///  and <see cref="CommandContext.Console"/> are set<br/>
         /// </summary>
         PreTransformTokens,

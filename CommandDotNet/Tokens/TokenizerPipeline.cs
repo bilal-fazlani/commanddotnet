@@ -9,9 +9,9 @@ namespace CommandDotNet.Tokens
     {
         public static Task<int> TokenizeMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            InsertSystemTransformations(commandContext.ExecutionConfig);
+            InsertSystemTransformations(commandContext.AppConfig);
             commandContext.Tokens = ApplyTokenTransformations(commandContext);
-            commandContext.ExecutionConfig.ParseEvents.TokenizationCompleted(commandContext);
+            commandContext.AppConfig.ParseEvents.TokenizationCompleted(commandContext);
 
             return next(commandContext);
         }
@@ -19,13 +19,13 @@ namespace CommandDotNet.Tokens
         private static TokenCollection ApplyTokenTransformations(CommandContext commandContext)
         {
             var tokens = commandContext.Tokens;
-            var executionConfig = commandContext.ExecutionConfig;
-            foreach (var transformation in executionConfig.TokenTransformations)
+            var appConfig = commandContext.AppConfig;
+            foreach (var transformation in appConfig.TokenTransformations)
             {
                 try
                 {
                     var tempArgs = transformation.Transformation(tokens);
-                    executionConfig.ParseEvents.TokenTransformation(commandContext, transformation, tokens, tempArgs);
+                    appConfig.ParseEvents.TokenTransformation(commandContext, transformation, tokens, tempArgs);
                     tokens = tempArgs;
                 }
                 catch (Exception e)
@@ -37,12 +37,12 @@ namespace CommandDotNet.Tokens
             return tokens;
         }
 
-        private static void InsertSystemTransformations(ExecutionConfig executionConfig)
+        private static void InsertSystemTransformations(AppConfig appConfig)
         {
             // append system transformations to the end.
             // these are features we want to ensure are applied to all arguments
             // because parsing logic depends on these being processed
-            executionConfig.TokenTransformations = executionConfig.TokenTransformations
+            appConfig.TokenTransformations = appConfig.TokenTransformations
                 .OrderBy(t => t.Order)
                 .Union(
                     new[]

@@ -9,7 +9,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 {
     internal class MethodDef : IMethodDef
     {
-        private readonly ExecutionConfig _executionConfig;
+        private readonly AppConfig _appConfig;
         private IReadOnlyCollection<IArgumentDef> _argumentDefs;
         private IReadOnlyCollection<IArgument> _arguments;
         private ParameterInfo[] _parameters;
@@ -26,10 +26,10 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public object[] ParameterValues => EnsureInitialized(() => _values);
 
-        public MethodDef(MethodBase method, ExecutionConfig executionConfig)
+        public MethodDef(MethodBase method, AppConfig appConfig)
         {
             MethodBase = method ?? throw new ArgumentNullException(nameof(method));
-            _executionConfig = executionConfig ?? throw new ArgumentNullException(nameof(executionConfig));
+            _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
         }
 
         public object Invoke(object instance)
@@ -68,7 +68,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             var argumentMode = isCtor
                 ? ArgumentMode.Option
-                : _executionConfig.AppSettings.MethodArgumentMode;
+                : _appConfig.AppSettings.MethodArgumentMode;
             
             _values = new object[_parameters.Length];
             
@@ -94,7 +94,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 : new ParameterArgumentDef(
                         parameterInfo,
                         GetArgumentType(parameterInfo, argumentMode),
-                        _executionConfig,
+                        _appConfig,
                         value => _values[parameterInfo.Position] = value)
                     .ToEnumerable();
 
@@ -108,7 +108,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 : new PropertyArgumentDef(
                         propertyInfo,
                         GetArgumentType(propertyInfo, argumentMode),
-                        _executionConfig,
+                        _appConfig,
                         modelInstance)
                     .ToEnumerable();
 

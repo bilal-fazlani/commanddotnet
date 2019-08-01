@@ -28,7 +28,7 @@ namespace CommandDotNet.ClassModeling
             var commandDef = commandContext.ParseResult.TargetCommand.ContextData.Get<ICommandDef>();
             if (commandDef != null)
             {
-                var modelValidator = new ModelValidator(commandContext.ExecutionConfig.DependencyResolver);
+                var modelValidator = new ModelValidator(commandContext.AppConfig.DependencyResolver);
 
                 // TODO: move to Context object
                 var instantiateValues = commandDef.InstantiateMethodDef.ParameterValues;

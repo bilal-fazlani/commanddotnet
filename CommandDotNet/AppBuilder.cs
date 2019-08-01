@@ -45,9 +45,9 @@ namespace CommandDotNet
             return this;
         }
 
-        public ExecutionConfig Build(AppSettings appSettings, IDependencyResolver dependencyResolver)
+        public AppConfig Build(AppSettings appSettings, IDependencyResolver dependencyResolver)
         {
-            return new ExecutionConfig(appSettings, dependencyResolver, ParseEvents, BuildEvents, ContextData)
+            return new AppConfig(appSettings, dependencyResolver, ParseEvents, BuildEvents, ContextData)
             {
                 MiddlewarePipeline = _middlewareByStage
                     .SelectMany(kvp => kvp.Value.Select(v => new {stage = kvp.Key, v.order, v.middleware}) )

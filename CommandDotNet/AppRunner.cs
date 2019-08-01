@@ -167,7 +167,7 @@ namespace CommandDotNet
 
         private static Task<int> InvokeMiddleware(CommandContext commandContext)
         {
-            var pipeline = commandContext.ExecutionConfig.MiddlewarePipeline;
+            var pipeline = commandContext.AppConfig.MiddlewarePipeline;
 
             var middlewareChain = pipeline.Aggregate(
                 (first, second) =>

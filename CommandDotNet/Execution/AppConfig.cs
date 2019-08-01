@@ -5,7 +5,7 @@ using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Execution
 {
-    public class ExecutionConfig
+    public class AppConfig
     {
         public AppSettings AppSettings { get; }
         public IDependencyResolver DependencyResolver { get; }
@@ -17,7 +17,7 @@ namespace CommandDotNet.Execution
         internal IReadOnlyCollection<ExecutionMiddleware> MiddlewarePipeline { get; set; }
         internal IReadOnlyCollection<TokenTransformation> TokenTransformations { get; set; }
 
-        public ExecutionConfig(AppSettings appSettings, IDependencyResolver dependencyResolver,
+        public AppConfig(AppSettings appSettings, IDependencyResolver dependencyResolver,
             ParseEvents parseEvents, BuildEvents buildEvents, IContextData contextData)
         {
             AppSettings = appSettings;

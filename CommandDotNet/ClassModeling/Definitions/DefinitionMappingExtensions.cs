@@ -24,10 +24,10 @@ namespace CommandDotNet.ClassModeling.Definitions
             var commandBuilder = new CommandBuilder(command);
 
             commandDef.Arguments
-                .Select(a => a.ToArgument(commandContext.ExecutionConfig))
+                .Select(a => a.ToArgument(commandContext.AppConfig))
                 .ForEach(commandBuilder.AddArgument);
 
-            commandContext.ExecutionConfig.BuildEvents.CommandCreated(commandContext, commandBuilder);
+            commandContext.AppConfig.BuildEvents.CommandCreated(commandContext, commandBuilder);
 
             commandDef.SubCommands
                 .Select(c => c.ToCommand(command, commandContext).Command)
@@ -35,13 +35,13 @@ namespace CommandDotNet.ClassModeling.Definitions
             return commandBuilder;
         }
 
-        private static IArgument ToArgument(this IArgumentDef argumentDef, ExecutionConfig executionConfig)
+        private static IArgument ToArgument(this IArgumentDef argumentDef, AppConfig appConfig)
         {
             var underlyingType = argumentDef.Type.GetUnderlyingType();
 
             var argument = BuildArgument(
                 argumentDef, 
-                executionConfig, 
+                appConfig, 
                 argumentDef.HasDefaultValue ? argumentDef.DefaultValue : null,
                 new TypeInfo
                 {
@@ -51,7 +51,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             );
             argumentDef.Argument = argument;
 
-            var typeDescriptor = executionConfig.AppSettings.ArgumentTypeDescriptors.GetDescriptorOrThrow(underlyingType);
+            var typeDescriptor = appConfig.AppSettings.ArgumentTypeDescriptors.GetDescriptorOrThrow(underlyingType);
             argument.TypeInfo.DisplayName = typeDescriptor.GetDisplayName(argument);
 
             if (typeDescriptor is IAllowedValuesTypeDescriptor allowedValuesTypeDescriptor)
@@ -63,7 +63,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         private static IArgument BuildArgument(
             IArgumentDef argumentDef, 
-            ExecutionConfig executionConfig, 
+            AppConfig appConfig, 
             object defaultValue,
             TypeInfo typeInfo)
         {
@@ -81,7 +81,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             }
 
             var optionAttr = argumentDef.Attributes.GetCustomAttribute<OptionAttribute>();
-            var argumentArity = ArgumentArity.Default(argumentDef.Type, GetOptionBooleanMode(argumentDef, executionConfig.AppSettings.BooleanMode, optionAttr));
+            var argumentArity = ArgumentArity.Default(argumentDef.Type, GetOptionBooleanMode(argumentDef, appConfig.AppSettings.BooleanMode, optionAttr));
             return new Option(
                 new ArgumentTemplate(optionAttr?.LongName ?? argumentDef.Name, optionAttr?.ShortName).ToString(),
                 argumentArity, customAttributeProvider: argumentDef.Attributes)

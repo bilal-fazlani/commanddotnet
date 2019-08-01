@@ -19,13 +19,13 @@ namespace CommandDotNet.ClassModeling.Definitions
         public IMethodDef InvokeMethodDef { get; }
         public Command Command { get; set; }
 
-        public DelegateCommandDef(string name, Delegate handlerDelegate, ExecutionConfig executionConfig)
+        public DelegateCommandDef(string name, Delegate handlerDelegate, AppConfig appConfig)
         {
             _delegate = handlerDelegate;
             
             Name = name;
             InstantiateMethodDef = NullMethodDef.Instance;
-            InvokeMethodDef = new MethodDef(handlerDelegate.Method, executionConfig);
+            InvokeMethodDef = new MethodDef(handlerDelegate.Method, appConfig);
             Arguments = InvokeMethodDef.ArgumentDefs;
 
         }

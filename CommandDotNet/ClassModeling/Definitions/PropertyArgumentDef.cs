@@ -13,7 +13,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         public PropertyArgumentDef(
             PropertyInfo propertyInfo,
             ArgumentType argumentType,
-            ExecutionConfig executionConfig,
+            AppConfig appConfig,
             object modelInstance)
         {
             _propertyInfo = propertyInfo ?? throw new ArgumentNullException(nameof(propertyInfo));
@@ -21,7 +21,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             ArgumentType = argumentType;
 
-            Name = propertyInfo.BuildName(executionConfig);
+            Name = propertyInfo.BuildName(appConfig);
 
             DefaultValue = propertyInfo.GetValue(modelInstance);
 
