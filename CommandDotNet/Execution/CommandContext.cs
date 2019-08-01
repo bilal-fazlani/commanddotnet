@@ -10,8 +10,8 @@ namespace CommandDotNet.Execution
 
         /// <summary>
         /// The current working tokens. This collection is update with
-        /// input transformations during <see cref="MiddlewareStages.TransformInput"/>.
-        /// Modifications should be performed via input transformations so they
+        /// <see cref="TokenTransformation"/>s during <see cref="MiddlewareStages.TransformTokens"/>.
+        /// Modifications should be performed via <see cref="TokenTransformation"/>s so they
         /// can be logged with the Parse directive
         /// </summary>
         public TokenCollection Tokens { get; set; }

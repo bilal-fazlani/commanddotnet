@@ -100,7 +100,7 @@ namespace CommandDotNet
 
         private void AddCoreMiddleware()
         {
-            _appBuilder.AddMiddlewareInStage(TokenizerPipeline.TokenizeMiddleware, MiddlewareStages.TransformInput, -1);
+            _appBuilder.AddMiddlewareInStage(TokenizerPipeline.TokenizeMiddleware, MiddlewareStages.TransformTokens, -1);
             _appBuilder.AddMiddlewareInStage(CommandParser.ParseMiddleware, MiddlewareStages.ParseInput);
             _appBuilder.UseClassDefMiddleware(_rootCommandType);
             _appBuilder.UseHelpMiddleware();
@@ -201,10 +201,10 @@ namespace CommandDotNet
         /// Adds the transformation to the list of transformations applied to tokens
         /// before they are parsed into commands and arguments
         /// </summary>
-        public AppRunner UseInputTransformation(string name, int order,
+        public AppRunner UseTokenTransformation(string name, int order,
             Func<TokenCollection, TokenCollection> transformation)
         {
-            _appBuilder.AddInputTransformation(name, order, transformation);
+            _appBuilder.AddTokenTransformation(name, order, transformation);
             return this;
         }
 

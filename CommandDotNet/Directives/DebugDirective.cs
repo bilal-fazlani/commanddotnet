@@ -15,7 +15,7 @@ namespace CommandDotNet.Directives
         internal static AppBuilder UseDebugDirective(this AppBuilder appBuilder, bool? waitForDebuggerToAttach = null)
         {
             appBuilder.ContextData.Add(new DebugDirectiveContext(waitForDebuggerToAttach ?? !InTestHarness));
-            appBuilder.AddMiddlewareInStage(AttachDebugger, MiddlewareStages.PreTransformInput, int.MinValue);
+            appBuilder.AddMiddlewareInStage(AttachDebugger, MiddlewareStages.PreTransformTokens, int.MinValue);
 
             return appBuilder;
         }

@@ -12,8 +12,8 @@ namespace CommandDotNet.Directives
     {
         internal static AppBuilder UseParseDirective(this AppBuilder appBuilder)
         {
-            appBuilder.AddMiddlewareInStage(Report, MiddlewareStages.PreTransformInput);
-            appBuilder.AddMiddlewareInStage(ExitAfterReport, MiddlewareStages.TransformInput, int.MaxValue);
+            appBuilder.AddMiddlewareInStage(Report, MiddlewareStages.PreTransformTokens);
+            appBuilder.AddMiddlewareInStage(ExitAfterReport, MiddlewareStages.TransformTokens, int.MaxValue);
 
             return appBuilder;
         }
@@ -38,16 +38,16 @@ namespace CommandDotNet.Directives
 
                 if (verbose)
                 {
-                    executionConfig.ParseEvents.OnInputTransformation += args =>
+                    executionConfig.ParseEvents.OnTokenTransformation += args =>
                     {
-                        if (args.Pre.Count == args.Post.Count &&
-                            Enumerable.Range(0, args.Pre.Count).All(i => args.Pre[i] == args.Post[i]))
+                        if (args.PreTransformTokens.Count == args.PostTransformTokens.Count &&
+                            Enumerable.Range(0, args.PreTransformTokens.Count).All(i => args.PreTransformTokens[i] == args.PostTransformTokens[i]))
                         {
                             ReportTransformation(console, null, $">>> no changes after: {args.Transformation.Name}");
                         }
                         else
                         {
-                            ReportTransformation(console, args.Post, $">>> transformed after: {args.Transformation.Name}");
+                            ReportTransformation(console, args.PostTransformTokens, $">>> transformed after: {args.Transformation.Name}");
                         }
                     };
                 }
@@ -55,7 +55,7 @@ namespace CommandDotNet.Directives
                 {
                     executionConfig.ParseEvents.OnTokenizationCompleted += args =>
                     {
-                        var transformations = executionConfig.InputTransformations.Select(t => t.Name).ToCsv(" > ");
+                        var transformations = executionConfig.TokenTransformations.Select(t => t.Name).ToCsv(" > ");
                         ReportTransformation(console, args.CommandContext.Tokens, $">>> transformed after: {transformations}");
                     };
                 }

@@ -13,25 +13,25 @@ namespace CommandDotNet
         private readonly SortedDictionary<MiddlewareStages, List<(ExecutionMiddleware middleware, int order)>> _middlewareByStage = 
             new SortedDictionary<MiddlewareStages, List<(ExecutionMiddleware middleware, int order)>>();
 
-        private readonly Dictionary<string, InputTransformation> _inputTransformationsByName = 
-            new Dictionary<string, InputTransformation>();
+        private readonly Dictionary<string, TokenTransformation> _tokenTransformationsByName = 
+            new Dictionary<string, TokenTransformation>();
 
         public BuildEvents BuildEvents { get; } = new BuildEvents();
         public ParseEvents ParseEvents { get; } = new ParseEvents();
         public ContextData ContextData { get; } = new ContextData();
 
-        public void AddInputTransformation(string name, int order, Func<TokenCollection,TokenCollection> transformation)
+        public void AddTokenTransformation(string name, int order, Func<TokenCollection,TokenCollection> transformation)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             if (transformation == null) throw new ArgumentNullException(nameof(transformation));
 
-            if (_inputTransformationsByName.ContainsKey(name))
+            if (_tokenTransformationsByName.ContainsKey(name))
             {
                 throw new ArgumentException(
                     $"a transformation named {name} already exists. " +
-                    $"transformations={_inputTransformationsByName.Keys.ToOrderedCsv()}");
+                    $"transformations={_tokenTransformationsByName.Keys.ToOrderedCsv()}");
             }
-            _inputTransformationsByName.Add(name, new InputTransformation(name, order, transformation));
+            _tokenTransformationsByName.Add(name, new TokenTransformation(name, order, transformation));
         }
 
         public AppBuilder AddMiddlewareInStage(ExecutionMiddleware middleware, MiddlewareStages stage, int? orderWithinStage = null)
@@ -53,7 +53,7 @@ namespace CommandDotNet
                     .OrderBy(m => m.stage)
                     .ThenBy(m => m.order)
                     .Select(m => m.middleware).ToArray(),
-                InputTransformations = _inputTransformationsByName.Values.OrderBy(t => t.Order).ToArray()
+                TokenTransformations = _tokenTransformationsByName.Values.OrderBy(t => t.Order).ToArray()
             };
         }
     }

@@ -10,22 +10,22 @@ namespace CommandDotNet.Parsing
         public static Task<int> TokenizeMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             InsertSystemTransformations(commandContext.ExecutionConfig);
-            commandContext.Tokens = ApplyInputTransformations(commandContext);
+            commandContext.Tokens = ApplyTokenTransformations(commandContext);
             commandContext.ExecutionConfig.ParseEvents.TokenizationCompleted(commandContext);
 
             return next(commandContext);
         }
 
-        private static TokenCollection ApplyInputTransformations(CommandContext commandContext)
+        private static TokenCollection ApplyTokenTransformations(CommandContext commandContext)
         {
             var tokens = commandContext.Tokens;
             var executionConfig = commandContext.ExecutionConfig;
-            foreach (var transformation in executionConfig.InputTransformations)
+            foreach (var transformation in executionConfig.TokenTransformations)
             {
                 try
                 {
                     var tempArgs = transformation.Transformation(tokens);
-                    executionConfig.ParseEvents.InputTransformation(commandContext, transformation, tokens, tempArgs);
+                    executionConfig.ParseEvents.TokenTransformation(commandContext, transformation, tokens, tempArgs);
                     tokens = tempArgs;
                 }
                 catch (Exception e)
@@ -42,16 +42,16 @@ namespace CommandDotNet.Parsing
             // append system transformations to the end.
             // these are features we want to ensure are applied to all arguments
             // because parsing logic depends on these being processed
-            executionConfig.InputTransformations = executionConfig.InputTransformations
+            executionConfig.TokenTransformations = executionConfig.TokenTransformations
                 .OrderBy(t => t.Order)
                 .Union(
                     new[]
                     {
-                        new InputTransformation(
+                        new TokenTransformation(
                             "expand-clubbed-flags",
                             Int32.MaxValue,
                             Tokenizer.ExpandClubbedOptions),
-                        new InputTransformation(
+                        new TokenTransformation(
                             "split-option-assignments",
                             Int32.MaxValue,
                             Tokenizer.SplitOptionAssignments)

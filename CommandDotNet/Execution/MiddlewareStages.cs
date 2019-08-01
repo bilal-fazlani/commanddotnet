@@ -8,26 +8,26 @@ namespace CommandDotNet.Execution
     public enum MiddlewareStages
     {
         /// <summary>
-        /// Use the <see cref="PreTransformInput"/> stage for middleware that will configure the rest of the app
+        /// Use the <see cref="PreTransformTokens"/> stage for middleware that will configure the rest of the app
         /// or need to register event handlers early in the pipeline.
         /// <br/>Guarantees:<br/>
         /// - <see cref="CommandContext.Original"/> is populated<br/>
         /// - <see cref="CommandContext.Tokens"/> is set to <see cref="OriginalInput.Tokens"/>.
-        ///  The first pass of Tokenization has been performed but InputTransformations have not been applied.<br/>
+        ///  The first pass of Tokenization has been performed but <see cref="TokenTransformation"/>s have not been applied.<br/>
         /// - <see cref="CommandContext.ExecutionConfig"/>, <see cref="CommandContext.AppSettings"/>
         ///  and <see cref="CommandContext.Console"/> are set<br/>
         /// </summary>
-        PreTransformInput,
+        PreTransformTokens,
 
         /// <summary>
-        /// In the <see cref="TransformInput"/> stage, all InputTransformations have been applied to <see cref="CommandContext.Tokens"/>.
+        /// In the <see cref="TransformTokens"/> stage, all <see cref="TokenTransformation"/>s have been applied to <see cref="CommandContext.Tokens"/>.
         /// Any transformations to <see cref="CommandContext.Tokens"/> applied after this stage will not be reported by the
         /// parse directive.
         /// <br/>Guarantees:<br/>
-        /// - <see cref="CommandContext.Tokens"/> is the result of all InputTransformations<br/>
+        /// - <see cref="CommandContext.Tokens"/> is the result of all <see cref="TokenTransformation"/>s<br/>
         /// </summary>
-        TransformInput,
-        PostTransformInputPreBuild,
+        TransformTokens,
+        PostTransformTokensPreBuild,
 
         /// <summary>
         /// In the <see cref="Build"/> stage commands and arguments are determined from the type specified in <see cref="AppRunner{T}"/>.

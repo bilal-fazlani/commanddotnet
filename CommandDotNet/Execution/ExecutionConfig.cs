@@ -14,7 +14,7 @@ namespace CommandDotNet.Execution
         internal IContextData ContextData { get; }
 
         internal IReadOnlyCollection<ExecutionMiddleware> MiddlewarePipeline { get; set; }
-        internal IReadOnlyCollection<InputTransformation> InputTransformations { get; set; }
+        internal IReadOnlyCollection<TokenTransformation> TokenTransformations { get; set; }
 
         public ExecutionConfig(AppSettings appSettings, IDependencyResolver dependencyResolver,
             ParseEvents parseEvents, BuildEvents buildEvents, IContextData contextData)

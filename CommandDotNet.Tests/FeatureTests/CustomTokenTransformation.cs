@@ -7,13 +7,13 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests
 {
-    public class CustomInputTransformation
+    public class CustomTokenTransformation
     {
         private readonly AppSettings DirectivesEnabled = TestAppSettings.TestDefault.Clone(s => s.EnableDirectives = true);
 
         private readonly ITestOutputHelper _output;
 
-        public CustomInputTransformation(ITestOutputHelper output)
+        public CustomTokenTransformation(ITestOutputHelper output)
         {
             _output = output;
         }
@@ -22,7 +22,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public void ParseDirective_OutputsResults()
         {
             var result = new AppRunner<App>(DirectivesEnabled)
-                .UseInputTransformation("test", 1,
+                .UseTokenTransformation("test", 1,
                     tokens => new TokenCollection(tokens.Select(t =>
                         t.TokenType == TokenType.Value && t.Value != "Do"
                             ? Tokenizer.TokenizeValue("roses")
@@ -45,10 +45,10 @@ namespace CommandDotNet.Tests.FeatureTests
         }
 
         [Fact]
-        public void CanRegisterCustomInputTransformation()
+        public void CanRegisterCustomTokenTransformation()
         {
             var result = new AppRunner<App>()
-                .UseInputTransformation("test", 1, 
+                .UseTokenTransformation("test", 1, 
                     tokens => new TokenCollection(tokens.Select(t =>
                         t.TokenType == TokenType.Value && t.Value != "Do"
                             ? Tokenizer.TokenizeValue("roses")
