@@ -39,7 +39,7 @@ namespace CommandDotNet.Execution
 
         public AppSettings AppSettings { get; }
 
-        public IConsole Console => AppSettings.Console;
+        public IConsole Console => AppConfig.Console;
 
         public IContextData ContextData { get; } = new ContextData();
 

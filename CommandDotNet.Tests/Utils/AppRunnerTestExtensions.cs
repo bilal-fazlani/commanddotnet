@@ -22,7 +22,7 @@ namespace CommandDotNet.Tests.Utils
                     ? (Func<TestConsole, string>) null
                     : console => pipedInput?.ToCsv(Environment.NewLine));
                     
-            runner.UseConsole(testConsole);
+            runner.Configure(c => c.UseConsole(testConsole));
 
             var resolver = new TestDependencyResolver();
             foreach (var dependency in dependencies ?? Enumerable.Empty<object>())

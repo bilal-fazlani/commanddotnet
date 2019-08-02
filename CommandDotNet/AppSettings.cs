@@ -61,7 +61,5 @@ namespace CommandDotNet
         public ArgumentTypeDescriptors ArgumentTypeDescriptors { get; internal set; } = new ArgumentTypeDescriptors();
         
         internal IHelpProvider CustomHelpProvider { get; set; }
-
-        internal IConsole Console { get; set; } = new SystemConsole();
     }
 }

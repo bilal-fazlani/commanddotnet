@@ -49,7 +49,7 @@ namespace CommandDotNet.ClassModeling
             {
                 if (!commandDef.IsExecutable)
                 {
-                    HelpMiddleware.Print(commandContext.AppSettings, commandDef.Command);
+                    HelpMiddleware.Print(commandContext, commandDef.Command);
                     return Task.FromResult(0);
                 }
             }

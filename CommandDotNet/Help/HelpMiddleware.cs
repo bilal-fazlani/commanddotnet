@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using CommandDotNet.Builders;
 using CommandDotNet.Execution;
+using CommandDotNet.Rendering;
 
 namespace CommandDotNet.Help
 {
@@ -41,17 +42,22 @@ namespace CommandDotNet.Help
         {
             if (commandContext.ParseResult.ArgumentValues.Contains(Constants.HelpArgumentTemplate.LongName))
             {
-                Print(commandContext.AppSettings, commandContext.ParseResult.TargetCommand);
+                Print(commandContext, commandContext.ParseResult.TargetCommand);
                 return Task.FromResult(0);
             }
 
             return next(commandContext);
         }
 
-        public static void Print(AppSettings appSettings, Command command)
+        public static void Print(CommandContext commandContext, Command command)
+        {
+            Print(commandContext.AppSettings, commandContext.Console, command);
+        }
+
+        private static void Print(AppSettings appSettings, IConsole console, Command command)
         {
             IHelpProvider helpTextProvider = HelpTextProviderFactory.Create(appSettings);
-            appSettings.Console.Out.WriteLine(helpTextProvider.GetHelpText(command));
+            console.Out.WriteLine(helpTextProvider.GetHelpText(command));
         }
     }
 }

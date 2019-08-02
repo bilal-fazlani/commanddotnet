@@ -49,14 +49,14 @@ namespace CommandDotNet.Builders
         {
             if (commandContext.ParseResult.ArgumentValues.Contains(VersionOptionName))
             {
-                Print(commandContext.AppSettings);
+                Print(commandContext.AppSettings, commandContext.Console);
                 return Task.FromResult(0);
             }
 
             return next(commandContext);
         }
 
-        private static void Print(AppSettings appSettings)
+        private static void Print(AppSettings appSettings, IConsole console)
         {
             if (!appSettings.EnableVersionOption)
             {
@@ -74,10 +74,10 @@ namespace CommandDotNet.Builders
             }
 
             var filename = Path.GetFileName(hostAssembly.Location);
-            appSettings.Console.Out.WriteLine(filename);
+            console.Out.WriteLine(filename);
 
             var fvi = FileVersionInfo.GetVersionInfo(hostAssembly.Location);
-            appSettings.Console.Out.WriteLine(fvi.ProductVersion);
+            console.Out.WriteLine(fvi.ProductVersion);
         }
     }
 }

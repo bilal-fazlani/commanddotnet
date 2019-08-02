@@ -26,10 +26,10 @@ namespace CommandDotNet.Parsing
             }
             catch (CommandParsingException ex)
             {
-                var console = commandContext.AppSettings.Console;
+                var console = commandContext.Console;
                 console.Error.WriteLine(ex.Message);
                 console.Error.WriteLine();
-                HelpMiddleware.Print(commandContext.AppSettings, ex.Command);
+                HelpMiddleware.Print(commandContext, ex.Command);
                 return Task.FromResult(1);
             }
             return next(commandContext);

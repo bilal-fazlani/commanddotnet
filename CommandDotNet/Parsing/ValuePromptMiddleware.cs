@@ -14,7 +14,7 @@ namespace CommandDotNet.Parsing
         {
             var command = commandContext.ParseResult.TargetCommand;
             var argumentValues = commandContext.ParseResult.ArgumentValues;
-            var console = commandContext.AppSettings.Console;
+            var console = commandContext.Console;
 
             command.Operands
                 .Where(a => !argumentValues.Contains(a) && a.DefaultValue.IsNullValue())

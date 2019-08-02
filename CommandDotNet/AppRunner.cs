@@ -62,7 +62,7 @@ namespace CommandDotNet
             }
             catch (Exception e)
             {
-                return HandleException(e, _settings.Console);
+                return HandleException(e, _appConfigBuilder.Console);
             }
         }
 
@@ -80,7 +80,7 @@ namespace CommandDotNet
             }
             catch (Exception e)
             {
-                return HandleException(e, _settings.Console);
+                return HandleException(e, _appConfigBuilder.Console);
             }
         }
 
@@ -194,13 +194,6 @@ namespace CommandDotNet
         public AppRunner UseDependencyResolver(IDependencyResolver dependencyResolver)
         {
             _appConfigBuilder.UseDependencyResolver(dependencyResolver);
-            return this;
-        }
-
-        /// <summary>Replace the internal system console with provided console</summary>
-        public AppRunner UseConsole(IConsole console)
-        {
-            _settings.Console = console;
             return this;
         }
 

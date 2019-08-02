@@ -5,6 +5,7 @@ using CommandDotNet.Builders;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Parsing;
+using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
 
 namespace CommandDotNet
@@ -17,11 +18,21 @@ namespace CommandDotNet
         private readonly Dictionary<string, TokenTransformation> _tokenTransformationsByName = 
             new Dictionary<string, TokenTransformation>();
 
+
         private IDependencyResolver _dependencyResolver;
+
+        internal IConsole Console { get; private set; } = new SystemConsole();
 
         public BuildEvents BuildEvents { get; } = new BuildEvents();
         public ParseEvents ParseEvents { get; } = new ParseEvents();
         public ContextData ContextData { get; } = new ContextData();
+        
+        /// <summary>Replace the internal system console with provided console</summary>
+        public AppConfigBuilder UseConsole(IConsole console)
+        {
+            Console = console;
+            return this;
+        }
 
         /// <summary>
         /// Configures the app to use the resolver to create instances of
@@ -70,7 +81,7 @@ namespace CommandDotNet
 
         public AppConfig Build(AppSettings appSettings)
         {
-            return new AppConfig(appSettings, _dependencyResolver, ParseEvents, BuildEvents, ContextData)
+            return new AppConfig(appSettings, Console, _dependencyResolver, ParseEvents, BuildEvents, ContextData)
             {
                 MiddlewarePipeline = _middlewareByStage
                     .SelectMany(kvp => kvp.Value.Select(v => new {stage = kvp.Key, v.order, v.middleware}) )
