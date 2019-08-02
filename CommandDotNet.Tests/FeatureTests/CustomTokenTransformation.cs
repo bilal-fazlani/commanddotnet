@@ -22,11 +22,12 @@ namespace CommandDotNet.Tests.FeatureTests
         public void ParseDirective_OutputsResults()
         {
             var result = new AppRunner<App>(DirectivesEnabled)
-                .UseTokenTransformation("test", 1,
-                    tokens => new TokenCollection(tokens.Select(t =>
-                        t.TokenType == TokenType.Value && t.Value != "Do"
-                            ? Tokenizer.TokenizeValue("roses")
-                            : t)))
+                .Configure(c =>
+                    c.UseTokenTransformation("test", 1,
+                        tokens => new TokenCollection(tokens.Select(t =>
+                            t.TokenType == TokenType.Value && t.Value != "Do"
+                                ? Tokenizer.TokenizeValue("roses")
+                                : t))))
                 .RunInMem("[parse] Do --opt1 smells like".SplitArgs(), _output);
 
             result.OutputShouldBe(@"use [parse:verbose] to see results after each transformation
@@ -48,11 +49,12 @@ namespace CommandDotNet.Tests.FeatureTests
         public void CanRegisterCustomTokenTransformation()
         {
             var result = new AppRunner<App>()
-                .UseTokenTransformation("test", 1, 
-                    tokens => new TokenCollection(tokens.Select(t =>
-                        t.TokenType == TokenType.Value && t.Value != "Do"
-                            ? Tokenizer.TokenizeValue("roses")
-                            : t)))
+                .Configure(c =>
+                    c.UseTokenTransformation("test", 1,
+                        tokens => new TokenCollection(tokens.Select(t =>
+                            t.TokenType == TokenType.Value && t.Value != "Do"
+                                ? Tokenizer.TokenizeValue("roses")
+                                : t))))
                 .RunInMem("Do --opt1 smells like".SplitArgs(), _output);
 
             result.TestOutputs.Get<string>().Should().Be("roses");

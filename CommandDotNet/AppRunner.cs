@@ -36,11 +36,9 @@ namespace CommandDotNet
     /// </summary>
     public class AppRunner
     {
-        internal IDependencyResolver DependencyResolver;
-
         private readonly Type _rootCommandType;
         private readonly AppSettings _settings;
-        private readonly AppBuilder _appBuilder = new AppBuilder(); 
+        private readonly AppConfigBuilder _appConfigBuilder = new AppConfigBuilder(); 
 
         public AppRunner(Type rootCommandType, AppSettings settings = null)
         {
@@ -94,17 +92,19 @@ namespace CommandDotNet
             var tokens = args.Tokenize(includeDirectives: _settings.EnableDirectives);
             var commandContext = new CommandContext(
                 args, tokens, _settings,
-                _appBuilder.Build(_settings, DependencyResolver));
+                _appConfigBuilder.Build(_settings));
 
             return InvokeMiddleware(commandContext);
         }
 
         private void AddCoreMiddleware()
         {
-            _appBuilder.AddMiddlewareInStage(TokenizerPipeline.TokenizeMiddleware, MiddlewareStages.TransformTokens, -1);
-            _appBuilder.AddMiddlewareInStage(CommandParser.ParseMiddleware, MiddlewareStages.ParseInput);
-            _appBuilder.UseClassDefMiddleware(_rootCommandType);
-            _appBuilder.UseHelpMiddleware();
+            _appConfigBuilder
+                .UseMiddleware(TokenizerPipeline.TokenizeMiddleware, MiddlewareStages.TransformTokens, -1)
+                .UseMiddleware(CommandParser.ParseMiddleware, MiddlewareStages.ParseInput);
+
+            this.UseClassDefMiddleware(_rootCommandType)
+                .UseHelpMiddleware();
 
             // TODO: add middleware between stages to validate CommandContext is exiting a stage with required data populated
             //       i.e. ParseResult should be fully populated after Parse stage
@@ -116,25 +116,25 @@ namespace CommandDotNet
         {
             if (_settings.EnableDirectives)
             {
-                _appBuilder.UseDebugDirective();
-                _appBuilder.UseParseDirective();
+                this.UseDebugDirective()
+                    .UseParseDirective();
             }
 
             if (_settings.EnableVersionOption)
             {
-                _appBuilder.UseVersionMiddleware();
+                this.UseVersionMiddleware();
             }
 
             if (_settings.PromptForMissingOperands)
             {
-                _appBuilder.AddMiddlewareInStage(ValuePromptMiddleware.PromptForMissingOperands,
+                _appConfigBuilder.UseMiddleware(ValuePromptMiddleware.PromptForMissingOperands,
                     MiddlewareStages.PostParseInputPreBindValues);
             }
 
             // TODO: move FluentValidation into a separate repo & nuget package?
             //       there are other ways to do validation that could also
             //       be applied to parameters
-            _appBuilder.AddMiddlewareInStage(ModelValidator.ValidateModelsMiddleware,
+            _appConfigBuilder.UseMiddleware(ModelValidator.ValidateModelsMiddleware,
                 MiddlewareStages.PostBindValuesPreInvoke);
 
             _appConfigBuilder.UseMiddleware(DependencyResolveMiddleware.InjectDependencies,
@@ -172,6 +172,12 @@ namespace CommandDotNet
             return middlewareChain(commandContext, ctx => Task.FromResult(0));
         }
 
+        public AppRunner Configure(Action<AppConfigBuilder> configureCallback)
+        {
+            configureCallback(_appConfigBuilder);
+            return this;
+        }
+
         /// <summary>
         /// Replace the internal help provider with given help provider
         /// </summary>
@@ -182,35 +188,12 @@ namespace CommandDotNet
         }
 
         /// <summary>
-        /// Adds the middleware to the pipeline in the specified <see cref="MiddlewareStages"/>.
-        /// Use <see cref="orderWithinStage"/> to specify order in relation
-        /// to other middleware within the same stage.
-        /// </summary>
-        public AppRunner UseMiddleware(ExecutionMiddleware middleware, MiddlewareStages stage,
-            int? orderWithinStage = null)
-        {
-            _appBuilder.AddMiddlewareInStage(middleware, stage, orderWithinStage);
-            return this;
-        }
-
-        /// <summary>
-        /// Adds the transformation to the list of transformations applied to tokens
-        /// before they are parsed into commands and arguments
-        /// </summary>
-        public AppRunner UseTokenTransformation(string name, int order,
-            Func<TokenCollection, TokenCollection> transformation)
-        {
-            _appBuilder.AddTokenTransformation(name, order, transformation);
-            return this;
-        }
-
-        /// <summary>
         /// Configures the app to use the resolver to create instances of
         /// properties decorated with <see cref="InjectPropertyAttribute"/>
         /// </summary>
         public AppRunner UseDependencyResolver(IDependencyResolver dependencyResolver)
         {
-            DependencyResolver = dependencyResolver;
+            _appConfigBuilder.UseDependencyResolver(dependencyResolver);
             return this;
         }
 
@@ -226,6 +209,5 @@ namespace CommandDotNet
         {
             return UseCustomHelpProvider(customHelpProvider);
         }
-
     }
 }

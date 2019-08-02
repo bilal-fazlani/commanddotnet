@@ -12,12 +12,13 @@ namespace CommandDotNet.Directives
         // to call UseDebugDirective from the tests.
         internal static bool InTestHarness { private get; set; }
 
-        internal static AppBuilder UseDebugDirective(this AppBuilder appBuilder, bool? waitForDebuggerToAttach = null)
+        internal static AppRunner UseDebugDirective(this AppRunner appRunner, bool? waitForDebuggerToAttach = null)
         {
-            appBuilder.ContextData.Add(new DebugDirectiveContext(waitForDebuggerToAttach ?? !InTestHarness));
-            appBuilder.AddMiddlewareInStage(AttachDebugger, MiddlewareStages.PreTransformTokens, int.MinValue);
-
-            return appBuilder;
+            return appRunner.Configure(c =>
+            {
+                c.ContextData.Add(new DebugDirectiveContext(waitForDebuggerToAttach ?? !InTestHarness));
+                c.UseMiddleware(AttachDebugger, MiddlewareStages.PreTransformTokens, int.MinValue);
+            });
         }
 
         // adapted from https://github.com/dotnet/command-line-api directives

@@ -12,7 +12,7 @@ namespace CommandDotNet.Execution
 
         public ParseEvents ParseEvents { get; }
         public BuildEvents BuildEvents { get; }
-        internal IContextData ContextData { get; }
+        public IContextData ContextData { get; }
 
         internal IReadOnlyCollection<ExecutionMiddleware> MiddlewarePipeline { get; set; }
         internal IReadOnlyCollection<TokenTransformation> TokenTransformations { get; set; }

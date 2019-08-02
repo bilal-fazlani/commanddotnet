@@ -7,12 +7,16 @@ namespace CommandDotNet.Help
 {
     internal static class HelpMiddleware
     {
-        internal static AppBuilder UseHelpMiddleware(this AppBuilder builder)
+        internal static AppRunner UseHelpMiddleware(this AppRunner appRunner)
         {
-            builder.BuildEvents.OnCommandCreated += AddHelpOption;
-            builder.AddMiddlewareInStage(DisplayHelpIfSpecified, MiddlewareStages.PostParseInputPreBindValues);
+            return appRunner.Configure(c =>
+            {
+                c.BuildEvents.OnCommandCreated += AddHelpOption;
+                c.UseMiddleware(DisplayHelpIfSpecified, MiddlewareStages.PostParseInputPreBindValues);
 
-            return builder;
+                // TODO: consider adding another middleware to check CommandContext.ShowHelpForCommand (of type Command)
+                //       and if set, show help. Removes the tight coupling on this Print method
+            });
         }
 
         private static void AddHelpOption(BuildEvents.CommandCreatedEventArgs args)

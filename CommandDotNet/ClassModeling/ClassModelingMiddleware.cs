@@ -10,15 +10,17 @@ namespace CommandDotNet.ClassModeling
 {
     internal static class ClassModelingMiddleware
     {
-        internal static AppBuilder UseClassDefMiddleware(this AppBuilder appBuilder, Type rootCommandType)
+        internal static AppRunner UseClassDefMiddleware(this AppRunner appRunner, Type rootCommandType)
         {
-            appBuilder.AddMiddlewareInStage((context, next) => BuildMiddleware(rootCommandType, context, next), MiddlewareStages.Build);
-            appBuilder.AddMiddlewareInStage(SetInvocationContextMiddleware, MiddlewareStages.ParseInput);
-            appBuilder.AddMiddlewareInStage(DisplayHelpIfCommandIsNotExecutable, MiddlewareStages.BindValues);
-            appBuilder.AddMiddlewareInStage(BindValuesMiddleware, MiddlewareStages.BindValues);
-            appBuilder.AddMiddlewareInStage(CreateInstancesMiddleware, MiddlewareStages.BindValues);
-            appBuilder.AddMiddlewareInStage(InvokeCommandDefMiddleware, MiddlewareStages.Invoke, int.MaxValue);
-            return appBuilder;
+            return appRunner.Configure(c =>
+            {
+                c.UseMiddleware((context, next) => BuildMiddleware(rootCommandType, context, next), MiddlewareStages.Build);
+                c.UseMiddleware(SetInvocationContextMiddleware, MiddlewareStages.ParseInput);
+                c.UseMiddleware(DisplayHelpIfCommandIsNotExecutable, MiddlewareStages.BindValues);
+                c.UseMiddleware(BindValuesMiddleware, MiddlewareStages.BindValues);
+                c.UseMiddleware(CreateInstancesMiddleware, MiddlewareStages.BindValues);
+                c.UseMiddleware(InvokeCommandDefMiddleware, MiddlewareStages.Invoke, int.MaxValue);
+            });
         }
 
         private static Task<int> BuildMiddleware(Type rootCommandType, CommandContext commandContext, Func<CommandContext, Task<int>> next)

@@ -10,12 +10,13 @@ namespace CommandDotNet.Directives
 {
     internal static class ParseDirective
     {
-        internal static AppBuilder UseParseDirective(this AppBuilder appBuilder)
+        internal static AppRunner UseParseDirective(this AppRunner appRunner)
         {
-            appBuilder.AddMiddlewareInStage(Report, MiddlewareStages.PreTransformTokens);
-            appBuilder.AddMiddlewareInStage(ExitAfterReport, MiddlewareStages.TransformTokens, int.MaxValue);
-
-            return appBuilder;
+            return appRunner.Configure(c =>
+            {
+                c.UseMiddleware(Report, MiddlewareStages.PreTransformTokens);
+                c.UseMiddleware(ExitAfterReport, MiddlewareStages.TransformTokens, int.MaxValue);
+            });
         }
 
         // adapted from https://github.com/dotnet/command-line-api directives

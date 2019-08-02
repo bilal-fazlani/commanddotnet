@@ -116,11 +116,11 @@ namespace CommandDotNet.Tests.FeatureTests
             if (postBindValues != null)
             {
                 // TODO: middleware ordering like this is brittle
-                appRunner.UseMiddleware(postBindValues, MiddlewareStages.PostBindValuesPreInvoke, int.MaxValue);
+                appRunner.Configure(c => c.UseMiddleware(postBindValues, MiddlewareStages.PostBindValuesPreInvoke, int.MaxValue));
             }
             if (preBindValues != null)
             {
-                appRunner.UseMiddleware(preBindValues, MiddlewareStages.PostParseInputPreBindValues, int.MaxValue);
+                appRunner.Configure(c => c.UseMiddleware(preBindValues, MiddlewareStages.PostParseInputPreBindValues, int.MaxValue));
             }
 
             var args = $"NotifyOwner --Number {carNumber} --owner {ownerName}".SplitArgs();

@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
+using CommandDotNet.Rendering;
 
 namespace CommandDotNet.Builders
 {
@@ -12,12 +13,13 @@ namespace CommandDotNet.Builders
         private const string VersionOptionName = "version";
         private const string VersionTemplate = "-v | --" + VersionOptionName;
         
-        internal static AppBuilder UseVersionMiddleware(this AppBuilder builder)
+        internal static AppRunner UseVersionMiddleware(this AppRunner appRunner)
         {
-            builder.BuildEvents.OnCommandCreated += AddVersionOption;
-            builder.AddMiddlewareInStage(DisplayVersionIfSpecified, MiddlewareStages.PostParseInputPreBindValues);
-
-            return builder;
+            return appRunner.Configure(c =>
+            {
+                c.BuildEvents.OnCommandCreated += AddVersionOption;
+                c.UseMiddleware(DisplayVersionIfSpecified, MiddlewareStages.PostParseInputPreBindValues);
+            });
         }
 
         private static void AddVersionOption(BuildEvents.CommandCreatedEventArgs args)
