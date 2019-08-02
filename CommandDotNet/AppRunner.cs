@@ -177,15 +177,5 @@ namespace CommandDotNet
             configureCallback(_appConfigBuilder);
             return this;
         }
-
-        /// <summary>
-        /// Configures the app to use the resolver to create instances of
-        /// properties decorated with <see cref="InjectPropertyAttribute"/>
-        /// </summary>
-        public AppRunner UseDependencyResolver(IDependencyResolver dependencyResolver)
-        {
-            _appConfigBuilder.UseDependencyResolver(dependencyResolver);
-            return this;
-        }
     }
 }

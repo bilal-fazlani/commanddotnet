@@ -29,7 +29,7 @@ namespace CommandDotNet.Tests.Utils
             {
                 resolver.Register(dependency);
             }
-            runner.UseDependencyResolver(resolver);
+            runner.Configure(c => c.UseDependencyResolver(resolver));
 
             var outputs = new TestOutputs();
             resolver.Register(outputs);
