@@ -51,13 +51,8 @@ namespace CommandDotNet.Help
 
         public static void Print(CommandContext commandContext, Command command)
         {
-            Print(commandContext.AppSettings, commandContext.Console, command);
-        }
-
-        private static void Print(AppSettings appSettings, IConsole console, Command command)
-        {
-            IHelpProvider helpTextProvider = HelpTextProviderFactory.Create(appSettings);
-            console.Out.WriteLine(helpTextProvider.GetHelpText(command));
+            var helpText = commandContext.AppConfig.HelpProvider.GetHelpText(command);
+            commandContext.Console.Out.WriteLine(helpText);
         }
     }
 }

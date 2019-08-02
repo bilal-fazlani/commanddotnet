@@ -4,6 +4,7 @@ using System.Linq;
 using CommandDotNet.Builders;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
+using CommandDotNet.Help;
 using CommandDotNet.Parsing;
 using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
@@ -20,6 +21,7 @@ namespace CommandDotNet
 
 
         private IDependencyResolver _dependencyResolver;
+        private IHelpProvider _customHelpProvider;
 
         internal IConsole Console { get; private set; } = new SystemConsole();
 
@@ -41,6 +43,15 @@ namespace CommandDotNet
         public AppConfigBuilder UseDependencyResolver(IDependencyResolver dependencyResolver)
         {
             _dependencyResolver = dependencyResolver ?? throw new ArgumentNullException(nameof(dependencyResolver));
+            return this;
+        }
+
+        /// <summary>
+        /// Replace the internal help provider with given help provider
+        /// </summary>
+        public AppConfigBuilder UseCustomHelpProvider(IHelpProvider customHelpProvider)
+        {
+            _customHelpProvider = customHelpProvider;
             return this;
         }
 
@@ -81,7 +92,9 @@ namespace CommandDotNet
 
         public AppConfig Build(AppSettings appSettings)
         {
-            return new AppConfig(appSettings, Console, _dependencyResolver, ParseEvents, BuildEvents, ContextData)
+            var helpProvider = _customHelpProvider ?? HelpTextProviderFactory.Create(appSettings);
+
+            return new AppConfig(appSettings, Console, _dependencyResolver, helpProvider, ParseEvents, BuildEvents, ContextData)
             {
                 MiddlewarePipeline = _middlewareByStage
                     .SelectMany(kvp => kvp.Value.Select(v => new {stage = kvp.Key, v.order, v.middleware}) )

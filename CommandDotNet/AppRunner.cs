@@ -179,15 +179,6 @@ namespace CommandDotNet
         }
 
         /// <summary>
-        /// Replace the internal help provider with given help provider
-        /// </summary>
-        public AppRunner UseCustomHelpProvider(IHelpProvider customHelpProvider)
-        {
-            _settings.CustomHelpProvider = customHelpProvider;
-            return this;
-        }
-
-        /// <summary>
         /// Configures the app to use the resolver to create instances of
         /// properties decorated with <see cref="InjectPropertyAttribute"/>
         /// </summary>
@@ -195,12 +186,6 @@ namespace CommandDotNet
         {
             _appConfigBuilder.UseDependencyResolver(dependencyResolver);
             return this;
-        }
-
-        [Obsolete("Use UseCustomHelpProvider instead")]
-        public AppRunner WithCustomHelpProvider(IHelpProvider customHelpProvider)
-        {
-            return UseCustomHelpProvider(customHelpProvider);
         }
     }
 }
