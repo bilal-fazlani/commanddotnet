@@ -48,6 +48,12 @@ namespace CommandDotNet
             // TODO: add .rsp file transformation as an extension option
         }
 
+        public AppRunner Configure(Action<AppConfigBuilder> configureCallback)
+        {
+            configureCallback(_appConfigBuilder);
+            return this;
+        }
+
         /// <summary>
         /// Executes the specified command with given parameters
         /// </summary>
@@ -170,12 +176,6 @@ namespace CommandDotNet
                         first(ctx, c => second(c, next)));
 
             return middlewareChain(commandContext, ctx => Task.FromResult(0));
-        }
-
-        public AppRunner Configure(Action<AppConfigBuilder> configureCallback)
-        {
-            configureCallback(_appConfigBuilder);
-            return this;
         }
     }
 }

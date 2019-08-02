@@ -18,7 +18,7 @@ namespace CommandDotNet.Execution
         public TokenCollection Tokens { get; set; }
 
         /// <summary>
-        /// The root command for the type specified in <see cref="AppRunner{T}"/>. 
+        /// The root command for the type specified in <see cref="AppRunner{TRootCommandType}"/>. 
         /// This is populated in the <see cref="MiddlewareStages.Build"/> stage.
         /// </summary>
         public Command RootCommand { get; set; }
