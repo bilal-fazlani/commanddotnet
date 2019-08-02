@@ -12,7 +12,7 @@ namespace CommandDotNet.Builders
         {
             var instance = commandContext.InvocationContext.Instance;
             var dependencyResolver = commandContext.AppConfig.DependencyResolver;
-            if (instance != null)
+            if (instance != null && dependencyResolver != null)
             {
                 //detect injection properties
                 var properties = instance.GetType().GetDeclaredProperties<InjectPropertyAttribute>().ToList();
@@ -25,11 +25,6 @@ namespace CommandDotNet.Builders
                         {
                             propertyInfo.SetValue(instance, dependencyResolver.Resolve(propertyInfo.PropertyType));
                         }
-                    }
-                    else // there are some properties but there is no dependency resolver set
-                    {
-                        throw new AppRunnerException("Dependency resolver is not set for injecting properties. " +
-                                                     "Please use an IoC framework'");
                     }
                 }
             }

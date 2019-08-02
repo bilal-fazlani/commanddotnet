@@ -137,11 +137,8 @@ namespace CommandDotNet
             _appBuilder.AddMiddlewareInStage(ModelValidator.ValidateModelsMiddleware,
                 MiddlewareStages.PostBindValuesPreInvoke);
 
-            if (DependencyResolver != null)
-            {
-                _appBuilder.AddMiddlewareInStage(DependencyResolveMiddleware.InjectDependencies,
-                    MiddlewareStages.PostBindValuesPreInvoke);
-            }
+            _appConfigBuilder.UseMiddleware(DependencyResolveMiddleware.InjectDependencies,
+                MiddlewareStages.PostBindValuesPreInvoke);
         }
 
         private static int HandleException(Exception ex, IConsole console)
