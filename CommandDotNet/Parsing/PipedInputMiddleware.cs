@@ -9,9 +9,9 @@ namespace CommandDotNet.Parsing
 {
     internal static class PipedInputMiddleware
     {
-        internal static AppBuilder EnablePipedInput(this AppBuilder appBuilder)
+        internal static AppRunner EnablePipedInput(this AppRunner appRunner)
         {
-            return appBuilder.AddMiddlewareInStage(InjectPipedInput, MiddlewareStages.PostParseInputPreBindValues);
+            return appRunner.UseMiddleware(InjectPipedInput, MiddlewareStages.PostParseInputPreBindValues);
         }
 
         private static Task<int> InjectPipedInput(CommandContext ctx, Func<CommandContext, Task<int>> next)

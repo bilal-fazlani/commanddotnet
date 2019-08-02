@@ -137,8 +137,6 @@ namespace CommandDotNet
             _appBuilder.AddMiddlewareInStage(ModelValidator.ValidateModelsMiddleware,
                 MiddlewareStages.PostBindValuesPreInvoke);
 
-            _appBuilder.EnablePipedInput();
-
             if (DependencyResolver != null)
             {
                 _appBuilder.AddMiddlewareInStage(DependencyResolveMiddleware.InjectDependencies,

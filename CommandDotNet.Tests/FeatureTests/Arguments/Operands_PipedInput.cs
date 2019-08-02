@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CommandDotNet.Parsing;
 using CommandDotNet.Tests.Utils;
 using FluentAssertions;
 using Xunit;
@@ -18,7 +19,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenPipedInputAndNoExplicitValue_PipedInputIsAppended()
         {
-            var result = new AppRunner<App>().RunInMem(
+            var result = new AppRunner<App>()
+                .AppendPipedInputToOperandList()
+                .RunInMem(
                 $"{nameof(App.List)}".SplitArgs(), _testOutputHelper, 
                 pipedInput: new[] {"aaa", "bbb"});
 
@@ -29,9 +32,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenPipedInputAndExplicitValue_AppendsPipedToExplicit()
         {
-            var result = new AppRunner<App>().RunInMem(
-                $"{nameof(App.List)} aaa bbb".SplitArgs(), _testOutputHelper,
-                pipedInput: new[] { "ccc", "ddd" });
+            var result = new AppRunner<App>()
+                .AppendPipedInputToOperandList()
+                .RunInMem(
+                    $"{nameof(App.List)} aaa bbb".SplitArgs(), _testOutputHelper,
+                    pipedInput: new[] {"ccc", "ddd"});
 
             result.ExitCode.Should().Be(0);
             result.TestOutputs.Get<List<string>>().Should().BeEquivalentTo("aaa", "bbb", "ccc", "ddd");
@@ -40,9 +45,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenNoListArg_PipedInputIsIgnored()
         {
-            var result = new AppRunner<App>().RunInMem(
-                $"{nameof(App.Single)} single".SplitArgs(), _testOutputHelper,
-                pipedInput: new[] { "aaa" });
+            var result = new AppRunner<App>()
+                .AppendPipedInputToOperandList()
+                .RunInMem(
+                    $"{nameof(App.Single)} single".SplitArgs(), _testOutputHelper,
+                    pipedInput: new[] {"aaa"});
 
             result.ExitCode.Should().Be(0);
             result.TestOutputs.Get<string>().Should().Be("single");
@@ -52,9 +59,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenSingleAndListArg_AndNoArgValuesExplicitlyProvided_PipedInputAppendedToListArg()
         {
-            var result = new AppRunner<App>().RunInMem(
-                $"{nameof(App.SingleAndList)}".SplitArgs(), _testOutputHelper,
-                pipedInput: new[] { "aaa", "bbb" });
+            var result = new AppRunner<App>()
+                .AppendPipedInputToOperandList()
+                .RunInMem(
+                    $"{nameof(App.SingleAndList)}".SplitArgs(), _testOutputHelper,
+                    pipedInput: new[] {"aaa", "bbb"});
 
             result.ExitCode.Should().Be(0);
             result.TestOutputs.Get<string>().Should().BeNull();
