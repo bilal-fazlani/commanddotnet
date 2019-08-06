@@ -9,42 +9,29 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.ScenarioFramework
 {
-    public class ScenarioVerifier
+    public static class AppRunnScenarioExtensions
     {
-        private readonly ITestOutputHelper _output;
-
-        public ScenarioVerifier(ITestOutputHelper output)
-        {
-            _output = output;
-        }
-
-        public void VerifyScenario(IScenario scenario)
+        public static void VerifyScenario(this AppRunner appRunner, ITestOutputHelper output, IScenario scenario)
         {
             if (scenario.WhenArgs != null && scenario.WhenArgsArray != null)
             {
                 throw new InvalidOperationException($"Both {nameof(scenario.WhenArgs)} and {nameof(scenario.WhenArgsArray)} were specified.  Only one can be specified.");
             }
 
-            if (scenario.And.AppSettings == null)
-            {
-                scenario.And.AppSettings = TestAppSettings.TestDefault;
-            }
-
             AppRunnerResult results = null;
             try
             {
-                // scenarios don't pass testOutputHelper because that framework
-                // print the AppRunnerResult.ConsoleOut so it's not necessary
-                // to capture output directly to XUnit
-                results = new AppRunner(
-                        scenario.AppType, 
-                        scenario.And.AppSettings ?? TestAppSettings.TestDefault)
-                    .RunInMem(
-                        scenario.WhenArgsArray ?? scenario.WhenArgs.SplitArgs(), 
-                        null, 
-                        scenario.And.Dependencies, 
-                        null, 
-                        null);
+                // scenarios don't pass testOutputHelper
+                // RunInMem will print to AppRunnerResult.ConsoleOut
+                // The output will be printed only if there is
+                // an exception to be debugged and after all other
+                // relevant context is printed.
+                results = appRunner.RunInMem(
+                    scenario.WhenArgsArray ?? scenario.WhenArgs.SplitArgs(),
+                    null,
+                    scenario.And.Dependencies,
+                    null,
+                    null);
 
                 AssertExitCodeAndErrorMessage(scenario, results);
 
@@ -60,32 +47,32 @@ namespace CommandDotNet.Tests.ScenarioFramework
             }
             catch (Exception)
             {
-                PrintContext(scenario);
+                PrintContext(appRunner, output, scenario);
                 if (results != null)
                 {
-                    _output.WriteLine("");
-                    _output.WriteLine("App Results:");
-                    _output.WriteLine(results.ConsoleOut);
+                    output.WriteLine("");
+                    output.WriteLine("App Results:");
+                    output.WriteLine(results.ConsoleOut);
                 }
                 throw;
             }
         }
 
-        private void PrintContext(IScenario scenario)
+        private static void PrintContext(AppRunner appRunner, ITestOutputHelper output, IScenario scenario)
         {
             if (scenario.Context != null)
             {
-                _output.WriteLine($"Scenario class: {scenario.Context.Host.GetType()}");
+                output.WriteLine($"Scenario class: {scenario.Context.Host.GetType()}");
             }
             var appSettings = scenario.And.AppSettings;
             var appSettingsProps = appSettings.GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .OrderBy(p => p.Name);
-            _output.WriteLine("");
-            _output.WriteLine($"AppSettings:");
+            output.WriteLine("");
+            output.WriteLine($"AppSettings:");
             foreach (var propertyInfo in appSettingsProps)
             {
-                _output.WriteLine($"  {propertyInfo.Name}: {propertyInfo.GetValue(appSettings)}");
+                output.WriteLine($"  {propertyInfo.Name}: {propertyInfo.GetValue(appSettings)}");
             }
         }
 

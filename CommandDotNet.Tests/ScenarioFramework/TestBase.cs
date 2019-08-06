@@ -4,16 +4,25 @@ namespace CommandDotNet.Tests.ScenarioFramework
 {
     public class TestBase
     {
-        private readonly ScenarioVerifier _scenarioVerifier;
+        protected readonly ITestOutputHelper TestOutputHelper;
 
         protected TestBase(ITestOutputHelper testOutputHelper)
         {
-            _scenarioVerifier = new ScenarioVerifier(testOutputHelper);
+            TestOutputHelper = testOutputHelper;
         }
 
         protected void Verify(IScenario scenario)
         {
-            _scenarioVerifier.VerifyScenario(scenario);
+            if (scenario.And.AppSettings == null)
+            {
+                scenario.And.AppSettings = TestAppSettings.TestDefault;
+            }
+
+            var appRunner = new AppRunner(
+                scenario.AppType,
+                scenario.And.AppSettings ?? TestAppSettings.TestDefault);
+
+            appRunner.VerifyScenario(TestOutputHelper, scenario);
         }
     }
 }

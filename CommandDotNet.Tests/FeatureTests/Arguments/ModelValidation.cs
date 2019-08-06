@@ -7,13 +7,10 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class ModelValidation
+    public class ModelValidation : TestBase
     {
-        private readonly ScenarioVerifier _verifier;
-
-        public ModelValidation(ITestOutputHelper output)
+        public ModelValidation(ITestOutputHelper output) : base(output)
         {
-            _verifier = new ScenarioVerifier(output);
         }
 
         [Fact]
@@ -33,7 +30,7 @@ Arguments:
 
   Email  <TEXT>" }
             };
-            _verifier.VerifyScenario(scenario);
+            Verify(scenario);
         }
 
         [Fact]
@@ -49,7 +46,7 @@ Arguments:
   'Name' should not be empty.
   'Email' should not be empty." }
             };
-            _verifier.VerifyScenario(scenario);
+            Verify(scenario);
         }
 
         [Fact]
@@ -66,7 +63,7 @@ Arguments:
   'Name' should not be empty.
   'Email' should not be empty." }
             };
-            _verifier.VerifyScenario(scenario);
+            Verify(scenario);
         }
 
         [Fact]
@@ -77,7 +74,7 @@ Arguments:
                 WhenArgs = "Save 1 john john@doe.com",
                 Then = { Outputs = { new Person{Id = 1, Name = "john", Email = "john@doe.com"}}}
             };
-            _verifier.VerifyScenario(scenario);
+            Verify(scenario);
         }
 
         public class App
