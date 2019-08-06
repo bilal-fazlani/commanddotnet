@@ -15,14 +15,16 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void Should_EchoAllArgs_OnNewLine_WithIndent()
         {
-            Verify(new Scenario<App>
-            {
-                Given = { AppSettings = DirectivesEnabled },
-                WhenArgs = "[parse:verbose] some -ab args to echo",
-                Then =
-                {
-                    ExitCode = 0, // method should not have been called
-                    Result = @">>> from shell
+            new AppRunner<App>(DirectivesEnabled)
+                .UseParseDirective()
+                .VerifyScenario(TestOutputHelper,
+                    new Scenario
+                    {
+                        WhenArgs = "[parse:verbose] some -ab args to echo",
+                        Then =
+                        {
+                            ExitCode = 0, // method should not have been called
+                            Result = @">>> from shell
   Directive: [parse:verbose]
   Value    : some
   Option   : -ab
@@ -38,21 +40,23 @@ namespace CommandDotNet.Tests.FeatureTests
   Value    : to
   Value    : echo
 >>> no changes after: split-option-assignments"
-                }
-            });
+                        }
+                    });
         }
 
         [Fact]
         public void Should_SpecifyWhenTransformation_DoesNotMakeChanges()
         {
-            Verify(new Scenario<App>
-            {
-                Given = { AppSettings = DirectivesEnabled },
-                WhenArgs = "[parse:verbose] some args to echo",
-                Then =
-                {
-                    ExitCode = 0, // method should not have been called
-                    Result = @">>> from shell
+            new AppRunner<App>(DirectivesEnabled)
+                .UseParseDirective()
+                .VerifyScenario(TestOutputHelper,
+                    new Scenario
+                    {
+                        WhenArgs = "[parse:verbose] some args to echo",
+                        Then =
+                        {
+                            ExitCode = 0, // method should not have been called
+                            Result = @">>> from shell
   Directive: [parse:verbose]
   Value    : some
   Value    : args
@@ -60,8 +64,8 @@ namespace CommandDotNet.Tests.FeatureTests
   Value    : echo
 >>> no changes after: expand-clubbed-flags
 >>> no changes after: split-option-assignments"
-                }
-            });
+                        }
+                    });
         }
 
         public class App

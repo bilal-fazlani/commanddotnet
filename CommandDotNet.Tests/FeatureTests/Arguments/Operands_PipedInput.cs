@@ -78,7 +78,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         WhenArgs = $"{nameof(App.SingleAndList)} single",
                         Then =
                         {
-                            Outputs = {new List<string> {"aaa", "bbb"}}
+                            Outputs =
+                            {
+                                "single",
+                                new List<string> {"aaa", "bbb"}
+                            }
                         }
                     });
         }

@@ -1,4 +1,4 @@
-using CommandDotNet.Tests.Utils;
+using CommandDotNet.Tests.ScenarioFramework;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -16,26 +16,36 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         [Fact]
         public void BasicHelp_Includes_Description()
         {
-            var result = new AppRunner<App>(TestAppSettings.BasicHelp)
-                .RunInMem("Do -h".SplitArgs(), _testOutputHelper);
-
-            result.OutputShouldBe(@"Usage: dotnet testhost.dll Do [arguments] [options]
+            new AppRunner<App>(TestAppSettings.BasicHelp)
+                .VerifyScenario(_testOutputHelper,
+                    new Scenario
+                    {
+                        WhenArgs = "Do -h",
+                        Then =
+                        {
+                            Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
 
 Arguments:
   operand   operand-descr
   argument  argument-descr
 
 Options:
-  --option  option-descr");
+  --option  option-descr"
+                        }
+                    });
         }
 
         [Fact]
         public void DetailedHelp_Includes_Description()
         {
-            var result = new AppRunner<App>(TestAppSettings.DetailedHelp)
-                .RunInMem("Do -h".SplitArgs(), _testOutputHelper);
-
-            result.OutputShouldBe(@"Usage: dotnet testhost.dll Do [arguments] [options]
+            new AppRunner<App>(TestAppSettings.DetailedHelp)
+                .VerifyScenario(_testOutputHelper,
+                    new Scenario
+                    {
+                        WhenArgs = "Do -h",
+                        Then =
+                        {
+                            Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
 
 Arguments:
 
@@ -48,7 +58,9 @@ Arguments:
 Options:
 
   --option  <TEXT>
-  option-descr");
+  option-descr"
+                        }
+                    });
         }
 
         public class App

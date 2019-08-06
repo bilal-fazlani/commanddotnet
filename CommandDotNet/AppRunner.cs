@@ -5,7 +5,6 @@ using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using CommandDotNet.Builders;
 using CommandDotNet.ClassModeling;
-using CommandDotNet.Directives;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Help;
@@ -37,13 +36,14 @@ namespace CommandDotNet
     public class AppRunner
     {
         private readonly Type _rootCommandType;
-        private readonly AppSettings _settings;
-        private readonly AppConfigBuilder _appConfigBuilder = new AppConfigBuilder(); 
+        private readonly AppConfigBuilder _appConfigBuilder = new AppConfigBuilder();
+
+        public readonly AppSettings AppSettings;
 
         public AppRunner(Type rootCommandType, AppSettings settings = null)
         {
             _rootCommandType = rootCommandType ?? throw new ArgumentNullException(nameof(rootCommandType));
-            _settings = settings ?? new AppSettings();
+            AppSettings = settings ?? new AppSettings();
 
             // TODO: add .rsp file transformation as an extension option
         }
@@ -95,10 +95,10 @@ namespace CommandDotNet
             AddCoreMiddleware();
             AddOptionalMiddleware();
 
-            var tokens = args.Tokenize(includeDirectives: _settings.EnableDirectives);
+            var tokens = args.Tokenize(includeDirectives: AppSettings.EnableDirectives);
             var commandContext = new CommandContext(
-                args, tokens, _settings,
-                _appConfigBuilder.Build(_settings));
+                args, tokens, AppSettings,
+                _appConfigBuilder.Build(AppSettings));
 
             return InvokeMiddleware(commandContext);
         }
@@ -120,18 +120,12 @@ namespace CommandDotNet
 
         private void AddOptionalMiddleware()
         {
-            if (_settings.EnableDirectives)
-            {
-                this.UseDebugDirective()
-                    .UseParseDirective();
-            }
-
-            if (_settings.EnableVersionOption)
+            if (AppSettings.EnableVersionOption)
             {
                 this.UseVersionMiddleware();
             }
 
-            if (_settings.PromptForMissingOperands)
+            if (AppSettings.PromptForMissingOperands)
             {
                 _appConfigBuilder.UseMiddleware(ValuePromptMiddleware.PromptForMissingOperands,
                     MiddlewareStages.PostParseInputPreBindValues);

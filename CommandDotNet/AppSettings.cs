@@ -1,6 +1,7 @@
 ﻿using System;
+using CommandDotNet.Execution;
 using CommandDotNet.Help;
-using CommandDotNet.Rendering;
+using CommandDotNet.Tokens;
 using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet
@@ -38,6 +39,11 @@ namespace CommandDotNet
 
         public bool EnableVersionOption { get; set; } = true;
 
+        /// <summary>
+        /// Set to true to tokenize arguments as directives,
+        /// captured in <see cref="CommandContext.Tokens"/>.Directives
+        /// for use by middleware
+        /// </summary>
         public bool EnableDirectives { get; set; }
 
         [Obsolete("Use correctly spelled PromptForMissingOperands")]

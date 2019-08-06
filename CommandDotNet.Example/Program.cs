@@ -26,7 +26,10 @@ namespace CommandDotNet.Example
                 }
             };
             config?.Invoke(appSettings);
-            return new AppRunner<TApp>(appSettings).Run(args);
+            return new AppRunner<TApp>(appSettings)
+                .UseDebugDirective()
+                .UseParseDirective()
+                .Run(args);
         }
 
         private static int RunDocExample(string[] args)

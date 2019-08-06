@@ -22,6 +22,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public void ParseDirective_OutputsResults()
         {
             var result = new AppRunner<App>(DirectivesEnabled)
+                .UseParseDirective()
                 .Configure(c =>
                     c.UseTokenTransformation("test", 1,
                         tokens => new TokenCollection(tokens.Select(t =>
