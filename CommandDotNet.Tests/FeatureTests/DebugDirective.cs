@@ -19,7 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void Directives_DisabledByDefault()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
                 WhenArgs = "[debug] Do",
                 Then =
@@ -34,9 +34,9 @@ namespace CommandDotNet.Tests.FeatureTests
         public void DebugDirective_PrintsProcessId_And_WaitsForDebuggerToStart()
         {
             var processId = Process.GetCurrentProcess().Id;
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = DirectivesEnabled },
+                Given = { AppSettings = DirectivesEnabled },
                 WhenArgs = "[debug] Do",
                 Then =
                 {

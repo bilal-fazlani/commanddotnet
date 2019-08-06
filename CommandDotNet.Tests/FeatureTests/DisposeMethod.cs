@@ -19,9 +19,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void When_IDisposable_BasicHelp_DoesNotInclude_DisposeMethod()
         {
-            Verify(new Given<DisposableApp>
+            Verify(new Scenario<DisposableApp>
             {
-                And = {AppSettings = BasicHelp},
+                Given = {AppSettings = BasicHelp},
                 WhenArgs = "-h",
                 Then = {ResultsNotContainsTexts = {"Dispose"}}
             });
@@ -30,9 +30,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void When_IDisposable_DetailedHelp_DoesNotInclude_DisposeMethod()
         {
-            Verify(new Given<DisposableApp>
+            Verify(new Scenario<DisposableApp>
             {
-                And = {AppSettings = DetailedHelp},
+                Given = {AppSettings = DetailedHelp},
                 WhenArgs = "-h",
                 Then = {ResultsNotContainsTexts = {"Dispose"}}
             });
@@ -41,9 +41,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void When_NotIDisposable_BasicHelp_DoesNotInclude_DisposeMethod()
         {
-            Verify(new Given<NotDisposableApp>
+            Verify(new Scenario<NotDisposableApp>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "-h",
                 Then = { ResultsContainsTexts = { @"Commands:
   Dispose  " } }
@@ -53,9 +53,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void When_NotIDisposable_DetailedHelp_DoesNotInclude_DisposeMethod()
         {
-            Verify(new Given<NotDisposableApp>
+            Verify(new Scenario<NotDisposableApp>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "-h",
                 Then = { ResultsContainsTexts = { @"Commands:
 
@@ -66,7 +66,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void When_IDisposable_CallsDisposeMethod()
         {
-            Verify(new Given<DisposableApp>
+            Verify(new Scenario<DisposableApp>
             {
                 WhenArgs = "Do",
                 Then = {Outputs = {true}}
@@ -76,7 +76,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void When_NotIDisposable_CallsDisposeMethod()
         {
-            Verify(new Given<NotDisposableApp>
+            Verify(new Scenario<NotDisposableApp>
             {
                 WhenArgs = "Dispose",
                 Then = { Outputs = { true } }

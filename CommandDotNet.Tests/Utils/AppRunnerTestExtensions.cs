@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using CommandDotNet.Extensions;
 using Xunit.Abstractions;
 
@@ -25,10 +24,7 @@ namespace CommandDotNet.Tests.Utils
             runner.Configure(c => c.UseConsole(testConsole));
 
             var resolver = new TestDependencyResolver();
-            foreach (var dependency in dependencies ?? Enumerable.Empty<object>())
-            {
-                resolver.Register(dependency);
-            }
+            dependencies?.ForEach(resolver.Register);
             runner.Configure(c => c.UseDependencyResolver(resolver));
 
             var outputs = new TestOutputs();

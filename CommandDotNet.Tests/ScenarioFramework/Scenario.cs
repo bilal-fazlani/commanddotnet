@@ -2,12 +2,24 @@ using System;
 
 namespace CommandDotNet.Tests.ScenarioFramework
 {
-    public class Given<T> : IScenario
+    public class Scenario<T> : Scenario, IScenarioForApp
     {
-        public string Name { get; }
         public Type AppType => typeof(T);
 
-        public ScenarioAnd And { get; } = new ScenarioAnd();
+        public Scenario() : base()
+        {
+        }
+
+        public Scenario(string name) : base(name)
+        {
+        }
+    }
+
+    public class Scenario : IScenario
+    {
+        public string Name { get; }
+
+        public ScenarioGiven Given { get; } = new ScenarioGiven();
         public string WhenArgs { get; set; }
 
         /// <summary>Use this for tested arguments that can contain spaces</summary>
@@ -17,11 +29,11 @@ namespace CommandDotNet.Tests.ScenarioFramework
 
         IScenarioContext IScenario.Context { get; set; }
 
-        public Given()
+        public Scenario()
         {
         }
 
-        public Given(string name)
+        protected Scenario(string name)
         {
             Name = name;
         }

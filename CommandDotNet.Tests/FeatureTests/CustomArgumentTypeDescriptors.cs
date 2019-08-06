@@ -23,9 +23,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void BasicHelp_IncludesParam()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = BasicHelpWithDescriptor },
+                Given = { AppSettings = BasicHelpWithDescriptor },
                 WhenArgs = "Do -h",
                 Then = { Result = @"Usage: dotnet testhost.dll Do [arguments]
 
@@ -37,9 +37,9 @@ Arguments:
         [Fact]
         public void DetailedHelp_IncludesParamAndDisplayNameFromDecriptor()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = DetailedHelpWithDescriptor },
+                Given = { AppSettings = DetailedHelpWithDescriptor },
                 WhenArgs = "Do -h",
                 Then = { Result = @"Usage: dotnet testhost.dll Do [arguments]
 
@@ -52,9 +52,9 @@ Arguments:
         [Fact]
         public void Exec_ParseArgumentUsingDescriptor()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = BasicHelpWithDescriptor },
+                Given = { AppSettings = BasicHelpWithDescriptor },
                 WhenArgs = "Do 2x3",
                 Then = { Outputs = { new Square { Length = 2, Width = 3 } } }
             });
@@ -63,7 +63,7 @@ Arguments:
         [Fact]
         public void Exec_FailsWithClearMessageWhenDescriptorIsNotRegistered()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
                 WhenArgs = "Do ",
                 Then =

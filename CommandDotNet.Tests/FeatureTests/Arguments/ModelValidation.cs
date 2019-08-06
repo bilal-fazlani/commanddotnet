@@ -16,7 +16,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void Help_DoesNotIncludeValidation()
         {
-            var scenario = new Given<App>
+            var scenario = new Scenario<App>
             {
                 WhenArgs = "Save -h",
                 Then = {
@@ -36,7 +36,7 @@ Arguments:
         [Fact]
         public void Exec_WithInvalidData_PrintsValidationError()
         {
-            var scenario = new Given<App>
+            var scenario = new Scenario<App>
             {
                 WhenArgs = "Save",
                 Then = { 
@@ -52,9 +52,9 @@ Arguments:
         [Fact]
         public void Exec_WithInvalidData_PrintsValidationError_UsingValidatorFromDI()
         {
-            var scenario = new Given<App>
+            var scenario = new Scenario<App>
             {
-                And = { Dependencies = {new PersonValidator()}},
+                Given = { Dependencies = new object[]{ new PersonValidator() } },
                 WhenArgs = "Save",
                 Then = {
                     ExitCode = 2,
@@ -69,7 +69,7 @@ Arguments:
         [Fact]
         public void Exec_WithValidData_Succeeds()
         {
-            var scenario = new Given<App>
+            var scenario = new Scenario<App>
             {
                 WhenArgs = "Save 1 john john@doe.com",
                 Then = { Outputs = { new Person{Id = 1, Name = "john", Email = "john@doe.com"}}}

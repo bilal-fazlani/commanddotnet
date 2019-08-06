@@ -14,7 +14,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void MethodIsCalledWithExpectedValues()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
                 WhenArgs = "Add -o * 2 3",
                 Then = { Outputs = { new App.AddResults { X = 2, Y = 3, Op = "*" } } }
@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void OptionCanBeSpecifiedAfterPositionalArg()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
                 WhenArgs = "Add 2 3 -o *",
                 Then = { Outputs = { new App.AddResults { X = 2, Y = 3, Op = "*" } } }
@@ -34,7 +34,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void OptionCanBeColonSeparated()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
                 WhenArgs = "Add 2 3 -o:*",
                 Then = { Outputs = { new App.AddResults { X = 2, Y = 3, Op = "*" } } }
@@ -44,7 +44,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void OptionCanBeEqualsSeparated()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
                 WhenArgs = "Add 2 3 -o=*",
                 Then = { Outputs = { new App.AddResults { X = 2, Y = 3, Op = "*" } } }
@@ -54,7 +54,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void DoesNotModifySpecialCharactersInArguments()
         {
-            Verify(new Given<App>("exec - special characters should be retained")
+            Verify(new Scenario<App>("exec - special characters should be retained")
             {
                 WhenArgsArray = new[] { "Do", "~!@#$%^&*()_= +[]\\{} |;':\",./<>?" },
                 Then =
@@ -67,7 +67,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void BracketsShouldbeRetainedInText()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
                 WhenArgsArray = new[] { "Do", "[some (parenthesis) {curly} and [bracketed] text]" },
                 Then =
@@ -80,7 +80,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact(Skip = "Method params cannot be marked as required yet.  Requiredness is only possible via FluentValidator")]
         public void OperandsAreRequired()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
                 WhenArgs = "Add 2",
                 Then =
@@ -94,7 +94,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void ErrorWhenExtraValueProvidedForOption()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
                 WhenArgs = "Add 2 3 -o * %",
                 Then =
@@ -108,7 +108,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void ExtraArgumentsNotAllowed()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
                 WhenArgs = "Add 2 3 4",
                 Then =

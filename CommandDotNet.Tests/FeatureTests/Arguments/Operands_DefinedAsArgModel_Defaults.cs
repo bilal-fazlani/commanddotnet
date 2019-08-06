@@ -20,9 +20,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void SampleTypes_BasicHelp_IncludesAll()
         {
-            Verify(new Given<OperandsDefaults>
+            Verify(new Scenario<OperandsDefaults>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "ArgsDefaults -h",
                 Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
 
@@ -40,9 +40,9 @@ Arguments:
         [Fact]
         public void SampleTypes_DetailedHelp_IncludesAll()
         {
-            Verify(new Given<OperandsDefaults>
+            Verify(new Scenario<OperandsDefaults>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "ArgsDefaults -h",
                 Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
 
@@ -69,9 +69,9 @@ Arguments:
         [Fact]
         public void StructList_BasicHelp_IncludesList()
         {
-            Verify(new Given<OperandsDefaults>
+            Verify(new Scenario<OperandsDefaults>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "StructListDefaults -h",
                 Then = { Result = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
 
@@ -83,9 +83,9 @@ Arguments:
         [Fact]
         public void StructList_DetailedHelp_IncludesList()
         {
-            Verify(new Given<OperandsDefaults>
+            Verify(new Scenario<OperandsDefaults>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "StructListDefaults -h",
                 Then = { Result = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
 
@@ -98,9 +98,9 @@ Arguments:
         [Fact]
         public void EnumList_BasicHelp_IncludesList()
         {
-            Verify(new Given<OperandsDefaults>
+            Verify(new Scenario<OperandsDefaults>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "EnumListDefaults -h",
                 Then = { Result = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
 
@@ -112,9 +112,9 @@ Arguments:
         [Fact]
         public void EnumList_DetailedHelp_IncludesList()
         {
-            Verify(new Given<OperandsDefaults>
+            Verify(new Scenario<OperandsDefaults>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "EnumListDefaults -h",
                 Then = { Result = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
 
@@ -128,9 +128,9 @@ Arguments:
         [Fact]
         public void ObjectList_BasicHelp_IncludesList()
         {
-            Verify(new Given<OperandsDefaults>
+            Verify(new Scenario<OperandsDefaults>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "ObjectListDefaults -h",
                 Then = { Result = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
 
@@ -142,9 +142,9 @@ Arguments:
         [Fact]
         public void ObjectList_DetailedHelp_IncludesList()
         {
-            Verify(new Given<OperandsDefaults>
+            Verify(new Scenario<OperandsDefaults>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "ObjectListDefaults -h",
                 Then = { Result = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
 
@@ -157,7 +157,7 @@ Arguments:
         [Fact]
         public void SampleTypes_Exec_OperandsAreAssignedByPosition()
         {
-            Verify(new Given<OperandsDefaults>
+            Verify(new Scenario<OperandsDefaults>
             {
                 WhenArgs = "ArgsDefaults true green 1 2 Monday http://google.com yellow orange",
                 Then =
@@ -179,7 +179,7 @@ Arguments:
         [Fact]
         public void SampleType_Exec_OperandsAreNotRequired_UsesDefaults()
         {
-            Verify(new Given<OperandsDefaults>
+            Verify(new Scenario<OperandsDefaults>
             {
                 WhenArgs = "ArgsDefaults",
                 Then =

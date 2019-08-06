@@ -21,9 +21,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void SampleTypes_BasicHelp()
         {
-            Verify(new Given<OperandsNoDefaults>
+            Verify(new Scenario<OperandsNoDefaults>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "ArgsNoDefault -h",
                 Then =
                 {
@@ -44,9 +44,9 @@ Arguments:
         [Fact]
         public void SampleTypes_DetailedHelp()
         {
-            Verify(new Given<OperandsNoDefaults>
+            Verify(new Scenario<OperandsNoDefaults>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "ArgsNoDefault -h",
                 Then =
                 {
@@ -76,9 +76,9 @@ Arguments:
         [Fact]
         public void StructList_BasicHelp()
         {
-            Verify(new Given<OperandsNoDefaults>
+            Verify(new Scenario<OperandsNoDefaults>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "StructListNoDefault -h",
                 Then =
                 {
@@ -93,9 +93,9 @@ Arguments:
         [Fact]
         public void StructList_DetailedHelp()
         {
-            Verify(new Given<OperandsNoDefaults>
+            Verify(new Scenario<OperandsNoDefaults>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "StructListNoDefault -h",
                 Then =
                 {
@@ -111,9 +111,9 @@ Arguments:
         [Fact]
         public void EnumList_BasicHelp()
         {
-            Verify(new Given<OperandsNoDefaults>
+            Verify(new Scenario<OperandsNoDefaults>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "EnumListNoDefault -h",
                 Then =
                 {
@@ -128,9 +128,9 @@ Arguments:
         [Fact]
         public void EnumList_DetailedHelp()
         {
-            Verify(new Given<OperandsNoDefaults>
+            Verify(new Scenario<OperandsNoDefaults>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "EnumListNoDefault -h",
                 Then =
                 {
@@ -147,9 +147,9 @@ Arguments:
         [Fact]
         public void ObjectList_BasicHelp()
         {
-            Verify(new Given<OperandsNoDefaults>
+            Verify(new Scenario<OperandsNoDefaults>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "ObjectListNoDefault -h",
                 Then =
                 {
@@ -164,9 +164,9 @@ Arguments:
         [Fact]
         public void ObjectList_DetailedHelp()
         {
-            Verify(new Given<OperandsNoDefaults>
+            Verify(new Scenario<OperandsNoDefaults>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "ObjectListNoDefault -h",
                 Then =
                 {
@@ -182,7 +182,7 @@ Arguments:
         [Fact]
         public void SampleTypes_Exec_Positional()
         {
-            Verify(new Given<OperandsNoDefaults>
+            Verify(new Scenario<OperandsNoDefaults>
             {
                 WhenArgs = "ArgsNoDefault true green 1 2 Monday http://google.com yellow orange",
                 Then =
@@ -207,7 +207,7 @@ Arguments:
         [Fact]
         public void SampleTypes_Exec_OperandsNotRequired()
         {
-            Verify(new Given<OperandsNoDefaults>
+            Verify(new Scenario<OperandsNoDefaults>
             {
                 WhenArgs = "ArgsNoDefault",
                 Then =
@@ -227,7 +227,7 @@ Arguments:
         [Fact]
         public void StructList_Exec_Positional()
         {
-            Verify(new Given<OperandsNoDefaults>
+            Verify(new Scenario<OperandsNoDefaults>
             {
                 WhenArgs = "StructListNoDefault 23 5 7",
                 Then =
@@ -246,7 +246,7 @@ Arguments:
         [Fact]
         public void EnumList_Exec_Positional()
         {
-            Verify(new Given<OperandsNoDefaults>
+            Verify(new Scenario<OperandsNoDefaults>
             {
                 WhenArgs = "EnumListNoDefault Friday Tuesday Thursday",
                 Then =
@@ -265,7 +265,7 @@ Arguments:
         [Fact]
         public void ObjectList_Exec_Positional()
         {
-            Verify(new Given<OperandsNoDefaults>
+            Verify(new Scenario<OperandsNoDefaults>
             {
                 WhenArgs = "ObjectListNoDefault http://google.com http://apple.com http://github.com",
                 Then =

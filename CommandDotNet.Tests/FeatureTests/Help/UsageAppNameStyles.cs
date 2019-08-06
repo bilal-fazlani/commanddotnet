@@ -14,9 +14,9 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         [Fact]
         public void AdaptiveStyleUsesGlobalToolStyle()
         {
-            Verify(new Given<WithAppMetadataName>
+            Verify(new Scenario<WithAppMetadataName>
             {
-                And = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.Adaptive } } },
+                Given = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.Adaptive } } },
                 WhenArgs = "-h",
                 Then = { ResultsContainsTexts = { "Usage: AppName" } }
             });
@@ -25,9 +25,9 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         [Fact]
         public void GlobalToolStyleUsesGlobalToolStyle()
         {
-            Verify(new Given<WithAppMetadataName>
+            Verify(new Scenario<WithAppMetadataName>
             {
-                And = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.GlobalTool } } },
+                Given = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.GlobalTool } } },
                 WhenArgs = "-h",
                 Then = { ResultsContainsTexts = { "Usage: AppName" } }
             });
@@ -36,9 +36,9 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         [Fact]
         public void DotNetStyleUsesDotNetStyle()
         {
-            Verify(new Given<WithoutAppMetadatName>
+            Verify(new Scenario<WithoutAppMetadatName>
             {
-                And = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.DotNet } } },
+                Given = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.DotNet } } },
                 WhenArgs = "-h",
                 Then = { ResultsContainsTexts = { "Usage: dotnet testhost.dll" } }
             });
@@ -47,9 +47,9 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         [Fact]
         public void ExecutableStyleUsesExecutableStyle()
         {
-            Verify(new Given<WithAppMetadataName>
+            Verify(new Scenario<WithAppMetadataName>
             {
-                And = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.Executable } } },
+                Given = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.Executable } } },
                 WhenArgs = "-h",
                 Then = { ResultsContainsTexts = { "Usage: testhost.dll" } }
             });
@@ -58,9 +58,9 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         [Fact]
         public void AdaptiveStyleFallsBackToDotNetStyle()
         {
-            Verify(new Given<WithoutAppMetadatName>
+            Verify(new Scenario<WithoutAppMetadatName>
             {
-                And = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.Adaptive } } },
+                Given = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.Adaptive } } },
                 WhenArgs = "-h",
                 Then = { ResultsContainsTexts = { "Usage: dotnet testhost.dll" } }
             });
@@ -69,9 +69,9 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         [Fact]
         public void GlobalToolStyleThrowsConfigurationException()
         {
-            Verify(new Given<WithoutAppMetadatName>
+            Verify(new Scenario<WithoutAppMetadatName>
             {
-                And = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.GlobalTool } } },
+                Given = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.GlobalTool } } },
                 WhenArgs = "-h",
                 Then =
                 {

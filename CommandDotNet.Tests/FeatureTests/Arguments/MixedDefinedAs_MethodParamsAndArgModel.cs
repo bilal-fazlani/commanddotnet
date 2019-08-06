@@ -18,9 +18,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void BasicHelp_IncludesModelAndParamDefinedArgs()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = {AppSettings = BasicHelp},
+                Given = {AppSettings = BasicHelp},
                 WhenArgs = "Do -h",
                 Then =
                 {
@@ -43,9 +43,9 @@ Options:
         [Fact]
         public void DetailedHelp_IncludesModelAndParamDefinedArgs()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "Do -h",
                 Then = { Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
 
@@ -72,9 +72,9 @@ Options:
         [Fact]
         public void Exec_MapsToAllArgs()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "Do --ModelOption moA --ModelOptionList moB --ModelOptionList moC " +
                            "--paramOption poA --paramOptionList poB --paramOptionList poC " +
                            "red green blue orange",
@@ -103,9 +103,9 @@ Options:
         [Fact]
         public void Exec_OptionsCanBeIncludedAfterArguments()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "Do --paramOptionList poB --paramOptionList poC " +
                            "red --paramOptionList poD green --paramOptionList poE " +
                            "blue --paramOptionList poF orange --paramOptionList poG",

@@ -18,9 +18,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void BasicHelp_Includes_StringCtorObjects()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = {AppSettings = BasicHelp},
+                Given = {AppSettings = BasicHelp},
                 WhenArgs = "Do -h",
                 Then = {Result = @"Usage: dotnet testhost.dll Do [arguments]
 
@@ -32,9 +32,9 @@ Arguments:
         [Fact]
         public void BasicHelp_List_Includes_StringCtorObjects()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "DoList -h",
                 Then = { Result = @"Usage: dotnet testhost.dll DoList [arguments]
 
@@ -46,9 +46,9 @@ Arguments:
         [Fact]
         public void DetailedHelp_Includes_StringCtorObjects()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = {AppSettings = DetailedHelp},
+                Given = {AppSettings = DetailedHelp},
                 WhenArgs = "Do -h",
                 Then = {Result = @"Usage: dotnet testhost.dll Do [arguments]
 
@@ -61,9 +61,9 @@ Arguments:
         [Fact]
         public void DetailedHelp_List_Includes_StringCtorObjects()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "DoList -h",
                 Then = { Result = @"Usage: dotnet testhost.dll DoList [arguments]
 
@@ -76,7 +76,7 @@ Arguments:
         [Fact]
         public void Exec_ConvertsStringToObject()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
                 WhenArgs = "DoList some-value another-value",
                 Then =
@@ -96,7 +96,7 @@ Arguments:
         [Fact]
         public void Exec_List_ConvertsStringToObject()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
                 WhenArgs = "Do some-value",
                 Then = { Outputs = { new StringCtorObject("some-value") } }

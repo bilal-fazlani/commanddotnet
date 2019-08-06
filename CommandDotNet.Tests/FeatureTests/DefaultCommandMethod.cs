@@ -18,9 +18,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void WithoutParams_BasicHelp_IncludesOtherCommands()
         {
-            Verify(new Given<WithoutParamsApp>
+            Verify(new Scenario<WithoutParamsApp>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "-h",
                 Then =
                 {
@@ -37,9 +37,9 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         [Fact]
         public void WithoutParams_DetailedHelp_IncludesOtherCommands()
         {
-            Verify(new Given<WithoutParamsApp>
+            Verify(new Scenario<WithoutParamsApp>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "-h",
                 Then =
                 {
@@ -57,9 +57,9 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         [Fact]
         public void WithParams_BasicHelp_IncludesArgsOtherCommands()
         {
-            Verify(new Given<WithParamsApp>
+            Verify(new Scenario<WithParamsApp>
             {
-                And = {AppSettings = BasicHelp},
+                Given = {AppSettings = BasicHelp},
                 WhenArgs = "-h",
                 Then =
                 {
@@ -79,9 +79,9 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         [Fact]
         public void WithParams_DetailedHelp_IncludesArgsOtherCommands()
         {
-            Verify(new Given<WithParamsApp>
+            Verify(new Scenario<WithParamsApp>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "-h",
                 Then =
                 {
@@ -104,7 +104,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         [Fact]
         public void WithoutParams_Execute_works()
         {
-            Verify(new Given<WithoutParamsApp>
+            Verify(new Scenario<WithoutParamsApp>
             {
                 WhenArgs = null,
                 Then =
@@ -117,7 +117,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         [Fact]
         public void WithParams_Execute_works()
         {
-            Verify(new Given<WithParamsApp>
+            Verify(new Scenario<WithParamsApp>
             {
                 WhenArgs = "abcde",
                 Then =

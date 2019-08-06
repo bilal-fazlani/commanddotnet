@@ -16,9 +16,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void App_BasicHelp_DisplaysApplicationMetadata()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "-h",
                 Then = { Result = @"app description
 
@@ -37,9 +37,9 @@ app extended help" }
         [Fact]
         public void App_DetailedHelp_DisplaysApplicationMetadata()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "-h",
                 Then = { Result = @"app description
 
@@ -59,9 +59,9 @@ app extended help" }
         [Fact]
         public void NestedApp_BasicHelp_DisplaysApplicationMetadata()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "SubApp -h",
                 Then = { Result = @"sub-app description
 
@@ -79,9 +79,9 @@ sub-app extended help" }
         [Fact]
         public void NestedApp_DetailedHelp_DisplaysApplicationMetadata()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "SubApp -h",
                 Then = { Result = @"sub-app description
 
@@ -100,9 +100,9 @@ sub-app extended help" }
         [Fact]
         public void Command_BasicHelp_DisplaysApplicationMetadata()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "somecommand -h",
                 Then = { Result = @"cmd description
 
@@ -118,9 +118,9 @@ cmd extended help" }
         [Fact]
         public void Command_DetailedHelp_DisplaysApplicationMetadata()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "somecommand -h",
                 Then = { Result = @"cmd description
 
@@ -137,7 +137,7 @@ cmd extended help" }
         [Fact]
         public void Command_Exec_UsesNameFromApplicationMetadata()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
                 WhenArgs = $"somecommand 5",
                 Then = { ExitCode = 5 }
@@ -147,7 +147,7 @@ cmd extended help" }
         [Fact]
         public void NestedApp_Command_Exec_UsesNameFromApplicationMetadata()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
                 WhenArgs = $"SubApp subdo 5",
                 Then = { ExitCode = 5 }

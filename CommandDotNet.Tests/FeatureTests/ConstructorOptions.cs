@@ -14,7 +14,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void HelpIncludesGlobalOptions()
         {
-            Verify(new Given<Root>
+            Verify(new Scenario<Root>
             {
                 WhenArgs = "-h",
                 Then =
@@ -37,7 +37,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         [Fact]
         public void HelpForSubCommandIncludesOnlyLocalGlobalOptions()
         {
-            Verify(new Given<Root>
+            Verify(new Scenario<Root>
             {
                 WhenArgs = "Leaf -h",
                 Then =
@@ -60,7 +60,7 @@ Use ""dotnet testhost.dll Leaf [command] --help"" for more information about a c
         [Fact]
         public void ExecutingSubCommandWillParseAndExecuteLocalGlobalOptions()
         {
-            Verify(new Given<Root>
+            Verify(new Scenario<Root>
             {
                 WhenArgs = "Leaf --LeafOpt leaf Do --DoOpt a b",
                 Then =
@@ -77,7 +77,7 @@ Use ""dotnet testhost.dll Leaf [command] --help"" for more information about a c
         [Fact]
         public void GlobalOptionMustBeSpecifiedBeforeLocalCommand()
         {
-            Verify(new Given<Root>
+            Verify(new Scenario<Root>
             {
                 WhenArgs = "Leaf Do --LeafOpt leaf --DoOpt a b",
                 Then =

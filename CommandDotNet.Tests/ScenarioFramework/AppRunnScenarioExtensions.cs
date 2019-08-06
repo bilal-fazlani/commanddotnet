@@ -29,9 +29,9 @@ namespace CommandDotNet.Tests.ScenarioFramework
                 results = appRunner.RunInMem(
                     scenario.WhenArgsArray ?? scenario.WhenArgs.SplitArgs(),
                     null,
-                    scenario.And.Dependencies,
-                    null,
-                    null);
+                    scenario.Given.Dependencies,
+                    scenario.Given.OnReadLine,
+                    scenario.Given.PipedInput);
 
                 AssertExitCodeAndErrorMessage(scenario, results);
 
@@ -64,7 +64,7 @@ namespace CommandDotNet.Tests.ScenarioFramework
             {
                 output.WriteLine($"Scenario class: {scenario.Context.Host.GetType()}");
             }
-            var appSettings = scenario.And.AppSettings;
+            var appSettings = appRunner.AppSettings;
             var appSettingsProps = appSettings.GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .OrderBy(p => p.Name);

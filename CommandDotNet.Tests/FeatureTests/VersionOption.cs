@@ -17,9 +17,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void WhenVersionEnabled_BasicHelp_IncludesVersionOption()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = VersionEnabledBasicHelp },
+                Given = { AppSettings = VersionEnabledBasicHelp },
                 WhenArgs = "-h",
                 Then = { ResultsContainsTexts = { "-v | --version  Show version information" } }
             });
@@ -28,9 +28,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void WhenVersionEnabled_DetailedHelp_IncludesVersionOption()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = VersionEnabledDetailedHelp },
+                Given = { AppSettings = VersionEnabledDetailedHelp },
                 WhenArgs = "-h",
                 Then = {
                     ResultsContainsTexts = { @"  -v | --version          
@@ -42,9 +42,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void WhenVersionDisabled_BasicHelp_IncludesVersionOption()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = VersionDisabled },
+                Given = { AppSettings = VersionDisabled },
                 WhenArgs = "-h",
                 Then = { ResultsNotContainsTexts = { "-v | --version" } }
             });
@@ -53,9 +53,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void WhenVersionDisabled_DetailedHelp_IncludesVersionOption()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = VersionDisabled },
+                Given = { AppSettings = VersionDisabled },
                 WhenArgs = "-h",
                 Then = { ResultsNotContainsTexts = { "-v | --version" } }
             });
@@ -64,9 +64,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void WhenVersionEnabled_Version_LongName_OutputsVersion()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = VersionEnabledBasicHelp },
+                Given = { AppSettings = VersionEnabledBasicHelp },
                 WhenArgs = "--version",
                 Then =
                 {
@@ -79,9 +79,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void WhenVersionEnabled_Version_ShortName_OutputsVersion()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = VersionEnabledBasicHelp },
+                Given = { AppSettings = VersionEnabledBasicHelp },
                 WhenArgs = "-v",
                 Then =
                 {
@@ -94,9 +94,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void WhenVersionEnabled_Version_LongName_NotRecognized()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = VersionDisabled },
+                Given = { AppSettings = VersionDisabled },
                 WhenArgs = "--version",
                 Then =
                 {
@@ -109,9 +109,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void WhenVersionEnabled_Version_ShortName_NotRecognized()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = VersionDisabled },
+                Given = { AppSettings = VersionDisabled },
                 WhenArgs = "-v",
                 Then =
                 {

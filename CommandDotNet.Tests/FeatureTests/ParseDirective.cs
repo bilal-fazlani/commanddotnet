@@ -15,9 +15,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void Should_EchoAllArgs_OnNewLine_WithIndent()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = DirectivesEnabled },
+                Given = { AppSettings = DirectivesEnabled },
                 WhenArgs = "[parse:verbose] some -ab args to echo",
                 Then =
                 {
@@ -45,9 +45,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void Should_SpecifyWhenTransformation_DoesNotMakeChanges()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = DirectivesEnabled },
+                Given = { AppSettings = DirectivesEnabled },
                 WhenArgs = "[parse:verbose] some args to echo",
                 Then =
                 {

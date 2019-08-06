@@ -21,9 +21,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void SampleTypes_BasicHelp()
         {
-            Verify(new Given<OptionsDefaults>
+            Verify(new Scenario<OptionsDefaults>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "ArgsDefaults -h",
                 Then =
                 {
@@ -44,9 +44,9 @@ Options:
         [Fact]
         public void SampleTypes_DetailedHelp()
         {
-            Verify(new Given<OptionsDefaults>
+            Verify(new Scenario<OptionsDefaults>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "ArgsDefaults -h",
                 Then =
                 {
@@ -75,9 +75,9 @@ Options:
         [Fact]
         public void StructList_BasicHelp()
         {
-            Verify(new Given<OptionsDefaults>
+            Verify(new Scenario<OptionsDefaults>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "StructListDefaults -h",
                 Then =
                 {
@@ -92,9 +92,9 @@ Options:
         [Fact]
         public void StructList_DetailedHelp()
         {
-            Verify(new Given<OptionsDefaults>
+            Verify(new Scenario<OptionsDefaults>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "StructListDefaults -h",
                 Then =
                 {
@@ -110,9 +110,9 @@ Options:
         [Fact]
         public void EnumList_BasicHelp()
         {
-            Verify(new Given<OptionsDefaults>
+            Verify(new Scenario<OptionsDefaults>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "EnumListDefaults -h",
                 Then =
                 {
@@ -127,9 +127,9 @@ Options:
         [Fact]
         public void EnumList_DetailedHelp()
         {
-            Verify(new Given<OptionsDefaults>
+            Verify(new Scenario<OptionsDefaults>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "EnumListDefaults -h",
                 Then =
                 {
@@ -146,9 +146,9 @@ Options:
         [Fact]
         public void ObjectList_BasicHelp()
         {
-            Verify(new Given<OptionsDefaults>
+            Verify(new Scenario<OptionsDefaults>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "ObjectListDefaults -h",
                 Then =
                 {
@@ -163,9 +163,9 @@ Options:
         [Fact]
         public void ObjectList_DetailedHelp()
         {
-            Verify(new Given<OptionsDefaults>
+            Verify(new Scenario<OptionsDefaults>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "ObjectListDefaults -h",
                 Then =
                 {
@@ -181,7 +181,7 @@ Options:
         [Fact]
         public void SampleTypes_Exec_Named()
         {
-            Verify(new Given<OptionsDefaults>
+            Verify(new Scenario<OptionsDefaults>
             {
                 WhenArgs = "ArgsDefaults --stringArg green --structArg 1 --structNArg 2 --enumArg Monday " +
                            "--objectArg http://google.com --stringListArg yellow --stringListArg orange",
@@ -207,7 +207,7 @@ Options:
         [Fact]
         public void SampleTypes_Exec_OptionsNotRequired_UsesDefaults()
         {
-            Verify(new Given<OptionsDefaults>
+            Verify(new Scenario<OptionsDefaults>
             {
                 WhenArgs = "ArgsDefaults",
                 Then =
@@ -230,7 +230,7 @@ Options:
         [Fact]
         public void StructList_Exec_Named()
         {
-            Verify(new Given<OptionsDefaults>
+            Verify(new Scenario<OptionsDefaults>
             {
                 WhenArgs = "StructListDefaults --structListArg 23 --structListArg 5 --structListArg 7",
                 Then =
@@ -249,7 +249,7 @@ Options:
         [Fact]
         public void EnumList_Exec_Named()
         {
-            Verify(new Given<OptionsDefaults>
+            Verify(new Scenario<OptionsDefaults>
             {
                 WhenArgs = "EnumListDefaults --enumListArg Friday --enumListArg Tuesday --enumListArg Thursday",
                 Then =
@@ -268,7 +268,7 @@ Options:
         [Fact]
         public void ObjectList_Exec_Named()
         {
-            Verify(new Given<OptionsDefaults>
+            Verify(new Scenario<OptionsDefaults>
             {
                 WhenArgs = "ObjectListDefaults --objectListArg http://google.com --objectListArg http://apple.com --objectListArg http://github.com",
                 Then =

@@ -11,16 +11,16 @@ namespace CommandDotNet.Tests.ScenarioFramework
             TestOutputHelper = testOutputHelper;
         }
 
-        protected void Verify(IScenario scenario)
+        protected void Verify(IScenarioForApp scenario)
         {
-            if (scenario.And.AppSettings == null)
+            if (scenario.Given.AppSettings == null)
             {
-                scenario.And.AppSettings = TestAppSettings.TestDefault;
+                scenario.Given.AppSettings = TestAppSettings.TestDefault;
             }
 
             var appRunner = new AppRunner(
                 scenario.AppType,
-                scenario.And.AppSettings ?? TestAppSettings.TestDefault);
+                scenario.Given.AppSettings ?? TestAppSettings.TestDefault);
 
             appRunner.VerifyScenario(TestOutputHelper, scenario);
         }

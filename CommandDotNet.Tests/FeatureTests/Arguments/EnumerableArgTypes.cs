@@ -18,9 +18,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void EnumerableModel_BasicHelp_Includes_Arguments()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "EnumerableModel -h",
                 Then = { Result = @"Usage: dotnet testhost.dll EnumerableModel [arguments] [options]
 
@@ -35,9 +35,9 @@ Options:
         [Fact]
         public void EnumerableModel_DetailedHelp_Includes_ArgumentsAsMultiple()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "EnumerableModel -h",
                 Then = { Result = @"Usage: dotnet testhost.dll EnumerableModel [arguments] [options]
 
@@ -54,9 +54,9 @@ Options:
         [Fact]
         public void EnumerableParams_BasicHelp_Includes_Arguments()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = {AppSettings = BasicHelp},
+                Given = {AppSettings = BasicHelp},
                 WhenArgs = "Enumerable -h",
                 Then = {Result = @"Usage: dotnet testhost.dll Enumerable [arguments] [options]
 
@@ -71,9 +71,9 @@ Options:
         [Fact]
         public void EnumerableParams_DetailedHelp_Includes_ArgumentsAsMultiple()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = {AppSettings = DetailedHelp},
+                Given = {AppSettings = DetailedHelp},
                 WhenArgs = "Enumerable -h",
                 Then = {Result = @"Usage: dotnet testhost.dll Enumerable [arguments] [options]
 
@@ -90,7 +90,7 @@ Options:
         [Fact]
         public void EnumerableParams_Exec_MapsArguments()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
                 WhenArgs = "Enumerable --options aaa --options bbb ccc ddd",
                 Then =
@@ -110,7 +110,7 @@ Options:
         [Fact]
         public void EnumerableModel_Exec_MapsArguments()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
                 WhenArgs = "EnumerableModel --Options aaa --Options bbb ccc ddd",
                 Then =
@@ -130,7 +130,7 @@ Options:
         [Fact]
         public void CollectionParams_Exec_MapsArguments()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
                 WhenArgs = "Collection --options aaa --options bbb ccc ddd",
                 Then =

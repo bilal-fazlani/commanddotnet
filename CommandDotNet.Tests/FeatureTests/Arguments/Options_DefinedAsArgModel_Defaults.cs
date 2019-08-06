@@ -20,9 +20,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void SampleTypes_BasicHelp_IncludesAll()
         {
-            Verify(new Given<OptionsDefaults>
+            Verify(new Scenario<OptionsDefaults>
             {
-                And = { AppSettings = BasicHelp },
+                Given = { AppSettings = BasicHelp },
                 WhenArgs = "ArgsDefaults -h",
                 Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
@@ -43,9 +43,9 @@ Options:
         [Fact]
         public void SampleTypes_DetailedHelp_IncludesAll()
         {
-            Verify(new Given<OptionsDefaults>
+            Verify(new Scenario<OptionsDefaults>
             {
-                And = { AppSettings = DetailedHelp },
+                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "ArgsDefaults -h",
                 Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
@@ -78,7 +78,7 @@ Options:
         [Fact]
         public void SampleTypes_Exec_OptionsCanBeAssignedByName()
         {
-            Verify(new Given<OptionsDefaults>
+            Verify(new Scenario<OptionsDefaults>
             {
                 WhenArgs = "ArgsDefaults --StringArg green --StructArg 1 --StructNArg 2 " +
                            "--EnumArg Monday --ObjectArg http://google.com " +
@@ -111,7 +111,7 @@ Options:
         [Fact]
         public void SampleTypes_Exec_OptionsAreNotRequired()
         {
-            Verify(new Given<OptionsDefaults>
+            Verify(new Scenario<OptionsDefaults>
             {
                 WhenArgs = "ArgsDefaults",
                 Then =

@@ -15,7 +15,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
         [Theory]
         [MemberData(nameof(Scenarios))]
-        public void Active(IScenario scenario)
+        public void Active(IScenarioForApp scenario)
         {
             Verify(scenario);
         }
@@ -28,7 +28,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public static Scenarios BuildScenarios<T>(string name) =>
             new Scenarios
             {
-                new Given<T>($"{name} - no args (implicit help) includes 1st level commands and 2nd level app")
+                new Scenario<T>($"{name} - no args (implicit help) includes 1st level commands and 2nd level app")
                 {
                     WhenArgs = null,
                     Then =
@@ -43,7 +43,7 @@ Commands:
 Use ""dotnet testhost.dll [command] --help"" for more information about a command."
                     }
                 },
-                new Given<T>($"{name} - help includes 1st level commands and 2nd level app")
+                new Scenario<T>($"{name} - help includes 1st level commands and 2nd level app")
                 {
                     WhenArgs = "-h",
                     Then =
@@ -58,7 +58,7 @@ Commands:
 Use ""dotnet testhost.dll [command] --help"" for more information about a command."
                     }
                 },
-                new Given<T>($"{name} - help for 2nd level app includes 2nd level commands and 3rd level app")
+                new Scenario<T>($"{name} - help for 2nd level app includes 2nd level commands and 3rd level app")
                 {
                     WhenArgs = "Second -h",
                     Then =
@@ -73,7 +73,7 @@ Commands:
 Use ""dotnet testhost.dll Second [command] --help"" for more information about a command."
                     }
                 },
-                new Given<T>($"{name} - help for 3rd level app includes 3rd level commands")
+                new Scenario<T>($"{name} - help for 3rd level app includes 3rd level commands")
                 {
                     WhenArgs = "Second Third -h",
                     Then =
@@ -87,17 +87,17 @@ Commands:
 Use ""dotnet testhost.dll Second Third [command] --help"" for more information about a command."
                     }
                 },
-                new Given<T>($"{name} - can execute 1st level local command")
+                new Scenario<T>($"{name} - can execute 1st level local command")
                 {
                     WhenArgs = "Do1 --Opt1 1111 somearg",
                     Then = {Outputs = {new ArgModel1 {Opt1 = "1111", Arg1 = "somearg"}}}
                 },
-                new Given<T>($"{name} - can execute 2nd level local command")
+                new Scenario<T>($"{name} - can execute 2nd level local command")
                 {
                     WhenArgs = "Second Do2 --Opt2 1111 somearg",
                     Then = {Outputs = {new ArgModel2 {Opt2 = "1111", Arg2 = "somearg"}}}
                 },
-                new Given<T>($"{name} - can execute 3rd level local command")
+                new Scenario<T>($"{name} - can execute 3rd level local command")
                 {
                     WhenArgs = "Second Third Do3 --Opt3 1111 somearg",
                     Then = {Outputs = {new ArgModel3 {Opt3 = "1111", Arg3 = "somearg"}}}

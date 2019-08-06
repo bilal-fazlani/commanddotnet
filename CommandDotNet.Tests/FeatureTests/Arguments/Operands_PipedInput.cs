@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using CommandDotNet.Parsing;
+using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.Utils;
-using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -19,55 +18,69 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenPipedInputAndNoExplicitValue_PipedInputIsAppended()
         {
-            var result = new AppRunner<App>()
+            new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .RunInMem(
-                $"{nameof(App.List)}".SplitArgs(), _testOutputHelper, 
-                pipedInput: new[] {"aaa", "bbb"});
-
-            result.ExitCode.Should().Be(0);
-            result.TestOutputs.Get<List<string>>().Should().BeEquivalentTo("aaa", "bbb");
+                .VerifyScenario(_testOutputHelper,
+                    new Scenario
+                    {
+                        Given = {PipedInput = new[] {"aaa", "bbb"}},
+                        WhenArgs = $"{nameof(App.List)}",
+                        Then =
+                        {
+                            Outputs = {new List<string> {"aaa", "bbb"}}
+                        }
+                    });
         }
 
         [Fact]
         public void GivenPipedInputAndExplicitValue_AppendsPipedToExplicit()
         {
-            var result = new AppRunner<App>()
+            new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .RunInMem(
-                    $"{nameof(App.List)} aaa bbb".SplitArgs(), _testOutputHelper,
-                    pipedInput: new[] {"ccc", "ddd"});
-
-            result.ExitCode.Should().Be(0);
-            result.TestOutputs.Get<List<string>>().Should().BeEquivalentTo("aaa", "bbb", "ccc", "ddd");
+                .VerifyScenario(_testOutputHelper,
+                    new Scenario
+                    {
+                        Given = {PipedInput = new[] {"ccc", "ddd"}},
+                        WhenArgs = $"{nameof(App.List)} aaa bbb",
+                        Then =
+                        {
+                            Outputs = {new List<string> {"aaa", "bbb", "ccc", "ddd"}}
+                        }
+                    });
         }
 
         [Fact]
         public void GivenNoListArg_PipedInputIsIgnored()
         {
-            var result = new AppRunner<App>()
+            new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .RunInMem(
-                    $"{nameof(App.Single)} single".SplitArgs(), _testOutputHelper,
-                    pipedInput: new[] {"aaa"});
-
-            result.ExitCode.Should().Be(0);
-            result.TestOutputs.Get<string>().Should().Be("single");
-            result.TestOutputs.Get<List<string>>().Should().BeNull();
+                .VerifyScenario(_testOutputHelper,
+                    new Scenario
+                    {
+                        Given = {PipedInput = new[] {"aaa"}},
+                        WhenArgs = $"{nameof(App.Single)} single",
+                        Then =
+                        {
+                            Outputs = {"single"}
+                        }
+                    });
         }
 
         [Fact]
         public void GivenSingleAndListArg_AndNoArgValuesExplicitlyProvided_PipedInputAppendedToListArg()
         {
-            var result = new AppRunner<App>()
+            new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .RunInMem(
-                    $"{nameof(App.SingleAndList)}".SplitArgs(), _testOutputHelper,
-                    pipedInput: new[] {"aaa", "bbb"});
-
-            result.ExitCode.Should().Be(0);
-            result.TestOutputs.Get<string>().Should().BeNull();
-            result.TestOutputs.Get<List<string>>().Should().BeEquivalentTo("aaa", "bbb");
+                .VerifyScenario(_testOutputHelper,
+                    new Scenario
+                    {
+                        Given = {PipedInput = new[] {"aaa", "bbb"}},
+                        WhenArgs = $"{nameof(App.SingleAndList)} single",
+                        Then =
+                        {
+                            Outputs = {new List<string> {"aaa", "bbb"}}
+                        }
+                    });
         }
 
         public class App

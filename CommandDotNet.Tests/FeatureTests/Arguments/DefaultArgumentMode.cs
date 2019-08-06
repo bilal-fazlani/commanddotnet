@@ -17,9 +17,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenOperandMode_InCtor_NonAttributedParamsDefaultTo_Operand()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = OperandMode },
+                Given = { AppSettings = OperandMode },
                 WhenArgs = "-h",
                 Then =
                 {
@@ -37,9 +37,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenOperandMode_InMethod_NonAttributedParamsDefaultTo_Operand()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = OperandMode },
+                Given = { AppSettings = OperandMode },
                 WhenArgs = "Method -h",
                 Then =
                 {
@@ -59,9 +59,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenOperandMode_InModel_NonAttributedParamsDefaultTo_Operand()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = OperandMode },
+                Given = { AppSettings = OperandMode },
                 WhenArgs = "Model -h",
                 Then =
                 {
@@ -81,9 +81,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenOptionMode_InCtor_NonAttributedParamsDefaultTo_Option()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = OptionMode },
+                Given = { AppSettings = OptionMode },
                 WhenArgs = "-h",
                 Then =
                 {
@@ -101,9 +101,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenOptionMode_InMethod_NonAttributedParamsDefaultTo_Option()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = OptionMode },
+                Given = { AppSettings = OptionMode },
                 WhenArgs = "Method -h",
                 Then =
                 {
@@ -123,9 +123,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenOptionMode_InModel_NonAttributedParamsDefaultTo_Option()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = {AppSettings = OptionMode},
+                Given = {AppSettings = OptionMode},
                 WhenArgs = "Model -h",
                 Then =
                 {
@@ -145,9 +145,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenObsoleteParameterMode_InCtor_NonAttributedParamsDefaultTo_Operand()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = DeprecatedParameterMode },
+                Given = { AppSettings = DeprecatedParameterMode },
                 WhenArgs = "-h",
                 Then =
                 {
@@ -165,9 +165,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenObsoleteParameterMode_InMethod_NonAttributedParamsDefaultTo_Operand()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = DeprecatedParameterMode },
+                Given = { AppSettings = DeprecatedParameterMode },
                 WhenArgs = "Method -h",
                 Then =
                 {
@@ -187,9 +187,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenObsoleteParameterMode_InModel_NonAttributedParamsDefaultTo_Operand()
         {
-            Verify(new Given<App>
+            Verify(new Scenario<App>
             {
-                And = { AppSettings = DeprecatedParameterMode },
+                Given = { AppSettings = DeprecatedParameterMode },
                 WhenArgs = "Model -h",
                 Then =
                 {

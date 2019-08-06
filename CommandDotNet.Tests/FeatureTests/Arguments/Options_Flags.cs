@@ -14,7 +14,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void Help_DoesNotInclude_BoolTypeOrAllowedArgumentValues()
         {
-            Verify(new Given<FlagApp>
+            Verify(new Scenario<FlagApp>
             {
                 // because the value should not be provided
                 WhenArgs = "Do -h",
@@ -29,7 +29,7 @@ Options:
         [Fact]
         public void WhenFlagIsSpecified_ValueIsTrue()
         {
-            Verify(new Given<FlagApp>
+            Verify(new Scenario<FlagApp>
             {
                 WhenArgs = "Do --flag",
                 Then = { Outputs = { true } }
@@ -39,7 +39,7 @@ Options:
         [Fact]
         public void WhenFlagIsNotSpecified_ValueIsFalse()
         {
-            Verify(new Given<FlagApp>
+            Verify(new Scenario<FlagApp>
             {
                 WhenArgs = "Do",
                 Then = { Outputs = { false } }
@@ -49,7 +49,7 @@ Options:
         [Fact]
         public void FlagsCanBeClubbed()
         {
-            Verify(new Given<FlagApp>
+            Verify(new Scenario<FlagApp>
             {
                 WhenArgs = "Club -ab",
                 Then = { Outputs = { new ClubResults { FlagA = true, FlagB = true } } }
