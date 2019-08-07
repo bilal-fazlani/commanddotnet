@@ -89,51 +89,6 @@ namespace CommandDotNet.Tokens
             return tokens.Select(t => t.RawValue).ToArray();
         }
 
-        public static TokenCollection ExpandClubbedOptions(this TokenCollection tokenCollection)
-        {
-            return new TokenCollection(tokenCollection.SelectMany(ExpandClubbedOption));
-        }
-
-        public static TokenCollection SplitOptionAssignments(this TokenCollection tokenCollection)
-        {
-            return new TokenCollection(tokenCollection.SelectMany(SplitOptionAssignment));
-        }
-
-        private static IEnumerable<Token> SplitOptionAssignment(Token token)
-        {
-            if (token.TokenType == TokenType.Option && token.OptionTokenType.HasValue)
-            {
-                var prefix = token.OptionTokenType.GetPrefix();
-                var optionName = token.OptionTokenType.GetName();
-                var value = token.OptionTokenType.GetAssignedValue();
-
-                yield return new Token(
-                    $"{prefix}{optionName}", optionName, TokenType.Option, 
-                    new OptionTokenType(optionName, token.OptionTokenType.IsLong));
-                yield return new Token(value, value, TokenType.Value);
-            }
-            else
-            {
-                yield return token;
-            }
-        }
-
-        private static IEnumerable<Token> ExpandClubbedOption(Token token)
-        {
-            if (token.TokenType == TokenType.Option && token.OptionTokenType.IsClubbed)
-            {
-                foreach (var flag in token.Value.ToCharArray())
-                {
-                    var value = flag.ToString();
-                    yield return new Token($"-{value}", value, TokenType.Option, new OptionTokenType(value));
-                }
-            }
-            else
-            {
-                yield return token;
-            }
-        }
-
         private static IEnumerable<Token> ParseTokens(IEnumerable<string> args, bool includeDirectives)
         {
             bool foundSeparator = false;

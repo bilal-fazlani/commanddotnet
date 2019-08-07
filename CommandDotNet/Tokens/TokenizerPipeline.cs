@@ -50,11 +50,11 @@ namespace CommandDotNet.Tokens
                         new TokenTransformation(
                             "expand-clubbed-flags",
                             Int32.MaxValue,
-                            Tokenizer.ExpandClubbedOptions),
+                            ExpandClubbedOptionsTransformation.Transform),
                         new TokenTransformation(
                             "split-option-assignments",
                             Int32.MaxValue,
-                            Tokenizer.SplitOptionAssignments)
+                            SplitOptionsTransformation.Transform)
                     })
                 .ToArray();
         }
