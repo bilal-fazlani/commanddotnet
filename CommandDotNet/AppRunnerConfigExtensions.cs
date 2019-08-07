@@ -10,12 +10,17 @@ namespace CommandDotNet
     /// <summary>Extensions to enable and configure features</summary>
     public static class AppRunnerConfigExtensions
     {
-        [Obsolete("replace with UseVersionMiddleware, UseFluentValidation ")]
+        [Obsolete("replace with UseVersionMiddleware, UseFluentValidation and UsePromptForMissingOperands")]
         public static AppRunner UseBackwardsCompatibilityMode(this AppRunner appRunner)
         {
             if (appRunner.AppSettings.EnableVersionOption)
             {
                 appRunner.UseVersionMiddleware();
+            }
+
+            if (appRunner.AppSettings.PromptForMissingOperands)
+            {
+                appRunner.UsePromptForMissingOperands();
             }
 
             return appRunner.UseFluentValidation();
@@ -57,6 +62,12 @@ namespace CommandDotNet
         public static AppRunner UseDependencyResolver(this AppRunner appRunner, IDependencyResolver dependencyResolver)
         {
             return DependencyResolverMiddleware.UseDependencyResolver(appRunner, dependencyResolver);
+        }
+
+        public static AppRunner UsePromptForMissingOperands(this AppRunner appRunner)
+        {
+            return appRunner.Configure(c =>
+                c.UseMiddleware(ValuePromptMiddleware.PromptForMissingOperands, MiddlewareStages.PostParseInputPreBindValues));
         }
 
         private static void AssertDirectivesAreEnabled(AppRunner appRunner)

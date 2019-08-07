@@ -46,13 +46,14 @@ namespace CommandDotNet
         /// </summary>
         public bool EnableDirectives { get; set; }
 
-        [Obsolete("Use correctly spelled PromptForMissingOperands")]
+        [Obsolete("Use appRunner.UsePromptForMissingOperands() extension method")]
         public bool PrompForArgumentsIfNotProvided
         {
             get => PromptForMissingOperands;
             set => PromptForMissingOperands = value;
         }
 
+        [Obsolete("Use appRunner.UsePromptForMissingOperands() extension method")]
         public bool PromptForMissingOperands { get; set; }
 
         public AppHelpSettings Help { get; set; } = new AppHelpSettings();

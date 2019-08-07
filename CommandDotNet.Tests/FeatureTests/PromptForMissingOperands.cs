@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.Utils;
-using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -9,7 +9,6 @@ namespace CommandDotNet.Tests.FeatureTests
     public class PromptForMissingOperands
     {
         private static readonly AppSettings PromptingEnabled = TestAppSettings.TestDefault.Clone(s => s.PromptForMissingOperands = true);
-        private static readonly AppSettings PromptingDisabled = TestAppSettings.TestDefault.Clone(s => s.PromptForMissingOperands = false);
 
         private readonly ITestOutputHelper _output;
 
@@ -21,67 +20,119 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void PromptingEnabled_WhenOperandProvidedButMissingOption_DoesNotPrompt()
         {
-            var result = new AppRunner<App>(PromptingEnabled)
-                .RunInMem("Do something".SplitArgs(), _output, onReadLine: console => "yes");
+            var scenario = new Scenario
+            {
+                Given = {OnReadLine = c => "yes"},
+                WhenArgs = "Do something",
+                Then =
+                {
+                    Outputs = {new App.DoResult
+                    {
+                        arg1 = "something"
+                    }}
+                }
+            };
 
-            var doResult = result.TestOutputs.Get<App.DoResult>();
-            doResult.opt1.Should().BeNull();
-            doResult.arg1.Should().Be("something");
+            VerifyEnabledScenarios(scenario);
         }
 
         [Fact]
         public void PromptingEnabled_WhenOperandAndOptionProvided_DoesNotPrompt()
         {
-            var result = new AppRunner<App>(PromptingEnabled)
-                .RunInMem("Do something --opt1 simple".SplitArgs(), _output, onReadLine: console => "yes");
+            var scenario = new Scenario
+            {
+                Given = { OnReadLine = c => "yes" },
+                WhenArgs = "Do something --opt1 simple",
+                Then =
+                {
+                    Outputs = {new App.DoResult
+                    {
+                        arg1 = "something",
+                        opt1 = "simple"
+                    }}
+                }
+            };
 
-            var doResult = result.TestOutputs.Get<App.DoResult>();
-            doResult.opt1.Should().Be("simple");
-            doResult.arg1.Should().Be("something");
+            VerifyEnabledScenarios(scenario);
         }
 
         [Fact]
         public void PromptingEnabled_WhenMissingOperand_DoesPrompt()
         {
-            var result = new AppRunner<App>(PromptingEnabled)
-                .RunInMem("Do".SplitArgs(), _output, onReadLine: console => "yes");
+            var scenario = new Scenario
+            {
+                Given = { OnReadLine = c => "yes" },
+                WhenArgs = "Do",
+                Then =
+                {
+                    Outputs = {new App.DoResult
+                    {
+                        arg1 = "yes"
+                    }}
+                }
+            };
 
-            var doResult = result.TestOutputs.Get<App.DoResult>();
-            doResult.opt1.Should().BeNull();
-            doResult.arg1.Should().Be("yes");
+            VerifyEnabledScenarios(scenario);
         }
 
         [Fact]
         public void PromptingDisabled_WhenMissingOperand_DoesNotPrompt()
         {
-            var result = new AppRunner<App>(PromptingDisabled)
-                .RunInMem("Do".SplitArgs(), _output, onReadLine: console => "yes");
+            var scenario = new Scenario
+            {
+                Given = { OnReadLine = c => "yes" },
+                WhenArgs = "Do",
+                Then =
+                {
+                    Outputs = {new App.DoResult()}
+                }
+            };
 
-            var doResult = result.TestOutputs.Get<App.DoResult>();
-            doResult.opt1.Should().BeNull();
-            doResult.arg1.Should().BeNull();
+            new AppRunner<App>()
+                .VerifyScenario(_output, scenario);
         }
 
         [Fact]
         public void PromptingEnabled_WhenOperandListProvided_DoesNotPrompt()
         {
-            var result = new AppRunner<App>(PromptingEnabled)
-                .RunInMem("DoList something simple".SplitArgs(), _output, onReadLine: console => "yes");
+            var scenario = new Scenario
+            {
+                Given = { OnReadLine = c => "yes" },
+                WhenArgs = "DoList something simple",
+                Then =
+                {
+                    Outputs = {new List<string>{"something", "simple"}}
+                }
+            };
 
-            var doResult = result.TestOutputs.Get<List<string>>();
-            doResult.Count.Should().Be(2);
-            doResult.Should().BeEquivalentTo("something", "simple");
+            VerifyEnabledScenarios(scenario);
         }
 
         [Fact]
         public void PromptingEnabled_WhenMissingOperandList_DoesPrompt()
         {
-            var result = new AppRunner<App>(PromptingEnabled)
-                .RunInMem("DoList".SplitArgs(), _output, onReadLine: console => "something simple");
+            var scenario = new Scenario
+            {
+                Given = { OnReadLine = c => "something simple" },
+                WhenArgs = "DoList",
+                Then =
+                {
+                    Outputs = {new List<string>{"something", "simple"}}
+                }
+            };
 
-            var doResult = result.TestOutputs.Get<List<string>>();
-            doResult.Count.Should().Be(2);
-            doResult.Should().BeEquivalentTo("something", "simple");
+            VerifyEnabledScenarios(scenario);
+        }
+
+        private void VerifyEnabledScenarios(Scenario scenario)
+        {
+            new AppRunner<App>()
+                .UsePromptForMissingOperands()
+                .VerifyScenario(_output, scenario);
+
+            new AppRunner<App>(PromptingEnabled)
+                .UseBackwardsCompatibilityMode()
+                .VerifyScenario(_output, scenario);
         }
 
         public class App
@@ -89,16 +140,14 @@ namespace CommandDotNet.Tests.FeatureTests
             [InjectProperty]
             public TestOutputs TestOutputs { get; set; }
 
-            public int Do([Option] string opt1, string arg1)
+            public void Do([Option] string opt1, string arg1)
             {
                 TestOutputs.Capture(new DoResult{opt1 = opt1, arg1 = arg1});
-                return opt1 == arg1 ? 0 : 1;
             }
 
-            public int DoList(List<string> args)
+            public void DoList(List<string> args)
             {
                 TestOutputs.Capture(args);
-                return 0;
             }
 
             public class DoResult

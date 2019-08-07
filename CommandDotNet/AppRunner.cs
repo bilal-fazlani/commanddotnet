@@ -93,7 +93,6 @@ namespace CommandDotNet
         private Task<int> Execute(string[] args)
         {
             AddCoreMiddleware();
-            AddOptionalMiddleware();
 
             var tokens = args.Tokenize(includeDirectives: AppSettings.EnableDirectives);
             var commandContext = new CommandContext(
@@ -116,15 +115,6 @@ namespace CommandDotNet
             //       i.e. ParseResult should be fully populated after Parse stage
             //            Invocation contexts should be fully populated after BindValues stage
             //            (when ctor options are moved to a middleware method, invocation context should be populated in Parse stage)
-        }
-
-        private void AddOptionalMiddleware()
-        {
-            if (AppSettings.PromptForMissingOperands)
-            {
-                _appConfigBuilder.UseMiddleware(ValuePromptMiddleware.PromptForMissingOperands,
-                    MiddlewareStages.PostParseInputPreBindValues);
-            }
         }
 
         private static int HandleException(Exception ex, IConsole console)
