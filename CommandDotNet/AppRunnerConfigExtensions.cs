@@ -1,6 +1,8 @@
 ﻿using System;
 using CommandDotNet.Builders;
+using CommandDotNet.ClassModeling;
 using CommandDotNet.Directives;
+using CommandDotNet.Execution;
 using CommandDotNet.Parsing;
 
 namespace CommandDotNet
@@ -16,7 +18,7 @@ namespace CommandDotNet
                 appRunner.UseVersionMiddleware();
             }
 
-            return appRunner;
+            return appRunner.UseFluentValidation();
         }
 
         public static AppRunner UseVersionMiddleware(this AppRunner appRunner)
@@ -40,6 +42,16 @@ namespace CommandDotNet
         public static AppRunner AppendPipedInputToOperandList(this AppRunner appRunner)
         {
             return PipedInputMiddleware.EnablePipedInput(appRunner);
+        }
+
+        public static AppRunner UseFluentValidation(this AppRunner appRunner)
+        {
+            // TODO: move FluentValidation into a separate repo & nuget package?
+            //       there are other ways to do validation that could also
+            //       be applied to parameters
+
+            return appRunner.Configure(c =>
+                c.UseMiddleware(ModelValidator.ValidateModelsMiddleware, MiddlewareStages.PostBindValuesPreInvoke));
         }
 
         private static void AssertDirectivesAreEnabled(AppRunner appRunner)

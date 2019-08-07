@@ -16,10 +16,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void Help_DoesNotIncludeValidation()
         {
-            var scenario = new Scenario<App>
+            var scenario = new Scenario
             {
                 WhenArgs = "Save -h",
-                Then = {
+                Then =
+                {
                     Result = @"Usage: dotnet testhost.dll Save [arguments]
 
 Arguments:
@@ -28,53 +29,87 @@ Arguments:
 
   Name   <TEXT>        
 
-  Email  <TEXT>" }
+  Email  <TEXT>"
+                }
             };
-            Verify(scenario);
+
+            new AppRunner<App>()
+                .UseFluentValidation()
+                .VerifyScenario(TestOutputHelper, scenario);
+
+            new AppRunner<App>()
+                .UseBackwardsCompatibilityMode()
+                .VerifyScenario(TestOutputHelper, scenario);
         }
 
         [Fact]
         public void Exec_WithInvalidData_PrintsValidationError()
         {
-            var scenario = new Scenario<App>
+            var scenario = new Scenario
             {
                 WhenArgs = "Save",
-                Then = { 
+                Then =
+                {
                     ExitCode = 2,
                     Result = @"'Person' is invalid
   'Id' must be greater than '0'.
   'Name' should not be empty.
-  'Email' should not be empty." }
+  'Email' should not be empty."
+                }
             };
-            Verify(scenario);
+
+            new AppRunner<App>()
+                .UseFluentValidation()
+                .VerifyScenario(TestOutputHelper, scenario);
+
+            new AppRunner<App>()
+                .UseBackwardsCompatibilityMode()
+                .VerifyScenario(TestOutputHelper, scenario);
         }
 
         [Fact]
         public void Exec_WithInvalidData_PrintsValidationError_UsingValidatorFromDI()
         {
-            var scenario = new Scenario<App>
+            var scenario = new Scenario
             {
-                Given = { Dependencies = new object[]{ new PersonValidator() } },
+                Given = {Dependencies = new object[] {new PersonValidator()}},
                 WhenArgs = "Save",
-                Then = {
+                Then =
+                {
                     ExitCode = 2,
                     Result = @"'Person' is invalid
   'Id' must be greater than '0'.
   'Name' should not be empty.
-  'Email' should not be empty." }
+  'Email' should not be empty."
+                }
             };
-            Verify(scenario);
+
+            new AppRunner<App>()
+                .UseFluentValidation()
+                .VerifyScenario(TestOutputHelper, scenario);
+
+            new AppRunner<App>()
+                .UseBackwardsCompatibilityMode()
+                .VerifyScenario(TestOutputHelper, scenario);
         }
 
         [Fact]
         public void Exec_WithValidData_Succeeds()
         {
-            var scenario = new Scenario<App>
+            var scenario = new Scenario
             {
+                Given = {Dependencies = new object[] {new PersonValidator()}},
                 WhenArgs = "Save 1 john john@doe.com",
-                Then = { Outputs = { new Person{Id = 1, Name = "john", Email = "john@doe.com"}}}
+                Then = {Outputs = {new Person {Id = 1, Name = "john", Email = "john@doe.com"}}}
             };
-            Verify(scenario);
+
+            new AppRunner<App>()
+                .UseFluentValidation()
+                .VerifyScenario(TestOutputHelper, scenario);
+
+            new AppRunner<App>()
+                .UseBackwardsCompatibilityMode()
+                .VerifyScenario(TestOutputHelper, scenario);
         }
 
         public class App
