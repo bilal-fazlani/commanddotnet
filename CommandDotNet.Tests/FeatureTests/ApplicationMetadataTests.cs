@@ -128,8 +128,7 @@ Usage: SomeApp somecommand [arguments]
 
 Arguments:
 
-  value    <NUMBER>
-
+  value  <NUMBER>
 
 cmd extended help" }
             });

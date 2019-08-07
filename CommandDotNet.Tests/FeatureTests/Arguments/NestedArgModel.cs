@@ -44,16 +44,15 @@ Options:
 
 Arguments:
 
-  Operand1    <TEXT>
+  Operand1  <TEXT>
 
-  Operand2    <TEXT>
-
+  Operand2  <TEXT>
 
 Options:
 
-  --Option1    <TEXT>
+  --Option1  <TEXT>
 
-  --Option2    <TEXT>" }
+  --Option2  <TEXT>" }
             });
         }
 

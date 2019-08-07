@@ -39,7 +39,7 @@ namespace CommandDotNet
 
         public IArgumentArity Arity { get; set; }
         public object DefaultValue { get; set; } = DBNull.Value;
-        public List<string> AllowedValues { get; set; }
+        public IReadOnlyCollection<string> AllowedValues { get; set; }
 
         public string Template { get; }
         public string ShortName { get; }
@@ -47,10 +47,14 @@ namespace CommandDotNet
 
         public bool Inherited { get; set; }
 
-        /// <summary>True when option is help or version</summary>
+        /// <summary>
+        /// True when option is not defined in class model
+        /// but is instead added via middleware.<br/>
+        /// eg. Help and Version
+        /// </summary>
         public bool IsSystemOption { get; set; }
 
-        public IEnumerable<string> Aliases => _aliases;
+        public IReadOnlyCollection<string> Aliases => _aliases;
 
         public ICustomAttributeProvider CustomAttributes { get; }
 

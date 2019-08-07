@@ -8,8 +8,8 @@ namespace CommandDotNet
         ITypeInfo TypeInfo { get; }
         IArgumentArity Arity { get; }
         object DefaultValue { get; }
-        List<string> AllowedValues { get; set; }
-        IEnumerable<string> Aliases { get; }
+        IReadOnlyCollection<string> AllowedValues { get; set; }
+        IReadOnlyCollection<string> Aliases { get; }
 
         ICustomAttributeProvider CustomAttributes { get; }
         IContextData ContextData { get; }

@@ -49,21 +49,21 @@ Arguments:
 
 Arguments:
 
-  boolArg                     <BOOLEAN>      [True]
+  boolArg                   <BOOLEAN>    [True]
   Allowed values: true, false
 
-  stringArg                   <TEXT>         [lala]
+  stringArg                 <TEXT>       [lala]
 
-  structArg                   <NUMBER>       [3]
+  structArg                 <NUMBER>     [3]
 
-  structNArg                  <NUMBER>       [4]
+  structNArg                <NUMBER>     [4]
 
-  enumArg                     <DAYOFWEEK>    [Wednesday]
+  enumArg                   <DAYOFWEEK>  [Wednesday]
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
-  objectArg                   <URI>
+  objectArg                 <URI>
 
-  stringListArg (Multiple)    <TEXT>" }
+  stringListArg (Multiple)  <TEXT>" }
             });
         }
 
@@ -92,7 +92,7 @@ Arguments:
 
 Arguments:
 
-  structListArg (Multiple)    <NUMBER>" }
+  structListArg (Multiple)  <NUMBER>" }
             });
         }
 
@@ -121,7 +121,7 @@ Arguments:
 
 Arguments:
 
-  enumListArg (Multiple)    <DAYOFWEEK>
+  enumListArg (Multiple)  <DAYOFWEEK>
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday" }
             });
         }
@@ -151,7 +151,7 @@ Arguments:
 
 Arguments:
 
-  objectListArg (Multiple)    <URI>" }
+  objectListArg (Multiple)  <URI>" }
             });
         }
 

@@ -54,7 +54,7 @@ Arguments:
 
 Arguments:
 
-  arg    <FILENAME>" }
+  arg  <FILENAME>" }
             });
         }
 
@@ -69,7 +69,7 @@ Arguments:
 
 Arguments:
 
-  args (Multiple)    <FILENAME>" }
+  args (Multiple)  <FILENAME>" }
             });
         }
 

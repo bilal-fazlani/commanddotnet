@@ -1,28 +1,13 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Help
 {
     internal static class HelpBuilderExtensions
     {
-        public static StringBuilder AppendUsageCommandNames(this StringBuilder sb, Command command, AppSettings appSettings)
-        {
-            var appName = GetAppName(command, appSettings.Help.UsageAppNameStyle);
-
-            sb.Append(appName);
-            foreach (var name in command.GetParentCommands(true).Reverse().Skip(1).Select(c => c.Name))
-            {
-                sb.Append(" ");
-                sb.Append(name);
-            }
-            return sb;
-        }
-
-        private static string GetAppName(Command command, UsageAppNameStyle usageAppNameStyle)
+        internal static string GetAppName(this Command command, UsageAppNameStyle usageAppNameStyle)
         {
             switch (usageAppNameStyle)
             {

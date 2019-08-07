@@ -43,12 +43,11 @@ Options:
 
 Arguments:
 
-  Args (Multiple)    <TEXT>
-
+  Args (Multiple)  <TEXT>
 
 Options:
 
-  --Options (Multiple)    <TEXT>" }
+  --Options (Multiple)  <TEXT>" }
             });
         }
 
@@ -80,12 +79,11 @@ Options:
 
 Arguments:
 
-  args (Multiple)    <TEXT>
-
+  args (Multiple)  <TEXT>
 
 Options:
 
-  --options (Multiple)    <TEXT>" }
+  --options (Multiple)  <TEXT>" }
             });
         }
 

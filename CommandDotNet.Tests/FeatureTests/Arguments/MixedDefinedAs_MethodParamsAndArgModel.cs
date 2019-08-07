@@ -51,22 +51,21 @@ Options:
 
 Arguments:
 
-  ModelArg                   <TEXT>
+  ModelArg                 <TEXT>
 
-  paramArg                   <TEXT>
+  paramArg                 <TEXT>
 
-  paramArgList (Multiple)    <TEXT>
-
+  paramArgList (Multiple)  <TEXT>
 
 Options:
 
-  --ModelOption                   <TEXT>
+  --ModelOption                 <TEXT>
 
-  --ModelOptionList (Multiple)    <TEXT>
+  --ModelOptionList (Multiple)  <TEXT>
 
-  --paramOption                   <TEXT>
+  --paramOption                 <TEXT>
 
-  --paramOptionList (Multiple)    <TEXT>" }
+  --paramOptionList (Multiple)  <TEXT>" }
             });
         }
 

@@ -45,7 +45,7 @@ Arguments:
 
 Arguments:
 
-  square    <!!SQUARE!!>" }
+  square  <!!SQUARE!!>" }
             });
         }
 

@@ -39,16 +39,15 @@ Options:
 
 Arguments:
 
-  operand     <TEXT>
+  operand   <TEXT>
   operand-descr
 
-  argument    <TEXT>
+  argument  <TEXT>
   argument-descr
-
 
 Options:
 
-  --option    <TEXT>
+  --option  <TEXT>
   option-descr");
         }
 
