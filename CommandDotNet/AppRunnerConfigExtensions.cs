@@ -54,6 +54,11 @@ namespace CommandDotNet
                 c.UseMiddleware(ModelValidator.ValidateModelsMiddleware, MiddlewareStages.PostBindValuesPreInvoke));
         }
 
+        public static AppRunner UseDependencyResolver(this AppRunner appRunner, IDependencyResolver dependencyResolver)
+        {
+            return DependencyResolverMiddleware.UseDependencyResolver(appRunner, dependencyResolver);
+        }
+
         private static void AssertDirectivesAreEnabled(AppRunner appRunner)
         {
             if (!appRunner.AppSettings.EnableDirectives)

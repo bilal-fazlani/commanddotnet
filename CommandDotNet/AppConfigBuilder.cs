@@ -40,7 +40,7 @@ namespace CommandDotNet
         /// Configures the app to use the resolver to create instances of
         /// properties decorated with <see cref="InjectPropertyAttribute"/>
         /// </summary>
-        public AppConfigBuilder UseDependencyResolver(IDependencyResolver dependencyResolver)
+        internal AppConfigBuilder UseDependencyResolver(IDependencyResolver dependencyResolver)
         {
             _dependencyResolver = dependencyResolver ?? throw new ArgumentNullException(nameof(dependencyResolver));
             return this;

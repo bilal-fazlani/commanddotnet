@@ -125,9 +125,6 @@ namespace CommandDotNet
                 _appConfigBuilder.UseMiddleware(ValuePromptMiddleware.PromptForMissingOperands,
                     MiddlewareStages.PostParseInputPreBindValues);
             }
-
-            _appConfigBuilder.UseMiddleware(DependencyResolveMiddleware.InjectDependencies,
-                MiddlewareStages.PostBindValuesPreInvoke);
         }
 
         private static int HandleException(Exception ex, IConsole console)

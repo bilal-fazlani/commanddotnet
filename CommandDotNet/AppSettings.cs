@@ -1,7 +1,6 @@
 ﻿using System;
 using CommandDotNet.Execution;
 using CommandDotNet.Help;
-using CommandDotNet.Tokens;
 using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet

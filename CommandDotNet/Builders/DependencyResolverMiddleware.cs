@@ -6,8 +6,17 @@ using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Builders
 {
-    internal static class DependencyResolveMiddleware
+    internal static class DependencyResolverMiddleware
     {
+        internal static AppRunner UseDependencyResolver(AppRunner appRunner, IDependencyResolver dependencyResolver)
+        {
+            return appRunner.Configure(c =>
+            {
+                c.UseDependencyResolver(dependencyResolver);
+                c.UseMiddleware(InjectDependencies, MiddlewareStages.PostBindValuesPreInvoke);
+            });
+        }
+
         internal static Task<int> InjectDependencies(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             var instance = commandContext.InvocationContext.Instance;
@@ -19,12 +28,9 @@ namespace CommandDotNet.Builders
 
                 if (properties.Any())
                 {
-                    if (dependencyResolver != null)
+                    foreach (var propertyInfo in properties)
                     {
-                        foreach (var propertyInfo in properties)
-                        {
-                            propertyInfo.SetValue(instance, dependencyResolver.Resolve(propertyInfo.PropertyType));
-                        }
+                        propertyInfo.SetValue(instance, dependencyResolver.Resolve(propertyInfo.PropertyType));
                     }
                 }
             }
