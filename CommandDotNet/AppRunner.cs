@@ -120,11 +120,6 @@ namespace CommandDotNet
 
         private void AddOptionalMiddleware()
         {
-            if (AppSettings.EnableVersionOption)
-            {
-                this.UseVersionMiddleware();
-            }
-
             if (AppSettings.PromptForMissingOperands)
             {
                 _appConfigBuilder.UseMiddleware(ValuePromptMiddleware.PromptForMissingOperands,

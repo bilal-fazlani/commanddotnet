@@ -1,3 +1,4 @@
+using CommandDotNet.Builders;
 using CommandDotNet.Tests.ScenarioFramework;
 using Xunit;
 using Xunit.Abstractions;
@@ -8,7 +9,8 @@ namespace CommandDotNet.Tests.FeatureTests
     {
         private static AppSettings VersionEnabledBasicHelp = TestAppSettings.BasicHelp.Clone(a => a.EnableVersionOption = true);
         private static AppSettings VersionEnabledDetailedHelp = TestAppSettings.DetailedHelp.Clone(a => a.EnableVersionOption = true);
-        private static AppSettings VersionDisabled = new AppSettings { EnableVersionOption = false };
+        private static AppSettings VersionDisabledBasicHelp = TestAppSettings.BasicHelp.Clone(a => a.EnableVersionOption = false);
+        private static AppSettings VersionEnabled = TestAppSettings.TestDefault.Clone(a => a.EnableVersionOption = true);
 
         public VersionOption(ITestOutputHelper output) : base(output)
         {
@@ -17,108 +19,136 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void WhenVersionEnabled_BasicHelp_IncludesVersionOption()
         {
-            Verify(new Scenario<App>
+            var scenario = new Scenario
             {
-                Given = { AppSettings = VersionEnabledBasicHelp },
                 WhenArgs = "-h",
-                Then = { ResultsContainsTexts = { "-v | --version  Show version information" } }
-            });
+                Then = {ResultsContainsTexts = {"-v | --version  Show version information"}}
+            };
+
+            new AppRunner<App>(TestAppSettings.BasicHelp)
+                .UseVersionMiddleware()
+                .VerifyScenario(TestOutputHelper, scenario);
+
+            new AppRunner<App>(VersionEnabledBasicHelp)
+                .UseBackwardsCompatibilityMode()
+                .VerifyScenario(TestOutputHelper, scenario);
         }
 
         [Fact]
         public void WhenVersionEnabled_DetailedHelp_IncludesVersionOption()
         {
-            Verify(new Scenario<App>
+            var scenario = new Scenario
             {
-                Given = { AppSettings = VersionEnabledDetailedHelp },
                 WhenArgs = "-h",
                 Then = {
                     ResultsContainsTexts = { @"  -v | --version          
   Show version information" }
                 }
-            });
+            };
+
+            new AppRunner<App>(TestAppSettings.DetailedHelp)
+                .UseVersionMiddleware()
+                .VerifyScenario(TestOutputHelper, scenario);
+
+            new AppRunner<App>(VersionEnabledDetailedHelp)
+                .UseBackwardsCompatibilityMode()
+                .VerifyScenario(TestOutputHelper, scenario);
         }
 
         [Fact]
-        public void WhenVersionDisabled_BasicHelp_IncludesVersionOption()
+        public void WhenVersionDisabled_BasicHelp_DoesNotIncludeVersionOption()
         {
-            Verify(new Scenario<App>
-            {
-                Given = { AppSettings = VersionDisabled },
-                WhenArgs = "-h",
-                Then = { ResultsNotContainsTexts = { "-v | --version" } }
-            });
+            new AppRunner<App>(TestAppSettings.BasicHelp)
+                .VerifyScenario(TestOutputHelper, new Scenario
+                {
+                    WhenArgs = "-h",
+                    Then = { ResultsNotContainsTexts = { "-v | --version" } }
+                });
         }
 
         [Fact]
-        public void WhenVersionDisabled_DetailedHelp_IncludesVersionOption()
+        public void WhenVersionDisabled_DetailedHelp_DoesNotIncludeVersionOption()
         {
-            Verify(new Scenario<App>
-            {
-                Given = { AppSettings = VersionDisabled },
-                WhenArgs = "-h",
-                Then = { ResultsNotContainsTexts = { "-v | --version" } }
-            });
+            new AppRunner<App>(TestAppSettings.DetailedHelp)
+                .VerifyScenario(TestOutputHelper, new Scenario
+                {
+                    WhenArgs = "-h",
+                    Then = {ResultsNotContainsTexts = {"-v | --version"}}
+                });
         }
 
         [Fact]
         public void WhenVersionEnabled_Version_LongName_OutputsVersion()
         {
-            Verify(new Scenario<App>
+            var scenario = new Scenario
             {
-                Given = { AppSettings = VersionEnabledBasicHelp },
                 WhenArgs = "--version",
                 Then =
                 {
                     Result = @"testhost.dll
 15.9.0"
                 }
-            });
+            };
+
+            new AppRunner<App>()
+                .UseVersionMiddleware()
+                .VerifyScenario(TestOutputHelper, scenario);
+
+            new AppRunner<App>(VersionEnabled)
+                .UseBackwardsCompatibilityMode()
+                .VerifyScenario(TestOutputHelper, scenario);
         }
 
         [Fact]
         public void WhenVersionEnabled_Version_ShortName_OutputsVersion()
         {
-            Verify(new Scenario<App>
+            var scenario = new Scenario
             {
-                Given = { AppSettings = VersionEnabledBasicHelp },
                 WhenArgs = "-v",
                 Then =
                 {
                     Result = @"testhost.dll
 15.9.0"
                 }
-            });
+            };
+            
+            new AppRunner<App>()
+                .UseVersionMiddleware()
+                .VerifyScenario(TestOutputHelper, scenario);
+
+            new AppRunner<App>(VersionEnabled)
+                .UseBackwardsCompatibilityMode()
+                .VerifyScenario(TestOutputHelper, scenario);
         }
 
         [Fact]
-        public void WhenVersionEnabled_Version_LongName_NotRecognized()
+        public void WhenVersionDisabled_Version_LongName_NotRecognized()
         {
-            Verify(new Scenario<App>
-            {
-                Given = { AppSettings = VersionDisabled },
-                WhenArgs = "--version",
-                Then =
+            new AppRunner<App>()
+                .VerifyScenario(TestOutputHelper, new Scenario
                 {
-                    ExitCode = 1,
-                    ResultsContainsTexts = { "Unrecognized option '--version'" }
-                }
-            });
+                    WhenArgs = "--version",
+                    Then =
+                    {
+                        ExitCode = 1,
+                        ResultsContainsTexts = { "Unrecognized option '--version'" }
+                    }
+                });
         }
 
         [Fact]
-        public void WhenVersionEnabled_Version_ShortName_NotRecognized()
+        public void WhenVersionDisabled_Version_ShortName_NotRecognized()
         {
-            Verify(new Scenario<App>
-            {
-                Given = { AppSettings = VersionDisabled },
-                WhenArgs = "-v",
-                Then =
+            new AppRunner<App>()
+                .VerifyScenario(TestOutputHelper, new Scenario
                 {
-                    ExitCode = 1,
-                    ResultsContainsTexts = { "Unrecognized option '-v'" }
-                }
-            });
+                    WhenArgs = "-v",
+                    Then =
+                    {
+                        ExitCode = 1,
+                        ResultsContainsTexts = {"Unrecognized option '-v'"}
+                    }
+                });
         }
 
         public class App

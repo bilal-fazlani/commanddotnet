@@ -13,7 +13,7 @@ namespace CommandDotNet.Builders
         private const string VersionOptionName = "version";
         private const string VersionTemplate = "-v | --" + VersionOptionName;
         
-        internal static AppRunner UseVersionMiddleware(this AppRunner appRunner)
+        internal static AppRunner UseVersionMiddleware(AppRunner appRunner)
         {
             return appRunner.Configure(c =>
             {

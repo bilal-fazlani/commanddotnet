@@ -37,6 +37,7 @@ namespace CommandDotNet
 
         public Case Case { get; set; } = Case.DontChange;
 
+        [Obsolete("Use appRunner.UseVersionMiddleware() extension method")]
         public bool EnableVersionOption { get; set; } = true;
 
         /// <summary>
