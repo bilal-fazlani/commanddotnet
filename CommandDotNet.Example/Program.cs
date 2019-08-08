@@ -29,6 +29,10 @@ namespace CommandDotNet.Example
             return new AppRunner<TApp>(appSettings)
                 .UseDebugDirective()
                 .UseParseDirective()
+                .UseVersionMiddleware()
+                .UseFluentValidation()
+                .UsePromptForMissingOperands()
+                .UseResponseFiles()
                 .Run(args);
         }
 

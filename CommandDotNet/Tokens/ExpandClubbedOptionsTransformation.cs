@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using CommandDotNet.Parsing;
 
 namespace CommandDotNet.Tokens
@@ -8,7 +7,7 @@ namespace CommandDotNet.Tokens
     {
         internal static TokenCollection Transform(this TokenCollection tokenCollection)
         {
-            return new TokenCollection(tokenCollection.SelectMany(ExpandClubbedOption));
+            return tokenCollection.Transform(ExpandClubbedOption, skipDirectives: true, skipSeparated: true);
         }
 
         private static IEnumerable<Token> ExpandClubbedOption(Token token)

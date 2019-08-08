@@ -30,7 +30,7 @@ namespace CommandDotNet.Tokens
                 }
                 catch (Exception e)
                 {
-                    throw new AppRunnerException($"transformation failure for: {transformation}", e);
+                    throw new TokenTransformationException(transformation, e);
                 }
             }
 

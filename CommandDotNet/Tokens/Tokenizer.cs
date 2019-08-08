@@ -7,6 +7,8 @@ namespace CommandDotNet.Tokens
 {
     public static class Tokenizer
     {
+        internal const string SeparatorString = "--";
+
         public static TokenCollection Tokenize(this IEnumerable<string> args, bool includeDirectives = false)
         {
             return new TokenCollection(ParseTokens(args, includeDirectives));
@@ -36,7 +38,7 @@ namespace CommandDotNet.Tokens
 
         public static bool TryTokenizeSeparator(string arg, out Token token)
         {
-            if (arg == "--")
+            if (arg == SeparatorString)
             {
                 token = new Token(arg, arg, TokenType.Separator);
                 return true;
@@ -67,21 +69,9 @@ namespace CommandDotNet.Tokens
             return true;
         }
 
-        public static Token TokenizeValue(string arg)
+        public static Token TokenizeValue(string argValue)
         {
-            return new Token(arg, arg, TokenType.Value);
-        }
-
-        public static string[] ToArgsArray(this TokenCollection tokens)
-        {
-            var results = tokens.Directives.Select(t => t.RawValue)
-                .Union(tokens.Arguments.Select(t => t.RawValue));
-            if (tokens.Separated.Any())
-            {
-                results = results.Union("--".ToEnumerable())
-                    .Union(tokens.Separated.Select(t => t.RawValue));
-            }
-            return results.ToArray();
+            return new Token(argValue, argValue, TokenType.Value);
         }
 
         public static string[] ToArgsArray(this IEnumerable<Token> tokens)

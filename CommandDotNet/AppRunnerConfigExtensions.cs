@@ -4,6 +4,7 @@ using CommandDotNet.ClassModeling;
 using CommandDotNet.Directives;
 using CommandDotNet.Execution;
 using CommandDotNet.Parsing;
+using CommandDotNet.Tokens;
 
 namespace CommandDotNet
 {
@@ -68,6 +69,11 @@ namespace CommandDotNet
         {
             return appRunner.Configure(c =>
                 c.UseMiddleware(ValuePromptMiddleware.PromptForMissingOperands, MiddlewareStages.PostParseInputPreBindValues));
+        }
+
+        public static AppRunner UseResponseFiles(this AppRunner appRunner)
+        {
+            return ExpandResponseFilesTransformation.UseResponseFiles(appRunner);
         }
 
         private static void AssertDirectivesAreEnabled(AppRunner appRunner)

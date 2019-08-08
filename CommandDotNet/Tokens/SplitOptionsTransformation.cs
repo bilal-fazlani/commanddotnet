@@ -8,7 +8,7 @@ namespace CommandDotNet.Tokens
     {
         internal static TokenCollection Transform(this TokenCollection tokenCollection)
         {
-            return new TokenCollection(tokenCollection.SelectMany(SplitOptionAssignment));
+            return tokenCollection.Transform(SplitOptionAssignment, skipDirectives: true, skipSeparated: true);
         }
 
         private static IEnumerable<Token> SplitOptionAssignment(Token token)

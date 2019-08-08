@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Tests.Utils
 {
@@ -21,7 +22,9 @@ namespace CommandDotNet.Tests.Utils
 
         public static string[] SplitArgs(this string args)
         {
-            return args?.Trim().Split(' ') ?? new string[0];
+            return args == null
+                ? new string[0]
+                : CommandLineStringSplitter.Instance.Split(args).ToArray();
         }
     }
 }
