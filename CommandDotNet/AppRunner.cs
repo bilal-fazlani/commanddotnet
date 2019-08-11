@@ -96,8 +96,7 @@ namespace CommandDotNet
 
             var tokens = args.Tokenize(includeDirectives: AppSettings.EnableDirectives);
             var commandContext = new CommandContext(
-                args, tokens, AppSettings,
-                _appConfigBuilder.Build(AppSettings));
+                args, tokens, _appConfigBuilder.Build(AppSettings));
 
             return InvokeMiddleware(commandContext);
         }

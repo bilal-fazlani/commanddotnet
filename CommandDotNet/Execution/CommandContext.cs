@@ -37,21 +37,17 @@ namespace CommandDotNet.Execution
 
         public AppConfig AppConfig { get; }
 
-        public AppSettings AppSettings { get; }
-
         public IConsole Console => AppConfig.Console;
 
         public IContextData ContextData { get; } = new ContextData();
 
         public CommandContext(
             string[] originalArgs, 
-            TokenCollection originalTokens, 
-            AppSettings appSettings,
+            TokenCollection originalTokens,
             AppConfig appConfig)
         {
             Original = new OriginalInput(originalArgs, originalTokens);
             Tokens = originalTokens;
-            AppSettings = appSettings;
             AppConfig = appConfig;
         }
     }

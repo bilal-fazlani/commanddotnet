@@ -22,7 +22,7 @@ namespace CommandDotNet.Parsing
         {
             try
             {
-                new CommandParser(commandContext.AppSettings).ParseCommand(commandContext);
+                new CommandParser(commandContext.AppConfig.AppSettings).ParseCommand(commandContext);
             }
             catch (CommandParsingException ex)
             {

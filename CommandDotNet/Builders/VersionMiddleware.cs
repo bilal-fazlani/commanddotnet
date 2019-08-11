@@ -49,7 +49,7 @@ namespace CommandDotNet.Builders
         {
             if (commandContext.ParseResult.ArgumentValues.Contains(VersionOptionName))
             {
-                Print(commandContext.AppSettings, commandContext.Console);
+                Print(commandContext.AppConfig.AppSettings, commandContext.Console);
                 return Task.FromResult(0);
             }
 
