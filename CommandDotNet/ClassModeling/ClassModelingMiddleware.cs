@@ -36,6 +36,7 @@ namespace CommandDotNet.ClassModeling
             {
                 var ctx = commandContext.InvocationContext;
                 ctx.InstantiateInvocation = commandDef.InstantiateMethodDef;
+                ctx.CommandMiddlewareInvocation = commandDef.MiddlewareMethodDef;
                 ctx.CommandInvocation = commandDef.InvokeMethodDef;
             }
 
@@ -67,8 +68,10 @@ namespace CommandDotNet.ClassModeling
                 var parserFactory = new ParserFactory(commandContext.AppSettings);
 
                 var instantiateArgs = commandDef.InstantiateMethodDef.ArgumentDefs;
+                var middlewareArgs = commandDef.MiddlewareMethodDef.ArgumentDefs;
                 var invokeArgs = commandDef.InvokeMethodDef.ArgumentDefs;
-                foreach (var argumentDef in instantiateArgs.Union(invokeArgs))
+
+                foreach (var argumentDef in instantiateArgs.Union(middlewareArgs).Union(invokeArgs))
                 {
                     if (argumentValues.TryGetValues(argumentDef.Argument, out var values))
                     {
@@ -125,8 +128,14 @@ namespace CommandDotNet.ClassModeling
         {
             var ctx = commandContext.InvocationContext;
 
-            var result = ctx.CommandInvocation.Invoke(commandContext, ctx.Instance);
-            return result.GetResultCodeAsync();
-        }
+            if (ctx.CommandMiddlewareInvocation != null)
+            {
+                return ctx.CommandMiddlewareInvocation.InvokeAsMiddleware(commandContext, ctx.Instance,
+                    commandCtx => ctx.CommandInvocation.Invoke(commandContext, ctx.Instance).GetResultCodeAsync());
+            }
+            else
+            {
+                return ctx.CommandInvocation.Invoke(commandContext, ctx.Instance).GetResultCodeAsync();
+            }}
     }
 }

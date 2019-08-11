@@ -16,6 +16,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         public IReadOnlyCollection<IArgumentDef> Arguments { get; }
         public IReadOnlyCollection<ICommandDef> SubCommands { get; } = new List<ICommandDef>().AsReadOnly();
         public IMethodDef InstantiateMethodDef { get; }
+        public IMethodDef MiddlewareMethodDef { get; }
         public IMethodDef InvokeMethodDef { get; }
         public Command Command { get; set; }
 
@@ -25,6 +26,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             
             Name = name;
             InstantiateMethodDef = NullMethodDef.Instance;
+            MiddlewareMethodDef = NullMethodDef.Instance;
             InvokeMethodDef = new MethodDef(handlerDelegate.Method, appConfig);
             Arguments = InvokeMethodDef.ArgumentDefs;
 

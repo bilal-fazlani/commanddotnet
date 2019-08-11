@@ -10,6 +10,9 @@ namespace CommandDotNet.ClassModeling.Definitions
 {
     internal class MethodDef : IMethodDef
     {
+        public static readonly Type MiddlewareNextReturnType = typeof(Task<int>);
+        public static readonly Type MiddlewareNextParameterType = typeof(Func<CommandContext, Task<int>>);
+
         private readonly AppConfig _appConfig;
         private IReadOnlyCollection<IArgumentDef> _argumentDefs;
         private IReadOnlyCollection<IArgument> _arguments;
@@ -36,10 +39,20 @@ namespace CommandDotNet.ClassModeling.Definitions
             _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
         }
 
-        public object InvokeAsMiddleware(CommandContext commandContext, Func<CommandContext,Task<int>> next,  object instance)
+        public static bool IsMiddlewareMethod(MethodBase methodBase)
+        {
+            return methodBase.GetParameters().Any(IsMiddlewareNextType);
+        }
+
+        private static bool IsMiddlewareNextType(ParameterInfo parameterInfo)
+        {
+            return parameterInfo.ParameterType == MiddlewareNextParameterType;
+        }
+
+        public Task<int> InvokeAsMiddleware(CommandContext commandContext, object instance, Func<CommandContext,Task<int>> next)
         {
             _setNext?.Invoke(next);
-            return Invoke(commandContext, instance);
+            return Invoke(commandContext, instance).GetResultCodeAsync();
         }
 
         public object Invoke(CommandContext commandContext, object instance)
@@ -112,7 +125,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 return Enumerable.Empty<IArgumentDef>();
             }
 
-            if (parameterInfo.ParameterType == typeof(Func<CommandContext, Task<int>>))
+            if (IsMiddlewareNextType(parameterInfo))
             {
                 _setNext = next => _values[parameterInfo.Position] = next;
                 return Enumerable.Empty<IArgumentDef>();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 
@@ -26,7 +27,9 @@ namespace CommandDotNet.ClassModeling.Definitions
         public IReadOnlyCollection<ICommandDef> SubCommands => _subCommands.Value;
 
         public IMethodDef InstantiateMethodDef { get; }
-        
+
+        public IMethodDef MiddlewareMethodDef { get; }
+
         public IMethodDef InvokeMethodDef => _defaultCommandDef.InvokeMethodDef;
 
         public Command Command { get; set; }
@@ -45,14 +48,79 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             Name = classType.BuildName(commandContext.AppConfig);
 
-            _defaultCommandDef = GetDefaultMethod();
-
             InstantiateMethodDef = BuildCtorMethod();
 
-            Arguments = _defaultCommandDef.Arguments.Union(InstantiateMethodDef.ArgumentDefs).ToArray();
+            var (middlewareMethod, defaultCommand, localCommands) = ParseMethods(commandContext.AppConfig);
+
+            MiddlewareMethodDef = middlewareMethod;
+            _defaultCommandDef = defaultCommand;
+
+            Arguments = _defaultCommandDef.Arguments
+                .Union(InstantiateMethodDef.ArgumentDefs)
+                .Union(MiddlewareMethodDef.ArgumentDefs)
+                .ToArray();
 
             // lazy loading prevents walking the entire hierarchy of sub-commands
-            _subCommands = new Lazy<List<ICommandDef>>(GetSubCommands);
+            _subCommands = new Lazy<List<ICommandDef>>(() => GetSubCommands(localCommands));
+        }
+
+        private (IMethodDef middlewareMethod, ICommandDef defaultCommand, List<ICommandDef> localCommands) ParseMethods(AppConfig appConfig)
+        {
+            MethodInfo middlewareMethodInfo = null;
+            MethodInfo defaultCommandMethodInfo = null;
+            List<MethodInfo> localCommandMethodInfos = new List<MethodInfo>();
+
+            foreach (var method in _classType.GetDeclaredMethods())
+            {
+                if (MethodDef.IsMiddlewareMethod(method))
+                {
+                    if (middlewareMethodInfo != null)
+                    {
+                        throw new InvalidConfigurationException($"`{_classType}` defines more than one middleware method with a parameter of type {MethodDef.MiddlewareNextParameterType}.  There can be only one.");
+                    }
+                    if (method.HasAttribute<DefaultMethodAttribute>())
+                    {
+                        throw new InvalidConfigurationException($"`{_classType}.{method.Name}` default method cannot contain parameter of type {MethodDef.MiddlewareNextParameterType}.");
+                    }
+
+                    var emDelegate = new ExecutionMiddleware((context, next) => Task.FromResult(1)).Method;
+                    if (method.ReturnType != emDelegate.ReturnType)
+                    {
+                        throw new InvalidConfigurationException($"`{_classType}.{method.Name}` must return type of {emDelegate.ReturnType}, matching {typeof(ExecutionMiddleware)}.");
+                    }
+
+                    middlewareMethodInfo = method;
+                }
+                else if (method.HasAttribute<DefaultMethodAttribute>())
+                {
+                    if (defaultCommandMethodInfo != null)
+                    {
+                        throw new InvalidConfigurationException($"`{_classType}` defines more than one method with {nameof(DefaultMethodAttribute)}.  There can be only one.");
+                    }
+                    defaultCommandMethodInfo = method;
+                }
+                else
+                {
+                    localCommandMethodInfos.Add(method);
+                }
+            }
+
+            var middlewareMethod = middlewareMethodInfo == null 
+                ? NullMethodDef.Instance 
+                : new MethodDef(middlewareMethodInfo, appConfig);
+
+            var defaultCommand = defaultCommandMethodInfo == null
+                ? (ICommandDef)new NullCommandDef(Name)
+                : new MethodCommandDef(defaultCommandMethodInfo, InstantiateMethodDef, middlewareMethod, appConfig);
+            
+            return (
+                middlewareMethod,
+                defaultCommand,
+                localCommandMethodInfos
+                    .Select(m => new MethodCommandDef(m, InstantiateMethodDef, middlewareMethod, appConfig))
+                    .Cast<ICommandDef>()
+                    .ToList());
+
         }
 
         private MethodDef BuildCtorMethod()
@@ -70,22 +138,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             return methodInfo;
         }
 
-        private ICommandDef GetDefaultMethod()
-        {
-            var defaultMethod = _classType.GetDeclaredMethods().FirstOrDefault(m => m.HasAttribute<DefaultMethodAttribute>());
-            return defaultMethod == null
-                ? (ICommandDef)new NullCommandDef(Name)
-                : new MethodCommandDef(defaultMethod, InstantiateMethodDef, _commandContext.AppConfig);
-        }
-
-        private List<ICommandDef> GetSubCommands() => GetLocalSubCommands().Union(GetNestedSubCommands()).ToList();
-
-        private IEnumerable<ICommandDef> GetLocalSubCommands()
-        {
-            return _classType.GetDeclaredMethods()
-                .Where(m => !m.HasAttribute<DefaultMethodAttribute>())
-                .Select(m => new MethodCommandDef(m, InstantiateMethodDef, _commandContext.AppConfig));
-        }
+        private List<ICommandDef> GetSubCommands(IEnumerable<ICommandDef> localSubCommands) => localSubCommands.Union(GetNestedSubCommands()).ToList();
 
         private IEnumerable<ICommandDef> GetNestedSubCommands()
         {

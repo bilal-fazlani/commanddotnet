@@ -4,6 +4,7 @@
     {
         public object Instance { get; set; }
         public IInvocation InstantiateInvocation { get; set; }
+        public IInvocation CommandMiddlewareInvocation { get; set; }
         public IInvocation CommandInvocation { get; set; }
     }
 }
