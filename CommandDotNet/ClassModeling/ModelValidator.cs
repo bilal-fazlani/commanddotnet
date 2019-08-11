@@ -31,12 +31,10 @@ namespace CommandDotNet.ClassModeling
                 var modelValidator = new ModelValidator(commandContext.AppConfig.DependencyResolver);
 
                 // TODO: move to Context object
-                var instantiateValues = commandDef.InstantiateMethodDef.ParameterValues;
                 var middlewareValues = commandDef.MiddlewareMethodDef.ParameterValues;
                 var invokeValues = commandDef.InvokeMethodDef.ParameterValues;
 
-                var failureResults = instantiateValues
-                    .Union(middlewareValues)
+                var failureResults = middlewareValues
                     .Union(invokeValues)
                     .OfType<IArgumentModel>()
                     .Select(model =>new {model, result=modelValidator.ValidateModel(model)})

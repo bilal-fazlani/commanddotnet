@@ -25,7 +25,7 @@ namespace CommandDotNet.Tests.Utils
 
             var resolver = new TestDependencyResolver();
             dependencies?.ForEach(resolver.Register);
-            runner.UseDependencyResolver(resolver);
+            runner.UseDependencyResolver(resolver, useLegacyInjectDependenciesAttribute: true);
 
             var outputs = new TestOutputs();
             resolver.Register(outputs);

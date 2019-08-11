@@ -26,7 +26,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public IReadOnlyCollection<ICommandDef> SubCommands => _subCommands.Value;
 
-        public IMethodDef InstantiateMethodDef { get; }
+        public Func<object> InstanceFactory { get; }
 
         public IMethodDef MiddlewareMethodDef { get; }
 
@@ -48,7 +48,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             Name = classType.BuildName(commandContext.AppConfig);
 
-            InstantiateMethodDef = BuildCtorMethod();
+            InstanceFactory = () => ResolveInstance(commandContext);
 
             var (middlewareMethod, defaultCommand, localCommands) = ParseMethods(commandContext.AppConfig);
 
@@ -56,7 +56,6 @@ namespace CommandDotNet.ClassModeling.Definitions
             _defaultCommandDef = defaultCommand;
 
             Arguments = _defaultCommandDef.Arguments
-                .Union(InstantiateMethodDef.ArgumentDefs)
                 .Union(MiddlewareMethodDef.ArgumentDefs)
                 .ToArray();
 
@@ -111,31 +110,25 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             var defaultCommand = defaultCommandMethodInfo == null
                 ? (ICommandDef)new NullCommandDef(Name)
-                : new MethodCommandDef(defaultCommandMethodInfo, InstantiateMethodDef, middlewareMethod, appConfig);
+                : new MethodCommandDef(defaultCommandMethodInfo, InstanceFactory, middlewareMethod, appConfig);
             
             return (
                 middlewareMethod,
                 defaultCommand,
                 localCommandMethodInfos
-                    .Select(m => new MethodCommandDef(m, InstantiateMethodDef, middlewareMethod, appConfig))
+                    .Select(m => new MethodCommandDef(m, InstanceFactory, middlewareMethod, appConfig))
                     .Cast<ICommandDef>()
                     .ToList());
 
         }
 
-        private MethodDef BuildCtorMethod()
+        private object ResolveInstance(CommandContext commandContext)
         {
-            var firstCtor = _classType.GetConstructors().FirstOrDefault();
+            var resolver = commandContext.AppConfig.DependencyResolver;
 
-            var methodInfo = new MethodDef(firstCtor, _commandContext.AppConfig);
-
-            if (methodInfo.ArgumentDefs.Any(a => a.ArgumentType == ArgumentType.Operand))
-            {
-                throw new AppRunnerException(
-                    $"Constructor arguments can not have [Operand] or [Argument] attribute. Use [Option] attribute. {methodInfo}");
-            }
-
-            return methodInfo;
+            return resolver != null && resolver.TryResolve(_classType, out var instance)
+                ? instance
+                : Activator.CreateInstance(_classType);
         }
 
         private List<ICommandDef> GetSubCommands(IEnumerable<ICommandDef> localSubCommands) => localSubCommands.Union(GetNestedSubCommands()).ToList();

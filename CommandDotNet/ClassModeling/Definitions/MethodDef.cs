@@ -88,9 +88,9 @@ namespace CommandDotNet.ClassModeling.Definitions
         {
             _parameters = MethodBase.GetParameters();
 
-            var isCtor = MethodBase is ConstructorInfo;
+            var isMiddleware = _parameters.Any(IsMiddlewareNextType);
 
-            var argumentMode = isCtor
+            var argumentMode = isMiddleware
                 ? ArgumentMode.Option
                 : _appConfig.AppSettings.MethodArgumentMode;
             

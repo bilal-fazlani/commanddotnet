@@ -18,7 +18,7 @@ namespace CommandDotNet.ClassModeling
                 c.UseMiddleware(SetInvocationContextMiddleware, MiddlewareStages.ParseInput);
                 c.UseMiddleware(DisplayHelpIfCommandIsNotExecutable, MiddlewareStages.BindValues);
                 c.UseMiddleware(BindValuesMiddleware, MiddlewareStages.BindValues);
-                c.UseMiddleware(CreateInstancesMiddleware, MiddlewareStages.BindValues);
+                c.UseMiddleware(ResolveInstancesMiddleware, MiddlewareStages.BindValues);
                 c.UseMiddleware(InvokeCommandDefMiddleware, MiddlewareStages.Invoke, int.MaxValue);
             });
         }
@@ -35,7 +35,6 @@ namespace CommandDotNet.ClassModeling
             if (commandDef != null)
             {
                 var ctx = commandContext.InvocationContext;
-                ctx.InstantiateInvocation = commandDef.InstantiateMethodDef;
                 ctx.CommandMiddlewareInvocation = commandDef.MiddlewareMethodDef;
                 ctx.CommandInvocation = commandDef.InvokeMethodDef;
             }
@@ -67,11 +66,10 @@ namespace CommandDotNet.ClassModeling
                 var argumentValues = commandContext.ParseResult.ArgumentValues;
                 var parserFactory = new ParserFactory(commandContext.AppSettings);
 
-                var instantiateArgs = commandDef.InstantiateMethodDef.ArgumentDefs;
                 var middlewareArgs = commandDef.MiddlewareMethodDef.ArgumentDefs;
                 var invokeArgs = commandDef.InvokeMethodDef.ArgumentDefs;
 
-                foreach (var argumentDef in instantiateArgs.Union(middlewareArgs).Union(invokeArgs))
+                foreach (var argumentDef in middlewareArgs.Union(invokeArgs))
                 {
                     if (argumentValues.TryGetValues(argumentDef.Argument, out var values))
                     {
@@ -98,14 +96,14 @@ namespace CommandDotNet.ClassModeling
             return next(commandContext);
         }
 
-        private static async Task<int> CreateInstancesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        private static async Task<int> ResolveInstancesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             var command = commandContext.ParseResult.TargetCommand;
             var commandDef = command.ContextData.Get<ICommandDef>();
 
             if (commandDef != null)
             {
-                commandContext.InvocationContext.Instance = commandDef.InstantiateMethodDef.Invoke(commandContext, null);
+                commandContext.InvocationContext.Instance = commandDef.InstanceFactory();
             }
 
             try

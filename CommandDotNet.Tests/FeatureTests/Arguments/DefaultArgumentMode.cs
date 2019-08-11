@@ -1,3 +1,6 @@
+using System;
+using System.Threading.Tasks;
+using CommandDotNet.Execution;
 using CommandDotNet.Tests.ScenarioFramework;
 using Xunit;
 using Xunit.Abstractions;
@@ -15,7 +18,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         }
 
         [Fact]
-        public void GivenOperandMode_InCtor_NonAttributedParamsDefaultTo_Operand()
+        public void GivenOperandMode_InMiddleware_NonAttributedParamsDefaultTo_Operand()
         {
             Verify(new Scenario<App>
             {
@@ -79,7 +82,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         }
 
         [Fact]
-        public void GivenOptionMode_InCtor_NonAttributedParamsDefaultTo_Option()
+        public void GivenOptionMode_InMiddleware_NonAttributedParamsDefaultTo_Option()
         {
             Verify(new Scenario<App>
             {
@@ -143,7 +146,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         }
 
         [Fact]
-        public void GivenObsoleteParameterMode_InCtor_NonAttributedParamsDefaultTo_Operand()
+        public void GivenObsoleteParameterMode_InMiddleware_NonAttributedParamsDefaultTo_Operand()
         {
             Verify(new Scenario<App>
             {
@@ -208,9 +211,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         public class App
         {
-            public App(string ctorDefault, [Option] string ctorOption)
+            public Task<int> Middleware(CommandContext context, Func<CommandContext, Task<int>> next, string ctorDefault, [Option] string ctorOption)
             {
-
+                return next(context);
             }
 
             public void Model(Model model)

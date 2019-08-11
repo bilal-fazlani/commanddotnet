@@ -60,9 +60,12 @@ namespace CommandDotNet
                 c.UseMiddleware(ModelValidator.ValidateModelsMiddleware, MiddlewareStages.PostBindValuesPreInvoke));
         }
 
-        public static AppRunner UseDependencyResolver(this AppRunner appRunner, IDependencyResolver dependencyResolver)
+        public static AppRunner UseDependencyResolver(
+            this AppRunner appRunner, 
+            IDependencyResolver dependencyResolver, 
+            bool useLegacyInjectDependenciesAttribute = false)
         {
-            return DependencyResolverMiddleware.UseDependencyResolver(appRunner, dependencyResolver);
+            return DependencyResolverMiddleware.UseDependencyResolver(appRunner, dependencyResolver, useLegacyInjectDependenciesAttribute);
         }
 
         public static AppRunner UsePromptForMissingOperands(this AppRunner appRunner)

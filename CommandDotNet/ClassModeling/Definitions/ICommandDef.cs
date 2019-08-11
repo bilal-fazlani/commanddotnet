@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace CommandDotNet.ClassModeling.Definitions
@@ -10,7 +11,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         bool IsExecutable { get; }
         IReadOnlyCollection<IArgumentDef> Arguments { get; }
         IReadOnlyCollection<ICommandDef> SubCommands { get; }
-        IMethodDef InstantiateMethodDef { get; }
+        Func<object> InstanceFactory { get; }
         IMethodDef MiddlewareMethodDef { get; }
         IMethodDef InvokeMethodDef { get; }
         Command Command { get; set; }

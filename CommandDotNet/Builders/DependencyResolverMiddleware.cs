@@ -8,12 +8,15 @@ namespace CommandDotNet.Builders
 {
     internal static class DependencyResolverMiddleware
     {
-        internal static AppRunner UseDependencyResolver(AppRunner appRunner, IDependencyResolver dependencyResolver)
+        internal static AppRunner UseDependencyResolver(AppRunner appRunner, IDependencyResolver dependencyResolver, bool useLegacyInjectDependenciesAttribute)
         {
             return appRunner.Configure(c =>
             {
                 c.UseDependencyResolver(dependencyResolver);
-                c.UseMiddleware(InjectDependencies, MiddlewareStages.PostBindValuesPreInvoke);
+                if (useLegacyInjectDependenciesAttribute)
+                {
+                    c.UseMiddleware(InjectDependencies, MiddlewareStages.PostBindValuesPreInvoke);
+                }
             });
         }
 
