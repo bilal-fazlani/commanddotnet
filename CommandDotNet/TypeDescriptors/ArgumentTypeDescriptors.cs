@@ -38,20 +38,28 @@ namespace CommandDotNet.TypeDescriptors
         internal ArgumentTypeDescriptors(ArgumentTypeDescriptors origin)
         {
             _customDescriptors = new List<IArgumentTypeDescriptor>(origin._customDescriptors);
-            _defaultDescriptors = new List<IArgumentTypeDescriptor>(origin._defaultDescriptors);
         }
 
+        /// <summary>Registers your customer descriptor</summary>
         public void Add(IArgumentTypeDescriptor argumentTypeDescriptor)
         {
             _customDescriptors.Add(new ErrorReportingDescriptor(argumentTypeDescriptor));
         }
 
+        /// <summary>.
+        /// Returns the first descriptor that supports this type. Returns null if no descriptor found.<br/>
+        /// Custom descriptors are evaluated before built-in descriptors
+        /// </summary>
         public IArgumentTypeDescriptor GetDescriptor(Type type)
         {
             return _customDescriptors.FirstOrDefault(d => d.CanSupport(type))
                    ?? _defaultDescriptors.FirstOrDefault(d => d.CanSupport(type));
         }
 
+        /// <summary>.
+        /// Returns the first descriptor that supports this type. Throws AppRunnerException if no descriptor found.<br/>
+        /// Custom descriptors are evaluated before built-in descriptors
+        /// </summary>
         public IArgumentTypeDescriptor GetDescriptorOrThrow(Type type)
         {
             return GetDescriptor(type) ?? throw new AppRunnerException(
