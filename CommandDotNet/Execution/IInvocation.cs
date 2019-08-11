@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace CommandDotNet.Execution
 {
@@ -10,7 +8,6 @@ namespace CommandDotNet.Execution
         IReadOnlyCollection<IArgument> Arguments { get; }
         IReadOnlyCollection<ParameterInfo> Parameters { get; }
         object[] ParameterValues { get; }
-        Task<int> InvokeAsMiddleware(CommandContext commandContext, object instance, Func<CommandContext, Task<int>> next);
         object Invoke(CommandContext commandContext, object instance);
     }
 }

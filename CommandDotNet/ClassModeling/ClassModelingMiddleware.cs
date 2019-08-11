@@ -34,9 +34,7 @@ namespace CommandDotNet.ClassModeling
             var commandDef = commandContext.ParseResult.TargetCommand.ContextData.Get<ICommandDef>();
             if (commandDef != null)
             {
-                var ctx = commandContext.InvocationContext;
-                ctx.CommandMiddlewareInvocation = commandDef.MiddlewareMethodDef;
-                ctx.CommandInvocation = commandDef.InvokeMethodDef;
+                commandContext.InvocationContext.CommandInvocation = commandDef.InvokeMethodDef;
             }
 
             return next(commandContext);
@@ -64,7 +62,7 @@ namespace CommandDotNet.ClassModeling
             {
                 var console = commandContext.Console;
                 var argumentValues = commandContext.ParseResult.ArgumentValues;
-                var parserFactory = new ParserFactory(commandContext.AppSettings);
+                var parserFactory = new ParserFactory(commandContext.AppConfig.AppSettings);
 
                 var middlewareArgs = commandDef.MiddlewareMethodDef.ArgumentDefs;
                 var invokeArgs = commandDef.InvokeMethodDef.ArgumentDefs;
@@ -125,15 +123,15 @@ namespace CommandDotNet.ClassModeling
         private static Task<int> InvokeCommandDefMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             var ctx = commandContext.InvocationContext;
+            var commandDef = commandContext.ParseResult.TargetCommand.ContextData.Get<ICommandDef>();
 
-            if (ctx.CommandMiddlewareInvocation != null)
+            if (commandDef.MiddlewareMethodDef != null)
             {
-                return ctx.CommandMiddlewareInvocation.InvokeAsMiddleware(commandContext, ctx.Instance,
+                return commandDef.MiddlewareMethodDef.InvokeAsMiddleware(commandContext, ctx.Instance,
                     commandCtx => ctx.CommandInvocation.Invoke(commandContext, ctx.Instance).GetResultCodeAsync());
             }
-            else
-            {
-                return ctx.CommandInvocation.Invoke(commandContext, ctx.Instance).GetResultCodeAsync();
-            }}
+
+            return ctx.CommandInvocation.Invoke(commandContext, ctx.Instance).GetResultCodeAsync();
+        }
     }
 }
