@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 
@@ -14,6 +15,9 @@ namespace CommandDotNet.ClassModeling.Definitions
         private IReadOnlyCollection<IArgument> _arguments;
         private ParameterInfo[] _parameters;
         private object[] _values;
+
+        private Action<CommandContext> _setCommandContext;
+        private Action<Func<CommandContext, Task<int>>> _setNext;
 
         public MethodBase MethodBase { get; }
 
@@ -32,10 +36,17 @@ namespace CommandDotNet.ClassModeling.Definitions
             _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
         }
 
-        public object Invoke(object instance)
+        public object InvokeAsMiddleware(CommandContext commandContext, Func<CommandContext,Task<int>> next,  object instance)
+        {
+            _setNext?.Invoke(next);
+            return Invoke(commandContext, instance);
+        }
+
+        public object Invoke(CommandContext commandContext, object instance)
         {
             // TODO: make async
-            // TODO: pass execution context
+
+            _setCommandContext?.Invoke(commandContext);
             return MethodBase is ConstructorInfo ctor
                 ? ctor.Invoke(_values)
                 : MethodBase.Invoke(instance, _values);
@@ -84,19 +95,36 @@ namespace CommandDotNet.ClassModeling.Definitions
             _argumentDefs = arguments.AsReadOnly();
         }
 
-        private IEnumerable<IArgumentDef> GetArgsFromParameter(ParameterInfo parameterInfo, ArgumentMode argumentMode) =>
-            parameterInfo.ParameterType.InheritsFrom<IArgumentModel>()
-                ? GetArgumentsFromModel(
+        private IEnumerable<IArgumentDef> GetArgsFromParameter(ParameterInfo parameterInfo, ArgumentMode argumentMode)
+        {
+            if (parameterInfo.ParameterType.InheritsFrom<IArgumentModel>())
+            {
+                return GetArgumentsFromModel(
                     parameterInfo.ParameterType,
                     argumentMode,
                     null,
+                    value => _values[parameterInfo.Position] = value);
+            }
+
+            if (parameterInfo.ParameterType == typeof(CommandContext))
+            {
+                _setCommandContext = ctx => _values[parameterInfo.Position] = ctx;
+                return Enumerable.Empty<IArgumentDef>();
+            }
+
+            if (parameterInfo.ParameterType == typeof(Func<CommandContext, Task<int>>))
+            {
+                _setNext = next => _values[parameterInfo.Position] = next;
+                return Enumerable.Empty<IArgumentDef>();
+            }
+
+            return new ParameterArgumentDef(
+                    parameterInfo,
+                    GetArgumentType(parameterInfo, argumentMode),
+                    _appConfig,
                     value => _values[parameterInfo.Position] = value)
-                : new ParameterArgumentDef(
-                        parameterInfo,
-                        GetArgumentType(parameterInfo, argumentMode),
-                        _appConfig,
-                        value => _values[parameterInfo.Position] = value)
-                    .ToEnumerable();
+                .ToEnumerable();
+        }
 
         private IEnumerable<IArgumentDef> GetArgsFromProperty(PropertyInfo propertyInfo, ArgumentMode argumentMode, object modelInstance) =>
             propertyInfo.PropertyType.InheritsFrom<IArgumentModel>()

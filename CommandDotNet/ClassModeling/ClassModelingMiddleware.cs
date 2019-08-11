@@ -102,7 +102,7 @@ namespace CommandDotNet.ClassModeling
 
             if (commandDef != null)
             {
-                commandContext.InvocationContext.Instance = commandDef.InstantiateMethodDef.Invoke(null);
+                commandContext.InvocationContext.Instance = commandDef.InstantiateMethodDef.Invoke(commandContext, null);
             }
 
             try
@@ -125,7 +125,7 @@ namespace CommandDotNet.ClassModeling
         {
             var ctx = commandContext.InvocationContext;
 
-            var result = ctx.CommandInvocation.Invoke(ctx.Instance);
+            var result = ctx.CommandInvocation.Invoke(commandContext, ctx.Instance);
             return result.GetResultCodeAsync();
         }
     }

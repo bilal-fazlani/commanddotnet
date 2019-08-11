@@ -8,6 +8,6 @@ namespace CommandDotNet.Execution
         IReadOnlyCollection<IArgument> Arguments { get; }
         IReadOnlyCollection<ParameterInfo> Parameters { get; }
         object[] ParameterValues { get; }
-        object Invoke(object instance);
+        object Invoke(CommandContext commandContext, object instance);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using CommandDotNet.Execution;
 
 namespace CommandDotNet.ClassModeling.Definitions
 {
@@ -18,7 +19,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         public IReadOnlyCollection<ParameterInfo> Parameters { get; } = new ParameterInfo[0];
         public object[] ParameterValues { get; } = new object[0];
 
-        public object Invoke(object instance)
+        public object Invoke(CommandContext commandContext, object instance)
         {
             // TODO: this should never be hit or it should result in a help exception
             throw new NotImplementedException("We should never reach this");
