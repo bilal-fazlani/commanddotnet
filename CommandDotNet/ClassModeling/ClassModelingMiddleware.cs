@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Execution;
-using CommandDotNet.Help;
 using CommandDotNet.Parsing;
 
 namespace CommandDotNet.ClassModeling
@@ -83,9 +82,23 @@ namespace CommandDotNet.ClassModeling
             var command = commandContext.ParseResult.TargetCommand;
             var commandDef = command.Services.Get<ICommandDef>();
 
+            bool instanceOwnedByThisMiddleware = false;
+
             if (commandDef != null)
             {
-                commandContext.InvocationContext.Instance = commandDef.InstanceFactory();
+                var classType = commandDef.CommandHostClassType;
+                var resolver = commandContext.AppConfig.DependencyResolver;
+
+                if (resolver != null && resolver.TryResolve(classType, out var instance))
+                {
+                    // don't dispose an instance owned by a container
+                    commandContext.InvocationContext.Instance = instance;
+                }
+                else
+                {
+                    instanceOwnedByThisMiddleware = true;
+                    commandContext.InvocationContext.Instance = Activator.CreateInstance(classType);
+                }
             }
 
             try
@@ -94,10 +107,7 @@ namespace CommandDotNet.ClassModeling
             }
             finally
             {
-                // TODO: remove this when the instance is managed by DI
-                //       and we can move creation of instance into an
-                //       internal implementation of IDependencyResolver
-                if (commandContext.InvocationContext.Instance is IDisposable disposable)
+                if (instanceOwnedByThisMiddleware && commandContext.InvocationContext.Instance is IDisposable disposable)
                 {
                     disposable.Dispose();
                 }

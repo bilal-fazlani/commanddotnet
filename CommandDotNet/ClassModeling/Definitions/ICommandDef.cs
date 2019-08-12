@@ -7,11 +7,11 @@ namespace CommandDotNet.ClassModeling.Definitions
     internal interface ICommandDef
     {
         string Name { get; }
+        Type CommandHostClassType { get; }
         ICustomAttributeProvider CustomAttributeProvider { get; }
         bool IsExecutable { get; }
         IReadOnlyCollection<IArgumentDef> Arguments { get; }
         IReadOnlyCollection<ICommandDef> SubCommands { get; }
-        Func<object> InstanceFactory { get; }
         IMethodDef MiddlewareMethodDef { get; }
         IMethodDef InvokeMethodDef { get; }
         Command Command { get; set; }

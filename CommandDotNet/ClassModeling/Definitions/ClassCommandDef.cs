@@ -11,22 +11,21 @@ namespace CommandDotNet.ClassModeling.Definitions
 {
     internal class ClassCommandDef : ICommandDef
     {
-        private readonly Type _classType;
         private readonly CommandContext _commandContext;
         private readonly ICommandDef _defaultCommandDef;
         private readonly Lazy<List<ICommandDef>> _subCommands;
 
         public string Name { get; }
 
-        public ICustomAttributeProvider CustomAttributeProvider => _classType;
+        public Type CommandHostClassType { get; }
+
+        public ICustomAttributeProvider CustomAttributeProvider => CommandHostClassType;
 
         public bool IsExecutable => _defaultCommandDef.IsExecutable;
 
         public IReadOnlyCollection<IArgumentDef> Arguments { get; }
 
         public IReadOnlyCollection<ICommandDef> SubCommands => _subCommands.Value;
-
-        public Func<object> InstanceFactory { get; }
 
         public IMethodDef MiddlewareMethodDef { get; }
 
@@ -43,12 +42,10 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         private ClassCommandDef(Type classType, CommandContext commandContext)
         {
-            _classType = classType ?? throw new ArgumentNullException(nameof(classType));
+            CommandHostClassType = classType ?? throw new ArgumentNullException(nameof(classType));
             _commandContext = commandContext ?? throw new ArgumentNullException(nameof(commandContext));
 
             Name = classType.BuildName(commandContext.AppConfig);
-
-            InstanceFactory = () => ResolveInstance(commandContext);
 
             var (middlewareMethod, defaultCommand, localCommands) = ParseMethods(commandContext.AppConfig);
 
@@ -69,23 +66,23 @@ namespace CommandDotNet.ClassModeling.Definitions
             MethodInfo defaultCommandMethodInfo = null;
             List<MethodInfo> localCommandMethodInfos = new List<MethodInfo>();
 
-            foreach (var method in _classType.GetDeclaredMethods())
+            foreach (var method in CommandHostClassType.GetDeclaredMethods())
             {
                 if (MethodDef.IsMiddlewareMethod(method))
                 {
                     if (middlewareMethodInfo != null)
                     {
-                        throw new InvalidConfigurationException($"`{_classType}` defines more than one middleware method with a parameter of type {MethodDef.MiddlewareNextParameterType}.  There can be only one.");
+                        throw new InvalidConfigurationException($"`{CommandHostClassType}` defines more than one middleware method with a parameter of type {MethodDef.MiddlewareNextParameterType}.  There can be only one.");
                     }
                     if (method.HasAttribute<DefaultMethodAttribute>())
                     {
-                        throw new InvalidConfigurationException($"`{_classType}.{method.Name}` default method cannot contain parameter of type {MethodDef.MiddlewareNextParameterType}.");
+                        throw new InvalidConfigurationException($"`{CommandHostClassType}.{method.Name}` default method cannot contain parameter of type {MethodDef.MiddlewareNextParameterType}.");
                     }
 
                     var emDelegate = new ExecutionMiddleware((context, next) => Task.FromResult(1)).Method;
                     if (method.ReturnType != emDelegate.ReturnType)
                     {
-                        throw new InvalidConfigurationException($"`{_classType}.{method.Name}` must return type of {emDelegate.ReturnType}, matching {typeof(ExecutionMiddleware)}.");
+                        throw new InvalidConfigurationException($"`{CommandHostClassType}.{method.Name}` must return type of {emDelegate.ReturnType}, matching {typeof(ExecutionMiddleware)}.");
                     }
 
                     middlewareMethodInfo = method;
@@ -94,7 +91,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 {
                     if (defaultCommandMethodInfo != null)
                     {
-                        throw new InvalidConfigurationException($"`{_classType}` defines more than one method with {nameof(DefaultMethodAttribute)}.  There can be only one.");
+                        throw new InvalidConfigurationException($"`{CommandHostClassType}` defines more than one method with {nameof(DefaultMethodAttribute)}.  There can be only one.");
                     }
                     defaultCommandMethodInfo = method;
                 }
@@ -110,25 +107,16 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             var defaultCommand = defaultCommandMethodInfo == null
                 ? (ICommandDef)new NullCommandDef(Name)
-                : new MethodCommandDef(defaultCommandMethodInfo, InstanceFactory, middlewareMethod, appConfig);
+                : new MethodCommandDef(defaultCommandMethodInfo, CommandHostClassType, middlewareMethod, appConfig);
             
             return (
                 middlewareMethod,
                 defaultCommand,
                 localCommandMethodInfos
-                    .Select(m => new MethodCommandDef(m, InstanceFactory, middlewareMethod, appConfig))
+                    .Select(m => new MethodCommandDef(m, CommandHostClassType, middlewareMethod, appConfig))
                     .Cast<ICommandDef>()
                     .ToList());
 
-        }
-
-        private object ResolveInstance(CommandContext commandContext)
-        {
-            var resolver = commandContext.AppConfig.DependencyResolver;
-
-            return resolver != null && resolver.TryResolve(_classType, out var instance)
-                ? instance
-                : Activator.CreateInstance(_classType);
         }
 
         private List<ICommandDef> GetSubCommands(IEnumerable<ICommandDef> localSubCommands) => localSubCommands.Union(GetNestedSubCommands()).ToList();
@@ -136,10 +124,10 @@ namespace CommandDotNet.ClassModeling.Definitions
         private IEnumerable<ICommandDef> GetNestedSubCommands()
         {
             IEnumerable<Type> propertySubmodules =
-                _classType.GetDeclaredProperties<SubCommandAttribute>()
+                CommandHostClassType.GetDeclaredProperties<SubCommandAttribute>()
                     .Select(p => p.PropertyType);
 
-            IEnumerable<Type> inlineClassSubmodules = _classType
+            IEnumerable<Type> inlineClassSubmodules = CommandHostClassType
                 .GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
                 .Where(x => x.HasAttribute<SubCommandAttribute>())
                 .Where(x => !x.IsCompilerGenerated())
