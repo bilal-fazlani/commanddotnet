@@ -156,12 +156,13 @@ namespace CommandDotNet.Parsing
             }
             else
             {
-                if (_appSettings.ThrowOnUnexpectedArgument)
+                if (_appSettings.IgnoreUnexpectedOperands)
                 {
-                    // use the term "argument" for messages displayed to users
-                    throw new CommandParsingException(command, $"Unrecognized command or argument '{token.RawValue}'");
+                    return ParseOperandResult.UnexpectedArgument;
                 }
-                return ParseOperandResult.UnexpectedArgument;
+
+                // use the term "argument" for messages displayed to users
+                throw new CommandParsingException(command, $"Unrecognized command or argument '{token.RawValue}'");
             }
 
             return ParseOperandResult.Succeeded;
@@ -176,16 +177,10 @@ namespace CommandDotNet.Parsing
 
             string optionName = optionTokenType.GetName();
 
-            // TODO: use IOption for param
             option = command.FindOption(optionName);
-
             if (option == null)
             {
-                if (_appSettings.ThrowOnUnexpectedArgument)
-                {
-                    throw new CommandParsingException(command, $"Unrecognized option '{token.RawValue}'");
-                }
-                return ParseOptionResult.UnknownOption;
+                throw new CommandParsingException(command, $"Unrecognized option '{token.RawValue}'");
             }
 
             if (optionTokenType.IsClubbed)

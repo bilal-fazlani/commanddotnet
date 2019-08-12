@@ -32,7 +32,7 @@ namespace CommandDotNet
         /// When false, unexpected arguments will result in a parse failure with help message.<br/>
         /// When true, unexpected arguments will be ignored
         /// </summary>
-        public bool IgnoreUnexpectedArguments { get; set; }
+        public bool IgnoreUnexpectedOperands { get; set; }
 
         /// <summary>
         /// When arguments are not decorated with [Operand] or [Option]
@@ -71,8 +71,8 @@ namespace CommandDotNet
         [Obsolete("Use IgnoreUnexpectedArguments instead")]
         public bool ThrowOnUnexpectedArgument
         {
-            get => !IgnoreUnexpectedArguments;
-            set => IgnoreUnexpectedArguments = !value;
+            get => !IgnoreUnexpectedOperands;
+            set => IgnoreUnexpectedOperands = !value;
         }
 
         [Obsolete("this is only used to display the arg separator in help. it does not make the separated arguments available for use.")]
