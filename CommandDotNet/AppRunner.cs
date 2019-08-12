@@ -44,8 +44,6 @@ namespace CommandDotNet
         {
             _rootCommandType = rootCommandType ?? throw new ArgumentNullException(nameof(rootCommandType));
             AppSettings = settings ?? new AppSettings();
-
-            // TODO: add .rsp file transformation as an extension option
         }
 
         public AppRunner Configure(Action<AppConfigBuilder> configureCallback)

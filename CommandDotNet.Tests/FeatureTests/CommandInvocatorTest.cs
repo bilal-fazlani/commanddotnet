@@ -115,7 +115,6 @@ namespace CommandDotNet.Tests.FeatureTests
 
             if (postBindValues != null)
             {
-                // TODO: middleware ordering like this is brittle
                 appRunner.Configure(c => c.UseMiddleware(postBindValues, MiddlewareStages.PostBindValuesPreInvoke, int.MaxValue));
             }
             if (preBindValues != null)

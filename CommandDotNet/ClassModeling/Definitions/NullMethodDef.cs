@@ -28,7 +28,6 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public object Invoke(CommandContext commandContext, object instance)
         {
-            // TODO: this should never be hit or it should result in a help exception
             throw new NotImplementedException("We should never reach this");
         }
     }

@@ -30,7 +30,6 @@ namespace CommandDotNet.ClassModeling
             {
                 var modelValidator = new ModelValidator(commandContext.AppConfig.DependencyResolver);
 
-                // TODO: move to Context object
                 var middlewareValues = commandDef.MiddlewareMethodDef.ParameterValues;
                 var invokeValues = commandDef.InvokeMethodDef.ParameterValues;
 

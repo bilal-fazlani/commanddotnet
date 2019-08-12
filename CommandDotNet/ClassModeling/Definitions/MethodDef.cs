@@ -57,8 +57,6 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public object Invoke(CommandContext commandContext, object instance)
         {
-            // TODO: make async
-
             _setCommandContext?.Invoke(commandContext);
             return MethodInfo.Invoke(instance, _values);
         }
