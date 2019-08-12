@@ -27,6 +27,12 @@ namespace CommandDotNet.Parsing
         /// </summary>
         public ArgumentValues ArgumentValues { get; }
 
+        /// <summary>
+        /// An exception encountered while parsing the commands.
+        /// Help should be printed for the <see cref="TargetCommand"/>
+        /// </summary>
+        public Exception ParseError { get; }
+
         public ParseResult(Command command,
             IReadOnlyCollection<Token> remainingOperands,
             IReadOnlyCollection<Token> separatedArguments,
@@ -36,6 +42,15 @@ namespace CommandDotNet.Parsing
             RemainingOperands = remainingOperands ?? new List<Token>();
             SeparatedArguments = separatedArguments ?? new List<Token>();
             ArgumentValues = argumentValues;
+        }
+
+        public ParseResult(Command command, Exception exception)
+        {
+            TargetCommand = command ?? throw new ArgumentNullException(nameof(command));
+            ParseError = exception ?? throw new ArgumentNullException(nameof(exception));
+            RemainingOperands = new List<Token>();
+            SeparatedArguments = new List<Token>();
+            ArgumentValues = new ArgumentValues();
         }
     }
 }

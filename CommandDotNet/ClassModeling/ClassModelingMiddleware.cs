@@ -16,7 +16,6 @@ namespace CommandDotNet.ClassModeling
             {
                 c.UseMiddleware((context, next) => BuildMiddleware(rootCommandType, context, next), MiddlewareStages.Build);
                 c.UseMiddleware(SetInvocationContextMiddleware, MiddlewareStages.ParseInput);
-                c.UseMiddleware(DisplayHelpIfCommandIsNotExecutable, MiddlewareStages.BindValues);
                 c.UseMiddleware(BindValuesMiddleware, MiddlewareStages.BindValues);
                 c.UseMiddleware(ResolveInstancesMiddleware, MiddlewareStages.BindValues);
                 c.UseMiddleware(InvokeCommandDefMiddleware, MiddlewareStages.Invoke, int.MaxValue);
@@ -35,21 +34,6 @@ namespace CommandDotNet.ClassModeling
             if (commandDef != null)
             {
                 commandContext.InvocationContext.CommandInvocation = commandDef.InvokeMethodDef;
-            }
-
-            return next(commandContext);
-        }
-
-        private static Task<int> DisplayHelpIfCommandIsNotExecutable(CommandContext commandContext, Func<CommandContext, Task<int>> next)
-        {
-            var commandDef = commandContext.ParseResult.TargetCommand.Services.Get<ICommandDef>();
-            if (commandDef != null)
-            {
-                if (!commandDef.IsExecutable)
-                {
-                    HelpMiddleware.Print(commandContext, commandDef.Command);
-                    return Task.FromResult(0);
-                }
             }
 
             return next(commandContext);

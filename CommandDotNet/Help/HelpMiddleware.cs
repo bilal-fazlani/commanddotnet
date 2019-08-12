@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using CommandDotNet.Builders;
+using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Execution;
-using CommandDotNet.Rendering;
 
 namespace CommandDotNet.Help
 {
@@ -13,10 +13,7 @@ namespace CommandDotNet.Help
             return appRunner.Configure(c =>
             {
                 c.BuildEvents.OnCommandCreated += AddHelpOption;
-                c.UseMiddleware(DisplayHelpIfSpecified, MiddlewareStages.PostParseInputPreBindValues);
-
-                // TODO: consider adding another middleware to check CommandContext.ShowHelpForCommand (of type Command)
-                //       and if set, show help. Removes the tight coupling on this Print method
+                c.UseMiddleware(DisplayHelp, MiddlewareStages.PostParseInputPreBindValues);
             });
         }
 
@@ -38,18 +35,35 @@ namespace CommandDotNet.Help
             args.CommandBuilder.AddArgument(option);
         }
 
-        private static Task<int> DisplayHelpIfSpecified(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        private static Task<int> DisplayHelp(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            if (commandContext.ParseResult.ArgumentValues.Contains(Constants.HelpArgumentTemplate.LongName))
+            var parseResult = commandContext.ParseResult;
+            if (parseResult.ParseError != null)
             {
-                Print(commandContext, commandContext.ParseResult.TargetCommand);
+                var console = commandContext.Console;
+                console.Error.WriteLine(parseResult.ParseError.Message);
+                console.Error.WriteLine();
+                Print(commandContext, parseResult.TargetCommand);
+                return Task.FromResult(1);
+            }
+
+            if (parseResult.ArgumentValues.Contains(Constants.HelpArgumentTemplate.LongName))
+            {
+                Print(commandContext, parseResult.TargetCommand);
+                return Task.FromResult(0);
+            }
+
+            var commandDef = parseResult.TargetCommand.Services.Get<ICommandDef>();
+            if (commandDef != null && !commandDef.IsExecutable)
+            {
+                Print(commandContext, commandDef.Command);
                 return Task.FromResult(0);
             }
 
             return next(commandContext);
         }
 
-        public static void Print(CommandContext commandContext, Command command)
+        private static void Print(CommandContext commandContext, Command command)
         {
             var helpText = commandContext.AppConfig.HelpProvider.GetHelpText(command);
             commandContext.Console.Out.WriteLine(helpText);

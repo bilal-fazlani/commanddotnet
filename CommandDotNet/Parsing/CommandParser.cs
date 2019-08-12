@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
-using CommandDotNet.Help;
 using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Parsing
@@ -26,11 +25,7 @@ namespace CommandDotNet.Parsing
             }
             catch (CommandParsingException ex)
             {
-                var console = commandContext.Console;
-                console.Error.WriteLine(ex.Message);
-                console.Error.WriteLine();
-                HelpMiddleware.Print(commandContext, ex.Command);
-                return Task.FromResult(1);
+                commandContext.ParseResult = new ParseResult(ex.Command, ex);
             }
             return next(commandContext);
         }
