@@ -7,7 +7,7 @@ using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Help
 {
-    internal class HelpTextProvider : IHelpProvider
+    public class HelpTextProvider : IHelpProvider
     {
         private readonly AppSettings _appSettings;
         private readonly string _appName;
@@ -164,9 +164,11 @@ namespace CommandDotNet.Help
         protected virtual string ArgumentArity<T>(T argument) where T : IArgument => 
             (argument.Arity.AllowsZeroOrMore() ? " (Multiple)" : "");
 
+        /// <summary>Returns a comma-separated list of the allowed values</summary>
         protected virtual string ArgumentAllowedValues<T>(T argument) where T : IArgument =>
             argument.AllowedValues?.ToCsv(", ").UnlessNullOrWhitespace(v => $"Allowed values: {v}");
 
+        /// <summary></summary>
         protected virtual string ArgumentDefaultValue(IArgument argument)
         {
             object defaultValue = argument.DefaultValue;
@@ -189,8 +191,8 @@ namespace CommandDotNet.Help
             return $"[{defaultValue}]";
         }
 
-        /// <summary>Indents the row</summary>
-        protected virtual string Row(string cell) => $"  {cell}";
+        /// <summary>Row with default indent of 2 spaces</summary>
+        protected virtual string Row(string cell, int indent = 2) => $"{new string(' ', indent)}{cell}";
 
         /// <summary>Indents the row and aligns the cells</summary>
         protected virtual string Row(params (int maxLength, string value)[] cells) =>
@@ -198,12 +200,14 @@ namespace CommandDotNet.Help
                     ? string.Format($"{{0, -{c.maxLength + 2}}}", c.value)
                     : c.value)
                 .ToCsv(""));
-        
+
+        /// <summary>Formats a section header.  Default appends line endings except for Usage</summary>
         protected virtual string FormatSectionHeader(string header)
             => "usage".Equals(header, StringComparison.OrdinalIgnoreCase)
                     ? $"{header}:"
                     : $"{header}:{Environment.NewLine}{Environment.NewLine}";
 
+        /// <summary>Joins the content into a single string, with headers and sections</summary>
         protected virtual string JoinSections(params (string header, string body)[] sections) =>
             sections
                 .Where(s => !s.body.IsNullOrWhitespace())
