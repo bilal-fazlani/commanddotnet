@@ -38,7 +38,7 @@ namespace CommandDotNet.Parsing
         private void ParseCommand(CommandContext commandContext)
         {
             bool ignoreRemainingArguments = false;
-            var remainingArguments = new List<Token>();
+            var remainingOperands = new List<Token>();
 
             Command currentCommand = commandContext.RootCommand;
             Option currentOption = null;
@@ -51,24 +51,12 @@ namespace CommandDotNet.Parsing
                 switch (token.TokenType)
                 {
                     case TokenType.Option:
-                        var optionResult = ParseOption(
-                            token, currentCommand, out currentOption, argumentValues.GetOrAdd);
-
-                        switch (optionResult)
-                        {
-                            case ParseOptionResult.Succeeded:
-                                break;
-                            case ParseOptionResult.UnknownOption:
-                                remainingArguments.Add(token);
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException(optionResult.ToString());
-                        }
+                        ParseOption(token, currentCommand, out currentOption, argumentValues.GetOrAdd);
                         break;
                     case TokenType.Value:
                         if (ignoreRemainingArguments && currentOption == null)
                         {
-                            remainingArguments.Add(token);
+                            remainingOperands.Add(token);
                         }
                         else
                         {
@@ -106,7 +94,7 @@ namespace CommandDotNet.Parsing
 
             commandContext.ParseResult = new ParseResult(
                 currentCommand, 
-                remainingArguments,
+                remainingOperands,
                 commandContext.Tokens.Separated,
                 argumentValues);
         }
@@ -116,12 +104,6 @@ namespace CommandDotNet.Parsing
             Succeeded,
             UnexpectedArgument,
             NewSubCommand
-        }
-
-        private enum ParseOptionResult
-        {
-            Succeeded,
-            UnknownOption
         }
 
         private ParseOperandResult ParseArgumentValue(Token token,
@@ -168,7 +150,7 @@ namespace CommandDotNet.Parsing
             return ParseOperandResult.Succeeded;
         }
 
-        private ParseOptionResult ParseOption(Token token, 
+        private void ParseOption(Token token, 
             Command command, 
             out Option option,
             Func<IArgument, List<string>> getArgValues)
@@ -197,8 +179,6 @@ namespace CommandDotNet.Parsing
                 TryAddValue(option, null, getArgValues);
                 option = null;
             }
-
-            return ParseOptionResult.Succeeded;
         }
         private static bool TryAddValue(Option option, string value, Func<IArgument, List<string>> getArgValues)
         {
