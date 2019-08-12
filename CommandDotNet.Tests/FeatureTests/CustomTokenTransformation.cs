@@ -25,7 +25,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .UseParseDirective()
                 .Configure(c =>
                     c.UseTokenTransformation("test", 1,
-                        tokens => new TokenCollection(tokens.Select(t =>
+                        (ctx, tokens) => new TokenCollection(tokens.Select(t =>
                             t.TokenType == TokenType.Value && t.Value != "Do"
                                 ? Tokenizer.TokenizeValue("roses")
                                 : t))))
@@ -52,7 +52,7 @@ namespace CommandDotNet.Tests.FeatureTests
             var result = new AppRunner<App>()
                 .Configure(c =>
                     c.UseTokenTransformation("test", 1,
-                        tokens => new TokenCollection(tokens.Select(t =>
+                        (ctx, tokens) => new TokenCollection(tokens.Select(t =>
                             t.TokenType == TokenType.Value && t.Value != "Do"
                                 ? Tokenizer.TokenizeValue("roses")
                                 : t))))
