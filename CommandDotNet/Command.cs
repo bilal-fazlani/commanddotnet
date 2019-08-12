@@ -31,13 +31,29 @@ namespace CommandDotNet
         public string Description { get; set; }
         public string ExtendedHelpText { get; set; }
 
+        /// <summary>The <see cref="Operand"/>s for this <see cref="Command"/></summary>
         public IReadOnlyCollection<Operand> Operands => _operands.AsReadOnly();
+        
+        /// <summary>The <see cref="Option"/>s for this <see cref="Command"/></summary>
         public IReadOnlyCollection<Option> Options => _options.AsReadOnly();
+
+        /// <summary>
+        /// The <see cref="Command"/> that hosts this <see cref="Command"/>.
+        /// Is null for the root command. Some parent commands are not executable
+        /// but are defined only to group for other commands.
+        /// </summary>
         public Command Parent { get; }
+
+        /// <summary>The <see cref="Command"/>s that can be accessed via this <see cref="Command"/></summary>
         public IReadOnlyCollection<Command> Subcommands => _commands.AsReadOnly();
+
+        /// <summary>The attributes defined on the method or class that define this <see cref="Command"/></summary>
         public ICustomAttributeProvider CustomAttributes { get; }
+
+        /// <summary>The services used by middleware and associated with this <see cref="Command"/></summary>
         public IServices Services { get; } = new Services();
 
+        /// <summary>Returns the option for the given alias, if it exists.</summary>
         public Option FindOption(string alias)
         {
             if (alias == null)
@@ -45,20 +61,8 @@ namespace CommandDotNet
                 throw new ArgumentNullException(nameof(alias));
             }
 
-            var option = FindOption(this, alias, false);
-            if (option == null && this.Parent != null)
-            {
-                option = FindOption(this.Parent, alias, true);
-            }
-
-            return option;
-        }
-
-        private static Option FindOption(Command command, string alias, bool onlyIfInherited)
-        {
-            return command._argumentsByAlias.TryGetValue(alias, out var argument)
+            return this._argumentsByAlias.TryGetValue(alias, out var argument)
                    && (argument is Option option)
-                   && (!onlyIfInherited || option.Inherited)
                 ? option
                 : null;
         }

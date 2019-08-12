@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Execution;
+using CommandDotNet.Extensions;
+using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet
 {
@@ -19,7 +21,7 @@ namespace CommandDotNet
             Arity = arity;
             CustomAttributes = customAttributeProvider ?? NullCustomAttributeProvider.Instance;
 
-            var argumentTemplate = new ArgumentTemplate(template);
+            var argumentTemplate = ArgumentTemplate.Parse(template);
             LongName = argumentTemplate.LongName;
             ShortName = argumentTemplate.ShortName;
 
@@ -29,22 +31,43 @@ namespace CommandDotNet
                 ? new HashSet<string>()
                 : new HashSet<string>(aliases);
             if (!LongName.IsNullOrWhitespace()) _aliases.Add(LongName);
-            if (!ShortName.IsNullOrWhitespace()) _aliases.Add(ShortName);
+            if (!ShortName.IsNullOrWhitespace()) _aliases.Add(ShortName.ToString());
         }
 
-        public string Name => LongName ?? ShortName;
+        public string Name => LongName ?? ShortName.ToString();
         public string Description { get; set; }
-        
+
+        /// <summary>The <see cref="ITypeInfo"/> for this argument</summary>
         public ITypeInfo TypeInfo { get; set; }
 
+        /// <summary>The <see cref="IArgumentArity"/> for this argument, describing how many values are allowed.</summary>
         public IArgumentArity Arity { get; set; }
+
+        /// <summary>The default value for this argument</summary>
         public object DefaultValue { get; set; } = DBNull.Value;
+
+        /// <summary>
+        /// The allowed values for this argument, as defined by an <see cref="IAllowedValuesTypeDescriptor"/> for this type.
+        /// i.e. enum arguments will list all values in the enum.
+        /// </summary>
         public IReadOnlyCollection<string> AllowedValues { get; set; }
 
+        /// <summary>The aliases defined for this argument</summary>
+        public IReadOnlyCollection<string> Aliases => _aliases;
+
+        /// <summary>
+        /// The template for the option.  A combination of <see cref="ShortName"/> and <see cref="LongName"/>
+        /// e.g. "-d|--dryrun"
+        /// </summary>
         public string Template { get; }
-        public string ShortName { get; }
+
+        /// <summary>A single character that will be prefixed with a single hyphen.</summary>
+        public char? ShortName { get; }
+
+        /// <summary>The long name that will be prefixed with a double hyphen.</summary>
         public string LongName { get; }
 
+        /// <summary>If true, this option is inherited from a command middleware method and can be specified after the target command</summary>
         public bool Inherited { get; set; }
 
         /// <summary>
@@ -54,15 +77,15 @@ namespace CommandDotNet
         /// </summary>
         public bool IsSystemOption { get; set; }
 
-        public IReadOnlyCollection<string> Aliases => _aliases;
-
+        /// <summary>The attributes defined on the parameter or property that define this argument</summary>
         public ICustomAttributeProvider CustomAttributes { get; }
 
+        /// <summary>The services used by middleware and associated with this argument</summary>
         public IServices Services { get; } = new Services();
 
         public override string ToString()
         {
-            return $"Option: {new ArgumentTemplate(LongName, ShortName, TypeInfo.DisplayName)}";
+            return $"Option: {new ArgumentTemplate(longName: LongName, shortName: ShortName, typeDisplayName: TypeInfo.DisplayName)}";
         }
 
         private bool Equals(Option other)

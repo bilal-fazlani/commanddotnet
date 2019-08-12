@@ -1,40 +1,63 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
+using CommandDotNet.Extensions;
 
 namespace CommandDotNet
 {
+    /// <summary>
+    /// An argument template is a terse description of an arguments short name, long name and type display name.
+    /// e.g. "-d|--dryrun"
+    /// </summary>
     public class ArgumentTemplate
     {
         public string LongName { get; }
-        public string ShortName { get; }
+        public char? ShortName { get; }
         public string TypeDisplayName { get; }
 
         public ArgumentTemplate(
-            string longName = null, 
-            string shortName = null,
+            string longName = null,
+            char? shortName = null,
+            string shortNameAsString = null,
             string typeDisplayName = null)
         {
             LongName = longName;
             ShortName = shortName;
             TypeDisplayName = typeDisplayName;
+
+            if (shortName.IsNullOrWhitespace() && !shortNameAsString.IsNullOrWhitespace())
+            {
+                if (shortNameAsString.Length > 1)
+                {
+                    throw new ArgumentException($"Short name must be a single character: {shortNameAsString}", nameof(shortNameAsString));
+                }
+
+                ShortName = shortNameAsString.Single();
+            }
+
+            if (LongName.IsNullOrWhitespace() && ShortName.IsNullOrWhitespace())
+            {
+                throw new ArgumentException("a long or short name is required");
+            }
         }
 
-        public ArgumentTemplate(string template)
+        public static ArgumentTemplate Parse(string template)
         {
+            string longName = null, shortName = null, typeDisplayName = null;
+
             foreach (var part in template.Split(new[] { ' ', '|' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 if (part.StartsWith("--"))
                 {
-                    LongName = part.Substring(2);
+                    longName = part.Substring(2);
                 }
                 else if (part.StartsWith("-"))
                 {
-                    var optName = part.Substring(1);
-                    ShortName = optName;
+                    shortName = part.Substring(1);
                 }
                 else if (part.StartsWith("<") && part.EndsWith(">"))
                 {
-                    TypeDisplayName = part.Substring(1, part.Length - 2);
+                    typeDisplayName = part.Substring(1, part.Length - 2);
                 }
                 else
                 {
@@ -42,16 +65,15 @@ namespace CommandDotNet
                 }
             }
 
-            if (LongName.IsNullOrWhitespace() && ShortName.IsNullOrWhitespace())
+            try
             {
-                throw new ArgumentException($"Invalid template pattern '{template}' Unable to determine the name of the argument. " +
-                                            "provide either a symbol, short or long name following this pattern: -symbol|-short|--long", nameof(template));
-            }
-        }
 
-        private bool IsEnglishLetter(char c)
-        {
-            return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+                return new ArgumentTemplate(longName: longName, shortNameAsString: shortName, typeDisplayName: typeDisplayName);
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException($"Invalid template pattern '{template}' {e.Message}. pattern: -short|--long", nameof(template), e);
+            }
         }
 
         public override string ToString()
@@ -66,7 +88,7 @@ namespace CommandDotNet
                 sb.Append(value);
             }
 
-            AppendIfNotNull("-", ShortName);
+            AppendIfNotNull("-", ShortName?.ToString());
             AppendIfNotNull("--", LongName);
 
             if (sb.Length == 0)

@@ -4,7 +4,7 @@
     {
         public const string HelpTemplate = "-h | --help";
 
-        public static readonly ArgumentTemplate HelpArgumentTemplate = new ArgumentTemplate(HelpTemplate);
+        public static readonly ArgumentTemplate HelpArgumentTemplate = ArgumentTemplate.Parse(HelpTemplate);
 
         public static class TypeDisplayNames
         {
