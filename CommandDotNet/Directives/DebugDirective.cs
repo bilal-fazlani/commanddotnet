@@ -16,7 +16,7 @@ namespace CommandDotNet.Directives
         {
             return appRunner.Configure(c =>
             {
-                c.ContextData.Add(new DebugDirectiveContext(waitForDebuggerToAttach ?? !InTestHarness));
+                c.Services.Add(new DebugDirectiveContext(waitForDebuggerToAttach ?? !InTestHarness));
                 c.UseMiddleware(AttachDebugger, MiddlewareStages.PreTransformTokens, int.MinValue);
             });
         }
@@ -26,7 +26,7 @@ namespace CommandDotNet.Directives
         {
             if (commandContext.Tokens.TryGetDirective("debug", out _))
             {
-                var waitForDebuggerToAttach = commandContext.AppConfig.ContextData.Get<DebugDirectiveContext>().WaitForDebuggerToAttach;
+                var waitForDebuggerToAttach = commandContext.AppConfig.Services.Get<DebugDirectiveContext>().WaitForDebuggerToAttach;
                 var process = Process.GetCurrentProcess();
 
                 var processId = process.Id;

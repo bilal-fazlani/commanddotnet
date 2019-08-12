@@ -11,7 +11,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         internal static ICommandBuilder ToCommand(this ICommandDef commandDef, Command parent, CommandContext commandContext)
         {
             var command = new Command(commandDef.Name, commandDef.CustomAttributeProvider, parent);
-            command.ContextData.Set(commandDef);
+            command.Services.Set(commandDef);
             commandDef.Command = command;
 
             var metadataAttribute = commandDef.CustomAttributeProvider.GetCustomAttribute<ApplicationMetadataAttribute>();

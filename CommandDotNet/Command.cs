@@ -36,7 +36,7 @@ namespace CommandDotNet
         public Command Parent { get; }
         public IReadOnlyCollection<Command> Subcommands => _commands.AsReadOnly();
         public ICustomAttributeProvider CustomAttributes { get; }
-        public IContextData ContextData { get; } = new ContextData();
+        public IServices Services { get; } = new Services();
 
         public Option FindOption(string alias)
         {
@@ -92,7 +92,7 @@ namespace CommandDotNet
                     throw new ArgumentException(
                         $"argument type must be `{typeof(Operand)}` or `{typeof(Option)}` but was `{argument.GetType()}`. " +
                         $"If `{argument.GetType()}` was created for extensibility, " +
-                        $"consider using {nameof(ContextData)} to store service classes instead.");
+                        $"consider using {nameof(Services)} to store service classes instead.");
             }
 
             RegisterArgumentByAliases(argument);

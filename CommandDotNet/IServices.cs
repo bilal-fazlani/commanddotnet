@@ -2,7 +2,8 @@
 
 namespace CommandDotNet
 {
-    public interface IContextData
+    /// <summary>Services and context data that can be captured for later use</summary>
+    public interface IServices
     {
         void Add<T>(T value);
         void Set<T>(T value);

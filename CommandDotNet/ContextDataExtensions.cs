@@ -4,14 +4,14 @@ namespace CommandDotNet
 {
     public static class ContextDataExtensions
     {
-        public static T GetOrAdd<T>(this IContextData contextData, Func<T> create)
+        public static T GetOrAdd<T>(this IServices services, Func<T> create)
         {
-            var data = contextData.Get<T>();
+            var data = services.Get<T>();
 
             if (data == null)
             {
                 data = create();
-                contextData.Add(data);
+                services.Add(data);
             }
 
             return data;

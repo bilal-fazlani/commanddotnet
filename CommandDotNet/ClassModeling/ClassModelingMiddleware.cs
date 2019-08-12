@@ -31,7 +31,7 @@ namespace CommandDotNet.ClassModeling
 
         private static Task<int> SetInvocationContextMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            var commandDef = commandContext.ParseResult.TargetCommand.ContextData.Get<ICommandDef>();
+            var commandDef = commandContext.ParseResult.TargetCommand.Services.Get<ICommandDef>();
             if (commandDef != null)
             {
                 commandContext.InvocationContext.CommandInvocation = commandDef.InvokeMethodDef;
@@ -42,7 +42,7 @@ namespace CommandDotNet.ClassModeling
 
         private static Task<int> DisplayHelpIfCommandIsNotExecutable(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            var commandDef = commandContext.ParseResult.TargetCommand.ContextData.Get<ICommandDef>();
+            var commandDef = commandContext.ParseResult.TargetCommand.Services.Get<ICommandDef>();
             if (commandDef != null)
             {
                 if (!commandDef.IsExecutable)
@@ -57,7 +57,7 @@ namespace CommandDotNet.ClassModeling
 
         private static Task<int> BindValuesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            var commandDef = commandContext.ParseResult.TargetCommand.ContextData.Get<ICommandDef>();
+            var commandDef = commandContext.ParseResult.TargetCommand.Services.Get<ICommandDef>();
             if (commandDef != null)
             {
                 var console = commandContext.Console;
@@ -97,7 +97,7 @@ namespace CommandDotNet.ClassModeling
         private static async Task<int> ResolveInstancesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             var command = commandContext.ParseResult.TargetCommand;
-            var commandDef = command.ContextData.Get<ICommandDef>();
+            var commandDef = command.Services.Get<ICommandDef>();
 
             if (commandDef != null)
             {
@@ -123,7 +123,7 @@ namespace CommandDotNet.ClassModeling
         private static Task<int> InvokeCommandDefMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             var ctx = commandContext.InvocationContext;
-            var commandDef = commandContext.ParseResult.TargetCommand.ContextData.Get<ICommandDef>();
+            var commandDef = commandContext.ParseResult.TargetCommand.Services.Get<ICommandDef>();
 
             if (commandDef.MiddlewareMethodDef != null)
             {

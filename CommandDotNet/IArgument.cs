@@ -12,6 +12,6 @@ namespace CommandDotNet
         IReadOnlyCollection<string> Aliases { get; }
 
         ICustomAttributeProvider CustomAttributes { get; }
-        IContextData ContextData { get; }
+        IServices Services { get; }
     }
 }

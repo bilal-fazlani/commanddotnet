@@ -4,7 +4,7 @@ using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Execution
 {
-    public class ContextData : IContextData
+    public class Services : IServices
     {
         private readonly Dictionary<Type, object> _servicesByType = new Dictionary<Type, object>();
 

@@ -16,14 +16,14 @@ namespace CommandDotNet.Execution
 
         public TokenizationEvents TokenizationEvents { get; }
         public BuildEvents BuildEvents { get; }
-        public IContextData ContextData { get; }
+        public IServices Services { get; }
 
         internal IReadOnlyCollection<ExecutionMiddleware> MiddlewarePipeline { get; set; }
         internal IReadOnlyCollection<TokenTransformation> TokenTransformations { get; set; }
 
         public AppConfig(AppSettings appSettings, IConsole console, 
             IDependencyResolver dependencyResolver, IHelpProvider helpProvider,
-            TokenizationEvents tokenizationEvents, BuildEvents buildEvents, IContextData contextData)
+            TokenizationEvents tokenizationEvents, BuildEvents buildEvents, IServices services)
         {
             AppSettings = appSettings;
             Console = console;
@@ -31,7 +31,7 @@ namespace CommandDotNet.Execution
             HelpProvider = helpProvider;
             TokenizationEvents = tokenizationEvents;
             BuildEvents = buildEvents;
-            ContextData = contextData;
+            Services = services;
         }
     }
 }

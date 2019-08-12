@@ -42,7 +42,7 @@ namespace CommandDotNet.Extensions
         {
             return $"argument type must be `{typeof(Operand)}` or `{typeof(Option)}` but was `{argument.GetType()}`. " +
                    $"If `{argument.GetType()}` was created for extensibility, " +
-                   $"consider using {nameof(IArgument)}.{nameof(IArgument.ContextData)} to store service classes instead.";
+                   $"consider using {nameof(IArgument)}.{nameof(IArgument.Services)} to store service classes instead.";
         }
     }
 }

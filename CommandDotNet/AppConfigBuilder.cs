@@ -27,7 +27,7 @@ namespace CommandDotNet
 
         public BuildEvents BuildEvents { get; } = new BuildEvents();
         public TokenizationEvents TokenizationEvents { get; } = new TokenizationEvents();
-        public ContextData ContextData { get; } = new ContextData();
+        public Services Services { get; } = new Services();
         
         /// <summary>Replace the internal system console with provided console</summary>
         public AppConfigBuilder UseConsole(IConsole console)
@@ -94,7 +94,7 @@ namespace CommandDotNet
         {
             var helpProvider = _customHelpProvider ?? HelpTextProviderFactory.Create(appSettings);
 
-            return new AppConfig(appSettings, Console, _dependencyResolver, helpProvider, TokenizationEvents, BuildEvents, ContextData)
+            return new AppConfig(appSettings, Console, _dependencyResolver, helpProvider, TokenizationEvents, BuildEvents, Services)
             {
                 MiddlewarePipeline = _middlewareByStage
                     .SelectMany(kvp => kvp.Value.Select(v => new {stage = kvp.Key, v.order, v.middleware}) )

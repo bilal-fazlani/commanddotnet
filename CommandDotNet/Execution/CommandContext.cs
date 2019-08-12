@@ -39,7 +39,7 @@ namespace CommandDotNet.Execution
 
         public IConsole Console => AppConfig.Console;
 
-        public IContextData ContextData { get; } = new ContextData();
+        public IServices Services { get; } = new Services();
 
         public CommandContext(
             string[] originalArgs, 
