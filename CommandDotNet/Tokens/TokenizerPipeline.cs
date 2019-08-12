@@ -11,7 +11,7 @@ namespace CommandDotNet.Tokens
         {
             InsertSystemTransformations(commandContext.AppConfig);
             commandContext.Tokens = ApplyTokenTransformations(commandContext);
-            commandContext.AppConfig.ParseEvents.TokenizationCompleted(commandContext);
+            commandContext.AppConfig.TokenizationEvents.TokenizationCompleted(commandContext);
 
             return next(commandContext);
         }
@@ -24,8 +24,8 @@ namespace CommandDotNet.Tokens
             {
                 try
                 {
-                    var tempArgs = transformation.Transformation(tokens);
-                    appConfig.ParseEvents.TokenTransformation(commandContext, transformation, tokens, tempArgs);
+                    var tempArgs = transformation.Transformation(commandContext, tokens);
+                    appConfig.TokenizationEvents.TokenTransformation(commandContext, transformation, tokens, tempArgs);
                     tokens = tempArgs;
                 }
                 catch (Exception e)

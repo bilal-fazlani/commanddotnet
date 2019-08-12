@@ -14,7 +14,7 @@ namespace CommandDotNet.Execution
         public IDependencyResolver DependencyResolver { get; }
         public IHelpProvider HelpProvider { get; }
 
-        public ParseEvents ParseEvents { get; }
+        public TokenizationEvents TokenizationEvents { get; }
         public BuildEvents BuildEvents { get; }
         public IContextData ContextData { get; }
 
@@ -23,13 +23,13 @@ namespace CommandDotNet.Execution
 
         public AppConfig(AppSettings appSettings, IConsole console, 
             IDependencyResolver dependencyResolver, IHelpProvider helpProvider,
-            ParseEvents parseEvents, BuildEvents buildEvents, IContextData contextData)
+            TokenizationEvents tokenizationEvents, BuildEvents buildEvents, IContextData contextData)
         {
             AppSettings = appSettings;
             Console = console;
             DependencyResolver = dependencyResolver;
             HelpProvider = helpProvider;
-            ParseEvents = parseEvents;
+            TokenizationEvents = tokenizationEvents;
             BuildEvents = buildEvents;
             ContextData = contextData;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using CommandDotNet.Execution;
 
 namespace CommandDotNet.Tokens
 {
@@ -6,9 +7,9 @@ namespace CommandDotNet.Tokens
     {
         public string Name { get; }
         public int Order { get; }
-        public Func<TokenCollection, TokenCollection> Transformation { get; }
+        public Func<CommandContext, TokenCollection, TokenCollection> Transformation { get; }
 
-        public TokenTransformation(string name, int order, Func<TokenCollection, TokenCollection> transformation)
+        public TokenTransformation(string name, int order, Func<CommandContext, TokenCollection, TokenCollection> transformation)
         {
             Name = name;
             Order = order;

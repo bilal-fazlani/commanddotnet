@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using CommandDotNet.Execution;
 using CommandDotNet.Parsing;
 
 namespace CommandDotNet.Tokens
 {
     internal static class SplitOptionsTransformation
     {
-        internal static TokenCollection Transform(this TokenCollection tokenCollection)
+        internal static TokenCollection Transform(CommandContext commandContext, TokenCollection tokenCollection)
         {
             return tokenCollection.Transform(SplitOptionAssignment, skipDirectives: true, skipSeparated: true);
         }

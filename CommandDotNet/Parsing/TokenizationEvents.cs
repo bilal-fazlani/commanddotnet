@@ -4,7 +4,10 @@ using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Parsing
 {
-    public class ParseEvents
+    /// <summary>
+    /// Events raised during the <see cref="MiddlewareStages.TransformTokens"/> stage
+    /// </summary>
+    public class TokenizationEvents
     {
         public event Action<OnTokenTransformationEventArgs> OnTokenTransformation;
 

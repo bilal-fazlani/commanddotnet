@@ -26,7 +26,7 @@ namespace CommandDotNet
         internal IConsole Console { get; private set; } = new SystemConsole();
 
         public BuildEvents BuildEvents { get; } = new BuildEvents();
-        public ParseEvents ParseEvents { get; } = new ParseEvents();
+        public TokenizationEvents TokenizationEvents { get; } = new TokenizationEvents();
         public ContextData ContextData { get; } = new ContextData();
         
         /// <summary>Replace the internal system console with provided console</summary>
@@ -59,7 +59,7 @@ namespace CommandDotNet
         /// Adds the transformation to the list of transformations applied to tokens
         /// before they are parsed into commands and arguments
         /// </summary>
-        public AppConfigBuilder UseTokenTransformation(string name, int order, Func<TokenCollection,TokenCollection> transformation)
+        public AppConfigBuilder UseTokenTransformation(string name, int order, Func<CommandContext, TokenCollection, TokenCollection> transformation)
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             if (transformation == null) throw new ArgumentNullException(nameof(transformation));
@@ -94,7 +94,7 @@ namespace CommandDotNet
         {
             var helpProvider = _customHelpProvider ?? HelpTextProviderFactory.Create(appSettings);
 
-            return new AppConfig(appSettings, Console, _dependencyResolver, helpProvider, ParseEvents, BuildEvents, ContextData)
+            return new AppConfig(appSettings, Console, _dependencyResolver, helpProvider, TokenizationEvents, BuildEvents, ContextData)
             {
                 MiddlewarePipeline = _middlewareByStage
                     .SelectMany(kvp => kvp.Value.Select(v => new {stage = kvp.Key, v.order, v.middleware}) )

@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using CommandDotNet.Execution;
 using CommandDotNet.Parsing;
 
 namespace CommandDotNet.Tokens
 {
     internal static class ExpandClubbedOptionsTransformation
     {
-        internal static TokenCollection Transform(this TokenCollection tokenCollection)
+        internal static TokenCollection Transform(CommandContext commandContext, TokenCollection tokenCollection)
         {
             return tokenCollection.Transform(ExpandClubbedOption, skipDirectives: true, skipSeparated: true);
         }

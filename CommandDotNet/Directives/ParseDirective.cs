@@ -39,7 +39,7 @@ namespace CommandDotNet.Directives
 
                 if (verbose)
                 {
-                    appConfig.ParseEvents.OnTokenTransformation += args =>
+                    appConfig.TokenizationEvents.OnTokenTransformation += args =>
                     {
                         if (args.PreTransformTokens.Count == args.PostTransformTokens.Count &&
                             Enumerable.Range(0, args.PreTransformTokens.Count).All(i => args.PreTransformTokens[i] == args.PostTransformTokens[i]))
@@ -54,7 +54,7 @@ namespace CommandDotNet.Directives
                 }
                 else
                 {
-                    appConfig.ParseEvents.OnTokenizationCompleted += args =>
+                    appConfig.TokenizationEvents.OnTokenizationCompleted += args =>
                     {
                         var transformations = appConfig.TokenTransformations.Select(t => t.Name).ToCsv(" > ");
                         ReportTransformation(console, args.CommandContext.Tokens, $">>> transformed after: {transformations}");
