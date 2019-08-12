@@ -32,17 +32,11 @@ namespace CommandDotNet
         public string ExtendedHelpText { get; set; }
 
         public IReadOnlyCollection<Operand> Operands => _operands.AsReadOnly();
+        public IReadOnlyCollection<Option> Options => _options.AsReadOnly();
         public Command Parent { get; }
         public IReadOnlyCollection<Command> Subcommands => _commands.AsReadOnly();
         public ICustomAttributeProvider CustomAttributes { get; }
         public IContextData ContextData { get; } = new ContextData();
-
-        public IReadOnlyCollection<Option> GetOptions(bool includeInherited = true)
-        {
-            return includeInherited
-                ? _options.Concat(this.GetParentCommands().SelectMany(a => a._options.Where(o => o.Inherited))).ToList().AsReadOnly()
-                : _options.ToList().AsReadOnly();
-        }
 
         public Option FindOption(string alias)
         {
@@ -51,10 +45,13 @@ namespace CommandDotNet
                 throw new ArgumentNullException(nameof(alias));
             }
 
-            return FindOption(this, alias, false)
-                   ?? this.GetParentCommands()
-                       .Select(c => FindOption(c, alias, true))
-                       .FirstOrDefault(o => o != null);
+            var option = FindOption(this, alias, false);
+            if (option == null && this.Parent != null)
+            {
+                option = FindOption(this.Parent, alias, true);
+            }
+
+            return option;
         }
 
         private static Option FindOption(Command command, string alias, bool onlyIfInherited)

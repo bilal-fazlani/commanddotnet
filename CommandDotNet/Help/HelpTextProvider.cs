@@ -214,7 +214,7 @@ namespace CommandDotNet.Help
             value.IsNullOrWhitespace() ? null : " " + value;
 
         private IEnumerable<Option> GetOptionsExcludingHelp(Command command) =>
-            command.GetOptions().Where(o => _appSettings.Help.PrintHelpOption || o.LongName != Constants.HelpArgumentTemplate.LongName);
+            command.Options.Where(o => _appSettings.Help.PrintHelpOption || o.LongName != Constants.HelpArgumentTemplate.LongName);
 
         private class CommandHelpValues
         {

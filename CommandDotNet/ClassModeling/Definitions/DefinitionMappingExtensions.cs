@@ -27,6 +27,15 @@ namespace CommandDotNet.ClassModeling.Definitions
                 .Select(a => a.ToArgument(commandContext.AppConfig))
                 .ForEach(commandBuilder.AddArgument);
 
+            if (commandDef.IsExecutable)
+            {
+                commandDef.MiddlewareMethodDef.ArgumentDefs
+                    .Select(d => d.Argument)
+                    .OfType<Option>()
+                    .Where(o => o.Inherited)
+                    .ForEach(commandBuilder.AddArgument);
+            }
+
             commandContext.AppConfig.BuildEvents.CommandCreated(commandContext, commandBuilder);
 
             commandDef.SubCommands
