@@ -19,7 +19,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         public IMethodDef InvokeMethodDef { get; }
         public Command Command { get; set; }
         
-        public MethodCommandDef(MethodBase method, Func<object> instanceFactory, IMethodDef middlewareMethodDef, AppConfig appConfig)
+        public MethodCommandDef(MethodInfo method, Func<object> instanceFactory, IMethodDef middlewareMethodDef, AppConfig appConfig)
         {
             _method = method;
 

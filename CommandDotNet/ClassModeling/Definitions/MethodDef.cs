@@ -22,7 +22,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         private Action<CommandContext> _setCommandContext;
         private Action<Func<CommandContext, Task<int>>> _setNext;
 
-        public MethodBase MethodBase { get; }
+        public MethodInfo MethodInfo { get; }
 
         public IReadOnlyCollection<IArgumentDef> ArgumentDefs => EnsureInitialized(() => _argumentDefs);
 
@@ -33,9 +33,9 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public object[] ParameterValues => EnsureInitialized(() => _values);
 
-        public MethodDef(MethodBase method, AppConfig appConfig)
+        public MethodDef(MethodInfo method, AppConfig appConfig)
         {
-            MethodBase = method ?? throw new ArgumentNullException(nameof(method));
+            MethodInfo = method ?? throw new ArgumentNullException(nameof(method));
             _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
         }
 
@@ -60,9 +60,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             // TODO: make async
 
             _setCommandContext?.Invoke(commandContext);
-            return MethodBase is ConstructorInfo ctor
-                ? ctor.Invoke(_values)
-                : MethodBase.Invoke(instance, _values);
+            return MethodInfo.Invoke(instance, _values);
         }
 
         private T EnsureInitialized<T>(ref T current, Func<T> getValues)
@@ -86,7 +84,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         private void Initialize()
         {
-            _parameters = MethodBase.GetParameters();
+            _parameters = MethodInfo.GetParameters();
 
             var isMiddleware = _parameters.Any(IsMiddlewareNextType);
 
@@ -175,8 +173,8 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public override string ToString()
         {
-            return $"{MethodBase.GetType().Name}:{MethodBase?.DeclaringType?.Name}.{MethodBase.Name}(" +
-                   $"{MethodBase.GetParameters().Select(p => $"{p.ParameterType} {p.Name}").ToCsv()})";
+            return $"{MethodInfo.GetType().Name}:{MethodInfo?.DeclaringType?.Name}.{MethodInfo.Name}(" +
+                   $"{MethodInfo.GetParameters().Select(p => $"{p.ParameterType} {p.Name}").ToCsv()})";
         }
     }
 }
