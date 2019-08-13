@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CommandDotNet.Example
 {
-    [ApplicationMetadata(Name = "pipes", Description = "example of accepting piped input")]
+    [Command(Name = "pipes", Description = "example of accepting piped input")]
     public class PipesApp
     {
         public void Echo([Operand] List<string> inputs, [Option] int times = 1)

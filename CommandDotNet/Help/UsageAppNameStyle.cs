@@ -5,7 +5,7 @@
         /// <summary>
         /// A combination of the other rules in this order:<br/>
         /// <see cref="GlobalTool"/>
-        /// if the root command has a name specified in <see cref="ApplicationMetadataAttribute"/>,
+        /// if the root command has a name specified in <see cref="CommandAttribute"/>,
         /// else <see cref="Executable"/> if the file extension is '.exe' <br/>
         /// else <see cref="DotNet"/>
         /// </summary>
@@ -14,7 +14,7 @@
         /// <summary>"dotnet {fileName}"</summary>
         DotNet,
 
-        /// <summary>"{rootCommand.ApplicationMetadataAttribute.Name}"</summary>
+        /// <summary>"{rootCommand.CommandAttribute.Name}"</summary>
         GlobalTool,
 
         /// <summary>"{fileName}"</summary>

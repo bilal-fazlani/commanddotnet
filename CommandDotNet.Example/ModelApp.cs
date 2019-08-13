@@ -7,7 +7,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace CommandDotNet.Example
 {
-    [ApplicationMetadata(Name = "models", Description = "example of using IArgumentModel, including fluent validation.")]
+    [Command(Name = "models", Description = "example of using IArgumentModel, including fluent validation.")]
     public class ModelApp
     {
         public int SendNotification(Person person, Address address)

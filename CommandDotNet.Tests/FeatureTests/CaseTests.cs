@@ -76,7 +76,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 return messageName == "m" && senderName == "s" && priority == 3 && c == 4 ? 10 : 1;
             }
 
-            [ApplicationMetadata(Name = "wn")]
+            [Command(Name = "wn")]
             public int WithName()
             {
                 return 10;

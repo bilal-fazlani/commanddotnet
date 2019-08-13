@@ -11,7 +11,7 @@ namespace CommandDotNet.Example.DocExamples
             _printValues = printValues;
         }
 
-        [ApplicationMetadata(Description = "Adds two numbers. duh!")]
+        [Command(Description = "Adds two numbers. duh!")]
         public void Add(int value1, int value2)
         {
             if (_printValues)

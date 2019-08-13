@@ -31,7 +31,7 @@ namespace CommandDotNet.Example.Issues
         }
     }
     
-    [ApplicationMetadata(Name = "number")]
+    [Command(Name = "number")]
     public class Issue55SubCommand : IDisposable
     {
         public Issue55SubCommand()

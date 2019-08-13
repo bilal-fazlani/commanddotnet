@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.Tests.Utils;

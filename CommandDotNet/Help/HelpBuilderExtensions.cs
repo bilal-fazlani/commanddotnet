@@ -20,7 +20,7 @@ namespace CommandDotNet.Help
                     if (rootAppName == null)
                     {
                         throw new AppRunnerException(
-                            $"Invalid configuration: {nameof(ApplicationMetadataAttribute)}.{nameof(ApplicationMetadataAttribute.Name)} " +
+                            $"Invalid configuration: {nameof(CommandAttribute)}.{nameof(CommandAttribute.Name)} " +
                             $"is required for the root command when {nameof(UsageAppNameStyle)}.{nameof(UsageAppNameStyle.GlobalTool)} " +
                             "is specified.");
                     }
@@ -39,7 +39,7 @@ namespace CommandDotNet.Help
             {
                 // https://github.com/bilal-fazlani/commanddotnet/issues/43
                 // CommandDotNet convention:
-                //   if root command has ApplicationMetadata.Name
+                //   if root command has CommandAttribute.Name
                 //   assume tool will be used as dotnet Global Tool
                 //   and print usage accordingly
                 return rootAppName;
@@ -60,7 +60,7 @@ namespace CommandDotNet.Help
 
         private static string GetRootAppName(Command command)
         {
-            return command.GetRootCommand().CustomAttributes?.GetCustomAttribute<ApplicationMetadataAttribute>()?.Name;
+            return command.GetRootCommand().CustomAttributes?.GetCustomAttribute<CommandAttribute>()?.Name;
         }
 
         private static string GetAppFileName()

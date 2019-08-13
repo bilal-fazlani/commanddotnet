@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace CommandDotNet.Example
 {
-    [ApplicationMetadata(Name = "demo", Description = "Sample application for demonstration", ExtendedHelpText = "this is extended help text")]
+    [Command(Name = "demo", Description = "Sample application for demonstration", ExtendedHelpText = "this is extended help text")]
     public class MyApplication
     {
         private readonly bool _cjumped;
@@ -59,7 +59,7 @@ namespace CommandDotNet.Example
             _cauthor = cauthor;
         }
         
-        [ApplicationMetadata(Description = "m makes someone jump", Name = "JUMP")]
+        [Command(Description = "m makes someone jump", Name = "JUMP")]
         public void Jump(
             [Option(Description = "m did someone jump?")]
             bool mjumped, 

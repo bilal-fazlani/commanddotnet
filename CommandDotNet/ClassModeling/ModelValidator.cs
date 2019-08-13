@@ -29,7 +29,7 @@ namespace CommandDotNet.ClassModeling
             if (commandDef != null)
             {
                 var modelValidator = new ModelValidator(commandContext.AppConfig.DependencyResolver);
-
+                
                 var middlewareValues = commandDef.MiddlewareMethodDef.ParameterValues;
                 var invokeValues = commandDef.InvokeMethodDef.ParameterValues;
 

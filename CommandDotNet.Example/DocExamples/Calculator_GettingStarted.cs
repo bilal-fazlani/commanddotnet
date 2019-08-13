@@ -4,7 +4,7 @@ namespace CommandDotNet.Example.DocExamples
 {
     public class Calculator_GettingStarted
     {
-        [ApplicationMetadata(Description = "Adds two numbers. duh!")]
+        [Command(Description = "Adds two numbers. duh!")]
         public void Add(int value1, int value2)
         {
             Console.WriteLine($"Answer:  {value1 + value2}");

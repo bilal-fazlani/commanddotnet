@@ -4,17 +4,17 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests
 {
-    public class ApplicationMetadataTests : TestBase
+    public class CommandMetadataTests : TestBase
     {
         private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
-        public ApplicationMetadataTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public CommandMetadataTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
         }
 
         [Fact]
-        public void App_BasicHelp_DisplaysApplicationMetadata()
+        public void App_BasicHelp_DisplaysCommandAttrData()
         {
             Verify(new Scenario<App>
             {
@@ -35,7 +35,7 @@ app extended help" }
         }
 
         [Fact]
-        public void App_DetailedHelp_DisplaysApplicationMetadata()
+        public void App_DetailedHelp_DisplaysCommandAttrData()
         {
             Verify(new Scenario<App>
             {
@@ -57,7 +57,7 @@ app extended help" }
         }
 
         [Fact]
-        public void NestedApp_BasicHelp_DisplaysApplicationMetadata()
+        public void NestedApp_BasicHelp_DisplaysCommandAttrData()
         {
             Verify(new Scenario<App>
             {
@@ -77,7 +77,7 @@ sub-app extended help" }
         }
 
         [Fact]
-        public void NestedApp_DetailedHelp_DisplaysApplicationMetadata()
+        public void NestedApp_DetailedHelp_DisplaysCommandAttrData()
         {
             Verify(new Scenario<App>
             {
@@ -98,7 +98,7 @@ sub-app extended help" }
         }
 
         [Fact]
-        public void Command_BasicHelp_DisplaysApplicationMetadata()
+        public void Command_BasicHelp_DisplaysCommandAttrData()
         {
             Verify(new Scenario<App>
             {
@@ -116,7 +116,7 @@ cmd extended help" }
         }
 
         [Fact]
-        public void Command_DetailedHelp_DisplaysApplicationMetadata()
+        public void Command_DetailedHelp_DisplaysCommandAttrData()
         {
             Verify(new Scenario<App>
             {
@@ -135,7 +135,7 @@ cmd extended help" }
         }
 
         [Fact]
-        public void Command_Exec_UsesNameFromApplicationMetadata()
+        public void Command_Exec_UsesNameFromCommandAttrData()
         {
             Verify(new Scenario<App>
             {
@@ -145,7 +145,7 @@ cmd extended help" }
         }
 
         [Fact]
-        public void NestedApp_Command_Exec_UsesNameFromApplicationMetadata()
+        public void NestedApp_Command_Exec_UsesNameFromCommandAttrData()
         {
             Verify(new Scenario<App>
             {
@@ -154,13 +154,13 @@ cmd extended help" }
             });
         }
 
-        [ApplicationMetadata(
+        [Command(
             Description = "app description",
             Name = "SomeApp",
             ExtendedHelpText = "app extended help")]
         public class App
         {
-            [ApplicationMetadata(
+            [Command(
                 Description = "cmd description",
                 Name = "somecommand",
                 ExtendedHelpText = "cmd extended help")]
@@ -170,13 +170,13 @@ cmd extended help" }
             }
 
             [SubCommand]
-            [ApplicationMetadata(
+            [Command(
                 Description = "sub-app description",
                 Name = "SubApp",
                 ExtendedHelpText = "sub-app extended help")]
             public class SubApp
             {
-                [ApplicationMetadata(Name = "subdo")]
+                [Command(Name = "subdo")]
                 public int Do(int value)
                 {
                     return value;

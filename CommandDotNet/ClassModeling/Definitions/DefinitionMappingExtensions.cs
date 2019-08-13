@@ -14,11 +14,11 @@ namespace CommandDotNet.ClassModeling.Definitions
             command.Services.Set(commandDef);
             commandDef.Command = command;
 
-            var metadataAttribute = commandDef.CustomAttributeProvider.GetCustomAttribute<ApplicationMetadataAttribute>();
-            if (metadataAttribute != null)
+            var commandAttribute = commandDef.CustomAttributeProvider.GetCustomAttribute<CommandAttribute>();
+            if (commandAttribute != null)
             {
-                command.Description = metadataAttribute.Description;
-                command.ExtendedHelpText = metadataAttribute.ExtendedHelpText;
+                command.Description = commandAttribute.Description;
+                command.ExtendedHelpText = commandAttribute.ExtendedHelpText;
             }
 
             var commandBuilder = new CommandBuilder(command);

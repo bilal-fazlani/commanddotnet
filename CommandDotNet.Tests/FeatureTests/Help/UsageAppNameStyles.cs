@@ -76,12 +76,13 @@ namespace CommandDotNet.Tests.FeatureTests.Help
                 Then =
                 {
                     ExitCode = 1,
-                    ResultsContainsTexts = { "Invalid configuration: ApplicationMetadataAttribute.Name is required for the root command when UsageAppNameStyle.GlobalTool is specified." }
+                    ResultsContainsTexts = { $"Invalid configuration: {nameof(CommandAttribute)}.{nameof(CommandAttribute.Name)} is required " +
+                                             $"for the root command when {nameof(UsageAppNameStyle)}.{nameof(UsageAppNameStyle.GlobalTool)} is specified." }
                 }
             });
         }
 
-        [ApplicationMetadata(Name = "AppName")]
+        [Command(Name = "AppName")]
         public class WithAppMetadataName
         {
 

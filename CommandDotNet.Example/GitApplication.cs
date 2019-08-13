@@ -2,7 +2,7 @@
 
 namespace CommandDotNet.Example
 {
-    [ApplicationMetadata(Name = "git", Description = "Fake git application")]
+    [Command(Name = "git", Description = "Fake git application")]
     public class GitApplication
     {
         [SubCommand]
@@ -21,7 +21,7 @@ namespace CommandDotNet.Example
             }
         }
         
-        [ApplicationMetadata(Description = "Stashes all changes when executed without any arguments. " +
+        [Command(Description = "Stashes all changes when executed without any arguments. " +
                                            "See stash --help for further information",
             Name = "stash")]
         [SubCommand]
@@ -33,20 +33,20 @@ namespace CommandDotNet.Example
                 Console.WriteLine($"changes stashed");
             }
         
-            [ApplicationMetadata(Name = "pop", Description = "Applies last stashed changes")]
+            [Command(Name = "pop", Description = "Applies last stashed changes")]
             public void Pop()
             {
                 Console.WriteLine($"stash popped");
             }
 
-            [ApplicationMetadata(Name = "list", Description = "Lists all saved stashed changes")]
+            [Command(Name = "list", Description = "Lists all saved stashed changes")]
             public void List()
             {
                 Console.WriteLine($"here's the list of stash");
             }
         }
         
-        [ApplicationMetadata(Name = "commit", Description = "Commits all staged changes")]
+        [Command(Name = "commit", Description = "Commits all staged changes")]
         public void Commit([Option(ShortName = "m")]string commitMessage)
         {
             Console.WriteLine("Commit successful");

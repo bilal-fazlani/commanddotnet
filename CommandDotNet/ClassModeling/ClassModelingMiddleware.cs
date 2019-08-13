@@ -119,6 +119,7 @@ namespace CommandDotNet.ClassModeling
             var ctx = commandContext.InvocationContext;
             var commandDef = commandContext.ParseResult.TargetCommand.Services.Get<ICommandDef>();
 
+
             if (commandDef.MiddlewareMethodDef != null)
             {
                 return commandDef.MiddlewareMethodDef.InvokeAsMiddleware(commandContext, ctx.Instance,

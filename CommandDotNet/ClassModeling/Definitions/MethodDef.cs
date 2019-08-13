@@ -19,8 +19,8 @@ namespace CommandDotNet.ClassModeling.Definitions
         private ParameterInfo[] _parameters;
         private object[] _values;
 
-        private Action<CommandContext> _setCommandContext;
-        private Action<Func<CommandContext, Task<int>>> _setNext;
+        private ParameterInfo _commandContextParameterInfo;
+        private ParameterInfo _nextParameterInfo;
 
         public MethodInfo MethodInfo { get; }
 
@@ -51,13 +51,19 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public Task<int> InvokeAsMiddleware(CommandContext commandContext, object instance, Func<CommandContext,Task<int>> next)
         {
-            _setNext?.Invoke(next);
+            if (_nextParameterInfo != null)
+            {
+                _values[_nextParameterInfo.Position] = next;
+            }
             return Invoke(commandContext, instance).GetResultCodeAsync();
         }
 
         public object Invoke(CommandContext commandContext, object instance)
         {
-            _setCommandContext?.Invoke(commandContext);
+            if (_commandContextParameterInfo != null)
+            {
+                _values[_commandContextParameterInfo.Position] = commandContext;
+            }
             return MethodInfo.Invoke(instance, _values);
         }
 
@@ -88,7 +94,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             var argumentMode = isMiddleware
                 ? ArgumentMode.Option
-                : _appConfig.AppSettings.MethodArgumentMode;
+                : _appConfig.AppSettings.DefaultArgumentMode;
             
             _values = new object[_parameters.Length];
             
@@ -117,13 +123,13 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             if (parameterInfo.ParameterType == typeof(CommandContext))
             {
-                _setCommandContext = ctx => _values[parameterInfo.Position] = ctx;
+                _commandContextParameterInfo = parameterInfo;
                 return Enumerable.Empty<IArgumentDef>();
             }
 
             if (IsMiddlewareNextType(parameterInfo))
             {
-                _setNext = next => _values[parameterInfo.Position] = next;
+                _nextParameterInfo = parameterInfo;
                 return Enumerable.Empty<IArgumentDef>();
             }
 

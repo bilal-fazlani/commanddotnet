@@ -36,28 +36,28 @@ namespace CommandDotNet.Tests.FeatureTests
             [InjectProperty]
             public TestOutputs TestOutputs { get; set; }
 
-            [ApplicationMetadata(Description = "Invokes an async method and exits with return code 2", Name = "get2")]
+            [Command(Description = "Invokes an async method and exits with return code 2", Name = "get2")]
             public async Task<int> Get2Async()
             {
                 TestOutputs.Capture(true);
                 return await Task.FromResult(2);
             }
 
-            [ApplicationMetadata(Description = "Invokes an async method and exits with return code 0", Name = "get00")]
+            [Command(Description = "Invokes an async method and exits with return code 0", Name = "get00")]
             public async Task Get0Async()
             {
                 TestOutputs.Capture(true);
                 await Task.CompletedTask;
             }
 
-            [ApplicationMetadata(Description = "Invokes an async method and exits with return code 3", Name = "get3")]
+            [Command(Description = "Invokes an async method and exits with return code 3", Name = "get3")]
             public Task<int> Get3Async()
             {
                 TestOutputs.Capture(true);
                 return Task.FromResult(3);
             }
 
-            [ApplicationMetadata(Description = "Invokes an async method and exits with return code 0", Name = "get01")]
+            [Command(Description = "Invokes an async method and exits with return code 0", Name = "get01")]
             public Task GetAsync()
             {
                 TestOutputs.Capture(true);
