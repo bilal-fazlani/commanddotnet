@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
 
@@ -26,17 +25,9 @@ namespace CommandDotNet.Directives
         {
             if (commandContext.Tokens.TryGetDirective("debug", out _))
             {
-                var waitForDebuggerToAttach = commandContext.AppConfig.Services.Get<DebugDirectiveContext>().WaitForDebuggerToAttach;
-                var process = Process.GetCurrentProcess();
-
-                var processId = process.Id;
-
-                commandContext.Console.Out.WriteLine($"Attach your debugger to process {processId} ({process.ProcessName}).");
-
-                while (waitForDebuggerToAttach && !Debugger.IsAttached)
-                {
-                    Task.Delay(500);
-                }
+                Debugger.Attach(
+                    commandContext.Console,
+                    commandContext.AppConfig.Services.Get<DebugDirectiveContext>().WaitForDebuggerToAttach);
             }
 
             return next(commandContext);

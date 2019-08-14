@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Drew Burlingame</Authors>
+    <Company>Drew Burlingame</Company>
+    <Description>Print alerts if current version is on the latest version</Description>
+    <PackageTags>dotnet core; console; argument parse;</PackageTags>
+    <RepositoryUrl>https://github.com/bilal-fazlani/CommandDotNet</RepositoryUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/bilal-fazlani/CommandDotNet/master/images/nuget-icon.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/bilal-fazlani/CommandDotNet</PackageProjectUrl>
+    <NeutralLanguage>English (United States)</NeutralLanguage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Semver" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CommandDotNet\CommandDotNet.csproj" />
+  </ItemGroup>
+
+</Project>
