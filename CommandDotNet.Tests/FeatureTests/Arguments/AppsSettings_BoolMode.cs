@@ -1,5 +1,5 @@
 using CommandDotNet.Tests.ScenarioFramework;
-using CommandDotNet.Tests.Utils;
+using CommandDotNet.TestTools;
 using Xunit;
 using Xunit.Abstractions;
 

@@ -8,7 +8,7 @@ using System.IO;
 using System.Text;
 using CommandDotNet.Rendering;
 
-namespace CommandDotNet.Tests.Utils
+namespace CommandDotNet.TestTools
 {
     public class TestConsole : IConsole
     {

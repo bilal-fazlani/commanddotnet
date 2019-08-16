@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using CommandDotNet.Tests.ScenarioFramework;
-using CommandDotNet.Tests.Utils;
+using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using CommandDotNet.Tokens;
 using FluentAssertions;
 using Xunit;

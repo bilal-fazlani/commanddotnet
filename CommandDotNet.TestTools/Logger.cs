@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CommandDotNet.Tests.Utils
+namespace CommandDotNet.TestTools
 {
     public class Logger : ILogger
     {

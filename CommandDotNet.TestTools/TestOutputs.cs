@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using CommandDotNet.Extensions;
 
-namespace CommandDotNet.Tests.Utils
+namespace CommandDotNet.TestTools
 {
     public class TestOutputs
     {

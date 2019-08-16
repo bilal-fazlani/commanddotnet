@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using CommandDotNet.Tests.ScenarioFramework;
-using CommandDotNet.Tests.Utils;
+using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
@@ -16,7 +16,7 @@ namespace CommandDotNet.Tests
             Func<TestConsole, string> onReadLine = null,
             IEnumerable<string> pipedInput = null)
         {
-            return runner.RunInMem(args, output?.AsLogger(), dependencies, onReadLine, pipedInput);
+            return AppRunnerTestExtensions.RunInMem(runner, args, output?.AsLogger(), dependencies, onReadLine, pipedInput);
         }
 
         public static void VerifyScenario(this AppRunner appRunner, ITestOutputHelper output, IScenario scenario)

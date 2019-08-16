@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace CommandDotNet.Tests.Utils
+namespace CommandDotNet.TestTools
 {
     public class TempFiles : IDisposable
     {

@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using CommandDotNet.Tokens;
 
-namespace CommandDotNet.Tests.Utils
+namespace CommandDotNet.TestTools
 {
     public static class StringExtensions
     {

@@ -1,6 +1,7 @@
-﻿using Xunit.Abstractions;
+﻿using CommandDotNet.Tests.ScenarioFramework;
+using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.ScenarioFramework
+namespace CommandDotNet.Tests
 {
     public class TestBase
     {

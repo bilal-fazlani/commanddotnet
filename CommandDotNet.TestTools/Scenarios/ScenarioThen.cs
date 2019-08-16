@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace CommandDotNet.Tests.ScenarioFramework
+namespace CommandDotNet.TestTools.Scenarios
 {
     public class ScenarioThen
     {

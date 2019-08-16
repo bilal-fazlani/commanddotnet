@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using CommandDotNet.Tests.Utils;
+using CommandDotNet.TestTools;
 using CommandDotNet.Tokens;
 using FluentAssertions;
 using Xunit;

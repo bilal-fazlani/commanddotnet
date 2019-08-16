@@ -1,19 +1,19 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using CommandDotNet.Tests.Utils;
+using CommandDotNet.Extensions;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.ScenarioFramework
+namespace CommandDotNet.TestTools.Scenarios
 {
     public static class AppRunnScenarioExtensions
     {
-        public static void VerifyScenario(this AppRunner appRunner, ITestOutputHelper output, IScenario scenario)
+        public static void VerifyScenario(this AppRunner appRunner, IScenario scenario)
         {
-            appRunner.VerifyScenario(new Logger(output.WriteLine), scenario);
+            appRunner.VerifyScenario(new Logger(Console.WriteLine), scenario);
         }
 
         public static void VerifyScenario(this AppRunner appRunner, ILogger logger, IScenario scenario)
@@ -139,11 +139,10 @@ namespace CommandDotNet.Tests.ScenarioFramework
             var actualOutputs = results.TestOutputs.Outputs;
             if (!scenario.Then.AllowUnspecifiedOutputs && actualOutputs.Count > scenario.Then.Outputs.Count)
             {
-                var expectedOutputTypes = scenario.Then.Outputs.Select(o => o.GetType()).ToHashSet();
-                var unexpectedTypes = String.Join(",", actualOutputs.Keys
+                var expectedOutputTypes = new HashSet<Type>(scenario.Then.Outputs.Select(o => o.GetType()));
+                var unexpectedTypes = actualOutputs.Keys
                     .Where(t => !expectedOutputTypes.Contains(t))
-                    .Select(t => t.Name)
-                    .OrderBy(n => n));
+                    .ToOrderedCsv();
 
                 throw new AssertionFailedException($"Unexpected output: {unexpectedTypes}");
             }

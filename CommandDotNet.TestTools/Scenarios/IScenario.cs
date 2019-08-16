@@ -1,4 +1,4 @@
-namespace CommandDotNet.Tests.ScenarioFramework
+namespace CommandDotNet.TestTools.Scenarios
 {
     public interface IScenario
     {

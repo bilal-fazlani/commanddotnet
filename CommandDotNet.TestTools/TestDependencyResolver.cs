@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using CommandDotNet.Builders;
 
-namespace CommandDotNet.Tests.Utils
+namespace CommandDotNet.TestTools
 {
-    public class TestDependencyResolver : IDependencyResolver
+    internal class TestDependencyResolver : IDependencyResolver
     {
         private readonly Dictionary<Type, object> _services = new Dictionary<Type, object>();
         

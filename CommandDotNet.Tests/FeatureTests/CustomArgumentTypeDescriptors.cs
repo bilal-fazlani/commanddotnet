@@ -1,7 +1,6 @@
 using System;
-using CommandDotNet.Help;
 using CommandDotNet.Tests.ScenarioFramework;
-using CommandDotNet.Tests.Utils;
+using CommandDotNet.TestTools;
 using CommandDotNet.TypeDescriptors;
 using Xunit;
 using Xunit.Abstractions;

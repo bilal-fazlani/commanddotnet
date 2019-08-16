@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
-using CommandDotNet.Tests.Utils;
 
-namespace CommandDotNet.Tests.ScenarioFramework
+namespace CommandDotNet.TestTools.Scenarios
 {
     public class ScenarioGiven
     {

@@ -1,4 +1,4 @@
-﻿namespace CommandDotNet.Tests.Utils
+﻿namespace CommandDotNet.TestTools
 {
     public interface ILogger
     {

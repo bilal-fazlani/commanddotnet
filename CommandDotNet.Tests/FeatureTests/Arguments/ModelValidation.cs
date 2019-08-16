@@ -1,5 +1,5 @@
-using CommandDotNet.Tests.ScenarioFramework;
-using CommandDotNet.Tests.Utils;
+using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using FluentValidation;
 using FluentValidation.Attributes;
 using Xunit;
