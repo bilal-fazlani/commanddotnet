@@ -11,11 +11,13 @@ namespace CommandDotNet.TestTools.Scenarios
 {
     public static class AppRunnerScenarioExtensions
     {
+        /// <summary>Run and verify the scenario expectations, output results to <see cref="Console"/></summary>
         public static void VerifyScenario(this AppRunner appRunner, IScenario scenario)
         {
             appRunner.VerifyScenario(new Logger(Console.WriteLine), scenario);
         }
 
+        /// <summary>Run and verify the scenario expectations using the given logger for output.</summary>
         public static void VerifyScenario(this AppRunner appRunner, ILogger logger, IScenario scenario)
         {
             if (scenario.WhenArgs != null && scenario.WhenArgsArray != null)
@@ -64,10 +66,6 @@ namespace CommandDotNet.TestTools.Scenarios
 
         private static void PrintContext(AppRunner appRunner, ILogger logger, IScenario scenario)
         {
-            if (scenario.Context != null)
-            {
-                logger.WriteLine($"Scenario class: {scenario.Context.Host.GetType()}");
-            }
             var appSettings = appRunner.AppSettings;
             var appSettingsProps = appSettings.GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
