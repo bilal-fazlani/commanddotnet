@@ -6,7 +6,7 @@ namespace CommandDotNet.TestTools
 {
     public class TestOutputs
     {
-        public Dictionary<Type, object> Outputs { get; } = new Dictionary<Type, object>();
+        public Dictionary<Type, object> Outputs { get; private set; } = new Dictionary<Type, object>();
 
         public void CaptureIfNotNull(object value)
         {
@@ -17,6 +17,7 @@ namespace CommandDotNet.TestTools
 
             Capture(value);
         }
+
         public void Capture(object value)
         {
             // arguments should only be captured once.  don't allow overwrites.
@@ -31,6 +32,15 @@ namespace CommandDotNet.TestTools
         public T Get<T>()
         {
             return (T)Get(typeof(T));
+        }
+
+        internal void UseOutputsFromInstance(TestOutputs testOutputs)
+        {
+            if (Outputs.Count > 0)
+                throw new InvalidOperationException(
+                    $"cannot link to a {nameof(TestOutputs)} that already has outputs recorded. keys:{Outputs.Keys.ToOrderedCsv()}");
+
+            Outputs = testOutputs.Outputs;
         }
     }
 }

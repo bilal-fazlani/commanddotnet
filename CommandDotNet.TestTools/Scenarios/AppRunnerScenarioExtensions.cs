@@ -9,7 +9,7 @@ using FluentAssertions.Execution;
 
 namespace CommandDotNet.TestTools.Scenarios
 {
-    public static class AppRunnScenarioExtensions
+    public static class AppRunnerScenarioExtensions
     {
         public static void VerifyScenario(this AppRunner appRunner, IScenario scenario)
         {
@@ -34,7 +34,6 @@ namespace CommandDotNet.TestTools.Scenarios
                 results = appRunner.RunInMem(
                     scenario.WhenArgsArray ?? scenario.WhenArgs.SplitArgs(),
                     null,
-                    scenario.Given.Dependencies,
                     scenario.Given.OnReadLine,
                     scenario.Given.PipedInput);
 

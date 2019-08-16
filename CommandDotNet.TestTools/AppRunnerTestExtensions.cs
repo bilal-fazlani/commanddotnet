@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 
 namespace CommandDotNet.TestTools
@@ -10,7 +13,6 @@ namespace CommandDotNet.TestTools
             this AppRunner runner, 
             string[] args,
             ILogger logger,
-            IEnumerable<object> dependencies = null,
             Func<TestConsole, string> onReadLine = null,
             IEnumerable<string> pipedInput = null)
         {
@@ -21,13 +23,7 @@ namespace CommandDotNet.TestTools
                     : console => pipedInput?.ToCsv(Environment.NewLine));
                     
             runner.Configure(c => c.UseConsole(testConsole));
-
-            var resolver = new TestDependencyResolver();
-            dependencies?.ForEach(resolver.Register);
-            runner.UseDependencyResolver(resolver, useLegacyInjectDependenciesAttribute: true);
-
-            var outputs = new TestOutputs();
-            resolver.Register(outputs);
+            var outputs = InjectTestOutputs(runner);
 
             var exitCode = runner.Run(args);
             var consoleOut = testConsole.Joined.ToString();
@@ -36,6 +32,35 @@ namespace CommandDotNet.TestTools
             logger?.WriteLine(consoleOut);
 
             return new AppRunnerResult(exitCode, consoleOut, outputs);
+        }
+
+        private static TestOutputs InjectTestOutputs(AppRunner runner)
+        {
+            TestOutputs outputs = new TestOutputs();
+            runner.Configure(c => c.UseMiddleware((context, next) =>
+            {
+                var instance = context.InvocationContext.Instance;
+                instance.GetType()
+                    .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                    .Where(p => p.PropertyType == typeof(TestOutputs))
+                    .ForEach(p =>
+                    {
+                        // principal of least surprise
+                        // if the test class sets the instance, then use that instance
+                        var value = (TestOutputs) p.GetValue(instance);
+                        if (value == null)
+                        {
+                            p.SetValue(instance, outputs);
+                        }
+                        else
+                        {
+                            outputs.UseOutputsFromInstance(value);
+                        }
+                    });
+                return next(context);
+            }, MiddlewareStages.PostBindValuesPreInvoke));
+
+            return outputs;
         }
     }
 }

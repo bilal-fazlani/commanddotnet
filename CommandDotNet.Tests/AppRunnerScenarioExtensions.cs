@@ -12,11 +12,10 @@ namespace CommandDotNet.Tests
             this AppRunner runner,
             string[] args,
             ITestOutputHelper output,
-            IEnumerable<object> dependencies = null,
             Func<TestConsole, string> onReadLine = null,
             IEnumerable<string> pipedInput = null)
         {
-            return AppRunnerTestExtensions.RunInMem(runner, args, output?.AsLogger(), dependencies, onReadLine, pipedInput);
+            return runner.RunInMem(args, output?.AsLogger(), onReadLine, pipedInput);
         }
 
         public static void VerifyScenario(this AppRunner appRunner, ITestOutputHelper output, IScenario scenario)
