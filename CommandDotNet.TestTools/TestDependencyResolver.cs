@@ -5,6 +5,9 @@ using CommandDotNet.Builders;
 
 namespace CommandDotNet.TestTools
 {
+    /// <summary>
+    /// A simple dictionary backed resolver.  Only one instance per type is supported.
+    /// </summary>
     public class TestDependencyResolver : IDependencyResolver, IEnumerable<object>
     {
         private readonly Dictionary<Type, object> _services = new Dictionary<Type, object>();

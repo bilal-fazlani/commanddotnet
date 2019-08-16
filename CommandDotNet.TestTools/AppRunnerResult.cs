@@ -1,17 +1,39 @@
+using System;
 using FluentAssertions;
 
 namespace CommandDotNet.TestTools
 {
     public class AppRunnerResult
     {
+        private readonly TestConsole _testConsole;
+
         public int ExitCode { get; }
-        public string ConsoleOut { get; }
+
+        /// <summary>
+        /// The combination of <see cref="Console.Error"/> and <see cref="Console.Out"/>
+        /// in the order they were written from the app.<br/>
+        /// This is how the output would appear in the shell.
+        /// </summary>
+        public string ConsoleAllOutput => _testConsole.Joined.ToString();
+
+        /// <summary>The error output only</summary>
+        public string ConsoleError => _testConsole.Error.ToString();
+
+        /// <summary>The standard output only</summary>
+        public string ConsoleOut => _testConsole.Out.ToString();
+
+        /// <summary>
+        /// <see cref="TestOutputs"/> captured in the command class.
+        /// The command class must have a public <see cref="TestOutputs"/> property for this to work.<br/>
+        /// This is a convenience for testing how inputs are mapped into the command method parameters.<br/>
+        /// Useful for testing middleware components, not the business logic of your commands.
+        /// </summary>
         public TestOutputs TestOutputs { get; }
 
-        public AppRunnerResult(int exitCode, string consoleOut, TestOutputs testOutputs)
+        public AppRunnerResult(int exitCode, TestConsole testConsole, TestOutputs testOutputs)
         {
+            _testConsole = testConsole;
             ExitCode = exitCode;
-            ConsoleOut = consoleOut;
             TestOutputs = testOutputs;
         }
 
@@ -22,7 +44,7 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public void OutputShouldBe(string expected)
         {
-            var actual = ConsoleOut.NormalizeLineEndings();
+            var actual = ConsoleAllOutput.NormalizeLineEndings();
             expected = expected.NormalizeLineEndings();
             actual.Should().Be(expected);
         }
@@ -34,7 +56,7 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public bool OutputContains(string expected)
         {
-            var actual = ConsoleOut.NormalizeLineEndings();
+            var actual = ConsoleAllOutput.NormalizeLineEndings();
             expected = expected.NormalizeLineEndings();
             return actual.Contains(expected);
         }

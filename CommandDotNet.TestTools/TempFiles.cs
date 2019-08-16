@@ -4,6 +4,7 @@ using System.IO;
 
 namespace CommandDotNet.TestTools
 {
+    /// <summary>A utility to create and track files so they can be disposed at the end of a test run.</summary>
     public class TempFiles : IDisposable
     {
         private readonly ILogger _logger;
@@ -14,6 +15,10 @@ namespace CommandDotNet.TestTools
             _logger = logger;
         }
 
+        /// <summary>
+        /// Creates a temp file with the given lines.<br/>
+        /// see <see cref="CreateOrClearTempFile"/> to understand how the file is created.
+        /// </summary>
         public string CreateTempFile(params string[] lines)
         {
             var path = CreateOrClearTempFile();
@@ -21,6 +26,10 @@ namespace CommandDotNet.TestTools
             return path;
         }
 
+        /// <summary>
+        /// Creates a temp file with the given lines. If the file exists, it is overwritten.<br/>
+        /// see <see cref="CreateOrClearTempFile"/> to understand how the file is created.
+        /// </summary>
         public string CreateOrOverwriteTempFile(string fileName, params string[] lines)
         {
             var path = CreateOrClearTempFile(fileName);

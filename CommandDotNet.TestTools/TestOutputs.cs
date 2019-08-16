@@ -4,6 +4,11 @@ using CommandDotNet.Extensions;
 
 namespace CommandDotNet.TestTools
 {
+    /// <summary>
+    /// <see cref="TestOutputs"/> a convenience for testing how inputs are mapped into the command method parameters.<br/>
+    /// The command class must have a public <see cref="TestOutputs"/> property for this to work.<br/>
+    /// Useful for testing middleware components, not the business logic of your commands.
+    /// </summary>
     public class TestOutputs
     {
         public Dictionary<Type, object> Outputs { get; private set; } = new Dictionary<Type, object>();

@@ -7,6 +7,7 @@ using CommandDotNet.Extensions;
 
 namespace CommandDotNet.TestTools
 {
+    /// <summary>Run the console in memory and get the results that would be output to the shell</summary>
     public static class AppRunnerTestExtensions
     {
         public static AppRunnerResult RunInMem(
@@ -31,7 +32,7 @@ namespace CommandDotNet.TestTools
             // output to console to help debugging failed tests
             logger?.WriteLine(consoleOut);
 
-            return new AppRunnerResult(exitCode, consoleOut, outputs);
+            return new AppRunnerResult(exitCode, testConsole, outputs);
         }
 
         private static TestOutputs InjectTestOutputs(AppRunner runner)

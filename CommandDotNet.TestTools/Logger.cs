@@ -2,6 +2,10 @@
 
 namespace CommandDotNet.TestTools
 {
+    /// <summary>
+    /// Used to write test & console output to a test framework.<br/>
+    /// i.e. if using XUnit, new Logger(testOutputHelper.WriteLine);
+    /// </summary>
     public class Logger : ILogger
     {
         private readonly Action<string> _logLine;
