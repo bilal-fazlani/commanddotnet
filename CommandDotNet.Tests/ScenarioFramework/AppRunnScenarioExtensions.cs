@@ -13,6 +13,11 @@ namespace CommandDotNet.Tests.ScenarioFramework
     {
         public static void VerifyScenario(this AppRunner appRunner, ITestOutputHelper output, IScenario scenario)
         {
+            appRunner.VerifyScenario(new Logger(output.WriteLine), scenario);
+        }
+
+        public static void VerifyScenario(this AppRunner appRunner, ILogger logger, IScenario scenario)
+        {
             if (scenario.WhenArgs != null && scenario.WhenArgsArray != null)
             {
                 throw new InvalidOperationException($"Both {nameof(scenario.WhenArgs)} and {nameof(scenario.WhenArgsArray)} were specified.  Only one can be specified.");
@@ -47,32 +52,32 @@ namespace CommandDotNet.Tests.ScenarioFramework
             }
             catch (Exception)
             {
-                PrintContext(appRunner, output, scenario);
+                PrintContext(appRunner, logger, scenario);
                 if (results != null)
                 {
-                    output.WriteLine("");
-                    output.WriteLine("App Results:");
-                    output.WriteLine(results.ConsoleOut);
+                    logger.WriteLine("");
+                    logger.WriteLine("App Results:");
+                    logger.WriteLine(results.ConsoleOut);
                 }
                 throw;
             }
         }
 
-        private static void PrintContext(AppRunner appRunner, ITestOutputHelper output, IScenario scenario)
+        private static void PrintContext(AppRunner appRunner, ILogger logger, IScenario scenario)
         {
             if (scenario.Context != null)
             {
-                output.WriteLine($"Scenario class: {scenario.Context.Host.GetType()}");
+                logger.WriteLine($"Scenario class: {scenario.Context.Host.GetType()}");
             }
             var appSettings = appRunner.AppSettings;
             var appSettingsProps = appSettings.GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .OrderBy(p => p.Name);
-            output.WriteLine("");
-            output.WriteLine($"AppSettings:");
+            logger.WriteLine("");
+            logger.WriteLine($"AppSettings:");
             foreach (var propertyInfo in appSettingsProps)
             {
-                output.WriteLine($"  {propertyInfo.Name}: {propertyInfo.GetValue(appSettings)}");
+                logger.WriteLine($"  {propertyInfo.Name}: {propertyInfo.GetValue(appSettings)}");
             }
         }
 

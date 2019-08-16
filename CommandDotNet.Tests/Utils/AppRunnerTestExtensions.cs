@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using CommandDotNet.Extensions;
-using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.Utils
 {
@@ -10,7 +9,7 @@ namespace CommandDotNet.Tests.Utils
         public static AppRunnerResult RunInMem(
             this AppRunner runner, 
             string[] args,
-            ITestOutputHelper testOutputHelper,
+            ILogger logger,
             IEnumerable<object> dependencies = null,
             Func<TestConsole, string> onReadLine = null,
             IEnumerable<string> pipedInput = null)
@@ -34,7 +33,7 @@ namespace CommandDotNet.Tests.Utils
             var consoleOut = testConsole.Joined.ToString();
             
             // output to console to help debugging failed tests
-            testOutputHelper?.WriteLine(consoleOut);
+            logger?.WriteLine(consoleOut);
 
             return new AppRunnerResult(exitCode, consoleOut, outputs);
         }

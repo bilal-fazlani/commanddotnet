@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.Utils
 {
     public class TempFiles : IDisposable
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ILogger _logger;
         private readonly List<string> _files = new List<string>();
 
-        public TempFiles(ITestOutputHelper testOutputHelper)
+        public TempFiles(ILogger logger)
         {
-            _testOutputHelper = testOutputHelper;
+            _logger = logger;
         }
 
         public string CreateTempFile(params string[] lines)
@@ -63,7 +62,7 @@ namespace CommandDotNet.Tests.Utils
                 File.Create(filePath).Dispose();
             }
 
-            _testOutputHelper.WriteLine($"created temp file: {filePath}");
+            _logger.WriteLine($"created temp file: {filePath}");
             _files.Add(filePath);
             return filePath;
         }
@@ -83,7 +82,7 @@ namespace CommandDotNet.Tests.Utils
                 }
                 catch (Exception e)
                 {
-                    _testOutputHelper.WriteLine($"failed to delete temp file: {fileName}. {e.Message}");
+                    _logger.WriteLine($"failed to delete temp file: {fileName}. {e.Message}");
                 }
             }
         }
