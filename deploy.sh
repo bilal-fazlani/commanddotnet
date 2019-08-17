@@ -14,12 +14,16 @@ parseTravisTag () {
 
 parseTravisTag
 
-# #PACKAGE
+# PACKAGE
 dotnet pack \
 -o output \
 -c Release \
 $PROJECT_NAME/$PROJECT_NAME.csproj \
 /p:Version=$DEPLOYMENT_VERSION
 
+# TESTING SCRIPT
+echo "output directory:"
+ls output/
+
 # #PUBLISH TO NUGET
-dotnet nuget push -s https://api.nuget.org/v3/index.json -k $NUGET_API_KEY_COMMANDDOTNET output/$PROJECT_NAME.$DEPLOYMENT_VERSION.nupkg
+# dotnet nuget push -s https://api.nuget.org/v3/index.json -k $NUGET_API_KEY_COMMANDDOTNET output/$PROJECT_NAME.$DEPLOYMENT_VERSION.nupkg
