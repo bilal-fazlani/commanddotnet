@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using CommandDotNet.TestTools.Scenarios;
 
 namespace CommandDotNet.Tests.ScenarioFramework
 {
     public class Scenarios : IEnumerable<IScenario>
     {
-        private List<IScenario> _scenarios = new List<IScenario>();
+        private readonly List<IScenario> _scenarios = new List<IScenario>();
 
         public void Add(IScenario scenario)
         {

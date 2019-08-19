@@ -1,20 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.Utils
+namespace CommandDotNet.TestTools
 {
+    /// <summary>A utility to create and track files so they can be disposed at the end of a test run.</summary>
     public class TempFiles : IDisposable
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ILogger _logger;
         private readonly List<string> _files = new List<string>();
 
-        public TempFiles(ITestOutputHelper testOutputHelper)
+        public TempFiles(ILogger logger)
         {
-            _testOutputHelper = testOutputHelper;
+            _logger = logger;
         }
 
+        /// <summary>
+        /// Creates a temp file with the given lines.<br/>
+        /// see <see cref="CreateOrClearTempFile"/> to understand how the file is created.
+        /// </summary>
         public string CreateTempFile(params string[] lines)
         {
             var path = CreateOrClearTempFile();
@@ -22,6 +26,10 @@ namespace CommandDotNet.Tests.Utils
             return path;
         }
 
+        /// <summary>
+        /// Creates a temp file with the given lines. If the file exists, it is overwritten.<br/>
+        /// see <see cref="CreateOrClearTempFile"/> to understand how the file is created.
+        /// </summary>
         public string CreateOrOverwriteTempFile(string fileName, params string[] lines)
         {
             var path = CreateOrClearTempFile(fileName);
@@ -63,7 +71,7 @@ namespace CommandDotNet.Tests.Utils
                 File.Create(filePath).Dispose();
             }
 
-            _testOutputHelper.WriteLine($"created temp file: {filePath}");
+            _logger.WriteLine($"created temp file: {filePath}");
             _files.Add(filePath);
             return filePath;
         }
@@ -83,7 +91,7 @@ namespace CommandDotNet.Tests.Utils
                 }
                 catch (Exception e)
                 {
-                    _testOutputHelper.WriteLine($"failed to delete temp file: {fileName}. {e.Message}");
+                    _logger.WriteLine($"failed to delete temp file: {fileName}. {e.Message}");
                 }
             }
         }

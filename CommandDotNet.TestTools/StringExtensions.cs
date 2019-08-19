@@ -2,10 +2,14 @@ using System;
 using System.Linq;
 using CommandDotNet.Tokens;
 
-namespace CommandDotNet.Tests.Utils
+namespace CommandDotNet.TestTools
 {
     public static class StringExtensions
     {
+        /// <summary>
+        /// Trims white space from all lines to ensure consistent results for test assertions.<br/>
+        /// This is to deal with whitespace padding when some lines don't need all elements.
+        /// </summary>
         public static string NormalizeLineEndings(this string text)
         {
             // split text and trim white space from all lines
@@ -20,6 +24,7 @@ namespace CommandDotNet.Tests.Utils
             return result.TrimEnd(Environment.NewLine.ToCharArray());
         }
 
+        /// <summary>Split the arguments using <see cref="CommandLineStringSplitter"/></summary>
         public static string[] SplitArgs(this string args)
         {
             return args == null

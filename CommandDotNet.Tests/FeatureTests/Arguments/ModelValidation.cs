@@ -1,5 +1,5 @@
-using CommandDotNet.Tests.ScenarioFramework;
-using CommandDotNet.Tests.Utils;
+using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using FluentValidation;
 using FluentValidation.Attributes;
 using Xunit;
@@ -70,9 +70,10 @@ Arguments:
         [Fact]
         public void Exec_WithInvalidData_PrintsValidationError_UsingValidatorFromDI()
         {
+            var resolver = new TestDependencyResolver{new PersonValidator()};
+
             var scenario = new Scenario
             {
-                Given = {Dependencies = new object[] {new PersonValidator()}},
                 WhenArgs = "Save",
                 Then =
                 {
@@ -86,35 +87,39 @@ Arguments:
 
             new AppRunner<App>()
                 .UseFluentValidation()
+                .UseDependencyResolver(resolver)
                 .VerifyScenario(TestOutputHelper, scenario);
 
             new AppRunner<App>()
                 .UseBackwardsCompatibilityMode()
+                .UseDependencyResolver(resolver)
                 .VerifyScenario(TestOutputHelper, scenario);
         }
 
         [Fact]
         public void Exec_WithValidData_Succeeds()
         {
+            var resolver = new TestDependencyResolver { new PersonValidator() };
+
             var scenario = new Scenario
             {
-                Given = {Dependencies = new object[] {new PersonValidator()}},
                 WhenArgs = "Save 1 john john@doe.com",
                 Then = {Outputs = {new Person {Id = 1, Name = "john", Email = "john@doe.com"}}}
             };
 
             new AppRunner<App>()
                 .UseFluentValidation()
+                .UseDependencyResolver(resolver)
                 .VerifyScenario(TestOutputHelper, scenario);
 
             new AppRunner<App>()
                 .UseBackwardsCompatibilityMode()
+                .UseDependencyResolver(resolver)
                 .VerifyScenario(TestOutputHelper, scenario);
         }
 
         public class App
         {
-            [InjectProperty]
             public TestOutputs TestOutputs { get; set; }
 
             public void Save(Person person)

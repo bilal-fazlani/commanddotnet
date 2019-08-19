@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using CommandDotNet.Tests.ScenarioFramework;
-using CommandDotNet.Tests.Utils;
+using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using CommandDotNet.Tokens;
 using FluentAssertions;
 using Xunit;
@@ -17,7 +17,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public ResponseFiles(ITestOutputHelper output)
         {
             _output = output;
-            _tempFiles = new TempFiles(_output);
+            _tempFiles = new TempFiles(_output.AsLogger());
         }
 
         public void Dispose()

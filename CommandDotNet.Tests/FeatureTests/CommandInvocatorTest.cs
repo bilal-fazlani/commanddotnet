@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
-using CommandDotNet.Tests.Utils;
+using CommandDotNet.TestTools;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;

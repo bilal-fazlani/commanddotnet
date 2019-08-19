@@ -1,4 +1,5 @@
 using System;
+using CommandDotNet.TestTools.Scenarios;
 
 namespace CommandDotNet.Tests.ScenarioFramework
 {

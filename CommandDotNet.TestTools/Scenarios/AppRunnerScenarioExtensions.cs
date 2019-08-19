@@ -1,17 +1,24 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using CommandDotNet.Tests.Utils;
+using CommandDotNet.Extensions;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.ScenarioFramework
+namespace CommandDotNet.TestTools.Scenarios
 {
-    public static class AppRunnScenarioExtensions
+    public static class AppRunnerScenarioExtensions
     {
-        public static void VerifyScenario(this AppRunner appRunner, ITestOutputHelper output, IScenario scenario)
+        /// <summary>Run and verify the scenario expectations, output results to <see cref="Console"/></summary>
+        public static void VerifyScenario(this AppRunner appRunner, IScenario scenario)
+        {
+            appRunner.VerifyScenario(new Logger(Console.WriteLine), scenario);
+        }
+
+        /// <summary>Run and verify the scenario expectations using the given logger for output.</summary>
+        public static void VerifyScenario(this AppRunner appRunner, ILogger logger, IScenario scenario)
         {
             if (scenario.WhenArgs != null && scenario.WhenArgsArray != null)
             {
@@ -29,7 +36,6 @@ namespace CommandDotNet.Tests.ScenarioFramework
                 results = appRunner.RunInMem(
                     scenario.WhenArgsArray ?? scenario.WhenArgs.SplitArgs(),
                     null,
-                    scenario.Given.Dependencies,
                     scenario.Given.OnReadLine,
                     scenario.Given.PipedInput);
 
@@ -47,32 +53,28 @@ namespace CommandDotNet.Tests.ScenarioFramework
             }
             catch (Exception)
             {
-                PrintContext(appRunner, output, scenario);
+                PrintContext(appRunner, logger, scenario);
                 if (results != null)
                 {
-                    output.WriteLine("");
-                    output.WriteLine("App Results:");
-                    output.WriteLine(results.ConsoleOut);
+                    logger.WriteLine("");
+                    logger.WriteLine("App Results:");
+                    logger.WriteLine(results.ConsoleAllOutput);
                 }
                 throw;
             }
         }
 
-        private static void PrintContext(AppRunner appRunner, ITestOutputHelper output, IScenario scenario)
+        private static void PrintContext(AppRunner appRunner, ILogger logger, IScenario scenario)
         {
-            if (scenario.Context != null)
-            {
-                output.WriteLine($"Scenario class: {scenario.Context.Host.GetType()}");
-            }
             var appSettings = appRunner.AppSettings;
             var appSettingsProps = appSettings.GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .OrderBy(p => p.Name);
-            output.WriteLine("");
-            output.WriteLine($"AppSettings:");
+            logger.WriteLine("");
+            logger.WriteLine($"AppSettings:");
             foreach (var propertyInfo in appSettingsProps)
             {
-                output.WriteLine($"  {propertyInfo.Name}: {propertyInfo.GetValue(appSettings)}");
+                logger.WriteLine($"  {propertyInfo.Name}: {propertyInfo.GetValue(appSettings)}");
             }
         }
 
@@ -114,7 +116,7 @@ namespace CommandDotNet.Tests.ScenarioFramework
 
                 sb.AppendLine();
                 sb.AppendLine("Console output <begin> ------------------------------");
-                sb.AppendLine(String.IsNullOrWhiteSpace(result.ConsoleOut) ? "<no output>" : result.ConsoleOut);
+                sb.AppendLine(String.IsNullOrWhiteSpace(result.ConsoleAllOutput) ? "<no output>" : result.ConsoleAllOutput);
                 sb.AppendLine("Console output <end>   ------------------------------");
 
                 throw new AssertionFailedException(sb.ToString());
@@ -134,11 +136,10 @@ namespace CommandDotNet.Tests.ScenarioFramework
             var actualOutputs = results.TestOutputs.Outputs;
             if (!scenario.Then.AllowUnspecifiedOutputs && actualOutputs.Count > scenario.Then.Outputs.Count)
             {
-                var expectedOutputTypes = scenario.Then.Outputs.Select(o => o.GetType()).ToHashSet();
-                var unexpectedTypes = String.Join(",", actualOutputs.Keys
+                var expectedOutputTypes = new HashSet<Type>(scenario.Then.Outputs.Select(o => o.GetType()));
+                var unexpectedTypes = actualOutputs.Keys
                     .Where(t => !expectedOutputTypes.Contains(t))
-                    .Select(t => t.Name)
-                    .OrderBy(n => n));
+                    .ToOrderedCsv();
 
                 throw new AssertionFailedException($"Unexpected output: {unexpectedTypes}");
             }

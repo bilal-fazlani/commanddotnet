@@ -13,6 +13,7 @@ using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
 
 [assembly: InternalsVisibleTo("CommandDotNet.Tests")]
+[assembly: InternalsVisibleTo("CommandDotNet.TestTools")]
 
 namespace CommandDotNet
 {

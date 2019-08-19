@@ -8,8 +8,9 @@ using System.IO;
 using System.Text;
 using CommandDotNet.Rendering;
 
-namespace CommandDotNet.Tests.Utils
+namespace CommandDotNet.TestTools
 {
+    /// <summary>A test console that can be used to capture all output and to provide input for ReadLine and ReadToEnd</summary>
     public class TestConsole : IConsole
     {
         public TestConsole(
@@ -47,6 +48,9 @@ namespace CommandDotNet.Tests.Utils
 
         public IStandardStreamWriter Out { get; }
 
+        /// <summary>
+        /// This is the combined output for <see cref="Error"/> and <see cref="Out"/> in the order the lines were output.
+        /// </summary>
         public IStandardStreamWriter Joined { get; }
 
         public bool IsOutputRedirected { get; }
