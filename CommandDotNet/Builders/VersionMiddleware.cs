@@ -58,11 +58,6 @@ namespace CommandDotNet.Builders
 
         private static void Print(AppSettings appSettings, IConsole console)
         {
-            if (!appSettings.EnableVersionOption)
-            {
-                return;
-            }
-
             var hostAssembly = Assembly.GetEntryAssembly();
             if (hostAssembly == null)
             {
