@@ -90,7 +90,7 @@ namespace CommandDotNet
             return this;
         }
 
-        public AppConfig Build(AppSettings appSettings)
+        internal AppConfig Build(AppSettings appSettings)
         {
             var helpProvider = _customHelpProvider ?? HelpTextProviderFactory.Create(appSettings);
 

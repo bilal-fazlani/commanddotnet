@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Rendering;
@@ -12,7 +9,7 @@ namespace CommandDotNet.Builders
     {
         private const string VersionOptionName = "version";
         private const string VersionTemplate = "-v | --" + VersionOptionName;
-        
+
         internal static AppRunner UseVersionMiddleware(AppRunner appRunner)
         {
             return appRunner.Configure(c =>
@@ -45,34 +42,24 @@ namespace CommandDotNet.Builders
             args.CommandBuilder.AddArgument(option);
         }
 
-        private static Task<int> DisplayVersionIfSpecified(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        private static Task<int> DisplayVersionIfSpecified(CommandContext commandContext,
+            Func<CommandContext, Task<int>> next)
         {
             if (commandContext.ParseResult.ArgumentValues.Contains(VersionOptionName))
             {
-                Print(commandContext.AppConfig.AppSettings, commandContext.Console);
+                Print(commandContext, commandContext.Console);
                 return Task.FromResult(0);
             }
 
             return next(commandContext);
         }
 
-        private static void Print(AppSettings appSettings, IConsole console)
+        private static void Print(CommandContext commandContext, IConsole console)
         {
-            var hostAssembly = Assembly.GetEntryAssembly();
-            if (hostAssembly == null)
-            {
-                throw new AppRunnerException(
-                    "Unable to determine version because Assembly.GetEntryAssembly() is null. " +
-                    "This is a known issue when running unit tests in .net framework. " +
-                    "Consider disabling for test runs. " +
-                    "https://tinyurl.com/y6rnjqsg");
-            }
+            var versionInfo = VersionInfo.GetVersionInfo(commandContext);
 
-            var filename = Path.GetFileName(hostAssembly.Location);
-            console.Out.WriteLine(filename);
-
-            var fvi = FileVersionInfo.GetVersionInfo(hostAssembly.Location);
-            console.Out.WriteLine(fvi.ProductVersion);
+            console.Out.WriteLine(versionInfo.Filename);
+            console.Out.WriteLine(versionInfo.Version);
         }
     }
 }

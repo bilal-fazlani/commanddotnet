@@ -2,6 +2,7 @@
 using CommandDotNet.Example.DocExamples;
 using CommandDotNet.Example.Issues;
 using CommandDotNet.Help;
+using CommandDotNet.NewerReleasesAlerts;
 
 namespace CommandDotNet.Example
 {
@@ -25,6 +26,7 @@ namespace CommandDotNet.Example
                     TextStyle = HelpTextStyle.Detailed
                 }
             };
+
             config?.Invoke(appSettings);
             return new AppRunner<TApp>(appSettings)
                 .UseDebugDirective()
@@ -33,6 +35,7 @@ namespace CommandDotNet.Example
                 .UseFluentValidation()
                 .UsePromptForMissingOperands()
                 .UseResponseFiles()
+                .UseNewerReleaseAlertOnGitHub("bilal-fazlani", "commanddotnet")
                 .Run(args);
         }
 

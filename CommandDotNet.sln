@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{6296
 		deploy.sh = deploy.sh
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandDotNet.NewerReleasesAlerts", "CommandDotNet.GitHubReleases\CommandDotNet.NewerReleasesAlerts.csproj", "{BB3E8869-107B-4E92-B6A2-2AB3A3CA2D3C}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandDotNet.TestTools", "CommandDotNet.TestTools\CommandDotNet.TestTools.csproj", "{75706FAE-BFF4-42FC-A5A6-C49744C7967C}"
 EndProject
 Global
@@ -47,6 +49,10 @@ Global
 		{75706FAE-BFF4-42FC-A5A6-C49744C7967C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75706FAE-BFF4-42FC-A5A6-C49744C7967C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75706FAE-BFF4-42FC-A5A6-C49744C7967C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB3E8869-107B-4E92-B6A2-2AB3A3CA2D3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB3E8869-107B-4E92-B6A2-2AB3A3CA2D3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB3E8869-107B-4E92-B6A2-2AB3A3CA2D3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB3E8869-107B-4E92-B6A2-2AB3A3CA2D3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
