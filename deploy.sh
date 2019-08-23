@@ -22,4 +22,4 @@ $PROJECT_NAME/$PROJECT_NAME.csproj \
 /p:Version=$DEPLOYMENT_VERSION
 
 # PUBLISH TO NUGET
-dotnet nuget push -s https://api.nuget.org/v3/index.json -k $NUGET_API_KEY_COMMANDDOTNET output/$PROJECT_NAME.$DEPLOYMENT_VERSION.nupkg
+dotnet nuget push -s https://api.nuget.org/v3/index.json -k $NUGET_API_KEY_COMMANDDOTNET CommandDotNet/output/$PROJECT_NAME.$DEPLOYMENT_VERSION.nupkg
