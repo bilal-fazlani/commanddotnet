@@ -26,6 +26,7 @@ namespace CommandDotNet.Directives
             if (commandContext.Tokens.TryGetDirective("debug", out _))
             {
                 Debugger.Attach(
+                    commandContext.AppConfig.CancellationToken,
                     commandContext.Console,
                     commandContext.AppConfig.Services.Get<DebugDirectiveContext>().WaitForDebuggerToAttach);
             }

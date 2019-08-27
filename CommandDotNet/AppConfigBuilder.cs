@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using CommandDotNet.Builders;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
@@ -24,11 +25,12 @@ namespace CommandDotNet
         private IHelpProvider _customHelpProvider;
 
         internal IConsole Console { get; private set; } = new SystemConsole();
+        public CancellationToken CancellationToken { get; } = new CancellationToken();
 
         public BuildEvents BuildEvents { get; } = new BuildEvents();
         public TokenizationEvents TokenizationEvents { get; } = new TokenizationEvents();
         public Services Services { get; } = new Services();
-        
+
         /// <summary>Replace the internal system console with provided console</summary>
         public AppConfigBuilder UseConsole(IConsole console)
         {
@@ -94,7 +96,7 @@ namespace CommandDotNet
         {
             var helpProvider = _customHelpProvider ?? HelpTextProviderFactory.Create(appSettings);
 
-            return new AppConfig(appSettings, Console, _dependencyResolver, helpProvider, TokenizationEvents, BuildEvents, Services)
+            return new AppConfig(appSettings, Console, _dependencyResolver, helpProvider, TokenizationEvents, BuildEvents, Services, CancellationToken)
             {
                 MiddlewarePipeline = _middlewareByStage
                     .SelectMany(kvp => kvp.Value.Select(v => new {stage = kvp.Key, v.order, v.middleware}) )
