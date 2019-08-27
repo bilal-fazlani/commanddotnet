@@ -33,6 +33,11 @@ namespace CommandDotNet.ClassModeling
             if (commandDef != null)
             {
                 commandContext.InvocationContext.CommandInvocation = commandDef.InvokeMethodDef;
+                if (commandDef.InterceptorMethodDef != NullMethodDef.Instance 
+                    && commandDef.InterceptorMethodDef != null)
+                {
+                    commandContext.InvocationContext.InterceptorInvocation = commandDef.InterceptorMethodDef;
+                }
             }
 
             return next(commandContext);
@@ -47,10 +52,10 @@ namespace CommandDotNet.ClassModeling
                 var argumentValues = commandContext.ParseResult.ArgumentValues;
                 var parserFactory = new ParserFactory(commandContext.AppConfig.AppSettings);
 
-                var middlewareArgs = commandDef.MiddlewareMethodDef.ArgumentDefs;
+                var interceptorArgs = commandDef.InterceptorMethodDef.ArgumentDefs;
                 var invokeArgs = commandDef.InvokeMethodDef.ArgumentDefs;
 
-                foreach (var argumentDef in middlewareArgs.Union(invokeArgs))
+                foreach (var argumentDef in interceptorArgs.Union(invokeArgs))
                 {
                     if (argumentValues.TryGetValues(argumentDef.Argument, out var values))
                     {
@@ -116,17 +121,19 @@ namespace CommandDotNet.ClassModeling
 
         private static Task<int> InvokeCommandDefMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            var ctx = commandContext.InvocationContext;
-            var commandDef = commandContext.ParseResult.TargetCommand.Services.Get<ICommandDef>();
-
-
-            if (commandDef.MiddlewareMethodDef != null)
+            Task<int> InvokeCommand(CommandContext ctx)
             {
-                return commandDef.MiddlewareMethodDef.InvokeAsMiddleware(commandContext, ctx.Instance,
-                    commandCtx => ctx.CommandInvocation.Invoke(commandContext, ctx.Instance).GetResultCodeAsync());
+                return ctx.InvocationContext.CommandInvocation
+                    .Invoke(commandContext, ctx.InvocationContext.Instance, null)
+                    .GetResultCodeAsync();
             }
 
-            return ctx.CommandInvocation.Invoke(commandContext, ctx.Instance).GetResultCodeAsync();
+            var invocations = commandContext.InvocationContext;
+            return invocations.InterceptorInvocation != null
+                ? invocations.InterceptorInvocation
+                    .Invoke(commandContext, invocations.Instance, InvokeCommand)
+                    .GetResultCodeAsync()
+                : InvokeCommand(commandContext);
         }
     }
 }

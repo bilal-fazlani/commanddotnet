@@ -27,7 +27,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public IReadOnlyCollection<ICommandDef> SubCommands => _subCommands.Value;
 
-        public IMethodDef MiddlewareMethodDef { get; }
+        public IMethodDef InterceptorMethodDef { get; }
 
         public IMethodDef InvokeMethodDef => _defaultCommandDef.InvokeMethodDef;
 
@@ -49,11 +49,11 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             var (middlewareMethod, defaultCommand, localCommands) = ParseMethods(commandContext.AppConfig);
 
-            MiddlewareMethodDef = middlewareMethod;
+            InterceptorMethodDef = middlewareMethod;
             _defaultCommandDef = defaultCommand;
 
             Arguments = _defaultCommandDef.Arguments
-                .Union(MiddlewareMethodDef.ArgumentDefs)
+                .Union(InterceptorMethodDef.ArgumentDefs)
                 .ToArray();
 
             // lazy loading prevents walking the entire hierarchy of sub-commands
@@ -68,7 +68,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             foreach (var method in CommandHostClassType.GetDeclaredMethods())
             {
-                if (MethodDef.IsMiddlewareMethod(method))
+                if (MethodDef.IsInterceptorMethod(method))
                 {
                     if (middlewareMethodInfo != null)
                     {

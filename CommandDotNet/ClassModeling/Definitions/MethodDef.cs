@@ -39,7 +39,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
         }
 
-        public static bool IsMiddlewareMethod(MethodBase methodBase)
+        public static bool IsInterceptorMethod(MethodBase methodBase)
         {
             return methodBase.GetParameters().Any(IsMiddlewareNextType);
         }
@@ -49,17 +49,18 @@ namespace CommandDotNet.ClassModeling.Definitions
             return parameterInfo.ParameterType == MiddlewareNextParameterType;
         }
 
-        public Task<int> InvokeAsMiddleware(CommandContext commandContext, object instance, Func<CommandContext,Task<int>> next)
+        public object Invoke(CommandContext commandContext, object instance, Func<CommandContext, Task<int>> next)
         {
             if (_nextParameterInfo != null)
             {
+                if (next == null)
+                {
+                    throw new AppRunnerException(
+                        $"Invalid operation. {nameof(Func<CommandContext, Task<int>>)} {_nextParameterInfo.Name} parameter not provided for method: {_nextParameterInfo.Member.FullName()}. " +
+                        $"Check middleware to ensure it hasn't misconfigured the {nameof(CommandContext.InvocationContext)}");
+                }
                 _values[_nextParameterInfo.Position] = next;
             }
-            return Invoke(commandContext, instance).GetResultCodeAsync();
-        }
-
-        public object Invoke(CommandContext commandContext, object instance)
-        {
             if (_commandContextParameterInfo != null)
             {
                 _values[_commandContextParameterInfo.Position] = commandContext;
