@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using CommandDotNet.Builders;
 using CommandDotNet.Help;
 using CommandDotNet.Parsing;
@@ -17,13 +18,15 @@ namespace CommandDotNet.Execution
         public TokenizationEvents TokenizationEvents { get; }
         public BuildEvents BuildEvents { get; }
         public IServices Services { get; }
+        public CancellationToken CancellationToken { get; }
 
         internal IReadOnlyCollection<ExecutionMiddleware> MiddlewarePipeline { get; set; }
         internal IReadOnlyCollection<TokenTransformation> TokenTransformations { get; set; }
 
-        public AppConfig(AppSettings appSettings, IConsole console, 
+        public AppConfig(AppSettings appSettings, IConsole console,
             IDependencyResolver dependencyResolver, IHelpProvider helpProvider,
-            TokenizationEvents tokenizationEvents, BuildEvents buildEvents, IServices services)
+            TokenizationEvents tokenizationEvents, BuildEvents buildEvents, IServices services,
+            CancellationToken cancellationToken)
         {
             AppSettings = appSettings;
             Console = console;
@@ -32,6 +35,7 @@ namespace CommandDotNet.Execution
             TokenizationEvents = tokenizationEvents;
             BuildEvents = buildEvents;
             Services = services;
+            CancellationToken = cancellationToken;
         }
     }
 }
