@@ -1,8 +1,9 @@
-﻿using CommandDotNet.Parsing;
+﻿using CommandDotNet.Execution;
+using CommandDotNet.Parsing;
 using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
 
-namespace CommandDotNet.Execution
+namespace CommandDotNet
 {
     public class CommandContext
     {
