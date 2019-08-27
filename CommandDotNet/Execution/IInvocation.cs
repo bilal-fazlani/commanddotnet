@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace CommandDotNet.Execution
 {
@@ -29,6 +31,6 @@ namespace CommandDotNet.Execution
         MethodInfo MethodInfo { get; }
 
         /// <summary>Invokes the instance</summary>
-        object Invoke(CommandContext commandContext, object instance);
+        object Invoke(CommandContext commandContext, object instance, Func<CommandContext, Task<int>> next);
     }
 }

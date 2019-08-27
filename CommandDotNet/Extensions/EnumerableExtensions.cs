@@ -7,6 +7,8 @@ namespace CommandDotNet.Extensions
 {
     internal static class EnumerableExtensions
     {
+        internal static bool IsNullOrEmpty<T>(this IEnumerable<T> items) => items == null || !items.Any();
+
         internal static IEnumerable<T> ToEnumerable<T>(this T instance)
         {
             yield return instance;

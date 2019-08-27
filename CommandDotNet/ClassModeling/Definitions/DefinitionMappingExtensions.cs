@@ -29,7 +29,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             if (commandDef.IsExecutable)
             {
-                commandDef.MiddlewareMethodDef.ArgumentDefs
+                commandDef.InterceptorMethodDef.ArgumentDefs
                     .Select(d => d.Argument)
                     .OfType<Option>()
                     .Where(o => o.Inherited)

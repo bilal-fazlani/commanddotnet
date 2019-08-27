@@ -16,7 +16,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         public bool IsExecutable => true;
         public IReadOnlyCollection<IArgumentDef> Arguments { get; }
         public IReadOnlyCollection<ICommandDef> SubCommands { get; } = new List<ICommandDef>().AsReadOnly();
-        public IMethodDef MiddlewareMethodDef { get; }
+        public IMethodDef InterceptorMethodDef { get; }
         public IMethodDef InvokeMethodDef { get; }
         public Command Command { get; set; }
 
@@ -25,7 +25,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             _delegate = handlerDelegate;
             
             Name = name;
-            MiddlewareMethodDef = NullMethodDef.Instance;
+            InterceptorMethodDef = NullMethodDef.Instance;
             InvokeMethodDef = new MethodDef(handlerDelegate.Method, appConfig);
             Arguments = InvokeMethodDef.ArgumentDefs;
 

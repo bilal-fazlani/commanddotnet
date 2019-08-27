@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Builders;
-using CommandDotNet.ClassModeling.Definitions;
-using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using FluentValidation;
 using FluentValidation.Attributes;
@@ -25,16 +23,16 @@ namespace CommandDotNet.ClassModeling
 
         internal static Task<int> ValidateModelsMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
-            var commandDef = commandContext.ParseResult.TargetCommand.Services.Get<ICommandDef>();
-            if (commandDef != null)
+            var iCtx = commandContext.InvocationContext;
+
+            var paramValues = iCtx.CommandInvocation.ParameterValues
+                .Union(iCtx.InterceptorInvocation?.ParameterValues ?? Enumerable.Empty<object>());
+
+            if (!paramValues.IsNullOrEmpty())
             {
                 var modelValidator = new ModelValidator(commandContext.AppConfig.DependencyResolver);
                 
-                var middlewareValues = commandDef.MiddlewareMethodDef.ParameterValues;
-                var invokeValues = commandDef.InvokeMethodDef.ParameterValues;
-
-                var failureResults = middlewareValues
-                    .Union(invokeValues)
+                var failureResults = paramValues
                     .OfType<IArgumentModel>()
                     .Select(model =>new {model, result=modelValidator.ValidateModel(model)})
                     .Where(v => v.result != null && !v.result.IsValid)

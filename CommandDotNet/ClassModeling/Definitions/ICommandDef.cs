@@ -12,7 +12,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         bool IsExecutable { get; }
         IReadOnlyCollection<IArgumentDef> Arguments { get; }
         IReadOnlyCollection<ICommandDef> SubCommands { get; }
-        IMethodDef MiddlewareMethodDef { get; }
+        IMethodDef InterceptorMethodDef { get; }
         IMethodDef InvokeMethodDef { get; }
         Command Command { get; set; }
     }
