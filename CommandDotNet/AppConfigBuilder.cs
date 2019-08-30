@@ -24,19 +24,12 @@ namespace CommandDotNet
         private IDependencyResolver _dependencyResolver;
         private IHelpProvider _customHelpProvider;
 
-        internal IConsole Console { get; private set; } = new SystemConsole();
-        public CancellationToken CancellationToken { get; } = new CancellationToken();
+        /// <summary>Replace the internal system console with provided console</summary>
+        public IConsole Console { get; set; } = new SystemConsole();
 
         public BuildEvents BuildEvents { get; } = new BuildEvents();
         public TokenizationEvents TokenizationEvents { get; } = new TokenizationEvents();
         public Services Services { get; } = new Services();
-
-        /// <summary>Replace the internal system console with provided console</summary>
-        public AppConfigBuilder UseConsole(IConsole console)
-        {
-            Console = console;
-            return this;
-        }
 
         /// <summary>
         /// Configures the app to use the resolver to create instances of
