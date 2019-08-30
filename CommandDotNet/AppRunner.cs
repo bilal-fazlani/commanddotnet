@@ -141,7 +141,9 @@ namespace CommandDotNet
             var middlewareChain = pipeline.Aggregate(
                 (first, second) =>
                     (ctx, next) =>
-                        first(ctx, c => second(c, next)));
+                        first(ctx, c => c.AppConfig.CancellationToken.IsCancellationRequested 
+                            ? Task.FromResult(0) 
+                            : second(c, next)));
 
             return middlewareChain(commandContext, ctx => Task.FromResult(0));
         }

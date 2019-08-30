@@ -27,6 +27,12 @@ namespace CommandDotNet
         /// <summary>Replace the internal system console with provided console</summary>
         public IConsole Console { get; set; } = new SystemConsole();
 
+        /// <summary>
+        /// This CancellationToken will be shared via the <see cref="CommandContext"/>
+        /// Set it to ensure all middleware can subscribe to a cancellation.
+        /// </summary>
+        public CancellationToken CancellationToken { get; set; } = CancellationToken.None;
+
         public BuildEvents BuildEvents { get; } = new BuildEvents();
         public TokenizationEvents TokenizationEvents { get; } = new TokenizationEvents();
         public Services Services { get; } = new Services();
