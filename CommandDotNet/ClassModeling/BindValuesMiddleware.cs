@@ -22,67 +22,78 @@ namespace CommandDotNet.ClassModeling
                 var interceptorArgs = commandDef.InterceptorMethodDef.ArgumentDefs;
                 var invokeArgs = commandDef.InvokeMethodDef.ArgumentDefs;
 
-                void SetFromStringInput(IArgumentDef argDef, List<string> values)
+                bool SetFromStringInput(IArgumentDef argDef, IEnumerable<string> values, out int returnCode)
                 {
-                    var parser = parserFactory.CreateInstance(argDef.Argument);
-                    var value = parser.Parse(argDef.Argument, values);
-                    argDef.SetValue(value);
+                    try
+                    {
+                        var parser = parserFactory.CreateInstance(argDef.Argument);
+                        var value = parser.Parse(argDef.Argument, values);
+                        argDef.SetValue(value);
+                        returnCode = 0;
+                        return true;
+                    }
+                    catch (ValueParsingException ex)
+                    {
+                        console.Error.WriteLine($"Failure parsing value for {argDef}.  values={values?.ToCsv()}");
+                        console.Error.WriteLine(ex.Message);
+                        console.Error.WriteLine();
+                        returnCode = 2;
+                        return false;
+                    }
                 }
 
                 foreach (var argumentDef in interceptorArgs.Union(invokeArgs))
                 {
-                    List<string> values = null;
-                    try
+                    if (argumentValues.TryGetValues(argumentDef.Argument, out var values))
                     {
-                        if (argumentValues.TryGetValues(argumentDef.Argument, out values))
+                        if (!SetFromStringInput(argumentDef, values, out int returnCode))
                         {
-                            SetFromStringInput(argumentDef, values);
+                            return Task.FromResult(returnCode);
                         }
-                        else if (argumentDef.Argument.DefaultValue != null)
+                    }
+                    else if (argumentDef.Argument.DefaultValue != null)
+                    {
+                        var defaultValue = argumentDef.Argument.DefaultValue;
+                        // middleware could set the default to any type.
+                        // string values could be assigned from attributes or config values
+                        // so they are parsed as if submitted from the shell.
+                        switch (defaultValue)
                         {
-                            var defaultValue = argumentDef.Argument.DefaultValue;
-                            // middleware could set the default to any type.
-                            // string values could be assigned from attributes or config values
-                            // so they are parsed as if submitted from the shell.
-                            switch (defaultValue)
-                            {
-                                case string stringValue:
-                                    SetFromStringInput(argumentDef, values = new List<string> { stringValue });
-                                    break;
-                                case IEnumerable<string> multiString:
-                                    SetFromStringInput(argumentDef, values = multiString.ToList());
-                                    break;
-                                default:
+                            case string stringValue:
+                                if (!SetFromStringInput(argumentDef, stringValue.ToEnumerable(), out int returnCode))
+                                {
+                                    return Task.FromResult(returnCode);
+                                }
+                                break;
+                            case IEnumerable<string> multiString:
+                                if (!SetFromStringInput(argumentDef, multiString, out returnCode))
+                                {
+                                    return Task.FromResult(returnCode);
+                                }
+                                break;
+                            default:
+                                try
+                                {
                                     if (argumentDef.Type.IsInstanceOfType(defaultValue))
                                     {
                                         argumentDef.SetValue(defaultValue);
                                     }
                                     else
                                     {
-                                        try
-                                        {
-                                            // cover cases like converting int to long.
-                                            var convertedValue = Convert.ChangeType(defaultValue, argumentDef.Type);
-                                            argumentDef.SetValue(convertedValue);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            console.Error.WriteLine($"Failure assigning value to {argumentDef}.");
-                                            console.Error.WriteLine(ex.Message);
-                                            console.Error.WriteLine();
-                                            return Task.FromResult(2);
-                                        }
+                                        // cover cases like converting int to long.
+                                        var convertedValue = Convert.ChangeType(defaultValue, argumentDef.Type);
+                                        argumentDef.SetValue(convertedValue);
                                     }
-                                    break;
-                            }
+                                }
+                                catch (Exception ex)
+                                {
+                                    console.Error.WriteLine($"Failure assigning value to {argumentDef}.");
+                                    console.Error.WriteLine(ex.Message);
+                                    console.Error.WriteLine();
+                                    return Task.FromResult(2);
+                                }
+                                break;
                         }
-                    }
-                    catch (ValueParsingException ex)
-                    {
-                        console.Error.WriteLine($"Failure parsing value for {argumentDef}.  values={values?.ToCsv()}");
-                        console.Error.WriteLine(ex.Message);
-                        console.Error.WriteLine();
-                        return Task.FromResult(2);
                     }
                 }
             }

@@ -16,7 +16,7 @@ namespace CommandDotNet.Parsing
             _argumentTypeDescriptor = argumentTypeDescriptor;
         }
 
-        public object Parse(IArgument argument, List<string> values)
+        public object Parse(IArgument argument, IEnumerable<string> values)
         {
             var listInstance = CreateGenericList();
 

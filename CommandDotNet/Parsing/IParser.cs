@@ -4,6 +4,6 @@ namespace CommandDotNet.Parsing
 {
     internal interface IParser
     {
-        object Parse(IArgument argument, List<string> values);
+        object Parse(IArgument argument, IEnumerable<string> values);
     }
 }
