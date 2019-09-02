@@ -10,6 +10,16 @@ namespace CommandDotNet.Tests
     {
         public static AppRunnerResult RunInMem(
             this AppRunner runner,
+            string args,
+            ITestOutputHelper output,
+            Func<TestConsole, string> onReadLine = null,
+            IEnumerable<string> pipedInput = null)
+        {
+            return runner.RunInMem(args.SplitArgs(), output?.AsLogger(), onReadLine, pipedInput);
+        }
+
+        public static AppRunnerResult RunInMem(
+            this AppRunner runner,
             string[] args,
             ITestOutputHelper output,
             Func<TestConsole, string> onReadLine = null,

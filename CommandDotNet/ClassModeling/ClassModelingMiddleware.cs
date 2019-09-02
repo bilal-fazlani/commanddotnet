@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Execution;
-using CommandDotNet.Parsing;
 
 namespace CommandDotNet.ClassModeling
 {
@@ -15,7 +13,7 @@ namespace CommandDotNet.ClassModeling
             {
                 c.UseMiddleware((context, next) => BuildMiddleware(rootCommandType, context, next), MiddlewareStages.Build);
                 c.UseMiddleware(SetInvocationContextMiddleware, MiddlewareStages.ParseInput);
-                c.UseMiddleware(BindValuesMiddleware, MiddlewareStages.BindValues);
+                c.UseMiddleware(BindValuesMiddleware.BindValues, MiddlewareStages.BindValues);
                 c.UseMiddleware(ResolveInstancesMiddleware, MiddlewareStages.BindValues);
                 c.UseMiddleware(InvokeCommandDefMiddleware, MiddlewareStages.Invoke, int.MaxValue);
             });
@@ -40,45 +38,6 @@ namespace CommandDotNet.ClassModeling
                 }
             }
 
-            return next(commandContext);
-        }
-
-        private static Task<int> BindValuesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
-        {
-            var commandDef = commandContext.ParseResult.TargetCommand.Services.Get<ICommandDef>();
-            if (commandDef != null)
-            {
-                var console = commandContext.Console;
-                var argumentValues = commandContext.ParseResult.ArgumentValues;
-                var parserFactory = new ParserFactory(commandContext.AppConfig.AppSettings);
-
-                var interceptorArgs = commandDef.InterceptorMethodDef.ArgumentDefs;
-                var invokeArgs = commandDef.InvokeMethodDef.ArgumentDefs;
-
-                foreach (var argumentDef in interceptorArgs.Union(invokeArgs))
-                {
-                    if (argumentValues.TryGetValues(argumentDef.Argument, out var values))
-                    {
-                        var parser = parserFactory.CreateInstance(argumentDef.Argument);
-                        object value;
-                        try
-                        {
-                            value = parser.Parse(argumentDef.Argument, values);
-                        }
-                        catch (ValueParsingException ex)
-                        {
-                            console.Error.WriteLine(ex.Message);
-                            console.Error.WriteLine();
-                            return Task.FromResult(2);
-                        }
-                        argumentDef.SetValue(value);
-                    }
-                    else if (argumentDef.HasDefaultValue)
-                    {
-                        argumentDef.SetValue(argumentDef.DefaultValue);
-                    }
-                }
-            }
             return next(commandContext);
         }
 
