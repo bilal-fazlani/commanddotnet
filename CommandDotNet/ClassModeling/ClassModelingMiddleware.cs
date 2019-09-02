@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Execution;
+using CommandDotNet.Rendering;
 
 namespace CommandDotNet.ClassModeling
 {
@@ -41,6 +45,13 @@ namespace CommandDotNet.ClassModeling
             return next(commandContext);
         }
 
+        private static readonly Dictionary<Type, Func<CommandContext, object>> InjectableServiceTypes = new Dictionary<Type, Func<CommandContext, object>>
+        {
+            [typeof(CommandContext)] = ctx => ctx,
+            [typeof(IConsole)] = ctx => ctx.Console,
+            [typeof(CancellationToken)] = ctx => ctx.AppConfig.CancellationToken
+        };
+
         private static async Task<int> ResolveInstancesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
             var command = commandContext.ParseResult.TargetCommand;
@@ -60,8 +71,22 @@ namespace CommandDotNet.ClassModeling
                 }
                 else
                 {
+                    var ctor = classType.GetConstructors()
+                        .Select(c => new {c, p= c.GetParameters()})
+                        .Where(cp => cp.p.Length == 0 || cp.p.All(p => InjectableServiceTypes.ContainsKey(p.ParameterType)))
+                        .OrderByDescending(cp => cp.p.Length)
+                        .FirstOrDefault();
+
+                    if (ctor == null)
+                    {
+                        throw new AppRunnerException($"No viable constructors found for {classType}");
+                    }
+
                     instanceOwnedByThisMiddleware = true;
-                    commandContext.InvocationContext.Instance = Activator.CreateInstance(classType);
+                    var parameters = ctor.p
+                        .Select(p => InjectableServiceTypes[p.ParameterType](commandContext))
+                        .ToArray();
+                    commandContext.InvocationContext.Instance = ctor.c.Invoke(parameters);
                 }
             }
 
