@@ -7,13 +7,6 @@ using System.Runtime.CompilerServices;
 
 namespace CommandDotNet.Extensions
 {
-    internal static class MemberInfoExtensions
-    {
-        internal static string FullName(this MemberInfo memberInfo, bool includeNamespace = false) =>
-            includeNamespace
-                ? $"{memberInfo.DeclaringType?.FullName}.{memberInfo.Name}"
-                : $"{memberInfo.DeclaringType?.Name}.{memberInfo.Name}";
-    }
     internal static class TypeExtensions
     {
         internal static IEnumerable<MethodInfo> GetDeclaredMethods(this Type type)

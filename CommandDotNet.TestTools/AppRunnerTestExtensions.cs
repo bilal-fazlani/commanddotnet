@@ -23,7 +23,7 @@ namespace CommandDotNet.TestTools
                     ? (Func<TestConsole, string>) null
                     : console => pipedInput?.ToCsv(Environment.NewLine));
                     
-            runner.Configure(c => c.UseConsole(testConsole));
+            runner.Configure(c => c.Console = testConsole);
             var outputs = InjectTestOutputs(runner);
 
             var exitCode = runner.Run(args);

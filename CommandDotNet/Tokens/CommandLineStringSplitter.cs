@@ -2,7 +2,7 @@
 
 namespace CommandDotNet.Tokens
 {
-    internal class CommandLineStringSplitter : ICommandLineStringSplitter
+    public class CommandLineStringSplitter : ICommandLineStringSplitter
     {
         // copied from System.CommandLine
         // https://github.com/dotnet/command-line-api/blob/master/src/System.CommandLine/Parsing/CommandLineStringSplitter.cs

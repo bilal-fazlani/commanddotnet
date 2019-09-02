@@ -12,7 +12,7 @@ namespace CommandDotNet.Builders
         {
             return appRunner.Configure(c =>
             {
-                c.UseDependencyResolver(dependencyResolver);
+                c.DependencyResolver = dependencyResolver;
                 if (useLegacyInjectDependenciesAttribute)
                 {
                     c.UseMiddleware(InjectDependencies, MiddlewareStages.PostBindValuesPreInvoke);

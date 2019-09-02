@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Execution;
-using CommandDotNet.Parsing;
+using CommandDotNet.Rendering;
 
 namespace CommandDotNet.ClassModeling
 {
@@ -15,7 +17,7 @@ namespace CommandDotNet.ClassModeling
             {
                 c.UseMiddleware((context, next) => BuildMiddleware(rootCommandType, context, next), MiddlewareStages.Build);
                 c.UseMiddleware(SetInvocationContextMiddleware, MiddlewareStages.ParseInput);
-                c.UseMiddleware(BindValuesMiddleware, MiddlewareStages.BindValues);
+                c.UseMiddleware(BindValuesMiddleware.BindValues, MiddlewareStages.BindValues);
                 c.UseMiddleware(ResolveInstancesMiddleware, MiddlewareStages.BindValues);
                 c.UseMiddleware(InvokeCommandDefMiddleware, MiddlewareStages.Invoke, int.MaxValue);
             });
@@ -43,44 +45,12 @@ namespace CommandDotNet.ClassModeling
             return next(commandContext);
         }
 
-        private static Task<int> BindValuesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        private static readonly Dictionary<Type, Func<CommandContext, object>> InjectableServiceTypes = new Dictionary<Type, Func<CommandContext, object>>
         {
-            var commandDef = commandContext.ParseResult.TargetCommand.Services.Get<ICommandDef>();
-            if (commandDef != null)
-            {
-                var console = commandContext.Console;
-                var argumentValues = commandContext.ParseResult.ArgumentValues;
-                var parserFactory = new ParserFactory(commandContext.AppConfig.AppSettings);
-
-                var interceptorArgs = commandDef.InterceptorMethodDef.ArgumentDefs;
-                var invokeArgs = commandDef.InvokeMethodDef.ArgumentDefs;
-
-                foreach (var argumentDef in interceptorArgs.Union(invokeArgs))
-                {
-                    if (argumentValues.TryGetValues(argumentDef.Argument, out var values))
-                    {
-                        var parser = parserFactory.CreateInstance(argumentDef.Argument);
-                        object value;
-                        try
-                        {
-                            value = parser.Parse(argumentDef.Argument, values);
-                        }
-                        catch (ValueParsingException ex)
-                        {
-                            console.Error.WriteLine(ex.Message);
-                            console.Error.WriteLine();
-                            return Task.FromResult(2);
-                        }
-                        argumentDef.SetValue(value);
-                    }
-                    else if (argumentDef.HasDefaultValue)
-                    {
-                        argumentDef.SetValue(argumentDef.DefaultValue);
-                    }
-                }
-            }
-            return next(commandContext);
-        }
+            [typeof(CommandContext)] = ctx => ctx,
+            [typeof(IConsole)] = ctx => ctx.Console,
+            [typeof(CancellationToken)] = ctx => ctx.AppConfig.CancellationToken
+        };
 
         private static async Task<int> ResolveInstancesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
         {
@@ -101,8 +71,22 @@ namespace CommandDotNet.ClassModeling
                 }
                 else
                 {
+                    var ctor = classType.GetConstructors()
+                        .Select(c => new {c, p= c.GetParameters()})
+                        .Where(cp => cp.p.Length == 0 || cp.p.All(p => InjectableServiceTypes.ContainsKey(p.ParameterType)))
+                        .OrderByDescending(cp => cp.p.Length)
+                        .FirstOrDefault();
+
+                    if (ctor == null)
+                    {
+                        throw new AppRunnerException($"No viable constructors found for {classType}");
+                    }
+
                     instanceOwnedByThisMiddleware = true;
-                    commandContext.InvocationContext.Instance = Activator.CreateInstance(classType);
+                    var parameters = ctor.p
+                        .Select(p => InjectableServiceTypes[p.ParameterType](commandContext))
+                        .ToArray();
+                    commandContext.InvocationContext.Instance = ctor.c.Invoke(parameters);
                 }
             }
 

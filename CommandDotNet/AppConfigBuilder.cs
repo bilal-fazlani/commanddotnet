@@ -20,42 +20,27 @@ namespace CommandDotNet
         private readonly Dictionary<string, TokenTransformation> _tokenTransformationsByName = 
             new Dictionary<string, TokenTransformation>();
 
-
-        private IDependencyResolver _dependencyResolver;
-        private IHelpProvider _customHelpProvider;
-
-        internal IConsole Console { get; private set; } = new SystemConsole();
-        public CancellationToken CancellationToken { get; } = new CancellationToken();
-
-        public BuildEvents BuildEvents { get; } = new BuildEvents();
-        public TokenizationEvents TokenizationEvents { get; } = new TokenizationEvents();
-        public Services Services { get; } = new Services();
-
-        /// <summary>Replace the internal system console with provided console</summary>
-        public AppConfigBuilder UseConsole(IConsole console)
-        {
-            Console = console;
-            return this;
-        }
-
         /// <summary>
         /// Configures the app to use the resolver to create instances of
         /// properties decorated with <see cref="InjectPropertyAttribute"/>
         /// </summary>
-        internal AppConfigBuilder UseDependencyResolver(IDependencyResolver dependencyResolver)
-        {
-            _dependencyResolver = dependencyResolver ?? throw new ArgumentNullException(nameof(dependencyResolver));
-            return this;
-        }
+        public IDependencyResolver DependencyResolver { get; set; }
+
+        /// <summary>Replace the internal help provider with given help provider</summary>
+        public IHelpProvider CustomHelpProvider { get; set; }
+
+        /// <summary>Replace the internal system console with provided console</summary>
+        public IConsole Console { get; set; } = new SystemConsole();
 
         /// <summary>
-        /// Replace the internal help provider with given help provider
+        /// This CancellationToken will be shared via the <see cref="CommandContext"/>
+        /// Set it to ensure all middleware can subscribe to a cancellation.
         /// </summary>
-        public AppConfigBuilder UseCustomHelpProvider(IHelpProvider customHelpProvider)
-        {
-            _customHelpProvider = customHelpProvider;
-            return this;
-        }
+        public CancellationToken CancellationToken { get; set; } = CancellationToken.None;
+
+        public BuildEvents BuildEvents { get; } = new BuildEvents();
+        public TokenizationEvents TokenizationEvents { get; } = new TokenizationEvents();
+        public Services Services { get; } = new Services();
 
         /// <summary>
         /// Adds the transformation to the list of transformations applied to tokens
@@ -94,9 +79,9 @@ namespace CommandDotNet
 
         internal AppConfig Build(AppSettings appSettings)
         {
-            var helpProvider = _customHelpProvider ?? HelpTextProviderFactory.Create(appSettings);
+            var helpProvider = CustomHelpProvider ?? HelpTextProviderFactory.Create(appSettings);
 
-            return new AppConfig(appSettings, Console, _dependencyResolver, helpProvider, TokenizationEvents, BuildEvents, Services, CancellationToken)
+            return new AppConfig(appSettings, Console, DependencyResolver, helpProvider, TokenizationEvents, BuildEvents, Services, CancellationToken)
             {
                 MiddlewarePipeline = _middlewareByStage
                     .SelectMany(kvp => kvp.Value.Select(v => new {stage = kvp.Key, v.order, v.middleware}) )
