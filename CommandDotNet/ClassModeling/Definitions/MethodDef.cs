@@ -27,7 +27,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         public IReadOnlyCollection<IArgumentDef> ArgumentDefs => EnsureInitialized(() => _argumentDefs);
 
         public IReadOnlyCollection<IArgument> Arguments => EnsureInitialized(ref _arguments,
-            () => ArgumentDefs.Select(a => a.Argument).ToList().AsReadOnly());
+            () => ArgumentDefs.Select(a => a.Argument).ToReadOnlyCollection());
 
         public IReadOnlyCollection<ParameterInfo> Parameters => EnsureInitialized(() => _parameters);
 
@@ -101,14 +101,14 @@ namespace CommandDotNet.ClassModeling.Definitions
             
             var parametersByName = _parameters.ToDictionary(
                 p => p.Name,
-                p => (param: p, args: GetArgsFromParameter(p, argumentMode).ToList()));
+                p => (param: p, args: GetArgsFromParameter(p, argumentMode).ToCollection()));
 
             var arguments = parametersByName.Values
                 .OrderBy(v => v.param.Position)
                 .SelectMany(p => p.args)
-                .ToList();
+                .ToReadOnlyCollection();
 
-            _argumentDefs = arguments.AsReadOnly();
+            _argumentDefs = arguments;
         }
 
         private IEnumerable<IArgumentDef> GetArgsFromParameter(ParameterInfo parameterInfo, ArgumentMode argumentMode)

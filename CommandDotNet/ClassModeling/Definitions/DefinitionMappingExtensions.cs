@@ -65,7 +65,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             if (typeDescriptor is IAllowedValuesTypeDescriptor allowedValuesTypeDescriptor)
             {
-                argument.AllowedValues = allowedValuesTypeDescriptor.GetAllowedValues(argument).ToList();
+                argument.AllowedValues = allowedValuesTypeDescriptor.GetAllowedValues(argument).ToReadOnlyCollection();
             }
             return argument;
         }

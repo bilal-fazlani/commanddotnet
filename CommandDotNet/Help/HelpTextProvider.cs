@@ -39,9 +39,7 @@ namespace CommandDotNet.Help
             _appName ?? command.GetAppName(_appHelpSettings.UsageAppNameStyle);
 
         /// <summary>The current command and it's parents.  aka bread crumbs</summary>
-        protected virtual string CommandPath(Command command) =>
-            command.GetParentCommands(true)
-                .Reverse().Skip(1).Select(c => c.Name).ToCsv(" ");
+        protected virtual string CommandPath(Command command) => command.GetPath();
 
         /// <summary>How operands are shown in the usage example</summary>
         protected virtual string UsageOperand(Command command) =>
@@ -68,14 +66,14 @@ namespace CommandDotNet.Help
             SectionArguments(
                 GetOptionsExcludingHelp(command)
                     .OrderBy(o => o.IsSystemOption)
-                    .ToList());
+                    .ToCollection());
 
         /// <summary>returns the body of the operands section</summary>
         protected virtual string SectionOperands(Command command) => 
-            SectionArguments(command.Operands.ToList());
+            SectionArguments(command.Operands.ToCollection());
 
         /// <summary>returns the body of an arguments section</summary>
-        protected virtual string SectionArguments<T>(List<T> arguments)
+        protected virtual string SectionArguments<T>(ICollection<T> arguments)
             where T : IArgument
         {
             if (!arguments.Any())
@@ -114,7 +112,7 @@ namespace CommandDotNet.Help
         /// <summary>returns the body of the subcommands section</summary>
         protected virtual string SectionSubcommands(Command command)
         {
-            var commands = command.Subcommands.ToList();
+            var commands = command.Subcommands.ToCollection();
 
             if (!commands.Any())
             {
@@ -226,12 +224,12 @@ namespace CommandDotNet.Help
             public string Description;
         }
 
-        private List<CommandHelpValues> BuildCommandHelpValues(List<Command> commands) =>
+        private ICollection<CommandHelpValues> BuildCommandHelpValues(IEnumerable<Command> commands) =>
             commands.Select(c => new CommandHelpValues
             {
                 Name = CommandName(c),
                 Description = CommandDescription(c)
-            }).ToList();
+            }).ToCollection();
 
         private class ArgumentHelpValues
         {
@@ -242,7 +240,7 @@ namespace CommandDotNet.Help
             public string AllowedValues;
         }
 
-        private List<ArgumentHelpValues> BuildArgumentHelpValues<T>(List<T> arguments) where T : IArgument =>
+        private ICollection<ArgumentHelpValues> BuildArgumentHelpValues<T>(IEnumerable<T> arguments) where T : IArgument =>
             arguments.Select(a => new ArgumentHelpValues
             {
                 Template = $"{ArgumentName(a)}{ArgumentArity(a)}",
@@ -250,6 +248,6 @@ namespace CommandDotNet.Help
                 DefaultValue = ArgumentDefaultValue(a),
                 Description = ArgumentDescription(a),
                 AllowedValues = ArgumentAllowedValues(a)
-            }).ToList();
+            }).ToCollection();
     }
 }

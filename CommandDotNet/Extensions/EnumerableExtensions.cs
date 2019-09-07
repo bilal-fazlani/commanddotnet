@@ -14,6 +14,10 @@ namespace CommandDotNet.Extensions
             yield return instance;
         }
 
+        public static ICollection<T> ToCollection<T>(this IEnumerable<T> items) => items as ICollection<T> ?? items.ToList();
+
+        public static IReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> items) => items as IReadOnlyCollection<T> ?? items.ToList().AsReadOnly();
+
         public static string ToCsv(this IEnumerable<string> items, string separator = ",")
         {
             return string.Join(separator, items);

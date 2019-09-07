@@ -87,7 +87,7 @@ namespace CommandDotNet.ClassModeling
                                 }
                                 catch (Exception ex)
                                 {
-                                    console.Error.WriteLine($"Failure assigning value to {argumentDef}.");
+                                    console.Error.WriteLine($"Failure assigning value to {argumentDef}. Value={defaultValue}");
                                     console.Error.WriteLine(ex.Message);
                                     console.Error.WriteLine();
                                     return Task.FromResult(2);

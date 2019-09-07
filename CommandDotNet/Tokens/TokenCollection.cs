@@ -26,25 +26,25 @@ namespace CommandDotNet.Tokens
         /// <summary>The indexer for this collection.  Includes argument separators if they exist.</summary>
         public Token this[int index] => _combined[index];
 
-        private TokenCollection(List<Token> directives, List<Token> arguments, List<Token> separated)
+        private TokenCollection(IEnumerable<Token> directives, IEnumerable<Token> arguments, IEnumerable<Token> separated)
         {
-            _directives = directives;
-            if (directives.Any())
+            _directives = directives.ToList();
+            if (_directives.Any())
             {
-                _combined.AddRange(directives);
-            }
-            _arguments = arguments;
-
-            if (arguments.Any())
-            {
-                _combined.AddRange(arguments);
+                _combined.AddRange(_directives);
             }
 
-            _separated = separated;
-            if (separated.Any())
+            _arguments = arguments.ToList();
+            if (_arguments.Any())
+            {
+                _combined.AddRange(_arguments);
+            }
+
+            _separated = separated.ToList();
+            if (_separated.Any())
             {
                 _combined.Add(new Token(Tokenizer.SeparatorString, Tokenizer.SeparatorString, TokenType.Separator));
-                _combined.AddRange(separated);
+                _combined.AddRange(_separated);
             }
         }
 

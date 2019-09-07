@@ -16,7 +16,7 @@ namespace CommandDotNet.Help
                 ? $"{header}:"
                 : $"{header}:{Environment.NewLine}";
 
-        protected override string SectionArguments<T>(List<T> arguments)
+        protected override string SectionArguments<T>(ICollection<T> arguments)
         {
             var nameMaxLength = arguments.Max(a => ArgumentName(a)?.Length) ?? 0;
 

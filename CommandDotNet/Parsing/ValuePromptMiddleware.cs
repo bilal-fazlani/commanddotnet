@@ -25,13 +25,13 @@ namespace CommandDotNet.Parsing
             return next(commandContext);
         }
 
-        private static List<string> PromptForValues(Operand argument, IConsole console)
+        private static ICollection<string> PromptForValues(Operand argument, IConsole console)
         {
-            List<string> inputs;
+            ICollection<string> inputs;
             if (argument.Arity.AllowsZeroOrMore())
             {
                 console.Out.Write($"{argument.Name} ({argument.TypeInfo.DisplayName}) [separate values by space]: ");
-                inputs = console.In.ReadLine()?.Split(' ').ToList() ?? new List<string>();
+                inputs = console.In.ReadLine()?.Split(' ');
             }
             else
             {
@@ -39,7 +39,7 @@ namespace CommandDotNet.Parsing
                 inputs = new List<string> { console.In.ReadLine() };
             }
 
-            return inputs;
+            return inputs ?? new List<string>();
         }
     }
 }
