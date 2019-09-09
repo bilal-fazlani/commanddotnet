@@ -5,11 +5,11 @@ using CommandDotNet.TestTools;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests
+namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 {
-    public class NestedCommandTests : TestBase
+    public class SubCommandTests : TestBase
     {
-        public NestedCommandTests(ITestOutputHelper output) : base(output)
+        public SubCommandTests(ITestOutputHelper output) : base(output)
         {
         }
 

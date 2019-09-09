@@ -5,16 +5,16 @@ using CommandDotNet.TestTools;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests
+namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 {
-    public class HostCommandMiddlewareOptionTests : TestBase
+    public class SubCommandInterceptorOptionTests : TestBase
     {
-        public HostCommandMiddlewareOptionTests(ITestOutputHelper output) : base(output)
+        public SubCommandInterceptorOptionTests(ITestOutputHelper output) : base(output)
         {
         }
 
         [Fact]
-        public void GivenRootMiddlewareHost_HelpIncludesMiddlewareOptions()
+        public void GivenRoot_HelpIncludesInterceptorOptions()
         {
             Verify(new Scenario<Root>
             {
@@ -40,7 +40,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         }
 
         [Fact]
-        public void GivenRootMiddlewareHost_HelpForHostedSubCommand_IncludesInheritedMiddlewareOptions()
+        public void GivenRoot_HelpForSubCommand_IncludesInheritedInterceptorOptions()
         {
             Verify(new Scenario<Root>
             {
@@ -63,7 +63,7 @@ Options:
         }
 
         [Fact]
-        public void GivenLeafMiddlewareHost_HelpIncludesOnlyLocalMiddlewareOptions()
+        public void GivenLeaf_HelpIncludesOnlyLocalInterceptorOptions()
         {
             Verify(new Scenario<Root>
             {
@@ -88,7 +88,7 @@ Use ""dotnet testhost.dll Leaf [command] --help"" for more information about a c
         }
 
         [Fact]
-        public void GivenLeafMiddlewareHost_HelpForHostedSubCommand_IncludesLocalInheritedMiddlewareOptions()
+        public void GivenLeaf_HelpForSubCommand_IncludesLocalInheritedInterceptorOptions()
         {
             Verify(new Scenario<Root>
             {
@@ -111,7 +111,7 @@ Options:
         }
 
         [Fact]
-        public void GivenRootMiddlewareHost_ExecutingLocalSubcommand_ParsesMiddlewareOptions()
+        public void GivenRoot_ExecutingLocalSubcommand_ParsesInterceptorOptions()
         {
             Verify(new Scenario<Root>
             {
@@ -120,7 +120,7 @@ Options:
                 {
                     Outputs =
                     {
-                        new RootMiddlewareResult{RootOpt = "rov", InheritedRootOpt = "irov"},
+                        new RootInterceptorResult{RootOpt = "rov", InheritedRootOpt = "irov"},
                         new RootDoResult{DoOpt = "a", DoArg = "b"}
                     }
                 }
@@ -128,7 +128,7 @@ Options:
         }
 
         [Fact]
-        public void GivenRootMiddlewareHost_ExecutingLocalSubcommand_InheritedOptionCanBeSpecifiedAfterSubcommand()
+        public void GivenRoot_ExecutingLocalSubcommand_InheritedOptionCanBeSpecifiedAfterSubcommand()
         {
             Verify(new Scenario<Root>
             {
@@ -137,7 +137,7 @@ Options:
                 {
                     Outputs =
                     {
-                        new RootMiddlewareResult{RootOpt = "rov", InheritedRootOpt = "irov"},
+                        new RootInterceptorResult{RootOpt = "rov", InheritedRootOpt = "irov"},
                         new RootDoResult{DoOpt = "a", DoArg = "b"}
                     }
                 }
@@ -145,7 +145,7 @@ Options:
         }
 
         [Fact]
-        public void GivenRootMiddlewareHost_ExecutingLocalSubcommand_NonInheritedOptionCanNotBeSpecifiedAfterSubcommand()
+        public void GivenRoot_ExecutingLocalSubcommand_NonInheritedOptionCanNotBeSpecifiedAfterSubcommand()
         {
             Verify(new Scenario<Root>
             {
@@ -157,8 +157,9 @@ Options:
                 }
             });
         }
+
         [Fact]
-        public void GivenLeafMiddlewareHost_ExecutingLocalSubcommand_ParsesMiddlewareOptions()
+        public void GivenLeaf_ExecutingLocalSubcommand_ParsesInterceptorOptions()
         {
             Verify(new Scenario<Root>
             {
@@ -167,7 +168,7 @@ Options:
                 {
                     Outputs =
                     {
-                        new LeafMiddlewareResult{LeafOpt = "lov", InheritedLeafOpt = "ilov"},
+                        new LeafInterceptorResult{LeafOpt = "lov", InheritedLeafOpt = "ilov"},
                         new LeafDoResult{DoOpt = "a", DoArg = "b"}
                     }
                 }
@@ -175,7 +176,7 @@ Options:
         }
 
         [Fact]
-        public void GivenLeafMiddlewareHost_ExecutingLocalSubcommand_InheritedOptionCanBeSpecifiedAfterSubcommand()
+        public void GivenLeaf_ExecutingLocalSubcommand_InheritedOptionCanBeSpecifiedAfterSubcommand()
         {
             Verify(new Scenario<Root>
             {
@@ -184,7 +185,7 @@ Options:
                 {
                     Outputs =
                     {
-                        new LeafMiddlewareResult{LeafOpt = "lov", InheritedLeafOpt = "ilov"},
+                        new LeafInterceptorResult{LeafOpt = "lov", InheritedLeafOpt = "ilov"},
                         new LeafDoResult{DoOpt = "a", DoArg = "b"}
                     }
                 }
@@ -192,7 +193,7 @@ Options:
         }
 
         [Fact]
-        public void GivenLeafMiddlewareHost_ExecutingLocalSubcommand_NonInheritedOptionCanNotBeSpecifiedAfterSubcommand()
+        public void GivenLeaf_ExecutingLocalSubcommand_NonInheritedOptionCanNotBeSpecifiedAfterSubcommand()
         {
             Verify(new Scenario<Root>
             {
@@ -206,7 +207,7 @@ Options:
         }
 
         [Fact]
-        public void ExecutingSubCommandWillParseAndExecuteLocalMiddlewareOptions()
+        public void ExecutingSubCommandWillParseAndExecuteLocalInterceptorOptions()
         {
             Verify(new Scenario<Root>
             {
@@ -215,7 +216,7 @@ Options:
                 {
                     Outputs =
                     {
-                        new LeafMiddlewareResult{LeafOpt = "leaf"},
+                        new LeafInterceptorResult{LeafOpt = "leaf"},
                         new LeafDoResult{DoOpt = "a", DoArg = "b"}
                     }
                 }
@@ -223,7 +224,7 @@ Options:
         }
 
         [Fact]
-        public void MiddlewareOptionMustBeSpecifiedBeforeLocalCommand()
+        public void InterceptorOptionMustBeSpecifiedBeforeLocalCommand()
         {
             Verify(new Scenario<Root>
             {
@@ -241,11 +242,11 @@ Options:
             [InjectProperty]
             public TestOutputs TestOutputs { get; set; }
 
-            public Task<int> Middleware(
+            public Task<int> Interceptor(
                 CommandContext context, Func<CommandContext, Task<int>> next, 
                 [Option] string rootOpt = null, [Option(Inherited = true)] string inheritedRootOpt = null)
             {
-                TestOutputs.Capture(new RootMiddlewareResult { RootOpt = rootOpt, InheritedRootOpt = inheritedRootOpt });
+                TestOutputs.Capture(new RootInterceptorResult { RootOpt = rootOpt, InheritedRootOpt = inheritedRootOpt });
                 return next(context);
             }
 
@@ -263,10 +264,10 @@ Options:
             [InjectProperty]
             public TestOutputs TestOutputs { get; set; }
 
-            public Task<int> Middleware(
-                CommandContext context, Func<CommandContext, Task<int>> next, LeafMiddlewareResult leafMiddlewareResult)
+            public Task<int> Interceptor(
+                CommandContext context, Func<CommandContext, Task<int>> next, LeafInterceptorResult leafInterceptorResult)
             {
-                TestOutputs.Capture(leafMiddlewareResult);
+                TestOutputs.Capture(leafInterceptorResult);
                 return next(context);
             }
 
@@ -276,7 +277,7 @@ Options:
             }
         }
 
-        public class RootMiddlewareResult
+        public class RootInterceptorResult
         {
             public string RootOpt { get; set; }
             public string InheritedRootOpt { get; set; }
@@ -290,7 +291,7 @@ Options:
             public string DoArg { get; set; }
         }
 
-        public class LeafMiddlewareResult : IArgumentModel
+        public class LeafInterceptorResult : IArgumentModel
         {
             [Option]
             public string LeafOpt { get; set; }

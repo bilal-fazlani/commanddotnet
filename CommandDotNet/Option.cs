@@ -67,7 +67,7 @@ namespace CommandDotNet
         /// <summary>The long name that will be prefixed with a double hyphen.</summary>
         public string LongName { get; }
 
-        /// <summary>If true, this option is inherited from a command middleware method and can be specified after the target command</summary>
+        /// <summary>If true, this option is inherited from a command interceptor method and can be specified after the target command</summary>
         public bool Inherited { get; set; }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace CommandDotNet
         /// <summary>The attributes defined on the parameter or property that define this argument</summary>
         public ICustomAttributeProvider CustomAttributes { get; }
 
-        /// <summary>The services used by middleware and associated with this argument</summary>
+        /// <summary>The services used by middleware for this argument</summary>
         public IServices Services { get; } = new Services();
 
         public override string ToString()

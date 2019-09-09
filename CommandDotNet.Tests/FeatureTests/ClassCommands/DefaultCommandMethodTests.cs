@@ -3,7 +3,7 @@ using CommandDotNet.TestTools;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests
+namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 {
     public class DefaultCommandMethodTests : TestBase
     {
@@ -54,7 +54,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         }
 
         [Fact]
-        public void WithParams_BasicHelp_IncludesArgsOtherCommands()
+        public void WithParams_BasicHelp_IncludesArgsAndOtherCommands()
         {
             Verify(new Scenario<WithParamsApp>
             {
@@ -76,12 +76,38 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         }
 
         [Fact]
-        public void WithParams_DetailedHelp_IncludesArgsOtherCommands()
+        public void WithParams_DetailedHelp_IncludesArgsAndOtherCommands()
         {
             Verify(new Scenario<WithParamsApp>
             {
                 Given = { AppSettings = DetailedHelp },
                 WhenArgs = "-h",
+                Then =
+                {
+                    Result = @"Usage: dotnet testhost.dll [command] [arguments]
+
+Arguments:
+
+  text  <TEXT>
+  some text
+
+Commands:
+
+  AnotherCommand
+
+Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+                }
+            });
+        }
+
+
+        [Fact(Skip = "requires framework to distinguish interceptor options from default options")]
+        public void WithParams_Help_ForAnotherCommand_DoesNotIncludeDefaultArgs()
+        {
+            Verify(new Scenario<WithParamsApp>
+            {
+                Given = { AppSettings = DetailedHelp },
+                WhenArgs = "AnotherCommand -h",
                 Then =
                 {
                     Result = @"Usage: dotnet testhost.dll [command] [arguments]
@@ -122,6 +148,32 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 Then =
                 {
                     Outputs = { "abcde" }
+                }
+            });
+        }
+
+        [Fact]
+        public void WithParams_Execute_AnotherCommand_WorksWithoutParams()
+        {
+            Verify(new Scenario<WithParamsApp>
+            {
+                WhenArgs = "AnotherCommand",
+                Then =
+                {
+                    Outputs = { false }
+                }
+            });
+        }
+
+        [Fact(Skip = "requires framework to distinguish interceptor options from default options")]
+        public void WithParams_Execute_AnotherCommand_FailsWithDefaultParams()
+        {
+            Verify(new Scenario<WithParamsApp>
+            {
+                WhenArgs = "AnotherCommand abcde",
+                Then =
+                {
+                    ResultsContainsTexts = { "Unrecognized command or argument 'abcde'"}
                 }
             });
         }
