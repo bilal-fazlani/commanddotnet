@@ -54,7 +54,7 @@ namespace CommandDotNet.NewerReleasesAlerts
             public OverrideHttpRequestCallback OverrideHttpRequestCallback { get; set; }
         }
 
-        private static Task<int> AlertOnNewVersion(CommandContext context, Func<CommandContext, Task<int>> next)
+        private static Task<int> AlertOnNewVersion(CommandContext context, ExecutionDelegate next)
         {
             NewerReleaseConfig config = context.AppConfig.Services.Get<NewerReleaseConfig>();
 

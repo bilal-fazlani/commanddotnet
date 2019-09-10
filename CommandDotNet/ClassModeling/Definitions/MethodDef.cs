@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 
@@ -10,9 +9,8 @@ namespace CommandDotNet.ClassModeling.Definitions
 {
     internal class MethodDef : IMethodDef
     {
-        public static readonly Type MiddlewareNextReturnType = typeof(Task<int>);
-        public static readonly Type MiddlewareNextParameterType = typeof(Func<CommandContext, Task<int>>);
-        public static readonly Type MiddlewareNextLiteParameterType = typeof(Func<Task<int>>);
+        public static readonly Type MiddlewareNextParameterType = typeof(ExecutionDelegate);
+        public static readonly Type InterceptorNextParameterType = typeof(InterceptorExecutionDelegate);
 
         private readonly AppConfig _appConfig;
         private IReadOnlyCollection<IArgumentDef> _argumentDefs;
@@ -48,23 +46,23 @@ namespace CommandDotNet.ClassModeling.Definitions
         private static bool IsMiddlewareNextType(ParameterInfo parameterInfo)
         {
             return parameterInfo.ParameterType == MiddlewareNextParameterType 
-                   || parameterInfo.ParameterType == MiddlewareNextLiteParameterType;
+                   || parameterInfo.ParameterType == InterceptorNextParameterType;
         }
 
-        public object Invoke(CommandContext commandContext, object instance, Func<CommandContext, Task<int>> next)
+        public object Invoke(CommandContext commandContext, object instance, ExecutionDelegate next)
         {
             if (_nextParameterInfo != null)
             {
                 if (next == null)
                 {
                     throw new AppRunnerException(
-                        $"Invalid operation. {nameof(Func<CommandContext, Task<int>>)} {_nextParameterInfo.Name} parameter not provided for method: {_nextParameterInfo.Member.FullName()}. " +
+                        $"Invalid operation. {nameof(ExecutionDelegate)} {_nextParameterInfo.Name} parameter not provided for method: {_nextParameterInfo.Member.FullName()}. " +
                         $"Check middleware to ensure it hasn't misconfigured the {nameof(CommandContext.InvocationContext)}");
                 }
 
-                if (_nextParameterInfo.ParameterType == MiddlewareNextLiteParameterType)
+                if (_nextParameterInfo.ParameterType == InterceptorNextParameterType)
                 {
-                    var nextLite = new Func<Task<int>>(() => next(commandContext));
+                    var nextLite = new InterceptorExecutionDelegate(() => next(commandContext));
                     _values[_nextParameterInfo.Position] = nextLite;
                 }
                 else

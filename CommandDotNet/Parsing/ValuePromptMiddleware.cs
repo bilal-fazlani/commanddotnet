@@ -10,7 +10,7 @@ namespace CommandDotNet.Parsing
 {
     internal static class ValuePromptMiddleware
     {
-        internal static Task<int> PromptForMissingOperands(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        internal static Task<int> PromptForMissingOperands(CommandContext commandContext, ExecutionDelegate next)
         {
             var command = commandContext.ParseResult.TargetCommand;
             var argumentValues = commandContext.ParseResult.ArgumentValues;

@@ -35,7 +35,7 @@ namespace CommandDotNet.Help
             args.CommandBuilder.AddArgument(option);
         }
 
-        private static Task<int> DisplayHelp(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        private static Task<int> DisplayHelp(CommandContext commandContext, ExecutionDelegate next)
         {
             var parseResult = commandContext.ParseResult;
             if (parseResult.ParseError != null)

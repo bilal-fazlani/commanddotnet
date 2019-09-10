@@ -14,7 +14,7 @@ namespace CommandDotNet.Parsing
             return appRunner.Configure(c => c.UseMiddleware(InjectPipedInput, MiddlewareStages.PostParseInputPreBindValues));
         }
 
-        private static Task<int> InjectPipedInput(CommandContext ctx, Func<CommandContext, Task<int>> next)
+        private static Task<int> InjectPipedInput(CommandContext ctx, ExecutionDelegate next)
         {
             if (ctx.Console.IsInputRedirected)
             {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Threading.Tasks;
+using CommandDotNet.Execution;
 
 namespace CommandDotNet.ClassModeling.Definitions
 {
@@ -20,7 +20,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         public IReadOnlyCollection<ParameterInfo> Parameters { get; } = new ParameterInfo[0];
         public object[] ParameterValues { get; } = new object[0];
 
-        public object Invoke(CommandContext commandContext, object instance, Func<CommandContext, Task<int>> next)
+        public object Invoke(CommandContext commandContext, object instance, ExecutionDelegate next)
         {
             throw new NotImplementedException("We should never reach this");
         }

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
-using CommandDotNet.Builders;
 using CommandDotNet.ClassModeling;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;

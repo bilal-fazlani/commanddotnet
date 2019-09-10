@@ -23,13 +23,13 @@ namespace CommandDotNet.ClassModeling
             });
         }
 
-        private static Task<int> BuildMiddleware(Type rootCommandType, CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        private static Task<int> BuildMiddleware(Type rootCommandType, CommandContext commandContext, ExecutionDelegate next)
         {
             commandContext.RootCommand = ClassCommandDef.CreateRootCommand(rootCommandType, commandContext);
             return next(commandContext);
         }
 
-        private static Task<int> SetInvocationContextMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        private static Task<int> SetInvocationContextMiddleware(CommandContext commandContext, ExecutionDelegate next)
         {
             var commandDef = commandContext.ParseResult.TargetCommand.Services.Get<ICommandDef>();
             if (commandDef != null)
@@ -52,7 +52,7 @@ namespace CommandDotNet.ClassModeling
             [typeof(CancellationToken)] = ctx => ctx.AppConfig.CancellationToken
         };
 
-        private static async Task<int> ResolveInstancesMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        private static async Task<int> ResolveInstancesMiddleware(CommandContext commandContext, ExecutionDelegate next)
         {
             var command = commandContext.ParseResult.TargetCommand;
             var commandDef = command.Services.Get<ICommandDef>();
@@ -103,7 +103,7 @@ namespace CommandDotNet.ClassModeling
             }
         }
 
-        private static Task<int> InvokeCommandDefMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        private static Task<int> InvokeCommandDefMiddleware(CommandContext commandContext, ExecutionDelegate next)
         {
             Task<int> InvokeCommand(CommandContext ctx)
             {

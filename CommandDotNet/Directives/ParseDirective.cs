@@ -20,7 +20,7 @@ namespace CommandDotNet.Directives
         }
 
         // adapted from https://github.com/dotnet/command-line-api directives
-        private static Task<int> Report(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        private static Task<int> Report(CommandContext commandContext, ExecutionDelegate next)
         {
             if (commandContext.Tokens.TryGetDirective("parse", out string value))
             {
@@ -65,7 +65,7 @@ namespace CommandDotNet.Directives
             return next(commandContext);
         }
 
-        private static Task<int> ExitAfterReport(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        private static Task<int> ExitAfterReport(CommandContext commandContext, ExecutionDelegate next)
         {
             return commandContext.Tokens.TryGetDirective("parse", out _)
                 ? Task.FromResult(0)

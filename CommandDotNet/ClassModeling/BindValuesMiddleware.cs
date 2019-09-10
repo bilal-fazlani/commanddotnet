@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.ClassModeling.Definitions;
+using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Parsing;
 
@@ -10,7 +11,7 @@ namespace CommandDotNet.ClassModeling
 {
     internal static class BindValuesMiddleware
     {
-        internal static Task<int> BindValues(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        internal static Task<int> BindValues(CommandContext commandContext, ExecutionDelegate next)
         {
             var commandDef = commandContext.ParseResult.TargetCommand.Services.Get<ICommandDef>();
             if (commandDef != null)

@@ -43,7 +43,7 @@ namespace CommandDotNet.Builders
         }
 
         private static Task<int> DisplayVersionIfSpecified(CommandContext commandContext,
-            Func<CommandContext, Task<int>> next)
+            ExecutionDelegate next)
         {
             if (commandContext.ParseResult.ArgumentValues.Contains(VersionOptionName))
             {

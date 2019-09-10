@@ -31,6 +31,6 @@ namespace CommandDotNet.Execution
         MethodInfo MethodInfo { get; }
 
         /// <summary>Invokes the instance</summary>
-        object Invoke(CommandContext commandContext, object instance, Func<CommandContext, Task<int>> next);
+        object Invoke(CommandContext commandContext, object instance, ExecutionDelegate next);
     }
 }

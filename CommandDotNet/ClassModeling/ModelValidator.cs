@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Builders;
+using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using FluentValidation;
 using FluentValidation.Attributes;
@@ -21,7 +22,7 @@ namespace CommandDotNet.ClassModeling
             _dependencyResolver = dependencyResolver;
         }
 
-        internal static Task<int> ValidateModelsMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        internal static Task<int> ValidateModelsMiddleware(CommandContext commandContext, ExecutionDelegate next)
         {
             var iCtx = commandContext.InvocationContext;
 

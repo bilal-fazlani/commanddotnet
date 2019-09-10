@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
@@ -20,7 +19,7 @@ namespace CommandDotNet.Builders
             });
         }
 
-        internal static Task<int> InjectDependencies(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        internal static Task<int> InjectDependencies(CommandContext commandContext, ExecutionDelegate next)
         {
             var instance = commandContext.InvocationContext.Instance;
             var dependencyResolver = commandContext.AppConfig.DependencyResolver;

@@ -1,23 +1,25 @@
 using System;
 using System.Threading.Tasks;
+using CommandDotNet.Execution;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 {
-    public class InterceptorLiteTests
+    public class InterceptorExecutionTests
     {
         private readonly ITestOutputHelper _testOutputHelper;
 
-        public InterceptorLiteTests(ITestOutputHelper testOutputHelper)
+        public InterceptorExecutionTests(ITestOutputHelper testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
-        public void InterceptorLiteMethodWithNoOptionsIsDetectedAndUsed()
+        public void InterceptorExecutionMethodWithNoOptionsIsDetectedAndUsed()
         {
             new AppRunner<AppNoOptions>()
                 .VerifyScenario(_testOutputHelper, new Scenario
@@ -31,7 +33,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         }
 
         [Fact]
-        public void InterceptorLiteMethodWithOptionsIsDetectedAndUsed()
+        public void InterceptorExecutionMethodWithOptionsIsDetectedAndUsed()
         {
             new AppRunner<AppWithOptions>()
                 .VerifyScenario(_testOutputHelper, new Scenario
@@ -45,7 +47,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         }
 
         [Fact]
-        public void InterceptorLiteMethodCanBypassNextDelegate()
+        public void InterceptorExecutionMethodCanBypassNextDelegate()
         {
             new AppRunner<AppWithOptions>()
                 .VerifyScenario(_testOutputHelper, new Scenario
@@ -59,13 +61,28 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         }
 
         [Fact]
+        public void InterceptorExecutionMethodCanChangeReturnCode()
+        {
+            new AppRunner<AppWithOptions>()
+                .VerifyScenario(_testOutputHelper, new Scenario
+                {
+                    WhenArgs = " --useReturnCode 5 Do 1",
+                    Then =
+                    {
+                        ExitCode = 5,
+                        Outputs = { true, 1 }
+                    }
+                });
+        }
+
+        [Fact]
         public void VoidInterceptorThrowsDescriptiveException()
         {
             Action testCode = () => new AppRunner<VoidInterceptor>().RunInMem("Do", _testOutputHelper);
 
             Assert.Throws<InvalidConfigurationException>(testCode)
                 .Message.Should().Contain(
-                    "`CommandDotNet.Tests.FeatureTests.ClassCommands.InterceptorLiteTests+VoidInterceptor.Intercept` " +
+                    "`CommandDotNet.Tests.FeatureTests.ClassCommands.InterceptorExecutionTests+VoidInterceptor.Intercept` " +
                     "must return type of System.Threading.Tasks.Task`1[System.Int32]");
         }
 
@@ -73,7 +90,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         {
             public TestOutputs TestOutputs { get; set; }
 
-            public Task<int> Intercept(Func<Task<int>> next)
+            public Task<int> Intercept(InterceptorExecutionDelegate next)
             {
                 TestOutputs.Capture(true);
                 return next();
@@ -89,13 +106,22 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         {
             public TestOutputs TestOutputs { get; set; }
 
-            public Task<int> Intercept(Func<Task<int>> next, [Option]string stringOpt, [Option]bool skipCmd = false)
+            public Task<int> Intercept(InterceptorExecutionDelegate next, 
+                string stringOpt, 
+                bool skipCmd = false,
+                int? useReturnCode = null)
             {
                 TestOutputs.Capture(true);
                 TestOutputs.CaptureIfNotNull(stringOpt);
-                return skipCmd 
-                    ? Task.FromResult(0) 
-                    : next();
+                if (skipCmd)
+                {
+                    return Task.FromResult(0);
+                }
+
+                var returnCode = next();
+                return useReturnCode.HasValue
+                    ? Task.FromResult(useReturnCode.Value)
+                    : returnCode;
             }
 
             public void Do(int arg1)
@@ -106,7 +132,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 
         class VoidInterceptor
         {
-            public void Intercept(Func<Task<int>> next)
+            public void Intercept(InterceptorExecutionDelegate next)
             {
                 next().Wait();
             }

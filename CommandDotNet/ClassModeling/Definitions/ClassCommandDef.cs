@@ -73,19 +73,19 @@ namespace CommandDotNet.ClassModeling.Definitions
                     if (middlewareMethodInfo != null)
                     {
                         throw new InvalidConfigurationException($"`{CommandHostClassType}` defines more than one middleware method with a parameter of type " +
-                                                                $"{MethodDef.MiddlewareNextParameterType} or {MethodDef.MiddlewareNextLiteParameterType}. " +
+                                                                $"{MethodDef.MiddlewareNextParameterType} or {MethodDef.InterceptorNextParameterType}. " +
                                                                 "There can be only one.");
                     }
                     if (method.HasAttribute<DefaultMethodAttribute>())
                     {
                         throw new InvalidConfigurationException($"`{CommandHostClassType}.{method.Name}` default method cannot contain parameter of type " +
-                                                                $"{MethodDef.MiddlewareNextParameterType} or {MethodDef.MiddlewareNextLiteParameterType}.");
+                                                                $"{MethodDef.MiddlewareNextParameterType} or {MethodDef.InterceptorNextParameterType}.");
                     }
 
                     var emDelegate = new ExecutionMiddleware((context, next) => Task.FromResult(1)).Method;
                     if (method.ReturnType != emDelegate.ReturnType)
                     {
-                        throw new InvalidConfigurationException($"`{CommandHostClassType}.{method.Name}` must return type of {emDelegate.ReturnType}, matching {typeof(ExecutionMiddleware)}.");
+                        throw new InvalidConfigurationException($"`{CommandHostClassType}.{method.Name}` must return type of {emDelegate.ReturnType}.");
                     }
 
                     middlewareMethodInfo = method;

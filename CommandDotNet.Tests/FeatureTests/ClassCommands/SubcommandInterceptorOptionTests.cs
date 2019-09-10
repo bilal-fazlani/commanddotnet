@@ -1,5 +1,5 @@
-using System;
 using System.Threading.Tasks;
+using CommandDotNet.Execution;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.TestTools;
 using Xunit;
@@ -243,7 +243,7 @@ Options:
             public TestOutputs TestOutputs { get; set; }
 
             public Task<int> Interceptor(
-                CommandContext context, Func<CommandContext, Task<int>> next, 
+                CommandContext context, ExecutionDelegate next, 
                 [Option] string rootOpt = null, [Option(Inherited = true)] string inheritedRootOpt = null)
             {
                 TestOutputs.Capture(new RootInterceptorResult { RootOpt = rootOpt, InheritedRootOpt = inheritedRootOpt });
@@ -265,7 +265,7 @@ Options:
             public TestOutputs TestOutputs { get; set; }
 
             public Task<int> Interceptor(
-                CommandContext context, Func<CommandContext, Task<int>> next, LeafInterceptorResult leafInterceptorResult)
+                CommandContext context, ExecutionDelegate next, LeafInterceptorResult leafInterceptorResult)
             {
                 TestOutputs.Capture(leafInterceptorResult);
                 return next(context);

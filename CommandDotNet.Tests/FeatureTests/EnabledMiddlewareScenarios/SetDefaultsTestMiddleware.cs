@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +22,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
 
         private static Task<int> SetDefaults(
             CommandContext context,
-            Func<CommandContext, Task<int>> next, 
+            ExecutionDelegate next, 
             IDictionary<string, object> defaults)
         {
             if (context.ParseResult.ParseError != null)

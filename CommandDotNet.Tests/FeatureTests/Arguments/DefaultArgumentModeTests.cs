@@ -1,5 +1,5 @@
-using System;
 using System.Threading.Tasks;
+using CommandDotNet.Execution;
 using CommandDotNet.Tests.ScenarioFramework;
 using Xunit;
 using Xunit.Abstractions;
@@ -210,7 +210,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         public class App
         {
-            public Task<int> Middleware(CommandContext context, Func<CommandContext, Task<int>> next, string ctorDefault, [Option] string ctorOption)
+            public Task<int> Middleware(CommandContext context, ExecutionDelegate next, string ctorDefault, [Option] string ctorOption)
             {
                 return next(context);
             }
