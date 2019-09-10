@@ -12,6 +12,7 @@ namespace CommandDotNet.ClassModeling.Definitions
     {
         public static readonly Type MiddlewareNextReturnType = typeof(Task<int>);
         public static readonly Type MiddlewareNextParameterType = typeof(Func<CommandContext, Task<int>>);
+        public static readonly Type MiddlewareNextLiteParameterType = typeof(Func<Task<int>>);
 
         private readonly AppConfig _appConfig;
         private IReadOnlyCollection<IArgumentDef> _argumentDefs;
@@ -46,7 +47,8 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         private static bool IsMiddlewareNextType(ParameterInfo parameterInfo)
         {
-            return parameterInfo.ParameterType == MiddlewareNextParameterType;
+            return parameterInfo.ParameterType == MiddlewareNextParameterType 
+                   || parameterInfo.ParameterType == MiddlewareNextLiteParameterType;
         }
 
         public object Invoke(CommandContext commandContext, object instance, Func<CommandContext, Task<int>> next)
@@ -59,7 +61,16 @@ namespace CommandDotNet.ClassModeling.Definitions
                         $"Invalid operation. {nameof(Func<CommandContext, Task<int>>)} {_nextParameterInfo.Name} parameter not provided for method: {_nextParameterInfo.Member.FullName()}. " +
                         $"Check middleware to ensure it hasn't misconfigured the {nameof(CommandContext.InvocationContext)}");
                 }
-                _values[_nextParameterInfo.Position] = next;
+
+                if (_nextParameterInfo.ParameterType == MiddlewareNextLiteParameterType)
+                {
+                    var nextLite = new Func<Task<int>>(() => next(commandContext));
+                    _values[_nextParameterInfo.Position] = nextLite;
+                }
+                else
+                {
+                    _values[_nextParameterInfo.Position] = next;
+                }
             }
             if (_commandContextParameterInfo != null)
             {
