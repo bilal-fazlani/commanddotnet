@@ -59,6 +59,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 }
             );
             argumentDef.Argument = argument;
+            argument.Services.Set(argumentDef);
 
             var typeDescriptor = appConfig.AppSettings.ArgumentTypeDescriptors.GetDescriptorOrThrow(underlyingType);
             argument.TypeInfo.DisplayName = typeDescriptor.GetDisplayName(argument);
