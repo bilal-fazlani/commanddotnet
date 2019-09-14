@@ -26,6 +26,11 @@ namespace CommandDotNet.Builders
                 return;
             }
 
+            if (args.CommandBuilder.Command.FindOption(VersionOptionName) != null)
+            {
+                return;
+            }
+
             var option = new Option(VersionTemplate, ArgumentArity.Zero)
             {
                 Description = "Show version information",
