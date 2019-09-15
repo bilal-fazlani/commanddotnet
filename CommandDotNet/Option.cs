@@ -79,7 +79,7 @@ namespace CommandDotNet
         /// but is instead added via middleware.<br/>
         /// eg. Help and Version
         /// </summary>
-        public bool IsSystemOption { get; set; }
+        public bool IsMiddlewareOption { get; set; }
 
         /// <summary>
         /// True when the option is defined in an interceptor method,
@@ -88,6 +88,12 @@ namespace CommandDotNet
         /// for parent commands.
         /// </summary>
         public bool IsInterceptorOption { get; }
+
+        /// <summary>
+        /// When true, the option should be shown in help.<br/>
+        /// Default: true
+        /// </summary>
+        public bool ShowInHelp { get; set; } = true;
 
         /// <summary>The attributes defined on the parameter or property that define this argument</summary>
         public ICustomAttributeProvider CustomAttributes { get; }

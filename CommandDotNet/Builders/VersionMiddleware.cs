@@ -40,7 +40,7 @@ namespace CommandDotNet.Builders
                     UnderlyingType = typeof(bool),
                     DisplayName = Constants.TypeDisplayNames.Flag
                 },
-                IsSystemOption = true,
+                IsMiddlewareOption = true,
                 Arity = ArgumentArity.Zero
             };
 

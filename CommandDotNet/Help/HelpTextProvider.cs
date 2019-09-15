@@ -53,7 +53,7 @@ namespace CommandDotNet.Help
 
         /// <summary>How options are shown in the usage example</summary>
         protected virtual string UsageOption(Command command) =>
-            GetOptionsExcludingHelp(command).Any()
+            command.Options.Any(o => o.ShowInHelp)
                 ? "[options]"
                 : null;
 
@@ -68,8 +68,9 @@ namespace CommandDotNet.Help
         /// <summary>returns the body of the options section</summary>
         protected virtual string SectionOptions(Command command)
         {
-            var options = GetOptionsExcludingHelp(command)
-                .OrderBy(o => o.IsSystemOption)
+            var options = command.Options
+                .Where(o => o.ShowInHelp)
+                .OrderBy(o => o.IsMiddlewareOption)
                 .ThenBy(o => o.IsInterceptorOption)
                 .ToCollection();
 
@@ -273,9 +274,6 @@ namespace CommandDotNet.Help
 
         private static string PadFront(string value) =>
             value.IsNullOrWhitespace() ? null : " " + value;
-
-        private IEnumerable<Option> GetOptionsExcludingHelp(Command command) =>
-            command.Options.Where(o => _appSettings.Help.PrintHelpOption || o.LongName != Constants.HelpArgumentTemplate.LongName);
 
         private class CommandHelpValues
         {

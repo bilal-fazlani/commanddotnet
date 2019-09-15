@@ -22,6 +22,8 @@ namespace CommandDotNet.Help
                 return;
             }
 
+            var appSettingsHelp = args.CommandContext.AppConfig.AppSettings.Help;
+
             var option = new Option(Constants.HelpTemplate, ArgumentArity.Zero, aliases: new []{"?"})
             {
                 Description = "Show help information",
@@ -31,8 +33,9 @@ namespace CommandDotNet.Help
                     UnderlyingType = typeof(bool),
                     DisplayName = Constants.TypeDisplayNames.Flag
                 },
-                IsSystemOption = true,
-                Arity = ArgumentArity.Zero
+                IsMiddlewareOption = true,
+                Arity = ArgumentArity.Zero,
+                ShowInHelp = appSettingsHelp.PrintHelpOption
             };
 
             args.CommandBuilder.AddArgument(option);
