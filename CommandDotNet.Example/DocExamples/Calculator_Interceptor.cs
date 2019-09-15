@@ -1,14 +1,16 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace CommandDotNet.Example.DocExamples
 {
-    public class Calculator_CtorOptions
+    public class Calculator_Interceptor
     {
-        private readonly bool _printValues;
+        private bool _printValues;
 
-        public Calculator_CtorOptions(bool printValues)
+        public Task<int> Interceptor(InterceptorExecutionDelegate next, bool printValues)
         {
             _printValues = printValues;
+            return next();
         }
 
         [Command(Description = "Adds two numbers. duh!")]

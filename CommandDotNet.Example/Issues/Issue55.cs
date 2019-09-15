@@ -1,22 +1,27 @@
 using System;
+using System.Threading.Tasks;
 
 namespace CommandDotNet.Example.Issues
 {
     public class Issue55 : IDisposable
     {
-        private readonly string _baseId;
-        private readonly string _host;
+        private string _baseId;
+        private string _host;
 
         [SubCommand]
         public Issue55SubCommand Number { get; set; }
         
-        public Issue55([Option(Inherited = true)]string baseId, [Option(Inherited = true)]string host = "localhost:8080")
+        public Task<int> Interceptor(InterceptorExecutionDelegate next, 
+            [Option(Inherited = true)]string baseId, 
+            [Option(Inherited = true)]string host = "localhost:8080")
         {
             _baseId = baseId;
             _host = host;
             
             //some more initial work here
             Console.WriteLine("Initial work...");
+
+            return next();
         }
 
         public void getFirmwareVersion()
