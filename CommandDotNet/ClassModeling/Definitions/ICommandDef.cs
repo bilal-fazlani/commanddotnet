@@ -10,6 +10,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         Type CommandHostClassType { get; }
         ICustomAttributeProvider CustomAttributeProvider { get; }
         bool IsExecutable { get; }
+        bool HasInterceptor { get; }
         IReadOnlyCollection<IArgumentDef> Arguments { get; }
         IReadOnlyCollection<ICommandDef> SubCommands { get; }
         IMethodDef InterceptorMethodDef { get; }

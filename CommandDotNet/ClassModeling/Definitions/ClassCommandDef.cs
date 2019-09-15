@@ -23,6 +23,8 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public bool IsExecutable => _defaultCommandDef.IsExecutable;
 
+        public bool HasInterceptor => InterceptorMethodDef != null && InterceptorMethodDef != NullMethodDef.Instance;
+
         public IReadOnlyCollection<IArgumentDef> Arguments { get; }
 
         public IReadOnlyCollection<ICommandDef> SubCommands => _subCommands.Value;
@@ -62,7 +64,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         private (IMethodDef interceptorMethod, ICommandDef defaultCommand, List<ICommandDef> localCommands) ParseMethods(AppConfig appConfig)
         {
-            MethodInfo middlewareMethodInfo = null;
+            MethodInfo interceptorMethodInfo = null;
             MethodInfo defaultCommandMethodInfo = null;
             List<MethodInfo> localCommandMethodInfos = new List<MethodInfo>();
 
@@ -70,7 +72,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             {
                 if (MethodDef.IsInterceptorMethod(method))
                 {
-                    if (middlewareMethodInfo != null)
+                    if (interceptorMethodInfo != null)
                     {
                         throw new InvalidConfigurationException($"`{CommandHostClassType}` defines more than one middleware method with a parameter of type " +
                                                                 $"{MethodDef.MiddlewareNextParameterType} or {MethodDef.InterceptorNextParameterType}. " +
@@ -88,7 +90,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                         throw new InvalidConfigurationException($"`{CommandHostClassType}.{method.Name}` must return type of {emDelegate.ReturnType}.");
                     }
 
-                    middlewareMethodInfo = method;
+                    interceptorMethodInfo = method;
                 }
                 else if (method.HasAttribute<DefaultMethodAttribute>())
                 {
@@ -104,9 +106,9 @@ namespace CommandDotNet.ClassModeling.Definitions
                 }
             }
 
-            var interceptorMethod = middlewareMethodInfo == null 
+            var interceptorMethod = interceptorMethodInfo == null 
                 ? NullMethodDef.Instance 
-                : new MethodDef(middlewareMethodInfo, appConfig);
+                : new MethodDef(interceptorMethodInfo, appConfig);
 
             var defaultCommand = defaultCommandMethodInfo == null
                 ? (ICommandDef)new NullCommandDef(Name)

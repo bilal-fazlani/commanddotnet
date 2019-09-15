@@ -29,10 +29,8 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             if (commandDef.IsExecutable)
             {
-                commandDef.InterceptorMethodDef.ArgumentDefs
-                    .Select(d => d.Argument)
-                    .OfType<Option>()
-                    .Where(o => o.Inherited)
+                command.GetParentCommands()
+                    .SelectMany(c => c.Options.Where(o => o.Inherited))
                     .ForEach(commandBuilder.AddArgument);
             }
 

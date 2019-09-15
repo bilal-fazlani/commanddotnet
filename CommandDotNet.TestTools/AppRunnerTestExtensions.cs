@@ -40,23 +40,27 @@ namespace CommandDotNet.TestTools
             TestOutputs outputs = new TestOutputs();
             runner.Configure(c => c.UseMiddleware((context, next) =>
             {
-                var instance = context.InvocationContext.Instance;
-                instance.GetType()
-                    .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                    .Where(p => p.PropertyType == typeof(TestOutputs))
-                    .ForEach(p =>
+                context.InvocationContexts.All
+                    .Select(i => i.Instance)
+                    .ForEach(instance =>
                     {
-                        // principal of least surprise
-                        // if the test class sets the instance, then use that instance
-                        var value = (TestOutputs) p.GetValue(instance);
-                        if (value == null)
-                        {
-                            p.SetValue(instance, outputs);
-                        }
-                        else
-                        {
-                            outputs.UseOutputsFromInstance(value);
-                        }
+                        instance.GetType()
+                            .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                            .Where(p => p.PropertyType == typeof(TestOutputs))
+                            .ForEach(p =>
+                            {
+                                // principal of least surprise
+                                // if the test class sets the instance, then use that instance
+                                var value = (TestOutputs) p.GetValue(instance);
+                                if (value == null)
+                                {
+                                    p.SetValue(instance, outputs);
+                                }
+                                else
+                                {
+                                    outputs.UseOutputsFromInstance(value);
+                                }
+                            });
                     });
                 return next(context);
             }, MiddlewareStages.PostBindValuesPreInvoke));

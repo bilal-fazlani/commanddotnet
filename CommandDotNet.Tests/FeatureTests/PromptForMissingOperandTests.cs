@@ -135,7 +135,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .VerifyScenario(_output, scenario);
         }
 
-        public class App
+        class App
         {
             [InjectProperty]
             public TestOutputs TestOutputs { get; set; }

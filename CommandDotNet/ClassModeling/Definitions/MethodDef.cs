@@ -40,10 +40,10 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public static bool IsInterceptorMethod(MethodBase methodBase)
         {
-            return methodBase.GetParameters().Any(IsMiddlewareNextType);
+            return methodBase.GetParameters().Any(IsExecutionDelegate);
         }
 
-        private static bool IsMiddlewareNextType(ParameterInfo parameterInfo)
+        private static bool IsExecutionDelegate(ParameterInfo parameterInfo)
         {
             return parameterInfo.ParameterType == MiddlewareNextParameterType 
                    || parameterInfo.ParameterType == InterceptorNextParameterType;
@@ -57,7 +57,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 {
                     throw new AppRunnerException(
                         $"Invalid operation. {nameof(ExecutionDelegate)} {_nextParameterInfo.Name} parameter not provided for method: {_nextParameterInfo.Member.FullName()}. " +
-                        $"Check middleware to ensure it hasn't misconfigured the {nameof(CommandContext.InvocationContext)}");
+                        $"Check middleware to ensure it hasn't misconfigured the {nameof(CommandContext.InvocationContexts)}");
                 }
 
                 if (_nextParameterInfo.ParameterType == InterceptorNextParameterType)
@@ -100,7 +100,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         {
             _parameters = MethodInfo.GetParameters();
 
-            var isMiddleware = _parameters.Any(IsMiddlewareNextType);
+            var isMiddleware = _parameters.Any(IsExecutionDelegate);
 
             var argumentMode = isMiddleware
                 ? ArgumentMode.Option
@@ -137,7 +137,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 return Enumerable.Empty<IArgumentDef>();
             }
 
-            if (IsMiddlewareNextType(parameterInfo))
+            if (IsExecutionDelegate(parameterInfo))
             {
                 _nextParameterInfo = parameterInfo;
                 return Enumerable.Empty<IArgumentDef>();

@@ -23,7 +23,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             Task<int> BeforeInvocation(CommandContext context, ExecutionDelegate next)
             {
-                var values = context.InvocationContext.CommandInvocation.ParameterValues;
+                var values = context.InvocationContexts.TargetCommand.Invocation.ParameterValues;
                 values.Length.Should().Be(2);
                 var invokedCar = (Car) values[0];
                 var invokedOwner = (string)values[1];
@@ -48,7 +48,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             Task<int> BeforeSetValues(CommandContext context, ExecutionDelegate next)
             {
-                var args = context.InvocationContext.CommandInvocation.Arguments;
+                var args = context.InvocationContexts.TargetCommand.Invocation.Arguments;
                 args.Count.Should().Be(2);
                 var carNumber = args.First();
                 var ownerName = args.Last();
@@ -95,7 +95,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
             Task<int> BeforeInvocation(CommandContext context, ExecutionDelegate next)
             {
-                var instance = context.InvocationContext.Instance;
+                var instance = context.InvocationContexts.TargetCommand.Instance;
                 instance.Should().NotBeNull();
                 var app = (App)instance;
 

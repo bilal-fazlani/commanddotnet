@@ -1,9 +1,6 @@
-using System;
 using System.Threading.Tasks;
-using CommandDotNet.Execution;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
-using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -19,9 +16,93 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         }
 
         [Fact]
-        public void InterceptorExecutionMethodWithNoOptionsIsDetectedAndUsed()
+        public void InterceptorMethod_WithNoOptions_Help4Parent_NoImpact()
         {
-            new AppRunner<AppNoOptions>()
+            new AppRunner<AppWithNoInterceptorOptions>()
+                .VerifyScenario(_testOutputHelper, new Scenario
+                {
+                    WhenArgs = "-h",
+                    Then =
+                    {
+                        Result = @"Usage: dotnet testhost.dll [command]
+
+Commands:
+
+  Do
+
+Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+                    }
+                });
+        }
+
+        [Fact]
+        public void InterceptorMethod_WithNoOptions_Help4Child_NoImpact()
+        {
+            new AppRunner<AppWithNoInterceptorOptions>()
+                .VerifyScenario(_testOutputHelper, new Scenario
+                {
+                    WhenArgs = "Do -h",
+                    Then =
+                    {
+                        Result = @"Usage: dotnet testhost.dll Do [arguments]
+
+Arguments:
+
+  arg1  <NUMBER>"
+                    }
+                });
+        }
+
+        [Fact]
+        public void InterceptorMethod_WithOptions_Help4Parent_ContainsInterceptorOptions()
+        {
+            new AppRunner<AppWithInteceptorOptions>()
+                .VerifyScenario(_testOutputHelper, new Scenario
+                {
+                    WhenArgs = "-h",
+                    Then =
+                    {
+                        Result = @"Usage: dotnet testhost.dll [command] [options]
+
+Options:
+
+  --stringOpt      <TEXT>
+
+  --skipCmd
+
+  --useReturnCode  <NUMBER>
+
+Commands:
+
+  Do
+
+Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+                    }
+                });
+        }
+
+        [Fact]
+        public void InterceptorMethod_WithOptions_Help4Child_NoImpact()
+        {
+            new AppRunner<AppWithInteceptorOptions>()
+                .VerifyScenario(_testOutputHelper, new Scenario
+                {
+                    WhenArgs = "Do -h",
+                    Then =
+                    {
+                        Result = @"Usage: dotnet testhost.dll Do [arguments]
+
+Arguments:
+
+  arg1  <NUMBER>"
+                    }
+                });
+        }
+
+        [Fact]
+        public void InterceptorMethod_WithNoOptions_IsDetectedAndUsed()
+        {
+            new AppRunner<AppWithNoInterceptorOptions>()
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     WhenArgs = "Do 1",
@@ -33,60 +114,58 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         }
 
         [Fact]
-        public void InterceptorExecutionMethodWithOptionsIsDetectedAndUsed()
+        public void InterceptorMethod_WithOptions_IsDetectedAndUsed()
         {
-            new AppRunner<AppWithOptions>()
+            new AppRunner<AppWithInteceptorOptions>()
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     WhenArgs = "--stringOpt lala Do 1",
                     Then =
                     {
-                        Outputs = { true, "lala", 1 }
+                        Outputs =
+                        {
+                            new AppWithInteceptorOptions.InterceptOptions {stringOpt = "lala"},
+                            1
+                        }
                     }
                 });
         }
 
         [Fact]
-        public void InterceptorExecutionMethodCanBypassNextDelegate()
+        public void InterceptorMethod_CanBypassNextDelegate()
         {
-            new AppRunner<AppWithOptions>()
+            new AppRunner<AppWithInteceptorOptions>()
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     WhenArgs = " --skipCmd Do 1",
                     Then =
                     {
-                        Outputs = { true }
+                        // does not contain output from Do method
+                        Outputs = { new AppWithInteceptorOptions.InterceptOptions{skipCmd = true} }
                     }
                 });
         }
 
         [Fact]
-        public void InterceptorExecutionMethodCanChangeReturnCode()
+        public void InterceptorMethod_CanChangeReturnCode()
         {
-            new AppRunner<AppWithOptions>()
+            new AppRunner<AppWithInteceptorOptions>()
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     WhenArgs = " --useReturnCode 5 Do 1",
                     Then =
                     {
                         ExitCode = 5,
-                        Outputs = { true, 1 }
+                        Outputs =
+                        {
+                            new AppWithInteceptorOptions.InterceptOptions {useReturnCode = 5},
+                            1
+                        }
                     }
                 });
         }
 
-        [Fact]
-        public void VoidInterceptorThrowsDescriptiveException()
-        {
-            Action testCode = () => new AppRunner<VoidInterceptor>().RunInMem("Do", _testOutputHelper);
-
-            Assert.Throws<InvalidConfigurationException>(testCode)
-                .Message.Should().Contain(
-                    "`CommandDotNet.Tests.FeatureTests.ClassCommands.InterceptorExecutionTests+VoidInterceptor.Intercept` " +
-                    "must return type of System.Threading.Tasks.Task`1[System.Int32]");
-        }
-
-        class AppNoOptions
+        class AppWithNoInterceptorOptions
         {
             public TestOutputs TestOutputs { get; set; }
 
@@ -102,25 +181,22 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             }
         }
 
-        class AppWithOptions
+        class AppWithInteceptorOptions
         {
             public TestOutputs TestOutputs { get; set; }
 
-            public Task<int> Intercept(InterceptorExecutionDelegate next, 
-                string stringOpt, 
-                bool skipCmd = false,
-                int? useReturnCode = null)
+            public Task<int> Intercept(InterceptorExecutionDelegate next,
+                InterceptOptions interceptOptions)
             {
-                TestOutputs.Capture(true);
-                TestOutputs.CaptureIfNotNull(stringOpt);
-                if (skipCmd)
+                TestOutputs.Capture(interceptOptions);
+                if (interceptOptions.skipCmd)
                 {
                     return Task.FromResult(0);
                 }
 
                 var returnCode = next();
-                return useReturnCode.HasValue
-                    ? Task.FromResult(useReturnCode.Value)
+                return interceptOptions.useReturnCode.HasValue
+                    ? Task.FromResult(interceptOptions.useReturnCode.Value)
                     : returnCode;
             }
 
@@ -128,17 +204,12 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             {
                 TestOutputs.Capture(arg1);
             }
-        }
 
-        class VoidInterceptor
-        {
-            public void Intercept(InterceptorExecutionDelegate next)
+            public class InterceptOptions : IArgumentModel
             {
-                next().Wait();
-            }
-
-            public void Do()
-            {
+                public string stringOpt { get; set; }
+                public bool skipCmd { get; set; } = false;
+                public int? useReturnCode { get; set; }
             }
         }
     }
