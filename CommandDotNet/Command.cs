@@ -20,11 +20,15 @@ namespace CommandDotNet
 
         public Command(string name, 
             ICustomAttributeProvider customAttributeProvider,
-            Command parent = null)
+            bool isExecutable,
+            Command parent = null,
+            bool hasInterceptor = false)
         {
             Name = name;
             CustomAttributes = customAttributeProvider;
+            IsExecutable = isExecutable;
             Parent = parent;
+            HasInterceptor = hasInterceptor;
         }
 
         public string Name { get; }
@@ -36,6 +40,9 @@ namespace CommandDotNet
         
         /// <summary>The <see cref="Option"/>s for this <see cref="Command"/></summary>
         public IReadOnlyCollection<Option> Options => _options.AsReadOnly();
+
+        public bool IsExecutable { get; }
+        public bool HasInterceptor { get; }
 
         /// <summary>
         /// The <see cref="Command"/> that hosts this <see cref="Command"/>.
