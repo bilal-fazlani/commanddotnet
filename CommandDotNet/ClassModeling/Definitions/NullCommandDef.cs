@@ -16,7 +16,6 @@ namespace CommandDotNet.ClassModeling.Definitions
         public ICustomAttributeProvider CustomAttributeProvider => null;
         public bool IsExecutable => false;
         public bool HasInterceptor => false;
-        public IReadOnlyCollection<IArgumentDef> Arguments => new List<IArgumentDef>().AsReadOnly();
         public IReadOnlyCollection<ICommandDef> SubCommands => new List<ICommandDef>().AsReadOnly();
         public IMethodDef InterceptorMethodDef { get; } = NullMethodDef.Instance;
         public IMethodDef InvokeMethodDef { get; } = NullMethodDef.Instance;

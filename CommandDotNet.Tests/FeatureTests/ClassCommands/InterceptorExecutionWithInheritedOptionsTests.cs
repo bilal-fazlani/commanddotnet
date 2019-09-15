@@ -122,9 +122,12 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 
 Options:
 
-  --nonInheritedOpt  <TEXT>
+  --nonInheritedOpt *a  <TEXT>
 
-  --inheritedOpt     <TEXT>
+  --inheritedOpt *a,b   <TEXT>
+
+  *a option can be used with subcommands. `[command] [options] [subcommand]`
+  *b option can be passed after final subcommand. `[command] [subcommand] [options]`
 
 Commands:
 
@@ -173,9 +176,11 @@ Arguments:
 
 Options:
 
-  --opt1          <NUMBER>
+  --opt1             <NUMBER>
 
-  --inheritedOpt  <TEXT>"
+  --inheritedOpt *c  <TEXT>
+
+  *c option is inherited from a parent command"
                     }
                 });
         }
@@ -193,7 +198,9 @@ Options:
 
 Options:
 
-  --inheritedOpt  <TEXT>"
+  --inheritedOpt *c  <TEXT>
+
+  *c option is inherited from a parent command"
                 }
             });
         }

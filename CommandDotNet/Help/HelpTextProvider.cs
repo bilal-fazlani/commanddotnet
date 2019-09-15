@@ -9,6 +9,10 @@ namespace CommandDotNet.Help
 {
     public class HelpTextProvider : IHelpProvider
     {
+        public static string FootnoteSymbol_InterceptorOption = "a";
+        public static string FootnoteSymbol_InheritedOptionForInterceptorCommand = "b";
+        public static string FootnoteSymbol_InheritedOptionForExecutableCommand = "c";
+
         private readonly AppSettings _appSettings;
         private readonly string _appName;
         private readonly AppHelpSettings _appHelpSettings;
@@ -62,18 +66,24 @@ namespace CommandDotNet.Help
         protected virtual string ExtendedHelpText(Command command) => command.ExtendedHelpText;
 
         /// <summary>returns the body of the options section</summary>
-        protected virtual string SectionOptions(Command command) =>
-            SectionArguments(
-                GetOptionsExcludingHelp(command)
-                    .OrderBy(o => o.IsSystemOption)
-                    .ToCollection());
+        protected virtual string SectionOptions(Command command)
+        {
+            var options = GetOptionsExcludingHelp(command)
+                .OrderBy(o => o.IsSystemOption)
+                .ThenBy(o => o.IsInterceptorOption)
+                .ToCollection();
+
+            var ssDelimiter = $"{Environment.NewLine}  ";
+            var ssDescriptions = GetOptionFootnoteDescriptions(command).Select(fn => $"{ssDelimiter}{FormatFootnoteSymbols(fn.symbol)} {fn.descr}").ToCsv("");
+            return SectionArguments(command, options) + ssDescriptions;
+        }
 
         /// <summary>returns the body of the operands section</summary>
         protected virtual string SectionOperands(Command command) => 
-            SectionArguments(command.Operands.ToCollection());
+            SectionArguments(command, command.Operands.ToCollection());
 
         /// <summary>returns the body of an arguments section</summary>
-        protected virtual string SectionArguments<T>(ICollection<T> arguments)
+        protected virtual string SectionArguments<T>(Command command, ICollection<T> arguments)
             where T : IArgument
         {
             if (!arguments.Any())
@@ -81,7 +91,7 @@ namespace CommandDotNet.Help
                 return null;
             }
 
-            var helpValues = BuildArgumentHelpValues(arguments);
+            var helpValues = BuildArgumentHelpValues(command, arguments);
             var templateMaxLength = helpValues.Max(a => a.Template?.Length) ?? 0;
             var displayNameMaxLength = helpValues.Max(a => a.TypeName?.Length) ?? 0;
 
@@ -152,6 +162,55 @@ namespace CommandDotNet.Help
             argument.SwitchFunc(
                 operand => operand.Name,
                 option => option.Template);
+
+        protected virtual string ArgumentFootNoteSymbols<T>(Command command, T argument) where T: IArgument =>
+            argument.SwitchFunc(
+                operand => null,
+                option =>
+                {
+                    var footnoteSymbols = GetOptionFootnoteSymbols(command, option).ToCsv();
+                    return footnoteSymbols.IsNullOrWhitespace() ? null : " " + FormatFootnoteSymbols(footnoteSymbols);
+                });
+
+        protected virtual string FormatFootnoteSymbols(string footnoteSymbols)
+        {
+            return $"*{footnoteSymbols}";
+        }
+        
+        protected virtual IEnumerable<string> GetOptionFootnoteSymbols(Command command, Option option)
+        {
+            if (command.IsExecutable)
+            {
+                if (option.Inherited) yield return FootnoteSymbol_InheritedOptionForExecutableCommand;
+            }
+            else
+            {
+                if (option.IsInterceptorOption) yield return FootnoteSymbol_InterceptorOption;
+                if (option.Inherited) yield return FootnoteSymbol_InheritedOptionForInterceptorCommand;
+            }
+        }
+
+        protected virtual IEnumerable<(string symbol, string descr)> GetOptionFootnoteDescriptions(Command command)
+        {
+            if (command.IsExecutable)
+            {
+                if (command.Options.Any(o => o.Inherited))
+                {
+                    yield return (FootnoteSymbol_InheritedOptionForExecutableCommand, "option is inherited from a parent command");
+                }
+            }
+            else
+            {
+                if (command.Options.Any(o => o.IsInterceptorOption))
+                {
+                    yield return (FootnoteSymbol_InterceptorOption, "option can be used with subcommands. `[command] [options] [subcommand]`");
+                }
+                if (command.Options.Any(o => o.Inherited))
+                {
+                    yield return (FootnoteSymbol_InheritedOptionForInterceptorCommand, "option can be passed after final subcommand. `[command] [subcommand] [options]`");
+                }
+            }
+        }
 
         protected virtual string ArgumentTypeName<T>(T argument) where T : IArgument => 
             argument.TypeInfo.DisplayName.UnlessNullOrWhitespace(n => $"<{n.ToUpperInvariant()}>");
@@ -240,10 +299,10 @@ namespace CommandDotNet.Help
             public string AllowedValues;
         }
 
-        private ICollection<ArgumentHelpValues> BuildArgumentHelpValues<T>(IEnumerable<T> arguments) where T : IArgument =>
+        private ICollection<ArgumentHelpValues> BuildArgumentHelpValues<T>(Command command, IEnumerable<T> arguments) where T : IArgument =>
             arguments.Select(a => new ArgumentHelpValues
             {
-                Template = $"{ArgumentName(a)}{ArgumentArity(a)}",
+                Template = $"{ArgumentName(a)}{ArgumentFootNoteSymbols(command, a)}{ArgumentArity(a)}",
                 TypeName = ArgumentTypeName(a),
                 DefaultValue = ArgumentDefaultValue(a),
                 Description = ArgumentDescription(a),

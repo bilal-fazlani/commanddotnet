@@ -15,10 +15,14 @@ namespace CommandDotNet
     {
         private readonly HashSet<string> _aliases;
         
-        public Option(string template, IArgumentArity arity, IEnumerable<string> aliases = null, ICustomAttributeProvider customAttributeProvider = null)
+        public Option(string template, IArgumentArity arity, 
+            IEnumerable<string> aliases = null, 
+            ICustomAttributeProvider customAttributeProvider = null, 
+            bool isInterceptorOption = false)
         {
             Template = template;
             Arity = arity;
+            IsInterceptorOption = isInterceptorOption;
             CustomAttributes = customAttributeProvider ?? NullCustomAttributeProvider.Instance;
 
             var argumentTemplate = ArgumentTemplate.Parse(template);
@@ -76,6 +80,14 @@ namespace CommandDotNet
         /// eg. Help and Version
         /// </summary>
         public bool IsSystemOption { get; set; }
+
+        /// <summary>
+        /// True when the option is defined in an interceptor method,
+        /// making it available for use when subcommands are executed.<br/>
+        /// This helps distinguish an interceptor option from a default command option
+        /// for parent commands.
+        /// </summary>
+        public bool IsInterceptorOption { get; }
 
         /// <summary>The attributes defined on the parameter or property that define this argument</summary>
         public ICustomAttributeProvider CustomAttributes { get; }

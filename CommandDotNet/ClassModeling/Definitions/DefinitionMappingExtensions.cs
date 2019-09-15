@@ -28,8 +28,12 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             var commandBuilder = new CommandBuilder(command);
 
-            commandDef.Arguments
-                .Select(a => a.ToArgument(commandContext.AppConfig))
+            commandDef.InvokeMethodDef.ArgumentDefs
+                .Select(a => a.ToArgument(commandContext.AppConfig, false))
+                .ForEach(commandBuilder.AddArgument);
+
+            commandDef.InterceptorMethodDef.ArgumentDefs
+                .Select(a => a.ToArgument(commandContext.AppConfig, true))
                 .ForEach(commandBuilder.AddArgument);
 
             if (commandDef.IsExecutable)
@@ -47,7 +51,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             return commandBuilder;
         }
 
-        private static IArgument ToArgument(this IArgumentDef argumentDef, AppConfig appConfig)
+        private static IArgument ToArgument(this IArgumentDef argumentDef, AppConfig appConfig, bool isInterceptorOption)
         {
             var underlyingType = argumentDef.Type.GetUnderlyingType();
 
@@ -59,8 +63,8 @@ namespace CommandDotNet.ClassModeling.Definitions
                 {
                     Type = argumentDef.Type,
                     UnderlyingType = underlyingType,
-                }
-            );
+                }, 
+                isInterceptorOption);
             argumentDef.Argument = argument;
             argument.Services.Set(argumentDef);
 
@@ -78,7 +82,8 @@ namespace CommandDotNet.ClassModeling.Definitions
             IArgumentDef argumentDef, 
             AppConfig appConfig, 
             object defaultValue,
-            TypeInfo typeInfo)
+            TypeInfo typeInfo, 
+            bool isInterceptorOption)
         {
             if (argumentDef.ArgumentType == ArgumentType.Operand)
             {
@@ -97,7 +102,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             var argumentArity = ArgumentArity.Default(argumentDef.Type, GetOptionBooleanMode(argumentDef, appConfig.AppSettings.BooleanMode, optionAttr));
             return new Option(
                 new ArgumentTemplate(longName: optionAttr?.LongName ?? argumentDef.Name, shortNameAsString: optionAttr?.ShortName).ToString(),
-                argumentArity, customAttributeProvider: argumentDef.Attributes)
+                argumentArity, customAttributeProvider: argumentDef.Attributes, isInterceptorOption: isInterceptorOption)
             {
                 Description = optionAttr?.Description,
                 Inherited = optionAttr?.Inherited ?? false,

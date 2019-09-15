@@ -16,14 +16,19 @@ namespace CommandDotNet.Help
                 ? $"{header}:"
                 : $"{header}:{Environment.NewLine}";
 
-        protected override string SectionArguments<T>(ICollection<T> arguments)
+        protected override string SectionArguments<T>(Command command, ICollection<T> arguments)
         {
-            var nameMaxLength = arguments.Max(a => ArgumentName(a)?.Length) ?? 0;
+            string Name(IArgument arg)
+            {
+                return ArgumentName(arg) + ArgumentFootNoteSymbols(command, arg);
+            }
+
+            var nameMaxLength = arguments.Max(a => Name(a)?.Length) ?? 0;
 
             var sb = new StringBuilder();
             foreach (var argument in arguments)
             {
-                sb.AppendLine(Row((nameMaxLength, ArgumentName(argument)), (-1, argument.Description)));
+                sb.AppendLine(Row((nameMaxLength, Name(argument)), (-1, argument.Description)));
             }
             return sb.ToString();
         }

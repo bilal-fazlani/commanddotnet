@@ -66,11 +66,13 @@ Arguments:
 
 Options:
 
-  --stringOpt      <TEXT>
+  --stringOpt *a      <TEXT>
 
-  --skipCmd
+  --skipCmd *a
 
-  --useReturnCode  <NUMBER>
+  --useReturnCode *a  <NUMBER>
+
+  *a option can be used with subcommands. `[command] [options] [subcommand]`
 
 Commands:
 

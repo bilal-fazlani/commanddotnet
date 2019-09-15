@@ -38,7 +38,7 @@ namespace CommandDotNet.ClassModeling
                     Command = commandDef.Command,
                     Invocation = commandDef.InvokeMethodDef
                 };
-                commandDef.Command.GetParentCommands(includeCurrent:true)
+                commandDef.Command.GetParentCommands(includeCurrent:false)
                     .Where(cmd => cmd.HasInterceptor)
                     .Reverse()
                     .Select(cmd => (cmd, def: cmd.Services.Get<ICommandDef>()))

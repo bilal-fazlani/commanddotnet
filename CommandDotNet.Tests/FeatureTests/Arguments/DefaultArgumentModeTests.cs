@@ -17,7 +17,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         }
 
         [Fact]
-        public void GivenOperandMode_InMiddleware_NonAttributedParamsDefaultTo_Operand()
+        public void GivenOperandMode_InInterceptor_NonAttributedParamsDefaultTo_Operand()
         {
             Verify(new Scenario<App>
             {
@@ -29,8 +29,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     ResultsContainsTexts =
                     {
                         @"Options:
-  --ctorDefault  
-  --ctorOption"
+  --ctorDefault *a  
+  --ctorOption *a"
                     }
                 }
             });
@@ -81,7 +81,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         }
 
         [Fact]
-        public void GivenOptionMode_InMiddleware_NonAttributedParamsDefaultTo_Option()
+        public void GivenOptionMode_InInterceptor_NonAttributedParamsDefaultTo_Option()
         {
             Verify(new Scenario<App>
             {
@@ -93,8 +93,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     ResultsContainsTexts =
                     {
                         @"Options:
-  --ctorDefault  
-  --ctorOption"
+  --ctorDefault *a  
+  --ctorOption *a"
                     }
                 }
             });
@@ -145,7 +145,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         }
 
         [Fact]
-        public void GivenObsoleteParameterMode_InMiddleware_NonAttributedParamsDefaultTo_Operand()
+        public void GivenObsoleteParameterMode_InInterceptor_NonAttributedParamsDefaultTo_Operand()
         {
             Verify(new Scenario<App>
             {
@@ -157,8 +157,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     ResultsContainsTexts =
                     {
                         @"Options:
-  --ctorDefault  
-  --ctorOption"
+  --ctorDefault *a  
+  --ctorOption *a"
                     }
                 }
             });

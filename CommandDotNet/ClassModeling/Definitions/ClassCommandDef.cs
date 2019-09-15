@@ -25,8 +25,6 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public bool HasInterceptor => InterceptorMethodDef != null && InterceptorMethodDef != NullMethodDef.Instance;
 
-        public IReadOnlyCollection<IArgumentDef> Arguments { get; }
-
         public IReadOnlyCollection<ICommandDef> SubCommands => _subCommands.Value;
 
         public IMethodDef InterceptorMethodDef { get; }
@@ -53,10 +51,6 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             InterceptorMethodDef = interceptorMethod;
             _defaultCommandDef = defaultCommand;
-
-            Arguments = _defaultCommandDef.Arguments
-                .Union(InterceptorMethodDef.ArgumentDefs)
-                .ToArray();
 
             // lazy loading prevents walking the entire hierarchy of sub-commands
             _subCommands = new Lazy<List<ICommandDef>>(() => GetSubCommands(localCommands));
@@ -112,13 +106,13 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             var defaultCommand = defaultCommandMethodInfo == null
                 ? (ICommandDef)new NullCommandDef(Name)
-                : new MethodCommandDef(defaultCommandMethodInfo, CommandHostClassType, interceptorMethod, appConfig);
+                : new MethodCommandDef(defaultCommandMethodInfo, CommandHostClassType, appConfig);
             
             return (
                 interceptorMethod,
                 defaultCommand,
                 localCommandMethodInfos
-                    .Select(m => new MethodCommandDef(m, CommandHostClassType, interceptorMethod, appConfig))
+                    .Select(m => new MethodCommandDef(m, CommandHostClassType, appConfig))
                     .Cast<ICommandDef>()
                     .ToList());
 
