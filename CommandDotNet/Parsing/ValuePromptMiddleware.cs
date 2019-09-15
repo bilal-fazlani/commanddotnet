@@ -12,15 +12,18 @@ namespace CommandDotNet.Parsing
     {
         internal static Task<int> PromptForMissingOperands(CommandContext commandContext, ExecutionDelegate next)
         {
-            var command = commandContext.ParseResult.TargetCommand;
             var argumentValues = commandContext.ParseResult.ArgumentValues;
-            var console = commandContext.Console;
 
-            command.Operands
-                .Where(a => !argumentValues.Contains(a) && a.DefaultValue.IsNullValue())
-                .Select(a => new { arg = a, values = PromptForValues(a, console) })
-                .Where(i => i.values.Count > 0)
-                .ForEach(i => argumentValues.GetOrAdd(i.arg).AddRange(i.values));
+            if (!argumentValues.Contains(Constants.HelpArgumentTemplate.LongName))
+            {
+                var console = commandContext.Console;
+                var command = commandContext.ParseResult.TargetCommand;
+                command.Operands
+                    .Where(a => !argumentValues.Contains(a) && a.DefaultValue.IsNullValue())
+                    .Select(a => new { arg = a, values = PromptForValues(a, console) })
+                    .Where(i => i.values.Count > 0)
+                    .ForEach(i => argumentValues.GetOrAdd(i.arg).AddRange(i.values));
+            }
 
             return next(commandContext);
         }
