@@ -63,8 +63,14 @@ namespace CommandDotNet.TypeDescriptors
         public IArgumentTypeDescriptor GetDescriptorOrThrow(Type type)
         {
             return GetDescriptor(type) ?? throw new AppRunnerException(
-                       $"type : {type} is not supported. If it's an argument model, " +
-                       $"inherit from {nameof(IArgumentModel)}. Otherwise, to support this type, " +
+                       $"type : {type} is not supported. " +
+                       Environment.NewLine +
+                       $"If it is an argument model, inherit from {nameof(IArgumentModel)}. " + 
+                       Environment.NewLine +
+                       $"If it is a service and not an argument, register using " +
+                       $"{nameof(AppRunner)}.{nameof(AppRunner.Configure)}(b => b.{nameof(AppConfigBuilder.ParameterResolversByType)}.Add(...)); " +
+                       Environment.NewLine +
+                       "Otherwise, to support this type, " +
                        $"implement a {nameof(TypeConverter)} or {nameof(IArgumentTypeDescriptor)} " +
                        "or add a constructor with a single string parameter.");
         }

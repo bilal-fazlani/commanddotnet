@@ -20,6 +20,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         private ParameterInfo _commandContextParameterInfo;
         private ParameterInfo _nextParameterInfo;
+        private List<ParameterInfo> _serviceParameters;
 
         public MethodInfo MethodInfo { get; }
 
@@ -70,10 +71,17 @@ namespace CommandDotNet.ClassModeling.Definitions
                     _values[_nextParameterInfo.Position] = next;
                 }
             }
+
             if (_commandContextParameterInfo != null)
             {
                 _values[_commandContextParameterInfo.Position] = commandContext;
             }
+
+            _serviceParameters?.ForEach(p =>
+            {
+                _values[p.Position] = _appConfig.ParameterResolversByType[p.ParameterType](commandContext);
+            });
+
             return MethodInfo.Invoke(instance, _values);
         }
 
@@ -129,6 +137,16 @@ namespace CommandDotNet.ClassModeling.Definitions
                     argumentMode,
                     null,
                     value => _values[parameterInfo.Position] = value);
+            }
+
+            if (_appConfig.ParameterResolversByType.ContainsKey(parameterInfo.ParameterType))
+            {
+                if(_serviceParameters == null)
+                {
+                    _serviceParameters = new List<ParameterInfo>();
+                }
+                _serviceParameters.Add(parameterInfo);
+                return Enumerable.Empty<IArgumentDef>();
             }
 
             if (parameterInfo.ParameterType == typeof(CommandContext))

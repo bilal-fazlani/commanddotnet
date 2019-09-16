@@ -1,24 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
-using CommandDotNet.Rendering;
 
 namespace CommandDotNet.ClassModeling
 {
     internal static class ResolveInstancesMiddleware
     {
-        private static readonly Dictionary<Type, Func<CommandContext, object>> InjectableServiceTypes = new Dictionary<Type, Func<CommandContext, object>>
-        {
-            [typeof(CommandContext)] = ctx => ctx,
-            [typeof(IConsole)] = ctx => ctx.Console,
-            [typeof(CancellationToken)] = ctx => ctx.AppConfig.CancellationToken
-        };
-
         internal static Task<int> ResolveInstances(CommandContext commandContext, ExecutionDelegate next)
         {
             var invocationContexts = commandContext.InvocationContexts;
@@ -86,6 +77,8 @@ namespace CommandDotNet.ClassModeling
                 return instance;
             }
 
+            var parameterResolversByType = commandContext.AppConfig.ParameterResolversByType;
+
             // NOTE: it's possible, that a class could appear more than once in the hierarchy.
             //       because this seems VERY unlikely to be needed, skip this case until
             //       proven it is needed to avoid additional state and complexity to
@@ -93,7 +86,7 @@ namespace CommandDotNet.ClassModeling
             //       for DI that one instance is created per scope.
             var ctor = classType.GetConstructors()
                 .Select(c => new { c, p = c.GetParameters() })
-                .Where(cp => cp.p.Length == 0 || cp.p.All(p => InjectableServiceTypes.ContainsKey(p.ParameterType)))
+                .Where(cp => cp.p.Length == 0 || cp.p.All(p => parameterResolversByType.ContainsKey(p.ParameterType)))
                 .OrderByDescending(cp => cp.p.Length)
                 .FirstOrDefault();
 
@@ -101,11 +94,11 @@ namespace CommandDotNet.ClassModeling
             {
                 throw new AppRunnerException(
                     $"No viable constructors found for {invocationContext}. " +
-                    $"Constructor can only contain parameters of type: {InjectableServiceTypes.Keys.ToOrderedCsv()}");
+                    $"Constructor can only contain parameters of type: {parameterResolversByType.Keys.ToOrderedCsv()}");
             }
 
             var parameters = ctor.p
-                .Select(p => InjectableServiceTypes[p.ParameterType](commandContext))
+                .Select(p => parameterResolversByType[p.ParameterType](commandContext))
                 .ToArray();
 
             instance = ctor.c.Invoke(parameters);

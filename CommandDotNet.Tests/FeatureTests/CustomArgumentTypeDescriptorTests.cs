@@ -60,7 +60,7 @@ Arguments:
         }
 
         [Fact]
-        public void Exec_FailsWithClearMessageWhenDescriptorIsNotRegistered()
+        public void Exec_WhenDescriptorIsNotRegistered_FailsWithActionableMessage()
         {
             Verify(new Scenario<App>
             {
@@ -68,9 +68,12 @@ Arguments:
                 Then =
                 {
                     ExitCode = 1,
-                    ResultsContainsTexts = { "type : CommandDotNet.Tests.FeatureTests.CustomArgumentTypeDescriptorTests+Square is not supported. " +
-                                             "If it's an argument model, inherit from IArgumentModel. " +
-                                             "Otherwise, to support this type, implement a TypeConverter or IArgumentTypeDescriptor or add a constructor with a single string parameter." }
+                    ResultsContainsTexts =
+                    {
+                        "type : CommandDotNet.Tests.FeatureTests.CustomArgumentTypeDescriptorTests+Square is not supported. ",
+                        "If it is an argument model, inherit from IArgumentModel. ",
+                        "Otherwise, to support this type, implement a TypeConverter or IArgumentTypeDescriptor or add a constructor with a single string parameter."
+                    }
                 }
             });
         }
