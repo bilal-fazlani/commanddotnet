@@ -23,7 +23,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public bool IsExecutable => _defaultCommandDef.IsExecutable;
 
-        public IReadOnlyCollection<IArgumentDef> Arguments { get; }
+        public bool HasInterceptor => InterceptorMethodDef != null && InterceptorMethodDef != NullMethodDef.Instance;
 
         public IReadOnlyCollection<ICommandDef> SubCommands => _subCommands.Value;
 
@@ -47,22 +47,18 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             Name = classType.BuildName(commandContext.AppConfig);
 
-            var (middlewareMethod, defaultCommand, localCommands) = ParseMethods(commandContext.AppConfig);
+            var (interceptorMethod, defaultCommand, localCommands) = ParseMethods(commandContext.AppConfig);
 
-            InterceptorMethodDef = middlewareMethod;
+            InterceptorMethodDef = interceptorMethod;
             _defaultCommandDef = defaultCommand;
-
-            Arguments = _defaultCommandDef.Arguments
-                .Union(InterceptorMethodDef.ArgumentDefs)
-                .ToArray();
 
             // lazy loading prevents walking the entire hierarchy of sub-commands
             _subCommands = new Lazy<List<ICommandDef>>(() => GetSubCommands(localCommands));
         }
 
-        private (IMethodDef middlewareMethod, ICommandDef defaultCommand, List<ICommandDef> localCommands) ParseMethods(AppConfig appConfig)
+        private (IMethodDef interceptorMethod, ICommandDef defaultCommand, List<ICommandDef> localCommands) ParseMethods(AppConfig appConfig)
         {
-            MethodInfo middlewareMethodInfo = null;
+            MethodInfo interceptorMethodInfo = null;
             MethodInfo defaultCommandMethodInfo = null;
             List<MethodInfo> localCommandMethodInfos = new List<MethodInfo>();
 
@@ -70,22 +66,25 @@ namespace CommandDotNet.ClassModeling.Definitions
             {
                 if (MethodDef.IsInterceptorMethod(method))
                 {
-                    if (middlewareMethodInfo != null)
+                    if (interceptorMethodInfo != null)
                     {
-                        throw new InvalidConfigurationException($"`{CommandHostClassType}` defines more than one middleware method with a parameter of type {MethodDef.MiddlewareNextParameterType}.  There can be only one.");
+                        throw new InvalidConfigurationException($"`{CommandHostClassType}` defines more than one middleware method with a parameter of type " +
+                                                                $"{MethodDef.MiddlewareNextParameterType} or {MethodDef.InterceptorNextParameterType}. " +
+                                                                "There can be only one.");
                     }
                     if (method.HasAttribute<DefaultMethodAttribute>())
                     {
-                        throw new InvalidConfigurationException($"`{CommandHostClassType}.{method.Name}` default method cannot contain parameter of type {MethodDef.MiddlewareNextParameterType}.");
+                        throw new InvalidConfigurationException($"`{CommandHostClassType}.{method.Name}` default method cannot contain parameter of type " +
+                                                                $"{MethodDef.MiddlewareNextParameterType} or {MethodDef.InterceptorNextParameterType}.");
                     }
 
                     var emDelegate = new ExecutionMiddleware((context, next) => Task.FromResult(1)).Method;
                     if (method.ReturnType != emDelegate.ReturnType)
                     {
-                        throw new InvalidConfigurationException($"`{CommandHostClassType}.{method.Name}` must return type of {emDelegate.ReturnType}, matching {typeof(ExecutionMiddleware)}.");
+                        throw new InvalidConfigurationException($"`{CommandHostClassType}.{method.Name}` must return type of {emDelegate.ReturnType}.");
                     }
 
-                    middlewareMethodInfo = method;
+                    interceptorMethodInfo = method;
                 }
                 else if (method.HasAttribute<DefaultMethodAttribute>())
                 {
@@ -101,19 +100,19 @@ namespace CommandDotNet.ClassModeling.Definitions
                 }
             }
 
-            var middlewareMethod = middlewareMethodInfo == null 
+            var interceptorMethod = interceptorMethodInfo == null 
                 ? NullMethodDef.Instance 
-                : new MethodDef(middlewareMethodInfo, appConfig);
+                : new MethodDef(interceptorMethodInfo, appConfig);
 
             var defaultCommand = defaultCommandMethodInfo == null
                 ? (ICommandDef)new NullCommandDef(Name)
-                : new MethodCommandDef(defaultCommandMethodInfo, CommandHostClassType, middlewareMethod, appConfig);
+                : new MethodCommandDef(defaultCommandMethodInfo, CommandHostClassType, appConfig);
             
             return (
-                middlewareMethod,
+                interceptorMethod,
                 defaultCommand,
                 localCommandMethodInfos
-                    .Select(m => new MethodCommandDef(m, CommandHostClassType, middlewareMethod, appConfig))
+                    .Select(m => new MethodCommandDef(m, CommandHostClassType, appConfig))
                     .Cast<ICommandDef>()
                     .ToList());
 

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CommandDotNet.Builders;
-using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Execution;
 
 namespace CommandDotNet.Help
@@ -19,6 +17,13 @@ namespace CommandDotNet.Help
 
         private static void AddHelpOption(BuildEvents.CommandCreatedEventArgs args)
         {
+            if (args.CommandBuilder.Command.FindOption(Constants.HelpArgumentTemplate.LongName) != null)
+            {
+                return;
+            }
+
+            var appSettingsHelp = args.CommandContext.AppConfig.AppSettings.Help;
+
             var option = new Option(Constants.HelpTemplate, ArgumentArity.Zero, aliases: new []{"?"})
             {
                 Description = "Show help information",
@@ -28,35 +33,37 @@ namespace CommandDotNet.Help
                     UnderlyingType = typeof(bool),
                     DisplayName = Constants.TypeDisplayNames.Flag
                 },
-                IsSystemOption = true,
-                Arity = ArgumentArity.Zero
+                IsMiddlewareOption = true,
+                Arity = ArgumentArity.Zero,
+                ShowInHelp = appSettingsHelp.PrintHelpOption
             };
 
             args.CommandBuilder.AddArgument(option);
         }
 
-        private static Task<int> DisplayHelp(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        private static Task<int> DisplayHelp(CommandContext commandContext, ExecutionDelegate next)
         {
             var parseResult = commandContext.ParseResult;
+            var targetCommand = parseResult.TargetCommand;
+
             if (parseResult.ParseError != null)
             {
                 var console = commandContext.Console;
                 console.Error.WriteLine(parseResult.ParseError.Message);
                 console.Error.WriteLine();
-                Print(commandContext, parseResult.TargetCommand);
+                Print(commandContext, targetCommand);
                 return Task.FromResult(1);
             }
 
             if (parseResult.ArgumentValues.Contains(Constants.HelpArgumentTemplate.LongName))
             {
-                Print(commandContext, parseResult.TargetCommand);
+                Print(commandContext, targetCommand);
                 return Task.FromResult(0);
             }
 
-            var commandDef = parseResult.TargetCommand.Services.Get<ICommandDef>();
-            if (commandDef != null && !commandDef.IsExecutable)
+            if (!targetCommand.IsExecutable)
             {
-                Print(commandContext, commandDef.Command);
+                Print(commandContext, targetCommand);
                 return Task.FromResult(0);
             }
 

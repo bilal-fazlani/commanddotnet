@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Builders;
+using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using FluentValidation;
 using FluentValidation.Attributes;
@@ -21,39 +22,33 @@ namespace CommandDotNet.ClassModeling
             _dependencyResolver = dependencyResolver;
         }
 
-        internal static Task<int> ValidateModelsMiddleware(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        internal static Task<int> ValidateModelsMiddleware(CommandContext commandContext, ExecutionDelegate next)
         {
-            var iCtx = commandContext.InvocationContext;
+            var modelValidator = new ModelValidator(commandContext.AppConfig.DependencyResolver);
 
-            var paramValues = iCtx.CommandInvocation.ParameterValues
-                .Union(iCtx.InterceptorInvocation?.ParameterValues ?? Enumerable.Empty<object>());
+            var paramValues = commandContext.InvocationContexts
+                .All
+                .SelectMany(i => i.Invocation.ParameterValues.OfType<IArgumentModel>());
+            
+            var failureResults = paramValues
+                .Select(model => new { model, result = modelValidator.ValidateModel(model) })
+                .Where(v => v.result != null && !v.result.IsValid)
+                .ToList();
 
-            if (!paramValues.IsNullOrEmpty())
+            if (failureResults.Any())
             {
-                var modelValidator = new ModelValidator(commandContext.AppConfig.DependencyResolver);
-                
-                var failureResults = paramValues
-                    .OfType<IArgumentModel>()
-                    .Select(model =>new {model, result=modelValidator.ValidateModel(model)})
-                    .Where(v => v.result != null && !v.result.IsValid)
-                    .ToList();
-
-                if (failureResults.Any())
+                var console = commandContext.Console;
+                failureResults.ForEach(f =>
                 {
-                    var console = commandContext.Console;
-
-                    failureResults.ForEach(f =>
+                    console.Out.WriteLine($"'{f.model.GetType().Name}' is invalid");
+                    foreach (var error in f.result.Errors)
                     {
-                        console.Out.WriteLine($"'{f.model.GetType().Name}' is invalid");
-                        foreach (var error in f.result.Errors)
-                        {
-                            console.Out.WriteLine($"  {error.ErrorMessage}");
-                        }
-                    });
-                    console.Error.WriteLine();
+                        console.Out.WriteLine($"  {error.ErrorMessage}");
+                    }
+                });
+                console.Error.WriteLine();
 
-                    return Task.FromResult(2);
-                }
+                return Task.FromResult(2);
             }
             return next(commandContext);
         }

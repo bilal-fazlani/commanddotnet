@@ -20,11 +20,15 @@ namespace CommandDotNet
 
         public Command(string name, 
             ICustomAttributeProvider customAttributeProvider,
-            Command parent = null)
+            bool isExecutable,
+            Command parent = null,
+            bool hasInterceptor = false)
         {
             Name = name;
             CustomAttributes = customAttributeProvider;
+            IsExecutable = isExecutable;
             Parent = parent;
+            HasInterceptor = hasInterceptor;
         }
 
         public string Name { get; }
@@ -36,6 +40,9 @@ namespace CommandDotNet
         
         /// <summary>The <see cref="Option"/>s for this <see cref="Command"/></summary>
         public IReadOnlyCollection<Option> Options => _options.AsReadOnly();
+
+        public bool IsExecutable { get; }
+        public bool HasInterceptor { get; }
 
         /// <summary>
         /// The <see cref="Command"/> that hosts this <see cref="Command"/>.
@@ -121,13 +128,13 @@ namespace CommandDotNet
 
         private void RegisterArgumentByAliases(IArgument argument)
         {
-            foreach (var parent in this.GetParentCommands(includeCurrent: true))
+            foreach (var parentOrThis in this.GetParentCommands(includeCurrent: true))
             {
                 IArgument duplicatedArg = null;
                 var duplicateAlias = argument.Aliases.FirstOrDefault(a => _argumentsByAlias.TryGetValue(a, out duplicatedArg));
 
                 // the alias cannot duplicate any argument in this command or any inherited option from parent commands
-                if (duplicateAlias != null && (ReferenceEquals(parent, this) || (duplicatedArg is Option option && option.Inherited)))
+                if (duplicateAlias != null && (ReferenceEquals(parentOrThis, this) || (duplicatedArg is Option option && option.Inherited)))
                 {
                     throw new AppRunnerException(
                         $"Duplicate alias detected. Attempted to add `{argument}` to `{this}` but `{duplicatedArg}` already exists");

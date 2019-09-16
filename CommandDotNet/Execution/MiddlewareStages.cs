@@ -46,10 +46,10 @@ namespace CommandDotNet.Execution
         /// - <see cref="CommandContext.ParseResult"/> is populated<br/>
         /// - <see cref="ParseResult.TargetCommand"/> is set to the target command<br/>
         /// - <see cref="ParseResult.ArgumentValues"/> contains the collection of values assigned to arguments<br/>
-        /// - <see cref="InvocationContext.InstantiateInvocation"/> and <see cref="InvocationContext.CommandInvocation"/>
-        ///  are set<br/>
-        ///   - <see cref="InvocationContext.Instance"/> and <see cref="IInvocation.ParameterValues"/> are not set
-        ///  until the <see cref="BindValues"/> stage.<br/>
+        /// - <see cref="InvocationContext.Invocation"/> and <see cref="InvocationContext.Command"/> are set for the target command and its ancestral interceptor commands<br/>
+        /// not set yet (see <see cref="BindValues"/>):<br/>
+        /// - <see cref="InvocationContext.Instance"/><br/>
+        /// - <see cref="IInvocation.ParameterValues"/><br/>
         /// </summary>
         ParseInput,
         PostParseInputPreBindValues,
@@ -58,14 +58,15 @@ namespace CommandDotNet.Execution
         /// In the <see cref="BindValues"/> stage the argument string values are bound to the parameters
         /// of the command method and the instance of the type containing the method is instantiated.
         /// <br/>Guarantees:<br/>
-        /// - <see cref="InvocationContext.Instance"/> is set<br/>
+        /// - <see cref="InvocationContext.Instance"/> are set for the target command and its ancestral interceptor commands<br/>
         /// - <see cref="IInvocation.ParameterValues"/> are set<br/>
+        /// - Properties attributed with <see cref="SubCommandAttribute"/> are populated IF the subcommand is included in the user request and the property is settable.
         /// </summary>
         BindValues,
         PostBindValuesPreInvoke,
 
         /// <summary>
-        /// In the <see cref="Invoke"/> stage the <see cref="InvocationContext.CommandInvocation"/> is invoked.
+        /// In the <see cref="Invoke"/> stage the <see cref="InvocationContexts.CommandInvocation"/> is invoked.
         /// This is the final stage.
         /// </summary>
         Invoke

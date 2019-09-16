@@ -50,13 +50,13 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Message.Should().Be("This middleware should not have been called");
         }
 
-        private Task<int> Cancel(CommandContext context, Func<CommandContext, Task<int>> next)
+        private Task<int> Cancel(CommandContext context, ExecutionDelegate next)
         {
             context.AppConfig.Services.Get<CancellationTokenSource>().Cancel();
             return next(context);
         }
 
-        private Task<int> Throw(CommandContext context, Func<CommandContext, Task<int>> next)
+        private Task<int> Throw(CommandContext context, ExecutionDelegate next)
         {
             throw new Exception("This middleware should not have been called");
         }

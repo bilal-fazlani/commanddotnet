@@ -26,6 +26,11 @@ namespace CommandDotNet.Builders
                 return;
             }
 
+            if (args.CommandBuilder.Command.FindOption(VersionOptionName) != null)
+            {
+                return;
+            }
+
             var option = new Option(VersionTemplate, ArgumentArity.Zero)
             {
                 Description = "Show version information",
@@ -35,7 +40,7 @@ namespace CommandDotNet.Builders
                     UnderlyingType = typeof(bool),
                     DisplayName = Constants.TypeDisplayNames.Flag
                 },
-                IsSystemOption = true,
+                IsMiddlewareOption = true,
                 Arity = ArgumentArity.Zero
             };
 
@@ -43,7 +48,7 @@ namespace CommandDotNet.Builders
         }
 
         private static Task<int> DisplayVersionIfSpecified(CommandContext commandContext,
-            Func<CommandContext, Task<int>> next)
+            ExecutionDelegate next)
         {
             if (commandContext.ParseResult.ArgumentValues.Contains(VersionOptionName))
             {

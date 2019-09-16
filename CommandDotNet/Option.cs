@@ -15,10 +15,14 @@ namespace CommandDotNet
     {
         private readonly HashSet<string> _aliases;
         
-        public Option(string template, IArgumentArity arity, IEnumerable<string> aliases = null, ICustomAttributeProvider customAttributeProvider = null)
+        public Option(string template, IArgumentArity arity, 
+            IEnumerable<string> aliases = null, 
+            ICustomAttributeProvider customAttributeProvider = null, 
+            bool isInterceptorOption = false)
         {
             Template = template;
             Arity = arity;
+            IsInterceptorOption = isInterceptorOption;
             CustomAttributes = customAttributeProvider ?? NullCustomAttributeProvider.Instance;
 
             var argumentTemplate = ArgumentTemplate.Parse(template);
@@ -67,7 +71,7 @@ namespace CommandDotNet
         /// <summary>The long name that will be prefixed with a double hyphen.</summary>
         public string LongName { get; }
 
-        /// <summary>If true, this option is inherited from a command middleware method and can be specified after the target command</summary>
+        /// <summary>If true, this option is inherited from a command interceptor method and can be specified after the target command</summary>
         public bool Inherited { get; set; }
 
         /// <summary>
@@ -75,12 +79,26 @@ namespace CommandDotNet
         /// but is instead added via middleware.<br/>
         /// eg. Help and Version
         /// </summary>
-        public bool IsSystemOption { get; set; }
+        public bool IsMiddlewareOption { get; set; }
+
+        /// <summary>
+        /// True when the option is defined in an interceptor method,
+        /// making it available for use when subcommands are executed.<br/>
+        /// This helps distinguish an interceptor option from a default command option
+        /// for parent commands.
+        /// </summary>
+        public bool IsInterceptorOption { get; }
+
+        /// <summary>
+        /// When true, the option should be shown in help.<br/>
+        /// Default: true
+        /// </summary>
+        public bool ShowInHelp { get; set; } = true;
 
         /// <summary>The attributes defined on the parameter or property that define this argument</summary>
         public ICustomAttributeProvider CustomAttributes { get; }
 
-        /// <summary>The services used by middleware and associated with this argument</summary>
+        /// <summary>The services used by middleware for this argument</summary>
         public IServices Services { get; } = new Services();
 
         public override string ToString()

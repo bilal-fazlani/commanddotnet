@@ -43,6 +43,18 @@ namespace CommandDotNet
         public Services Services { get; } = new Services();
 
         /// <summary>
+        /// Resolvers functions registered here are available to inject into constructors, interceptor methods and command methods.<br/>
+        /// Types must be resolvable from the <see cref="CommandContext"/><br/>
+        /// Default types: <see cref="CommandContext"/>, <see cref="IConsole"/>, <see cref="CancellationToken"/>
+        /// </summary>
+        public readonly Dictionary<Type, Func<CommandContext, object>> ParameterResolversByType = new Dictionary<Type, Func<CommandContext, object>>
+        {
+            [typeof(CommandContext)] = ctx => ctx,
+            [typeof(IConsole)] = ctx => ctx.Console,
+            [typeof(CancellationToken)] = ctx => ctx.AppConfig.CancellationToken
+        };
+
+        /// <summary>
         /// Adds the transformation to the list of transformations applied to tokens
         /// before they are parsed into commands and arguments
         /// </summary>
@@ -81,7 +93,7 @@ namespace CommandDotNet
         {
             var helpProvider = CustomHelpProvider ?? HelpTextProviderFactory.Create(appSettings);
 
-            return new AppConfig(appSettings, Console, DependencyResolver, helpProvider, TokenizationEvents, BuildEvents, Services, CancellationToken)
+            return new AppConfig(appSettings, Console, DependencyResolver, helpProvider, TokenizationEvents, BuildEvents, Services, CancellationToken, ParameterResolversByType)
             {
                 MiddlewarePipeline = _middlewareByStage
                     .SelectMany(kvp => kvp.Value.Select(v => new {stage = kvp.Key, v.order, v.middleware}) )

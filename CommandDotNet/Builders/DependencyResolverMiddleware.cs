@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
@@ -20,22 +19,26 @@ namespace CommandDotNet.Builders
             });
         }
 
-        internal static Task<int> InjectDependencies(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        internal static Task<int> InjectDependencies(CommandContext commandContext, ExecutionDelegate next)
         {
-            var instance = commandContext.InvocationContext.Instance;
-            var dependencyResolver = commandContext.AppConfig.DependencyResolver;
-            if (instance != null && dependencyResolver != null)
+            var resolver = commandContext.AppConfig.DependencyResolver;
+            if (resolver != null)
             {
-                //detect injection properties
-                var properties = instance.GetType().GetDeclaredProperties<InjectPropertyAttribute>().ToList();
-
-                if (properties.Any())
-                {
-                    foreach (var propertyInfo in properties)
+                commandContext.InvocationContexts.All
+                    .Select(i => i.Instance)
+                    .ForEach(instance =>
                     {
-                        propertyInfo.SetValue(instance, dependencyResolver.Resolve(propertyInfo.PropertyType));
-                    }
-                }
+                        //detect injection properties
+                        var properties = instance.GetType().GetDeclaredProperties<InjectPropertyAttribute>().ToList();
+
+                        if (properties.Any())
+                        {
+                            foreach (var propertyInfo in properties)
+                            {
+                                propertyInfo.SetValue(instance, resolver.Resolve(propertyInfo.PropertyType));
+                            }
+                        }
+                    });
             }
 
             return next(commandContext);

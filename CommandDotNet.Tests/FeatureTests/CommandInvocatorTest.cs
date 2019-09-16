@@ -21,9 +21,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void CanReadAndModifyParamValues()
         {
-            Task<int> BeforeInvocation(CommandContext context, Func<CommandContext, Task<int>> next)
+            Task<int> BeforeInvocation(CommandContext context, ExecutionDelegate next)
             {
-                var values = context.InvocationContext.CommandInvocation.ParameterValues;
+                var values = context.InvocationContexts.TargetCommand.Invocation.ParameterValues;
                 values.Length.Should().Be(2);
                 var invokedCar = (Car) values[0];
                 var invokedOwner = (string)values[1];
@@ -46,9 +46,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void CanReadAndModifyArgumentValues()
         {
-            Task<int> BeforeSetValues(CommandContext context, Func<CommandContext, Task<int>> next)
+            Task<int> BeforeSetValues(CommandContext context, ExecutionDelegate next)
             {
-                var args = context.InvocationContext.CommandInvocation.Arguments;
+                var args = context.InvocationContexts.TargetCommand.Invocation.Arguments;
                 args.Count.Should().Be(2);
                 var carNumber = args.First();
                 var ownerName = args.Last();
@@ -78,7 +78,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void CanReadCurrentCommand()
         {
-            Task<int> BeforeInvocation(CommandContext context, Func<CommandContext, Task<int>> next)
+            Task<int> BeforeInvocation(CommandContext context, ExecutionDelegate next)
             {
                 context.ParseResult.TargetCommand.Should().NotBeNull();
                 context.ParseResult.TargetCommand.Name.Should().Be(nameof(App.NotifyOwner));
@@ -93,9 +93,9 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             var guid = Guid.NewGuid();
 
-            Task<int> BeforeInvocation(CommandContext context, Func<CommandContext, Task<int>> next)
+            Task<int> BeforeInvocation(CommandContext context, ExecutionDelegate next)
             {
-                var instance = context.InvocationContext.Instance;
+                var instance = context.InvocationContexts.TargetCommand.Instance;
                 instance.Should().NotBeNull();
                 var app = (App)instance;
 

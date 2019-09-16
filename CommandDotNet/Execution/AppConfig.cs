@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using CommandDotNet.Builders;
 using CommandDotNet.Help;
@@ -22,11 +23,13 @@ namespace CommandDotNet.Execution
 
         internal IReadOnlyCollection<ExecutionMiddleware> MiddlewarePipeline { get; set; }
         internal IReadOnlyCollection<TokenTransformation> TokenTransformations { get; set; }
+        internal Dictionary<Type, Func<CommandContext, object>> ParameterResolversByType { get; }
 
         public AppConfig(AppSettings appSettings, IConsole console,
             IDependencyResolver dependencyResolver, IHelpProvider helpProvider,
             TokenizationEvents tokenizationEvents, BuildEvents buildEvents, IServices services,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken,
+            Dictionary<Type, Func<CommandContext, object>> parameterResolversByType)
         {
             AppSettings = appSettings;
             Console = console;
@@ -36,6 +39,7 @@ namespace CommandDotNet.Execution
             BuildEvents = buildEvents;
             Services = services;
             CancellationToken = cancellationToken;
+            ParameterResolversByType = parameterResolversByType;
         }
     }
 }

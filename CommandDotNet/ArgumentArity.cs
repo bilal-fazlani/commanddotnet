@@ -5,6 +5,8 @@ namespace CommandDotNet
 {
     public class ArgumentArity : IArgumentArity
     {
+        public const byte MaximumValue = byte.MaxValue;
+
         // copied and modified from System.CommandLine
         // https://github.com/dotnet/command-line-api/blob/master/src/System.CommandLine/ArgumentArity.cs
 
@@ -34,9 +36,9 @@ namespace CommandDotNet
 
         public static IArgumentArity ExactlyOne => new ArgumentArity(1, 1);
 
-        public static IArgumentArity ZeroOrMore => new ArgumentArity(0, byte.MaxValue);
+        public static IArgumentArity ZeroOrMore => new ArgumentArity(0, MaximumValue);
 
-        public static IArgumentArity OneOrMore => new ArgumentArity(1, byte.MaxValue);
+        public static IArgumentArity OneOrMore => new ArgumentArity(1, MaximumValue);
 
         public static IArgumentArity Default(Type type, BooleanMode booleanMode)
         {

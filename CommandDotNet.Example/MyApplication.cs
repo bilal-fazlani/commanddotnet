@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace CommandDotNet.Example
@@ -7,17 +8,18 @@ namespace CommandDotNet.Example
     [Command(Name = "demo", Description = "Sample application for demonstration", ExtendedHelpText = "this is extended help text")]
     public class MyApplication
     {
-        private readonly bool _cjumped;
-        private readonly string _clevel;
-        private readonly int? _cfeets;
-        private readonly IEnumerable<string> _cfriends;
-        private readonly double _cheight;
-        private readonly bool? _clog;
-        private readonly string _cpassword;
-        private readonly int _ctimes;
-        private readonly string _cauthor;
+        private bool _cjumped;
+        private string _clevel;
+        private int? _cfeets;
+        private IEnumerable<string> _cfriends;
+        private double _cheight;
+        private bool? _clog;
+        private string _cpassword;
+        private int _ctimes;
+        private string _cauthor;
 
-        public MyApplication(
+        public Task<int> Interceptor (
+            InterceptorExecutionDelegate next,
             [Option(Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor " +
                                   "incididunt ut labore et dolore magna aliqua. " +
                                   "Ut enim ad minim veniam, quis nostrud exercitation ullamco")]
@@ -57,6 +59,8 @@ namespace CommandDotNet.Example
             _cpassword = cpassword;
             _ctimes = ctimes;
             _cauthor = cauthor;
+
+            return next();
         }
         
         [Command(Description = "m makes someone jump", Name = "JUMP")]

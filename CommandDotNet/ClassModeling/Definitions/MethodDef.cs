@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 
@@ -10,8 +9,8 @@ namespace CommandDotNet.ClassModeling.Definitions
 {
     internal class MethodDef : IMethodDef
     {
-        public static readonly Type MiddlewareNextReturnType = typeof(Task<int>);
-        public static readonly Type MiddlewareNextParameterType = typeof(Func<CommandContext, Task<int>>);
+        public static readonly Type MiddlewareNextParameterType = typeof(ExecutionDelegate);
+        public static readonly Type InterceptorNextParameterType = typeof(InterceptorExecutionDelegate);
 
         private readonly AppConfig _appConfig;
         private IReadOnlyCollection<IArgumentDef> _argumentDefs;
@@ -21,13 +20,14 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         private ParameterInfo _commandContextParameterInfo;
         private ParameterInfo _nextParameterInfo;
+        private List<ParameterInfo> _serviceParameters;
 
         public MethodInfo MethodInfo { get; }
 
         public IReadOnlyCollection<IArgumentDef> ArgumentDefs => EnsureInitialized(() => _argumentDefs);
 
         public IReadOnlyCollection<IArgument> Arguments => EnsureInitialized(ref _arguments,
-            () => ArgumentDefs.Select(a => a.Argument).ToList().AsReadOnly());
+            () => ArgumentDefs.Select(a => a.Argument).ToReadOnlyCollection());
 
         public IReadOnlyCollection<ParameterInfo> Parameters => EnsureInitialized(() => _parameters);
 
@@ -41,30 +41,47 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public static bool IsInterceptorMethod(MethodBase methodBase)
         {
-            return methodBase.GetParameters().Any(IsMiddlewareNextType);
+            return methodBase.GetParameters().Any(IsExecutionDelegate);
         }
 
-        private static bool IsMiddlewareNextType(ParameterInfo parameterInfo)
+        private static bool IsExecutionDelegate(ParameterInfo parameterInfo)
         {
-            return parameterInfo.ParameterType == MiddlewareNextParameterType;
+            return parameterInfo.ParameterType == MiddlewareNextParameterType 
+                   || parameterInfo.ParameterType == InterceptorNextParameterType;
         }
 
-        public object Invoke(CommandContext commandContext, object instance, Func<CommandContext, Task<int>> next)
+        public object Invoke(CommandContext commandContext, object instance, ExecutionDelegate next)
         {
             if (_nextParameterInfo != null)
             {
                 if (next == null)
                 {
                     throw new AppRunnerException(
-                        $"Invalid operation. {nameof(Func<CommandContext, Task<int>>)} {_nextParameterInfo.Name} parameter not provided for method: {_nextParameterInfo.Member.FullName()}. " +
-                        $"Check middleware to ensure it hasn't misconfigured the {nameof(CommandContext.InvocationContext)}");
+                        $"Invalid operation. {nameof(ExecutionDelegate)} {_nextParameterInfo.Name} parameter not provided for method: {_nextParameterInfo.Member.FullName()}. " +
+                        $"Check middleware to ensure it hasn't misconfigured the {nameof(CommandContext.InvocationContexts)}");
                 }
-                _values[_nextParameterInfo.Position] = next;
+
+                if (_nextParameterInfo.ParameterType == InterceptorNextParameterType)
+                {
+                    var nextLite = new InterceptorExecutionDelegate(() => next(commandContext));
+                    _values[_nextParameterInfo.Position] = nextLite;
+                }
+                else
+                {
+                    _values[_nextParameterInfo.Position] = next;
+                }
             }
+
             if (_commandContextParameterInfo != null)
             {
                 _values[_commandContextParameterInfo.Position] = commandContext;
             }
+
+            _serviceParameters?.ForEach(p =>
+            {
+                _values[p.Position] = _appConfig.ParameterResolversByType[p.ParameterType](commandContext);
+            });
+
             return MethodInfo.Invoke(instance, _values);
         }
 
@@ -91,7 +108,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         {
             _parameters = MethodInfo.GetParameters();
 
-            var isMiddleware = _parameters.Any(IsMiddlewareNextType);
+            var isMiddleware = _parameters.Any(IsExecutionDelegate);
 
             var argumentMode = isMiddleware
                 ? ArgumentMode.Option
@@ -101,14 +118,14 @@ namespace CommandDotNet.ClassModeling.Definitions
             
             var parametersByName = _parameters.ToDictionary(
                 p => p.Name,
-                p => (param: p, args: GetArgsFromParameter(p, argumentMode).ToList()));
+                p => (param: p, args: GetArgsFromParameter(p, argumentMode).ToCollection()));
 
             var arguments = parametersByName.Values
                 .OrderBy(v => v.param.Position)
                 .SelectMany(p => p.args)
-                .ToList();
+                .ToReadOnlyCollection();
 
-            _argumentDefs = arguments.AsReadOnly();
+            _argumentDefs = arguments;
         }
 
         private IEnumerable<IArgumentDef> GetArgsFromParameter(ParameterInfo parameterInfo, ArgumentMode argumentMode)
@@ -122,13 +139,23 @@ namespace CommandDotNet.ClassModeling.Definitions
                     value => _values[parameterInfo.Position] = value);
             }
 
+            if (_appConfig.ParameterResolversByType.ContainsKey(parameterInfo.ParameterType))
+            {
+                if(_serviceParameters == null)
+                {
+                    _serviceParameters = new List<ParameterInfo>();
+                }
+                _serviceParameters.Add(parameterInfo);
+                return Enumerable.Empty<IArgumentDef>();
+            }
+
             if (parameterInfo.ParameterType == typeof(CommandContext))
             {
                 _commandContextParameterInfo = parameterInfo;
                 return Enumerable.Empty<IArgumentDef>();
             }
 
-            if (IsMiddlewareNextType(parameterInfo))
+            if (IsExecutionDelegate(parameterInfo))
             {
                 _nextParameterInfo = parameterInfo;
                 return Enumerable.Empty<IArgumentDef>();

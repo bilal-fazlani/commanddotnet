@@ -1,26 +1,49 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CommandDotNet.Extensions;
 
 namespace CommandDotNet
 {
     public static class CommandExtensions
     {
-        public static bool IsRootCommand<T>(this T command) where T : Command
+        public static bool IsRootCommand(this Command command)
         {
             return command.Parent == null;
         }
 
-        public static T GetRootCommand<T>(this T command) where T : Command
+        public static Command GetRootCommand(this Command command)
         {
             return command.GetParentCommands(true).Last();
         }
 
-        public static IEnumerable<T> GetParentCommands<T>(this T command, bool includeCurrent = false) where T : Command
+        public static IEnumerable<Command> GetParentCommands(this Command command, bool includeCurrent = false)
         {
             var startingCommand = includeCurrent ? command : command.Parent;
-            for (Command c = startingCommand; c != null; c = c.Parent)
+            for (var c = startingCommand; c != null; c = c.Parent)
             {
-                yield return (T)c;
+                yield return c;
+            }
+        }
+
+        public static string GetPath(this Command command, string separator = " ") =>
+            command.GetParentCommands(true)
+                .Reverse().Skip(1).Select(c => c.Name)
+                .ToCsv(separator);
+
+        public static IEnumerable<Command> GetDescendentCommands(this Command command, bool includeCurrent = false)
+        {
+            if (includeCurrent)
+            {
+                yield return command;
+            }
+
+            foreach (var child in command.Subcommands)
+            {
+                yield return child;
+                foreach (var grandChild in child.GetDescendentCommands())
+                {
+                    yield return grandChild;
+                }
             }
         }
     }

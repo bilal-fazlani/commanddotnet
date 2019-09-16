@@ -9,6 +9,10 @@ namespace CommandDotNet.Help
 {
     public class HelpTextProvider : IHelpProvider
     {
+        public static string FootnoteSymbol_InterceptorOption = "a";
+        public static string FootnoteSymbol_InheritedOptionForInterceptorCommand = "b";
+        public static string FootnoteSymbol_InheritedOptionForExecutableCommand = "c";
+
         private readonly AppSettings _appSettings;
         private readonly string _appName;
         private readonly AppHelpSettings _appHelpSettings;
@@ -39,9 +43,7 @@ namespace CommandDotNet.Help
             _appName ?? command.GetAppName(_appHelpSettings.UsageAppNameStyle);
 
         /// <summary>The current command and it's parents.  aka bread crumbs</summary>
-        protected virtual string CommandPath(Command command) =>
-            command.GetParentCommands(true)
-                .Reverse().Skip(1).Select(c => c.Name).ToCsv(" ");
+        protected virtual string CommandPath(Command command) => command.GetPath();
 
         /// <summary>How operands are shown in the usage example</summary>
         protected virtual string UsageOperand(Command command) =>
@@ -51,7 +53,7 @@ namespace CommandDotNet.Help
 
         /// <summary>How options are shown in the usage example</summary>
         protected virtual string UsageOption(Command command) =>
-            GetOptionsExcludingHelp(command).Any()
+            command.Options.Any(o => o.ShowInHelp)
                 ? "[options]"
                 : null;
 
@@ -64,18 +66,25 @@ namespace CommandDotNet.Help
         protected virtual string ExtendedHelpText(Command command) => command.ExtendedHelpText;
 
         /// <summary>returns the body of the options section</summary>
-        protected virtual string SectionOptions(Command command) =>
-            SectionArguments(
-                GetOptionsExcludingHelp(command)
-                    .OrderBy(o => o.IsSystemOption)
-                    .ToList());
+        protected virtual string SectionOptions(Command command)
+        {
+            var options = command.Options
+                .Where(o => o.ShowInHelp)
+                .OrderBy(o => o.IsMiddlewareOption)
+                .ThenBy(o => o.IsInterceptorOption)
+                .ToCollection();
+
+            var ssDelimiter = $"{Environment.NewLine}  ";
+            var ssDescriptions = GetOptionFootnoteDescriptions(command).Select(fn => $"{ssDelimiter}{FormatFootnoteSymbols(fn.symbol)} {fn.descr}").ToCsv("");
+            return SectionArguments(command, options) + ssDescriptions;
+        }
 
         /// <summary>returns the body of the operands section</summary>
         protected virtual string SectionOperands(Command command) => 
-            SectionArguments(command.Operands.ToList());
+            SectionArguments(command, command.Operands.ToCollection());
 
         /// <summary>returns the body of an arguments section</summary>
-        protected virtual string SectionArguments<T>(List<T> arguments)
+        protected virtual string SectionArguments<T>(Command command, ICollection<T> arguments)
             where T : IArgument
         {
             if (!arguments.Any())
@@ -83,7 +92,7 @@ namespace CommandDotNet.Help
                 return null;
             }
 
-            var helpValues = BuildArgumentHelpValues(arguments);
+            var helpValues = BuildArgumentHelpValues(command, arguments);
             var templateMaxLength = helpValues.Max(a => a.Template?.Length) ?? 0;
             var displayNameMaxLength = helpValues.Max(a => a.TypeName?.Length) ?? 0;
 
@@ -114,7 +123,7 @@ namespace CommandDotNet.Help
         /// <summary>returns the body of the subcommands section</summary>
         protected virtual string SectionSubcommands(Command command)
         {
-            var commands = command.Subcommands.ToList();
+            var commands = command.Subcommands.ToCollection();
 
             if (!commands.Any())
             {
@@ -154,6 +163,55 @@ namespace CommandDotNet.Help
             argument.SwitchFunc(
                 operand => operand.Name,
                 option => option.Template);
+
+        protected virtual string ArgumentFootNoteSymbols<T>(Command command, T argument) where T: IArgument =>
+            argument.SwitchFunc(
+                operand => null,
+                option =>
+                {
+                    var footnoteSymbols = GetOptionFootnoteSymbols(command, option).ToCsv();
+                    return footnoteSymbols.IsNullOrWhitespace() ? null : " " + FormatFootnoteSymbols(footnoteSymbols);
+                });
+
+        protected virtual string FormatFootnoteSymbols(string footnoteSymbols)
+        {
+            return $"*{footnoteSymbols}";
+        }
+        
+        protected virtual IEnumerable<string> GetOptionFootnoteSymbols(Command command, Option option)
+        {
+            if (command.IsExecutable)
+            {
+                if (option.Inherited) yield return FootnoteSymbol_InheritedOptionForExecutableCommand;
+            }
+            else
+            {
+                if (option.IsInterceptorOption) yield return FootnoteSymbol_InterceptorOption;
+                if (option.Inherited) yield return FootnoteSymbol_InheritedOptionForInterceptorCommand;
+            }
+        }
+
+        protected virtual IEnumerable<(string symbol, string descr)> GetOptionFootnoteDescriptions(Command command)
+        {
+            if (command.IsExecutable)
+            {
+                if (command.Options.Any(o => o.Inherited))
+                {
+                    yield return (FootnoteSymbol_InheritedOptionForExecutableCommand, "option is inherited from a parent command");
+                }
+            }
+            else
+            {
+                if (command.Options.Any(o => o.IsInterceptorOption))
+                {
+                    yield return (FootnoteSymbol_InterceptorOption, "option can be used with subcommands. `[command] [options] [subcommand]`");
+                }
+                if (command.Options.Any(o => o.Inherited))
+                {
+                    yield return (FootnoteSymbol_InheritedOptionForInterceptorCommand, "option can be passed after final subcommand. `[command] [subcommand] [options]`");
+                }
+            }
+        }
 
         protected virtual string ArgumentTypeName<T>(T argument) where T : IArgument => 
             argument.TypeInfo.DisplayName.UnlessNullOrWhitespace(n => $"<{n.ToUpperInvariant()}>");
@@ -217,21 +275,18 @@ namespace CommandDotNet.Help
         private static string PadFront(string value) =>
             value.IsNullOrWhitespace() ? null : " " + value;
 
-        private IEnumerable<Option> GetOptionsExcludingHelp(Command command) =>
-            command.Options.Where(o => _appSettings.Help.PrintHelpOption || o.LongName != Constants.HelpArgumentTemplate.LongName);
-
         private class CommandHelpValues
         {
             public string Name;
             public string Description;
         }
 
-        private List<CommandHelpValues> BuildCommandHelpValues(List<Command> commands) =>
+        private ICollection<CommandHelpValues> BuildCommandHelpValues(IEnumerable<Command> commands) =>
             commands.Select(c => new CommandHelpValues
             {
                 Name = CommandName(c),
                 Description = CommandDescription(c)
-            }).ToList();
+            }).ToCollection();
 
         private class ArgumentHelpValues
         {
@@ -242,14 +297,14 @@ namespace CommandDotNet.Help
             public string AllowedValues;
         }
 
-        private List<ArgumentHelpValues> BuildArgumentHelpValues<T>(List<T> arguments) where T : IArgument =>
+        private ICollection<ArgumentHelpValues> BuildArgumentHelpValues<T>(Command command, IEnumerable<T> arguments) where T : IArgument =>
             arguments.Select(a => new ArgumentHelpValues
             {
-                Template = $"{ArgumentName(a)}{ArgumentArity(a)}",
+                Template = $"{ArgumentName(a)}{ArgumentFootNoteSymbols(command, a)}{ArgumentArity(a)}",
                 TypeName = ArgumentTypeName(a),
                 DefaultValue = ArgumentDefaultValue(a),
                 Description = ArgumentDescription(a),
                 AllowedValues = ArgumentAllowedValues(a)
-            }).ToList();
+            }).ToCollection();
     }
 }

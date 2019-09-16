@@ -10,28 +10,31 @@ namespace CommandDotNet.Parsing
 {
     internal static class ValuePromptMiddleware
     {
-        internal static Task<int> PromptForMissingOperands(CommandContext commandContext, Func<CommandContext, Task<int>> next)
+        internal static Task<int> PromptForMissingOperands(CommandContext commandContext, ExecutionDelegate next)
         {
-            var command = commandContext.ParseResult.TargetCommand;
             var argumentValues = commandContext.ParseResult.ArgumentValues;
-            var console = commandContext.Console;
 
-            command.Operands
-                .Where(a => !argumentValues.Contains(a) && a.DefaultValue.IsNullValue())
-                .Select(a => new { arg = a, values = PromptForValues(a, console) })
-                .Where(i => i.values.Count > 0)
-                .ForEach(i => argumentValues.GetOrAdd(i.arg).AddRange(i.values));
+            if (!argumentValues.Contains(Constants.HelpArgumentTemplate.LongName))
+            {
+                var console = commandContext.Console;
+                var command = commandContext.ParseResult.TargetCommand;
+                command.Operands
+                    .Where(a => !argumentValues.Contains(a) && a.DefaultValue.IsNullValue())
+                    .Select(a => new { arg = a, values = PromptForValues(a, console) })
+                    .Where(i => i.values.Count > 0)
+                    .ForEach(i => argumentValues.GetOrAdd(i.arg).AddRange(i.values));
+            }
 
             return next(commandContext);
         }
 
-        private static List<string> PromptForValues(Operand argument, IConsole console)
+        private static ICollection<string> PromptForValues(Operand argument, IConsole console)
         {
-            List<string> inputs;
+            ICollection<string> inputs;
             if (argument.Arity.AllowsZeroOrMore())
             {
                 console.Out.Write($"{argument.Name} ({argument.TypeInfo.DisplayName}) [separate values by space]: ");
-                inputs = console.In.ReadLine()?.Split(' ').ToList() ?? new List<string>();
+                inputs = console.In.ReadLine()?.Split(' ');
             }
             else
             {
@@ -39,7 +42,7 @@ namespace CommandDotNet.Parsing
                 inputs = new List<string> { console.In.ReadLine() };
             }
 
-            return inputs;
+            return inputs ?? new List<string>();
         }
     }
 }

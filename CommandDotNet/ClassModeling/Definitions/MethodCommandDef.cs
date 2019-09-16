@@ -13,21 +13,19 @@ namespace CommandDotNet.ClassModeling.Definitions
         public Type CommandHostClassType { get; }
         public ICustomAttributeProvider CustomAttributeProvider => _method;
         public bool IsExecutable => true;
-        public IReadOnlyCollection<IArgumentDef> Arguments { get; }
+        public bool HasInterceptor => false;
         public IReadOnlyCollection<ICommandDef> SubCommands { get; } = new List<ICommandDef>().AsReadOnly();
-        public IMethodDef InterceptorMethodDef { get; }
+        public IMethodDef InterceptorMethodDef { get; } = NullMethodDef.Instance;
         public IMethodDef InvokeMethodDef { get; }
         public Command Command { get; set; }
         
-        public MethodCommandDef(MethodInfo method, Type commandHostClassType, IMethodDef interceptorMethodDef, AppConfig appConfig)
+        public MethodCommandDef(MethodInfo method, Type commandHostClassType, AppConfig appConfig)
         {
             _method = method;
 
             Name = method.BuildName(appConfig);
             CommandHostClassType = commandHostClassType;
-            InterceptorMethodDef = interceptorMethodDef;
             InvokeMethodDef = new MethodDef(method, appConfig);
-            Arguments = InvokeMethodDef.ArgumentDefs;
         }
     }
 }

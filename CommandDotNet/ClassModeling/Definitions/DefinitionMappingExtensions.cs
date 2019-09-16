@@ -10,7 +10,12 @@ namespace CommandDotNet.ClassModeling.Definitions
     {
         internal static ICommandBuilder ToCommand(this ICommandDef commandDef, Command parent, CommandContext commandContext)
         {
-            var command = new Command(commandDef.Name, commandDef.CustomAttributeProvider, parent);
+            var command = new Command(
+                commandDef.Name, 
+                commandDef.CustomAttributeProvider,
+                commandDef.IsExecutable,
+                parent, 
+                commandDef.HasInterceptor);
             command.Services.Set(commandDef);
             commandDef.Command = command;
 
@@ -23,16 +28,18 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             var commandBuilder = new CommandBuilder(command);
 
-            commandDef.Arguments
-                .Select(a => a.ToArgument(commandContext.AppConfig))
+            commandDef.InvokeMethodDef.ArgumentDefs
+                .Select(a => a.ToArgument(commandContext.AppConfig, false))
+                .ForEach(commandBuilder.AddArgument);
+
+            commandDef.InterceptorMethodDef.ArgumentDefs
+                .Select(a => a.ToArgument(commandContext.AppConfig, true))
                 .ForEach(commandBuilder.AddArgument);
 
             if (commandDef.IsExecutable)
             {
-                commandDef.InterceptorMethodDef.ArgumentDefs
-                    .Select(d => d.Argument)
-                    .OfType<Option>()
-                    .Where(o => o.Inherited)
+                command.GetParentCommands()
+                    .SelectMany(c => c.Options.Where(o => o.Inherited))
                     .ForEach(commandBuilder.AddArgument);
             }
 
@@ -44,7 +51,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             return commandBuilder;
         }
 
-        private static IArgument ToArgument(this IArgumentDef argumentDef, AppConfig appConfig)
+        private static IArgument ToArgument(this IArgumentDef argumentDef, AppConfig appConfig, bool isInterceptorOption)
         {
             var underlyingType = argumentDef.Type.GetUnderlyingType();
 
@@ -56,16 +63,17 @@ namespace CommandDotNet.ClassModeling.Definitions
                 {
                     Type = argumentDef.Type,
                     UnderlyingType = underlyingType,
-                }
-            );
+                }, 
+                isInterceptorOption);
             argumentDef.Argument = argument;
+            argument.Services.Set(argumentDef);
 
             var typeDescriptor = appConfig.AppSettings.ArgumentTypeDescriptors.GetDescriptorOrThrow(underlyingType);
             argument.TypeInfo.DisplayName = typeDescriptor.GetDisplayName(argument);
 
             if (typeDescriptor is IAllowedValuesTypeDescriptor allowedValuesTypeDescriptor)
             {
-                argument.AllowedValues = allowedValuesTypeDescriptor.GetAllowedValues(argument).ToList();
+                argument.AllowedValues = allowedValuesTypeDescriptor.GetAllowedValues(argument).ToReadOnlyCollection();
             }
             return argument;
         }
@@ -74,7 +82,8 @@ namespace CommandDotNet.ClassModeling.Definitions
             IArgumentDef argumentDef, 
             AppConfig appConfig, 
             object defaultValue,
-            TypeInfo typeInfo)
+            TypeInfo typeInfo, 
+            bool isInterceptorOption)
         {
             if (argumentDef.ArgumentType == ArgumentType.Operand)
             {
@@ -93,7 +102,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             var argumentArity = ArgumentArity.Default(argumentDef.Type, GetOptionBooleanMode(argumentDef, appConfig.AppSettings.BooleanMode, optionAttr));
             return new Option(
                 new ArgumentTemplate(longName: optionAttr?.LongName ?? argumentDef.Name, shortNameAsString: optionAttr?.ShortName).ToString(),
-                argumentArity, customAttributeProvider: argumentDef.Attributes)
+                argumentArity, customAttributeProvider: argumentDef.Attributes, isInterceptorOption: isInterceptorOption)
             {
                 Description = optionAttr?.Description,
                 Inherited = optionAttr?.Inherited ?? false,
