@@ -25,6 +25,8 @@ nav:
       - Dependency Injection: dependency-injection.md
       - Parameter types: parameter-types.md
       - Custom interceptors: custom-interceptors.md
+    - v3:
+      - V3/middleware.md
 # theme: readthedocs
 theme:
   name: 'material'
@@ -39,6 +41,7 @@ google_analytics:
 
 markdown_extensions:
   - admonition
+  - attr_list
   - codehilite
   - pymdownx.arithmatex
   - pymdownx.betterem:
@@ -56,6 +59,8 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.tilde
+  - toc:
+     permalink: "#"
 
 # Customization
 extra:
