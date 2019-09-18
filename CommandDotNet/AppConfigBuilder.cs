@@ -40,6 +40,11 @@ namespace CommandDotNet
 
         public BuildEvents BuildEvents { get; } = new BuildEvents();
         public TokenizationEvents TokenizationEvents { get; } = new TokenizationEvents();
+
+        /// <summary>
+        /// Services registered for the lifetime of the application.<br/>
+        /// Use to store configurations for use by middleware.<br/>
+        /// </summary>
         public Services Services { get; } = new Services();
 
         /// <summary>

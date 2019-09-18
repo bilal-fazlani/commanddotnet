@@ -1,5 +1,4 @@
 ﻿using System;
-using CommandDotNet.Execution;
 using CommandDotNet.Help;
 using CommandDotNet.TypeDescriptors;
 

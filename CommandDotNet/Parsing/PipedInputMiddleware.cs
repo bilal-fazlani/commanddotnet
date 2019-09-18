@@ -58,15 +58,5 @@ namespace CommandDotNet.Parsing
 
             return new string[0];
         }
-
-        private class PipedInput
-        {
-            public List<string> Input { get; }
-
-            public PipedInput(List<string> input)
-            {
-                Input = input;
-            }
-        }
     }
 }

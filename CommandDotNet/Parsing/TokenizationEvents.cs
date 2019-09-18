@@ -5,7 +5,8 @@ using CommandDotNet.Tokens;
 namespace CommandDotNet.Parsing
 {
     /// <summary>
-    /// Events raised during the <see cref="MiddlewareStages.Tokenize"/> stage
+    /// Events raised during the <see cref="MiddlewareStages.Tokenize"/> stage.<br/>
+    /// Set in <see cref="AppRunner.Configure"/>
     /// </summary>
     public class TokenizationEvents
     {

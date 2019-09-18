@@ -30,16 +30,22 @@ namespace CommandDotNet
         public ParseResult ParseResult { get; set; }
 
         /// <summary>
-        /// This the invocation is partially populated in the <see cref="MiddlewareStages.ParseInput"/>
-        /// stage and <see cref="InvocationPipeline.Instance"/> and <see cref="IInvocation.ParameterValues"/>
+        /// The <see cref="InvocationStep"/>s within the pipeline are mostly populated in
+        /// the <see cref="MiddlewareStages.ParseInput"/> stage.
+        /// <see cref="InvocationStep.Instance"/> and <see cref="IInvocation.ParameterValues"/>
         /// are populated in the <see cref="MiddlewareStages.BindValues"/> stage.
         /// </summary>
         public InvocationPipeline InvocationPipeline { get; } = new InvocationPipeline();
 
         public AppConfig AppConfig { get; }
 
-        public IConsole Console => AppConfig.Console;
+        /// <summary>The <see cref="IConsole"/>, defaulted from <see cref="Execution.AppConfig.Console"/>.</summary>
+        public IConsole Console { get; set; }
 
+        /// <summary>
+        /// Services registered for the lifetime of the <see cref="CommandContext"/>.<br/>
+        /// Can be used to store state for coordination between middleware and across middleware stages.
+        /// </summary>
         public IServices Services { get; } = new Services();
 
         public CommandContext(
@@ -50,6 +56,7 @@ namespace CommandDotNet
             Original = new OriginalInput(originalArgs, originalTokens);
             Tokens = originalTokens;
             AppConfig = appConfig;
+            Console = appConfig.Console;
         }
     }
 }
