@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using CommandDotNet.Execution;
 
 namespace CommandDotNet.Tokens
 {
@@ -9,7 +8,7 @@ namespace CommandDotNet.Tokens
     {
         internal static AppRunner UseResponseFiles(AppRunner appRunner)
         {
-            return appRunner.Configure(c => c.UseTokenTransformation(nameof(ExpandResponseFile), 1, Transform));
+            return appRunner.Configure(c => c.UseTokenTransformation("expand-response-files", 1, Transform));
         }
 
         private static TokenCollection Transform(CommandContext commandContext, TokenCollection tokenCollection)

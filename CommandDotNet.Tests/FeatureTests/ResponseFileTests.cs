@@ -125,7 +125,7 @@ namespace CommandDotNet.Tests.FeatureTests
             var ex = Assert.Throws<TokenTransformationException>(() => 
                 appRunner.Run("Do", "@not-exists"));
 
-            ex.Message.Should().Contain("ExpandResponseFile");
+            ex.Message.Should().Contain("expand-response-file");
             ex.InnerException.Should().BeOfType<FileNotFoundException>();
             var fileName = ((FileNotFoundException)ex.InnerException).FileName;
             Path.GetFileName(fileName).Should().Be("not-exists");
