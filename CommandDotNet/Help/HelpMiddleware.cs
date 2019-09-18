@@ -12,7 +12,7 @@ namespace CommandDotNet.Help
             return appRunner.Configure(c =>
             {
                 c.BuildEvents.OnCommandCreated += AddHelpOption;
-                c.UseMiddleware(DisplayHelp, MiddlewareStages.PostParseInputPreBindValues);
+                c.UseMiddleware(DisplayHelp, MiddlewareStages.ParseInput, int.MaxValue);
             });
         }
 

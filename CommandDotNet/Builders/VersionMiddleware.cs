@@ -15,7 +15,7 @@ namespace CommandDotNet.Builders
             return appRunner.Configure(c =>
             {
                 c.BuildEvents.OnCommandCreated += AddVersionOption;
-                c.UseMiddleware(DisplayVersionIfSpecified, MiddlewareStages.PostParseInputPreBindValues);
+                c.UseMiddleware(DisplayVersionIfSpecified, MiddlewareStages.ParseInput, int.MaxValue-100);
             });
         }
 
