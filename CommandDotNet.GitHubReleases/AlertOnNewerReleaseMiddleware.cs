@@ -42,7 +42,7 @@ namespace CommandDotNet.NewerReleasesAlerts
                     PostfixAlertMessageCallback = postfixAlertMessageCallback,
                     OverrideHttpRequestCallback = overrideHttpRequestCallback
                 });
-                c.UseMiddleware(AlertOnNewVersion, MiddlewareStages.PreTransformTokens);
+                c.UseMiddleware(AlertOnNewVersion, MiddlewareStages.PreTokenize);
             });
         }
 

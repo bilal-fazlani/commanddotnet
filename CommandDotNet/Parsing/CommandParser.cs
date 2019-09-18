@@ -17,7 +17,7 @@ namespace CommandDotNet.Parsing
             _appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
         }
 
-        internal static Task<int> ParseMiddleware(CommandContext commandContext, ExecutionDelegate next)
+        internal static Task<int> ParseInputMiddleware(CommandContext commandContext, ExecutionDelegate next)
         {
             try
             {

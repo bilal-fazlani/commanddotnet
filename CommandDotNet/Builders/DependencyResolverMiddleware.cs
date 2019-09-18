@@ -14,12 +14,12 @@ namespace CommandDotNet.Builders
                 c.DependencyResolver = dependencyResolver;
                 if (useLegacyInjectDependenciesAttribute)
                 {
-                    c.UseMiddleware(InjectDependencies, MiddlewareStages.PostBindValuesPreInvoke);
+                    c.UseMiddleware(LegacyInjectPropertiesDependencies, MiddlewareStages.PostBindValuesPreInvoke);
                 }
             });
         }
 
-        internal static Task<int> InjectDependencies(CommandContext commandContext, ExecutionDelegate next)
+        internal static Task<int> LegacyInjectPropertiesDependencies(CommandContext commandContext, ExecutionDelegate next)
         {
             var resolver = commandContext.AppConfig.DependencyResolver;
             if (resolver != null)

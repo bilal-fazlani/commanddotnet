@@ -5,7 +5,7 @@ using CommandDotNet.Tokens;
 namespace CommandDotNet.Parsing
 {
     /// <summary>
-    /// Events raised during the <see cref="MiddlewareStages.TransformTokens"/> stage
+    /// Events raised during the <see cref="MiddlewareStages.Tokenize"/> stage
     /// </summary>
     public class TokenizationEvents
     {

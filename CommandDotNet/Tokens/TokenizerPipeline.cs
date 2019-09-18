@@ -7,7 +7,7 @@ namespace CommandDotNet.Tokens
 {
     internal static class TokenizerPipeline
     {
-        public static Task<int> TokenizeMiddleware(CommandContext commandContext, ExecutionDelegate next)
+        public static Task<int> TokenizeInputMiddleware(CommandContext commandContext, ExecutionDelegate next)
         {
             InsertSystemTransformations(commandContext.AppConfig);
             commandContext.Tokens = ApplyTokenTransformations(commandContext);

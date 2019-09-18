@@ -12,7 +12,7 @@ namespace CommandDotNet
 
         /// <summary>
         /// The current working tokens. This collection is update with
-        /// <see cref="TokenTransformation"/>s during <see cref="MiddlewareStages.TransformTokens"/>.
+        /// <see cref="TokenTransformation"/>s during <see cref="MiddlewareStages.Tokenize"/>.
         /// Modifications should be performed via <see cref="TokenTransformation"/>s so they
         /// can be logged with the Parse directive
         /// </summary>

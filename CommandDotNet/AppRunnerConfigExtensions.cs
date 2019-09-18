@@ -57,7 +57,7 @@ namespace CommandDotNet
             //       be applied to parameters
 
             return appRunner.Configure(c =>
-                c.UseMiddleware(ModelValidator.ValidateModelsMiddleware, MiddlewareStages.PostBindValuesPreInvoke));
+                c.UseMiddleware(ModelValidator.FluentValidationMiddleware, MiddlewareStages.PostBindValuesPreInvoke));
         }
 
         public static AppRunner UseDependencyResolver(

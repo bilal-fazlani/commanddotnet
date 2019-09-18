@@ -22,7 +22,7 @@ namespace CommandDotNet.ClassModeling
             _dependencyResolver = dependencyResolver;
         }
 
-        internal static Task<int> ValidateModelsMiddleware(CommandContext commandContext, ExecutionDelegate next)
+        internal static Task<int> FluentValidationMiddleware(CommandContext commandContext, ExecutionDelegate next)
         {
             var modelValidator = new ModelValidator(commandContext.AppConfig.DependencyResolver);
 

@@ -18,7 +18,7 @@ namespace CommandDotNet.ClassModeling
                 c.UseMiddleware(AssembleInvocationPipelineMiddleware, MiddlewareStages.ParseInput);
                 c.UseMiddleware(BindValuesMiddleware.BindValues, MiddlewareStages.BindValues);
                 c.UseMiddleware(ResolveInstancesMiddleware.ResolveInstances, MiddlewareStages.BindValues);
-                c.UseMiddleware(InvokeCommandDefMiddleware, MiddlewareStages.Invoke, int.MaxValue);
+                c.UseMiddleware(InvokeInvocationPipelineMiddleware, MiddlewareStages.Invoke, int.MaxValue);
             });
         }
 
@@ -57,7 +57,7 @@ namespace CommandDotNet.ClassModeling
             return next(commandContext);
         }
 
-        private static Task<int> InvokeCommandDefMiddleware(CommandContext commandContext, ExecutionDelegate _)
+        private static Task<int> InvokeInvocationPipelineMiddleware(CommandContext commandContext, ExecutionDelegate _)
         {
             Task<int> Invoke(InvocationStep step, CommandContext context, ExecutionDelegate next, bool isCommand)
             {

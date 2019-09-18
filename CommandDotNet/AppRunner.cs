@@ -103,8 +103,8 @@ namespace CommandDotNet
         private void AddCoreMiddleware()
         {
             _appConfigBuilder
-                .UseMiddleware(TokenizerPipeline.TokenizeMiddleware, MiddlewareStages.TransformTokens, -1)
-                .UseMiddleware(CommandParser.ParseMiddleware, MiddlewareStages.ParseInput);
+                .UseMiddleware(TokenizerPipeline.TokenizeInputMiddleware, MiddlewareStages.Tokenize, -1)
+                .UseMiddleware(CommandParser.ParseInputMiddleware, MiddlewareStages.ParseInput);
 
             this.UseClassDefMiddleware(_rootCommandType)
                 .UseHelpMiddleware();
