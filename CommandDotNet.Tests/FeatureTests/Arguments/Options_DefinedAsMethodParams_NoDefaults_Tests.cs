@@ -287,8 +287,7 @@ Options:
 
         private class OptionsNoDefaults : IArgsNoDefaultsSampleTypesMethod
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             public void ArgsNoDefault(
                 [Option] bool boolArg,

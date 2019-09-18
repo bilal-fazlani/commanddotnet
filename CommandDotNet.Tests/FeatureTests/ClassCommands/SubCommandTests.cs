@@ -106,8 +106,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
 
         public class ThreeLevelsApp
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             [SubCommand]
             public Second Second { get; set; }
@@ -120,8 +119,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
 
         public class Second
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             [SubCommand]
             public Third Third { get; set; }
@@ -134,8 +132,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
 
         public class Third
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             public void Do3(ArgModel3 model)
             {
@@ -145,8 +142,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
 
         public class NestedThreeLevelsApp
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
 
             public void Do1(ArgModel1 model)
@@ -157,8 +153,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
             [SubCommand]
             public class Second
             {
-                [InjectProperty]
-                public TestOutputs TestOutputs { get; set; }
+                private TestOutputs TestOutputs { get; set; }
 
                 public void Do2(ArgModel2 model)
                 {
@@ -168,8 +163,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
                 [SubCommand]
                 public class Third
                 {
-                    [InjectProperty]
-                    public TestOutputs TestOutputs { get; set; }
+                    private TestOutputs TestOutputs { get; set; }
 
                     public void Do3(ArgModel3 model)
                     {

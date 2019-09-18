@@ -80,8 +80,7 @@ Arguments:
 
         public class App
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             public void Do(Square square)
             {

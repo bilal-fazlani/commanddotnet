@@ -291,8 +291,7 @@ Options:
 
         private class OptionsDefaults : IArgsDefaultsSampleTypesMethod
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             public void ArgsDefaults(
                 [Option] bool boolArg = true,

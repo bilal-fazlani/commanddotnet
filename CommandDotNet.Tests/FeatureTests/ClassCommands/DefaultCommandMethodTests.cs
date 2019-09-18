@@ -182,8 +182,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         {
             public const string DefaultMethodExecuted = "default executed";
 
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             [DefaultMethod]
             public void DefaultMethod()
@@ -199,8 +198,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
 
         public class WithParamsApp
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             [DefaultMethod]
             public void DefaultMethod(

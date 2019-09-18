@@ -202,8 +202,7 @@ Arguments:
 
         private class OperandsDefaults : IArgsDefaultsSampleTypesMethod
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             public void ArgsDefaults(
                 [Operand] bool boolArg = true,

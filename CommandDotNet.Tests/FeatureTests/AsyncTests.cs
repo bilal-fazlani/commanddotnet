@@ -33,8 +33,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
         public class App
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             [Command(Description = "Invokes an async method and exits with return code 2", Name = "get2")]
             public async Task<int> Get2Async()

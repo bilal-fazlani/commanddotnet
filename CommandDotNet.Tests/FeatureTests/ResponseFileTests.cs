@@ -133,8 +133,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
         public class App
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             public void Do([Option] string opt1, string arg1)
             {

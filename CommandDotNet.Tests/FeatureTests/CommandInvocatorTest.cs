@@ -128,8 +128,7 @@ namespace CommandDotNet.Tests.FeatureTests
         
         public class App
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             public int NotifyOwner(Car car, [Option] string owner)
             {

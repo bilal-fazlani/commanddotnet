@@ -123,8 +123,7 @@ Options:
 
         private class OptionsDefaults
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             public void ArgsDefaults(OptionsDefaultsSampleTypesModel model)
             {

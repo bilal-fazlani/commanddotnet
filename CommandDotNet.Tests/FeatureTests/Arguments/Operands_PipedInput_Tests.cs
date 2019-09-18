@@ -89,8 +89,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         public class App
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             public void Single([Operand] string singleArg)
             {

@@ -58,8 +58,7 @@ Options:
 
         private class FlagApp
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             public void Do([Option] bool flag)
             {

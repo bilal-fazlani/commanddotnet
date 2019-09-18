@@ -288,8 +288,7 @@ Arguments:
 
         private class OperandsNoDefaults: IArgsNoDefaultsSampleTypesMethod
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             public void ArgsNoDefault(
                 [Operand] bool boolArg,

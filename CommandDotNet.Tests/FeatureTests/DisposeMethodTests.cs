@@ -85,8 +85,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
         public class DisposableApp : IDisposable
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             public void Do()
             {
@@ -100,8 +99,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
         public class NotDisposableApp
         {
-            [InjectProperty]
-            public TestOutputs TestOutputs { get; set; }
+            private TestOutputs TestOutputs { get; set; }
 
             public void Dispose()
             {
