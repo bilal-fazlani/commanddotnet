@@ -26,7 +26,9 @@ nav:
       - Parameter types: parameter-types.md
       - Custom interceptors: custom-interceptors.md
     - v3:
+      - V3/v3-changes.md
       - V3/middleware.md
+      - V3/interceptors.md
 # theme: readthedocs
 theme:
   name: 'material'
