@@ -18,8 +18,8 @@ nav:
       - Nesting commands: nesting-commands.md
       - Exceptions: exceptions.md
     - Extras:
-      - Directives: directives.md
-      - Fluent validation for parameters: fluent-validation-for-parameters.md
+      - directives.md
+      - Fluent validation for parameters: fluent-validation-for-argument-models.md
       - Settings: settings.md
     - Extensibility:
       - Dependency Injection: dependency-injection.md
