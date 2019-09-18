@@ -26,7 +26,7 @@ namespace CommandDotNet.ClassModeling
         {
             var modelValidator = new ModelValidator(commandContext.AppConfig.DependencyResolver);
 
-            var paramValues = commandContext.InvocationContexts
+            var paramValues = commandContext.InvocationPipeline
                 .All
                 .SelectMany(i => i.Invocation.ParameterValues.OfType<IArgumentModel>());
             

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
@@ -96,7 +97,7 @@ namespace CommandDotNet
             var commandContext = new CommandContext(
                 args, tokens, _appConfigBuilder.Build(AppSettings));
 
-            return InvokeMiddleware(commandContext);
+            return commandContext.AppConfig.MiddlewarePipeline.InvokePipeline(commandContext);
         }
 
         private void AddCoreMiddleware()
@@ -131,20 +132,6 @@ namespace CommandDotNet
                     ExceptionDispatchInfo.Capture(ex).Throw();
                     return 1; // this will only be called if there are no inner exceptions
             }
-        }
-
-        private static Task<int> InvokeMiddleware(CommandContext commandContext)
-        {
-            var pipeline = commandContext.AppConfig.MiddlewarePipeline;
-
-            var middlewareChain = pipeline.Aggregate(
-                (first, second) =>
-                    (ctx, next) =>
-                        first(ctx, c => c.AppConfig.CancellationToken.IsCancellationRequested 
-                            ? Task.FromResult(0) 
-                            : second(c, next)));
-
-            return middlewareChain(commandContext, ctx => Task.FromResult(0));
         }
     }
 }

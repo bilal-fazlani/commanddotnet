@@ -24,7 +24,7 @@ namespace CommandDotNet.Builders
             var resolver = commandContext.AppConfig.DependencyResolver;
             if (resolver != null)
             {
-                commandContext.InvocationContexts.All
+                commandContext.InvocationPipeline.All
                     .Select(i => i.Instance)
                     .ForEach(instance =>
                     {

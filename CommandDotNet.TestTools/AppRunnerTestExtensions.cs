@@ -40,7 +40,7 @@ namespace CommandDotNet.TestTools
             TestOutputs outputs = new TestOutputs();
             runner.Configure(c => c.UseMiddleware((context, next) =>
             {
-                context.InvocationContexts.All
+                context.InvocationPipeline.All
                     .Select(i => i.Instance)
                     .ForEach(instance =>
                     {

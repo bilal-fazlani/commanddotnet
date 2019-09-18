@@ -31,10 +31,10 @@ namespace CommandDotNet
 
         /// <summary>
         /// This the invocation is partially populated in the <see cref="MiddlewareStages.ParseInput"/>
-        /// stage and <see cref="InvocationContexts.Instance"/> and <see cref="IInvocation.ParameterValues"/>
+        /// stage and <see cref="InvocationPipeline.Instance"/> and <see cref="IInvocation.ParameterValues"/>
         /// are populated in the <see cref="MiddlewareStages.BindValues"/> stage.
         /// </summary>
-        public InvocationContexts InvocationContexts { get; } = new InvocationContexts();
+        public InvocationPipeline InvocationPipeline { get; } = new InvocationPipeline();
 
         public AppConfig AppConfig { get; }
 

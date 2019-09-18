@@ -58,7 +58,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 {
                     throw new AppRunnerException(
                         $"Invalid operation. {nameof(ExecutionDelegate)} {_nextParameterInfo.Name} parameter not provided for method: {_nextParameterInfo.Member.FullName()}. " +
-                        $"Check middleware to ensure it hasn't misconfigured the {nameof(CommandContext.InvocationContexts)}");
+                        $"Check middleware to ensure it hasn't misconfigured the {nameof(CommandContext.InvocationPipeline)}");
                 }
 
                 if (_nextParameterInfo.ParameterType == InterceptorNextParameterType)

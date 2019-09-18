@@ -12,21 +12,21 @@ namespace CommandDotNet.ClassModeling
     {
         internal static Task<int> ResolveInstances(CommandContext commandContext, ExecutionDelegate next)
         {
-            var invocationContexts = commandContext.InvocationContexts;
+            var pipeline = commandContext.InvocationPipeline;
             var instancesToDispose = new List<IDisposable>();
 
-            InvocationContext parentContext = null;
-            foreach (var ic in invocationContexts.All)
+            InvocationStep parentStep = null;
+            foreach (var ic in pipeline.All)
             {
-                if (parentContext != null 
-                    && parentContext.Invocation.MethodInfo.DeclaringType == ic.Invocation.MethodInfo.DeclaringType)
+                if (parentStep != null 
+                    && parentStep.Invocation.MethodInfo.DeclaringType == ic.Invocation.MethodInfo.DeclaringType)
                 {
                     // this is true when the interceptor method is in the same class as the command method 
-                    ic.Instance = parentContext.Instance;
+                    ic.Instance = parentStep.Instance;
                     continue;
                 }
-                ic.Instance = GetInstance(ic, parentContext, commandContext, out bool createdHere);
-                parentContext = ic;
+                ic.Instance = GetInstance(ic, parentStep, commandContext, out bool createdHere);
+                parentStep = ic;
 
                 // only dispose instances owned by this middleware, not by a container
                 if (createdHere && ic.Instance is IDisposable disposable)
@@ -55,12 +55,12 @@ namespace CommandDotNet.ClassModeling
             }
         }
 
-        private static object GetInstance(InvocationContext invocationContext,
-            InvocationContext parentContext,
+        private static object GetInstance(InvocationStep invocationStep,
+            InvocationStep parentStep,
             CommandContext commandContext,
             out bool createdHere)
         {
-            var command = invocationContext.Command;
+            var command = invocationStep.Command;
             var commandDef = command.Services.Get<ICommandDef>();
             if (commandDef == null)
             {
@@ -73,7 +73,7 @@ namespace CommandDotNet.ClassModeling
             if (resolver != null && resolver.TryResolve(classType, out var instance))
             {
                 createdHere = false;
-                SetInstanceForParent(parentContext, classType, instance);
+                SetInstanceForParent(parentStep, classType, instance);
                 return instance;
             }
 
@@ -93,7 +93,7 @@ namespace CommandDotNet.ClassModeling
             if (ctor == null)
             {
                 throw new AppRunnerException(
-                    $"No viable constructors found for {invocationContext}. " +
+                    $"No viable constructors found for {invocationStep}. " +
                     $"Constructor can only contain parameters of type: {parameterResolversByType.Keys.ToOrderedCsv()}");
             }
 
@@ -103,15 +103,15 @@ namespace CommandDotNet.ClassModeling
 
             instance = ctor.c.Invoke(parameters);
             createdHere = true;
-            SetInstanceForParent(parentContext, classType, instance);
+            SetInstanceForParent(parentStep, classType, instance);
             return instance;
         }
 
-        private static void SetInstanceForParent(InvocationContext parentContext, Type classType, object instance)
+        private static void SetInstanceForParent(InvocationStep parentStep, Type classType, object instance)
         {
-            if (parentContext != null)
+            if (parentStep != null)
             {
-                var parent = parentContext.Instance;
+                var parent = parentStep.Instance;
                 parent.GetType().GetProperties()
                     .Where(p =>
                         p.CanWrite

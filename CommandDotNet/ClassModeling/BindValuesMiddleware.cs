@@ -38,7 +38,7 @@ namespace CommandDotNet.ClassModeling
                 }
             }
 
-            var argumentDefs = commandContext.InvocationContexts.All
+            var argumentDefs = commandContext.InvocationPipeline.All
                 .SelectMany(ic => ic.Command.Options.Cast<IArgument>().Union(ic.Command.Operands))
                 .Select(a => a.Services.Get<IArgumentDef>())
                 .Where(d => d != null);
