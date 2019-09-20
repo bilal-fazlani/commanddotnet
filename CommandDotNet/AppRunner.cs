@@ -45,6 +45,7 @@ namespace CommandDotNet
         {
             _rootCommandType = rootCommandType ?? throw new ArgumentNullException(nameof(rootCommandType));
             AppSettings = settings ?? new AppSettings();
+            AddCoreMiddleware();
         }
 
         public AppRunner Configure(Action<AppConfigBuilder> configureCallback)
@@ -91,8 +92,6 @@ namespace CommandDotNet
 
         private async Task<int> Execute(string[] args)
         {
-            AddCoreMiddleware();
-
             var tokens = args.Tokenize(includeDirectives: AppSettings.EnableDirectives);
 
             var appConfig = _appConfigBuilder.Build(AppSettings);
