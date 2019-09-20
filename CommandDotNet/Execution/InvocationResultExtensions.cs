@@ -10,9 +10,9 @@ namespace CommandDotNet.Execution
             switch (value)
             {
                 case Task<int> resultCodeTask:
-                    return await resultCodeTask;
+                    return await resultCodeTask.ConfigureAwait(false);
                 case Task task:
-                    await task;
+                    await task.ConfigureAwait(false);
                     return 0;
                 case int resultCode:
                     return resultCode;

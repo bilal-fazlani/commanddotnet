@@ -81,7 +81,7 @@ namespace CommandDotNet
         {
             try
             {
-                return await Execute(args);
+                return await Execute(args).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -89,15 +89,19 @@ namespace CommandDotNet
             }
         }
 
-        private Task<int> Execute(string[] args)
+        private async Task<int> Execute(string[] args)
         {
             AddCoreMiddleware();
 
             var tokens = args.Tokenize(includeDirectives: AppSettings.EnableDirectives);
-            var commandContext = new CommandContext(
-                args, tokens, _appConfigBuilder.Build(AppSettings));
 
-            return commandContext.AppConfig.MiddlewarePipeline.InvokePipeline(commandContext);
+            var appConfig = _appConfigBuilder.Build(AppSettings);
+            var commandContext = new CommandContext(args, tokens, appConfig);
+
+            var result = await commandContext.AppConfig.MiddlewarePipeline
+                .InvokePipeline(commandContext).ConfigureAwait(false);
+
+            return result;
         }
 
         private void AddCoreMiddleware()
