@@ -27,29 +27,38 @@ namespace CommandDotNet
             return appRunner.UseFluentValidation();
         }
 
+        /// <summary>Adds the --version option to the app</summary>
         public static AppRunner UseVersionMiddleware(this AppRunner appRunner)
         {
             return VersionMiddleware.UseVersionMiddleware(appRunner);
         }
 
+        /// <summary>
+        /// When the first argument is [debug], the framework will wait for a debugger to attach.<br/>
+        /// Note: <see cref="UseCancellationHandlers"/> to be able to cancel before attaching the debugger.
+        /// </summary>
         public static AppRunner UseDebugDirective(this AppRunner appRunner)
         {
             AssertDirectivesAreEnabled(appRunner);
             return DebugDirective.UseDebugDirective(appRunner);
         }
-
+        
+        /// <summary>
+        /// When the first argument is [parse], the framework will output the result of all <see cref="TokenTransformation"/>s<br/>
+        /// </summary>
         public static AppRunner UseParseDirective(this AppRunner appRunner)
         {
             AssertDirectivesAreEnabled(appRunner);
             return ParseDirective.UseParseDirective(appRunner);
         }
 
-        /// <summary>Enables piped input to be appended to any commands operand list</summary>
+        /// <summary>Piped input will be appended to an operand list if one exists for the command</summary>
         public static AppRunner AppendPipedInputToOperandList(this AppRunner appRunner)
         {
             return PipedInputMiddleware.EnablePipedInput(appRunner);
         }
 
+        /// <summary>Enables FluentValidation for <see cref="IArgumentModel"/>s</summary>
         public static AppRunner UseFluentValidation(this AppRunner appRunner)
         {
             // TODO: move FluentValidation into a separate repo & nuget package?
@@ -60,6 +69,7 @@ namespace CommandDotNet
                 c.UseMiddleware(ModelValidator.FluentValidationMiddleware, MiddlewareStages.PostBindValuesPreInvoke));
         }
 
+        /// <summary>Use the <see cref="IDependencyResolver"/> to create the command classes.</summary>
         public static AppRunner UseDependencyResolver(
             this AppRunner appRunner, 
             IDependencyResolver dependencyResolver, 
@@ -68,12 +78,14 @@ namespace CommandDotNet
             return DependencyResolverMiddleware.UseDependencyResolver(appRunner, dependencyResolver, useLegacyInjectDependenciesAttribute);
         }
 
+        /// <summary>Users will be prompted for values when operands are not provided</summary>
         public static AppRunner UsePromptForMissingOperands(this AppRunner appRunner)
         {
             return appRunner.Configure(c =>
                 c.UseMiddleware(ValuePromptMiddleware.PromptForMissingOperands, MiddlewareStages.PostParseInputPreBindValues));
         }
 
+        /// <summary>Prefix a filepath with @ and it will be replaced by its contents during <see cref="MiddlewareStages.Tokenize"/></summary>
         public static AppRunner UseResponseFiles(this AppRunner appRunner)
         {
             return ExpandResponseFilesTransformation.UseResponseFiles(appRunner);
