@@ -66,7 +66,7 @@ Options:
                     AllowUnspecifiedOutputs = true,
                     Outputs =
                     {
-                        new ParameterResolverTests.DoResults
+                        new DoResults
                         {
                             IntOperand = 7,
                             StringOption = "optValue",
@@ -77,7 +77,7 @@ Options:
                                 CancellationTokenIsNone = false
                             }
                         },
-                        new ParameterResolverTests.InterceptorResults
+                        new InterceptorResults
                         {
                             ParameterServices =
                             {
@@ -104,7 +104,7 @@ Options:
                         ResultsContainsTexts =
                         {
                             "CommandDotNet.Tests.FeatureTests.ParameterResolverTests+SomeService is not supported.",
-                            "If it is a service and not an argument, register using AppRunner.Configure(b => b.ParameterResolversByType.Add(...)); "
+                            "If it is a service and not an argument, register using AppRunner.Configure(b => b.UseParameterResolver(ctx => ...)); "
                         }
                     }
                 });
@@ -115,7 +115,7 @@ Options:
         {
             var someSvc = new SomeService();
             new AppRunner<SomeServiceApp>()
-                .Configure(b => b.ParameterResolversByType.Add(typeof(SomeService), ctx => someSvc))
+                .Configure(b => b.UseParameterResolver(ctx => someSvc))
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     WhenArgs = "Do",
@@ -123,7 +123,7 @@ Options:
                     {
                         Outputs =
                         {
-                            new ParameterResolverTests.DoResults()
+                            new DoResults()
                             {
                                 ParameterServices =
                                 {
@@ -141,7 +141,7 @@ Options:
 
             public void Do(SomeService someService, [Operand] int intOperand, [Option] string stringOption = null)
             {
-                TestOutputs.Capture(new ParameterResolverTests.DoResults
+                TestOutputs.Capture(new DoResults
                 {
                     IntOperand = intOperand,
                     StringOption = stringOption,

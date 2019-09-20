@@ -20,6 +20,13 @@ namespace CommandDotNet
         private readonly Dictionary<string, TokenTransformation> _tokenTransformationsByName = 
             new Dictionary<string, TokenTransformation>();
 
+        private readonly Dictionary<Type, Func<CommandContext, object>> _parameterResolversByType = new Dictionary<Type, Func<CommandContext, object>>
+        {
+            [typeof(CommandContext)] = ctx => ctx,
+            [typeof(IConsole)] = ctx => ctx.Console,
+            [typeof(CancellationToken)] = ctx => ctx.AppConfig.CancellationToken
+        };
+
         /// <summary>
         /// Configures the app to use the resolver to create instances of
         /// properties decorated with <see cref="InjectPropertyAttribute"/>
@@ -52,12 +59,11 @@ namespace CommandDotNet
         /// Types must be resolvable from the <see cref="CommandContext"/><br/>
         /// Default types: <see cref="CommandContext"/>, <see cref="IConsole"/>, <see cref="CancellationToken"/>
         /// </summary>
-        public readonly Dictionary<Type, Func<CommandContext, object>> ParameterResolversByType = new Dictionary<Type, Func<CommandContext, object>>
+        public AppConfigBuilder UseParameterResolver<T>(Func<CommandContext,T> resolver) where T: class
         {
-            [typeof(CommandContext)] = ctx => ctx,
-            [typeof(IConsole)] = ctx => ctx.Console,
-            [typeof(CancellationToken)] = ctx => ctx.AppConfig.CancellationToken
-        };
+            _parameterResolversByType.Add(typeof(T), resolver);
+            return this;
+        }
 
         /// <summary>
         /// Adds the transformation to the list of transformations applied to tokens
@@ -98,7 +104,7 @@ namespace CommandDotNet
         {
             var helpProvider = CustomHelpProvider ?? HelpTextProviderFactory.Create(appSettings);
 
-            return new AppConfig(appSettings, Console, DependencyResolver, helpProvider, TokenizationEvents, BuildEvents, Services, CancellationToken, ParameterResolversByType)
+            return new AppConfig(appSettings, Console, DependencyResolver, helpProvider, TokenizationEvents, BuildEvents, Services, CancellationToken, _parameterResolversByType)
             {
                 MiddlewarePipeline = _middlewareByStage
                     .SelectMany(kvp => kvp.Value.Select(v => new {stage = kvp.Key, v.order, v.middleware}) )
