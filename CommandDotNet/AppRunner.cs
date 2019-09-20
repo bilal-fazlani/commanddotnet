@@ -100,6 +100,8 @@ namespace CommandDotNet
             var result = await commandContext.AppConfig.MiddlewarePipeline
                 .InvokePipeline(commandContext).ConfigureAwait(false);
 
+            appConfig.OnRunCompleted?.Invoke(new EventArgs());
+
             return result;
         }
 

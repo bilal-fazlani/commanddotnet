@@ -45,6 +45,13 @@ namespace CommandDotNet
         /// </summary>
         public CancellationToken CancellationToken { get; set; } = CancellationToken.None;
 
+        /// <summary>
+        /// <see cref="OnRunCompleted"/> is triggered when after the pipeline has completed execution.
+        /// Use this to cleanup any events after the run.<br/>
+        /// This is useful for tests and when using new AppRunner instances to create a cli session.
+        /// </summary>
+        public event Action<EventArgs> OnRunCompleted;
+
         public BuildEvents BuildEvents { get; } = new BuildEvents();
         public TokenizationEvents TokenizationEvents { get; } = new TokenizationEvents();
 
@@ -104,7 +111,7 @@ namespace CommandDotNet
         {
             var helpProvider = CustomHelpProvider ?? HelpTextProviderFactory.Create(appSettings);
 
-            return new AppConfig(appSettings, Console, DependencyResolver, helpProvider, TokenizationEvents, BuildEvents, Services, CancellationToken, _parameterResolversByType)
+            return new AppConfig(appSettings, Console, DependencyResolver, helpProvider, OnRunCompleted, TokenizationEvents, BuildEvents, Services, CancellationToken, _parameterResolversByType)
             {
                 MiddlewarePipeline = _middlewareByStage
                     .SelectMany(kvp => kvp.Value.Select(v => new {stage = kvp.Key, v.order, v.middleware}) )
