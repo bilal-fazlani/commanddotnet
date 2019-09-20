@@ -19,7 +19,8 @@ namespace CommandDotNet.ClassModeling.Definitions
             command.Services.Set(commandDef);
             commandDef.Command = command;
 
-            var commandAttribute = commandDef.CustomAttributeProvider.GetCustomAttribute<CommandAttribute>();
+            var commandAttribute = commandDef.CustomAttributeProvider.GetCustomAttribute<CommandAttribute>() 
+                                   ?? commandDef.CustomAttributeProvider.GetCustomAttribute<ApplicationMetadataAttribute>();
             if (commandAttribute != null)
             {
                 command.Description = commandAttribute.Description;

@@ -11,4 +11,11 @@ namespace CommandDotNet
         
         public string ExtendedHelpText { get; set; }
     }
+
+    [Obsolete("Use CommandAttribute instead")]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    public class ApplicationMetadataAttribute : CommandAttribute
+    {
+
+    }
 }

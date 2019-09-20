@@ -154,7 +154,8 @@ cmd extended help" }
             });
         }
 
-        [Command(
+        // sanity check for ApplicationMetadata until it has been removed 
+        [ApplicationMetadata(
             Description = "app description",
             Name = "SomeApp",
             ExtendedHelpText = "app extended help")]
