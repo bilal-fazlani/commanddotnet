@@ -34,7 +34,7 @@ namespace CommandDotNet.Tests.FeatureTests
         }
 
         [Fact]
-        public void VerifyThrowThrows()
+        public void EnsureNoFalsePositives()
         {
             // this test ensures the previous test is not passing with a false positive
             var tokenSource = new CancellationTokenSource();
@@ -63,10 +63,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
         public class App
         {
-            public void Do()
-            {
-
-            }
+            public void Do() { }
         }
     }
 }

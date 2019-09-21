@@ -35,7 +35,7 @@ namespace CommandDotNet
 
         /// <summary>
         /// When the first argument is [debug], the framework will wait for a debugger to attach.<br/>
-        /// Note: <see cref="UseCancellationHandlers"/> to be able to cancel before attaching the debugger.
+        /// Note: Use with <see cref="UseCancellationHandlers"/> to be able to cancel before attaching the debugger.
         /// </summary>
         public static AppRunner UseDebugDirective(this AppRunner appRunner)
         {
@@ -89,6 +89,17 @@ namespace CommandDotNet
         public static AppRunner UseResponseFiles(this AppRunner appRunner)
         {
             return ExpandResponseFilesTransformation.UseResponseFiles(appRunner);
+        }
+
+        /// <summary>
+        /// Sets <see cref="AppConfig.CancellationToken"/> and cancels the token on
+        /// <see cref="Console.CancelKeyPress"/>, <see cref="AppDomain.ProcessExit"/> and
+        /// <see cref="AppDomain.UnhandledException"/> if <see cref="UnhandledExceptionEventArgs.IsTerminating"/> is true.<br/>
+        /// Once cancelled, the pipelines will not progress to the next step.
+        /// </summary>
+        public static AppRunner UseCancellationHandlers(this AppRunner appRunner)
+        {
+            return CancellationMiddleware.UseCancellationHandlers(appRunner);
         }
 
         private static void AssertDirectivesAreEnabled(AppRunner appRunner)

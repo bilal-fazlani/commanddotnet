@@ -29,6 +29,7 @@ namespace CommandDotNet.Example
 
             config?.Invoke(appSettings);
             return new AppRunner<TApp>(appSettings)
+                .UseCancellationHandlers()
                 .UseDebugDirective()
                 .UseParseDirective()
                 .UseVersionMiddleware()
@@ -65,6 +66,9 @@ namespace CommandDotNet.Example
 
             [SubCommand]
             public PipesApp PipesApp { get; set; }
+
+            [SubCommand]
+            public CancelMeApp CancelMeApp { get; set; }
         }
     }
 }
