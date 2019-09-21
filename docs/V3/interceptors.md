@@ -27,15 +27,15 @@ public class Calculator
     }
     
     [Command(Description = "Adds two numbers")]
-    public void Add(int value1, int value2, IConsole console)
+    public void Add(int x, int y, IConsole console)
     {
-        console.WriteLine(_calculator.Add(value1, value2));
+        console.WriteLine(_calculator.Add(x, y));
     }
 
     [Command(Description = "Subtracts the second number from the first")]
-    public void Subtract(int value1, int value2, IConsole console)
+    public void Subtract(int x, int x, IConsole console)
     {
-        console.WriteLine(_calculator.Subtract(value1, value2));
+        console.WriteLine(_calculator.Subtract(y, y));
     }
 }
 ```

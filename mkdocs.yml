@@ -28,7 +28,11 @@ nav:
     - v3:
       - V3/v3-changes.md
       - V3/middleware.md
+      - V3/cancellation.md
       - V3/interceptors.md
+      - V3/parameter-resolvers.md
+      - V3/piped-arguments.md
+      - V3/response-files.md
 # theme: readthedocs
 theme:
   name: 'material'
