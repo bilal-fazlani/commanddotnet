@@ -117,9 +117,7 @@ The middleware pipeline architecture obsoleted the CommandInvoker. Look at the `
     * [ ] move Humanizer into a separate nuget package
     * [ ] update CommandDotNet.Ioc... repos
 * [ ] make test tools available via nuget
-* [ ] list parser takes 
 * [ ] complete features
-    * [ ] Cancellation middleware
     * [ ] RemainingOperands
     * [ ] SeparatedArguments
     * [ ] argument arity
