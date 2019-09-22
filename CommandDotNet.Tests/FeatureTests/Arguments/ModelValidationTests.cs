@@ -118,6 +118,43 @@ Arguments:
                 .VerifyScenario(TestOutputHelper, scenario);
         }
 
+        [Fact]
+        public void Exec_WhenNoDependencyResolver_ValidatorIsCreated()
+        {
+            var scenario = new Scenario
+            {
+                WhenArgs = "Save",
+                Then =
+                {
+                    ExitCode = 2,
+                    ResultsContainsTexts = {"'Person' is invalid"}
+                }
+            };
+
+            new AppRunner<App>()
+                .UseFluentValidation()
+                .VerifyScenario(TestOutputHelper, scenario);
+        }
+
+        [Fact]
+        public void Exec_WhenValidatorNotRegistered_ValidatorIsCreated()
+        {
+            var scenario = new Scenario
+            {
+                WhenArgs = "Save",
+                Then =
+                {
+                    ExitCode = 2,
+                    ResultsContainsTexts = {"'Person' is invalid"}
+                }
+            };
+
+            new AppRunner<App>()
+                .UseFluentValidation()
+                .UseDependencyResolver(new TestDependencyResolver())
+                .VerifyScenario(TestOutputHelper, scenario);
+        }
+
         public class App
         {
             public TestOutputs TestOutputs { get; set; }
