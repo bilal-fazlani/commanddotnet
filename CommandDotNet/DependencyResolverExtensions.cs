@@ -15,7 +15,7 @@ namespace CommandDotNet
             try
             {
                 item = resolver.Resolve(type);
-                return true;
+                return item != null;
             }
             catch (Exception)
             {
