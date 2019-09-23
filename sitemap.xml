@@ -2,97 +2,132 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/quick-start/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/parameters/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/attributes/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/constructors/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/default-method/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/default-values/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/collections/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/argument-models/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/async-methods/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/custom-return-codes/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/nesting-commands/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/exceptions/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/directives/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://bilal-fazlani.github.io/commanddotnet/fluent-validation-for-parameters/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <loc>https://bilal-fazlani.github.io/commanddotnet/fluent-validation-for-argument-models/</loc>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/settings/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/dependency-injection/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/parameter-types/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://bilal-fazlani.github.io/commanddotnet/custom-interceptors/</loc>
-     <lastmod>2019-07-16</lastmod>
+     <lastmod>2019-09-23</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://bilal-fazlani.github.io/commanddotnet/V3/v3-changes/</loc>
+     <lastmod>2019-09-23</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://bilal-fazlani.github.io/commanddotnet/V3/middleware/</loc>
+     <lastmod>2019-09-23</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://bilal-fazlani.github.io/commanddotnet/V3/cancellation/</loc>
+     <lastmod>2019-09-23</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://bilal-fazlani.github.io/commanddotnet/V3/interceptors/</loc>
+     <lastmod>2019-09-23</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://bilal-fazlani.github.io/commanddotnet/V3/parameter-resolvers/</loc>
+     <lastmod>2019-09-23</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://bilal-fazlani.github.io/commanddotnet/V3/piped-arguments/</loc>
+     <lastmod>2019-09-23</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    <url>
+     <loc>https://bilal-fazlani.github.io/commanddotnet/V3/response-files/</loc>
+     <lastmod>2019-09-23</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>

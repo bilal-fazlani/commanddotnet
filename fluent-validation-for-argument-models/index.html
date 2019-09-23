@@ -11,7 +11,7 @@
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
       
-        <link rel="canonical" href="https://bilal-fazlani.github.io/commanddotnet/default-method/">
+        <link rel="canonical" href="https://bilal-fazlani.github.io/commanddotnet/fluent-validation-for-argument-models/">
       
       
       
@@ -38,7 +38,7 @@
     
     
       
-        <title>Default method - CommandDotNet</title>
+        <title>Fluent validation for parameters - CommandDotNet</title>
       
     
     
@@ -138,7 +138,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Default method
+                Fluent validation for parameters
               
             </span>
           
@@ -271,12 +271,10 @@
       
       
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
     
     <label class="md-nav__link" for="nav-3">
       Defining Commands
@@ -328,18 +326,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-    
-    <a href="./" title="Default method" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../default-method/" title="Default method" class="md-nav__link">
       Default method
     </a>
-    
   </li>
 
         
@@ -436,10 +427,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
     
     <label class="md-nav__link" for="nav-4">
       Extras
@@ -467,11 +460,18 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../fluent-validation-for-argument-models/" title="Fluent validation for parameters" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+    <a href="./" title="Fluent validation for parameters" class="md-nav__link md-nav__link--active">
       Fluent validation for parameters
     </a>
+    
   </li>
 
         
@@ -672,26 +672,52 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/bilal-fazlani/commanddotnet/edit/master/docs/default-method.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/bilal-fazlani/commanddotnet/edit/master/docs/fluent-validation-for-argument-models.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                  <h1>Default method</h1>
+                  <h1>Fluent validation for parameters</h1>
                 
-                <p>Right now, when you just execute the dll, without any commands, it shows help. If you want to call a method when application is executed without any 
-commands, you can do that with the help of <code class="codehilite"><span class="o">[</span><span class="n">DefaultMethod</span><span class="o">]</span><span class="w"></span></code> attribute.</p>
-<div class="codehilite"><pre><span></span><span class="na">        [DefaultMethod]</span>
-        <span class="k">public</span> <span class="k">void</span> <span class="nf">SomeMethod</span><span class="p">()</span>
+                <p>You can use <a href="https://github.com/JeremySkinner/FluentValidation">FluentValidation</a> with this library to validate <a href="../argument-models/">argument models</a>.</p>
+<p>Here's an example,</p>
+<div class="codehilite"><pre><span></span>    <span class="k">class</span> <span class="nc">Program</span>
+    <span class="p">{</span>
+        <span class="k">static</span> <span class="kt">int</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
         <span class="p">{</span>
-
+            <span class="n">AppRunner</span><span class="p">&lt;</span><span class="n">ValidationApp</span><span class="p">&gt;</span> <span class="n">appRunner</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AppRunner</span><span class="p">&lt;</span><span class="n">ValidationApp</span><span class="p">&gt;();</span>
+            <span class="k">return</span> <span class="n">appRunner</span><span class="p">.</span><span class="n">Run</span><span class="p">(</span><span class="n">args</span><span class="p">);</span>
         <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">ValidationApp</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">ValidateModel</span><span class="p">(</span><span class="n">PersonModel</span> <span class="n">person</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">string</span> <span class="n">content</span> <span class="p">=</span> <span class="n">JsonConvert</span><span class="p">.</span><span class="n">SerializeObject</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">Formatting</span><span class="p">.</span><span class="n">Indented</span><span class="p">);</span>
+            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">content</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="na">    [Validator(typeof(PersonValidator))]</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">PersonModel</span> <span class="p">:</span> <span class="n">IArgumentModel</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="kt">int</span> <span class="n">Id</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="k">public</span> <span class="kt">string</span> <span class="n">Email</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">PersonValidator</span> <span class="p">:</span> <span class="n">AbstractValidator</span><span class="p">&lt;</span><span class="n">PersonModel</span><span class="p">&gt;</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="nf">PersonValidator</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Id</span><span class="p">).</span><span class="n">GreaterThan</span><span class="p">(</span><span class="m">0</span><span class="p">);</span>
+            <span class="n">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Name</span><span class="p">).</span><span class="n">NotEmpty</span><span class="p">();</span>
+            <span class="n">RuleFor</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Email</span><span class="p">).</span><span class="n">NotEmpty</span><span class="p">().</span><span class="n">EmailAddress</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 </pre></div>
 
-<p>Some points to note about default method:</p>
-<ul>
-<li>It won't show up in help and can't be called explicitly with method name. The only way to execute it is not passing any command name</li>
-<li>It does not support any parameters</li>
-<li>It can have access to class level fields which are passed via constructor</li>
-</ul>
+<p>If the validation fails, app exits with return code 2 and prints validation error messages on screen.</p>
                 
                   
                 
@@ -704,9 +730,9 @@ commands, you can do that with the help of <code class="codehilite"><span class=
   <div id="disqus_thread"></div>
   <script>
     var disqus_config = function () {
-      this.page.url = "https://bilal-fazlani.github.io/commanddotnet/default-method/";
+      this.page.url = "https://bilal-fazlani.github.io/commanddotnet/fluent-validation-for-argument-models/";
       this.page.identifier =
-        "/default-method/";
+        "/fluent-validation-for-argument-models/";
     };
     (function() {
       var d = document, s = d.createElement("script");
@@ -728,7 +754,7 @@ commands, you can do that with the help of <code class="codehilite"><span class=
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../constructors/" title="Constructors" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../directives/" title="Directives" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -737,19 +763,19 @@ commands, you can do that with the help of <code class="codehilite"><span class=
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Constructors
+                Directives
               </span>
             </div>
           </a>
         
         
-          <a href="../default-values/" title="Default values" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../settings/" title="Settings" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Default values
+                Settings
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
