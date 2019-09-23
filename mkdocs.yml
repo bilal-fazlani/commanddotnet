@@ -18,13 +18,21 @@ nav:
       - Nesting commands: nesting-commands.md
       - Exceptions: exceptions.md
     - Extras:
-      - Directives: directives.md
-      - Fluent validation for parameters: fluent-validation-for-parameters.md
+      - directives.md
+      - Fluent validation for parameters: fluent-validation-for-argument-models.md
       - Settings: settings.md
     - Extensibility:
       - Dependency Injection: dependency-injection.md
       - Parameter types: parameter-types.md
       - Custom interceptors: custom-interceptors.md
+    - v3:
+      - V3/v3-changes.md
+      - V3/middleware.md
+      - V3/cancellation.md
+      - V3/interceptors.md
+      - V3/parameter-resolvers.md
+      - V3/piped-arguments.md
+      - V3/response-files.md
 # theme: readthedocs
 theme:
   name: 'material'
@@ -39,6 +47,7 @@ google_analytics:
 
 markdown_extensions:
   - admonition
+  - attr_list
   - codehilite
   - pymdownx.arithmatex
   - pymdownx.betterem:
@@ -56,6 +65,8 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.tilde
+  - toc:
+     permalink: "#"
 
 # Customization
 extra:

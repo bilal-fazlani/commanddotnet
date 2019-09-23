@@ -14,7 +14,7 @@ Supports all types with a string constructor or where a TypeConverter is defined
 - `FileInfo`
 - `DirectoryInfo`
 
-Also supports `List<T>`, `IEnumerable<T>` and `Nullable<T>` where T can be converted from string.  Note: `T[]` is not supported.
+Also supports `List<T>`, `IEnumerable<T>` and `Nullable<T>` where T can be converted from string.  Note: `T[]` is not currently supported.
 
 These are applicable for both - Options and Arguments
 
