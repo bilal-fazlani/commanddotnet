@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-TRAVIS_TAG=CommandDotNet.TestTools_1.0.0
+#TRAVIS_TAG=CommandDotNet.TestTools_1.0.0
 #TRAVIS_TAG=CommandDotNet.TestTools_1.0.0-preview1
 
 parseTravisTag () {
