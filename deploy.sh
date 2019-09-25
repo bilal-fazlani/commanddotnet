@@ -95,6 +95,8 @@ updateProjectRefsInNuspec () {
   for i in ${!PROJECT_REF_NAMES[@]}; do
     projectRefName=${PROJECT_REF_NAMES[$i]}
     projectRefVersion=${PROJECT_REF_VERSIONS[$i]}
+
+    chmod 666 $NUSPEC_FILE
     
     # dotnet pack has a bug: https://github.com/NuGet/Home/issues/7328
     # - project reference versions set to pack version 
