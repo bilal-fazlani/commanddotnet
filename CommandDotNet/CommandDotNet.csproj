@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
-    <Authors>Bilal Fazlani</Authors>
+    <Authors>Bilal Fazlani, Drew Burlingame</Authors>
     <NeutralLanguage>en-US</NeutralLanguage>
     <AssemblyTitle>CommandDotNet</AssemblyTitle>
     <Description>Model your command line application interface in a class</Description>

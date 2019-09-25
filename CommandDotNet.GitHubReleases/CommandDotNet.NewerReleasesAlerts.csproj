@@ -3,9 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
-    <Authors>Drew Burlingame</Authors>
+    <Authors>Bilal Fazlani, Drew Burlingame</Authors>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <Description>Print alerts if current version is on the latest version</Description>
+    <AssemblyTitle>CommandDotNet.NewerReleasesAlerts</AssemblyTitle>
+    <Description>Print alerts if current version of the app is not the latest published version</Description>
     <PackageTags>dotnet core; console; argument parse; test;</PackageTags>
     <PackageProjectUrl>https://github.com/bilal-fazlani/CommandDotNet</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -30,7 +31,15 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="Semver" Version="2.0.4" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Compile Remove="output\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="output\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="output\**" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommandDotNet\CommandDotNet.csproj" />
   </ItemGroup>

@@ -3,8 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
-    <Authors>Drew Burlingame</Authors>
+    <Authors>Bilal Fazlani, Drew Burlingame</Authors>
     <NeutralLanguage>en-US</NeutralLanguage>
+    <AssemblyTitle>CommandDotNet.TestTools</AssemblyTitle>
     <Description>Test your CommandDotNet application</Description>
     <PackageTags>dotnet core; console; argument parse; test;</PackageTags>
     <PackageProjectUrl>https://github.com/bilal-fazlani/CommandDotNet</PackageProjectUrl>
@@ -26,13 +27,19 @@
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-
+  <ItemGroup>
+    <Compile Remove="output\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="output\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="output\**" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.8.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\CommandDotNet\CommandDotNet.csproj" />
   </ItemGroup>
-
 </Project>
