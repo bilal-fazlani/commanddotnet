@@ -168,4 +168,4 @@ echo " "
 fixNupkgVersions
 
 # PUBLISH TO NUGET
-#dotnet nuget push -s https://api.nuget.org/v3/index.json -k $NUGET_API_KEY_COMMANDDOTNET CommandDotNet/output/$NUPKG_FILE
+dotnet nuget push -s https://api.nuget.org/v3/index.json -k $NUGET_API_KEY_COMMANDDOTNET CommandDotNet/output/$NUPKG_FILE
