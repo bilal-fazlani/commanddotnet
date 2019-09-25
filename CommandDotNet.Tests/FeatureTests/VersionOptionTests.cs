@@ -27,10 +27,6 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<App>(TestAppSettings.BasicHelp)
                 .UseVersionMiddleware()
                 .VerifyScenario(TestOutputHelper, scenario);
-
-            new AppRunner<App>(VersionEnabledBasicHelp)
-                .UseBackwardsCompatibilityMode()
-                .VerifyScenario(TestOutputHelper, scenario);
         }
 
         [Fact]
@@ -47,10 +43,6 @@ namespace CommandDotNet.Tests.FeatureTests
 
             new AppRunner<App>(TestAppSettings.DetailedHelp)
                 .UseVersionMiddleware()
-                .VerifyScenario(TestOutputHelper, scenario);
-
-            new AppRunner<App>(VersionEnabledDetailedHelp)
-                .UseBackwardsCompatibilityMode()
                 .VerifyScenario(TestOutputHelper, scenario);
         }
 
@@ -92,10 +84,6 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<App>()
                 .UseVersionMiddleware()
                 .VerifyScenario(TestOutputHelper, scenario);
-
-            new AppRunner<App>(VersionEnabled)
-                .UseBackwardsCompatibilityMode()
-                .VerifyScenario(TestOutputHelper, scenario);
         }
 
         [Fact]
@@ -113,10 +101,6 @@ namespace CommandDotNet.Tests.FeatureTests
             
             new AppRunner<App>()
                 .UseVersionMiddleware()
-                .VerifyScenario(TestOutputHelper, scenario);
-
-            new AppRunner<App>(VersionEnabled)
-                .UseBackwardsCompatibilityMode()
                 .VerifyScenario(TestOutputHelper, scenario);
         }
 

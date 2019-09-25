@@ -36,10 +36,6 @@ Arguments:
             new AppRunner<App>()
                 .UseFluentValidation()
                 .VerifyScenario(TestOutputHelper, scenario);
-
-            new AppRunner<App>()
-                .UseBackwardsCompatibilityMode()
-                .VerifyScenario(TestOutputHelper, scenario);
         }
 
         [Fact]
@@ -60,10 +56,6 @@ Arguments:
 
             new AppRunner<App>()
                 .UseFluentValidation()
-                .VerifyScenario(TestOutputHelper, scenario);
-
-            new AppRunner<App>()
-                .UseBackwardsCompatibilityMode()
                 .VerifyScenario(TestOutputHelper, scenario);
         }
 
@@ -89,11 +81,6 @@ Arguments:
                 .UseFluentValidation()
                 .UseDependencyResolver(resolver)
                 .VerifyScenario(TestOutputHelper, scenario);
-
-            new AppRunner<App>()
-                .UseBackwardsCompatibilityMode()
-                .UseDependencyResolver(resolver)
-                .VerifyScenario(TestOutputHelper, scenario);
         }
 
         [Fact]
@@ -109,11 +96,6 @@ Arguments:
 
             new AppRunner<App>()
                 .UseFluentValidation()
-                .UseDependencyResolver(resolver)
-                .VerifyScenario(TestOutputHelper, scenario);
-
-            new AppRunner<App>()
-                .UseBackwardsCompatibilityMode()
                 .UseDependencyResolver(resolver)
                 .VerifyScenario(TestOutputHelper, scenario);
         }

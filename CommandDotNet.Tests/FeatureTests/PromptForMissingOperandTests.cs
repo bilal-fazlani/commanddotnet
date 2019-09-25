@@ -129,10 +129,6 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<App>()
                 .UsePromptForMissingOperands()
                 .VerifyScenario(_output, scenario);
-
-            new AppRunner<App>(PromptingEnabled)
-                .UseBackwardsCompatibilityMode()
-                .VerifyScenario(_output, scenario);
         }
 
         class App

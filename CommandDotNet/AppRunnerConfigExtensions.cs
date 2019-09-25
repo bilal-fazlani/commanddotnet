@@ -11,22 +11,6 @@ namespace CommandDotNet
     /// <summary>Extensions to enable and configure features</summary>
     public static class AppRunnerConfigExtensions
     {
-        [Obsolete("replace with UseVersionMiddleware, UseFluentValidation and UsePromptForMissingOperands")]
-        public static AppRunner UseBackwardsCompatibilityMode(this AppRunner appRunner)
-        {
-            if (appRunner.AppSettings.EnableVersionOption)
-            {
-                appRunner.UseVersionMiddleware();
-            }
-
-            if (appRunner.AppSettings.PromptForMissingOperands)
-            {
-                appRunner.UsePromptForMissingOperands();
-            }
-
-            return appRunner.UseFluentValidation();
-        }
-
         /// <summary>Adds the --version option to the app</summary>
         public static AppRunner UseVersionMiddleware(this AppRunner appRunner)
         {
