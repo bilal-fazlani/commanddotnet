@@ -42,17 +42,6 @@ namespace CommandDotNet
             return PipedInputMiddleware.EnablePipedInput(appRunner);
         }
 
-        /// <summary>Enables FluentValidation for <see cref="IArgumentModel"/>s</summary>
-        public static AppRunner UseFluentValidation(this AppRunner appRunner)
-        {
-            // TODO: move FluentValidation into a separate repo & nuget package?
-            //       there are other ways to do validation that could also
-            //       be applied to parameters
-
-            return appRunner.Configure(c =>
-                c.UseMiddleware(ModelValidator.FluentValidationMiddleware, MiddlewareStages.PostBindValuesPreInvoke));
-        }
-
         /// <summary>Use the <see cref="IDependencyResolver"/> to create the command classes.</summary>
         public static AppRunner UseDependencyResolver(
             this AppRunner appRunner, 

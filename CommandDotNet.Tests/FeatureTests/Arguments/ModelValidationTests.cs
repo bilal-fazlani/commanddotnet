@@ -1,3 +1,4 @@
+using CommandDotNet.FluentValidation;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using FluentValidation;

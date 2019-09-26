@@ -1,6 +1,7 @@
 ﻿using System;
 using CommandDotNet.Example.DocExamples;
 using CommandDotNet.Example.Issues;
+using CommandDotNet.FluentValidation;
 using CommandDotNet.Help;
 using CommandDotNet.NewerReleasesAlerts;
 
