@@ -14,8 +14,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 commandDef.Name, 
                 commandDef.CustomAttributeProvider,
                 commandDef.IsExecutable,
-                parent, 
-                commandDef.HasInterceptor);
+                parent);
             command.Services.Set(commandDef);
             commandDef.Command = command;
 

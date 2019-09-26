@@ -40,10 +40,9 @@ namespace CommandDotNet.ClassModeling
                     Invocation = commandDef.InvokeMethodDef
                 };
                 commandDef.Command.GetParentCommands(includeCurrent:false)
-                    .Where(cmd => cmd.HasInterceptor)
-                    .Reverse()
                     .Select(cmd => (cmd, def: cmd.Services.Get<ICommandDef>()))
-                    .Where(c => c.def != null) // in case command is defined by a different middleware
+                    .Where(c => c.def != null && c.def.HasInterceptor) // in case command is defined by a different middleware
+                    .Reverse()
                     .ForEach(c =>
                     {
                         pipeline.AncestorInterceptors.Add(new InvocationStep

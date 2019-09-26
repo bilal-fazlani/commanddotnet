@@ -21,28 +21,30 @@ namespace CommandDotNet
         public Command(string name, 
             ICustomAttributeProvider customAttributeProvider,
             bool isExecutable,
-            Command parent = null,
-            bool hasInterceptor = false)
+            Command parent = null)
         {
             Name = name;
             CustomAttributes = customAttributeProvider;
             IsExecutable = isExecutable;
             Parent = parent;
-            HasInterceptor = hasInterceptor;
         }
 
         public string Name { get; }
         public string Description { get; set; }
         public string ExtendedHelpText { get; set; }
 
+        /// <summary>
+        /// When true, the command can be executed.<br/>
+        /// When false, a subcommand must be specified.<br/>
+        /// The final command specified must be an executable command must be.
+        /// </summary>
+        public bool IsExecutable { get; }
+
         /// <summary>The <see cref="Operand"/>s for this <see cref="Command"/></summary>
         public IReadOnlyCollection<Operand> Operands => _operands.AsReadOnly();
         
         /// <summary>The <see cref="Option"/>s for this <see cref="Command"/></summary>
         public IReadOnlyCollection<Option> Options => _options.AsReadOnly();
-
-        public bool IsExecutable { get; }
-        public bool HasInterceptor { get; }
 
         /// <summary>
         /// The <see cref="Command"/> that hosts this <see cref="Command"/>.
