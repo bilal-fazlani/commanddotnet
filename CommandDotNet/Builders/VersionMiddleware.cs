@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Rendering;
 
@@ -8,7 +7,6 @@ namespace CommandDotNet.Builders
     internal static class VersionMiddleware
     {
         private const string VersionOptionName = "version";
-        private const string VersionTemplate = "-v | --" + VersionOptionName;
 
         internal static AppRunner UseVersionMiddleware(AppRunner appRunner)
         {
@@ -31,15 +29,9 @@ namespace CommandDotNet.Builders
                 return;
             }
 
-            var option = new Option(VersionTemplate, ArgumentArity.Zero)
+            var option = new Option(VersionOptionName, 'v', TypeInfo.Flag, ArgumentArity.Zero)
             {
                 Description = "Show version information",
-                TypeInfo = new TypeInfo
-                {
-                    Type = typeof(bool),
-                    UnderlyingType = typeof(bool),
-                    DisplayName = Constants.TypeDisplayNames.Flag
-                },
                 IsMiddlewareOption = true,
                 Arity = ArgumentArity.Zero
             };

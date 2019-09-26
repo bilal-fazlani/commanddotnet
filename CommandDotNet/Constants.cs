@@ -1,12 +1,10 @@
 ﻿namespace CommandDotNet
 {
-    internal static class Constants
+    public static class Constants
     {
-        public const string HelpTemplate = "-h | --help";
+        public static readonly string HelpOptionName = "help";
 
-        public static readonly ArgumentTemplate HelpArgumentTemplate = ArgumentTemplate.Parse(HelpTemplate);
-
-        public static class TypeDisplayNames
+        internal static class TypeDisplayNames
         {
             public const string Flag = null;
 

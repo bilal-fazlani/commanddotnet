@@ -152,7 +152,7 @@ namespace CommandDotNet.Help
         /// <summary>Hint displayed in the subcommands section for getting help for a subcommand.</summary>
         protected virtual string SubcommandHelpHint(Command command) =>
             $"Use \"{AppName(command)}{PadFront(CommandPath(command))} " +
-            $"[command] --{Constants.HelpArgumentTemplate.LongName}\" " +
+            $"[command] --{Constants.HelpOptionName}\" " +
             "for more information about a command.";
 
         protected virtual string CommandName(Command command) => command.Name;
@@ -162,7 +162,7 @@ namespace CommandDotNet.Help
         protected virtual string ArgumentName<T>(T argument) where T : IArgument =>
             argument.SwitchFunc(
                 operand => operand.Name,
-                option => option.Template);
+                option => ArgumentTemplate.Build(option.LongName, option.ShortName));
 
         protected virtual string ArgumentFootNoteSymbols<T>(Command command, T argument) where T: IArgument =>
             argument.SwitchFunc(

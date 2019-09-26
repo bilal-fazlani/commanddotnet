@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using CommandDotNet.Builders;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
@@ -59,11 +60,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 argumentDef, 
                 appConfig, 
                 argumentDef.HasDefaultValue ? argumentDef.DefaultValue : null,
-                new TypeInfo
-                {
-                    Type = argumentDef.Type,
-                    UnderlyingType = underlyingType,
-                }, 
+                new TypeInfo(argumentDef.Type, underlyingType), 
                 isInterceptorOption);
             argumentDef.Argument = argument;
             argument.Services.Set(argumentDef);
@@ -89,26 +86,43 @@ namespace CommandDotNet.ClassModeling.Definitions
             {
                 var operandAttr = argumentDef.Attributes.GetCustomAttribute<OperandAttribute>() 
                                   ?? (INameAndDescription) argumentDef.Attributes.GetCustomAttribute<ArgumentAttribute>();
-                return new Operand(operandAttr?.Name ?? argumentDef.Name, argumentDef.Attributes)
+                return new Operand(operandAttr?.Name ?? argumentDef.Name, typeInfo, argumentDef.Attributes)
                 {
                     Description = operandAttr?.Description,
                     Arity = ArgumentArity.Default(argumentDef.Type, BooleanMode.Explicit),
-                    DefaultValue = defaultValue,
-                    TypeInfo = typeInfo
+                    DefaultValue = defaultValue
                 };
             }
 
             var optionAttr = argumentDef.Attributes.GetCustomAttribute<OptionAttribute>();
-            var argumentArity = ArgumentArity.Default(argumentDef.Type, GetOptionBooleanMode(argumentDef, appConfig.AppSettings.BooleanMode, optionAttr));
+            var booleanMode = GetOptionBooleanMode(argumentDef, appConfig.AppSettings.BooleanMode, optionAttr);
+            var argumentArity = ArgumentArity.Default(argumentDef.Type, booleanMode);
+
             return new Option(
-                new ArgumentTemplate(longName: optionAttr?.LongName ?? argumentDef.Name, shortNameAsString: optionAttr?.ShortName).ToString(),
-                argumentArity, customAttributeProvider: argumentDef.Attributes, isInterceptorOption: isInterceptorOption)
+                optionAttr?.LongName ?? argumentDef.Name,
+                ParseShortName(optionAttr?.ShortName),
+                typeInfo, argumentArity, customAttributeProvider: argumentDef.Attributes, isInterceptorOption: isInterceptorOption)
             {
                 Description = optionAttr?.Description,
                 Inherited = optionAttr?.Inherited ?? false,
-                DefaultValue = defaultValue,
-                TypeInfo = typeInfo
+                DefaultValue = defaultValue
             };
+        }
+
+        private static char? ParseShortName(string shortNameAsString)
+        {
+            if (shortNameAsString.IsNullOrWhitespace())
+            {
+                return null;
+            }
+
+            if (shortNameAsString.Length > 1)
+            {
+                throw new ArgumentException($"Short name must be a single character: {shortNameAsString}",
+                    nameof(shortNameAsString));
+            }
+
+            return shortNameAsString.Single();
         }
 
         private static BooleanMode GetOptionBooleanMode(

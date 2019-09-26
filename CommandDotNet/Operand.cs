@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using CommandDotNet.ClassModeling.Definitions;
@@ -11,9 +12,10 @@ namespace CommandDotNet
 {
     public class Operand : IArgument
     {
-        public Operand(string name, ICustomAttributeProvider customAttributeProvider = null)
+        public Operand(string name, TypeInfo typeInfo, ICustomAttributeProvider customAttributeProvider = null)
         {
-            Name = name;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            TypeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
             Aliases = new[] {name};
             CustomAttributes = customAttributeProvider ?? NullCustomAttributeProvider.Instance;
         }
@@ -47,7 +49,7 @@ namespace CommandDotNet
 
         public override string ToString()
         {
-            return $"Operand: {new ArgumentTemplate(longName:Name, typeDisplayName:TypeInfo.DisplayName)}";
+            return $"Operand: {Name}";
         }
 
         private bool Equals(Operand other)

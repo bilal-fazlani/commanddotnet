@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
@@ -14,7 +13,7 @@ namespace CommandDotNet.Parsing
         {
             var argumentValues = commandContext.ParseResult.ArgumentValues;
 
-            if (!argumentValues.Contains(Constants.HelpArgumentTemplate.LongName))
+            if (!argumentValues.Contains(Constants.HelpOptionName))
             {
                 var console = commandContext.Console;
                 var command = commandContext.ParseResult.TargetCommand;

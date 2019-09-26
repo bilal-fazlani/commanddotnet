@@ -15,21 +15,27 @@ namespace CommandDotNet
     {
         private readonly HashSet<string> _aliases;
         
-        public Option(string template, IArgumentArity arity, 
+        public Option(
+            string longName,
+            char? shortName,
+            TypeInfo typeInfo,
+            IArgumentArity arity, 
             IEnumerable<string> aliases = null, 
             ICustomAttributeProvider customAttributeProvider = null, 
             bool isInterceptorOption = false)
         {
-            Template = template;
+            if (longName.IsNullOrWhitespace() && shortName.IsNullOrWhitespace())
+            {
+                throw new ArgumentException("a long or short name is required");
+            }
+
+            TypeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
             Arity = arity;
             IsInterceptorOption = isInterceptorOption;
             CustomAttributes = customAttributeProvider ?? NullCustomAttributeProvider.Instance;
 
-            var argumentTemplate = ArgumentTemplate.Parse(template);
-            LongName = argumentTemplate.LongName;
-            ShortName = argumentTemplate.ShortName;
-
-            TypeInfo = new TypeInfo {DisplayName = argumentTemplate.TypeDisplayName};
+            LongName = longName;
+            ShortName = shortName;
 
             _aliases = aliases == null
                 ? new HashSet<string>()
@@ -39,6 +45,17 @@ namespace CommandDotNet
         }
 
         public string Name => LongName ?? ShortName.ToString();
+
+        /// <summary>A single character that will be prefixed with a single hyphen.</summary>
+        public char? ShortName { get; }
+
+        /// <summary>The long name that will be prefixed with a double hyphen.</summary>
+        public string LongName { get; }
+
+        /// <summary>The aliases defined for this argument</summary>
+        public IReadOnlyCollection<string> Aliases => _aliases;
+
+        /// <summary>Describes the option</summary>
         public string Description { get; set; }
 
         /// <summary>The <see cref="ITypeInfo"/> for this argument</summary>
@@ -55,21 +72,6 @@ namespace CommandDotNet
         /// i.e. enum arguments will list all values in the enum.
         /// </summary>
         public IReadOnlyCollection<string> AllowedValues { get; set; }
-
-        /// <summary>The aliases defined for this argument</summary>
-        public IReadOnlyCollection<string> Aliases => _aliases;
-
-        /// <summary>
-        /// The template for the option.  A combination of <see cref="ShortName"/> and <see cref="LongName"/>
-        /// e.g. "-d|--dryrun"
-        /// </summary>
-        public string Template { get; }
-
-        /// <summary>A single character that will be prefixed with a single hyphen.</summary>
-        public char? ShortName { get; }
-
-        /// <summary>The long name that will be prefixed with a double hyphen.</summary>
-        public string LongName { get; }
 
         /// <summary>If true, this option is inherited from a command interceptor method and can be specified after the target command</summary>
         public bool Inherited { get; set; }
@@ -103,7 +105,7 @@ namespace CommandDotNet
 
         public override string ToString()
         {
-            return $"Option: {new ArgumentTemplate(longName: LongName, shortName: ShortName, typeDisplayName: TypeInfo.DisplayName)}";
+            return $"Option: {Name}";
         }
 
         private bool Equals(Option other)
