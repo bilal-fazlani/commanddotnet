@@ -9,7 +9,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         private readonly ParameterInfo _parameterInfo;
         private readonly Action<object> _assignValue;
 
-        public ArgumentType ArgumentType { get; }
+        public CommandNodeType CommandNodeType { get; }
 
         public string Name { get; }
 
@@ -25,16 +25,16 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public ParameterArgumentDef(
             ParameterInfo parameterInfo,
-            ArgumentType argumentType,
+            CommandNodeType commandNodeType,
             AppConfig appConfig,
             Action<object> assignValue)
         {
             _parameterInfo = parameterInfo ?? throw new ArgumentNullException(nameof(parameterInfo));
             _assignValue = assignValue ?? throw new ArgumentNullException(nameof(assignValue));
 
-            ArgumentType = argumentType;
+            CommandNodeType = commandNodeType;
 
-            Name = parameterInfo.BuildName(appConfig);
+            Name = parameterInfo.BuildName(commandNodeType, appConfig);
         }
 
         public void SetValue(object value)

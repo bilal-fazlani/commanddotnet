@@ -53,9 +53,11 @@ namespace CommandDotNet.Execution
         internal IReadOnlyCollection<ExecutionMiddleware> MiddlewarePipeline { get; set; }
         internal IReadOnlyCollection<TokenTransformation> TokenTransformations { get; set; }
         internal Dictionary<Type, Func<CommandContext, object>> ParameterResolversByType { get; }
+        internal NameTransformation NameTransformation { get; }
 
         public AppConfig(AppSettings appSettings, IConsole console,
-            IDependencyResolver dependencyResolver, IHelpProvider helpProvider, Action<EventArgs> onRunCompleted,
+            IDependencyResolver dependencyResolver, IHelpProvider helpProvider, 
+            NameTransformation nameTransformation, Action<EventArgs> onRunCompleted,
             TokenizationEvents tokenizationEvents, BuildEvents buildEvents, IServices services,
             CancellationToken cancellationToken,
             Dictionary<Type, Func<CommandContext, object>> parameterResolversByType)
@@ -64,6 +66,7 @@ namespace CommandDotNet.Execution
             Console = console;
             DependencyResolver = dependencyResolver;
             HelpProvider = helpProvider;
+            NameTransformation = nameTransformation ?? ((memberName, overrideName, kind) => overrideName ?? memberName);
             OnRunCompleted = onRunCompleted;
             TokenizationEvents = tokenizationEvents;
             BuildEvents = buildEvents;

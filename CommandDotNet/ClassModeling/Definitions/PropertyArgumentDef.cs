@@ -12,16 +12,16 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public PropertyArgumentDef(
             PropertyInfo propertyInfo,
-            ArgumentType argumentType,
+            CommandNodeType commandNodeType,
             AppConfig appConfig,
             object modelInstance)
         {
             _propertyInfo = propertyInfo ?? throw new ArgumentNullException(nameof(propertyInfo));
             _modelInstance = modelInstance ?? throw new ArgumentNullException(nameof(modelInstance));
 
-            ArgumentType = argumentType;
+            CommandNodeType = commandNodeType;
 
-            Name = propertyInfo.BuildName(appConfig);
+            Name = propertyInfo.BuildName(commandNodeType, appConfig);
 
             DefaultValue = propertyInfo.GetValue(modelInstance);
 
@@ -36,7 +36,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             HasDefaultValue = DefaultValue != DBNull.Value;
         }
 
-        public ArgumentType ArgumentType { get; }
+        public CommandNodeType CommandNodeType { get; }
 
         public string Name { get; }
 

@@ -82,7 +82,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             TypeInfo typeInfo, 
             bool isInterceptorOption)
         {
-            if (argumentDef.ArgumentType == ArgumentType.Operand)
+            if (argumentDef.CommandNodeType == CommandNodeType.Operand)
             {
                 var operandAttr = argumentDef.Attributes.GetCustomAttribute<OperandAttribute>() 
                                   ?? (INameAndDescription) argumentDef.Attributes.GetCustomAttribute<ArgumentAttribute>();
@@ -93,20 +93,26 @@ namespace CommandDotNet.ClassModeling.Definitions
                     DefaultValue = defaultValue
                 };
             }
-
-            var optionAttr = argumentDef.Attributes.GetCustomAttribute<OptionAttribute>();
-            var booleanMode = GetOptionBooleanMode(argumentDef, appConfig.AppSettings.BooleanMode, optionAttr);
-            var argumentArity = ArgumentArity.Default(argumentDef.Type, booleanMode);
-
-            return new Option(
-                optionAttr?.LongName ?? argumentDef.Name,
-                ParseShortName(optionAttr?.ShortName),
-                typeInfo, argumentArity, customAttributeProvider: argumentDef.Attributes, isInterceptorOption: isInterceptorOption)
+            
+            if (argumentDef.CommandNodeType == CommandNodeType.Option)
             {
-                Description = optionAttr?.Description,
-                Inherited = optionAttr?.Inherited ?? false,
-                DefaultValue = defaultValue
-            };
+                var optionAttr = argumentDef.Attributes.GetCustomAttribute<OptionAttribute>();
+                var booleanMode = GetOptionBooleanMode(argumentDef, appConfig.AppSettings.BooleanMode, optionAttr);
+                var argumentArity = ArgumentArity.Default(argumentDef.Type, booleanMode);
+
+                return new Option(
+                    optionAttr?.LongName ?? argumentDef.Name,
+                    ParseShortName(optionAttr?.ShortName),
+                    typeInfo, argumentArity, customAttributeProvider: argumentDef.Attributes,
+                    isInterceptorOption: isInterceptorOption)
+                {
+                    Description = optionAttr?.Description,
+                    Inherited = optionAttr?.Inherited ?? false,
+                    DefaultValue = defaultValue
+                };
+            }
+
+            throw new ArgumentOutOfRangeException($"Unknown argument type: {argumentDef.CommandNodeType}");
         }
 
         private static char? ParseShortName(string shortNameAsString)

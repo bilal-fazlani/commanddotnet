@@ -45,7 +45,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             CommandHostClassType = classType ?? throw new ArgumentNullException(nameof(classType));
             _commandContext = commandContext ?? throw new ArgumentNullException(nameof(commandContext));
 
-            Name = classType.BuildName(commandContext.AppConfig);
+            Name = classType.BuildName(CommandNodeType.Command, commandContext.AppConfig);
 
             var (interceptorMethod, defaultCommand, localCommands) = ParseMethods(commandContext.AppConfig);
 

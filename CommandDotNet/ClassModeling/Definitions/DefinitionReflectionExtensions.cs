@@ -8,16 +8,20 @@ namespace CommandDotNet.ClassModeling.Definitions
 {
     internal static class DefinitionReflectionExtensions
     {
-        internal static string BuildName(this ParameterInfo parameterInfo, AppConfig appConfig)
+        internal static string BuildName(this ParameterInfo parameterInfo, CommandNodeType commandNodeType, AppConfig appConfig)
         {
-            return parameterInfo.GetCustomAttributes().OfType<INameAndDescription>().FirstOrDefault()?.Name
-                   ?? parameterInfo.Name.ChangeCase(appConfig.AppSettings.Case);
+            return BuildName(parameterInfo, parameterInfo.Name, commandNodeType, appConfig);
         }
 
-        internal static string BuildName(this MemberInfo memberInfo, AppConfig appConfig)
+        internal static string BuildName(this MemberInfo memberInfo, CommandNodeType commandNodeType, AppConfig appConfig)
         {
-            return memberInfo.GetCustomAttributes().OfType<INameAndDescription>().FirstOrDefault()?.Name 
-                   ?? memberInfo.Name.ChangeCase(appConfig.AppSettings.Case);
+            return BuildName(memberInfo, memberInfo.Name, commandNodeType, appConfig);
+        }
+
+        private static string BuildName(ICustomAttributeProvider attributes, string memberName, CommandNodeType commandNodeType, AppConfig appConfig)
+        {
+            var overrideName = attributes.GetCustomAttributes(true).OfType<INameAndDescription>().FirstOrDefault()?.Name;
+            return appConfig.NameTransformation(memberName, overrideName, commandNodeType);
         }
 
         internal static bool IsOption(this ICustomAttributeProvider attributeProvider, ArgumentMode argumentMode)

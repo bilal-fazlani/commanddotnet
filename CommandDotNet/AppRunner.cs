@@ -37,7 +37,7 @@ namespace CommandDotNet
     public class AppRunner
     {
         private readonly Type _rootCommandType;
-        private readonly AppConfigBuilder _appConfigBuilder = new AppConfigBuilder();
+        private readonly AppConfigBuilder _appConfigBuilder;
 
         public readonly AppSettings AppSettings;
 
@@ -45,6 +45,7 @@ namespace CommandDotNet
         {
             _rootCommandType = rootCommandType ?? throw new ArgumentNullException(nameof(rootCommandType));
             AppSettings = settings ?? new AppSettings();
+            _appConfigBuilder = new AppConfigBuilder(AppSettings);
             AddCoreMiddleware();
         }
 
@@ -94,7 +95,7 @@ namespace CommandDotNet
         {
             var tokens = args.Tokenize(includeDirectives: AppSettings.EnableDirectives);
 
-            var appConfig = _appConfigBuilder.Build(AppSettings);
+            var appConfig = _appConfigBuilder.Build();
             var commandContext = new CommandContext(args, tokens, appConfig);
 
             var result = await commandContext.AppConfig.MiddlewarePipeline

@@ -27,6 +27,14 @@ namespace CommandDotNet
             [typeof(CancellationToken)] = ctx => ctx.AppConfig.CancellationToken
         };
 
+        public AppConfigBuilder(AppSettings appSettings)
+        {
+            AppSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
+            NameTransformation = (memberName, overrideName, kind) => overrideName ?? memberName.ChangeCase(AppSettings.Case);
+        }
+
+        public AppSettings AppSettings { get; }
+
         /// <summary>
         /// Configures the app to use the resolver to create instances of
         /// properties decorated with <see cref="InjectPropertyAttribute"/>
@@ -35,6 +43,17 @@ namespace CommandDotNet
 
         /// <summary>Replace the internal help provider with given help provider</summary>
         public IHelpProvider CustomHelpProvider { get; set; }
+
+        /// <summary>
+        /// Add a name transformation to enforce name consistency across commands, operands and options.<br/>
+        /// memberName: The name of the class, method, property or parameter defining the class or argument.<br/>
+        /// nameOverride:The name provided via attribute or other extensibility point.<br/>
+        /// commandNodeType: the <see cref="CommandNodeType"/> the name is for.
+        /// </summary>
+        /// <remarks>
+        /// To enforce casing rules, configure `appRunner.UseNameCasing(...)` from the nuget package CommandDotNet.NameCasing
+        /// </remarks>
+        public NameTransformation NameTransformation { get; set; }
 
         /// <summary>Replace the internal system console with provided console</summary>
         public IConsole Console { get; set; } = new SystemConsole();
@@ -107,11 +126,14 @@ namespace CommandDotNet
             return this;
         }
 
-        internal AppConfig Build(AppSettings appSettings)
+        internal AppConfig Build()
         {
-            var helpProvider = CustomHelpProvider ?? HelpTextProviderFactory.Create(appSettings);
+            var helpProvider = CustomHelpProvider ?? HelpTextProviderFactory.Create(AppSettings);
 
-            return new AppConfig(appSettings, Console, DependencyResolver, helpProvider, OnRunCompleted, TokenizationEvents, BuildEvents, Services, CancellationToken, _parameterResolversByType)
+            return new AppConfig(
+                AppSettings, Console, DependencyResolver, helpProvider, NameTransformation,
+                OnRunCompleted, TokenizationEvents, BuildEvents, Services, 
+                CancellationToken, _parameterResolversByType)
             {
                 MiddlewarePipeline = _middlewareByStage
                     .SelectMany(kvp => kvp.Value.Select(v => new {stage = kvp.Key, v.order, v.middleware}) )

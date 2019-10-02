@@ -198,9 +198,9 @@ namespace CommandDotNet.ClassModeling.Definitions
                 .SelectMany(propertyInfo => GetArgsFromProperty(propertyInfo, argumentMode, instance));
         }
 
-        private static ArgumentType GetArgumentType(ICustomAttributeProvider info, ArgumentMode argumentMode)
+        private static CommandNodeType GetArgumentType(ICustomAttributeProvider info, ArgumentMode argumentMode)
         {
-            return info.IsOption(argumentMode) ? ArgumentType.Option : ArgumentType.Operand;
+            return info.IsOption(argumentMode) ? CommandNodeType.Option : CommandNodeType.Operand;
         }
 
         public override string ToString()

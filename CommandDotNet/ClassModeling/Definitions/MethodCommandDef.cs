@@ -23,7 +23,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         {
             _method = method;
 
-            Name = method.BuildName(appConfig);
+            Name = method.BuildName(CommandNodeType.Command, appConfig);
             CommandHostClassType = commandHostClassType;
             InvokeMethodDef = new MethodDef(method, appConfig);
         }
