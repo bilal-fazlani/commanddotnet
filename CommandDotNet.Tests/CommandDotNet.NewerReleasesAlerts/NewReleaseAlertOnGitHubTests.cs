@@ -6,7 +6,7 @@ using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests.NewReleaseAlerts
+namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
 {
     public class NewReleaseAlertOnGitHubTests
     {

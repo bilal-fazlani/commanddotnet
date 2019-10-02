@@ -6,7 +6,7 @@ using FluentValidation.Attributes;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests.Arguments
+namespace CommandDotNet.Tests.CommandDotNet.FluentValidation
 {
     public class ModelValidationTests : TestBase
     {
