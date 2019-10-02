@@ -46,5 +46,20 @@ namespace CommandDotNet
                 }
             }
         }
+
+        public static bool HelpWasRequested(this Command command)
+        {
+            return command.HasRawValues(Constants.HelpOptionName);
+        }
+
+        public static bool HasRawValues(this Command command, string alias)
+        {
+            return command.FindRawValues(alias) != null;
+        }
+
+        public static ICollection<string> FindRawValues(this Command command, string alias)
+        {
+            return command.FindOption(alias)?.RawValues;
+        }
     }
 }

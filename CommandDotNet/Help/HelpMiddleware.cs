@@ -52,7 +52,7 @@ namespace CommandDotNet.Help
                 return Task.FromResult(1);
             }
 
-            if (parseResult.ArgumentValues.Contains(Constants.HelpOptionName))
+            if (parseResult.HelpWasRequested())
             {
                 Print(commandContext, targetCommand);
                 return Task.FromResult(0);

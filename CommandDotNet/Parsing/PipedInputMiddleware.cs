@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
+using CommandDotNet.Extensions;
 using CommandDotNet.Rendering;
 
 namespace CommandDotNet.Parsing
@@ -36,7 +37,14 @@ namespace CommandDotNet.Parsing
                 if (operand != null)
                 {
                     var pipedInput = ctx.Services.GetOrAdd(() => GetPipedInput(ctx.Console));
-                    ctx.ParseResult.ArgumentValues.GetOrAdd(operand).AddRange(pipedInput);
+                    if (operand.RawValues == null)
+                    {
+                        operand.RawValues = pipedInput;
+                    }
+                    else
+                    {
+                        operand.RawValues.AddRange(pipedInput);
+                    }
                 }
             }
 

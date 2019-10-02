@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Parsing
@@ -22,26 +23,25 @@ namespace CommandDotNet.Parsing
         public IReadOnlyCollection<Token> SeparatedArguments { get; }
 
         /// <summary>
-        /// String values for defined arguments are stored in <see cref="ArgumentValues"/>.
-        /// These values have not been converted to a system type yet. 
-        /// </summary>
-        public ArgumentValues ArgumentValues { get; }
-
-        /// <summary>
         /// An exception encountered while parsing the commands.
         /// Help should be printed for the <see cref="TargetCommand"/>
         /// </summary>
         public Exception ParseError { get; }
 
+        /// <summary>
+        /// Returns true if the help option was specified
+        /// for the target command or any of its parent commands
+        /// </summary>
+        public bool HelpWasRequested() =>
+            TargetCommand.GetParentCommands(includeCurrent: true).Any(c => c.HelpWasRequested());
+
         public ParseResult(Command command,
             IReadOnlyCollection<Token> remainingOperands,
-            IReadOnlyCollection<Token> separatedArguments,
-            ArgumentValues argumentValues)
+            IReadOnlyCollection<Token> separatedArguments)
         {
             TargetCommand = command ?? throw new ArgumentNullException(nameof(command));
             RemainingOperands = remainingOperands ?? new List<Token>();
             SeparatedArguments = separatedArguments ?? new List<Token>();
-            ArgumentValues = argumentValues;
         }
 
         public ParseResult(Command command, Exception exception)
@@ -50,7 +50,6 @@ namespace CommandDotNet.Parsing
             ParseError = exception ?? throw new ArgumentNullException(nameof(exception));
             RemainingOperands = new List<Token>();
             SeparatedArguments = new List<Token>();
-            ArgumentValues = new ArgumentValues();
         }
     }
 }

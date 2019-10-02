@@ -14,7 +14,6 @@ namespace CommandDotNet.ClassModeling
         internal static Task<int> BindValues(CommandContext commandContext, ExecutionDelegate next)
         {
             var console = commandContext.Console;
-            var argumentValues = commandContext.ParseResult.ArgumentValues;
             var parserFactory = new ParserFactory(commandContext.AppConfig.AppSettings);
 
             bool SetFromStringInput(IArgumentDef argDef, IEnumerable<string> values, out int returnCode)
@@ -46,9 +45,9 @@ namespace CommandDotNet.ClassModeling
             foreach (var argumentDef in argumentDefs)
             {
                 var argument = argumentDef.Argument;
-                if (argumentValues.TryGetValues(argument, out var values))
+                if (!argument.RawValues.IsNullOrEmpty())
                 {
-                    if (!SetFromStringInput(argumentDef, values, out int returnCode))
+                    if (!SetFromStringInput(argumentDef, argument.RawValues, out int returnCode))
                     {
                         return Task.FromResult(returnCode);
                     }

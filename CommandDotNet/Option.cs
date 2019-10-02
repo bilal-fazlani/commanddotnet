@@ -73,6 +73,13 @@ namespace CommandDotNet
         /// </summary>
         public IReadOnlyCollection<string> AllowedValues { get; set; }
 
+        /// <summary>
+        /// The text values provided in the shell.
+        /// Will be null if no values were provided.
+        /// Flag options will contain a bool value.
+        /// </summary>
+        public ICollection<string> RawValues { get; set; }
+
         /// <summary>If true, this option is inherited from a command interceptor method and can be specified after the target command</summary>
         public bool Inherited { get; set; }
 

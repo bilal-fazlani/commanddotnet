@@ -39,14 +39,12 @@ namespace CommandDotNet.Parsing
             Option currentOption = null;
             IEnumerator<Operand> operands = new OperandEnumerator(currentCommand.Operands);
 
-            var argumentValues = new ArgumentValues();
-
             foreach (var token in commandContext.Tokens.Arguments)
             {
                 switch (token.TokenType)
                 {
                     case TokenType.Option:
-                        ParseOption(token, currentCommand, out currentOption, argumentValues.GetOrAdd);
+                        ParseOption(token, currentCommand, out currentOption);
                         break;
                     case TokenType.Value:
                         if (ignoreRemainingArguments && currentOption == null)
@@ -56,7 +54,7 @@ namespace CommandDotNet.Parsing
                         else
                         {
                             var operandResult = ParseArgumentValue(
-                                token, ref currentCommand, ref currentOption, operands, argumentValues.GetOrAdd);
+                                token, ref currentCommand, ref currentOption, operands);
 
                             switch (operandResult)
                             {
@@ -90,8 +88,7 @@ namespace CommandDotNet.Parsing
             commandContext.ParseResult = new ParseResult(
                 currentCommand, 
                 remainingOperands,
-                commandContext.Tokens.Separated,
-                argumentValues);
+                commandContext.Tokens.Separated);
         }
 
         private enum ParseOperandResult
@@ -104,12 +101,11 @@ namespace CommandDotNet.Parsing
         private ParseOperandResult ParseArgumentValue(Token token,
             ref Command command,
             ref Option option,
-            IEnumerator<Operand> operands, 
-            Func<IArgument,List<string>> getArgValues)
+            IEnumerator<Operand> operands)
         {
             if (option != null)
             {
-                if (TryAddValue(option, token.Value, getArgValues))
+                if (TryAddValue(option, token.Value))
                 {
                     option = null;
                     return ParseOperandResult.Succeeded;
@@ -129,7 +125,12 @@ namespace CommandDotNet.Parsing
 
             if (operands.MoveNext())
             {
-                getArgValues(operands.Current).Add(token.Value);
+                var current = operands.Current;
+                if (current.RawValues == null)
+                {
+                    current.RawValues = new List<string>();
+                }
+                current.RawValues.Add(token.Value);
             }
             else
             {
@@ -147,8 +148,7 @@ namespace CommandDotNet.Parsing
 
         private void ParseOption(Token token, 
             Command command, 
-            out Option option,
-            Func<IArgument, List<string>> getArgValues)
+            out Option option)
         {
             var optionTokenType = token.OptionTokenType;
 
@@ -171,23 +171,28 @@ namespace CommandDotNet.Parsing
             if(option.Arity.AllowsNone())
             {
                 // No value is needed for this option
-                TryAddValue(option, null, getArgValues);
+                TryAddValue(option, null);
                 option = null;
             }
         }
-        private static bool TryAddValue(Option option, string value, Func<IArgument, List<string>> getArgValues)
+        private static bool TryAddValue(Option option, string value)
         {
+            if (option.RawValues == null)
+            {
+                option.RawValues = new List<string>();
+            }
+
             if (option.Arity.AllowsZeroOrMore())
             {
-                getArgValues(option).Add(value);
+                option.RawValues.Add(value);
             }
             else if (option.Arity.AllowsZeroOrOne())
             {
-                if (getArgValues(option).Any())
+                if (option.RawValues.Any())
                 {
                     return false;
                 }
-                getArgValues(option).Add(value);
+                option.RawValues.Add(value);
             }
             else if (option.Arity.AllowsNone())
             {
@@ -196,7 +201,7 @@ namespace CommandDotNet.Parsing
                     return false;
                 }
                 // Add a value to indicate that this option was specified
-                getArgValues(option).Add("true");
+                option.RawValues.Add("true");
             }
             return true;
         }

@@ -38,6 +38,12 @@ namespace CommandDotNet
         /// </summary>
         public IReadOnlyCollection<string> AllowedValues { get; set; }
 
+        /// <summary>
+        /// The text values provided in the shell.
+        /// Will be null if no values were provided.
+        /// </summary>
+        public ICollection<string> RawValues { get; set; }
+
         /// <summary>The aliases defined for this argument</summary>
         public IReadOnlyCollection<string> Aliases { get; }
 

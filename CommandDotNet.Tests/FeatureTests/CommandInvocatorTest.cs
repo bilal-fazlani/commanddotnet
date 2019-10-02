@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
@@ -48,7 +49,9 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             Task<int> BeforeSetValues(CommandContext context, ExecutionDelegate next)
             {
-                var args = context.InvocationPipeline.TargetCommand.Invocation.Arguments;
+                var targetCommand = context.InvocationPipeline.TargetCommand;
+
+                var args = targetCommand.Invocation.Arguments;
                 args.Count.Should().Be(2);
                 var carNumber = args.First();
                 var ownerName = args.Last();
@@ -56,14 +59,12 @@ namespace CommandDotNet.Tests.FeatureTests
                 carNumber.Name.Should().Be(nameof(Car.Number));
                 ownerName.Name.Should().Be("owner");
 
-                var resultArgumentValues = context.ParseResult.ArgumentValues;
+                carNumber.RawValues.Should().NotBeNullOrEmpty();
+                carNumber.RawValues.Single().Should().Be("1");
 
-                resultArgumentValues.TryGetValues(carNumber, out var carNumberValues).Should().BeTrue();
-                carNumberValues.Single().Should().Be("1");
-
-                resultArgumentValues.TryGetValues(ownerName, out var ownerNameValues).Should().BeTrue();
-                ownerNameValues.Single().Should().Be("Jack");
-                ownerNameValues[0] = "Jill";
+                ownerName.RawValues.Should().HaveCountGreaterThan(0);
+                ownerName.RawValues.Single().Should().Be("Jack");
+                ownerName.RawValues = new []{ "Jill" };
 
                 return next(context);
             }
