@@ -27,7 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandDotNet.NewerReleases
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandDotNet.TestTools", "CommandDotNet.TestTools\CommandDotNet.TestTools.csproj", "{75706FAE-BFF4-42FC-A5A6-C49744C7967C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandDotNet.FluentValidation", "CommandDotNet.FluentValidation\CommandDotNet.FluentValidation.csproj", "{0E741A7F-AD39-431E-9182-4D337451676C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandDotNet.FluentValidation", "CommandDotNet.FluentValidation\CommandDotNet.FluentValidation.csproj", "{0E741A7F-AD39-431E-9182-4D337451676C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandDotNet.NameCasing", "CommandDotNet.NameCasing\CommandDotNet.NameCasing.csproj", "{D229B0C6-8753-491D-8E4A-51790D2D3071}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{0E741A7F-AD39-431E-9182-4D337451676C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E741A7F-AD39-431E-9182-4D337451676C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E741A7F-AD39-431E-9182-4D337451676C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D229B0C6-8753-491D-8E4A-51790D2D3071}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D229B0C6-8753-491D-8E4A-51790D2D3071}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D229B0C6-8753-491D-8E4A-51790D2D3071}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D229B0C6-8753-491D-8E4A-51790D2D3071}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

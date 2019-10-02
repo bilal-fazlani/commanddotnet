@@ -39,9 +39,6 @@ namespace CommandDotNet
         /// </summary>
         public ArgumentMode DefaultArgumentMode { get; set; } = ArgumentMode.Operand;
 
-        /// <summary>The specified case is applied to command and argument names</summary>
-        public Case Case { get; set; } = Case.DontChange;
-
         /// <summary>
         /// Set to true to tokenize arguments as directives,
         /// captured in <see cref="CommandContext.Tokens"/>.Directives

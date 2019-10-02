@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
     <Authors>Bilal Fazlani, Drew Burlingame</Authors>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <AssemblyTitle>CommandDotNet</AssemblyTitle>
-    <Description>Model your command line application interface in a class</Description>
+    <AssemblyTitle>CommandDotNet.NameCasing</AssemblyTitle>
+    <Description>Uses Humanizer to transform the case of command and argument names</Description>
     <PackageTags>dotnet core; console; argument parse;</PackageTags>
     <PackageProjectUrl>https://github.com/bilal-fazlani/CommandDotNet</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -27,17 +28,6 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LibLog" Version="5.0.6">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
-    <PackageReference Include="System.Reflection" Version="4.3.0" />
-    <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Reflection.Primitives" Version="4.3.0" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Remove="output\**" />
   </ItemGroup>
   <ItemGroup>
@@ -46,7 +36,13 @@
   <ItemGroup>
     <None Remove="output\**" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Remove="CommandDotNet.csproj.DotSettings" />
+    <PackageReference Include="Humanizer.Core" Version="2.7.9" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CommandDotNet\CommandDotNet.csproj" />
+  </ItemGroup>
+
 </Project>

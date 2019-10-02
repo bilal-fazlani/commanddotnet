@@ -1,4 +1,7 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using CommandDotNet.NameCasing;
+using CommandDotNet.TestTools.Scenarios;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -26,7 +29,8 @@ namespace CommandDotNet.Tests.FeatureTests
         [InlineData(Case.LowerCase, "wn")]
         public void CanHonorCommandCase(Case @case, string commandName)
         {
-            var result = new AppRunner<App>(new AppSettings {Case = @case})
+            var result = new AppRunner<App>()
+                .UseNameCasing(@case)
                 .RunInMem(new[] {commandName}, _testOutputHelper);
 
             result.ExitCode.Should().Be(10);
@@ -42,7 +46,8 @@ namespace CommandDotNet.Tests.FeatureTests
             string senderName, string priorotyName, string cName)
         {
             var args = new[] { commandName, messageName, "m", senderName, "s", priorotyName, "3", cName, "4" };
-            var result = new AppRunner<App>(new AppSettings { Case = @case })
+            var result = new AppRunner<App>()
+                .UseNameCasing(@case)
                 .RunInMem(args, _testOutputHelper);
             
             result.ExitCode.Should().Be(10);
@@ -56,13 +61,62 @@ namespace CommandDotNet.Tests.FeatureTests
         [InlineData(Case.LowerCase, "subcommand", "sendnotification")]
         public void CanHonorSubCommandCase(Case @case, string commandName, string notificationCommandName)
         {
-            var result = new AppRunner<App>(new AppSettings { Case = @case })
+            var result = new AppRunner<App>()
+                .UseNameCasing(@case)
                 .RunInMem(new[] { commandName, notificationCommandName }, _testOutputHelper);
             
             result.ExitCode.Should().Be(10);
         }
 
-        public class App
+        [Theory]
+        [InlineData(Case.DontChange, false, "camelCase", "kebab-case", "lowercase", "NoOverride", "PascalCase")]
+        [InlineData(Case.CamelCase, false, "camelCase", "kebab-case", "lowercase", "noOverride", "PascalCase")]
+        [InlineData(Case.KebabCase, false, "camelCase", "kebab-case", "lowercase", "no-override", "PascalCase")]
+        [InlineData(Case.LowerCase, false, "camelCase", "kebab-case", "lowercase", "nooverride", "PascalCase")]
+        [InlineData(Case.PascalCase, false, "camelCase", "kebab-case", "lowercase", "NoOverride", "PascalCase")]
+        [InlineData(Case.DontChange, true, "camelCase", "kebab-case", "lowercase", "NoOverride", "PascalCase")]
+        [InlineData(Case.CamelCase, true, "camelCase", "kebab-case", "lowercase", "noOverride", "pascalCase")]
+        [InlineData(Case.KebabCase, true, "camel-case", "kebab-case", "lowercase", "no-override", "pascal-case")]
+        [InlineData(Case.LowerCase, true, "camelcase", "kebab-case", "lowercase", "nooverride", "pascalcase")]
+        [InlineData(Case.PascalCase, true, "CamelCase", "KebabCase", "Lowercase", "NoOverride", "PascalCase")]
+        public void CanChangeCaseOfOverride(Case @case, bool applyToNameOverrides, params string[] commandNames)
+        {
+            // Important things to know
+            // - lowercase cannot be converted to another case... except, the first letter will be capitalized for Pascal
+            //   Humanizer doesn't know where the second word starts
+            // - kebabcase cannot be converted to camelcase or lowercase. no idea why atm.
+            // - Camel and Pascal can be converted to any other case
+
+            new AppRunner<App2>()
+                .UseNameCasing(@case, applyToNameOverrides)
+                .VerifyScenario(_testOutputHelper, new Scenario
+                {
+                    WhenArgs = "-h",
+                    Then =
+                    {
+                        ResultsContainsTexts = commandNames.ToList()
+                    }
+                });
+        }
+
+        class App2
+        {
+            public void NoOverride() { }
+
+            [Command(Name = "camelCase")]
+            public void CamelCaseOverride() { }
+
+            [Command(Name = "kebab-case")]
+            public void KebabCaseOverride() { }
+
+            [Command(Name = "lowercase")]
+            public void LowerCaseOverride() { }
+
+            [Command(Name = "PascalCase")]
+            public void PascalCaseOverride() { }
+        }
+
+        class App
         {
             public int ProcessRequest()
             {

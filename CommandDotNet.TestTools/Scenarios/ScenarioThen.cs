@@ -24,9 +24,9 @@ namespace CommandDotNet.TestTools.Scenarios
         public List<object> Outputs { get; } = new List<object>();
 
         /// <summary>When specified, asserts the given text segments are contained in the <see cref="Result"/></summary>
-        public List<string> ResultsContainsTexts { get; } = new List<string>();
+        public List<string> ResultsContainsTexts { get; set; } = new List<string>();
 
         /// <summary>When specified, asserts the given text segments are not contained in the <see cref="Result"/></summary>
-        public List<string> ResultsNotContainsTexts { get; } = new List<string>();
+        public List<string> ResultsNotContainsTexts { get; set; } = new List<string>();
     }
 }

@@ -30,7 +30,7 @@ namespace CommandDotNet
         public AppConfigBuilder(AppSettings appSettings)
         {
             AppSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
-            NameTransformation = (memberName, overrideName, kind) => overrideName ?? memberName.ChangeCase(AppSettings.Case);
+            NameTransformation = (memberName, overrideName, kind) => overrideName ?? memberName;
         }
 
         public AppSettings AppSettings { get; }

@@ -1,8 +1,8 @@
-﻿using System;
-using CommandDotNet.Example.DocExamples;
+﻿using CommandDotNet.Example.DocExamples;
 using CommandDotNet.Example.Issues;
 using CommandDotNet.FluentValidation;
 using CommandDotNet.Help;
+using CommandDotNet.NameCasing;
 using CommandDotNet.NewerReleasesAlerts;
 
 namespace CommandDotNet.Example
@@ -16,20 +16,20 @@ namespace CommandDotNet.Example
             return Run<Examples>(args);
         }
 
-        private static int Run<TApp>(string[] args, Action<AppSettings> config = null) where TApp : class
+        private static int Run<TApp>(string[] args, Case @case = Case.DontChange) where TApp : class
         {
             var appSettings = new AppSettings
             {
                 EnableDirectives = true,
-                EnableVersionOption = true,
                 Help =
                 {
                     TextStyle = HelpTextStyle.Detailed
                 }
             };
 
-            config?.Invoke(appSettings);
             return new AppRunner<TApp>(appSettings)
+                .UseNameCasing(@case)
+                .UseVersionMiddleware()
                 .UseCancellationHandlers()
                 .UseDebugDirective()
                 .UseParseDirective()
@@ -43,12 +43,7 @@ namespace CommandDotNet.Example
 
         private static int RunDocExample(string[] args)
         {
-            return Run<SomeClass>(args, s =>
-            {
-                s.EnableVersionOption = false;
-                // s.Help.UsageAppNameStyle = UsageAppNameStyle.GlobalTool;
-                s.Case = Case.KebabCase;
-            });
+            return Run<SomeClass>(args, Case.KebabCase);
         }
 
         public class Examples

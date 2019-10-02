@@ -1,4 +1,4 @@
-﻿namespace CommandDotNet
+﻿namespace CommandDotNet.NameCasing
 {
     public enum Case
     {
