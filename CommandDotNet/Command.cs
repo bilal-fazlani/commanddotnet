@@ -73,40 +73,32 @@ namespace CommandDotNet
         public Option FindOption(string alias) =>
             FindArgumentNode(alias) is Option option ? option : null;
 
-        internal void AddSubCommand(Command command)
+        internal void AddArgumentNode(IArgumentNode argumentNode)
         {
-            if (command == null)
+            if (argumentNode == null)
             {
-                throw new ArgumentNullException(nameof(command));
+                throw new ArgumentNullException(nameof(argumentNode));
             }
 
-            _commands.Add(command);
-            RegisterArgumentByAliases(command);
-        }
-
-        internal void AddArgument(IArgument argument)
-        {
-            if (argument == null)
+            switch (argumentNode)
             {
-                throw new ArgumentNullException(nameof(argument));
-            }
-
-            switch (argument)
-            {
+                case Command command:
+                    _commands.Add(command);
+                    break;
                 case Operand operand:
                     AddOperand(operand);
                     break;
                 case Option option:
-                    AddOption(option);
+                    _options.Add(option);
                     break;
                 default:
                     throw new ArgumentException(
-                        $"argument type must be `{typeof(Operand)}` or `{typeof(Option)}` but was `{argument.GetType()}`. " +
-                        $"If `{argument.GetType()}` was created for extensibility, " +
+                        $"argument node type must be `{typeof(Command)}`, `{typeof(Operand)}` or `{typeof(Option)}` but was `{argumentNode.GetType()}`. " +
+                        $"If `{argumentNode.GetType()}` was created for extensibility, " +
                         $"consider using {nameof(Services)} to store service classes instead.");
             }
 
-            RegisterArgumentByAliases(argument);
+            RegisterArgumentByAliases(argumentNode);
         }
 
         private void AddOperand(Operand operand)
@@ -119,11 +111,6 @@ namespace CommandDotNet
                 throw new AppRunnerException(message);
             }
             _operands.Add(operand);
-        }
-
-        private void AddOption(Option option)
-        {
-            _options.Add(option);
         }
 
         private void RegisterArgumentByAliases(IArgumentNode argument)

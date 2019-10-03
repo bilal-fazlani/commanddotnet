@@ -6,8 +6,8 @@
 
         public CommandBuilder(Command command) => Command = command;
 
-        public void AddSubCommand(Command command) => Command.AddSubCommand(command);
+        public void AddSubCommand(Command command) => Command.AddArgumentNode(command);
 
-        public void AddArgument(IArgument argument) => Command.AddArgument(argument);
+        public void AddArgument(IArgument argument) => Command.AddArgumentNode(argument);
     }
 }
