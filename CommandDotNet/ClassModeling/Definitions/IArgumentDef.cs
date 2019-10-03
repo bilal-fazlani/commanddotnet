@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Reflection;
+using CommandDotNet.Builders;
 
 namespace CommandDotNet.ClassModeling.Definitions
 {
-    internal interface IArgumentDef
+    internal interface IArgumentDef: ICustomAttributesContainer
     {
         CommandNodeType CommandNodeType { get; }
         string Name { get; }
         Type Type { get; }
         bool HasDefaultValue { get; }
         object DefaultValue { get; }
-        ICustomAttributeProvider Attributes { get; }
         IArgument Argument { get; set; }
         void SetValue(object value);
     }

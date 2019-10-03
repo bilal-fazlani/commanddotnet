@@ -21,7 +21,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public IArgument Argument { get; set; }
 
-        public ICustomAttributeProvider Attributes => _parameterInfo;
+        public ICustomAttributeProvider CustomAttributes => _parameterInfo;
 
         public ParameterArgumentDef(
             ParameterInfo parameterInfo,

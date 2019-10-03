@@ -48,7 +48,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public IArgument Argument { get; set; }
 
-        public ICustomAttributeProvider Attributes => _propertyInfo;
+        public ICustomAttributeProvider CustomAttributes => _propertyInfo;
 
         public void SetValue(object value)
         {

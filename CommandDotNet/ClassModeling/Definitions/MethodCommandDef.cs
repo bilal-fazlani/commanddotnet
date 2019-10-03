@@ -11,7 +11,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public string Name { get; }
         public Type CommandHostClassType { get; }
-        public ICustomAttributeProvider CustomAttributeProvider => _method;
+        public ICustomAttributeProvider CustomAttributes => _method;
         public bool IsExecutable => true;
         public bool HasInterceptor => false;
         public IReadOnlyCollection<ICommandDef> SubCommands { get; } = new List<ICommandDef>().AsReadOnly();

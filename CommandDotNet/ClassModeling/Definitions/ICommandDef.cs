@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
+using CommandDotNet.Builders;
 
 namespace CommandDotNet.ClassModeling.Definitions
 {
-    internal interface ICommandDef
+    internal interface ICommandDef: ICustomAttributesContainer
     {
         string Name { get; }
         Type CommandHostClassType { get; }
-        ICustomAttributeProvider CustomAttributeProvider { get; }
         bool IsExecutable { get; }
         bool HasInterceptor { get; }
         IReadOnlyCollection<ICommandDef> SubCommands { get; }

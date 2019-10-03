@@ -13,14 +13,14 @@ namespace CommandDotNet.ClassModeling.Definitions
         {
             var command = new Command(
                 commandDef.Name, 
-                commandDef.CustomAttributeProvider,
+                commandDef.CustomAttributes,
                 commandDef.IsExecutable,
                 parent);
             command.Services.Set(commandDef);
             commandDef.Command = command;
 
-            var commandAttribute = commandDef.CustomAttributeProvider.GetCustomAttribute<CommandAttribute>() 
-                                   ?? commandDef.CustomAttributeProvider.GetCustomAttribute<ApplicationMetadataAttribute>();
+            var commandAttribute = commandDef.CustomAttributes.GetCustomAttribute<CommandAttribute>() 
+                                   ?? commandDef.CustomAttributes.GetCustomAttribute<ApplicationMetadataAttribute>();
             if (commandAttribute != null)
             {
                 command.Description = commandAttribute.Description;
@@ -84,9 +84,9 @@ namespace CommandDotNet.ClassModeling.Definitions
         {
             if (argumentDef.CommandNodeType == CommandNodeType.Operand)
             {
-                var operandAttr = argumentDef.Attributes.GetCustomAttribute<OperandAttribute>() 
-                                  ?? (INameAndDescription) argumentDef.Attributes.GetCustomAttribute<ArgumentAttribute>();
-                return new Operand(operandAttr?.Name ?? argumentDef.Name, typeInfo, argumentDef.Attributes)
+                var operandAttr = argumentDef.CustomAttributes.GetCustomAttribute<OperandAttribute>() 
+                                  ?? (INameAndDescription) argumentDef.CustomAttributes.GetCustomAttribute<ArgumentAttribute>();
+                return new Operand(operandAttr?.Name ?? argumentDef.Name, typeInfo, argumentDef.CustomAttributes)
                 {
                     Description = operandAttr?.Description,
                     Arity = ArgumentArity.Default(argumentDef.Type, BooleanMode.Explicit),
@@ -96,14 +96,14 @@ namespace CommandDotNet.ClassModeling.Definitions
             
             if (argumentDef.CommandNodeType == CommandNodeType.Option)
             {
-                var optionAttr = argumentDef.Attributes.GetCustomAttribute<OptionAttribute>();
+                var optionAttr = argumentDef.CustomAttributes.GetCustomAttribute<OptionAttribute>();
                 var booleanMode = GetOptionBooleanMode(argumentDef, appConfig.AppSettings.BooleanMode, optionAttr);
                 var argumentArity = ArgumentArity.Default(argumentDef.Type, booleanMode);
 
                 return new Option(
                     optionAttr?.LongName ?? argumentDef.Name,
                     ParseShortName(optionAttr?.ShortName),
-                    typeInfo, argumentArity, customAttributeProvider: argumentDef.Attributes,
+                    typeInfo, argumentArity, customAttributeProvider: argumentDef.CustomAttributes,
                     isInterceptorOption: isInterceptorOption)
                 {
                     Description = optionAttr?.Description,

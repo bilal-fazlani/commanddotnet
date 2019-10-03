@@ -5,12 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using CommandDotNet.Builders;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 
 namespace CommandDotNet
 {
-    public class Command : INameAndDescription
+    public class Command : INameAndDescription, ICustomAttributesContainer, IServicesContainer
     {
         private readonly List<Option> _options = new List<Option>();
         private readonly List<Operand> _operands = new List<Operand>();

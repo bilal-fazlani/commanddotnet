@@ -19,7 +19,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public Type CommandHostClassType { get; }
 
-        public ICustomAttributeProvider CustomAttributeProvider => CommandHostClassType;
+        public ICustomAttributeProvider CustomAttributes => CommandHostClassType;
 
         public bool IsExecutable => _defaultCommandDef.IsExecutable;
 

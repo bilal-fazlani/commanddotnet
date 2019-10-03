@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Reflection;
+using CommandDotNet.Builders;
 using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet
 {
     /// <summary>An argument is either an <see cref="Option"/> or <see cref="Operand"/></summary>
-    public interface IArgument: INameAndDescription
+    public interface IArgument: INameAndDescription, ICustomAttributesContainer, IServicesContainer
     {
         /// <summary>The <see cref="ITypeInfo"/> for this argument</summary>
         ITypeInfo TypeInfo { get; }
@@ -30,11 +30,5 @@ namespace CommandDotNet
 
         /// <summary>The aliases defined for this argument</summary>
         IReadOnlyCollection<string> Aliases { get; }
-
-        /// <summary>The attributes defined on the parameter or property that define this argument</summary>
-        ICustomAttributeProvider CustomAttributes { get; }
-
-        /// <summary>The services used by middleware and associated with this argument</summary>
-        IServices Services { get; }
     }
 }

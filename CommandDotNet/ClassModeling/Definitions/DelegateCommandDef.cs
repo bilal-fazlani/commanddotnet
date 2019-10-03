@@ -12,7 +12,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public string Name { get; }
         public Type CommandHostClassType { get; } = null;
-        public ICustomAttributeProvider CustomAttributeProvider => _delegate.Method;
+        public ICustomAttributeProvider CustomAttributes => _delegate.Method;
         public bool IsExecutable => true;
         public bool HasInterceptor => false;
         public IReadOnlyCollection<ICommandDef> SubCommands { get; } = new List<ICommandDef>().AsReadOnly();
