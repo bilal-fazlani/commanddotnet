@@ -9,7 +9,7 @@ namespace CommandDotNet
         
         public string LongName { get; set; }
 
-        string INameAndDescription.Name => LongName ?? ShortName;
+        string INameAndDescription.Name => LongName;
 
         public BooleanMode BooleanMode { get; set; }
         

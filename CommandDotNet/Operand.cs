@@ -12,9 +12,10 @@ namespace CommandDotNet
 {
     public class Operand : IArgument
     {
-        public Operand(string name, TypeInfo typeInfo, ICustomAttributeProvider customAttributeProvider = null)
+        public Operand(string name, Command parent, TypeInfo typeInfo, ICustomAttributeProvider customAttributeProvider = null)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
+            Parent = parent ?? throw new ArgumentNullException(nameof(parent));
             TypeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
             Aliases = new[] {name};
             CustomAttributes = customAttributeProvider ?? NullCustomAttributeProvider.Instance;
@@ -43,6 +44,9 @@ namespace CommandDotNet
         /// Will be null if no values were provided.
         /// </summary>
         public ICollection<string> RawValues { get; set; }
+
+        /// <summary>The <see cref="Command"/> that hosts this <see cref="Operand"/></summary>
+        public Command Parent { get; }
 
         /// <summary>The aliases defined for this argument</summary>
         public IReadOnlyCollection<string> Aliases { get; }

@@ -5,7 +5,7 @@ using CommandDotNet.TypeDescriptors;
 namespace CommandDotNet
 {
     /// <summary>An argument is either an <see cref="Option"/> or <see cref="Operand"/></summary>
-    public interface IArgument: INameAndDescription, ICustomAttributesContainer, IServicesContainer
+    public interface IArgument: IArgumentNode
     {
         /// <summary>The <see cref="ITypeInfo"/> for this argument</summary>
         ITypeInfo TypeInfo { get; }
@@ -27,8 +27,5 @@ namespace CommandDotNet
         /// Will be null or empty if no values were provided.
         /// </summary>
         ICollection<string> RawValues { get; set; }
-
-        /// <summary>The aliases defined for this argument</summary>
-        IReadOnlyCollection<string> Aliases { get; }
     }
 }

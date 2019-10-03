@@ -24,10 +24,8 @@ namespace CommandDotNet.Help
 
             var appSettingsHelp = args.CommandContext.AppConfig.AppSettings.Help;
 
-            var option = new Option(
-                Constants.HelpOptionName, 
-                'h', 
-                TypeInfo.Flag, ArgumentArity.Zero, aliases: new []{"?"})
+            var option = new Option(Constants.HelpOptionName, 'h', 
+                args.CommandBuilder.Command, TypeInfo.Flag, ArgumentArity.Zero, aliases: new []{"?"})
             {
                 Description = "Show help information",
                 IsMiddlewareOption = true,

@@ -11,13 +11,13 @@ using CommandDotNet.Extensions;
 
 namespace CommandDotNet
 {
-    public class Command : INameAndDescription, ICustomAttributesContainer, IServicesContainer
+    public class Command : IArgumentNode
     {
         private readonly List<Option> _options = new List<Option>();
         private readonly List<Operand> _operands = new List<Operand>();
         private readonly List<Command> _commands = new List<Command>();
 
-        private readonly Dictionary<string, IArgument> _argumentsByAlias = new Dictionary<string, IArgument>();
+        private readonly Dictionary<string, IArgumentNode> _argumentsByAlias = new Dictionary<string, IArgumentNode>();
 
         public Command(string name, 
             ICustomAttributeProvider customAttributeProvider,
@@ -28,6 +28,7 @@ namespace CommandDotNet
             CustomAttributes = customAttributeProvider;
             IsExecutable = isExecutable;
             Parent = parent;
+            Aliases = new[] {name};
         }
 
         public string Name { get; }
@@ -53,6 +54,8 @@ namespace CommandDotNet
         /// but are defined only to group for other commands.
         /// </summary>
         public Command Parent { get; }
+
+        public IReadOnlyCollection<string> Aliases { get; }
 
         /// <summary>The <see cref="Command"/>s that can be accessed via this <see cref="Command"/></summary>
         public IReadOnlyCollection<Command> Subcommands => _commands.AsReadOnly();
@@ -85,6 +88,7 @@ namespace CommandDotNet
             }
 
             _commands.Add(command);
+            RegisterArgumentByAliases(command);
         }
 
         internal void AddArgument(IArgument argument)
@@ -129,18 +133,18 @@ namespace CommandDotNet
             _options.Add(option);
         }
 
-        private void RegisterArgumentByAliases(IArgument argument)
+        private void RegisterArgumentByAliases(IArgumentNode argument)
         {
             foreach (var parentOrThis in this.GetParentCommands(includeCurrent: true))
             {
-                IArgument duplicatedArg = null;
+                IArgumentNode duplicatedArg = null;
                 var duplicateAlias = argument.Aliases.FirstOrDefault(a => _argumentsByAlias.TryGetValue(a, out duplicatedArg));
 
                 // the alias cannot duplicate any argument in this command or any inherited option from parent commands
                 if (duplicateAlias != null && (ReferenceEquals(parentOrThis, this) || (duplicatedArg is Option option && option.Inherited)))
                 {
-                    throw new AppRunnerException(
-                        $"Duplicate alias detected. Attempted to add `{argument}` to `{this}` but `{duplicatedArg}` already exists");
+                    throw new InvalidConfigurationException(
+                        $"Duplicate alias '{duplicateAlias}' added to command '{this.Name}'. Duplicates: '{argument.GetType().Name}:{argument.Name}' & '{duplicatedArg.GetType().Name}:{duplicatedArg.Name}'");
                 }
             }
 

@@ -30,11 +30,11 @@ namespace CommandDotNet.ClassModeling.Definitions
             var commandBuilder = new CommandBuilder(command);
 
             commandDef.InvokeMethodDef.ArgumentDefs
-                .Select(a => a.ToArgument(commandContext.AppConfig, false))
+                .Select(a => a.ToArgument(command, commandContext.AppConfig, false))
                 .ForEach(commandBuilder.AddArgument);
 
             commandDef.InterceptorMethodDef.ArgumentDefs
-                .Select(a => a.ToArgument(commandContext.AppConfig, true))
+                .Select(a => a.ToArgument(command, commandContext.AppConfig, true))
                 .ForEach(commandBuilder.AddArgument);
 
             if (commandDef.IsExecutable)
@@ -52,12 +52,13 @@ namespace CommandDotNet.ClassModeling.Definitions
             return commandBuilder;
         }
 
-        private static IArgument ToArgument(this IArgumentDef argumentDef, AppConfig appConfig, bool isInterceptorOption)
+        private static IArgument ToArgument(this IArgumentDef argumentDef, Command parent, AppConfig appConfig, bool isInterceptorOption)
         {
             var underlyingType = argumentDef.Type.GetUnderlyingType();
 
             var argument = BuildArgument(
                 argumentDef, 
+                parent,
                 appConfig, 
                 argumentDef.HasDefaultValue ? argumentDef.DefaultValue : null,
                 new TypeInfo(argumentDef.Type, underlyingType), 
@@ -75,18 +76,18 @@ namespace CommandDotNet.ClassModeling.Definitions
             return argument;
         }
 
-        private static IArgument BuildArgument(
-            IArgumentDef argumentDef, 
-            AppConfig appConfig, 
+        private static IArgument BuildArgument(IArgumentDef argumentDef,
+            Command parent,
+            AppConfig appConfig,
             object defaultValue,
-            TypeInfo typeInfo, 
+            TypeInfo typeInfo,
             bool isInterceptorOption)
         {
             if (argumentDef.CommandNodeType == CommandNodeType.Operand)
             {
                 var operandAttr = argumentDef.CustomAttributes.GetCustomAttribute<OperandAttribute>() 
                                   ?? (INameAndDescription) argumentDef.CustomAttributes.GetCustomAttribute<ArgumentAttribute>();
-                return new Operand(operandAttr?.Name ?? argumentDef.Name, typeInfo, argumentDef.CustomAttributes)
+                return new Operand(argumentDef.Name, parent, typeInfo, argumentDef.CustomAttributes)
                 {
                     Description = operandAttr?.Description,
                     Arity = ArgumentArity.Default(argumentDef.Type, BooleanMode.Explicit),
@@ -101,9 +102,9 @@ namespace CommandDotNet.ClassModeling.Definitions
                 var argumentArity = ArgumentArity.Default(argumentDef.Type, booleanMode);
 
                 return new Option(
-                    optionAttr?.LongName ?? argumentDef.Name,
+                    argumentDef.Name,
                     ParseShortName(optionAttr?.ShortName),
-                    typeInfo, argumentArity, customAttributeProvider: argumentDef.CustomAttributes,
+                    parent, typeInfo, argumentArity, customAttributeProvider: argumentDef.CustomAttributes,
                     isInterceptorOption: isInterceptorOption)
                 {
                     Description = optionAttr?.Description,

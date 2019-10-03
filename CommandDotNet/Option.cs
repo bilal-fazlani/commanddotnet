@@ -17,7 +17,8 @@ namespace CommandDotNet
         
         public Option(
             string longName,
-            char? shortName,
+            char? shortName, 
+            Command parent,
             TypeInfo typeInfo,
             IArgumentArity arity, 
             IEnumerable<string> aliases = null, 
@@ -29,6 +30,7 @@ namespace CommandDotNet
                 throw new ArgumentException("a long or short name is required");
             }
 
+            Parent = parent ?? throw new ArgumentNullException(nameof(parent));
             TypeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
             Arity = arity;
             IsInterceptorOption = isInterceptorOption;
@@ -51,6 +53,9 @@ namespace CommandDotNet
 
         /// <summary>The long name that will be prefixed with a double hyphen.</summary>
         public string LongName { get; }
+
+        /// <summary>The <see cref="Command"/> that hosts this <see cref="Option"/></summary>
+        public Command Parent { get; }
 
         /// <summary>The aliases defined for this argument</summary>
         public IReadOnlyCollection<string> Aliases => _aliases;

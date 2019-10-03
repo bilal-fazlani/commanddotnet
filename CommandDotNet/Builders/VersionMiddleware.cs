@@ -29,7 +29,8 @@ namespace CommandDotNet.Builders
                 return;
             }
 
-            var option = new Option(VersionOptionName, 'v', TypeInfo.Flag, ArgumentArity.Zero)
+            var option = new Option(VersionOptionName, 'v', 
+                args.CommandBuilder.Command, TypeInfo.Flag, ArgumentArity.Zero)
             {
                 Description = "Show version information",
                 IsMiddlewareOption = true,
