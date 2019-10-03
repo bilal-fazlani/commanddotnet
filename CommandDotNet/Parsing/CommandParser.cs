@@ -114,11 +114,9 @@ namespace CommandDotNet.Parsing
                 throw new CommandParsingException(command, $"Unexpected value '{token.RawValue}' for option '{option.Name}'");
             }
 
-            var subCommand = command.Subcommands
-                .FirstOrDefault(c => c.Name.Equals(token.Value, StringComparison.OrdinalIgnoreCase));
-            if (subCommand != null)
+            if (command.FindArgumentNode(token.Value) is Command subcommand)
             {
-                command = subCommand;
+                command = subcommand;
                 option = null;
                 return ParseOperandResult.NewSubCommand;
             }
@@ -152,9 +150,7 @@ namespace CommandDotNet.Parsing
         {
             var optionTokenType = token.OptionTokenType;
 
-            string optionName = optionTokenType.GetName();
-
-            option = command.FindOption(optionName);
+            option = command.FindOption(optionTokenType.GetName());
             if (option == null)
             {
                 throw new CommandParsingException(command, $"Unrecognized option '{token.RawValue}'");

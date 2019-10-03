@@ -17,7 +17,7 @@ namespace CommandDotNet.Help
 
         private static void AddHelpOption(BuildEvents.CommandCreatedEventArgs args)
         {
-            if (args.CommandBuilder.Command.FindOption(Constants.HelpOptionName) != null)
+            if (args.CommandBuilder.Command.ContainsArgumentNode(Constants.HelpOptionName))
             {
                 return;
             }

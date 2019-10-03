@@ -24,7 +24,7 @@ namespace CommandDotNet.Builders
                 return;
             }
 
-            if (args.CommandBuilder.Command.FindOption(VersionOptionName) != null)
+            if (args.CommandBuilder.Command.ContainsArgumentNode(VersionOptionName))
             {
                 return;
             }

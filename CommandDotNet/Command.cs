@@ -66,19 +66,12 @@ namespace CommandDotNet
         /// <summary>The services used by middleware and associated with this <see cref="Command"/></summary>
         public IServices Services { get; } = new Services();
 
-        /// <summary>Returns the option for the given alias, if it exists.</summary>
-        public Option FindOption(string alias)
-        {
-            if (alias == null)
-            {
-                throw new ArgumentNullException(nameof(alias));
-            }
+        public IArgumentNode FindArgumentNode(string alias) => 
+            _argumentsByAlias.GetValueOrDefault(alias ?? throw new ArgumentNullException(nameof(alias)));
 
-            return this._argumentsByAlias.TryGetValue(alias, out var argument)
-                   && (argument is Option option)
-                ? option
-                : null;
-        }
+        /// <summary>Returns the option for the given alias, if it exists.</summary>
+        public Option FindOption(string alias) =>
+            FindArgumentNode(alias) is Option option ? option : null;
 
         internal void AddSubCommand(Command command)
         {
