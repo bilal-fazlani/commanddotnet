@@ -16,6 +16,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         private readonly Lazy<List<ICommandDef>> _subCommands;
 
         public string Name { get; }
+        public string SourcePath => CommandHostClassType.FullName;
 
         public Type CommandHostClassType { get; }
 
@@ -30,8 +31,6 @@ namespace CommandDotNet.ClassModeling.Definitions
         public IMethodDef InterceptorMethodDef { get; }
 
         public IMethodDef InvokeMethodDef => _defaultCommandDef.InvokeMethodDef;
-
-        public Command Command { get; set; }
 
         public static Command CreateRootCommand(Type classType, CommandContext commandContext)
         {

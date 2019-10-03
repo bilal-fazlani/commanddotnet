@@ -40,6 +40,8 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public string Name { get; }
 
+        public string SourcePath => _propertyInfo.FullName(includeNamespace: true);
+
         public Type Type => _propertyInfo.PropertyType;
 
         public bool HasDefaultValue { get; }
@@ -57,7 +59,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public override string ToString()
         {
-            return $"Property:{_propertyInfo.DeclaringType?.Name}.{_propertyInfo.Name} > {Name}({Type})";
+            return $"Property:{SourcePath} > {Name}({Type})";
         }
     }
 }

@@ -12,13 +12,21 @@ namespace CommandDotNet
 {
     public class Operand : IArgument
     {
-        public Operand(string name, Command parent, TypeInfo typeInfo, ICustomAttributeProvider customAttributeProvider = null)
+        public Operand(
+            string name, 
+            Command parent, 
+            TypeInfo typeInfo,
+            IArgumentArity arity,
+            string definitionSource = null, 
+            ICustomAttributeProvider customAttributes = null)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Parent = parent ?? throw new ArgumentNullException(nameof(parent));
             TypeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
+            Arity = arity;
+            DefinitionSource = definitionSource;
             Aliases = new[] {name};
-            CustomAttributes = customAttributeProvider ?? NullCustomAttributeProvider.Instance;
+            CustomAttributes = customAttributes ?? NullCustomAttributeProvider.Instance;
         }
 
         public string Name { get; }
@@ -50,6 +58,9 @@ namespace CommandDotNet
 
         /// <summary>The aliases defined for this argument</summary>
         public IReadOnlyCollection<string> Aliases { get; }
+
+        /// <summary>The source that defined this argument</summary>
+        public string DefinitionSource { get; }
 
         /// <summary>The attributes defined on the parameter or property that define this argument</summary>
         public ICustomAttributeProvider CustomAttributes { get; }

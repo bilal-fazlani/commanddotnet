@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.ClassModeling.Definitions;
@@ -30,17 +29,18 @@ namespace CommandDotNet.ClassModeling
 
         private static Task<int> AssembleInvocationPipelineMiddleware(CommandContext commandContext, ExecutionDelegate next)
         {
-            var commandDef = commandContext.ParseResult.TargetCommand.Services.Get<ICommandDef>();
+            var command = commandContext.ParseResult.TargetCommand;
+            var commandDef = command.GetCommandDef();
             if (commandDef != null)
             {
                 var pipeline = commandContext.InvocationPipeline;
                 pipeline.TargetCommand = new InvocationStep
                 {
-                    Command = commandDef.Command,
+                    Command = command,
                     Invocation = commandDef.InvokeMethodDef
                 };
-                commandDef.Command.GetParentCommands(includeCurrent:false)
-                    .Select(cmd => (cmd, def: cmd.Services.Get<ICommandDef>()))
+                command.GetParentCommands(includeCurrent:false)
+                    .Select(cmd => (cmd, def: cmd.GetCommandDef()))
                     .Where(c => c.def != null && c.def.HasInterceptor) // in case command is defined by a different middleware
                     .Reverse()
                     .ForEach(c =>

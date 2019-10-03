@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace CommandDotNet.ClassModeling.Definitions
 {
-    internal class NullCustomAttributeProvider : ICustomAttributeProvider
+    public class NullCustomAttributeProvider : ICustomAttributeProvider
     {
         internal static readonly NullCustomAttributeProvider Instance = new NullCustomAttributeProvider();
 

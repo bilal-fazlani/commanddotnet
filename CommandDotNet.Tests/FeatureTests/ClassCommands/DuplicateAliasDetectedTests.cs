@@ -20,7 +20,9 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             Assert.Throws<InvalidConfigurationException>(() =>
                     new AppRunner<DuplicateCommandApp>()
                         .RunInMem("-h", _testOutputHelper))
-                .Message.Should().Be("Duplicate alias 'lala' added to command 'DuplicateCommandApp'. Duplicates: 'Command:lala' & 'Command:lala'");
+                .Message.Should().Be("Duplicate alias 'lala' added to command 'DuplicateCommandApp'. Duplicates: " +
+                                     "'Command:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateCommandApp.Do2)' & " +
+                                     "'Command:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateCommandApp.Do1)'");
         }
 
         [Fact]
@@ -29,7 +31,9 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             Assert.Throws<InvalidConfigurationException>(() =>
                     new AppRunner<DuplicateArgumentApp>()
                         .RunInMem("-h", _testOutputHelper))
-                .Message.Should().Be("Duplicate alias 'lala' added to command 'Do'. Duplicates: 'Option:lala' & 'Operand:lala'");
+                .Message.Should().Be("Duplicate alias 'lala' added to command 'Do'. Duplicates: " +
+                                     "'Option:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateArgumentApp.Do.option)' & " +
+                                     "'Operand:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateArgumentApp.Do.operand)'");
         }
 
         [Fact]
@@ -38,7 +42,9 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             Assert.Throws<InvalidConfigurationException>(() =>
                     new AppRunner<DuplicateInterceptorOptionApp>()
                         .RunInMem("-h", _testOutputHelper))
-                .Message.Should().Be("Duplicate alias 'lala' added to command 'DuplicateInterceptorOptionApp'. Duplicates: 'Command:lala' & 'Option:lala'");
+                .Message.Should().Be("Duplicate alias 'lala' added to command 'DuplicateInterceptorOptionApp'. Duplicates: " +
+                                     "'Command:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateInterceptorOptionApp.Do)' & " +
+                                     "'Option:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateInterceptorOptionApp.Intercept.lala)'");
         }
 
         [Fact]
@@ -47,7 +53,9 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             Assert.Throws<InvalidConfigurationException>(() =>
                     new AppRunner<DuplicateInheritedOptionApp>()
                         .RunInMem("SubApp SubDo -h", _testOutputHelper))
-                .Message.Should().Be("Duplicate alias 'lala' added to command 'SubDo'. Duplicates: 'Option:lala' & 'Operand:lala'");
+                .Message.Should().Be("Duplicate alias 'lala' added to command 'SubDo'. Duplicates: " +
+                                     "'Option:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateInheritedOptionApp.Intercept.lala)' & " +
+                                     "'Operand:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateInheritedOptionApp+SubApp.SubDo.lala)'");
         }
 
         class DuplicateCommandApp

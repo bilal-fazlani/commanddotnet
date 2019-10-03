@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using CommandDotNet.Execution;
+using CommandDotNet.Extensions;
 
 namespace CommandDotNet.ClassModeling.Definitions
 {
@@ -11,6 +12,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         private readonly Delegate _delegate;
 
         public string Name { get; }
+        public string SourcePath => _delegate.Method.FullName(includeNamespace: true);
         public Type CommandHostClassType { get; } = null;
         public ICustomAttributeProvider CustomAttributes => _delegate.Method;
         public bool IsExecutable => true;
@@ -18,7 +20,6 @@ namespace CommandDotNet.ClassModeling.Definitions
         public IReadOnlyCollection<ICommandDef> SubCommands { get; } = new List<ICommandDef>().AsReadOnly();
         public IMethodDef InterceptorMethodDef { get; }
         public IMethodDef InvokeMethodDef { get; }
-        public Command Command { get; set; }
 
         public DelegateCommandDef(string name, Delegate handlerDelegate, AppConfig appConfig)
         {
@@ -27,6 +28,11 @@ namespace CommandDotNet.ClassModeling.Definitions
             Name = name;
             InterceptorMethodDef = NullMethodDef.Instance;
             InvokeMethodDef = new MethodDef(handlerDelegate.Method, appConfig);
+        }
+
+        public override string ToString()
+        {
+            return $"Delegate:{SourcePath} > {Name}";
         }
     }
 }

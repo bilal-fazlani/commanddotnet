@@ -1,12 +1,10 @@
 ﻿using System;
-using CommandDotNet.Builders;
 
 namespace CommandDotNet.ClassModeling.Definitions
 {
-    internal interface IArgumentDef: ICustomAttributesContainer
+    internal interface IArgumentDef: ISourceDef
     {
         CommandNodeType CommandNodeType { get; }
-        string Name { get; }
         Type Type { get; }
         bool HasDefaultValue { get; }
         object DefaultValue { get; }

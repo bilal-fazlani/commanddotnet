@@ -20,9 +20,10 @@ namespace CommandDotNet
             char? shortName, 
             Command parent,
             TypeInfo typeInfo,
-            IArgumentArity arity, 
+            IArgumentArity arity,
+            string definitionSource = null,
             IEnumerable<string> aliases = null, 
-            ICustomAttributeProvider customAttributeProvider = null, 
+            ICustomAttributeProvider customAttributes = null, 
             bool isInterceptorOption = false)
         {
             if (longName.IsNullOrWhitespace() && shortName.IsNullOrWhitespace())
@@ -33,8 +34,9 @@ namespace CommandDotNet
             Parent = parent ?? throw new ArgumentNullException(nameof(parent));
             TypeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
             Arity = arity;
+            DefinitionSource = definitionSource;
             IsInterceptorOption = isInterceptorOption;
-            CustomAttributes = customAttributeProvider ?? NullCustomAttributeProvider.Instance;
+            CustomAttributes = customAttributes ?? NullCustomAttributeProvider.Instance;
 
             LongName = longName;
             ShortName = shortName;
@@ -59,6 +61,9 @@ namespace CommandDotNet
 
         /// <summary>The aliases defined for this argument</summary>
         public IReadOnlyCollection<string> Aliases => _aliases;
+
+        /// <summary>The source that defined this argument</summary>
+        public string DefinitionSource { get; }
 
         /// <summary>Describes the option</summary>
         public string Description { get; set; }

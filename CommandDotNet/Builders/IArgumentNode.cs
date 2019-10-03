@@ -18,5 +18,8 @@ namespace CommandDotNet.Builders
 
         /// <summary>The aliases defined for this argument</summary>
         IReadOnlyCollection<string> Aliases { get; }
+
+        /// <summary>The source that defined this argument node</summary>
+        string DefinitionSource { get; }
     }
 }

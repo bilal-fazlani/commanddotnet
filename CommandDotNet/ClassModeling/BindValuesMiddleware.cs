@@ -39,7 +39,7 @@ namespace CommandDotNet.ClassModeling
 
             var argumentDefs = commandContext.InvocationPipeline.All
                 .SelectMany(ic => ic.Command.Options.Cast<IArgument>().Union(ic.Command.Operands))
-                .Select(a => a.Services.Get<IArgumentDef>())
+                .Select(a => a.GetArgumentDef())
                 .Where(d => d != null);
 
             foreach (var argumentDef in argumentDefs)

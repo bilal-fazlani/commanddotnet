@@ -22,12 +22,14 @@ namespace CommandDotNet
         public Command(string name, 
             ICustomAttributeProvider customAttributeProvider,
             bool isExecutable,
-            Command parent = null)
+            Command parent = null,
+            string definitionSource = null)
         {
             Name = name;
             CustomAttributes = customAttributeProvider;
             IsExecutable = isExecutable;
             Parent = parent;
+            DefinitionSource = definitionSource;
             Aliases = new[] {name};
         }
 
@@ -55,7 +57,11 @@ namespace CommandDotNet
         /// </summary>
         public Command Parent { get; }
 
+        /// <summary>The aliases defined for this command</summary>
         public IReadOnlyCollection<string> Aliases { get; }
+
+        /// <summary>The source that defined this command</summary>
+        public string DefinitionSource { get; }
 
         /// <summary>The <see cref="Command"/>s that can be accessed via this <see cref="Command"/></summary>
         public IReadOnlyCollection<Command> Subcommands => _commands.AsReadOnly();
@@ -113,22 +119,25 @@ namespace CommandDotNet
             _operands.Add(operand);
         }
 
-        private void RegisterArgumentByAliases(IArgumentNode argument)
+        private void RegisterArgumentByAliases(IArgumentNode argumentNode)
         {
             foreach (var parentOrThis in this.GetParentCommands(includeCurrent: true))
             {
                 IArgumentNode duplicatedArg = null;
-                var duplicateAlias = argument.Aliases.FirstOrDefault(a => _argumentsByAlias.TryGetValue(a, out duplicatedArg));
+                var duplicateAlias = argumentNode.Aliases.FirstOrDefault(a => _argumentsByAlias.TryGetValue(a, out duplicatedArg));
 
                 // the alias cannot duplicate any argument in this command or any inherited option from parent commands
                 if (duplicateAlias != null && (ReferenceEquals(parentOrThis, this) || (duplicatedArg is Option option && option.Inherited)))
                 {
+                    string GetArgNodeName(IArgumentNode arg) => $"{arg.GetType().Name}:{arg.Name}(source:{arg.DefinitionSource})";
+
                     throw new InvalidConfigurationException(
-                        $"Duplicate alias '{duplicateAlias}' added to command '{this.Name}'. Duplicates: '{argument.GetType().Name}:{argument.Name}' & '{duplicatedArg.GetType().Name}:{duplicatedArg.Name}'");
+                        $"Duplicate alias '{duplicateAlias}' added to command '{this.Name}'. " +
+                        $"Duplicates: '{GetArgNodeName(argumentNode)}' & '{GetArgNodeName(duplicatedArg)}'");
                 }
             }
 
-            argument.Aliases.ForEach(a => _argumentsByAlias.Add(a, argument));
+            argumentNode.Aliases.ForEach(a => _argumentsByAlias.Add(a, argumentNode));
         }
 
         public override string ToString()

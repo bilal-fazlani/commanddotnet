@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using CommandDotNet.Execution;
+using CommandDotNet.Extensions;
 
 namespace CommandDotNet.ClassModeling.Definitions
 {
@@ -10,6 +11,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         private readonly MethodBase _method;
 
         public string Name { get; }
+        public string SourcePath => _method.FullName(includeNamespace: true);
         public Type CommandHostClassType { get; }
         public ICustomAttributeProvider CustomAttributes => _method;
         public bool IsExecutable => true;
@@ -17,7 +19,6 @@ namespace CommandDotNet.ClassModeling.Definitions
         public IReadOnlyCollection<ICommandDef> SubCommands { get; } = new List<ICommandDef>().AsReadOnly();
         public IMethodDef InterceptorMethodDef { get; } = NullMethodDef.Instance;
         public IMethodDef InvokeMethodDef { get; }
-        public Command Command { get; set; }
         
         public MethodCommandDef(MethodInfo method, Type commandHostClassType, AppConfig appConfig)
         {
@@ -26,6 +27,10 @@ namespace CommandDotNet.ClassModeling.Definitions
             Name = method.BuildName(CommandNodeType.Command, appConfig);
             CommandHostClassType = commandHostClassType;
             InvokeMethodDef = new MethodDef(method, appConfig);
+        }
+        public override string ToString()
+        {
+            return $"Method:{SourcePath} > {Name}";
         }
     }
 }

@@ -61,7 +61,7 @@ namespace CommandDotNet.ClassModeling
             out bool createdHere)
         {
             var command = invocationStep.Command;
-            var commandDef = command.Services.Get<ICommandDef>();
+            var commandDef = command.GetCommandDef();
             if (commandDef == null)
             {
                 createdHere = false;

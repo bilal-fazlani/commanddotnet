@@ -12,6 +12,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         }
 
         public string Name { get; }
+        public string SourcePath { get; } = "NullCommandDef";
         public Type CommandHostClassType { get; } = null;
         public ICustomAttributeProvider CustomAttributes => null;
         public bool IsExecutable => false;
@@ -19,6 +20,5 @@ namespace CommandDotNet.ClassModeling.Definitions
         public IReadOnlyCollection<ICommandDef> SubCommands => new List<ICommandDef>().AsReadOnly();
         public IMethodDef InterceptorMethodDef { get; } = NullMethodDef.Instance;
         public IMethodDef InvokeMethodDef { get; } = NullMethodDef.Instance;
-        public Command Command { get; set; }
     }
 }

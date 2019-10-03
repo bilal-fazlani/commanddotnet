@@ -15,9 +15,9 @@ namespace CommandDotNet.ClassModeling.Definitions
                 commandDef.Name, 
                 commandDef.CustomAttributes,
                 commandDef.IsExecutable,
-                parent);
+                parent,
+                commandDef.SourcePath);
             command.Services.Set(commandDef);
-            commandDef.Command = command;
 
             var commandAttribute = commandDef.CustomAttributes.GetCustomAttribute<CommandAttribute>() 
                                    ?? commandDef.CustomAttributes.GetCustomAttribute<ApplicationMetadataAttribute>();
@@ -87,10 +87,15 @@ namespace CommandDotNet.ClassModeling.Definitions
             {
                 var operandAttr = argumentDef.CustomAttributes.GetCustomAttribute<OperandAttribute>() 
                                   ?? (INameAndDescription) argumentDef.CustomAttributes.GetCustomAttribute<ArgumentAttribute>();
-                return new Operand(argumentDef.Name, parent, typeInfo, argumentDef.CustomAttributes)
+                return new Operand(
+                    argumentDef.Name, 
+                    parent, 
+                    typeInfo,
+                    ArgumentArity.Default(argumentDef.Type, BooleanMode.Explicit), 
+                    argumentDef.SourcePath,
+                    customAttributes: argumentDef.CustomAttributes)
                 {
                     Description = operandAttr?.Description,
-                    Arity = ArgumentArity.Default(argumentDef.Type, BooleanMode.Explicit),
                     DefaultValue = defaultValue
                 };
             }
@@ -104,7 +109,11 @@ namespace CommandDotNet.ClassModeling.Definitions
                 return new Option(
                     argumentDef.Name,
                     ParseShortName(optionAttr?.ShortName),
-                    parent, typeInfo, argumentArity, customAttributeProvider: argumentDef.CustomAttributes,
+                    parent, 
+                    typeInfo, 
+                    argumentArity, 
+                    definitionSource: argumentDef.SourcePath,
+                    customAttributes: argumentDef.CustomAttributes,
                     isInterceptorOption: isInterceptorOption)
                 {
                     Description = optionAttr?.Description,

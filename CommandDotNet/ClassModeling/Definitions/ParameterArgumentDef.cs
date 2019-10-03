@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using CommandDotNet.Execution;
+using CommandDotNet.Extensions;
 
 namespace CommandDotNet.ClassModeling.Definitions
 {
@@ -12,6 +13,8 @@ namespace CommandDotNet.ClassModeling.Definitions
         public CommandNodeType CommandNodeType { get; }
 
         public string Name { get; }
+
+        public string SourcePath => _parameterInfo.FullName(includeNamespace: true);
 
         public Type Type => _parameterInfo.ParameterType;
 
@@ -44,7 +47,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public override string ToString()
         {
-            return $"Parameter:{_parameterInfo.Member.DeclaringType?.Name}.{_parameterInfo.Member.Name}.{_parameterInfo.Name} > {Name}({Type})";
+            return $"Parameter:{SourcePath} > {Name}({Type})";
         }
     }
 }
