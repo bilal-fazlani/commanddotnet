@@ -63,5 +63,17 @@ namespace CommandDotNet.TestTools
             expected = expected.NormalizeLineEndings();
             return actual.Contains(expected);
         }
+
+        /// <summary>
+        /// Help generation leaves extra trailing spaces that are hard to account for in test verification.
+        /// This method removes trailing white space from each line and standardizes Environment.NewLine
+        /// for all line endings
+        /// </summary>
+        public bool OutputNotContains(string expected)
+        {
+            var actual = ConsoleAllOutput.NormalizeLineEndings();
+            expected = expected.NormalizeLineEndings();
+            return !actual.Contains(expected);
+        }
     }
 }
