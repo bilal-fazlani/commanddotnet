@@ -72,6 +72,10 @@ namespace CommandDotNet
         {
             return $"Operand: {Name}";
         }
+        
+        public static bool operator ==(Operand x, Operand y) => (object)x == (object)y;
+
+        public static bool operator !=(Operand x, Operand y) => !(x == y);
 
         private bool Equals(Operand other)
         {

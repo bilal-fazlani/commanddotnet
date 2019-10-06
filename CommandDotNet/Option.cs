@@ -125,6 +125,10 @@ namespace CommandDotNet
             return $"Option: {Name}";
         }
 
+        public static bool operator ==(Option x, Option y) => (object)x == (object)y;
+
+        public static bool operator !=(Option x, Option y) => !(x == y);
+
         private bool Equals(Option other)
         {
             return string.Equals(LongName, other.LongName) 

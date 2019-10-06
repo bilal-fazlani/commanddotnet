@@ -148,6 +148,10 @@ namespace CommandDotNet
                    $"commands:{_commands.Select(c => c.Name).ToCsv()}";
         }
 
+        public static bool operator ==(Command x, Command y) => (object) x == (object) y;
+
+        public static bool operator !=(Command x, Command y) => !(x == y);
+
         private bool Equals(Command other)
         {
             return string.Equals(Name, other.Name) 

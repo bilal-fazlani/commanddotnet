@@ -180,11 +180,10 @@ namespace CommandDotNet.Help
         
         protected virtual IEnumerable<string> GetOptionFootnoteSymbols(Command command, Option option)
         {
-            if (command.IsExecutable)
-            {
-                if (option.Inherited) yield return FootnoteSymbol_InheritedOptionForExecutableCommand;
-            }
-            else
+            if (command.IsExecutable && option.Inherited && command != option.Parent) 
+                yield return FootnoteSymbol_InheritedOptionForExecutableCommand;
+
+            if (command.Subcommands.Any())
             {
                 if (option.IsInterceptorOption) yield return FootnoteSymbol_InterceptorOption;
                 if (option.Inherited) yield return FootnoteSymbol_InheritedOptionForInterceptorCommand;
@@ -193,23 +192,15 @@ namespace CommandDotNet.Help
 
         protected virtual IEnumerable<(string symbol, string descr)> GetOptionFootnoteDescriptions(Command command)
         {
-            if (command.IsExecutable)
-            {
-                if (command.Options.Any(o => o.Inherited))
-                {
-                    yield return (FootnoteSymbol_InheritedOptionForExecutableCommand, "option is inherited from a parent command");
-                }
-            }
-            else
+            if (command.IsExecutable && command.Options.Any(o => o.Inherited && command != o.Parent))
+                yield return (FootnoteSymbol_InheritedOptionForExecutableCommand, "option is inherited from a parent command");
+
+            if (command.Subcommands.Any())
             {
                 if (command.Options.Any(o => o.IsInterceptorOption))
-                {
                     yield return (FootnoteSymbol_InterceptorOption, "option can be used with subcommands. `[command] [options] [subcommand]`");
-                }
                 if (command.Options.Any(o => o.Inherited))
-                {
                     yield return (FootnoteSymbol_InheritedOptionForInterceptorCommand, "option can be passed after final subcommand. `[command] [subcommand] [options]`");
-                }
             }
         }
 

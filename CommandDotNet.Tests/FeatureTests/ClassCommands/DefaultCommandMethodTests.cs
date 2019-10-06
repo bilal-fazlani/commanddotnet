@@ -15,9 +15,9 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         }
 
         [Fact]
-        public void WithoutParams_BasicHelp_IncludesOtherCommands()
+        public void WithoutDefaultArgs_BasicHelp_IncludesOtherCommands()
         {
-            Verify(new Scenario<WithoutParamsApp>
+            Verify(new Scenario<WithoutDefaultArgsApp>
             {
                 Given = { AppSettings = BasicHelp },
                 WhenArgs = "-h",
@@ -34,9 +34,9 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         }
 
         [Fact]
-        public void WithoutParams_DetailedHelp_IncludesOtherCommands()
+        public void WithoutDefaultArgs_DetailedHelp_IncludesOtherCommands()
         {
-            Verify(new Scenario<WithoutParamsApp>
+            Verify(new Scenario<WithoutDefaultArgsApp>
             {
                 Given = { AppSettings = DetailedHelp },
                 WhenArgs = "-h",
@@ -54,9 +54,9 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         }
 
         [Fact]
-        public void WithParams_BasicHelp_IncludesArgsAndOtherCommands()
+        public void WithDefaultArgs_BasicHelp_IncludesArgsAndOtherCommands()
         {
-            Verify(new Scenario<WithParamsApp>
+            Verify(new Scenario<WithDefaultArgsApp>
             {
                 Given = {AppSettings = BasicHelp},
                 WhenArgs = "-h",
@@ -76,9 +76,9 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         }
 
         [Fact]
-        public void WithParams_DetailedHelp_IncludesArgsAndOtherCommands()
+        public void WithDefaultArgs_DetailedHelp_IncludesArgsAndOtherCommands()
         {
-            Verify(new Scenario<WithParamsApp>
+            Verify(new Scenario<WithDefaultArgsApp>
             {
                 Given = { AppSettings = DetailedHelp },
                 WhenArgs = "-h",
@@ -101,48 +101,37 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         }
 
 
-        [Fact(Skip = "requires framework to distinguish interceptor options from default options")]
-        public void WithParams_Help_ForAnotherCommand_DoesNotIncludeDefaultArgs()
+        [Fact]
+        public void WithDefaultArgs_Help_ForAnotherCommand_DoesNotIncludeDefaultArgs()
         {
-            Verify(new Scenario<WithParamsApp>
+            Verify(new Scenario<WithDefaultArgsApp>
             {
                 Given = { AppSettings = DetailedHelp },
                 WhenArgs = "AnotherCommand -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll [command] [arguments]
-
-Arguments:
-
-  text  <TEXT>
-  some text
-
-Commands:
-
-  AnotherCommand
-
-Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+                    Result = @"Usage: dotnet testhost.dll AnotherCommand"
                 }
             });
         }
 
         [Fact]
-        public void WithoutParams_Execute_works()
+        public void WithoutDefaultArgs_Execute_works()
         {
-            Verify(new Scenario<WithoutParamsApp>
+            Verify(new Scenario<WithoutDefaultArgsApp>
             {
                 WhenArgs = null,
                 Then =
                 {
-                    Outputs = { WithoutParamsApp.DefaultMethodExecuted }
+                    Outputs = { WithoutDefaultArgsApp.DefaultMethodExecuted }
                 }
             });
         }
 
         [Fact]
-        public void WithParams_Execute_works()
+        public void WithDefaultArgs_Execute_works()
         {
-            Verify(new Scenario<WithParamsApp>
+            Verify(new Scenario<WithDefaultArgsApp>
             {
                 WhenArgs = "abcde",
                 Then =
@@ -153,9 +142,9 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         }
 
         [Fact]
-        public void WithParams_Execute_AnotherCommand_WorksWithoutParams()
+        public void WithDefaultArgs_Execute_AnotherCommand_WorksWithoutParams()
         {
-            Verify(new Scenario<WithParamsApp>
+            Verify(new Scenario<WithDefaultArgsApp>
             {
                 WhenArgs = "AnotherCommand",
                 Then =
@@ -165,20 +154,21 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             });
         }
 
-        [Fact(Skip = "requires framework to distinguish interceptor options from default options")]
-        public void WithParams_Execute_AnotherCommand_FailsWithDefaultParams()
+        [Fact]
+        public void WithDefaultArgs_Execute_AnotherCommand_FailsWithDefaultParams()
         {
-            Verify(new Scenario<WithParamsApp>
+            Verify(new Scenario<WithDefaultArgsApp>
             {
                 WhenArgs = "AnotherCommand abcde",
                 Then =
                 {
+                    ExitCode = 1,
                     ResultsContainsTexts = { "Unrecognized command or argument 'abcde'"}
                 }
             });
         }
 
-        public class WithoutParamsApp
+        public class WithoutDefaultArgsApp
         {
             public const string DefaultMethodExecuted = "default executed";
 
@@ -196,7 +186,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             }
         }
 
-        public class WithParamsApp
+        public class WithDefaultArgsApp
         {
             private TestOutputs TestOutputs { get; set; }
 

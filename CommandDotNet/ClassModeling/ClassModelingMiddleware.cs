@@ -39,7 +39,7 @@ namespace CommandDotNet.ClassModeling
                     Command = command,
                     Invocation = commandDef.InvokeMethodDef
                 };
-                command.GetParentCommands(includeCurrent:false)
+                command.GetParentCommands(includeCurrent:true)
                     .Select(cmd => (cmd, def: cmd.GetCommandDef()))
                     .Where(c => c.def != null && c.def.HasInterceptor) // in case command is defined by a different middleware
                     .Reverse()
