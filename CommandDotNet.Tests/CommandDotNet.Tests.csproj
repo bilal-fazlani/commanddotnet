@@ -6,8 +6,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoFixture.Xunit2" Version="4.8.0" />
-    <PackageReference Include="CommandDotNet.IoC.Autofac" Version="1.0.5" />
-    <PackageReference Include="CommandDotNet.IoC.MicrosoftDependencyInjection" Version="1.0.9" />
     <PackageReference Include="FluentAssertions" Version="5.8.0" />
     <PackageReference Include="FluentValidation" Version="7.6.103" />
     <PackageReference Include="JsonDiffPatch.Net" Version="2.1.0" />
