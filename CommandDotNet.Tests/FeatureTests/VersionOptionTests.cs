@@ -107,7 +107,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void WhenVersionDisabled_Version_LongName_NotRecognized()
         {
-            new AppRunner<App>()
+            new AppRunner<App>(VersionDisabledBasicHelp)
                 .VerifyScenario(TestOutputHelper, new Scenario
                 {
                     WhenArgs = "--version",
@@ -122,7 +122,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void WhenVersionDisabled_Version_ShortName_NotRecognized()
         {
-            new AppRunner<App>()
+            new AppRunner<App>(VersionDisabledBasicHelp)
                 .VerifyScenario(TestOutputHelper, new Scenario
                 {
                     WhenArgs = "-v",

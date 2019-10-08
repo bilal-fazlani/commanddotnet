@@ -1,5 +1,6 @@
 using System;
 using CommandDotNet.Rendering;
+using CommandDotNet.TestTools.Prompts;
 
 namespace CommandDotNet.TestTools.Scenarios
 {
@@ -9,10 +10,16 @@ namespace CommandDotNet.TestTools.Scenarios
         public AppSettings AppSettings { get; set; }
 
         /// <summary>
-        /// Use this delegate to mimic input in response to a <see cref="IConsole"/>In.ReadLine().
+        /// Use this delegate to mimic input in response to a <see cref="IConsole"/>.In.ReadLine()<br/>
         /// Use <see cref="TestConsole"/>.Out.ToString() to get the output up to that point.
         /// </summary>
         public Func<TestConsole, string> OnReadLine { get; set; }
+
+        /// <summary>
+        /// Use this delegate to mimic input in response to a <see cref="IConsole"/>.ReadKey()<br/>
+        /// Use <see cref="TestConsole"/>.Out.ToString() to get the output up to that point.
+        /// </summary>
+        public IPromptResponder OnPrompt { get; set; }
 
         /// <summary>Use to mimic piped input from the shell.</summary>
         public string[] PipedInput { get; set; }

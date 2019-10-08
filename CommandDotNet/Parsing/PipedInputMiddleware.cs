@@ -12,7 +12,7 @@ namespace CommandDotNet.Parsing
     {
         internal static AppRunner EnablePipedInput(AppRunner appRunner)
         {
-            return appRunner.Configure(c => c.UseMiddleware(InjectPipedInput, MiddlewareStages.PostParseInputPreBindValues));
+            return appRunner.Configure(c => c.UseMiddleware(InjectPipedInput, MiddlewareStages.PostParseInputPreBindValues, -1));
         }
 
         private static Task<int> InjectPipedInput(CommandContext ctx, ExecutionDelegate next)
@@ -57,9 +57,7 @@ namespace CommandDotNet.Parsing
             {
                 var input = console.In.ReadToEnd().TrimEnd('\r', '\n');
                 return input
-                    .Split(
-                        new[] {"\r\n", "\r", "\n"},
-                        StringSplitOptions.None)
+                    .SplitIntoLines()
                     .Select(s => s.Trim())
                     .ToArray();
             }

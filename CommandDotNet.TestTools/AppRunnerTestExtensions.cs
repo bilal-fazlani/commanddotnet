@@ -4,24 +4,28 @@ using System.Linq;
 using System.Reflection;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
+using CommandDotNet.TestTools.Prompts;
 
 namespace CommandDotNet.TestTools
 {
     /// <summary>Run the console in memory and get the results that would be output to the shell</summary>
     public static class AppRunnerTestExtensions
     {
-        public static AppRunnerResult RunInMem(
-            this AppRunner runner, 
+        public static AppRunnerResult RunInMem(this AppRunner runner,
             string[] args,
             ILogger logger,
             Func<TestConsole, string> onReadLine = null,
-            IEnumerable<string> pipedInput = null)
+            IEnumerable<string> pipedInput = null,
+            IPromptResponder promptResponder = null)
         {
             var testConsole = new TestConsole(
                 onReadLine,
                 pipedInput == null
                     ? (Func<TestConsole, string>) null
-                    : console => pipedInput?.ToCsv(Environment.NewLine));
+                    : console => pipedInput?.ToCsv(Environment.NewLine),
+                promptResponder == null
+                    ? (Func<TestConsole, ConsoleKeyInfo>)null
+                    : promptResponder.OnReadKey);
                     
             runner.Configure(c => c.Console = testConsole);
             var outputs = InjectTestOutputs(runner);

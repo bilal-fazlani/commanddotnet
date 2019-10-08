@@ -35,7 +35,7 @@ namespace CommandDotNet.Example
                 .UseParseDirective()
                 .UseVersionMiddleware()
                 .UseFluentValidation()
-                .UsePromptForMissingOperands()
+                .UsePrompting()
                 .UseResponseFiles()
                 .UseNewerReleaseAlertOnGitHub("bilal-fazlani", "commanddotnet")
                 .Run(args);
@@ -65,6 +65,9 @@ namespace CommandDotNet.Example
 
             [SubCommand]
             public CancelMeApp CancelMeApp { get; set; }
+
+            [SubCommand]
+            public PromptApp PromptApp { get; set; }
         }
     }
 }

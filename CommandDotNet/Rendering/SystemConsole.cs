@@ -27,5 +27,16 @@ namespace CommandDotNet.Rendering
         public IStandardStreamReader In { get; }
 
         public bool IsInputRedirected => Console.IsInputRedirected;
+
+        public ConsoleKeyInfo ReadKey(bool intercept = false)
+        {
+            return Console.ReadKey(intercept);
+        }
+
+        public bool TreatControlCAsInput
+        {
+            get => Console.TreatControlCAsInput;
+            set => Console.TreatControlCAsInput = value;
+        }
     }
 }

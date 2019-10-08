@@ -37,7 +37,8 @@ namespace CommandDotNet.TestTools.Scenarios
                     scenario.WhenArgsArray ?? scenario.WhenArgs.SplitArgs(),
                     null,
                     scenario.Given.OnReadLine,
-                    scenario.Given.PipedInput);
+                    scenario.Given.PipedInput,
+                    scenario.Given.OnPrompt);
 
                 AssertExitCodeAndErrorMessage(scenario, results);
 
@@ -53,7 +54,7 @@ namespace CommandDotNet.TestTools.Scenarios
             }
             catch (Exception)
             {
-                PrintContext(appRunner, logger, scenario);
+                PrintContext(appRunner, logger);
                 if (results != null)
                 {
                     logger.WriteLine("");
@@ -64,7 +65,7 @@ namespace CommandDotNet.TestTools.Scenarios
             }
         }
 
-        private static void PrintContext(AppRunner appRunner, ILogger logger, IScenario scenario)
+        private static void PrintContext(AppRunner appRunner, ILogger logger)
         {
             var appSettings = appRunner.AppSettings;
             var appSettingsProps = appSettings.GetType()

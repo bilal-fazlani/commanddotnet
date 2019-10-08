@@ -5,7 +5,9 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
+using CommandDotNet.Prompts;
 using CommandDotNet.Rendering;
 
 namespace CommandDotNet.TestTools
@@ -13,10 +15,14 @@ namespace CommandDotNet.TestTools
     /// <summary>A test console that can be used to capture all output and to provide input for ReadLine and ReadToEnd</summary>
     public class TestConsole : IConsole
     {
+        private readonly Func<TestConsole, ConsoleKeyInfo> _onReadKey;
+
         public TestConsole(
             Func<TestConsole, string> onReadLine = null,
-            Func<TestConsole, string> onReadToEnd = null)
+            Func<TestConsole, string> onReadToEnd = null,
+            Func<TestConsole, ConsoleKeyInfo> onReadKey = null)
         {
+            _onReadKey = onReadKey;
             IsInputRedirected = onReadToEnd != null;
 
             var joined = new StandardStreamWriter();
@@ -48,20 +54,50 @@ namespace CommandDotNet.TestTools
 
         public IStandardStreamWriter Out { get; }
 
+        public string OutLastLine => Out.ToString().SplitIntoLines().Last();
+
         /// <summary>
         /// This is the combined output for <see cref="Error"/> and <see cref="Out"/> in the order the lines were output.
         /// </summary>
         public IStandardStreamWriter Joined { get; }
 
-        public bool IsOutputRedirected { get; }
+        public bool IsOutputRedirected { get; } = false;
 
-        public bool IsErrorRedirected { get; }
+        public bool IsErrorRedirected { get; } = false;
 
         public IStandardStreamReader In { get; }
 
         public bool IsInputRedirected { get; }
 
-        internal class StandardStreamReader : IStandardStreamReader
+        public ConsoleKeyInfo ReadKey(bool intercept)
+        {
+            ConsoleKeyInfo consoleKeyInfo;
+
+            do
+            {
+                consoleKeyInfo = _onReadKey?.Invoke(this)
+                                 ?? new ConsoleKeyInfo('\u0000', ConsoleKey.Enter, false, false, false);
+
+                // mimic System.Console which does not interrupt during ReadKey
+                // and does not return Ctrl+C unless TreatControlCAsInput == true.
+            } while (!TreatControlCAsInput && consoleKeyInfo.IsCtrlC());
+
+            if (!intercept)
+            {
+                if (consoleKeyInfo.Key == ConsoleKey.Enter)
+                {
+                    Out.WriteLine("");
+                }
+                else
+                {
+                    Out.Write(consoleKeyInfo.KeyChar.ToString());
+                }
+            }
+            return consoleKeyInfo;
+        }
+        public bool TreatControlCAsInput { get; set; }
+
+        private class StandardStreamReader : IStandardStreamReader
         {
             private readonly Func<string> _onReadLine;
             private readonly Func<string> _onReadToEnd;
@@ -83,7 +119,7 @@ namespace CommandDotNet.TestTools
             }
         }
 
-        internal class StandardStreamWriter : TextWriter, IStandardStreamWriter
+        private class StandardStreamWriter : TextWriter, IStandardStreamWriter
         {
             private readonly StandardStreamWriter _inner;
             private readonly StringBuilder _stringBuilder = new StringBuilder();
@@ -97,7 +133,14 @@ namespace CommandDotNet.TestTools
             public override void Write(char value)
             {
                 _inner?.Write(value);
-                _stringBuilder.Append(value);
+                if (value == '\b' && _stringBuilder.Length > 0)
+                {
+                    _stringBuilder.Length = _stringBuilder.Length - 1;
+                }
+                else
+                {
+                    _stringBuilder.Append(value);
+                }
             }
 
             public override Encoding Encoding { get; } = Encoding.Unicode;

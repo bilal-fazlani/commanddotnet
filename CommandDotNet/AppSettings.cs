@@ -77,14 +77,14 @@ namespace CommandDotNet
         [Obsolete("Use appRunner.UseVersionMiddleware() extension method")]
         public bool EnableVersionOption { get; set; } = true;
 
-        [Obsolete("Use appRunner.UsePromptForMissingOperands() extension method")]
+        [Obsolete("Use appRunner.PromptForMissingArguments() extension method")]
         public bool PrompForArgumentsIfNotProvided
         {
             get => PromptForMissingOperands;
             set => PromptForMissingOperands = value;
         }
 
-        [Obsolete("Use appRunner.UsePromptForMissingOperands() extension method")]
+        [Obsolete("Use appRunner.PromptForMissingArguments() extension method")]
         public bool PromptForMissingOperands { get; set; }
 
         [Obsolete("Use Help.TextStyle")]

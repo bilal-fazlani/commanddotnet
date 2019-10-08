@@ -10,6 +10,19 @@ namespace CommandDotNet
 
         public static Command GetRootCommand(this Command command) => command.GetParentCommands(true).Last();
 
+        public static IEnumerable<IArgument> AllArguments(this Command command, bool includeInterceptorOptions = false)
+        {
+            var allLocalArgs = command.Operands.Cast<IArgument>().Concat(command.Options);
+
+            // inherited options are already included in allLocalArgs
+            return includeInterceptorOptions
+                ? command.GetParentCommands()
+                    .Reverse()
+                    .SelectMany(c => c.Options.Where(o => o.IsInterceptorOption && !o.Inherited))
+                    .Concat(allLocalArgs)
+                : allLocalArgs;
+        }
+
         public static IEnumerable<Command> GetParentCommands(this Command command, bool includeCurrent = false)
         {
             var startingCommand = includeCurrent ? command : command.Parent;

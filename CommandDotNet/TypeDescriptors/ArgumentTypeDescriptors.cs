@@ -16,6 +16,7 @@ namespace CommandDotNet.TypeDescriptors
                 new EnumTypeDescriptor(),
 
                 new DelegatedTypeDescriptor<string>(Constants.TypeDisplayNames.Text, v => v),
+                new DelegatedTypeDescriptor<Password>(Constants.TypeDisplayNames.Text, v => new Password(v)),
                 new DelegatedTypeDescriptor<char>(Constants.TypeDisplayNames.Character, v => char.Parse(v)),
 
                 new DelegatedTypeDescriptor<long>(Constants.TypeDisplayNames.Number, v => long.Parse(v, CultureInfo.InvariantCulture)),
