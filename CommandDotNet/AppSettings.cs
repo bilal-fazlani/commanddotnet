@@ -74,19 +74,6 @@ namespace CommandDotNet
         [Obsolete("this is only used to display the arg separator in help. it does not make the separated arguments available for use.")]
         public bool AllowArgumentSeparator { get; set; }
 
-        [Obsolete("Use appRunner.UseVersionMiddleware() extension method")]
-        public bool EnableVersionOption { get; set; } = true;
-
-        [Obsolete("Use appRunner.PromptForMissingArguments() extension method")]
-        public bool PrompForArgumentsIfNotProvided
-        {
-            get => PromptForMissingOperands;
-            set => PromptForMissingOperands = value;
-        }
-
-        [Obsolete("Use appRunner.PromptForMissingArguments() extension method")]
-        public bool PromptForMissingOperands { get; set; }
-
         [Obsolete("Use Help.TextStyle")]
         public HelpTextStyle HelpTextStyle
         {

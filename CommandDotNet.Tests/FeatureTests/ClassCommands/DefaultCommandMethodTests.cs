@@ -7,8 +7,8 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 {
     public class DefaultCommandMethodTests : TestBase
     {
-        private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp.Clone(a => a.EnableVersionOption = false);
-        private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp.Clone(a => a.EnableVersionOption = false);
+        private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
+        private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
         
         public DefaultCommandMethodTests(ITestOutputHelper output) : base(output)
         {

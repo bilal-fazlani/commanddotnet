@@ -9,8 +9,8 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class CustomArgumentTypeDescriptorTests : TestBase
     {
-        private static readonly AppSettings BasicHelpWithDescriptor = TestAppSettings.BasicHelp.Clone(a => a.EnableVersionOption = true);
-        private static readonly AppSettings DetailedHelpWithDescriptor = TestAppSettings.DetailedHelp.Clone(a => a.EnableVersionOption = true);
+        private static readonly AppSettings BasicHelpWithDescriptor = TestAppSettings.BasicHelp;
+        private static readonly AppSettings DetailedHelpWithDescriptor = TestAppSettings.DetailedHelp;
 
         public CustomArgumentTypeDescriptorTests(ITestOutputHelper output) : base(output)
         {

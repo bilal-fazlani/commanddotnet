@@ -6,11 +6,6 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class VersionOptionTests : TestBase
     {
-        private static readonly AppSettings VersionEnabledBasicHelp = TestAppSettings.BasicHelp.Clone(a => a.EnableVersionOption = true);
-        private static readonly AppSettings VersionEnabledDetailedHelp = TestAppSettings.DetailedHelp.Clone(a => a.EnableVersionOption = true);
-        private static readonly AppSettings VersionDisabledBasicHelp = TestAppSettings.BasicHelp.Clone(a => a.EnableVersionOption = false);
-        private static readonly AppSettings VersionEnabled = TestAppSettings.TestDefault.Clone(a => a.EnableVersionOption = true);
-
         public VersionOptionTests(ITestOutputHelper output) : base(output)
         {
         }
@@ -107,7 +102,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void WhenVersionDisabled_Version_LongName_NotRecognized()
         {
-            new AppRunner<App>(VersionDisabledBasicHelp)
+            new AppRunner<App>()
                 .VerifyScenario(TestOutputHelper, new Scenario
                 {
                     WhenArgs = "--version",
@@ -122,7 +117,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void WhenVersionDisabled_Version_ShortName_NotRecognized()
         {
-            new AppRunner<App>(VersionDisabledBasicHelp)
+            new AppRunner<App>()
                 .VerifyScenario(TestOutputHelper, new Scenario
                 {
                     WhenArgs = "-v",
