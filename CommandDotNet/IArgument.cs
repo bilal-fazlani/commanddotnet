@@ -11,7 +11,7 @@ namespace CommandDotNet
         ITypeInfo TypeInfo { get; }
 
         /// <summary>The <see cref="IArgumentArity"/> for this argument, describing how many values are allowed.</summary>
-        IArgumentArity Arity { get; }
+        IArgumentArity Arity { get; set; }
 
         /// <summary>The default value for this argument</summary>
         object DefaultValue { get; set; }
