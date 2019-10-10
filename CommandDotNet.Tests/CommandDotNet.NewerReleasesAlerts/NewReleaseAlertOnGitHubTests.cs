@@ -25,7 +25,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
             var version = "1.0.0";
 
             new AppRunner<App>()
-                .Configure(c => c.Services.Set(new VersionInfo("blah", version)))
+                .Configure(c => c.Services.AddOrUpdate(new VersionInfo("blah", version)))
                 .UseNewerReleaseAlertOnGitHub(organizationName, repositoryName,
                     overrideHttpRequestCallback: (client, uri) => Task.FromResult(BuildGitHubApiResponse("1.0.1")))
                 .VerifyScenario(_testOutputHelper, new Scenario
@@ -50,7 +50,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
             var version = "1.0.1";
 
             new AppRunner<App>()
-                .Configure(c => c.Services.Set(new VersionInfo("blah", version)))
+                .Configure(c => c.Services.AddOrUpdate(new VersionInfo("blah", version)))
                 .UseNewerReleaseAlertOnGitHub(organizationName, repositoryName, 
                     overrideHttpRequestCallback: (client, uri) => Task.FromResult(BuildGitHubApiResponse("1.0.0")))
                 .VerifyScenario(_testOutputHelper, new Scenario

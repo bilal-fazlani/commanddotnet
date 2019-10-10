@@ -44,7 +44,7 @@ namespace CommandDotNet.Builders
             var filename = Path.GetFileName(hostAssembly.Location);
             var fvi = FileVersionInfo.GetVersionInfo(hostAssembly.Location);
             versionInfo = new VersionInfo(filename, fvi.ProductVersion);
-            appConfigServices.Set(versionInfo);
+            appConfigServices.AddOrUpdate(versionInfo);
             return versionInfo;
         }
     }

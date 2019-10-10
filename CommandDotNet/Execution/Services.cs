@@ -10,12 +10,49 @@ namespace CommandDotNet.Execution
 
         public void Add<T>(T value)
         {
-            _servicesByType.Add(typeof(T), value);
+            Add(typeof(T), value);
         }
 
-        public void Set<T>(T value)
+        public void Add(Type type, object value)
         {
-            _servicesByType[typeof(T)] = value;
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            if(!type.IsInstanceOfType(value))
+            {
+                throw new ArgumentException($"{nameof(value)} '{value.GetType()}' must be an instance of {nameof(type)} '{type}'");
+            }
+            if (_servicesByType.ContainsKey(type))
+            {
+                throw new ArgumentException($"service for {nameof(type)} '{type}' already exists '{_servicesByType[type]}'");
+            }
+
+            _servicesByType.Add(type, value);
+        }
+
+        public void AddOrUpdate<T>(T value)
+        {
+            AddOrUpdate(typeof(T), value);
+        }
+
+        public void AddOrUpdate(Type type, object value)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            if (!type.IsInstanceOfType(value))
+            {
+                throw new ArgumentException($"{nameof(value)} '{value.GetType()}' must be an instance of {nameof(type)} '{type}'");
+            }
+
+            _servicesByType[type] = value;
+        }
+
+        public T Get<T>()
+        {
+            return (T)Get(typeof(T));
         }
 
         public object Get(Type type)
@@ -23,9 +60,9 @@ namespace CommandDotNet.Execution
             return _servicesByType.GetValueOrDefault(type);
         }
 
-        public T Get<T>()
+        public ICollection<KeyValuePair<Type, object>> GetAll()
         {
-            return (T)Get(typeof(T));
+            return _servicesByType.ToCollection();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 commandDef.IsExecutable,
                 parent,
                 commandDef.SourcePath);
-            command.Services.Set(commandDef);
+            command.Services.AddOrUpdate(commandDef);
 
             var commandAttribute = commandDef.CustomAttributes.GetCustomAttribute<CommandAttribute>() 
                                    ?? commandDef.CustomAttributes.GetCustomAttribute<ApplicationMetadataAttribute>();
@@ -64,7 +64,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 new TypeInfo(argumentDef.Type, underlyingType), 
                 isInterceptorOption);
             argumentDef.Argument = argument;
-            argument.Services.Set(argumentDef);
+            argument.Services.AddOrUpdate(argumentDef);
 
             var typeDescriptor = appConfig.AppSettings.ArgumentTypeDescriptors.GetDescriptorOrThrow(underlyingType);
             argument.TypeInfo.DisplayName = typeDescriptor.GetDisplayName(argument);

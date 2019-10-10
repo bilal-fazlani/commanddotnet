@@ -4,7 +4,7 @@ using CommandDotNet.Tokens;
 using FluentAssertions;
 using Xunit;
 
-namespace CommandDotNet.Tests.Parsing
+namespace CommandDotNet.Tests.UnitTests.Parsing
 {
     public class CommandLineStringSplitterTests
     {

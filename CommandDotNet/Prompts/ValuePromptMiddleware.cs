@@ -30,7 +30,7 @@ namespace CommandDotNet.Prompts
                                        if(prompter == null)
                                        {
                                            prompter = new Prompter(ctx.Console);
-                                           ctx.Services.Set(prompter);
+                                           ctx.Services.AddOrUpdate(prompter);
                                        }
                                        return prompter;
                                    });

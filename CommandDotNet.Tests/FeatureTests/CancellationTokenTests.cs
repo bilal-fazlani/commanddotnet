@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<App>()
                 .Configure(c =>
                 {
-                    c.Services.Set(tokenSource);
+                    c.Services.AddOrUpdate(tokenSource);
                     c.CancellationToken = tokenSource.Token;
                     c.UseMiddleware(Cancel, MiddlewareStages.PostTokenizePreBuild);
                     c.UseMiddleware(Throw, MiddlewareStages.PostTokenizePreBuild);
@@ -41,7 +41,7 @@ namespace CommandDotNet.Tests.FeatureTests
             var appRunner = new AppRunner<App>()
                 .Configure(c =>
                 {
-                    c.Services.Set(tokenSource);
+                    c.Services.AddOrUpdate(tokenSource);
                     c.CancellationToken = tokenSource.Token;
                     c.UseMiddleware(Throw, MiddlewareStages.PostTokenizePreBuild);
                 });
