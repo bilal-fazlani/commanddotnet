@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using CommandDotNet.TestTools;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
@@ -48,7 +49,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         }
 
         [Fact]
-        public void ShouldDetectDuplicateInheritiedOptions()
+        public void ShouldDetectDuplicateInheritedOptions()
         {
             Assert.Throws<InvalidConfigurationException>(() =>
                     new AppRunner<DuplicateInheritedOptionApp>()
@@ -56,6 +57,14 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                 .Message.Should().Be("Duplicate alias 'lala' added to command 'SubDo'. Duplicates: " +
                                      "'Option:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateInheritedOptionApp.Intercept.lala)' & " +
                                      "'Operand:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateInheritedOptionApp+SubApp.SubDo.lala)'");
+        }
+
+        [Fact]
+        public void InteceptorOptionsShouldNotCollideWithChildCommandOptions()
+        {
+            new AppRunner<NonDuplicateInheritedOptionApp>()
+                .RunInMem("SubApp SubDo -h", _testOutputHelper)
+                .ExitCode.Should().Be(0);
         }
 
         class DuplicateCommandApp
@@ -88,6 +97,22 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         class DuplicateInheritedOptionApp
         {
             public Task<int> Intercept(InterceptorExecutionDelegate next, [Option(Inherited = true)] string lala)
+            {
+                return next();
+            }
+
+            public void Do() { }
+
+            [SubCommand]
+            public class SubApp
+            {
+                public void SubDo(string lala) { }
+            }
+        }
+
+        class NonDuplicateInheritedOptionApp
+        {
+            public Task<int> Intercept(InterceptorExecutionDelegate next, [Option] string lala)
             {
                 return next();
             }
