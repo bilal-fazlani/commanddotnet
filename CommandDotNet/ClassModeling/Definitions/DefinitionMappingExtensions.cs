@@ -24,6 +24,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             if (commandAttribute != null)
             {
                 command.Description = commandAttribute.Description;
+                command.Usage = commandAttribute.Usage;
                 command.ExtendedHelpText = commandAttribute.ExtendedHelpText;
             }
 

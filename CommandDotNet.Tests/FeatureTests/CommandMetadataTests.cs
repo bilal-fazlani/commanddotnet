@@ -22,7 +22,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 WhenArgs = "-h",
                 Then = { Result = @"app description
 
-Usage: SomeApp [command]
+Usage: some usage examples
 
 Commands:
   somecommand  cmd description
@@ -43,7 +43,7 @@ app extended help" }
                 WhenArgs = "-h",
                 Then = { Result = @"app description
 
-Usage: SomeApp [command]
+Usage: some usage examples
 
 Commands:
 
@@ -139,7 +139,7 @@ cmd extended help" }
         {
             Verify(new Scenario<App>
             {
-                WhenArgs = $"somecommand 5",
+                WhenArgs = "somecommand 5",
                 Then = { ExitCode = 5 }
             });
         }
@@ -149,7 +149,7 @@ cmd extended help" }
         {
             Verify(new Scenario<App>
             {
-                WhenArgs = $"SubApp subdo 5",
+                WhenArgs = "SubApp subdo 5",
                 Then = { ExitCode = 5 }
             });
         }
@@ -157,6 +157,7 @@ cmd extended help" }
         // sanity check for ApplicationMetadata until it has been removed 
         [ApplicationMetadata(
             Description = "app description",
+            Usage = "some usage examples",
             Name = "SomeApp",
             ExtendedHelpText = "app extended help")]
         public class App

@@ -35,7 +35,8 @@ namespace CommandDotNet.Help
 
         /// <summary>returns the body of the usage section</summary>
         protected virtual string SectionUsage(Command command) =>
-            $"{PadFront(AppName(command))}{PadFront(CommandPath(command))}" +
+            PadFront(command.Usage)
+            ?? $"{PadFront(AppName(command))}{PadFront(CommandPath(command))}" +
             $"{PadFront(UsageSubcommand(command))}{PadFront(UsageOperand(command))}{PadFront(UsageOption(command))}" +
             (_appSettings.AllowArgumentSeparator ? " [[--] <arg>...]" : null);
 

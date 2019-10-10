@@ -5,7 +5,12 @@ using Newtonsoft.Json;
 
 namespace CommandDotNet.Example
 {
-    [Command(Name = "demo", Description = "Sample application for demonstration", ExtendedHelpText = "this is extended help text")]
+    [Command(Name = "demo", 
+        Description = "Sample application for demonstration", 
+        Usage = "\n" +
+                "\n demo [demo options] JUMP [jump options]" +
+                "\n demo [--cjumped][--cfeets 5]... JUMP [--mjumped][--mfeets 10]",
+        ExtendedHelpText = "this is extended help text")]
     public class MyApplication
     {
         private bool _cjumped;
