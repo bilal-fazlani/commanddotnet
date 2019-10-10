@@ -18,7 +18,6 @@ namespace CommandDotNet.ClassModeling.Definitions
         private ParameterInfo[] _parameters;
         private object[] _values;
 
-        private ParameterInfo _commandContextParameterInfo;
         private ParameterInfo _nextParameterInfo;
         private List<ParameterInfo> _serviceParameters;
 
@@ -70,11 +69,6 @@ namespace CommandDotNet.ClassModeling.Definitions
                 {
                     _values[_nextParameterInfo.Position] = next;
                 }
-            }
-
-            if (_commandContextParameterInfo != null)
-            {
-                _values[_commandContextParameterInfo.Position] = commandContext;
             }
 
             _serviceParameters?.ForEach(p =>
@@ -146,12 +140,6 @@ namespace CommandDotNet.ClassModeling.Definitions
                     _serviceParameters = new List<ParameterInfo>();
                 }
                 _serviceParameters.Add(parameterInfo);
-                return Enumerable.Empty<IArgumentDef>();
-            }
-
-            if (parameterInfo.ParameterType == typeof(CommandContext))
-            {
-                _commandContextParameterInfo = parameterInfo;
                 return Enumerable.Empty<IArgumentDef>();
             }
 
