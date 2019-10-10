@@ -11,7 +11,7 @@ using CommandDotNet.Extensions;
 
 namespace CommandDotNet
 {
-    public class Command : IArgumentNode
+    public sealed class Command : IArgumentNode
     {
         private readonly List<Option> _options = new List<Option>();
         private readonly List<Operand> _operands = new List<Operand>();

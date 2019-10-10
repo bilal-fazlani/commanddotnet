@@ -10,7 +10,7 @@ using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet
 {
-    public class Operand : IArgument
+    public sealed class Operand : IArgument
     {
         public Operand(
             string name, 

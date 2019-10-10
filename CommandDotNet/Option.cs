@@ -11,7 +11,7 @@ using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet
 {
-    public class Option : IArgument
+    public sealed class Option : IArgument
     {
         private readonly HashSet<string> _aliases;
         
