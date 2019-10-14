@@ -13,7 +13,7 @@ namespace CommandDotNet.ClassModeling
         {
             return appRunner.Configure(c =>
             {
-                c.UseMiddleware((context, next) => BuildMiddleware(rootCommandType, context, next), MiddlewareStages.Build);
+                c.UseMiddleware((context, next) => CreateRootCommand(context, next, rootCommandType), MiddlewareStages.Tokenize, int.MaxValue);
                 c.UseMiddleware(AssembleInvocationPipelineMiddleware, MiddlewareStages.ParseInput);
                 c.UseMiddleware(BindValuesMiddleware.BindValues, MiddlewareStages.BindValues);
                 c.UseMiddleware(ResolveInstancesMiddleware.ResolveInstances, MiddlewareStages.BindValues);
@@ -21,7 +21,8 @@ namespace CommandDotNet.ClassModeling
             });
         }
 
-        private static Task<int> BuildMiddleware(Type rootCommandType, CommandContext commandContext, ExecutionDelegate next)
+        private static Task<int> CreateRootCommand(
+            CommandContext commandContext, ExecutionDelegate next, Type rootCommandType)
         {
             commandContext.RootCommand = ClassCommandDef.CreateRootCommand(rootCommandType, commandContext);
             return next(commandContext);

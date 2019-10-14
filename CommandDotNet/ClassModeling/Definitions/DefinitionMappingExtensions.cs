@@ -45,11 +45,12 @@ namespace CommandDotNet.ClassModeling.Definitions
                     .ForEach(commandBuilder.AddArgument);
             }
 
-            commandContext.AppConfig.BuildEvents.CommandCreated(commandContext, commandBuilder);
-
             commandDef.SubCommands
                 .Select(c => c.ToCommand(command, commandContext).Command)
                 .ForEach(commandBuilder.AddSubCommand);
+
+            commandContext.AppConfig.BuildEvents.CommandCreated(commandContext, commandBuilder);
+
             return commandBuilder;
         }
 

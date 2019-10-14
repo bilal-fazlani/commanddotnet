@@ -25,19 +25,11 @@ namespace CommandDotNet.Execution
         /// parse directive.
         /// <br/>Guarantees:<br/>
         /// - <see cref="CommandContext.Tokens"/> is the result of all <see cref="TokenTransformation"/>s<br/>
-        /// </summary>
-        Tokenize,
-        PostTokenizePreBuild,
-
-        /// <summary>
-        /// In the <see cref="Build"/> stage commands and arguments are determined from the type specified in <see cref="AppRunner{T}"/>.
-        /// <br/>Guarantees:<br/>
         /// - <see cref="CommandContext.RootCommand"/> is set for the type specified in <see cref="AppRunner{T}"/>.<br/>
-        /// - All builders are prepped for the parse stage.
         ///   The entire command hierarchy may be loaded or commands may lazy load during parse.
         /// </summary>
-        Build,
-        PostBuildPreParseInput,
+        Tokenize,
+        PostTokenizePreParseInput,
 
         /// <summary>
         /// In the <see cref="ParseInput"/> stage Tokens are parsed to determine the
@@ -45,7 +37,7 @@ namespace CommandDotNet.Execution
         /// <br/>Guarantees:<br/>
         /// - <see cref="CommandContext.ParseResult"/> is populated<br/>
         /// - <see cref="ParseResult.TargetCommand"/> is set to the target command<br/>
-        /// - <see cref="ParseResult.ArgumentValues"/> contains the collection of values assigned to arguments<br/>
+        /// - <see cref="IArgument.RawValues"/> contains the collection of values assigned to arguments<br/>
         /// - <see cref="InvocationStep.Invocation"/> and <see cref="InvocationStep.Command"/> are set for the target command and its ancestral interceptor commands<br/>
         /// not set yet (see <see cref="BindValues"/>):<br/>
         /// - <see cref="InvocationStep.Instance"/><br/>

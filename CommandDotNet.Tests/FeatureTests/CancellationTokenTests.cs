@@ -26,8 +26,8 @@ namespace CommandDotNet.Tests.FeatureTests
                 {
                     c.Services.AddOrUpdate(tokenSource);
                     c.CancellationToken = tokenSource.Token;
-                    c.UseMiddleware(Cancel, MiddlewareStages.PostTokenizePreBuild);
-                    c.UseMiddleware(Throw, MiddlewareStages.PostTokenizePreBuild);
+                    c.UseMiddleware(Cancel, MiddlewareStages.PostTokenizePreParseInput);
+                    c.UseMiddleware(Throw, MiddlewareStages.PostTokenizePreParseInput);
                 })
                 .RunInMem(new string[0], _testOutputHelper)
                 .ConsoleAllOutput.Should().BeEmpty();
@@ -43,7 +43,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 {
                     c.Services.AddOrUpdate(tokenSource);
                     c.CancellationToken = tokenSource.Token;
-                    c.UseMiddleware(Throw, MiddlewareStages.PostTokenizePreBuild);
+                    c.UseMiddleware(Throw, MiddlewareStages.PostTokenizePreParseInput);
                 });
 
             Assert.Throws<Exception>(() => appRunner.RunInMem(new string[0], _testOutputHelper))
