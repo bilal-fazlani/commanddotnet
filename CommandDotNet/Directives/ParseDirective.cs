@@ -15,7 +15,7 @@ namespace CommandDotNet.Directives
             return appRunner.Configure(c =>
             {
                 c.UseMiddleware(Report, MiddlewareStages.PreTokenize);
-                c.UseMiddleware(ExitAfterReport, MiddlewareStages.Tokenize, int.MaxValue);
+                c.UseMiddleware(ExitAfterReport, MiddlewareStages.Tokenize, int.MaxValue-1);
             });
         }
 

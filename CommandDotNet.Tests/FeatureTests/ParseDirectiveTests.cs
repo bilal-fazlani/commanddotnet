@@ -73,7 +73,7 @@ namespace CommandDotNet.Tests.FeatureTests
             public int some(
                 [Option(ShortName = "a")] bool opt1,
                 [Option(ShortName = "b")] bool opt2,
-                [Option(ShortName = "val")] string optionValue,
+                [Option(ShortName = "v")] string optionValue,
                 string args, string to, string echo)
             {
                 return 5;

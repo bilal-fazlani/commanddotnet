@@ -110,7 +110,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
                 return new Option(
                     argumentDef.Name,
-                    ParseShortName(optionAttr?.ShortName),
+                    ParseShortName(argumentDef, optionAttr?.ShortName),
                     parent, 
                     typeInfo, 
                     argumentArity, 
@@ -127,7 +127,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             throw new ArgumentOutOfRangeException($"Unknown argument type: {argumentDef.CommandNodeType}");
         }
 
-        private static char? ParseShortName(string shortNameAsString)
+        private static char? ParseShortName(IArgumentDef argumentDef, string shortNameAsString)
         {
             if (shortNameAsString.IsNullOrWhitespace())
             {
@@ -136,7 +136,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             if (shortNameAsString.Length > 1)
             {
-                throw new ArgumentException($"Short name must be a single character: {shortNameAsString}",
+                throw new ArgumentException($"Short name must be a single character: {shortNameAsString} {argumentDef}",
                     nameof(shortNameAsString));
             }
 
@@ -152,7 +152,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             return argumentDef.Type.GetUnderlyingType() == typeof(bool)
                 ? optionAttr.BooleanMode
                 : throw new AppRunnerException(
-                    $"BooleanMode is set to `{optionAttr.BooleanMode}` for a non boolean type.  {argumentDef}");
+                    $"BooleanMode is set to `{optionAttr.BooleanMode}` for a non boolean type. {argumentDef}");
         }
     }
 }
