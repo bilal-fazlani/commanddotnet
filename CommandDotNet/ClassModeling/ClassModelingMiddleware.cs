@@ -16,7 +16,7 @@ namespace CommandDotNet.ClassModeling
                 c.UseMiddleware((context, next) => CreateRootCommand(context, next, rootCommandType), MiddlewareStages.Tokenize, int.MaxValue);
                 c.UseMiddleware(AssembleInvocationPipelineMiddleware, MiddlewareStages.ParseInput);
                 c.UseMiddleware(BindValuesMiddleware.BindValues, MiddlewareStages.BindValues);
-                c.UseMiddleware(ResolveInstancesMiddleware.ResolveInstances, MiddlewareStages.BindValues);
+                c.UseMiddleware(ResolveCommandClassesMiddleware.ResolveInstances, MiddlewareStages.BindValues);
                 c.UseMiddleware(InvokeInvocationPipelineMiddleware, MiddlewareStages.Invoke, int.MaxValue);
             });
         }

@@ -54,6 +54,7 @@ namespace CommandDotNet.Execution
         internal IReadOnlyCollection<TokenTransformation> TokenTransformations { get; set; }
         internal Dictionary<Type, Func<CommandContext, object>> ParameterResolversByType { get; }
         internal NameTransformation NameTransformation { get; }
+        internal ResolverService ResolverService { get; }
 
         public AppConfig(AppSettings appSettings, IConsole console,
             IDependencyResolver dependencyResolver, IHelpProvider helpProvider, 
@@ -73,6 +74,10 @@ namespace CommandDotNet.Execution
             Services = services;
             CancellationToken = cancellationToken;
             ParameterResolversByType = parameterResolversByType;
+
+            ResolverService = services.GetOrAdd(() => new ResolverService());
+            ResolverService.BackingResolver = dependencyResolver;
+            OnRunCompleted += args => ResolverService.OnRunCompleted(args.CommandContext);
         }
     }
 }
