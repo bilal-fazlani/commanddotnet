@@ -47,7 +47,7 @@ namespace CommandDotNet.Execution
         /// </summary>
         public IHelpProvider HelpProvider { get; }
 
-        internal Action<EventArgs> OnRunCompleted { get; }
+        internal Action<OnRunCompletedEventArgs> OnRunCompleted { get; }
         internal TokenizationEvents TokenizationEvents { get; }
         internal BuildEvents BuildEvents { get; }
         internal IReadOnlyCollection<ExecutionMiddleware> MiddlewarePipeline { get; set; }
@@ -57,7 +57,7 @@ namespace CommandDotNet.Execution
 
         public AppConfig(AppSettings appSettings, IConsole console,
             IDependencyResolver dependencyResolver, IHelpProvider helpProvider, 
-            NameTransformation nameTransformation, Action<EventArgs> onRunCompleted,
+            NameTransformation nameTransformation, Action<OnRunCompletedEventArgs> onRunCompleted,
             TokenizationEvents tokenizationEvents, BuildEvents buildEvents, IServices services,
             CancellationToken cancellationToken,
             Dictionary<Type, Func<CommandContext, object>> parameterResolversByType)

@@ -69,7 +69,7 @@ namespace CommandDotNet
         /// Use this to cleanup any events after the run.<br/>
         /// This is useful for tests and when using new AppRunner instances to create a cli session.
         /// </summary>
-        public event Action<EventArgs> OnRunCompleted;
+        public event Action<OnRunCompletedEventArgs> OnRunCompleted;
 
         public BuildEvents BuildEvents { get; } = new BuildEvents();
         public TokenizationEvents TokenizationEvents { get; } = new TokenizationEvents();
@@ -129,7 +129,7 @@ namespace CommandDotNet
         internal AppConfig Build()
         {
             var helpProvider = CustomHelpProvider ?? HelpTextProviderFactory.Create(AppSettings);
-
+            
             return new AppConfig(
                 AppSettings, Console, DependencyResolver, helpProvider, NameTransformation,
                 OnRunCompleted, TokenizationEvents, BuildEvents, Services, 

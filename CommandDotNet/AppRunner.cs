@@ -92,14 +92,14 @@ namespace CommandDotNet
         private async Task<int> Execute(string[] args)
         {
             var tokens = args.Tokenize(includeDirectives: AppSettings.EnableDirectives);
-
+            
             var appConfig = _appConfigBuilder.Build();
             var commandContext = new CommandContext(args, tokens, appConfig);
 
             var result = await commandContext.AppConfig.MiddlewarePipeline
                 .InvokePipeline(commandContext).ConfigureAwait(false);
 
-            appConfig.OnRunCompleted?.Invoke(new EventArgs());
+            appConfig.OnRunCompleted?.Invoke(new OnRunCompletedEventArgs(commandContext));
 
             return result;
         }
