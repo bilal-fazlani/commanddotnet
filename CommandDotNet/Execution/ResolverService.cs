@@ -10,16 +10,18 @@ namespace CommandDotNet.Execution
     {
         internal IDependencyResolver BackingResolver { private get; set; }
 
-        public object Resolve(Type type)
-        {
-            return BackingResolver?.Resolve(type);
-        }
+        public object Resolve(Type type) => BackingResolver?.Resolve(type);
 
         public bool TryResolve(Type type, out object item)
         {
             item = null;
             return BackingResolver?.TryResolve(type, out item) ?? false;
         }
+
+        internal object ResolveArgumentModel(Type modelType) =>
+            TryResolve(modelType, out var item) 
+                ? item 
+                : Activator.CreateInstance(modelType);
 
         internal object ResolveCommandClass(Type classType, CommandContext commandContext)
         {

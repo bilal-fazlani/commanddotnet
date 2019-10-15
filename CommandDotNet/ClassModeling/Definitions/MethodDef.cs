@@ -173,8 +173,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         private IEnumerable<IArgumentDef> GetArgumentsFromModel(Type modelType, ArgumentMode argumentMode, object existingDefault, Action<object> instanceCreated)
         {
-            // Enhancement: add IDependencyResolver.TryResolve and try resolve first.
-            var instance = existingDefault ?? Activator.CreateInstance(modelType);
+            var instance = existingDefault ?? _appConfig.ResolverService.ResolveArgumentModel(modelType);
 
             if (existingDefault == null)
             {

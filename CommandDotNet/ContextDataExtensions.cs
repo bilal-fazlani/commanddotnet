@@ -6,15 +6,19 @@ namespace CommandDotNet
     {
         public static T GetOrAdd<T>(this IServices services, Func<T> create)
         {
-            var data = services.Get<T>();
+            var service = services.Get<T>();
 
-            if (data == null)
+            if (service == null)
             {
-                data = create();
-                services.Add(data);
+                service = create();
+                if (service == null)
+                {
+                    throw new AppRunnerException($"'{create}' returned null");
+                }
+                services.Add(service);
             }
 
-            return data;
+            return service;
         }
     }
 }
