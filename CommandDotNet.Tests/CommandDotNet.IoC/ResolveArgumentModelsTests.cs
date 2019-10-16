@@ -1,15 +1,16 @@
 using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests.Arguments
+namespace CommandDotNet.Tests.CommandDotNet.IoC
 {
-    public class ArgumentModelsViaDependencyResolverTests
+    public class ResolveArgumentModelsTests
     {
         private readonly ITestOutputHelper _testOutputHelper;
 
-        public ArgumentModelsViaDependencyResolverTests(ITestOutputHelper testOutputHelper)
+        public ResolveArgumentModelsTests(ITestOutputHelper testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;
         }
@@ -19,7 +20,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             var argModel = new ArgModel {Text = "some default"};
             var testOutputs = new AppRunner<App>()
-                .UseDependencyResolver(new TestDependencyResolver {argModel})
+                .UseDependencyResolver(new TestDependencyResolver {new App(), argModel})
                 .RunInMem("Do lala", _testOutputHelper)
                 .TestOutputs;
 

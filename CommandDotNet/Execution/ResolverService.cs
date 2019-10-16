@@ -6,26 +6,31 @@ using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Execution
 {
-    internal class ResolverService: IDependencyResolver
+    internal class ResolverService
     {
+        internal bool UseResolveForArgumentModel { get; set; }
+        internal bool UseTryResolveForCommandClass { get; set; }
         internal IDependencyResolver BackingResolver { private get; set; }
 
-        public object Resolve(Type type) => BackingResolver?.Resolve(type);
-
-        public bool TryResolve(Type type, out object item)
+        internal object ResolveArgumentModel(Type modelType)
         {
-            item = null;
-            return BackingResolver?.TryResolve(type, out item) ?? false;
-        }
-
-        internal object ResolveArgumentModel(Type modelType) =>
-            TryResolve(modelType, out var item) 
-                ? item 
+            // Default uses TryResolve for IArgumentModel because they're
+            // expected to be POCOs and not require DI.
+            // DI can be used to share the instance with
+            // other items in the scope or to load values
+            // via the container, perhaps from configuration
+            // sources.
+            return ConditionalTryResolve(modelType, out var item, !UseResolveForArgumentModel)
+                ? item
                 : Activator.CreateInstance(modelType);
+        }
 
         internal object ResolveCommandClass(Type classType, CommandContext commandContext)
         {
-            if(TryResolve(classType, out var item))
+            // Default uses Resolve so the container can throw an exception if the class isn't registered.
+            // if null is returned, then the container gives consent for other the class to
+            // be created by this framework. 
+            if (ConditionalTryResolve(classType, out var item, UseTryResolveForCommandClass))
             {
                 return item;
             }
@@ -61,19 +66,36 @@ namespace CommandDotNet.Execution
             return item;
         }
 
+        internal void OnRunCompleted(CommandContext commandContext)
+        {
+            // When we support a cli session, we'll need to capture exceptions here
+            // and best effort dispose of all instances
+            commandContext.Services.Get<Disposables>()?.Items.ForEach(i => i.Dispose());
+        }
+
+        private bool ConditionalTryResolve(Type type, out object item, bool useTry)
+        {
+            if (BackingResolver == null)
+            {
+                item = null;
+                return false;
+            }
+
+            if (useTry)
+            {
+                return BackingResolver.TryResolve(type, out item);
+            }
+
+            item = BackingResolver.Resolve(type);
+            return item != null;
+        }
+
         private static void RegisterDisposable(CommandContext commandContext, object item)
         {
             if (item is IDisposable disposableItem)
             {
                 commandContext.Services.GetOrAdd(() => new Disposables()).Items.Add(disposableItem);
             }
-        }
-
-        internal void OnRunCompleted(CommandContext commandContext)
-        {
-            // When we support a cli session, we'll need to capture exceptions here
-            // and best effort dispose of all instances
-            commandContext.Services.Get<Disposables>()?.Items.ForEach(i => i.Dispose());
         }
 
         private class Disposables

@@ -43,12 +43,33 @@ namespace CommandDotNet
         }
 
         /// <summary>Use the <see cref="IDependencyResolver"/> to create the command classes.</summary>
+        /// <param name="appRunner">the <see cref="AppRunner"/> instance</param>
+        /// <param name="dependencyResolver">the <see cref="IDependencyResolver"/> to use</param>
+        /// <param name="useResolveForArgumentModel">
+        /// <see cref="IDependencyResolver.TryResolve"/> is the default to resolve <see cref="IArgumentModel"/>s.
+        /// Set this to true to use <see cref="IDependencyResolver.Resolve"/>.
+        /// If Resolve is used and returns null, this framework will attempt to
+        /// instantiate an instance.
+        /// </param>
+        /// <param name="useTryResolveForCommandClass">
+        /// <see cref="IDependencyResolver.Resolve"/> is the default to resolve command classes.
+        /// Set this to true to use <see cref="IDependencyResolver.TryResolve"/>.
+        /// If Resolve is used and returns null, this framework will attempt to
+        /// instantiate an instance.
+        /// </param>
+        /// <param name="useLegacyInjectDependenciesAttribute"> 
+        /// when true, resolve instances for properties marked with [InjectProperty].
+        /// This feature is deprecated and may be removed with next major release.
+        /// </param>
         public static AppRunner UseDependencyResolver(
             this AppRunner appRunner, 
-            IDependencyResolver dependencyResolver, 
+            IDependencyResolver dependencyResolver,
+            bool useResolveForArgumentModel = false,
+            bool useTryResolveForCommandClass = false,
             bool useLegacyInjectDependenciesAttribute = false)
         {
-            return DependencyResolverMiddleware.UseDependencyResolver(appRunner, dependencyResolver, useLegacyInjectDependenciesAttribute);
+            return DependencyResolverMiddleware.UseDependencyResolver(appRunner, dependencyResolver, 
+                useResolveForArgumentModel, useTryResolveForCommandClass, useLegacyInjectDependenciesAttribute);
         }
 
         /// <summary>

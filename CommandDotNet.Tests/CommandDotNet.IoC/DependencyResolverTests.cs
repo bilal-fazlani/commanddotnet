@@ -3,7 +3,6 @@ using Autofac;
 using CommandDotNet.IoC.Autofac;
 using CommandDotNet.IoC.MicrosoftDependencyInjection;
 using CommandDotNet.IoC.SimpleInjector;
-using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using SimpleInjector;
 using Xunit;
@@ -36,6 +35,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         public void Autofac_ShouldWork()
         {
             ContainerBuilder containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterType<App>();
             containerBuilder.RegisterType<SomeService>().As<ISomeService>();
             IContainer container = containerBuilder.Build();
 

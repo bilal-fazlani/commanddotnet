@@ -63,8 +63,6 @@ Arguments:
         [Fact]
         public void Exec_WithInvalidData_PrintsValidationError_UsingValidatorFromDI()
         {
-            var resolver = new TestDependencyResolver{new PersonValidator()};
-
             var scenario = new Scenario
             {
                 WhenArgs = "Save",
@@ -80,15 +78,15 @@ Arguments:
 
             new AppRunner<App>()
                 .UseFluentValidation()
-                .UseDependencyResolver(resolver)
+                .UseDependencyResolver(
+                    new TestDependencyResolver{new PersonValidator()}, 
+                    useTryResolveForCommandClass: true)
                 .VerifyScenario(TestOutputHelper, scenario);
         }
 
         [Fact]
         public void Exec_WithValidData_Succeeds()
         {
-            var resolver = new TestDependencyResolver { new PersonValidator() };
-
             var scenario = new Scenario
             {
                 WhenArgs = "Save 1 john john@doe.com",
@@ -97,7 +95,9 @@ Arguments:
 
             new AppRunner<App>()
                 .UseFluentValidation()
-                .UseDependencyResolver(resolver)
+                .UseDependencyResolver(
+                    new TestDependencyResolver { new PersonValidator() }, 
+                    useTryResolveForCommandClass: true)
                 .VerifyScenario(TestOutputHelper, scenario);
         }
 
@@ -134,7 +134,9 @@ Arguments:
 
             new AppRunner<App>()
                 .UseFluentValidation()
-                .UseDependencyResolver(new TestDependencyResolver())
+                .UseDependencyResolver(
+                    new TestDependencyResolver(), 
+                    useTryResolveForCommandClass: true)
                 .VerifyScenario(TestOutputHelper, scenario);
         }
 
