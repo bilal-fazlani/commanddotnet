@@ -33,7 +33,6 @@ namespace CommandDotNet.Example
                 .UseCancellationHandlers()
                 .UseDebugDirective()
                 .UseParseDirective()
-                .UseVersionMiddleware()
                 .UseFluentValidation()
                 .UsePrompting()
                 .UseResponseFiles()
