@@ -32,11 +32,20 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public IMethodDef InvokeMethodDef => _defaultCommandDef.InvokeMethodDef;
 
-        public static Command CreateRootCommand(Type classType, CommandContext commandContext)
+        public static Command CreateRootCommand(Type rootAppType, CommandContext commandContext)
         {
-            return new ClassCommandDef(classType, commandContext)
+            return new ClassCommandDef(rootAppType, commandContext)
                 .ToCommand(null, commandContext)
                 .Command;
+        }
+
+        public static IEnumerable<Type> GetAllCommandClassTypes(Type rootAppType)
+        {
+            var childTypes = GetNestedSubCommandTypes(rootAppType)
+                .SelectMany(GetAllCommandClassTypes);
+            return rootAppType
+                .ToEnumerable()
+                .Union(childTypes);
         }
 
         private ClassCommandDef(Type classType, CommandContext commandContext)
@@ -117,23 +126,29 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         }
 
-        private List<ICommandDef> GetSubCommands(IEnumerable<ICommandDef> localSubCommands) => localSubCommands.Union(GetNestedSubCommands()).ToList();
+        private List<ICommandDef> GetSubCommands(IEnumerable<ICommandDef> localSubCommands) => 
+            localSubCommands.Union(GetNestedSubCommands()).ToList();
 
         private IEnumerable<ICommandDef> GetNestedSubCommands()
         {
+            return GetNestedSubCommandTypes(CommandHostClassType)
+                .Select(t => new ClassCommandDef(t, _commandContext));
+        }
+
+        private static IEnumerable<Type> GetNestedSubCommandTypes(Type classType)
+        {
             IEnumerable<Type> propertySubmodules =
-                CommandHostClassType.GetDeclaredProperties<SubCommandAttribute>()
+                classType.GetDeclaredProperties<SubCommandAttribute>()
                     .Select(p => p.PropertyType);
 
-            IEnumerable<Type> inlineClassSubmodules = CommandHostClassType
+            IEnumerable<Type> inlineClassSubmodules = classType
                 .GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
                 .Where(x => x.HasAttribute<SubCommandAttribute>())
                 .Where(x => !x.IsCompilerGenerated())
                 .Where(x => !typeof(IAsyncStateMachine).IsAssignableFrom(x));
 
             return propertySubmodules
-                .Union(inlineClassSubmodules)
-                .Select(t => new ClassCommandDef(t, _commandContext));
+                .Union(inlineClassSubmodules);
         }
     }
 }

@@ -34,14 +34,14 @@ namespace CommandDotNet
     /// </summary>
     public class AppRunner
     {
-        private readonly Type _rootCommandType;
         private readonly AppConfigBuilder _appConfigBuilder;
 
-        public readonly AppSettings AppSettings;
+        public AppSettings AppSettings { get; }
+        public Type RootCommandType { get; }
 
         public AppRunner(Type rootCommandType, AppSettings settings = null)
         {
-            _rootCommandType = rootCommandType ?? throw new ArgumentNullException(nameof(rootCommandType));
+            RootCommandType = rootCommandType ?? throw new ArgumentNullException(nameof(rootCommandType));
             AppSettings = settings ?? new AppSettings();
             _appConfigBuilder = new AppConfigBuilder(AppSettings);
             AddCoreMiddleware();
@@ -110,7 +110,7 @@ namespace CommandDotNet
                 .UseMiddleware(TokenizerPipeline.TokenizeInputMiddleware, MiddlewareStages.Tokenize, -1)
                 .UseMiddleware(CommandParser.ParseInputMiddleware, MiddlewareStages.ParseInput);
 
-            this.UseClassDefMiddleware(_rootCommandType)
+            this.UseClassDefMiddleware(RootCommandType)
                 .UseHelpMiddleware();
 
             // TODO: add middleware between stages to validate CommandContext is exiting a stage with required data populated

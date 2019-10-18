@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.TestTools;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -11,6 +12,24 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
     {
         public SubCommandTests(ITestOutputHelper output) : base(output)
         {
+        }
+
+        [Fact]
+        public void CanDiscoverAllTests()
+        {
+            var classNames = new AppRunner<ThreeLevelsApp>()
+                .GetCommandClassTypes()
+                .Select(t => t.Name)
+                .ToList();
+            classNames.Count.Should().Be(3);
+            classNames.Should().ContainEquivalentOf(nameof(ThreeLevelsApp), nameof(Second), nameof(Third));
+
+            classNames = new AppRunner<NestedThreeLevelsApp>()
+                .GetCommandClassTypes()
+                .Select(t => t.Name)
+                .ToList();
+            classNames.Count.Should().Be(3);
+            classNames.Should().ContainEquivalentOf(nameof(NestedThreeLevelsApp), nameof(Second), nameof(Third));
         }
 
         [Theory]
