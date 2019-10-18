@@ -37,9 +37,10 @@ namespace CommandDotNet
 
         /// <summary>
         /// Configures the app to use the resolver to create instances of
-        /// properties decorated with <see cref="InjectPropertyAttribute"/>
+        /// properties decorated with <see cref="InjectPropertyAttribute"/><br/>
+        /// use appRunner.UseDependencyResolver(...) extension method to set this instance.
         /// </summary>
-        public IDependencyResolver DependencyResolver { get; set; }
+        public IDependencyResolver DependencyResolver { get; internal set; }
 
         /// <summary>Replace the internal help provider with given help provider</summary>
         public IHelpProvider CustomHelpProvider { get; set; }
