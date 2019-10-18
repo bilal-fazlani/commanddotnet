@@ -147,6 +147,26 @@ Options:
             });
         }
 
+        [Fact]
+        public void ArrayParams_Exec_MapsArguments()
+        {
+            Verify(new Scenario<App>
+            {
+                WhenArgs = "Array --options aaa --options bbb ccc ddd",
+                Then =
+                {
+                    Outputs =
+                    {
+                        new EnumerableModel
+                        {
+                            Options = new[] {"aaa", "bbb"},
+                            Args = new[] {"ccc", "ddd"}
+                        }
+                    }
+                }
+            });
+        }
+
         public class App
         {
             private TestOutputs TestOutputs { get; set; }
@@ -170,6 +190,8 @@ Options:
             {
                 TestOutputs.Capture(new EnumerableModel { Options = options, Args = args });
             }
+
+            public void Array([Option]string[] options, string[] args) => TestOutputs.Capture(new EnumerableModel { Options = options, Args = args });
         }
 
         public class EnumerableModel : IArgumentModel

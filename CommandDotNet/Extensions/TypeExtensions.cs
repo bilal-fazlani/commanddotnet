@@ -25,9 +25,11 @@ namespace CommandDotNet.Extensions
 
         internal static Type GetListUnderlyingType(this Type type)
         {
-            return typeof(IEnumerable).IsAssignableFrom(type) && type.IsGenericType
-                ? type.GetGenericArguments().FirstOrDefault() 
-                : null;
+            return type.IsArray
+                ? type.GetElementType()
+                : typeof(IEnumerable).IsAssignableFrom(type) && type.IsGenericType
+                    ? type.GetGenericArguments().FirstOrDefault()
+                    : null;
         }
 
         internal static bool IsCollection(this Type type)
