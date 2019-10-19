@@ -58,15 +58,15 @@ namespace CommandDotNet
         }
 
         public static bool HelpWasRequested(this Command command) => 
-            command.HasRawValues(Constants.HelpOptionName);
+            command.HasInputValues(Constants.HelpOptionName);
 
         public static bool ContainsArgumentNode(this Command command, string alias) =>
             command.FindArgumentNode(alias) != null;
 
-        public static bool HasRawValues(this Command command, string alias) => 
-            command.FindRawValues(alias) != null;
+        public static bool HasInputValues(this Command command, string alias) => 
+            command.FindInputValues(alias)?.Any() ?? false;
 
-        public static ICollection<string> FindRawValues(this Command command, string alias) => 
-            command.FindArgumentNode(alias) is IArgument argument ? argument.RawValues : null;
+        public static ICollection<InputValue> FindInputValues(this Command command, string alias) => 
+            command.FindArgumentNode(alias) is IArgument argument ? argument.InputValues : null;
     }
 }

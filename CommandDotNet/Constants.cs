@@ -4,21 +4,34 @@
     {
         public static readonly string HelpOptionName = "help";
 
+        /// <summary>The <see cref="InputValue.Source"/>es defined by this framework</summary>
+        public static class InputValueSources
+        {
+            /// <summary>Values provided in the shell by the user or script</summary>
+            public static readonly string Argument = "argument";
+
+            /// <summary>Values piped into the application</summary>
+            public static readonly string Piped = "pipes";
+
+            /// <summary>Values provided via user prompt</summary>
+            public static readonly string Prompt = "prompt";
+        }
+
         internal static class TypeDisplayNames
         {
-            public const string Flag = null;
+            public static readonly string Flag = null;
 
-            public const string Number = "Number";
+            public static readonly string Number = "Number";
 
-            public const string Boolean = "Boolean";
+            public static readonly string Boolean = "Boolean";
 
-            public const string DoubleNumber = "Double";
+            public static readonly string DoubleNumber = "Double";
 
-            public const string DecimalNumber = "Decimal";
+            public static readonly string DecimalNumber = "Decimal";
 
-            public const string Character = "Character";
+            public static readonly string Character = "Character";
 
-            public const string Text = "Text";
+            public static readonly string Text = "Text";
         }
     }
 }

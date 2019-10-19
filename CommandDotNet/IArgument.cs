@@ -21,11 +21,12 @@ namespace CommandDotNet
         /// i.e. enum arguments will list all values in the enum.
         /// </summary>
         IReadOnlyCollection<string> AllowedValues { get; set; }
-
+        
         /// <summary>
-        /// The text values provided in the shell.
-        /// Will be null or empty if no values were provided.
+        /// The text values provided as input to the application.
+        /// Will be empty if no values were provided.<br/>
+        /// Sources provided by this framework can be found at <see cref="Constants.InputValueSources"/>
         /// </summary>
-        ICollection<string> RawValues { get; set; }
+        ICollection<InputValue> InputValues { get; }
     }
 }

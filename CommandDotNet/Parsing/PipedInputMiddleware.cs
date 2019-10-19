@@ -36,15 +36,8 @@ namespace CommandDotNet.Parsing
 
                 if (operand != null)
                 {
-                    var pipedInput = ctx.Services.GetOrAdd(() => GetPipedInput(ctx.Console));
-                    if (operand.RawValues == null)
-                    {
-                        operand.RawValues = pipedInput;
-                    }
-                    else
-                    {
-                        operand.RawValues.AddRange(pipedInput);
-                    }
+                    var pipedInput = GetPipedInput(ctx.Console);
+                    operand.InputValues.Add(new InputValue(Constants.InputValueSources.Piped, pipedInput));
                 }
             }
 

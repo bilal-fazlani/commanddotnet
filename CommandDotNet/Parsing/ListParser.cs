@@ -20,6 +20,8 @@ namespace CommandDotNet.Parsing
 
         public object Parse(IArgument argument, IEnumerable<string> values)
         {
+            // TODO: when _type & values is IEnumerable but not ICollection
+            //       DO NOT enumerate values here as it could be a stream.
             var listInstance = _type.IsArray
                 ? new ArrayList()
                 : CreateGenericList();

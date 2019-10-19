@@ -66,9 +66,13 @@ namespace CommandDotNet.Prompts
                         option => !option.Arity.AllowsNone() // exclude flag options: help, version, ...
                         ))
                     .Where(a => argumentFilter == null || argumentFilter(a))
-                    .Where(a => a.RawValues.IsNullOrEmpty() && a.DefaultValue.IsNullValue())
+                    .Where(a => a.InputValues.IsEmpty() && a.DefaultValue.IsNullValue())
                     .TakeWhile(a => !commandContext.AppConfig.CancellationToken.IsCancellationRequested && !isCancellationRequested)
-                    .ForEach(a => a.RawValues = argumentPrompter.PromptForArgumentValues(commandContext, a, out isCancellationRequested));
+                    .ForEach(a =>
+                    {
+                        var values = argumentPrompter.PromptForArgumentValues(commandContext, a, out isCancellationRequested);
+                        a.InputValues.Add(new InputValue(Constants.InputValueSources.Prompt, values));
+                    });
 
                 if (isCancellationRequested)
                 {

@@ -84,11 +84,12 @@ namespace CommandDotNet
         public IReadOnlyCollection<string> AllowedValues { get; set; }
 
         /// <summary>
-        /// The text values provided in the shell.
-        /// Will be null if no values were provided.
+        /// The text values provided as input.
+        /// Will be empty if no values were provided.<br/>
+        /// Sources provided by this framework can be found at <see cref="Constants.InputValueSources"/><br/>
         /// Flag options will contain a bool value.
         /// </summary>
-        public ICollection<string> RawValues { get; set; }
+        public ICollection<InputValue> InputValues { get; } = new List<InputValue>();
 
         /// <summary>If true, this option is inherited from a command interceptor method and can be specified after the target command</summary>
         public bool Inherited { get; set; }

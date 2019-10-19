@@ -45,9 +45,9 @@ namespace CommandDotNet.ClassModeling
             foreach (var argumentDef in argumentDefs)
             {
                 var argument = argumentDef.Argument;
-                if (!argument.RawValues.IsNullOrEmpty())
+                if (argument.InputValues.Any())
                 {
-                    if (!SetFromStringInput(argumentDef, argument.RawValues, out int returnCode))
+                    if (!SetFromStringInput(argumentDef, argument.InputValues.SelectMany(iv => iv.Values), out int returnCode))
                     {
                         return Task.FromResult(returnCode);
                     }

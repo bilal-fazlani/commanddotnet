@@ -48,10 +48,11 @@ namespace CommandDotNet
         public IReadOnlyCollection<string> AllowedValues { get; set; }
 
         /// <summary>
-        /// The text values provided in the shell.
-        /// Will be null if no values were provided.
+        /// The text values provided as input.
+        /// Will be empty if no values were provided.<br/>
+        /// Sources provided by this framework can be found at <see cref="Constants.InputValueSources"/>
         /// </summary>
-        public ICollection<string> RawValues { get; set; }
+        public ICollection<InputValue> InputValues { get; } = new List<InputValue>();
 
         /// <summary>The <see cref="Command"/> that hosts this <see cref="Operand"/></summary>
         public Command Parent { get; }

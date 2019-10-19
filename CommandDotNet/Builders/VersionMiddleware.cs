@@ -44,7 +44,7 @@ namespace CommandDotNet.Builders
         private static Task<int> DisplayVersionIfSpecified(CommandContext commandContext,
             ExecutionDelegate next)
         {
-            if (commandContext.RootCommand.HasRawValues(VersionOptionName))
+            if (commandContext.RootCommand.HasInputValues(VersionOptionName))
             {
                 Print(commandContext, commandContext.Console);
                 return Task.FromResult(0);

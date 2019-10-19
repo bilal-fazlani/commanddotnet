@@ -124,11 +124,7 @@ namespace CommandDotNet.Parsing
             if (operands.MoveNext())
             {
                 var current = operands.Current;
-                if (current.RawValues == null)
-                {
-                    current.RawValues = new List<string>();
-                }
-                current.RawValues.Add(token.Value);
+                GetArgumentParsedValues(current).Add(token.Value);
             }
             else
             {
@@ -171,24 +167,36 @@ namespace CommandDotNet.Parsing
                 option = null;
             }
         }
+
+        private static ICollection<string> GetArgumentParsedValues(IArgument argument)
+        {
+            // in most cases, this will be the first or only InputValues
+            var source = Constants.InputValueSources.Argument;
+            var parserValues = argument.InputValues.FirstOrDefault(iv => iv.Source == source);
+            if (parserValues == null)
+            {
+                parserValues = new InputValue(source, new List<string>());
+                argument.InputValues.Add(parserValues);
+            }
+
+            return (List<string>)parserValues.Values;
+        }
+
         private static bool TryAddValue(Option option, string value)
         {
-            if (option.RawValues == null)
-            {
-                option.RawValues = new List<string>();
-            }
+            var values = GetArgumentParsedValues(option);
 
             if (option.Arity.AllowsZeroOrMore())
             {
-                option.RawValues.Add(value);
+                values.Add(value);
             }
             else if (option.Arity.AllowsZeroOrOne())
             {
-                if (option.RawValues.Any())
+                if (values.Any())
                 {
                     return false;
                 }
-                option.RawValues.Add(value);
+                values.Add(value);
             }
             else if (option.Arity.AllowsNone())
             {
@@ -197,7 +205,7 @@ namespace CommandDotNet.Parsing
                     return false;
                 }
                 // Add a value to indicate that this option was specified
-                option.RawValues.Add("true");
+                values.Add("true");
             }
             return true;
         }
