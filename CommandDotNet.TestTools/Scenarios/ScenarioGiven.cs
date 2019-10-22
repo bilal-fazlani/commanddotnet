@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using CommandDotNet.Rendering;
 using CommandDotNet.TestTools.Prompts;
 
@@ -22,6 +23,6 @@ namespace CommandDotNet.TestTools.Scenarios
         public IPromptResponder OnPrompt { get; set; }
 
         /// <summary>Use to mimic piped input from the shell.</summary>
-        public string[] PipedInput { get; set; }
+        public IEnumerable<string> PipedInput { get; set; }
     }
 }

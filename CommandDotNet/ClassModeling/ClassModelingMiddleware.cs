@@ -62,7 +62,7 @@ namespace CommandDotNet.ClassModeling
             Task<int> Invoke(InvocationStep step, CommandContext context, ExecutionDelegate next, bool isCommand)
             {
                 var result = step.Invocation.Invoke(context, step.Instance, next);
-                return isCommand 
+                return isCommand
                     ? result.GetResultCodeAsync()
                     : (Task<int>)result;
             }

@@ -4,9 +4,11 @@
 // copied & adapted from System.CommandLine 
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using CommandDotNet.Extensions;
 using CommandDotNet.Prompts;
 using CommandDotNet.Rendering;
 
@@ -19,11 +21,30 @@ namespace CommandDotNet.TestTools
 
         public TestConsole(
             Func<TestConsole, string> onReadLine = null,
-            Func<TestConsole, string> onReadToEnd = null,
+            IEnumerable<string> pipedInput = null,
             Func<TestConsole, ConsoleKeyInfo> onReadKey = null)
         {
             _onReadKey = onReadKey;
-            IsInputRedirected = onReadToEnd != null;
+            IsInputRedirected = pipedInput != null;
+
+            if (pipedInput != null)
+            {
+                if (onReadLine != null)
+                {
+                    throw new Exception($"{nameof(onReadLine)} and {nameof(pipedInput)} cannot both be specified. " +
+                                        "Windows will throw 'System.IO.IOException: The handle is invalid' on an attempt to ");
+                }
+
+                if (pipedInput is ICollection<string> inputs)
+                {
+                    var queue = new Queue<string>(inputs);
+                    onReadLine = console => queue.Count == 0 ? null : queue.Dequeue();
+                }
+                else
+                {
+                    onReadLine = console => pipedInput.Take(1).FirstOrDefault();
+                }
+            }
 
             var joined = new StandardStreamWriter();
             Joined = joined;
@@ -36,15 +57,6 @@ namespace CommandDotNet.TestTools
                     // write to joined output so it can be logged for debugging
                     joined.WriteLine();
                     joined.WriteLine($"IConsole.ReadLine > {input}");
-                    joined.WriteLine();
-                    return input;
-                },
-                () =>
-                {
-                    var input = onReadToEnd?.Invoke(this);
-                    // write to joined output so it can be logged for debugging
-                    joined.WriteLine();
-                    joined.WriteLine($"IConsole.ReadToEnd > {input}");
                     joined.WriteLine();
                     return input;
                 });
@@ -100,12 +112,10 @@ namespace CommandDotNet.TestTools
         private class StandardStreamReader : IStandardStreamReader
         {
             private readonly Func<string> _onReadLine;
-            private readonly Func<string> _onReadToEnd;
 
-            public StandardStreamReader(Func<string> onReadLine, Func<string> onReadToEnd)
+            public StandardStreamReader(Func<string> onReadLine)
             {
                 _onReadLine = onReadLine;
-                _onReadToEnd = onReadToEnd;
             }
 
             public string ReadLine()
@@ -115,7 +125,7 @@ namespace CommandDotNet.TestTools
 
             public string ReadToEnd()
             {
-                return _onReadToEnd?.Invoke();
+                return _onReadLine.EnumerateLinesUntilNull().ToCsv(Environment.NewLine);
             }
         }
 

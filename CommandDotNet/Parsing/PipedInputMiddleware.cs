@@ -4,18 +4,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
+using CommandDotNet.Logging;
 using CommandDotNet.Rendering;
 
 namespace CommandDotNet.Parsing
 {
     internal static class PipedInputMiddleware
     {
-        internal static AppRunner EnablePipedInput(AppRunner appRunner)
+        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
+
+        internal static AppRunner AppendPipedInputToOperandList(AppRunner appRunner)
         {
-            return appRunner.Configure(c => c.UseMiddleware(InjectPipedInput, MiddlewareStages.PostParseInputPreBindValues, -1));
+            // -1 to ensure this middleware runs before any prompting so the value won't appear null
+            return appRunner.Configure(c => c.UseMiddleware(InjectPipedInputToOperandList, MiddlewareStages.PostParseInputPreBindValues, -1));
         }
 
-        private static Task<int> InjectPipedInput(CommandContext ctx, ExecutionDelegate next)
+        private static Task<int> InjectPipedInputToOperandList(CommandContext ctx, ExecutionDelegate next)
         {
             if (ctx.Console.IsInputRedirected)
             {
@@ -34,28 +38,24 @@ namespace CommandDotNet.Parsing
                 var operand = ctx.ParseResult.TargetCommand.Operands
                     .FirstOrDefault(o => o.Arity.AllowsZeroOrMore());
 
-                if (operand != null)
+                if (operand == null)
                 {
-                    var pipedInput = GetPipedInput(ctx.Console);
-                    operand.InputValues.Add(new InputValue(Constants.InputValueSources.Piped, pipedInput));
+                    Log.DebugFormat("No list operands found for {0}", ctx.ParseResult.TargetCommand.Name);
+                }
+                else
+                {
+                    Log.DebugFormat("Piping input to {0}.{1}", ctx.ParseResult.TargetCommand.Name, operand.Name);
+                    operand.InputValues.Add(new InputValue(Constants.InputValueSources.Piped, GetPipedInput(ctx.Console)));
                 }
             }
 
             return next(ctx);
         }
 
-        public static ICollection<string> GetPipedInput(IConsole console)
+        public static IEnumerable<string> GetPipedInput(IConsole console)
         {
-            if (console.IsInputRedirected)
-            {
-                var input = console.In.ReadToEnd().TrimEnd('\r', '\n');
-                return input
-                    .SplitIntoLines()
-                    .Select(s => s.Trim())
-                    .ToArray();
-            }
-
-            return new string[0];
+            Func<string> readLine = console.In.ReadLine;
+            return readLine.EnumerateLinesUntilNull();
         }
     }
 }

@@ -36,7 +36,8 @@ namespace CommandDotNet.Example
                 .UseFluentValidation()
                 .UsePrompting()
                 .UseResponseFiles()
-                .UseNewerReleaseAlertOnGitHub("bilal-fazlani", "commanddotnet")
+                .AppendPipedInputToOperandList()
+                //.UseNewerReleaseAlertOnGitHub("bilal-fazlani", "commanddotnet")
                 .Run(args);
         }
 

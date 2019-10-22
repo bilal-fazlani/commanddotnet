@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using CommandDotNet.Builders;
-using CommandDotNet.ClassModeling;
 using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Directives;
 using CommandDotNet.Execution;
@@ -42,7 +41,7 @@ namespace CommandDotNet
         /// <summary>Piped input will be appended to an operand list if one exists for the command</summary>
         public static AppRunner AppendPipedInputToOperandList(this AppRunner appRunner)
         {
-            return PipedInputMiddleware.EnablePipedInput(appRunner);
+            return PipedInputMiddleware.AppendPipedInputToOperandList(appRunner);
         }
 
         /// <summary>Use the <see cref="IDependencyResolver"/> to create the command classes.</summary>

@@ -32,9 +32,19 @@ namespace CommandDotNet.Extensions
                     : null;
         }
 
+        internal static bool IsEnumerable(this Type type)
+        {
+            return type.GetInterfaces()
+                .Any(x => x == typeof(IEnumerable));
+        }
+
         internal static bool IsCollection(this Type type)
         {
-            return type.GetInterfaces().Any(x => x == typeof(IEnumerable));
+            return type.GetInterfaces()
+                .Concat(type.ToEnumerable())
+                .Any(x => x.IsGenericType
+                    ? x.GetGenericTypeDefinition() == typeof(ICollection<>)
+                    : x == typeof(ICollection));
         }
 
         internal static object GetDefaultValue(this Type type)

@@ -59,5 +59,19 @@ namespace CommandDotNet.Extensions
                 action(item);
             }
         }
+
+        internal static IEnumerable<string> EnumerateLinesUntilNull(this Func<string> readLine)
+        {
+            while (true)
+            {
+                var line = readLine();
+                if (line == null)
+                {
+                    yield break;
+                }
+
+                yield return line;
+            }
+        }
     }
 }

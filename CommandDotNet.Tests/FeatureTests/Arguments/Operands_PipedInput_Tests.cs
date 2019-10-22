@@ -1,4 +1,8 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using CommandDotNet.Execution;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
@@ -87,6 +91,60 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     });
         }
 
+        [Fact]
+        public void GivenStreamingApp_PipedInput_IsOnlyEnumeratedWithinTheCommandMethod()
+        {
+            var stream = new PipedInputStream("aaa", "bbb");
+            new AppRunner<StreamingApp>()
+                .AppendPipedInputToOperandList()
+                .Configure(c =>
+                    c.UseMiddleware((context, next) =>
+                        {
+                            stream.EnumerationIsPremature = false;
+                            return next(context);
+                        }, 
+                        MiddlewareStages.Invoke, -1))
+                .VerifyScenario(_testOutputHelper,
+                    new Scenario
+                    {
+                        Given = {PipedInput = stream},
+                        WhenArgs = $"{nameof(StreamingApp.Stream)}",
+                        Then =
+                        {
+                            Outputs = {new List<string> {"aaa", "bbb"}}
+                        }
+                    });
+        }
+
+        private class PipedInputStream : IEnumerable<string>
+        {
+            private readonly Queue<string> _queue;
+            public bool EnumerationIsPremature = true;
+
+            public PipedInputStream(params string[] inputs)
+            {
+                _queue = new Queue<string>(inputs);
+            }
+
+            public IEnumerator<string> GetEnumerator()
+            {
+                if (EnumerationIsPremature)
+                    throw new Exception("premature enumeration");
+
+                if (!_queue.Any())
+                {
+                    yield break;
+                }
+
+                yield return _queue.Dequeue();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+        }
+
         public class App
         {
             private TestOutputs TestOutputs { get; set; }
@@ -105,6 +163,16 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             {
                 TestOutputs.CaptureIfNotNull(singleArg);
                 TestOutputs.CaptureIfNotNull(listArgs);
+            }
+        }
+
+        public class StreamingApp
+        {
+            private TestOutputs TestOutputs { get; set; }
+
+            public void Stream(IEnumerable<string> input)
+            {
+                TestOutputs.Capture(input.ToList());
             }
         }
     }

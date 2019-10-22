@@ -18,11 +18,11 @@ namespace CommandDotNet.TestTools
             IEnumerable<string> pipedInput = null,
             IPromptResponder promptResponder = null)
         {
+            TestToolsLogProvider.InitLogProvider(logger);
+
             var testConsole = new TestConsole(
                 onReadLine,
-                pipedInput == null
-                    ? (Func<TestConsole, string>) null
-                    : console => pipedInput?.ToCsv(Environment.NewLine),
+                pipedInput,
                 promptResponder == null
                     ? (Func<TestConsole, ConsoleKeyInfo>)null
                     : promptResponder.OnReadKey);

@@ -42,7 +42,7 @@ namespace CommandDotNet
 
         public static IArgumentArity Default(Type type, BooleanMode booleanMode)
         {
-            if (type != typeof(string) && type.IsCollection())
+            if (type != typeof(string) && type.IsEnumerable())
             {
                 return ZeroOrMore;
             }
