@@ -28,14 +28,9 @@ namespace CommandDotNet.TestTools.Scenarios
             AppRunnerResult results = null;
             try
             {
-                // scenarios don't pass testOutputHelper
-                // RunInMem will print to AppRunnerResult.ConsoleOut
-                // The output will be printed only if there is
-                // an exception to be debugged and after all other
-                // relevant context is printed.
                 results = appRunner.RunInMem(
                     scenario.WhenArgsArray ?? scenario.WhenArgs.SplitArgs(),
-                    null,
+                    logger,
                     scenario.Given.OnReadLine,
                     scenario.Given.PipedInput,
                     scenario.Given.OnPrompt);
