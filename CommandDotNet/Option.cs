@@ -11,25 +11,42 @@ using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet
 {
+    public class ValueProxy
+    {
+        public Func<object> Getter { get; }
+        public Action<object> Setter { get; }
+
+        public ValueProxy(Func<object> getter, Action<object> setter)
+        {
+            Getter = getter;
+            Setter = setter;
+        }
+    }
     public sealed class Option : IArgument
     {
+        private object _value;
+        private readonly ValueProxy _valueProxy;
+
         private readonly HashSet<string> _aliases;
         
         public Option(
             string longName,
-            char? shortName, 
+            char? shortName,
             Command parent,
             TypeInfo typeInfo,
             IArgumentArity arity,
             string definitionSource = null,
-            IEnumerable<string> aliases = null, 
-            ICustomAttributeProvider customAttributes = null, 
-            bool isInterceptorOption = false)
+            IEnumerable<string> aliases = null,
+            ICustomAttributeProvider customAttributes = null,
+            bool isInterceptorOption = false,
+            ValueProxy valueProxy = null)
         {
             if (longName.IsNullOrWhitespace() && shortName.IsNullOrWhitespace())
             {
                 throw new ArgumentException("a long or short name is required");
             }
+
+            _valueProxy = valueProxy;
 
             Parent = parent ?? throw new ArgumentNullException(nameof(parent));
             TypeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
@@ -91,6 +108,23 @@ namespace CommandDotNet
         /// </summary>
         public ICollection<InputValue> InputValues { get; } = new List<InputValue>();
 
+        /// <summary>The parsed and converted value for the argument to be passed to a method</summary>
+        public object Value
+        {
+            get => _valueProxy == null ? _value : _valueProxy.Getter();
+            set
+            {
+                if (_valueProxy == null)
+                {
+                    _value = value;
+                }
+                else
+                {
+                    _valueProxy.Setter(value);
+                }
+            }
+        }
+
         /// <summary>If true, this option is inherited from a command interceptor method and can be specified after the target command</summary>
         public bool Inherited { get; set; }
 
@@ -123,7 +157,7 @@ namespace CommandDotNet
 
         public override string ToString()
         {
-            return $"Option: {Name}";
+            return $"Option: {Name} ({DefinitionSource})";
         }
 
         public static bool operator ==(Option x, Option y) => (object)x == (object)y;

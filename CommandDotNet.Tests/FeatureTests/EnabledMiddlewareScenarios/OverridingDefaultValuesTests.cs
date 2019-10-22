@@ -187,7 +187,8 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                             ExitCode = 2,
                             ResultsContainsTexts =
                             {
-                                "Property:CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels.OptionsDefaultsSampleTypesModel.StructNArg > StructNArg(System.Nullable`1[System.Int32])",
+                                "Failure assigning value to Option: StructNArg",
+                                "CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels.OptionsDefaultsSampleTypesModel.StructNArg",
                                 "Invalid cast from 'System.Int64' to 'System.Nullable`1"
                             }
                         }

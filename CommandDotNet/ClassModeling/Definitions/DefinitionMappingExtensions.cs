@@ -95,7 +95,8 @@ namespace CommandDotNet.ClassModeling.Definitions
                     typeInfo,
                     ArgumentArity.Default(argumentDef.Type, BooleanMode.Explicit), 
                     argumentDef.SourcePath,
-                    customAttributes: argumentDef.CustomAttributes)
+                    customAttributes: argumentDef.CustomAttributes,
+                    argumentDef.ValueProxy)
                 {
                     Description = operandAttr?.Description,
                     DefaultValue = defaultValue
@@ -116,7 +117,8 @@ namespace CommandDotNet.ClassModeling.Definitions
                     argumentArity, 
                     definitionSource: argumentDef.SourcePath,
                     customAttributes: argumentDef.CustomAttributes,
-                    isInterceptorOption: isInterceptorOption)
+                    isInterceptorOption: isInterceptorOption,
+                    valueProxy: argumentDef.ValueProxy)
                 {
                     Description = optionAttr?.Description,
                     Inherited = optionAttr?.Inherited ?? false,

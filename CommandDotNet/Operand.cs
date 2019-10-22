@@ -12,14 +12,19 @@ namespace CommandDotNet
 {
     public sealed class Operand : IArgument
     {
+        private object _value;
+        private readonly ValueProxy _valueProxy;
+
         public Operand(
             string name, 
             Command parent, 
             TypeInfo typeInfo,
             IArgumentArity arity,
             string definitionSource = null, 
-            ICustomAttributeProvider customAttributes = null)
+            ICustomAttributeProvider customAttributes = null,
+            ValueProxy valueProxy = null)
         {
+            _valueProxy = valueProxy;
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Parent = parent ?? throw new ArgumentNullException(nameof(parent));
             TypeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
@@ -54,6 +59,23 @@ namespace CommandDotNet
         /// </summary>
         public ICollection<InputValue> InputValues { get; } = new List<InputValue>();
 
+        /// <summary>The parsed and converted value for the argument to be passed to a method</summary>
+        public object Value
+        {
+            get => _valueProxy == null ? _value : _valueProxy.Getter();
+            set
+            {
+                if (_valueProxy == null)
+                {
+                    _value = value;
+                }
+                else
+                {
+                    _valueProxy.Setter(value);
+                }
+            }
+        }
+
         /// <summary>The <see cref="Command"/> that hosts this <see cref="Operand"/></summary>
         public Command Parent { get; }
 
@@ -71,7 +93,7 @@ namespace CommandDotNet
 
         public override string ToString()
         {
-            return $"Operand: {Name}";
+            return $"Operand: {Name} ({DefinitionSource})";
         }
         
         public static bool operator ==(Operand x, Operand y) => (object)x == (object)y;

@@ -8,7 +8,6 @@ namespace CommandDotNet.ClassModeling.Definitions
     internal class ParameterArgumentDef : IArgumentDef
     {
         private readonly ParameterInfo _parameterInfo;
-        private readonly Action<object> _assignValue;
 
         public CommandNodeType CommandNodeType { get; }
 
@@ -26,23 +25,29 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public ICustomAttributeProvider CustomAttributes => _parameterInfo;
 
+        public ValueProxy ValueProxy { get; }
+
         public ParameterArgumentDef(
             ParameterInfo parameterInfo,
             CommandNodeType commandNodeType,
             AppConfig appConfig,
-            Action<object> assignValue)
+            object[] parameterValues)
         {
-            _parameterInfo = parameterInfo ?? throw new ArgumentNullException(nameof(parameterInfo));
-            _assignValue = assignValue ?? throw new ArgumentNullException(nameof(assignValue));
+            if (parameterValues == null)
+            {
+                throw new ArgumentNullException(nameof(parameterValues));
+            }
 
+            _parameterInfo = parameterInfo ?? throw new ArgumentNullException(nameof(parameterInfo));
             CommandNodeType = commandNodeType;
 
             Name = parameterInfo.BuildName(commandNodeType, appConfig);
-        }
 
-        public void SetValue(object value)
-        {
-            _assignValue(value);
+            ValueProxy = new ValueProxy(
+                () => parameterValues[parameterInfo.Position],
+
+                value => parameterValues[parameterInfo.Position] = value
+            );
         }
 
         public override string ToString()

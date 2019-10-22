@@ -28,5 +28,8 @@ namespace CommandDotNet
         /// Sources provided by this framework can be found at <see cref="Constants.InputValueSources"/>
         /// </summary>
         ICollection<InputValue> InputValues { get; }
+
+        /// <summary>The parsed and converted value for the argument to be passed to a method</summary>
+        object Value { get; set; }
     }
 }

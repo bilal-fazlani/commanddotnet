@@ -9,6 +9,6 @@ namespace CommandDotNet.ClassModeling.Definitions
         bool HasDefaultValue { get; }
         object DefaultValue { get; }
         IArgument Argument { get; set; }
-        void SetValue(object value);
+        ValueProxy ValueProxy { get; }
     }
 }

@@ -153,7 +153,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                     parameterInfo,
                     GetArgumentType(parameterInfo, argumentMode),
                     _appConfig,
-                    value => _values[parameterInfo.Position] = value)
+                    _values)
                 .ToEnumerable();
         }
 

@@ -7,7 +7,6 @@ namespace CommandDotNet.ClassModeling.Definitions
 {
     internal class PropertyArgumentDef : IArgumentDef
     {
-        private readonly object _modelInstance;
         private readonly PropertyInfo _propertyInfo;
 
         public PropertyArgumentDef(
@@ -16,14 +15,24 @@ namespace CommandDotNet.ClassModeling.Definitions
             AppConfig appConfig,
             object modelInstance)
         {
+            if (modelInstance == null)
+            {
+                throw new ArgumentNullException(nameof(modelInstance));
+            }
+
             _propertyInfo = propertyInfo ?? throw new ArgumentNullException(nameof(propertyInfo));
-            _modelInstance = modelInstance ?? throw new ArgumentNullException(nameof(modelInstance));
 
             CommandNodeType = commandNodeType;
 
             Name = propertyInfo.BuildName(commandNodeType, appConfig);
 
             DefaultValue = propertyInfo.GetValue(modelInstance);
+
+            ValueProxy = new ValueProxy(
+                () => _propertyInfo.GetValue(modelInstance),
+
+                value => _propertyInfo.SetValue(modelInstance, value)
+            );
 
             // Enhancement: AppSetting.StrictDefaults: show any default values that will be used.
             //       If a value type doesn't have a default, it would be defined as a nullable type.
@@ -52,10 +61,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public ICustomAttributeProvider CustomAttributes => _propertyInfo;
 
-        public void SetValue(object value)
-        {
-            _propertyInfo.SetValue(_modelInstance, value);
-        }
+        public ValueProxy ValueProxy { get; }
 
         public override string ToString()
         {

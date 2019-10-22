@@ -16,20 +16,19 @@ namespace CommandDotNet.ClassModeling
             var console = commandContext.Console;
             var parserFactory = new ParserFactory(commandContext.AppConfig.AppSettings);
 
-            bool SetFromStringInput(IArgumentDef argDef, IEnumerable<string> values, out int returnCode)
+            bool SetFromStringInput(IArgument argument, IEnumerable<string> values, out int returnCode)
             {
                 try
                 {
-                    var argument = argDef.Argument;
                     var parser = parserFactory.CreateInstance(argument);
                     var value = parser.Parse(argument, values);
-                    argDef.SetValue(value);
+                    argument.Value = value;
                     returnCode = 0;
                     return true;
                 }
                 catch (ValueParsingException ex)
                 {
-                    console.Error.WriteLine($"Failure parsing value for {argDef}.  values={values?.ToCsv()}");
+                    console.Error.WriteLine($"Failure parsing value for {argument}.  values={values?.ToCsv()}");
                     console.Error.WriteLine(ex.Message);
                     console.Error.WriteLine();
                     returnCode = 2;
@@ -37,17 +36,15 @@ namespace CommandDotNet.ClassModeling
                 }
             }
 
-            var argumentDefs = commandContext.InvocationPipeline.All
+            var arguments = commandContext.InvocationPipeline.All
                 .SelectMany(ic => ic.Command.Options.Cast<IArgument>().Union(ic.Command.Operands))
-                .Select(a => a.GetArgumentDef())
-                .Where(d => d != null);
+                .Where(a => a.GetArgumentDef() != null);
 
-            foreach (var argumentDef in argumentDefs)
+            foreach (var argument in arguments)
             {
-                var argument = argumentDef.Argument;
                 if (argument.InputValues.Any())
                 {
-                    if (!SetFromStringInput(argumentDef, argument.InputValues.SelectMany(iv => iv.Values), out int returnCode))
+                    if (!SetFromStringInput(argument, argument.InputValues.SelectMany(iv => iv.Values), out int returnCode))
                     {
                         return Task.FromResult(returnCode);
                     }
@@ -61,14 +58,14 @@ namespace CommandDotNet.ClassModeling
                     switch (defaultValue)
                     {
                         case string stringValue:
-                            if (!SetFromStringInput(argumentDef, stringValue.ToEnumerable(), out int returnCode))
+                            if (!SetFromStringInput(argument, stringValue.ToEnumerable(), out int returnCode))
                             {
                                 return Task.FromResult(returnCode);
                             }
 
                             break;
                         case IEnumerable<string> multiString:
-                            if (!SetFromStringInput(argumentDef, multiString, out returnCode))
+                            if (!SetFromStringInput(argument, multiString, out returnCode))
                             {
                                 return Task.FromResult(returnCode);
                             }
@@ -77,21 +74,22 @@ namespace CommandDotNet.ClassModeling
                         default:
                             try
                             {
-                                if (argumentDef.Type.IsInstanceOfType(defaultValue))
+                                var argumentType = argument.TypeInfo.Type;
+                                if (argumentType.IsInstanceOfType(defaultValue))
                                 {
-                                    argumentDef.SetValue(defaultValue);
+                                    argument.Value = defaultValue;
                                 }
                                 else
                                 {
                                     // cover cases like converting int to long.
-                                    var convertedValue = Convert.ChangeType(defaultValue, argumentDef.Type);
-                                    argumentDef.SetValue(convertedValue);
+                                    var convertedValue = Convert.ChangeType(defaultValue, argumentType);
+                                    argument.Value = convertedValue;
                                 }
                             }
                             catch (Exception ex)
                             {
                                 console.Error.WriteLine(
-                                    $"Failure assigning value to {argumentDef}. Value={defaultValue}");
+                                    $"Failure assigning value to {argument}. Value={defaultValue}");
                                 console.Error.WriteLine(ex.Message);
                                 console.Error.WriteLine();
                                 return Task.FromResult(2);
