@@ -95,9 +95,7 @@ updateProjectRefsInNuspec () {
   for i in ${!PROJECT_REF_NAMES[@]}; do
     projectRefName=${PROJECT_REF_NAMES[$i]}
     projectRefVersion=${PROJECT_REF_VERSIONS[$i]}
-
-    chmod 666 $NUSPEC_FILE
-    
+   
     # dotnet pack has a bug: https://github.com/NuGet/Home/issues/7328
     # - project reference versions set to pack version 
     # so we'll check DEPLOYMENT_VERSION and also 1.0.0 so this still works when the bug is fixed     
@@ -118,6 +116,7 @@ fixNupkgVersions () {
   # update nuspec with correct versions of referenced projects  
   cd $PROJECT_NAME/output
   unzip $NUPKG_FILE $NUSPEC_FILE
+  chmod 666 $NUSPEC_FILE
   
   updateProjectRefsInNuspec
   
@@ -145,11 +144,14 @@ echo "PROJECT_FILE         = $PROJECT_FILE"
 echo "NUPKG_FILE           = $NUPKG_FILE"
 echo "NUSPEC_FILE          = $NUSPEC_FILE"
 
-parseProjectRefs
-
+if [ "$PROJECT_NAME" != "CommandDotNet" ]
+then
+  parseProjectRefs
+fi
+  
 echo "PROJECT_REF_NAMES    = ${PROJECT_REF_NAMES[@]}"
 echo "PROJECT_REF_VERSIONS = ${PROJECT_REF_VERSIONS[@]}"
-
+  
 updateProjectRefsInSln
 
 echo " "
