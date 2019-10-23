@@ -13,6 +13,30 @@ namespace CommandDotNet
     /// <summary>Extensions to enable and configure features</summary>
     public static class AppRunnerConfigExtensions
     {
+        /// <summary>
+        /// Configures the <see cref="AppRunner"/> with the 'default' set of middleware.
+        /// See the 'optOutOf...' parameters for the list of included middleware.
+        /// </summary>
+        public static AppRunner UseDefaultMiddleware(this AppRunner appRunner,
+            bool optOutOfCancellationHandlers = false,
+            bool optOutOfDebugDirective = false,
+            bool optOutOfParseDirective = false,
+            bool optOutOfPrompting = false,
+            bool optOutOfResponseFiles = false,
+            bool optOutOfVersionMiddleware = false,
+            bool optOutOfAppendPipedInputToOperandList = false)
+        {
+            if (!optOutOfCancellationHandlers) appRunner.UseCancellationHandlers();
+            if (!optOutOfDebugDirective) appRunner.UseDebugDirective();
+            if (!optOutOfParseDirective) appRunner.UseParseDirective();
+            if (!optOutOfPrompting) appRunner.UsePrompting();
+            if (!optOutOfResponseFiles) appRunner.UseResponseFiles();
+            if (!optOutOfVersionMiddleware) appRunner.UseVersionMiddleware();
+            if (!optOutOfAppendPipedInputToOperandList) appRunner.AppendPipedInputToOperandList();
+
+            return appRunner;
+        }
+
         /// <summary>Adds the --version option to the app</summary>
         public static AppRunner UseVersionMiddleware(this AppRunner appRunner)
         {
