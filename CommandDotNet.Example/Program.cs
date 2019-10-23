@@ -20,7 +20,6 @@ namespace CommandDotNet.Example
         {
             var appSettings = new AppSettings
             {
-                EnableDirectives = true,
                 Help =
                 {
                     TextStyle = HelpTextStyle.Detailed

@@ -9,8 +9,6 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class CustomTokenTransformationTests
     {
-        private static readonly AppSettings DirectivesEnabled = TestAppSettings.TestDefault.Clone(s => s.EnableDirectives = true);
-
         private readonly ITestOutputHelper _output;
 
         public CustomTokenTransformationTests(ITestOutputHelper output)
@@ -21,7 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void ParseDirective_OutputsResults()
         {
-            var result = new AppRunner<App>(DirectivesEnabled)
+            var result = new AppRunner<App>()
                 .UseParseDirective()
                 .Configure(c =>
                     c.UseTokenTransformation("test", 1,

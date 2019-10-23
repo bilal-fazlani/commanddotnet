@@ -119,11 +119,11 @@ namespace CommandDotNet
 
         private static void AssertDirectivesAreEnabled(AppRunner appRunner)
         {
-            if (!appRunner.AppSettings.EnableDirectives)
+            if (appRunner.AppSettings.DisableDirectives)
             {
                 throw new AppRunnerException($"Directives are not enabled.  " +
-                                             $"{nameof(AppRunner)}.{nameof(AppRunner.AppSettings)}.{nameof(AppSettings.EnableDirectives)} " +
-                                             "must be set to true");
+                                             $"{nameof(AppRunner)}.{nameof(AppRunner.AppSettings)}.{nameof(AppSettings.DisableDirectives)} " +
+                                             "must not be set to true");
             }
         }
     }

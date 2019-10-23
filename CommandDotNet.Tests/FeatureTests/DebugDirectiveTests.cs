@@ -7,8 +7,6 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class DebugDirectiveTests : TestBase
     {
-        private static readonly AppSettings DirectivesEnabled = TestAppSettings.TestDefault.Clone(s => s.EnableDirectives = true);
-
         public DebugDirectiveTests(ITestOutputHelper output) : base(output)
         {
             // skip waiting for debugger to connect
@@ -16,9 +14,9 @@ namespace CommandDotNet.Tests.FeatureTests
         }
 
         [Fact]
-        public void Directives_DisabledByDefault()
+        public void Directives_CanBeDisabled()
         {
-            new AppRunner<App>()
+            new AppRunner<App>(TestAppSettings.TestDefault.Clone(s => s.DisableDirectives = true))
                 .VerifyScenario(TestOutputHelper,
                     new Scenario
                     {
@@ -35,7 +33,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public void DebugDirective_PrintsProcessId_And_WaitsForDebuggerToStart()
         {
             var processId = Process.GetCurrentProcess().Id;
-            new AppRunner<App>(DirectivesEnabled)
+            new AppRunner<App>()
                 .UseDebugDirective()
                 .VerifyScenario(TestOutputHelper,
                     new Scenario

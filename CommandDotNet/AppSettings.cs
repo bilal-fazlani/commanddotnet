@@ -38,13 +38,13 @@ namespace CommandDotNet
         /// DefaultArgumentMode is used to determine which mode to use.
         /// </summary>
         public ArgumentMode DefaultArgumentMode { get; set; } = ArgumentMode.Operand;
-
+        
         /// <summary>
-        /// Set to true to tokenize arguments as directives,
+        /// Set to true to prevent tokenizing arguments as directives,
         /// captured in <see cref="CommandContext.Tokens"/>.Directives
         /// for use by middleware
         /// </summary>
-        public bool EnableDirectives { get; set; }
+        public bool DisableDirectives { get; set; }
 
         /// <summary>Settings specific to built-in help providers</summary>
         public AppHelpSettings Help { get; set; } = new AppHelpSettings();

@@ -6,8 +6,6 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class ParseDirectiveTests : TestBase
     {
-        private static readonly AppSettings DirectivesEnabled = TestAppSettings.TestDefault.Clone(s => s.EnableDirectives = true);
-
         public ParseDirectiveTests(ITestOutputHelper output) : base(output)
         {
         }
@@ -15,7 +13,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void Should_EchoAllArgs_OnNewLine_WithIndent()
         {
-            new AppRunner<App>(DirectivesEnabled)
+            new AppRunner<App>()
                 .UseParseDirective()
                 .VerifyScenario(TestOutputHelper,
                     new Scenario
@@ -47,7 +45,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void Should_SpecifyWhenTransformation_DoesNotMakeChanges()
         {
-            new AppRunner<App>(DirectivesEnabled)
+            new AppRunner<App>()
                 .UseParseDirective()
                 .VerifyScenario(TestOutputHelper,
                     new Scenario

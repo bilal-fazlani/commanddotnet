@@ -91,7 +91,7 @@ namespace CommandDotNet
 
         private async Task<int> Execute(string[] args)
         {
-            var tokens = args.Tokenize(includeDirectives: AppSettings.EnableDirectives);
+            var tokens = args.Tokenize(includeDirectives: !AppSettings.DisableDirectives);
             
             var appConfig = _appConfigBuilder.Build();
             var commandContext = new CommandContext(args, tokens, appConfig);
