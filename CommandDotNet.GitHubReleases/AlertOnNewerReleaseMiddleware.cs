@@ -12,8 +12,6 @@ namespace CommandDotNet.NewerReleasesAlerts
         public delegate string ParseSemanticVersionFromResponseBodyDelegate(string responseBody);
         public delegate string PostfixAlertMessageDelegate(string latestReleaseVersion);
 
-        public delegate Task<string> OverrideHttpRequestCallback(HttpClient client, Uri requestUri);
-        
         /// <summary>
         /// This middleware will call the <see cref="latestReleaseUrl"/> and
         /// use <see cref="parseSemanticVersionFromResponseBodyCallback"/> to parse a
@@ -27,11 +25,16 @@ namespace CommandDotNet.NewerReleasesAlerts
         /// <param name="parseSemanticVersionFromResponseBodyCallback">callback to get the semantic version for response from the <see cref="latestReleaseUrl"/></param>
         /// <param name="postfixAlertMessageCallback">the results of this callback will be post-fixed to the alert message.  i.e. download link.</param>
         /// <param name="overrideHttpRequestCallback">use this callback to append headers and auth info for tests. Also useful for mocking requests for unit tests.</param>
+        /// <param name="skipCommand">
+        /// Use this to skip the alert for commands where the alert would result in bad output.
+        /// i.e. Command output that could be piped to another command.
+        /// </param>
         public static AppRunner UseNewerReleaseAlert(this AppRunner appRunner, 
             string latestReleaseUrl,
             ParseSemanticVersionFromResponseBodyDelegate parseSemanticVersionFromResponseBodyCallback,
             PostfixAlertMessageDelegate postfixAlertMessageCallback = null,
-            OverrideHttpRequestCallback overrideHttpRequestCallback = null)
+            OverrideHttpRequestCallback overrideHttpRequestCallback = null,
+            Predicate<Command> skipCommand = null)
         {
             return appRunner.Configure(c =>
             {
@@ -40,9 +43,10 @@ namespace CommandDotNet.NewerReleasesAlerts
                     LatestReleaseUrl = latestReleaseUrl,
                     ParseSematicVersionFromResponseBodyCallback = parseSemanticVersionFromResponseBodyCallback,
                     PostfixAlertMessageCallback = postfixAlertMessageCallback,
-                    OverrideHttpRequestCallback = overrideHttpRequestCallback
+                    OverrideHttpRequestCallback = overrideHttpRequestCallback,
+                    SkipCommand = skipCommand
                 });
-                c.UseMiddleware(AlertOnNewVersion, MiddlewareStages.PreTokenize);
+                c.UseMiddleware(AlertOnNewVersion, MiddlewareStages.PostParseInputPreBindValues);
             });
         }
 
@@ -52,26 +56,32 @@ namespace CommandDotNet.NewerReleasesAlerts
             public ParseSemanticVersionFromResponseBodyDelegate ParseSematicVersionFromResponseBodyCallback;
             public PostfixAlertMessageDelegate PostfixAlertMessageCallback;
             public OverrideHttpRequestCallback OverrideHttpRequestCallback { get; set; }
+            public Predicate<Command> SkipCommand { get; set; }
         }
 
         private static Task<int> AlertOnNewVersion(CommandContext context, ExecutionDelegate next)
         {
-            NewerReleaseConfig config = context.AppConfig.Services.Get<NewerReleaseConfig>();
+            var config = context.AppConfig.Services.Get<NewerReleaseConfig>();
 
-            SemVersion latestReleaseVersion = null;
-
-            var shouldAlert = TryGetCurrentVersion(context, out var currentVersion)
-                              && TryGetLatestReleaseVersion(context, config, out latestReleaseVersion)
-                              && currentVersion < latestReleaseVersion;
-            if (shouldAlert)
+            var skipCommand = config.SkipCommand?.Invoke(context.ParseResult.TargetCommand) ?? false;
+            if (!skipCommand)
             {
-                var message = $"A newer release exists. Current:{currentVersion} Latest:{latestReleaseVersion}";
-                if (config.PostfixAlertMessageCallback != null)
+                SemVersion latestReleaseVersion = null;
+
+                var shouldAlert = TryGetCurrentVersion(context, out var currentVersion)
+                                  && TryGetLatestReleaseVersion(context, config, out latestReleaseVersion)
+                                  && currentVersion < latestReleaseVersion;
+                if (shouldAlert)
                 {
-                    message += $" {config.PostfixAlertMessageCallback?.Invoke(latestReleaseVersion.ToString())}";
+                    var message = $"A newer release exists. Current:{currentVersion} Latest:{latestReleaseVersion}";
+                    if (config.PostfixAlertMessageCallback != null)
+                    {
+                        message += $" {config.PostfixAlertMessageCallback?.Invoke(latestReleaseVersion.ToString())}";
+                    }
+
+                    context.Console.Out.WriteLine(message);
+                    context.Console.Out.WriteLine();
                 }
-                context.Console.Out.WriteLine(message);
-                context.Console.Out.WriteLine();
             }
 
             return next(context);

@@ -14,10 +14,15 @@ namespace CommandDotNet.NewerReleasesAlerts
         /// <param name="repositoryName">The name of the repository in GitHub</param>
         /// <param name="getVersionFromReleaseName">Provide this in cases where the release name does not follow a standard 'v1.0.0-prefix' naming convention.</param>
         /// <param name="overrideHttpRequestCallback">use this callback to append headers and auth info for tests. Also useful for mocking requests for unit tests.</param>
+        /// <param name="skipCommand">
+        /// Use this to skip the alert for commands where the alert would result in bad output.
+        /// i.e. Command output that could be piped to another command.
+        /// </param>
         public static AppRunner UseNewerReleaseAlertOnGitHub(this AppRunner appRunner,
             string organizationName, string repositoryName,
             Func<string, string> getVersionFromReleaseName = null,
-            AlertOnNewerReleaseMiddleware.OverrideHttpRequestCallback overrideHttpRequestCallback = null)
+            OverrideHttpRequestCallback overrideHttpRequestCallback = null,
+            Predicate<Command> skipCommand = null)
         {
             if (getVersionFromReleaseName == null)
             {
@@ -28,7 +33,7 @@ namespace CommandDotNet.NewerReleasesAlerts
                 BuildLatestReleaseUrl(organizationName, repositoryName), 
                 response => getVersionFromReleaseName(GetNameFromReleaseBody(response)),
                 version => $"Download from {BuildDownloadUrl(organizationName, repositoryName, version)}",
-                overrideHttpRequestCallback);
+                overrideHttpRequestCallback, skipCommand);
         }
 
         private static string GetNameFromReleaseBody(string response)

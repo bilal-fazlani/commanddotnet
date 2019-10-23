@@ -1,4 +1,5 @@
-﻿using CommandDotNet.Example.DocExamples;
+﻿using System.Linq;
+using CommandDotNet.Example.DocExamples;
 using CommandDotNet.Example.Issues;
 using CommandDotNet.FluentValidation;
 using CommandDotNet.Help;
@@ -36,7 +37,8 @@ namespace CommandDotNet.Example
                 .UsePrompting()
                 .UseResponseFiles()
                 .AppendPipedInputToOperandList()
-                //.UseNewerReleaseAlertOnGitHub("bilal-fazlani", "commanddotnet")
+                .UseNewerReleaseAlertOnGitHub("bilal-fazlani", "commanddotnet", 
+                    skipCommand: command => command.GetParentCommands(true).Any(c => c.Name == "pipes"))
                 .Run(args);
         }
 

@@ -67,6 +67,32 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                 });
         }
 
+        [Fact]
+        public void ShouldNotAlertWhenTargetCommandIsSkipped()
+        {
+            var organizationName = "bilal-fazlani";
+            var repositoryName = "commanddotnet";
+            var version = "1.0.0";
+
+            new AppRunner<App>()
+                .Configure(c => c.Services.AddOrUpdate(new VersionInfo("blah", version)))
+                .UseNewerReleaseAlertOnGitHub(organizationName, repositoryName,
+                    overrideHttpRequestCallback: (client, uri) => Task.FromResult(BuildGitHubApiResponse("1.0.1")),
+                    skipCommand:command => true)
+                .VerifyScenario(_testOutputHelper, new Scenario
+                {
+                    WhenArgs = "Do",
+                    Then =
+                    {
+                        ResultsNotContainsTexts =
+                        {
+                            $"A newer release exists. Current:{version} Latest:",
+                            $"Download from https://github.com/{organizationName}/{repositoryName}/releases/tag/"
+                        }
+                    }
+                });
+        }
+
         public class App
         {
             public TestOutputs TestOutputs { get; set; }
