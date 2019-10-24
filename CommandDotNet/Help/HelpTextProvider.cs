@@ -163,7 +163,7 @@ namespace CommandDotNet.Help
         protected virtual string ArgumentName<T>(T argument) where T : IArgument =>
             argument.SwitchFunc(
                 operand => operand.Name,
-                option => ArgumentTemplate.Build(option.LongName, option.ShortName));
+                option => OptionTemplate.Build(option.LongName, option.ShortName));
 
         protected virtual string ArgumentFootNoteSymbols<T>(Command command, T argument) where T: IArgument =>
             argument.SwitchFunc(
