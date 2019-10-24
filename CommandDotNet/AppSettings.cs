@@ -9,13 +9,10 @@ namespace CommandDotNet
         private BooleanMode _booleanMode = BooleanMode.Implicit;
 
         /// <summary>
-        /// When Explicit, options require a 'true' or 'false' value be specified.
-        /// When Implicit, an option is considered false unless it's specified.
-        /// The next argument will be considered a new argument.
+        /// When Explicit, boolean options require a 'true' or 'false' value be specified.<br/>
+        /// When Implicit, boolean options are treated as Flags, considered false unless it's specified
+        /// and the next argument will be considered a new argument.
         /// </summary>
-        /// <remarks>
-        /// BooleanMode applies to bool options only.
-        /// </remarks>
         public BooleanMode BooleanMode
         {
             get => _booleanMode;
@@ -36,6 +33,7 @@ namespace CommandDotNet
         /// <summary>
         /// When arguments are not decorated with [Operand] or [Option]
         /// DefaultArgumentMode is used to determine which mode to use.
+        /// Operand is the default.
         /// </summary>
         public ArgumentMode DefaultArgumentMode { get; set; } = ArgumentMode.Operand;
         
