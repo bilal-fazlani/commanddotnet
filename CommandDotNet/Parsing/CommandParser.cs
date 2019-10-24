@@ -175,7 +175,7 @@ namespace CommandDotNet.Parsing
             var parserValues = argument.InputValues.FirstOrDefault(iv => iv.Source == source);
             if (parserValues == null)
             {
-                parserValues = new InputValue(source, new List<string>());
+                parserValues = new InputValue(source, false, new List<string>());
                 argument.InputValues.Add(parserValues);
             }
 
