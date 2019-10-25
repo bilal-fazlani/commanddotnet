@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Rendering;
 
-namespace CommandDotNet.Example
+namespace CommandDotNet.Example.Commands
 {
-    [Command(Name = "prompts", Description = "Demonstrates prompting, including password handling.")]
-    public class PromptApp
+    [Command(
+        Description = "Demonstrates prompting (including passwords) and interceptor method to define options common to subcommands",
+        ExtendedHelpText = "Uses an interceptor method ",
+        Usage = "prompts ")]
+    public class Prompts
     {
         public Task<int> Intercept(InterceptorExecutionDelegate next, string username, Password password, IConsole console)
         {
@@ -31,12 +34,13 @@ namespace CommandDotNet.Example
             return next();
         }
 
-        [DefaultMethod]
-        public void Default(IConsole console, string say)
+        [Command(Description = "Echos the given text, demonstrating prompting for a single item")]
+        public void Echo(IConsole console, string text)
         {
-            console.Out.WriteLine(say);
+            console.Out.WriteLine(text);
         }
 
+        [Command(Description = "sums the list of numbers, demonstrating prompting for a list")]
         public void Sum(IConsole console, ICollection<int> numbers)
         {
             console.Out.WriteLine(numbers == null
@@ -44,6 +48,7 @@ namespace CommandDotNet.Example
                 : $"{string.Join(" + ", numbers)} = {numbers.Sum()}");
         }
 
+        [Command(Description = "Echos the list of items")]
         public void List(IConsole console, ICollection<string> items)
         {
             console.Out.WriteLine(string.Join(Environment.NewLine, items));

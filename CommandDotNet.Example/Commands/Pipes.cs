@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Threading;
 using CommandDotNet.Rendering;
 
-namespace CommandDotNet.Example
+namespace CommandDotNet.Example.Commands
 {
-    [Command(Name = "pipes", 
-        Description = "example of accepting piped input",
-        Usage = "`... pipes Echo --times 10 hello | ... pipes Echo` to see piped input printed again\n" +
-                "`... pipes Echo --times 10 --sleep 10 hello | ... pipes Echo` to see that piped input can be streamed as available")]
-    public class PipesApp
+    [Command(
+        Description = "demonstrates accepting piped input",
+        Usage = "`pipes echo --times 10 hello | pipes echo` to see piped input printed again\n" +
+                "`pipes echo --times 10 --sleep 10 hello | pipes echo` to see that piped input can be streamed as available")]
+    public class Pipes
     {
         [Command(
-            Usage = "`... pipes Echo --times 10 hello | ... pipes Echo` to see piped input printed again\n"
-                    + "`... pipes Echo --times 10 --sleep 10 hello | ... pipes Echo` to see that piped input can be streamed")]
+            Usage = "`pipes echo --times 10 hello | pipes echo` to see piped input printed again\n"
+                    + "`pipes echo --times 10 --sleep 10 hello | pipes echo` to see that piped input can be streamed")]
         public void Echo(
             IConsole console,
             CancellationToken cancellationToken,

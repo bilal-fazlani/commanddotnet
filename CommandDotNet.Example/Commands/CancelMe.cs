@@ -2,18 +2,23 @@
 using System.Threading;
 using CommandDotNet.Rendering;
 
-namespace CommandDotNet.Example
+namespace CommandDotNet.Example.Commands
 {
-    [Command(Name = "cancel-me", Description = "example of using cancellation tokens. Also used to test the CancellationMiddleware")]
-    public class CancelMeApp
+    [Command(
+        Description = "Example of using cancellation tokens. " +
+                      "Use this to test changes to CancellationMiddleware across OS's",
+        Usage = "`dotnet CommandDotNet.Examples.dll cancel-me` the app will run until Ctrl+C is entered.\n" +
+                "`dotnet CommandDotNet.Examples.dll cancel-me -x 10` to trigger Environment.Exit from another thread to ensure the app will exit.\n" +
+                "`dotnet CommandDotNet.Examples.dll cancel-me -c 10` to raise an unhandled exception to ensure the app will exit."
+        )]
+    public class CancelMe
     {
         [DefaultMethod]
         public void Default(
             CancellationToken cancellationToken, 
             IConsole console,
             [Option(ShortName = "x", LongName = "exitAfterNRounds")] int exitAfterNRounds = -1,
-            [Option(ShortName = "c", LongName = "crashAfterNRounds")] int crashAfterNRounds = -1
-        )
+            [Option(ShortName = "c", LongName = "crashAfterNRounds")] int crashAfterNRounds = -1)
         {
             int counter = 0;
             while (!cancellationToken.IsCancellationRequested)

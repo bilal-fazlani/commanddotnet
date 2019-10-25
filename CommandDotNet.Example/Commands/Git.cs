@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace CommandDotNet.Example
+namespace CommandDotNet.Example.Commands
 {
-    [Command(Name = "git", Description = "Fake git application")]
-    public class GitApplication
+    [Command(Description = "Fake git application to demonstrate nested sub-commands. Does NOT interact with git.")]
+    public class Git
     {
         [SubCommand]
         public Submodule SubmoduleProperty { get; set; }
