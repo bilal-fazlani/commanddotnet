@@ -30,12 +30,15 @@ namespace CommandDotNet.TestTools
             {
                 var msg = messageFunc?.Invoke();
 
-                if (parameters?.Any() ?? false)
+                if (msg != null && (parameters?.Any() ?? false))
                 {
                     msg = string.Format(msg, parameters);
                 }
 
-                _logger?.WriteLine($"{name}: {level.ToString().First()} {msg} {exception}");
+                if (msg != null || exception != null)
+                {
+                    _logger?.WriteLine($"{name}: {level.ToString().First()} {msg} {exception}");
+                }
 
                 return true;
             };

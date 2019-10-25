@@ -30,6 +30,7 @@ namespace CommandDotNet.Example
             return new AppRunner<TApp>(appSettings)
                 .UseDefaultMiddleware()
                 .UseNameCasing(@case)
+                .UseLog2ConsoleDirective()
                 .UseFluentValidation()
                 .UseNewerReleaseAlertOnGitHub("bilal-fazlani", "commanddotnet", 
                     skipCommand: command => command.GetParentCommands(true).Any(c => c.Name == "pipes"))
