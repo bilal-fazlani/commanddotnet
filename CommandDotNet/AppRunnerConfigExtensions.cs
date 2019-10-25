@@ -15,24 +15,24 @@ namespace CommandDotNet
     {
         /// <summary>
         /// Configures the <see cref="AppRunner"/> with the 'default' set of middleware.
-        /// See the 'optOutOf...' parameters for the list of included middleware.
+        /// See the 'exclude...' parameters for the list of included middleware.
         /// </summary>
         public static AppRunner UseDefaultMiddleware(this AppRunner appRunner,
-            bool optOutOfCancellationHandlers = false,
-            bool optOutOfDebugDirective = false,
-            bool optOutOfParseDirective = false,
-            bool optOutOfPrompting = false,
-            bool optOutOfResponseFiles = false,
-            bool optOutOfVersionMiddleware = false,
-            bool optOutOfAppendPipedInputToOperandList = false)
+            bool excludeCancellationHandlers = false,
+            bool excludeDebugDirective = false,
+            bool excludeParseDirective = false,
+            bool excludePrompting = false,
+            bool excludeResponseFiles = false,
+            bool excludeVersionMiddleware = false,
+            bool excludeAppendPipedInputToOperandList = false)
         {
-            if (!optOutOfCancellationHandlers) appRunner.UseCancellationHandlers();
-            if (!optOutOfDebugDirective) appRunner.UseDebugDirective();
-            if (!optOutOfParseDirective) appRunner.UseParseDirective();
-            if (!optOutOfPrompting) appRunner.UsePrompting();
-            if (!optOutOfResponseFiles) appRunner.UseResponseFiles();
-            if (!optOutOfVersionMiddleware) appRunner.UseVersionMiddleware();
-            if (!optOutOfAppendPipedInputToOperandList) appRunner.AppendPipedInputToOperandList();
+            if (!excludeCancellationHandlers) appRunner.UseCancellationHandlers();
+            if (!excludeDebugDirective) appRunner.UseDebugDirective();
+            if (!excludeParseDirective) appRunner.UseParseDirective();
+            if (!excludePrompting) appRunner.UsePrompting();
+            if (!excludeResponseFiles) appRunner.UseResponseFiles();
+            if (!excludeVersionMiddleware) appRunner.UseVersionMiddleware();
+            if (!excludeAppendPipedInputToOperandList) appRunner.AppendPipedInputToOperandList();
 
             return appRunner;
         }
