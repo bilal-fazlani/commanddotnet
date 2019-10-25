@@ -37,7 +37,7 @@ namespace CommandDotNet.TestTools
 
                 if (msg != null || exception != null)
                 {
-                    _logger?.WriteLine($"{name}: {level.ToString().First()} {msg} {exception}");
+                    _logger?.WriteLine($"{level.ToString().First()} {name} > {msg} {exception}");
                 }
 
                 return true;

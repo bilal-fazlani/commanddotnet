@@ -60,7 +60,7 @@ namespace CommandDotNet.Example
                     if (msg != null || exception != null)
                     {
                         var stream = level == LogLevel.Error || level == LogLevel.Fatal ? _console.Error : _console.Out;
-                        stream.WriteLine($"{level.ToString().First()} {name} {msg} {exception}");
+                        stream.WriteLine($"{level.ToString().First()} {name} > {msg} {exception}");
                     }
 
                     return true;
