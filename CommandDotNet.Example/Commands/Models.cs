@@ -78,10 +78,10 @@ namespace CommandDotNet.Example.Commands
         public class NotificationOptions : IArgumentModel
         {
             [Option]
-            public DateTime? SendAfter { get; set; } = DateTime.MinValue;
+            public DateTime? SendAfter { get; set; }
 
             [Option]
-            public int? RetryCount { get; set; } = 0;
+            public int? RetryCount { get; set; }
         }
 
         public class NotificationValidator : AbstractValidator<Notification>

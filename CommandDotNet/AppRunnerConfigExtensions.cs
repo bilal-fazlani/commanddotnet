@@ -104,17 +104,23 @@ namespace CommandDotNet
         /// </summary>
         /// <param name="appRunner">The <see cref="AppRunner"/> instance</param>
         /// <param name="prompterOverride">The <see cref="IPrompter"/> to use instead of the default.  Overriding this may impact TestTool support.</param>
-        /// <param name="skipForMissingArguments">When true, users will be NOT prompted for each missing argument</param>
+        /// <param name="promptForMissingArguments">
+        /// Prompt users for missing arguments.<br/>
+        /// Default is True.
+        /// </param>
         /// <param name="argumentPromptTextOverride">Override the default prompt text format.</param>
-        /// <param name="argumentFilter">Filter the arguments that will be prompted. i.e. Create a [PromptWhenMissing] attribute, or only prompt for operands.</param>
+        /// <param name="argumentFilter">
+        /// Filter the arguments that will be prompted. i.e. Create a [PromptWhenMissing] attribute, or only prompt for operands.<br/>
+        /// Default filter includes only arguments where <see cref="IArgumentArity.MinimumNumberOfValues"/> is greater than zero.
+        /// </param>
         public static AppRunner UsePrompting(
             this AppRunner appRunner,
             Func<CommandContext, IPrompter> prompterOverride = null,
-            bool skipForMissingArguments = false,
+            bool promptForMissingArguments = true,
             Func<CommandContext, IArgument, string> argumentPromptTextOverride = null,
             Predicate<IArgument> argumentFilter = null)
         {
-            return ValuePromptMiddleware.UsePrompting(appRunner, prompterOverride, skipForMissingArguments, argumentPromptTextOverride, argumentFilter);
+            return ValuePromptMiddleware.UsePrompting(appRunner, prompterOverride, promptForMissingArguments, argumentPromptTextOverride, argumentFilter);
         }
 
         /// <summary>Prefix a filepath with @ and it will be replaced by its contents during <see cref="MiddlewareStages.Tokenize"/></summary>

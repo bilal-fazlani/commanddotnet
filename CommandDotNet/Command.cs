@@ -111,7 +111,7 @@ namespace CommandDotNet
         private void AddOperand(Operand operand)
         {
             var lastOperand = Operands.LastOrDefault();
-            if (lastOperand != null && lastOperand.Arity.AllowsZeroOrMore())
+            if (lastOperand != null && lastOperand.Arity.AllowsMany())
             {
                 var message =
                     $"The last operand '{lastOperand.Name}' accepts multiple values. No more operands can be added.";

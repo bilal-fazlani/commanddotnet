@@ -16,6 +16,8 @@ namespace CommandDotNet.Extensions
                 .Where(m => !typeof(IDisposable).IsAssignableFrom(type) || m.Name != nameof(IDisposable.Dispose));
         }
 
+        internal static bool IsNullableType(this Type type) => Nullable.GetUnderlyingType(type) != null;
+
         internal static Type GetUnderlyingType(this Type type)
         {
             return Nullable.GetUnderlyingType(type)
@@ -35,6 +37,7 @@ namespace CommandDotNet.Extensions
         internal static bool IsEnumerable(this Type type)
         {
             return type.GetInterfaces()
+                .Concat(type.ToEnumerable())
                 .Any(x => x == typeof(IEnumerable));
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CommandDotNet.Extensions;
+using CommandDotNet.Logging;
 using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
 
@@ -10,6 +11,8 @@ namespace CommandDotNet.Prompts
 {
     public class Prompter : IPrompter
     {
+        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
+
         private readonly IConsole _console;
 
         public Prompter(IConsole console)
@@ -55,8 +58,13 @@ namespace CommandDotNet.Prompts
                 return PromptForValueRobustImpl(promptText, isPassword, isList, out isCancellationRequested);
             }
 
+            Log.Debug("setting console.TreatControlCAsInput = true");
             _console.TreatControlCAsInput = true;
-            using (new DisposableAction(() => _console.TreatControlCAsInput = false))
+            using (new DisposableAction(() =>
+            {
+                Log.Debug("setting console.TreatControlCAsInput = false");
+                _console.TreatControlCAsInput = false;
+            }))
             {
                 return PromptForValueRobustImpl(promptText, isPassword, isList, out isCancellationRequested);
             }
@@ -73,7 +81,7 @@ namespace CommandDotNet.Prompts
             consoleOut.Write(promptText);
             if (isList)
             {
-                consoleOut.Write(" [separate value on new line. <enter> twice to finish]");
+                consoleOut.Write(" [<enter> once to begin new value. <enter> twice to finish]");
             }
             consoleOut.Write(": ");
             if (isList)

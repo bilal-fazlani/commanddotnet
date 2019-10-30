@@ -212,7 +212,7 @@ namespace CommandDotNet.Help
             argument.Description.UnlessNullOrWhitespace();
 
         protected virtual string ArgumentArity<T>(T argument) where T : IArgument => 
-            (argument.Arity.AllowsZeroOrMore() ? " (Multiple)" : "");
+            (argument.Arity.AllowsMany() ? " (Multiple)" : "");
 
         /// <summary>Returns a comma-separated list of the allowed values</summary>
         protected virtual string ArgumentAllowedValues<T>(T argument) where T : IArgument =>

@@ -186,16 +186,8 @@ namespace CommandDotNet.Parsing
         {
             var values = GetArgumentParsedValues(option);
 
-            if (option.Arity.AllowsZeroOrMore())
+            if (option.Arity.AllowsMany())
             {
-                values.Add(value);
-            }
-            else if (option.Arity.AllowsZeroOrOne())
-            {
-                if (values.Any())
-                {
-                    return false;
-                }
                 values.Add(value);
             }
             else if (option.Arity.AllowsNone())
@@ -206,6 +198,14 @@ namespace CommandDotNet.Parsing
                 }
                 // Add a value to indicate that this option was specified
                 values.Add("true");
+            }
+            else if (!option.Arity.AllowsMany())
+            {
+                if (values.Any())
+                {
+                    return false;
+                }
+                values.Add(value);
             }
             return true;
         }
@@ -230,7 +230,7 @@ namespace CommandDotNet.Parsing
 
             public bool MoveNext()
             {
-                if (Current == null || !Current.Arity.AllowsZeroOrMore())
+                if (Current == null || !Current.Arity.AllowsMany())
                 {
                     return _enumerator.MoveNext();
                 }

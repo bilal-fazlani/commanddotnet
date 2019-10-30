@@ -17,17 +17,19 @@ namespace CommandDotNet.Prompts
             _getPromptTextCallback = getPromptTextCallback;
         }
 
-        public virtual ICollection<string> PromptForArgumentValues(CommandContext commandContext, IArgument argument, out bool isCancellationRequested)
+        public virtual ICollection<string> PromptForArgumentValues(
+            CommandContext commandContext, IArgument argument, out bool isCancellationRequested)
         {
             var argumentName = _getPromptTextCallback?.Invoke(commandContext, argument) ?? argument.Name;
             var promptText = $"{argumentName} ({argument.TypeInfo.DisplayName})";
+            var isPassword = argument.TypeInfo.UnderlyingType == typeof(Password);
 
             ICollection<string> inputs = new List<string>();
-
-            if (argument.Arity.AllowsZeroOrMore())
+            
+            if (argument.Arity.AllowsMany())
             {
                 if (_prompter.TryPromptForValues(
-                    out var values, out isCancellationRequested, promptText))
+                    out var values, out isCancellationRequested, promptText, isPassword: isPassword))
                 {
                     inputs.AddRange(values);
                 }
@@ -35,8 +37,7 @@ namespace CommandDotNet.Prompts
             else
             {
                 if (_prompter.TryPromptForValue(
-                    out var value, out isCancellationRequested, promptText, 
-                    isPassword: argument.TypeInfo.UnderlyingType == typeof(Password)))
+                    out var value, out isCancellationRequested, promptText, isPassword: isPassword))
                 {
                     inputs.Add(value);
                 }

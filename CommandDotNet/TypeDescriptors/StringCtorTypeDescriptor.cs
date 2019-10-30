@@ -27,7 +27,7 @@ namespace CommandDotNet.TypeDescriptors
 
         private static Converter GetConverter(IArgument argument)
         {
-            return argument.Arity.AllowsZeroOrMore()
+            return argument.Arity.AllowsMany()
                 ? GetConverter(argument.TypeInfo.UnderlyingType)
                 : GetConverter(argument.TypeInfo.Type);
         }

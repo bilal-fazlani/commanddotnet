@@ -36,7 +36,7 @@ namespace CommandDotNet.Parsing
                 //    this can become an option passed into appBuilder.EnablePipedInput(...)
                 //    if a need arises to throw instead of merge
                 var operand = ctx.ParseResult.TargetCommand.Operands
-                    .FirstOrDefault(o => o.Arity.AllowsZeroOrMore());
+                    .FirstOrDefault(o => o.Arity.AllowsMany());
 
                 if (operand == null)
                 {

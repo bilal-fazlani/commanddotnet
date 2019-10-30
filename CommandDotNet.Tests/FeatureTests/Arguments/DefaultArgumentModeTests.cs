@@ -8,8 +8,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class DefaultArgumentModeTests : TestBase
     {
-        private static readonly AppSettings OperandMode = TestAppSettings.BasicHelp.Clone(a => a.MethodArgumentMode = ArgumentMode.Operand);
-        private static readonly AppSettings OptionMode = TestAppSettings.BasicHelp.Clone(a => a.MethodArgumentMode = ArgumentMode.Option);
+        private static readonly AppSettings OperandMode = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Operand);
+        private static readonly AppSettings OptionMode = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Option);
         private static readonly AppSettings DeprecatedParameterMode = TestAppSettings.BasicHelp.Clone(a => a.MethodArgumentMode = ArgumentMode.Parameter);
 
         public DefaultArgumentModeTests(ITestOutputHelper output) : base(output)

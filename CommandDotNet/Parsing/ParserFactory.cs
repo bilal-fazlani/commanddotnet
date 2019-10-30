@@ -14,7 +14,7 @@ namespace CommandDotNet.Parsing
 
         public IParser CreateInstance(IArgument argument)
         {
-            return argument.Arity.AllowsZeroOrMore()
+            return argument.Arity.AllowsMany()
                 ? new ListParser(
                     argument.TypeInfo.Type, 
                     argument.TypeInfo.UnderlyingType, 

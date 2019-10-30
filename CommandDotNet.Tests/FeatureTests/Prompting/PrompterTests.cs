@@ -5,7 +5,7 @@ using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests
+namespace CommandDotNet.Tests.FeatureTests.Prompting
 {
     public class PrompterTests
     {
@@ -17,7 +17,7 @@ namespace CommandDotNet.Tests.FeatureTests
         }
 
         [Fact]
-        public void Stuff()
+        public void InjectedPrompterCanPromptForValues()
         {
             new AppRunner<App>()
                 .UsePrompting()

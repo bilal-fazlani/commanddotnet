@@ -12,7 +12,11 @@ namespace CommandDotNet.Example.Commands
         Usage = "prompts ")]
     public class Prompts
     {
-        public Task<int> Intercept(InterceptorExecutionDelegate next, string username, Password password, IConsole console)
+        public Task<int> Intercept(InterceptorExecutionDelegate next, 
+            Password password, 
+            IConsole console,
+            [Option]
+            string username = "admin")
         {
             // mimic auth
 

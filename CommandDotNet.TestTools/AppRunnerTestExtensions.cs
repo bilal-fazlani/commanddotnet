@@ -12,6 +12,7 @@ namespace CommandDotNet.TestTools
     /// <summary>Run the console in memory and get the results that would be output to the shell</summary>
     public static class AppRunnerTestExtensions
     {
+        /// <summary>Injects a middleware to capture state at specific point</summary>
         public static AppRunner CaptureState(this AppRunner runner, Action<CommandContext> capture,
             MiddlewareStages middlewareStage, int? orderWithinStage = null, bool exitAfterCapture = false)
         {
@@ -24,6 +25,7 @@ namespace CommandDotNet.TestTools
             }, middlewareStage, orderWithinStage));
         }
 
+        /// <summary>Run the console in memory and get the results that would be output to the shell</summary>
         public static AppRunnerResult RunInMem(this AppRunner runner,
             string[] args,
             ILogger logger,

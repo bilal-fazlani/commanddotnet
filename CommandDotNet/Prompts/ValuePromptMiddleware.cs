@@ -16,7 +16,7 @@ namespace CommandDotNet.Prompts
         internal static AppRunner UsePrompting(
             AppRunner appRunner,
             Func<CommandContext, IPrompter> prompterOverride = null,
-            bool skipForMissingArguments = false,
+            bool promptForMissingArguments = true,
             Func<CommandContext, IArgument, string> argumentPromptTextOverride = null,
             Predicate<IArgument> argumentFilter = null)
         {
@@ -40,8 +40,9 @@ namespace CommandDotNet.Prompts
 
                 c.UseParameterResolver(ctx => prompterOverride(ctx));
 
-                if (!skipForMissingArguments)
+                if (promptForMissingArguments)
                 {
+                    argumentFilter = argumentFilter ?? (a => a.Arity.RequiresAtLeastOne()); 
                     c.UseMiddleware(
                         (ctx, next) => PromptForMissingArguments(ctx, next,
                             new ArgumentPrompter(prompterOverride(ctx), argumentPromptTextOverride), argumentFilter), 

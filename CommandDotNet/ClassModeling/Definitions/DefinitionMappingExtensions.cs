@@ -61,8 +61,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             var argument = BuildArgument(
                 argumentDef, 
                 parent,
-                appConfig, 
-                argumentDef.HasDefaultValue ? argumentDef.DefaultValue : null,
+                appConfig,
                 new TypeInfo(argumentDef.Type, underlyingType), 
                 isInterceptorOption);
             argumentDef.Argument = argument;
@@ -81,10 +80,11 @@ namespace CommandDotNet.ClassModeling.Definitions
         private static IArgument BuildArgument(IArgumentDef argumentDef,
             Command parent,
             AppConfig appConfig,
-            object defaultValue,
             TypeInfo typeInfo,
             bool isInterceptorOption)
         {
+            var defaultValue = argumentDef.HasDefaultValue ? argumentDef.DefaultValue : null;
+
             if (argumentDef.CommandNodeType == CommandNodeType.Operand)
             {
                 var operandAttr = argumentDef.CustomAttributes.GetCustomAttribute<OperandAttribute>() 
@@ -93,7 +93,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                     argumentDef.Name, 
                     parent, 
                     typeInfo,
-                    ArgumentArity.Default(argumentDef.Type, BooleanMode.Explicit), 
+                    ArgumentArity.Default(argumentDef.Type, argumentDef.HasDefaultValue, BooleanMode.Explicit), 
                     argumentDef.SourcePath,
                     customAttributes: argumentDef.CustomAttributes,
                     argumentDef.ValueProxy)
@@ -107,7 +107,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             {
                 var optionAttr = argumentDef.CustomAttributes.GetCustomAttribute<OptionAttribute>();
                 var booleanMode = GetOptionBooleanMode(argumentDef, appConfig.AppSettings.BooleanMode, optionAttr);
-                var argumentArity = ArgumentArity.Default(argumentDef.Type, booleanMode);
+                var argumentArity = ArgumentArity.Default(argumentDef.Type, argumentDef.HasDefaultValue, booleanMode);
 
                 var longName = optionAttr?.ShortName != null 
                     ? optionAttr?.LongName 

@@ -7,14 +7,10 @@ using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests
+namespace CommandDotNet.Tests.FeatureTests.Prompting
 {
     public class PromptForMissingArgumentTests
     {
-        // TEST:
-        // - prompt for value within command
-        // - piped input is checked before prompting
-
         private readonly ITestOutputHelper _testOutputHelper;
 
         public PromptForMissingArgumentTests(ITestOutputHelper testOutputHelper)
@@ -30,7 +26,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     Given = { OnPrompt = Respond.FailOnPrompt },
-                    WhenArgs = "Do something --opt1 simple",
+                    WhenArgs = $"{nameof(App.Do)} something --opt1 simple",
                     Then =
                     {
                         Outputs = {new App.DoResult
@@ -51,7 +47,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     Given = { OnPrompt = Respond.With("simple", prompt => prompt.StartsWith("opt1")) },
-                    WhenArgs = "Do something",
+                    WhenArgs = $"{nameof(App.Do)} something",
                     Then =
                     {
                         Outputs = {new App.DoResult
@@ -72,7 +68,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     Given = { OnPrompt = Respond.With("something", prompt => prompt.StartsWith("arg1")) },
-                    WhenArgs = "Do --opt1 simple",
+                    WhenArgs = $"{nameof(App.Do)} --opt1 simple",
                     Then =
                     {
                         Outputs = {new App.DoResult
@@ -99,7 +95,7 @@ namespace CommandDotNet.Tests.FeatureTests
                             new Answer("simple", prompt => prompt.StartsWith("opt1"))
                         )
                     },
-                    WhenArgs = "Do",
+                    WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {
                         Outputs =
@@ -117,89 +113,6 @@ opt1 (Text): simple"
         }
 
         [Fact]
-        public void WhenPrompting_CtrlC_ExitsApp()
-        {
-            new AppRunner<App>()
-                .UsePrompting()
-                .VerifyScenario(_testOutputHelper, new Scenario
-                {
-                    Given = { OnPrompt = Respond.With(new Answer("part".ToConsoleKeyInfos().AppendCtrlCKey())) },
-                    WhenArgs = "Do",
-                    Then =
-                    {
-                        Result = @"arg1 (Text): part"
-                    }
-                });
-        }
-
-        [Fact]
-        public void WhenPrompting_SingleEscape_ClearsPrompt()
-        {
-            var arg1Answer = "take1".ToConsoleKeyInfos().AppendEscapeKey().Concat("take2".ToConsoleKeyInfos());
-
-            new AppRunner<App>()
-                .UsePrompting()
-                .VerifyScenario(_testOutputHelper, new Scenario
-                {
-                    Given = { OnPrompt = Respond.With(
-                        new Answer(arg1Answer, prompt => prompt.StartsWith("arg1")),
-                        new Answer("simple", prompt => prompt.StartsWith("opt1")))
-                    },
-                    WhenArgs = "Do",
-                    Then =
-                    {
-                        Outputs =
-                        {
-                            new App.DoResult
-                            {
-                                Arg1 = "take2",
-                                Opt1 = "simple"
-                            }
-                        },
-                        Result = @"arg1 (Text): take2
-opt1 (Text): simple"
-                    }
-                });
-        }
-
-        [Fact]
-        public void WhenPrompting_DoubleEscape_ExitsPrompt()
-        {
-            new AppRunner<App>()
-                .UsePrompting()
-                .VerifyScenario(_testOutputHelper, new Scenario
-                {
-                    Given = { OnPrompt = Respond.With(
-                        new Answer("take1".ToConsoleKeyInfos().AppendEscapeKey().AppendEscapeKey(), prompt => prompt.StartsWith("arg1")),
-                        new Answer("not-used", prompt => prompt.StartsWith("arg1"))) },
-                    WhenArgs = "Do",
-                    Then =
-                    {
-                        Result = @"arg1 (Text):
-opt1 (Text):"
-                    }
-                });
-        }
-
-        [Fact]
-        public void WhenPrompting_BackspaceRemovesCharactersButNotPrompt()
-        {
-            new AppRunner<App>()
-                .UsePrompting()
-                .VerifyScenario(_testOutputHelper, new Scenario
-                {
-                    Given = { OnPrompt = Respond.With("yes\b\b\b\bno\b\b\bmaybe", reuse: true) },
-                    WhenArgs = "Do",
-                    Then =
-                    {
-                        Outputs = { new App.DoResult{Arg1 = "maybe", Opt1 = "maybe"}},
-                        Result = @"arg1 (Text): maybe
-opt1 (Text): maybe"
-                    }
-                });
-        }
-
-        [Fact]
         public void WhenOperandListProvided_DoesNotPrompt()
         {
             new AppRunner<App>()
@@ -207,7 +120,7 @@ opt1 (Text): maybe"
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     Given = { OnPrompt = Respond.With("yes")},
-                    WhenArgs = "DoList something simple",
+                    WhenArgs = $"{nameof(App.DoList)} something simple",
                     Then =
                     {
                         Outputs = {new List<string>{"something", "simple"}},
@@ -224,11 +137,11 @@ opt1 (Text): maybe"
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     Given = { OnPrompt = Respond.WithList(new []{"something", "simple"}) },
-                    WhenArgs = "DoList",
+                    WhenArgs = $"{nameof(App.DoList)}",
                     Then =
                     {
                         Outputs = {new List<string>{"something", "simple"}},
-                        Result = @"args (Text) [separate value on new line. <enter> twice to finish]:
+                        Result = @"args (Text) [<enter> once to begin new value. <enter> twice to finish]:
 something
 simple"
                     }
@@ -243,7 +156,7 @@ simple"
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     Given = { OnPrompt = Respond.WithList(new[] { "something", "simple", "'or not'", "\"so simple\"" }) },
-                    WhenArgs = "DoList",
+                    WhenArgs = $"{nameof(App.DoList)}",
                     Then =
                     {
                         Outputs = {new List<string>{"something", "simple", "'or not'", "\"so simple\""}}
@@ -259,7 +172,7 @@ simple"
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     Given = {OnPrompt = Respond.With("1", prompt => prompt.StartsWith("intercept1"))},
-                    WhenArgs = "Do --inherited1 2",
+                    WhenArgs = $"{nameof(HierApp.Do)} --inherited1 2",
                     Then =
                     {
                         Outputs = {new HierApp.InterceptResult {Intercept1 = 1, Inherited1 = 2}}
@@ -275,7 +188,7 @@ simple"
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     Given = { OnPrompt = Respond.With("2", prompt => prompt.StartsWith("inherited1")) },
-                    WhenArgs = " --intercept1 1 Do",
+                    WhenArgs = $" --intercept1 1 {nameof(HierApp.Do)}",
                     Then =
                     {
                         Outputs = {new HierApp.InterceptResult {Intercept1 = 1, Inherited1 = 2}}
@@ -293,7 +206,7 @@ simple"
                     Given = { OnPrompt = Respond.With(
                         new Answer("lala", prompt => prompt.StartsWith("user")), 
                         new Answer("fishies", prompt => prompt.StartsWith("password")))},
-                    WhenArgs = "Secure",
+                    WhenArgs = $"{nameof(App.Secure)}",
                     Then =
                     {
                         Outputs = { new App.SecureResult{User = "lala", Password = new Password("fishies")}},
@@ -313,7 +226,7 @@ password (Text): "
                     Given = { OnPrompt = Respond.With(
                         new Answer("lala", prompt => prompt.StartsWith("user")), 
                         new Answer("fishies\b\b\b\b\b\b\bnew", prompt => prompt.StartsWith("password")))},
-                    WhenArgs = "Secure",
+                    WhenArgs = $"{nameof(App.Secure)}",
                     Then =
                     {
                         Outputs = { new App.SecureResult{User = "lala", Password = new Password("new")}},
@@ -331,8 +244,25 @@ password (Text): "
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     Given = { OnPrompt = Respond.FailOnPrompt },
-                    WhenArgs = "Flags",
+                    WhenArgs = $"{nameof(App.Flags)}",
                     Then = { Result = ""}
+                });
+        }
+
+        [Fact]
+        public void WhenExplicitBoolOptionMissing_Prompts()
+        {
+
+            new AppRunner<App>(new AppSettings { BooleanMode = BooleanMode.Explicit })
+                .UsePrompting()
+                .VerifyScenario(_testOutputHelper, new Scenario
+                {
+                    Given = { OnPrompt = Respond.With(
+                        new Answer("true", prompt => prompt.StartsWith("a ")),
+                        new Answer("false", prompt => prompt.StartsWith("b "))
+                        )},
+                    WhenArgs = $"{nameof(App.Flags)}",
+                    Then = { Outputs = { (flagA: true, flagB: false) } }
                 });
         }
 
@@ -344,7 +274,7 @@ password (Text): "
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     Given = { OnPrompt = Respond.With("true", prompt => prompt.StartsWith("operand1")) },
-                    WhenArgs = "Bool",
+                    WhenArgs = $"{nameof(App.Bool)}",
                     Then =
                     {
                         Outputs = { true },
@@ -354,14 +284,14 @@ password (Text): "
         }
 
         [Fact]
-        public void CanOverriddePromptText()
+        public void CanOverridePromptText()
         {
             new AppRunner<App>()
                 .UsePrompting(argumentPromptTextOverride: (ctx, arg) => "lala")
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     Given = { OnPrompt = Respond.With("fishies", reuse: true) },
-                    WhenArgs = "Do",
+                    WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {
                         Outputs = { new App.DoResult{Arg1 = "fishies", Opt1 = "fishies"}},
@@ -379,7 +309,7 @@ lala (Text): fishies"
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     Given = {OnPrompt = Respond.With("something", prompt => prompt.StartsWith("arg1"))},
-                    WhenArgs = "Do",
+                    WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {
                         Outputs = {new App.DoResult {Arg1 = "something"}},
@@ -402,7 +332,7 @@ lala (Text): fishies"
                         OnPrompt = Respond.FailOnPrompt,
                         PipedInput = pipedInput
                     },
-                    WhenArgs = "DoList",
+                    WhenArgs = $"{nameof(App.DoList)}",
                     Then = { Outputs = { pipedInput.ToList() } }
                 });
         }
@@ -430,6 +360,7 @@ lala (Text): fishies"
                 [Option(ShortName = "a")] bool flagA,
                 [Option(ShortName = "b")] bool flagB)
             {
+                TestOutputs.Capture((flagA, flagB));
             }
 
             public void Bool(bool operand1)
