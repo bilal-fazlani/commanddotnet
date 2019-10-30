@@ -109,8 +109,11 @@ namespace CommandDotNet.ClassModeling.Definitions
                 var booleanMode = GetOptionBooleanMode(argumentDef, appConfig.AppSettings.BooleanMode, optionAttr);
                 var argumentArity = ArgumentArity.Default(argumentDef.Type, booleanMode);
 
+                var longName = optionAttr?.ShortName != null 
+                    ? optionAttr?.LongName 
+                    : (optionAttr?.LongName ?? argumentDef.Name);
                 return new Option(
-                    argumentDef.Name,
+                    longName,
                     ParseShortName(argumentDef, optionAttr?.ShortName),
                     parent, 
                     typeInfo, 
