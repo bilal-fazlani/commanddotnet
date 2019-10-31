@@ -11,7 +11,7 @@
             public static readonly string Argument = "argument";
 
             /// <summary>Values piped into the application</summary>
-            public static readonly string Piped = "pipes";
+            public static readonly string Piped = "piped";
 
             /// <summary>Values provided via user prompt</summary>
             public static readonly string Prompt = "prompt";
