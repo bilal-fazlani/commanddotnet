@@ -96,7 +96,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 
         class DuplicateInheritedOptionApp
         {
-            public Task<int> Intercept(InterceptorExecutionDelegate next, [Option(Inherited = true)] string lala)
+            public Task<int> Intercept(InterceptorExecutionDelegate next, [Option(AssignToExecutableSubcommands = true)] string lala)
             {
                 return next();
             }

@@ -16,101 +16,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         }
 
         [Fact]
-        public void InheritedOptions_CanBeProvidedInExecutableLocalChildren()
-        {
-            new AppRunner<App>()
-                .VerifyScenario(_testOutputHelper, new Scenario
-                {
-                    WhenArgs = "--nonInheritedOpt lala Do --inheritedOpt fishies --opt1 5 10",
-                    Then =
-                    {
-                        Outputs =
-                        {
-                            new App.InterceptResult
-                            {
-                                NonInheritedOpt = "lala",
-                                InheritedOpt = "fishies"
-                            },
-                            new App.DoResult
-                            {
-                                Arg1 = 10,
-                                Opt1 = 5
-                            }
-                        }
-                    }
-                });
-        }
-
-        [Fact]
-        public void InheritedOptions_CanBeProvidedInExecutableNestedChildren()
-        {
-            new AppRunner<App>()
-                .VerifyScenario(_testOutputHelper, new Scenario
-                {
-                    WhenArgs = "--nonInheritedOpt lala ChildApp Do --inheritedOpt fishies",
-                    Then =
-                    {
-                        Outputs =
-                        {
-                            new App.InterceptResult
-                            {
-                                NonInheritedOpt = "lala",
-                                InheritedOpt = "fishies"
-                            },
-                            new ChildApp.DoResult
-                            {
-                                Executed = true
-                            }
-                        }
-                    }
-                });
-        }
-
-        [Fact]
-        public void InheritedOptions_CanBeProvidedWithDeclaringCommand()
-        {
-            // TODO: Does this really make sense?  Should inherited options be specified in either location?  It seems confusing. 
-            //       What's the purpose of this feature?
-            new AppRunner<App>()
-                .VerifyScenario(_testOutputHelper, new Scenario
-                {
-                    WhenArgs = "--nonInheritedOpt lala --inheritedOpt fishies Do --opt1 5 10",
-                    Then =
-                    {
-                        Outputs =
-                        {
-                            new App.InterceptResult
-                            {
-                                NonInheritedOpt = "lala",
-                                InheritedOpt = "fishies"
-                            },
-                            new App.DoResult
-                            {
-                                Arg1 = 10,
-                                Opt1 = 5
-                            }
-                        }
-                    }
-                });
-        }
-
-        [Fact]
-        public void InheritedOptions_CanNotBeProvidedInNonExecutableChildren()
-        {
-            new AppRunner<App>()
-                .VerifyScenario(_testOutputHelper, new Scenario
-                {
-                    WhenArgs = "--nonInheritedOpt lala ChildApp --inheritedOpt fishies",
-                    Then =
-                    {
-                        ExitCode = 1,
-                        ResultsContainsTexts = { "Unrecognized option '--inheritedOpt'" }
-                    }
-                });
-        }
-
-        [Fact]
-        public void Help_ShowInheritedOptions_InDeclaringCommand()
+        public void DeclaringCommands_InheritedOptions_NotShown_InHelp()
         {
             new AppRunner<App>()
                 .VerifyScenario(_testOutputHelper, new Scenario
@@ -122,12 +28,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 
 Options:
 
-  --nonInheritedOpt *a  <TEXT>
-
-  --inheritedOpt *a,b   <TEXT>
-
-  *a option can be used with subcommands. `[command] [options] [subcommand]`
-  *b option can be passed after final subcommand. `[command] [subcommand] [options]`
+  --interceptorOpt  <TEXT>
 
 Commands:
 
@@ -140,7 +41,117 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         }
 
         [Fact]
-        public void Help_DoNotShowInheritedOptions_InNonExecutableChildren()
+        public void DeclaringCommands_InheritedOptions_NotAccepted()
+        {
+            // TODO: Does this really make sense?  Should inherited options be specified in either location?  It seems confusing. 
+            //       What's the purpose of this feature?
+            new AppRunner<App>()
+                .VerifyScenario(_testOutputHelper, new Scenario
+                {
+                    WhenArgs = "--interceptorOpt lala --inheritedOpt fishies Do --opt1 5 10",
+                    Then =
+                    {
+                        ExitCode = 1,
+                        ResultsContainsTexts = { "Unrecognized option '--inheritedOpt'" }
+                    }
+                });
+        }
+
+        [Fact]
+        public void ExecutableLocalSubcommands_InheritedOptions_AreShown_InHelp()
+        {
+            new AppRunner<App>()
+                .VerifyScenario(_testOutputHelper, new Scenario
+                {
+                    WhenArgs = "Do -h",
+                    Then =
+                    {
+                        Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+
+Arguments:
+
+  arg1  <NUMBER>
+
+Options:
+
+  --opt1          <NUMBER>
+
+  --inheritedOpt  <TEXT>"
+                    }
+                });
+        }
+
+        [Fact]
+        public void ExecutableLocalSubcommands_InheritedOptions_AreAccepted()
+        {
+            new AppRunner<App>()
+                .VerifyScenario(_testOutputHelper, new Scenario
+                {
+                    WhenArgs = "--interceptorOpt lala Do --inheritedOpt fishies --opt1 5 10",
+                    Then =
+                    {
+                        Outputs =
+                        {
+                            new App.InterceptResult
+                            {
+                                InterceptorOpt = "lala",
+                                InheritedOpt = "fishies"
+                            },
+                            new App.DoResult
+                            {
+                                Arg1 = 10,
+                                Opt1 = 5
+                            }
+                        }
+                    }
+                });
+        }
+
+        [Fact]
+        public void ExecutableNestedSubcommands_InheritedOptions_AreShown_InHelp()
+        {
+            new AppRunner<App>()
+                .VerifyScenario(_testOutputHelper, new Scenario
+                {
+                    WhenArgs = "ChildApp Do -h",
+                    Then =
+                    {
+                        Result = @"Usage: dotnet testhost.dll ChildApp Do [options]
+
+Options:
+
+  --inheritedOpt  <TEXT>"
+                    }
+                });
+        }
+
+        [Fact]
+        public void ExecutableNestedSubcommands_InheritedOptions_AreAccepted()
+        {
+            new AppRunner<App>()
+                .VerifyScenario(_testOutputHelper, new Scenario
+                {
+                    WhenArgs = "--interceptorOpt lala ChildApp Do --inheritedOpt fishies",
+                    Then =
+                    {
+                        Outputs =
+                        {
+                            new App.InterceptResult
+                            {
+                                InterceptorOpt = "lala",
+                                InheritedOpt = "fishies"
+                            },
+                            new ChildApp.DoResult
+                            {
+                                Executed = true
+                            }
+                        }
+                    }
+                });
+        }
+
+        [Fact]
+        public void NonExecutableSubcommands_InheritedOptions_NotShown_InHelp()
         {
             new AppRunner<App>()
                 .VerifyScenario(_testOutputHelper, new Scenario
@@ -160,49 +171,18 @@ Use ""dotnet testhost.dll ChildApp [command] --help"" for more information about
         }
 
         [Fact]
-        public void Help_ShowInheritedOptions_InExecutableLocalChildren()
+        public void NonExecutableSubcommands_InheritedOptions_NotAccepted()
         {
             new AppRunner<App>()
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    WhenArgs = "--interceptorOpt lala ChildApp --inheritedOpt fishies",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
-
-Arguments:
-
-  arg1  <NUMBER>
-
-Options:
-
-  --opt1             <NUMBER>
-
-  --inheritedOpt *c  <TEXT>
-
-  *c option is inherited from a parent command"
+                        ExitCode = 1,
+                        ResultsContainsTexts = { "Unrecognized option '--inheritedOpt'" }
                     }
                 });
-        }
-
-        [Fact]
-        public void Help_ShowInheritedOptions_InExecutableNestedChildren()
-        {
-            new AppRunner<App>()
-                .VerifyScenario(_testOutputHelper, new Scenario
-            {
-                WhenArgs = "ChildApp Do -h",
-                Then =
-                {
-                    Result = @"Usage: dotnet testhost.dll ChildApp Do [options]
-
-Options:
-
-  --inheritedOpt *c  <TEXT>
-
-  *c option is inherited from a parent command"
-                }
-            });
         }
 
         class App
@@ -213,10 +193,10 @@ Options:
             public ChildApp ChildApp { get; set; }
 
             public Task<int> Intercept(InterceptorExecutionDelegate next,
-                string nonInheritedOpt,
-                [Option(Inherited = true)] string inheritedOpt)
+                string interceptorOpt,
+                [Option(AssignToExecutableSubcommands = true)] string inheritedOpt)
             {
-                TestOutputs.Capture(new InterceptResult { InheritedOpt = inheritedOpt, NonInheritedOpt = nonInheritedOpt });
+                TestOutputs.Capture(new InterceptResult { InheritedOpt = inheritedOpt, InterceptorOpt = interceptorOpt });
                 return next();
             }
 
@@ -227,7 +207,7 @@ Options:
 
             public class InterceptResult
             {
-                public string NonInheritedOpt { get; set; }
+                public string InterceptorOpt { get; set; }
                 public string InheritedOpt { get; set; }
             }
 

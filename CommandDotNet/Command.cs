@@ -14,8 +14,9 @@ namespace CommandDotNet
     public sealed class Command : IArgumentNode
     {
         private readonly List<Option> _options = new List<Option>();
+        private readonly List<Option> _optionsForExecutableSubcommands = new List<Option>();
         private readonly List<Operand> _operands = new List<Operand>();
-        private readonly List<Command> _commands = new List<Command>();
+        private readonly List<Command> _subcommands = new List<Command>();
 
         private readonly Dictionary<string, IArgumentNode> _argumentsByAlias = new Dictionary<string, IArgumentNode>();
 
@@ -65,7 +66,7 @@ namespace CommandDotNet
         public string DefinitionSource { get; }
 
         /// <summary>The <see cref="Command"/>s that can be accessed via this <see cref="Command"/></summary>
-        public IReadOnlyCollection<Command> Subcommands => _commands.AsReadOnly();
+        public IReadOnlyCollection<Command> Subcommands => _subcommands.AsReadOnly();
 
         /// <summary>The attributes defined on the method or class that define this <see cref="Command"/></summary>
         public ICustomAttributeProvider CustomAttributes { get; }
@@ -90,13 +91,13 @@ namespace CommandDotNet
             switch (argumentNode)
             {
                 case Command command:
-                    _commands.Add(command);
+                    AddSubcommand(command);
                     break;
                 case Operand operand:
                     AddOperand(operand);
                     break;
                 case Option option:
-                    _options.Add(option);
+                    AddOption(option);
                     break;
                 default:
                     throw new ArgumentException(
@@ -104,8 +105,18 @@ namespace CommandDotNet
                         $"If `{argumentNode.GetType()}` was created for extensibility, " +
                         $"consider using {nameof(Services)} to store service classes instead.");
             }
+        }
 
-            RegisterArgumentByAliases(argumentNode);
+        private void AddSubcommand(Command command)
+        {
+            _subcommands.Add(command);
+            RegisterArgumentByAliases(command);
+            if (command.IsExecutable)
+            {
+                this.GetParentCommands(includeCurrent: true)
+                    .SelectMany(c => c._optionsForExecutableSubcommands)
+                    .ForEach(command.AddArgumentNode);
+            }
         }
 
         private void AddOperand(Operand operand)
@@ -118,6 +129,31 @@ namespace CommandDotNet
                 throw new AppRunnerException(message);
             }
             _operands.Add(operand);
+            RegisterArgumentByAliases(operand);
+        }
+
+        private void AddOption(Option option)
+        {
+            if (option.AssignToExecutableSubcommands)
+            {
+                if (option.Parent == this)
+                {
+                    _optionsForExecutableSubcommands.Add(option);
+                    this.GetDescendentCommands(includeCurrent: false)
+                        .Where(c => c.IsExecutable)
+                        .ForEach(c => c.AddArgumentNode(option));
+                }
+                if(IsExecutable)
+                {
+                    _options.Add(option);
+                    RegisterArgumentByAliases(option);
+                }
+            }
+            else
+            {
+                _options.Add(option);
+                RegisterArgumentByAliases(option);
+            }
         }
 
         private void RegisterArgumentByAliases(IArgumentNode argumentNode)
@@ -127,8 +163,7 @@ namespace CommandDotNet
                 IArgumentNode duplicatedArg = null;
                 var duplicateAlias = argumentNode.Aliases.FirstOrDefault(a => _argumentsByAlias.TryGetValue(a, out duplicatedArg));
 
-                // the alias cannot duplicate any argument in this command or any inherited option from parent commands
-                if (duplicateAlias != null && (ReferenceEquals(parentOrThis, this) || (duplicatedArg is Option option && option.Inherited)))
+                if (duplicateAlias != null && ReferenceEquals(parentOrThis, this))
                 {
                     string GetArgNodeName(IArgumentNode arg) => $"{arg.GetType().Name}:{arg.Name}(source:{arg.DefinitionSource})";
 
@@ -146,7 +181,7 @@ namespace CommandDotNet
             return $"{nameof(Command)}:{Name} " +
                    $"operands:{_operands.Select(o => o.Name).ToCsv()} " +
                    $"options:{_options.Select(o => o.Name).ToCsv()} " +
-                   $"commands:{_commands.Select(c => c.Name).ToCsv()}";
+                   $"commands:{_subcommands.Select(c => c.Name).ToCsv()}";
         }
 
         public static bool operator ==(Command x, Command y) => (object) x == (object) y;

@@ -20,7 +20,7 @@ namespace CommandDotNet.Help
         {
             string Name(IArgument arg)
             {
-                return ArgumentName(arg) + ArgumentFootNoteSymbols(command, arg);
+                return ArgumentName(arg);
             }
 
             var nameMaxLength = arguments.Max(a => Name(a)?.Length) ?? 0;

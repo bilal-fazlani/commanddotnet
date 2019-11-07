@@ -39,11 +39,18 @@ namespace CommandDotNet
             IEnumerable<string> aliases = null,
             ICustomAttributeProvider customAttributes = null,
             bool isInterceptorOption = false,
+            bool assignToExecutableSubcommands = false,
             ValueProxy valueProxy = null)
         {
             if (longName.IsNullOrWhitespace() && shortName.IsNullOrWhitespace())
             {
-                throw new ArgumentException("a long or short name is required");
+                throw new ArgumentException($"a long or short name is required. source:{definitionSource}");
+            }
+
+            if (isInterceptorOption && assignToExecutableSubcommands)
+            {
+                throw new ArgumentException($"{nameof(isInterceptorOption)} and {nameof(assignToExecutableSubcommands)} are mutually exclusive. " +
+                                            $"They cannot both be true. source:{definitionSource}");
             }
 
             _valueProxy = valueProxy;
@@ -53,8 +60,8 @@ namespace CommandDotNet
             Arity = arity;
             DefinitionSource = definitionSource;
             IsInterceptorOption = isInterceptorOption;
+            AssignToExecutableSubcommands = assignToExecutableSubcommands;
             CustomAttributes = customAttributes ?? NullCustomAttributeProvider.Instance;
-
             LongName = longName;
             ShortName = shortName;
 
@@ -125,8 +132,15 @@ namespace CommandDotNet
             }
         }
 
-        /// <summary>If true, this option is inherited from a command interceptor method and can be specified after the target command</summary>
-        public bool Inherited { get; set; }
+        [Obsolete("Use AssignToExecutableSubcommands instead")]
+        public bool Inherited => AssignToExecutableSubcommands;
+
+        /// <summary>
+        /// When true, this option is an Inherited option, defined by a command interceptor method
+        /// and assigned to executable subcommands of the interceptor.<br/>
+        /// Note: The Parent will still be the defining command, not the target command.
+        /// </summary>
+        public bool AssignToExecutableSubcommands { get; }
 
         /// <summary>
         /// True when option is not defined in class model
