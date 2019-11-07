@@ -38,13 +38,6 @@ namespace CommandDotNet.ClassModeling.Definitions
                 .Select(a => a.ToArgument(command, commandContext.AppConfig, true))
                 .ForEach(commandBuilder.AddArgument);
 
-            if (commandDef.IsExecutable)
-            {
-                command.GetParentCommands()
-                    .SelectMany(c => c.Options.Where(o => o.Inherited))
-                    .ForEach(commandBuilder.AddArgument);
-            }
-
             commandDef.SubCommands
                 .Select(c => c.ToCommand(command, commandContext).Command)
                 .ForEach(commandBuilder.AddSubCommand);
@@ -109,6 +102,9 @@ namespace CommandDotNet.ClassModeling.Definitions
                 var booleanMode = GetOptionBooleanMode(argumentDef, appConfig.AppSettings.BooleanMode, optionAttr);
                 var argumentArity = ArgumentArity.Default(argumentDef.Type, argumentDef.HasDefaultValue, booleanMode);
 
+                var assignOnlyToExecutableSubcommands = optionAttr?.AssignToExecutableSubcommands ?? false;
+                isInterceptorOption = isInterceptorOption && !assignOnlyToExecutableSubcommands;
+
                 var longName = optionAttr?.ShortName != null 
                     ? optionAttr?.LongName 
                     : (optionAttr?.LongName ?? argumentDef.Name);
@@ -121,10 +117,10 @@ namespace CommandDotNet.ClassModeling.Definitions
                     definitionSource: argumentDef.SourcePath,
                     customAttributes: argumentDef.CustomAttributes,
                     isInterceptorOption: isInterceptorOption,
+                    assignToExecutableSubcommands: assignOnlyToExecutableSubcommands,
                     valueProxy: argumentDef.ValueProxy)
                 {
                     Description = optionAttr?.Description,
-                    Inherited = optionAttr?.Inherited ?? false,
                     DefaultValue = defaultValue
                 };
             }

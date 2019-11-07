@@ -11,36 +11,25 @@ namespace CommandDotNet
         /// <summary>Get the root command</summary>
         public static Command GetRootCommand(this Command command) => command.GetParentCommands(true).Last();
 
-        /// <summary>
-        /// Return all <see cref="Operand"/>s and <see cref="Option"/>s for the command.
-        /// </summary>
+        /// <summary> Return all <see cref="Operand"/>s and <see cref="Option"/>s for the command</summary>
         /// <param name="command">The command</param>
-        /// <param name="includeInterceptorOptions">
-        /// When true, includes options from interceptors of all parent commands.
-        /// Inherited options are included whether true or false.
-        /// </param>
+        /// <param name="includeInterceptorOptions">When true, includes options from interceptors of all parent commands</param>
         public static IEnumerable<IArgument> AllArguments(this Command command, bool includeInterceptorOptions = false)
         {
             return command.Operands.Cast<IArgument>()
                 .Concat(command.AllOptions(includeInterceptorOptions));
         }
 
-        /// <summary>
-        /// Return all <see cref="Option"/>s for the command. Inherited options are already included.
-        /// </summary>
+        /// <summary>Return all <see cref="Option"/>s for the command.</summary>
         /// <param name="command">The command</param>
-        /// <param name="includeInterceptorOptions">
-        /// When true, includes options from interceptors of all parent commands.
-        /// Inherited options are included whether true or false.
-        /// </param>
+        /// <param name="includeInterceptorOptions">When true, includes options from interceptors of all parent commands</param>
         public static IEnumerable<Option> AllOptions(this Command command, bool includeInterceptorOptions = false) =>
             includeInterceptorOptions
                 ? command.Options
                     .Concat(command
                         .GetParentCommands()
                         .Reverse()
-                        // inherited options are already included in allLocalArgs
-                        .SelectMany(c => c.Options.Where(o => o.IsInterceptorOption && !o.Inherited)))
+                        .SelectMany(c => c.Options.Where(o => o.IsInterceptorOption)))
                 : command.Options;
 
         /// <summary>returns the parents of the current command, sorted from closest to farthest parent</summary>

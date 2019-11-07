@@ -74,13 +74,13 @@ Arguments:
 
 Options:
 
-  --stringOpt *a      <TEXT>
+  --stringOpt  <TEXT>
 
-  --skipCmd *a
+Options also available for subcommands:
 
-  --useReturnCode *a  <NUMBER>
+  --skipCmd
 
-  *a option can be used with subcommands. `[command] [options] [subcommand]`
+  --useReturnCode  <NUMBER>
 
 Commands:
 
@@ -100,11 +100,15 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "Do -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Do [arguments]
+                        Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
 
 Arguments:
 
-  arg1  <NUMBER>"
+  arg1  <NUMBER>
+
+Options:
+
+  --stringOpt  <TEXT>"
                     }
                 });
         }
@@ -227,6 +231,7 @@ Arguments:
 
             public class InterceptOptions : IArgumentModel
             {
+                [Option(AssignToExecutableSubcommands = true)]
                 public string stringOpt { get; set; }
                 public bool skipCmd { get; set; } = false;
                 public int? useReturnCode { get; set; }

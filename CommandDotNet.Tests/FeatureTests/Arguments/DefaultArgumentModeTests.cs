@@ -29,8 +29,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     ResultsContainsTexts =
                     {
                         @"Options:
-  --ctorDefault *a  
-  --ctorOption *a"
+  --ctorDefault
+  --ctorOption"
                     }
                 }
             });
@@ -93,8 +93,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     ResultsContainsTexts =
                     {
                         @"Options:
-  --ctorDefault *a  
-  --ctorOption *a"
+  --ctorDefault
+  --ctorOption"
                     }
                 }
             });
@@ -157,8 +157,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     ResultsContainsTexts =
                     {
                         @"Options:
-  --ctorDefault *a  
-  --ctorOption *a"
+  --ctorDefault
+  --ctorOption"
                     }
                 }
             });

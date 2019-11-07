@@ -385,7 +385,7 @@ lala (Text): fishies"
         {
             private TestOutputs TestOutputs { get; set; }
 
-            public Task<int> Intercept(InterceptorExecutionDelegate next, int intercept1, [Option(Inherited = true)] int inherited1)
+            public Task<int> Intercept(InterceptorExecutionDelegate next, int intercept1, [Option(AssignToExecutableSubcommands = true)] int inherited1)
             {
                 TestOutputs.Capture(new InterceptResult { Intercept1 = intercept1, Inherited1 = inherited1 });
                 return next();
