@@ -4,6 +4,9 @@ mono: none
 git:
   depth: false
 
+services:
+  - docker
+
 stages:
     - name: test
     - name: deploy

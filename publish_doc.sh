@@ -1,27 +1,58 @@
 #!/bin/bash -e
 
-echo "installing tools"
-pip install mkdocs mkdocs-material pygments pymdown-extensions recommonmark
-echo "installed"
+git_config_travis() {
+  echo "configuring git for travis"
+  git config --global user.email "travis@travis-ci.com"
+  git config --global user.name "Travis CI"
+}
 
-git worktree add site gh-pages
+git_add_site() {
+  echo "adding worktree 'site'"
+  git worktree add site gh-pages
+}
 
-echo "generating new documentation"
-mkdocs build
-echo "documentation generated"
+git_remove_site() {
+  echo "removing worktree 'site'"
+  git worktree remove site
+}
 
-echo "commit pages"
-git config --global user.email "travis@travis-ci.com"
-git config --global user.name "Travis CI"
-git config --global push.default current
-cd site
-git add --all
-git commit -m "${TRAVIS_COMMIT_MESSAGE}"
-echo "committed pages"
+mkdocks_build() {
+  ./mkdocs-build.sh
+}
 
-echo "publishing to github"
-git push https://${GITHUB_TOKEN}@github.com/bilal-fazlani/commanddotnet.git
-echo "published"
+git_commit_site() {
+  echo "commit pages"
+  cd site
+  git add --all
+  git commit -m "$COMMIT_MSG"
+  cd ..
+  echo "committed pages"
+}
 
-cd ..
-git worktree remove site
+git_push_site() {  
+  echo "publishing to github"
+  cd site
+  git push https://${GITHUB_TOKEN}@github.com/bilal-fazlani/commanddotnet.git gh-pages
+  cd ..
+  echo "published"
+}
+
+COMMIT_MSG="${TRAVIS_COMMIT_MESSAGE}"
+
+if [ -z "$COMMIT_MSG" ]
+then
+  COMMIT_MSG="$1"
+  if [ -z "$COMMIT_MSG" ]
+  then
+    echo "commit message required"
+    echo "usage: publish_doc.sh 'commit message'"
+    exit 1
+  fi
+else
+  git_config_travis
+fi
+git_add_site
+mkdocks_build
+git_commit_site
+git_push_site
+git_remove_site
