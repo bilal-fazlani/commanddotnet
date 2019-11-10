@@ -1,10 +1,18 @@
 language: csharp
 mono: none
 
+git:
+  depth: false
+
+services:
+  - docker
+
 stages:
     - name: test
     - name: deploy
       if: tag IS present
+    - name: publish documentation
+      if: type = push AND branch = master
 
 #--------- TEST JOBS --------------
 jobs:
@@ -31,6 +39,18 @@ jobs:
           dotnet: 2.1
           env:
               - secure: umGBSeo5NxTY/R7mcpygIaqznyAj2GIS+fSps/WQbh8jvtBwCLedvfEPiGMefGHOHYJuKIqaz2uOqCHcVbpJ1aeyHndRcwi8t6JzSqUBQRNOaAmpDYvAM5D/sQzPtvDLOAiEHgq+9q4gbDZCuwgnko4I/G9my7N1J18tVSBq7CWhNar0JKX8cRmlqyz0gISFhEia3YtZCgbQTwZtVzkatXqDdNYQguKIAO10aALmTbFWcDq0lp8IzH8b1o0YuR0nmNg2cjBgFTlb0qEtgJ8d/mdBWvgV3q1o1R6hn5Kdi/jCAvWPdhB/oqa83K8PDVTBeDzVfB41KKBGn/IbBp+09Wdkqqmw45d4aNfuCdjzsMw4q+5bwUmbHJb/tE+udu4A+GDZEuH7VUF8GRk2prVxT/phP4cAlh0H501FkIDrReiIpbRzw4KNziDjYoHqm9R0yYwSTeyuFAOqScpWZpHlnza5acwZwgnV50SHncENb7vRUYZqWgjohcSqdzBiVPN+yZ0sX5M6pp/7vPmz8VqbxkITzFeKMIoukSMTMyNpSCXkFob/CcDZJV39h5+nv0wdXbAfa6WRgaDA4DTIcmWZQxFCpf57ZcpZkJek/WEnFRl/glTW40wDSrpDqQVa78KPph5SKRjSHLYrETWB3u/SS2X0JwOwQqJ2KjAv3YgqUIs=
+        #-----------------------------------
+
+        #--------- DOCUMENTATION PUBLISHING JOB ---------- 
+        - stage: publish documentation
+          name: update documentation on github pages
+          language: python
+          python: 3.6
+          script: ./publish_doc.sh
+          on: linux
+          env:
+            - secure: WuJ6fGlEUW7ZjYAdWmqB9EGCFvfpjvfB3lEITkFSWq7jZ+5eAwi2PbI5NyVV0l0hCmDDDrv8MaGgmOJUKLvtCbPthIEmkwSzV8qI9JGT+xzLeJG5ZQ1qPlZgfyz9fGGT6tzO5K+dc/5qMaTX4nHdHnLkwiRz9w853CciBxY6gn5aC3/j8znICnB1d3EbbzksWPwm0rnYgf3QHt0jT+p3r889kh27lWfQkokSeDo7nsHnn61EPNJSygenzSZgMA6U7OrnJATU99lbPtRH/VqkUHncAIA8M5iH+DS87VRRUNIanJNGr6/g9ikMtmhtJzJLzxvc8yPjHZJkekia0BMBI2ir4BB7aH2gQzX7QbdSUwCDdOhh40/EX5TaibonMKU1qWkFgsVxVcIA6Ls5/Kc1AduPnMSeJG5OZW3XDmoT6eBq2p3dMScAWY19piMC3zFU8sHYL6W/BWm57LMbwJzyjNNmLPP85c7zCD7Dy0C40DgRDRyEp9K1XY7WaNOfBO4y+I7bsFbzOU3KRkuDtytGgZ3wGfHfUd2p1AFbxhtqd79ppGcC6JMO57POo7+feBaS6N7MGrgLO3rGand8KZ0ZM8rAH3A1uxQ+Sk1D/6FBPErVzBvDUmFi67cKymNVi09ocKUK9hymGWeA1K70ascO5eT2LpdscbwB9J/WMO+LV7E=
+        #-----------------------------------
 #-----------------------------------
 
 # cache:
