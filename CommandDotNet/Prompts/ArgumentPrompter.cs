@@ -28,16 +28,14 @@ namespace CommandDotNet.Prompts
             
             if (argument.Arity.AllowsMany())
             {
-                if (_prompter.TryPromptForValues(
-                    out var values, out isCancellationRequested, promptText, isPassword: isPassword))
+                if (_prompter.TryPromptForValues(promptText, out var values, out isCancellationRequested, isPassword: isPassword))
                 {
                     inputs.AddRange(values);
                 }
             }
             else
             {
-                if (_prompter.TryPromptForValue(
-                    out var value, out isCancellationRequested, promptText, isPassword: isPassword))
+                if (_prompter.TryPromptForValue(promptText, out var value, out isCancellationRequested, isPassword: isPassword))
                 {
                     inputs.Add(value);
                 }

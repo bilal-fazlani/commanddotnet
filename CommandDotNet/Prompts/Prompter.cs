@@ -30,13 +30,15 @@ namespace CommandDotNet.Prompts
             return PromptForValueImpl(promptText, isPassword, true, out isCancellationRequested);
         }
 
-        public bool TryPromptForValue(out string value, out bool isCancellationRequested, string promptText, bool isPassword = false)
+        public bool TryPromptForValue(string promptText, out string value, out bool isCancellationRequested,
+            bool isPassword = false)
         {
             value = PromptForValue(promptText, out isCancellationRequested, isPassword);
             return !value.IsNullOrEmpty();
         }
 
-        public bool TryPromptForValues(out IEnumerable<string> values, out bool isCancellationRequested, string promptText, bool isPassword = false)
+        public bool TryPromptForValues(string promptText, out IEnumerable<string> values,
+            out bool isCancellationRequested, bool isPassword = false)
         {
             values = PromptForValues(promptText, out isCancellationRequested, isPassword);
             return !values.IsNullOrEmpty();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommandDotNet.Prompts;
 using CommandDotNet.Rendering;
 
 namespace CommandDotNet.Example.Commands
@@ -12,30 +13,39 @@ namespace CommandDotNet.Example.Commands
         Usage = "prompts ")]
     public class Prompts
     {
-        public Task<int> Intercept(InterceptorExecutionDelegate next, 
-            Password password, 
-            IConsole console,
-            [Option]
-            string username = "admin")
+        [SubCommand]
+        public class Secure
         {
-            // mimic auth
-
-            if(username == null)
+            public Task<int> Intercept(InterceptorExecutionDelegate next,
+                Password password,
+                IConsole console,
+                [Option]
+                string username = "admin")
             {
-                console.Out.WriteLine("username not provided");
-                return Task.FromResult(1);
+                // mimic auth
+
+                if (username == null)
+                {
+                    console.Out.WriteLine("username not provided");
+                    return Task.FromResult(1);
+                }
+
+                var pwd = password?.GetPassword();
+                if (string.IsNullOrWhiteSpace(pwd))
+                {
+                    console.Out.WriteLine("password not provided");
+                    return Task.FromResult(1);
+                }
+
+                console.Out.WriteLine($"authenticated as user:{username} with password:{password}  (actual password:{password.GetPassword()})");
+
+                return next();
             }
 
-            var pwd = password?.GetPassword();
-            if (string.IsNullOrWhiteSpace(pwd))
+            public void Download(string url, string filepath, IConsole console)
             {
-                console.Out.WriteLine("password not provided");
-                return Task.FromResult(1);
+                console.Out.WriteLine($"Pretending to download {url} to {filepath}");
             }
-
-            console.Out.WriteLine($"authenticated as user:{username} with password:{password}  (actual password:{password.GetPassword()})");
-
-            return next();
         }
 
         [Command(Description = "Echos the given text, demonstrating prompting for a single item")]
@@ -56,6 +66,18 @@ namespace CommandDotNet.Example.Commands
         public void List(IConsole console, ICollection<string> items)
         {
             console.Out.WriteLine(string.Join(Environment.NewLine, items));
+        }
+
+        [Command(Description = "knock-knock joke, demonstrating use of IPrompter")]
+        public void Knock(IConsole console, IPrompter prompter)
+        {
+            if (prompter.TryPromptForValue("who's there?", out var answer1, out bool isCancellationRequested) && !isCancellationRequested)
+            {
+                var answer2 = prompter.PromptForValue($"{answer1} who?", out isCancellationRequested);
+
+                console.Out.WriteLine($"{answer2}");
+                console.Out.WriteLine("lulz");
+            }
         }
     }
 }
