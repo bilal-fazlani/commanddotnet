@@ -1,34 +1,32 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Field/=Includes/@KeyIndexDefined">True</s:Boolean>
-	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Field/=Includes/Order/@EntryValue">1</s:Int64>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/@KeyIndexDefined">True</s:Boolean>
-	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Field/=args/@KeyIndexDefined">True</s:Boolean>
-	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Field/=args/Order/@EntryValue">2</s:Int64>
-	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Field/=Test/@KeyIndexDefined">True</s:Boolean>
-	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Field/=Test/Order/@EntryValue">1</s:Int64>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Shortcut/@EntryValue">scenario-tests</s:String>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Description/@EntryValue">Creates a scenario test class </s:String>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Text/@EntryValue">&#xD;
-    public class $FeatureTestName$ : TestBase&#xD;
+    public class $FeatureTestName$&#xD;
     {&#xD;
-        public $FeatureTestName$(ITestOutputHelper output) : base(output)&#xD;
+        private readonly ITestOutputHelper _testOutputHelper;&#xD;
+&#xD;
+        public $FeatureTestName$(ITestOutputHelper testOutputHelper)&#xD;
         {&#xD;
+			_testOutputHelper = testOutputHelper&#xD;
         }&#xD;
 &#xD;
         [Fact]&#xD;
         public void $Test$()&#xD;
         {&#xD;
-            Verify(new Given&lt;App&gt;&#xD;
-            {&#xD;
-				WhenArgs = "$args$",&#xD;
-				Then = { $END$ }&#xD;
-			});&#xD;
+			new App()&#xD;
+				.VerifyScenario(_testOutputHelper, new Scenario&#xD;
+				{&#xD;
+					WhenArgs = "Do",&#xD;
+					Then = { $END$ }&#xD;
+				});&#xD;
 		}&#xD;
 &#xD;
         public class App&#xD;
         {&#xD;
-            [InjectProperty]&#xD;
-            public TestOutputs TestOutputs { get; set; }&#xD;
+			// injected by test framework&#xD;
+            private TestOutputs TestOutputs { get; set; }&#xD;
 &#xD;
 			public void Do()&#xD;
 			{&#xD;
@@ -38,63 +36,54 @@
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Reformat/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Categories/=CommandDotNet/@EntryIndexedValue">CommandDotNet</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Categories/=Imported_00206_002F9_002F2019/@EntryIndexedValue">Imported 6/9/2019</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Field/=FeatureTestName/@KeyIndexDefined">True</s:Boolean>
 	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Field/=FeatureTestName/Order/@EntryValue">0</s:Int64>
-	
-	
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Field/=Test/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=F393F52F86F0B740B032B5E963FBD2F8/Field/=Test/Order/@EntryValue">1</s:Int64>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/@KeyIndexDefined">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Shortcut/@EntryValue">scenario-tests-with-help</s:String>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Description/@EntryValue">Creates a scenario test class with help scenarios</s:String>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Text/@EntryValue">&#xD;
-    public class $FeatureTestName$ : TestBase&#xD;
+    public class $FeatureTestName$&#xD;
     {&#xD;
-        private static AppSettings BasicHelp = TestAppSettings.BasicHelp;&#xD;
-        private static AppSettings DetailedHelp = TestAppSettings.DetailedHelp;&#xD;
+        private readonly ITestOutputHelper _testOutputHelper;&#xD;
 &#xD;
-        public $FeatureTestName$(ITestOutputHelper output) : base(output)&#xD;
+        public $FeatureTestName$(ITestOutputHelper testOutputHelper)&#xD;
         {&#xD;
+			_testOutputHelper = testOutputHelper&#xD;
         }&#xD;
-&#xD;
+		&#xD;
         [Fact]&#xD;
-        public void BasicHelp_Includes_$Includes$()&#xD;
+        public void Help_Includes_$Includes$()&#xD;
         {&#xD;
-            Verify(new Given&lt;App&gt;&#xD;
-            {&#xD;
-                And = {AppSettings = BasicHelp},&#xD;
-				WhenArgs = "Do -h",&#xD;
-                Then = { Result = @"Usage: run test and copy result from failure message here" }&#xD;
-			});&#xD;
+			new App()&#xD;
+				.VerifyScenario(_testOutputHelper, new Scenario&#xD;
+				{&#xD;
+					WhenArgs = "Do -h",&#xD;
+					Then = { Result = @"Usage: run test and copy result from failure message here" }&#xD;
+				});&#xD;
 		}&#xD;
 &#xD;
         [Fact]&#xD;
-        public void DetailedHelp_Includes_$Includes$()&#xD;
+        public void $Test$()&#xD;
         {&#xD;
-            Verify(new Given&lt;App&gt;&#xD;
-            {&#xD;
-                And = {AppSettings = DetailedHelp},&#xD;
-				WhenArgs = "Do -h",&#xD;
-                Then = { Result = @"Usage: run test and copy result from failure message here" }&#xD;
-			});&#xD;
-		}&#xD;
-&#xD;
-        [Fact]&#xD;
-        public void Exec_()&#xD;
-        {&#xD;
-            Verify(new Given&lt;App&gt;&#xD;
-            {&#xD;
-				WhenArgs = "Do",&#xD;
-                Then = { Outputs = {  } }&#xD;
-			});&#xD;
+			new App()&#xD;
+				.VerifyScenario(_testOutputHelper, new Scenario&#xD;
+				{&#xD;
+					WhenArgs = "Do",&#xD;
+					Then = { $END$ }&#xD;
+				});&#xD;
 		}&#xD;
 &#xD;
         public class App&#xD;
         {&#xD;
-            [InjectProperty]&#xD;
-            public TestOutputs TestOutputs { get; set; }&#xD;
+			// injected by test framework&#xD;
+            private TestOutputs TestOutputs { get; set; }&#xD;
 &#xD;
 			public void Do()&#xD;
 			{&#xD;
@@ -103,6 +92,7 @@
 	}</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Reformat/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Categories/=Imported_00206_002F9_002F2019/@EntryIndexedValue">Imported 6/9/2019</s:String>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Categories/=CommandDotNet/@EntryIndexedValue">CommandDotNet</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
@@ -110,9 +100,7 @@
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Field/=FeatureTestName/@KeyIndexDefined">True</s:Boolean>
 	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Field/=FeatureTestName/Order/@EntryValue">0</s:Int64>
-	
-	
-	
-	
-	
-	</wpf:ResourceDictionary>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Field/=Includes/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Field/=Includes/Order/@EntryValue">1</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Field/=Test/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=EE16825558C04D4E8B3239CB7817914C/Field/=Test/Order/@EntryValue">2</s:Int64></wpf:ResourceDictionary>
