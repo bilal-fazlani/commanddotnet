@@ -8,8 +8,8 @@ namespace CommandDotNet.NameCasing
         /// When true
         /// </summary>
         /// <param name="appRunner"></param>
-        /// <param name="case"></param>
-        /// <param name="applyToNameOverrides"></param>
+        /// <param name="case">The case to apply</param>
+        /// <param name="applyToNameOverrides">Case should be applied to names overridden in attributes.</param>
         /// <returns></returns>
         public static AppRunner UseNameCasing(this AppRunner appRunner, Case @case, bool applyToNameOverrides = false)
         {

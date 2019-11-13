@@ -13,7 +13,7 @@ namespace CommandDotNet.Example
         internal static AppRunner UseLog2ConsoleDirective(this AppRunner appRunner)
         {
             return appRunner.Configure(c =>
-                c.UseMiddleware(LogToConsole, MiddlewareStages.PreTokenize, Int32.MinValue));
+                c.UseMiddleware(LogToConsole, MiddlewareStages.PreTokenize, int.MinValue));
         }
 
         private static Task<int> LogToConsole(CommandContext context, ExecutionDelegate next)
