@@ -25,13 +25,17 @@ nav:
       - Dependency Injection: dependency-injection.md
       - Parameter types: parameter-types.md
       - Custom interceptors: custom-interceptors.md
-    - v3:
+    - v3 RC:
       - V3/v3-changes.md
+      - V3/argument-terminology.md
+      - V3/option-or-operand.md
       - V3/middleware.md
       - V3/cancellation.md
       - V3/interceptors.md
+      - V3/passwords.md
       - V3/parameter-resolvers.md
       - V3/piped-arguments.md
+      - V3/prompting.md
       - V3/response-files.md
 # theme: readthedocs
 theme:
