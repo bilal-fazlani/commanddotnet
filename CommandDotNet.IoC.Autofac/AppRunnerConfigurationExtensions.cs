@@ -50,7 +50,7 @@ namespace CommandDotNet.IoC.Autofac
                         {
                             return next(context);
                         }
-                    }, MiddlewareStages.Tokenize, int.MinValue);
+                    }, MiddlewareStages.PreTokenize, int.MinValue + 10);
                 }
             });
         }

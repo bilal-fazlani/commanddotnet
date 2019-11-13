@@ -49,7 +49,7 @@ namespace CommandDotNet.IoC.MicrosoftDependencyInjection
                         {
                             return next(context);
                         }
-                    }, MiddlewareStages.Tokenize, int.MinValue);
+                    }, MiddlewareStages.PreTokenize, int.MinValue + 10);
                 }
             });
         }
