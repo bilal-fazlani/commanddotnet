@@ -17,7 +17,7 @@ git_remove_site() {
 }
 
 mkdocks_build() {
-  chmod 777 mkdocs_build.sh
+  chmod 777 ./mkdocs-build.sh
   ./mkdocs-build.sh
 }
 
