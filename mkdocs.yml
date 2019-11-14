@@ -28,6 +28,7 @@ nav:
     - v3 RC:
       - V3/v3-changes.md
       - V3/argument-terminology.md
+      - V3/argument-arity.md
       - V3/option-or-operand.md
       - V3/middleware.md
       - V3/cancellation.md
@@ -37,6 +38,8 @@ nav:
       - V3/piped-arguments.md
       - V3/prompting.md
       - V3/response-files.md
+      - V3/test-tools.md
+      - V3/newer-release-alerts.md
 # theme: readthedocs
 theme:
   name: 'material'

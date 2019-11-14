@@ -26,7 +26,7 @@ The architecture is now based around a [middleware pipeline](middleware.md).
 
 * [Response file](response-files.md) support 
 * `HelpTextProvider` can be overridden to make targetted changes to a section of help.
-* [Test tools](todo.md), helpful for end-to-end test and testing framework extensions, like middleware components.
+* [Test tools](test-tools.md), helpful for end-to-end test and testing framework extensions, like middleware components.
 * List operands can be populated from [piped arguments](piped-arguments.md).
 * [Parameter resolvers](parameter-resolvers.md).
 * [Ctrl+C support](cancellation.md) with CancellationToken.
@@ -37,15 +37,15 @@ The architecture is now based around a [middleware pipeline](middleware.md).
 * [Piped input](piped-arguments.md) can be mapped to operand lists.
 * SimpleInjector container support.
 * IoC runInScope to enable isolated instances in each run.
-* `IArgumentModels` can be resolved from containers to enabe reuse and populating defaults from configs.
-* [Newer Release Alerts](todo.md) to alert users when running an older verion of your application.
+* `IArgumentModel` instances can be resolved from containers. Defaults can be populated from configs and those values will appear in help.
+* [Newer Release Alerts](newer-release-alerts.md) to alert users when running an older verion of your application.
 * External dependencies Humanizr and FluentValidation have been extracted to nuget packages: CommandDotNet.NameCasing & CommandDotNet.FluentValidation.
 
 Several bugs were fixed along the way.
 
 ## Breaking Changes
 
-We initially tried to roll out this update in backward compatible phases. Due to the scope of changes, that proved more burdonsome that it was worth. We decided the benefits were worth the price of breaking changes. Hopefully you'll agree... maybe not during the update, but shortly there after. :smile:
+We initially tried to roll out this update in backward compatible phases. Due to the scope of changes, that proved more burdonsome that it was worth. We decided the benefits were worth the price of breaking changes. Hopefully you'll agree.
 
 In some cases, i.e. renamed attributes, the old method or class has been marked with `[Obsolete]` and warnings will suggest how to upgrade.  These will be removed in the next major release, `4.x`
 

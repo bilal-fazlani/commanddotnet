@@ -2,25 +2,25 @@
 
 When implementing new features, there are two patterns for writing feature tests.
 
-## Scenario pattern
+## BDD Scenario pattern
 This [readme.md](FeatureTests/README.md) will walk you through how to use it.  This pattern gives a succint, declarative way to specify the scenario from the perspective of calling the app from the command line.
 
+## AppRunner extensions
+The second pattern is run an instance of the AppRunner using `AppRunner.RunInMem(...)`
 
-## AppRunner pattern
-The second pattern is run an instance of the AppRunner using `AppRunner.RunInMem(...)`  
-
-This requires an instance of `ITestOutputHelper` to ensure output for the test is captured by Xunit.  Xunit will inject the `ITestOutputHelper` into the test classes ctor.
-
-`RunInMem` returns an instance of 
+`RunInMem` returns an instance of [AppRunnerResult](../CommandDotNet.TestTools/AppRunnerResult.cs)
 
 ``` c#
     public class AppRunnerResult
     {
         public int ExitCode { get; }
         public string ConsoleOut { get; }
+        public string ConsoleError { get; }
+        public string ConsoleOutAndError { get; }
         public TestOutputs TestOutputs { get; }
         public void OutputShouldBe(string expected){...}
         public bool OutputContains(string expected){...}
+        public bool OutputNotContains(string expected){...}
     }
 ```
 
