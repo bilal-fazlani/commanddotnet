@@ -2,33 +2,34 @@
 
 When implementing new features, there are two patterns for writing feature tests.
 
-## Scenario pattern
+## BDD Scenario pattern
 This [readme.md](FeatureTests/README.md) will walk you through how to use it.  This pattern gives a succint, declarative way to specify the scenario from the perspective of calling the app from the command line.
 
+## AppRunner extensions
+The second pattern is run an instance of the AppRunner using `AppRunner.RunInMem(...)`
 
-## AppRunner pattern
-The second pattern is run an instance of the AppRunner using `AppRunner.RunInMem(...)`  
-
-This requires an instance of `ITestOutputHelper` to ensure output for the test is captured by Xunit.  Xunit will inject the `ITestOutputHelper` into the test classes ctor.
-
-`RunInMem` returns an instance of 
+`RunInMem` returns an instance of [AppRunnerResult](../CommandDotNet.TestTools/AppRunnerResult.cs)
 
 ``` c#
     public class AppRunnerResult
     {
         public int ExitCode { get; }
+
+        // the console output   
         public string ConsoleOut { get; }
+        public string ConsoleError { get; }
+        public string ConsoleOutAndError { get; }
+        
+        // described in the scenario readme.md from above
         public TestOutputs TestOutputs { get; }
+
+        // helpers that normalize the help output which 
+        // can contain extra whitespace at the end of lines.
         public void OutputShouldBe(string expected){...}
         public bool OutputContains(string expected){...}
+        public bool OutputNotContains(string expected){...}
     }
 ```
-
-`ConsoleOut` is what you'd see in the console window.
-
-`TestOutputs` are described in the [Scenario readme.md](FeatureTests/README.md)
-
-`OutputShouldBe` and `OutputContains` are helpers that normalize the help output which can contain extra whitespace at the end of lines.
 
 ## Commonalities
 Both patterns require an app class be defined for the test.  The app(s) should be defined within the test class to avoid polluting the test namespace.
@@ -37,9 +38,9 @@ Both patterns ensure Console.Out is never used keeping the option open for paral
 
 Both patterns test at the public API layer which has several benefits
 
-* The full pipeline is tested.  This prevents failures where unit tests isolation interactions with one aspect of the framework but forgot others. 
-* Refactoring internals can be done without changing any tests.  
-* It's easier to identify breaking changes.  If a test needs to change, it indicates a breaking change because either behavior or the API has been modified.
+* The full pipeline is tested. Integration between components cannot be accidently skipped.  It is harder to introduce bugs due to not understanding the interactions between subsystems.
+* Refactoring internals can be done without changing any tests.
+* It's easier to identify breaking changes. If a test needs to change, it indicates a breaking change as either behavior or the API has been modified.
 
 ## Summary
 

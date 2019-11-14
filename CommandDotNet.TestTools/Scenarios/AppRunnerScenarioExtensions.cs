@@ -54,7 +54,7 @@ namespace CommandDotNet.TestTools.Scenarios
                 {
                     logger.WriteLine("");
                     logger.WriteLine("App Results:");
-                    logger.WriteLine(results.ConsoleAllOutput);
+                    logger.WriteLine(results.ConsoleOutAndError);
                 }
                 throw;
             }
@@ -112,7 +112,7 @@ namespace CommandDotNet.TestTools.Scenarios
 
                 sb.AppendLine();
                 sb.AppendLine("Console output <begin> ------------------------------");
-                sb.AppendLine(String.IsNullOrWhiteSpace(result.ConsoleAllOutput) ? "<no output>" : result.ConsoleAllOutput);
+                sb.AppendLine(String.IsNullOrWhiteSpace(result.ConsoleOutAndError) ? "<no output>" : result.ConsoleOutAndError);
                 sb.AppendLine("Console output <end>   ------------------------------");
 
                 throw new AssertionFailedException(sb.ToString());
