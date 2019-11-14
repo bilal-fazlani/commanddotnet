@@ -12,8 +12,12 @@ git_add_site() {
 }
 
 git_remove_site() {
-  echo "removing worktree 'site'"
-  git worktree remove site
+  # skip in travis. this fails and is not necessary there
+  if [ -z "${TRAVIS_COMMIT_MESSAGE}"]
+  then
+    echo "removing worktree 'site'"
+    git worktree remove site
+  fi
 }
 
 mkdocks_build() {
@@ -55,5 +59,5 @@ fi
 git_add_site
 mkdocks_build
 git_commit_site
-git_push_site
+#git_push_site
 git_remove_site
