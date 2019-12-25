@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://www.w3.org/2000/svg" xmlns:xl="http://www.w3.org/1999/xlink" version="1.1" viewBox="251 179 544 366" width="544" height="366">
+  <defs>
+    <font-face font-family="Helvetica Neue" font-size="200" panose-1="2 0 5 3 0 0 0 2 0 4" units-per-em="1000" underline-position="-100" underline-thickness="50" slope="0" x-height="517" cap-height="714" ascent="951.9958" descent="-212.99744" font-weight="400">
+      <font-face-src>
+        <font-face-name name="HelveticaNeue"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Helvetica Neue" font-size="150" panose-1="2 0 5 3 0 0 0 2 0 4" units-per-em="1000" underline-position="-100" underline-thickness="50" slope="0" x-height="517" cap-height="714" ascent="951.9958" descent="-212.99744" font-weight="400">
+      <font-face-src>
+        <font-face-name name="HelveticaNeue"/>
+      </font-face-src>
+    </font-face>
+    <font-face font-family="Helvetica Neue" font-size="100" panose-1="2 0 5 3 0 0 0 2 0 4" units-per-em="1000" underline-position="-100" underline-thickness="50" slope="0" x-height="517" cap-height="714" ascent="951.9958" descent="-212.99744" font-weight="400">
+      <font-face-src>
+        <font-face-name name="HelveticaNeue"/>
+      </font-face-src>
+    </font-face>
+  </defs>
+  <metadata> Produced by OmniGraffle 7.12.1 
+    <dc:date>2019-12-25 17:38:29 +0000</dc:date>
+  </metadata>
+  <g id="Small" fill-opacity="1" stroke-opacity="1" fill="none" stroke="none" stroke-dasharray="none">
+    <title>Small</title>
+    <g id="Small: Layer 1">
+      <title>Layer 1</title>
+      <g id="Graphic_7">
+        <rect x="252" y="182.70136" width="542.5" height="361.5" fill="black"/>
+        <rect x="252" y="182.70136" width="542.5" height="361.5" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_6">
+        <rect x="256" y="187.70136" width="534" height="103" fill="white"/>
+        <rect x="256" y="187.70136" width="534" height="103" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      </g>
+      <g id="Graphic_5">
+        <text transform="translate(282.53736 256.70136)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="200" font-weight="400" fill="white" x="0" y="190">&gt;</tspan>
+        </text>
+      </g>
+      <g id="Graphic_4">
+        <text transform="translate(428.35407 300.70136)" fill="white">
+          <tspan font-family="Helvetica Neue" font-size="150" font-weight="400" fill="white" x="0" y="143">./net</tspan>
+        </text>
+      </g>
+      <g id="Graphic_3">
+        <text transform="translate(298.5 179.80136)" fill="black">
+          <tspan font-family="Helvetica Neue" font-size="100" font-weight="400" fill="black" x="4.999994" y="95">command</tspan>
+        </text>
+      </g>
+    </g>
+  </g>
+</svg>

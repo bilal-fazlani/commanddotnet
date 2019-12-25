@@ -42,10 +42,11 @@ nav:
       - V3/newer-release-alerts.md
 theme:
   name: 'material'
+  favicon: 'img/favicon.ico'
   palette:
     primary: 'indigo'
     accent: 'pink'  
-  logo: 'img/logo.png'
+  logo: 'img/small-logo.svg'
 
 google_analytics:
   - 'UA-39358317-3'
@@ -72,7 +73,11 @@ markdown_extensions:
       custom_checkbox: true
   - pymdownx.tilde
   - toc:
-     permalink: "#"
+     permalink: "#"   
+
+plugins:
+  - search
+  - git-revision-date-localized     
 
 # Customization
 extra:
@@ -84,5 +89,3 @@ extra:
       link: 'https://twitter.com/bilal_fazlani'
     - type: 'linkedin'
       link: 'https://www.linkedin.com/in/bilal-fazlani/'
-  
-extra_css: ['commanddotnet/superfences.css', 'superfences.css']
