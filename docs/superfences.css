@@ -16,10 +16,12 @@
   
   .superfences-tabs label {
     width: auto;
-    margin: 0 0.5em;
-    padding: 0.25em;
-    font-size: 120%;
+    margin: 0;
+    margin-bottom: -1em;
+    padding: 0.25em 0.5em;
     cursor: pointer;
+    border-top-left-radius: 0.2em;
+    border-top-right-radius: 0.2em;
   }
   
   .superfences-tabs input {
@@ -30,11 +32,16 @@
   .superfences-tabs input:nth-child(n+1) {
     color: #333333;
   }
-  
+
   .superfences-tabs input:nth-child(n+1):checked + label {
-      color: #FF5252;
+      background-color: #ddd;
+      font-weight: bold;
   }
-  
+
+  .superfences-tabs input:nth-child(n+1):hover + label {
+    color :#f50057;
+}
+
   .superfences-tabs input:nth-child(n+1):checked + label + .superfences-content {
       display: block;
   }

@@ -1,4 +1,4 @@
-![logo](img/logo.png)
+![logo](img/logo.png){: style="width:20em"}
 
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/CommandDotNet.svg)](https://www.nuget.org/packages/CommandDotNet)  [![NuGet](https://img.shields.io/nuget/dt/CommandDotNet.svg)](https://www.nuget.org/packages/CommandDotNet)
 [![Build Status](https://travis-ci.com/bilal-fazlani/commanddotnet.svg?branch=master)](https://travis-ci.com/bilal-fazlani/commanddotnet)

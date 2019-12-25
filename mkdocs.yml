@@ -40,7 +40,6 @@ nav:
       - V3/response-files.md
       - V3/test-tools.md
       - V3/newer-release-alerts.md
-# theme: readthedocs
 theme:
   name: 'material'
   palette:
