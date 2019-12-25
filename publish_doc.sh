@@ -11,11 +11,6 @@ git_add_site() {
   git worktree add site gh-pages
 }
 
-git_remove_site() {
-  echo "removing worktree 'site'"
-  git worktree remove site
-}
-
 mkdocks_build() {
   chmod 777 ./mkdocs-build.sh
   ./mkdocs-build.sh
@@ -56,4 +51,3 @@ git_add_site
 mkdocks_build
 git_commit_site
 git_push_site
-git_remove_site
