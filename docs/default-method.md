@@ -2,11 +2,11 @@ Right now, when you just execute the dll, without any commands, it shows help. I
 commands, you can do that with the help of `[DefaultMethod]` attribute.
 
 ```c#
-        [DefaultMethod]
-        public void SomeMethod()
-        {
-            
-        }
+[DefaultMethod]
+public void SomeMethod()
+{
+    
+}
 ```
 
 Some points to note about default method:
