@@ -32,6 +32,16 @@ namespace CommandDotNet.TestTools
             _services.Add(service.GetType(), service);
         }
 
+        public void Add<T>(T service)
+        {
+            _services[typeof(T)] = service;
+        }
+
+        public void AddOrUpdate<T>(T service)
+        {
+            _services[typeof(T)] = service;
+        }
+
         public IEnumerator<object> GetEnumerator()
         {
             return _services.Values.GetEnumerator();

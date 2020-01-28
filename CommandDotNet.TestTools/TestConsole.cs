@@ -14,7 +14,12 @@ using CommandDotNet.Rendering;
 
 namespace CommandDotNet.TestTools
 {
-    /// <summary>A test console that can be used to capture all output and to provide input for ReadLine and ReadToEnd</summary>
+    /// <summary>
+    /// A test console that can be used to <br/>
+    /// - capture output <br/>
+    /// - provide piped input <br/>
+    /// - handle ReadLine and ReadToEnd requests
+    /// </summary>
     public class TestConsole : IConsole
     {
         private readonly Func<TestConsole, ConsoleKeyInfo> _onReadKey;
@@ -81,6 +86,11 @@ namespace CommandDotNet.TestTools
 
         public bool IsInputRedirected { get; }
 
+        /// <summary>
+        /// Read a key from the input
+        /// </summary>
+        /// <param name="intercept">When true, the key is not displayed in the output</param>
+        /// <returns></returns>
         public ConsoleKeyInfo ReadKey(bool intercept)
         {
             ConsoleKeyInfo consoleKeyInfo;
@@ -107,6 +117,7 @@ namespace CommandDotNet.TestTools
             }
             return consoleKeyInfo;
         }
+
         public bool TreatControlCAsInput { get; set; }
 
         private class StandardStreamReader : IStandardStreamReader

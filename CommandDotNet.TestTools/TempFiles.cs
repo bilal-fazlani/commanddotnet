@@ -67,7 +67,7 @@ namespace CommandDotNet.TestTools
                 }
 
                 // overwrite if the file exists so we start with clean slate
-                // in case a previous test run failed
+                // in case a previous test run failed to cleanup properly
                 File.Create(filePath).Dispose();
             }
 

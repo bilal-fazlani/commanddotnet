@@ -12,7 +12,11 @@ namespace CommandDotNet.TestTools
     /// <summary>Run the console in memory and get the results that would be output to the shell</summary>
     public static class AppRunnerTestExtensions
     {
-        /// <summary>Injects a middleware to capture state at specific point</summary>
+        /// <summary>
+        /// Injects a middleware to capture state at specific point. <br/>
+        /// This method does not prevent referenced objects from being mutated after capture. <br/>
+        /// It is the responsibility of capture action to clone data to prevent mutation.
+        /// </summary>
         public static AppRunner CaptureState(this AppRunner runner, Action<CommandContext> capture,
             MiddlewareStages middlewareStage, int? orderWithinStage = null, bool exitAfterCapture = false)
         {
