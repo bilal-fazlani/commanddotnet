@@ -1,7 +1,7 @@
 # Interceptor methods
 
-Interceptor methods provide a way to define a method that will be executed for all subcommands, as well as the current command if it contains a default method.
-Interceptor methods can define options to be provided in the shell.  Interceptors cannot define arguments because they are positional and positional arguments are not allowed when a subcommand is requested.
+Interceptor methods will be executed for all commands and subcommands of a class.
+Interceptor methods can define options to be provided in the shell. Interceptors cannot define operands because they are positional and positional arguments are only applicable for the target command.
 
 Example:
 
@@ -17,34 +17,51 @@ dotnet calculator --radix 2 Add 1 2
 public class Calculator
 {
     private iCalculator _calculator;
+    private IConsole _console;
 
     public Task<int> Interceptor(
-        InterceptorExecutionDelegate next, 
-        int radix)
+        InterceptorExecutionDelegate next,
+        IConsole console,
+        int radix,)
     {
         _calculator = Factory.GetCalculatorFor(radix);
+        _console = console;
         return next();
     }
     
     [Command(Description = "Adds two numbers")]
-    public void Add(int x, int y, IConsole console)
+    public void Add(int x, int y)
     {
-        console.WriteLine(_calculator.Add(x, y));
+        _console.WriteLine(_calculator.Add(x, y));
     }
 
     [Command(Description = "Subtracts the second number from the first")]
-    public void Subtract(int x, int x, IConsole console)
+    public void Subtract(int x, int x)
     {
-        console.WriteLine(_calculator.Subtract(y, y));
+        _console.WriteLine(_calculator.Subtract(y, y));
     }
 }
 ```
 
+Interceptor methods signatures must follow these rules:
+
+* `public` accessor
+* `Task<int>` return type
+* contain either execution delegate: `ExecutionDelegate` or `InterceptorExecutionDelegate`.
+
+Method name does *not* matter.  In our examples, we use `Interceptor`.
+
+Examples:
+
+* `public Task<int> MethodName(ExecutionDelegate next, CommandContext context)`
+* `public Task<int> MethodName(InterceptorExecutionDelegate next)`
+
+
 ## Inherited options
 
-Inherited options provide a way to specify the interceptor option in the executed subcommand.
+Inherited options provide a way to assign the interceptor option an an option of the executed subcommand.
 
-Using the previous example, change `int radix` to `[Option(Inherited = true)] int radix` 
+Using the previous example, change `int radix` to `[Option(AssignToExecutableSubcommands = true)] int radix` 
 
 Now in the shell: 
 
@@ -56,25 +73,28 @@ dotnet calculator Add 1 2 --radix 2
 public class Calculator
 {
     private iCalculator _calculator;
+    private IConsole _console;
 
     public Task<int> Interceptor(
-        InterceptorExecutionDelegate next, 
-        [Option(Inherited = true)] int radix)
+        InterceptorExecutionDelegate next,
+        IConsole console,
+        [Option(AssignToExecutableSubcommands = true)] int radix)
     {
         _calculator = Factory.GetCalculatorFor(radix);
+        _console = console;
         return next();
     }
     
     [Command(Description = "Adds two numbers")]
-    public void Add(int value1, int value2, IConsole console)
+    public void Add(int x, int y)
     {
-        console.WriteLine(_calculator.Add(value1, value2));
+        _console.WriteLine(_calculator.Add(x, y));
     }
 
     [Command(Description = "Subtracts the second number from the first")]
-    public void Subtract(int value1, int value2, IConsole console)
+    public void Subtract(int x, int y)
     {
-        console.WriteLine(_calculator.Subtract(value1, value2));
+        _console.WriteLine(_calculator.Subtract(x, y));
     }
 }
 ```
@@ -90,3 +110,37 @@ In addition to defining options, interceptor methods can define parameters of ty
 ## Hooks for your commands
 
 Wrap `return next();` in try/catch/finally statements and use the interceptor as pre and post hooks for your commands.
+
+``` c#
+    public Task<int> Interceptor(InterceptorExecutionDelegate next)
+    {
+        prehook();
+        try
+        {
+            return next();
+        }
+        catch()
+        {
+            errorhook();
+        }
+        finally()
+        {
+            posthook();
+        }
+    }
+```
+
+## Hierarchy interaction
+
+Interceptor methods will be run for all subcommands, including subcommands of subcommands.  If the interceptor should run only for subcommands defined in that class, follow this example to determine if the target command is for the same class instance as the current interceptor method.
+
+``` c#
+    public Task<int> Interceptor(InterceptorExecutionDelegate next, CommandContext context)
+    {
+        if(context.InvocationPipeline.TargetCommand.Instance == this)
+        {
+            prehook();
+        }
+        return next();
+    }
+```

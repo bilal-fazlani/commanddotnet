@@ -1,9 +1,9 @@
 # Piped Arguments
 
 ## What is piping?
-Piping is a way to pass the console output of a command to another another command.
+Piping is a way to pass the console output of a command to another command.
 
-A simple example is searching the history of your bash commands for git commands: `history | grep git`.
+A simple example is filtering your history of bash commands for git commands: `history | grep git`.
 
 The pipe `|` tells the shell you are running a new command and that the new command will take the output of the previous command.  
 In this case, `history` will output the last N bash commands and `grep git` will filter the output to only the commands containing "git"
@@ -11,23 +11,55 @@ In this case, `history` will output the last N bash commands and `grep git` will
 Piping is a great way to decompose commands into smaller, single-responsibility commands.
 
 !!!tip
-    When you find commands repeating the same options to determine what items to operate on, consider extracting the options into search command that returns ids and then update the other commands take the list of ids.
+    When you find commands repeating the same options to determine what items to operate on, consider extracting the options into search command that returns ids and then update the other commands take the list of ids. 
+
+    `app.exe get-customer-ids --only-active | app.exe migrate-customers`
 
 In .net console apps, you can check piped input using `Console.IsInputRedirected` and `Console.In.Read___()`. 
 
-Or... use our provided middleware
+Or... use the `AppendPipedInputToOperandList` middleware
 
-## Using the middleware?
+## Using the middleware
 
-First, enable the feature with `appRunner.AppendPipedInputToOperandList()`.
+Enable the feature with `appRunner.AppendPipedInputToOperandList()`.
 
-Every command is allowed a single operand list. If one is defined and if piped input is available, it will be appended to this list. If the user provides values for the operand and pipes input, the two sources will be concatenated, with piped input at the end.
+Every command is allowed a single operand list. If one is defined and if piped input is available, it will be appended to this list. If the user pipes input and also specifies values for the operand, the two sources will be concatenated with piped input at the end.
+
+#### Example
+
+Given the commands defined below and this input in the shell: `Users Find -a | Users Disable`
+
+The shell will start two processes, the first for Find and the second for Disable. As the first process writes ids to the output stream, the id is "piped" to the second process. The Disable command will process the ids as they are received. When Find completes, the first process will shutdown and the pipe will be closed. The Disable command will complete any remaining ids and then shutdown.
+
+If Disable used a type of `List<string>` or `string[]`, then Disable could not process the ids until the Find process completed. By using `IEnumerable<string>` results can be streamed.
+
+``` c#
+public class Users
+{
+    public void Find(
+        IConsole console,
+        [Option(ShortName="a")] bool activeOnly, 
+        string pattern = null)
+    {
+        foreach(var user in userSvc.GetUsers(activeOnly, pattern))
+        {
+            console.Out.WriteLine(user.Id)
+        }
+    }
+
+    public void Disable(IEnumerable<string> ids)
+    {
+        foreach(string id in ids)
+        {
+            userSvc.Disable(id);
+        }    
+    }
+}
+```
 
 !!!tip
-    All output to the console is piped to the next command. Be sure the command does not include additional logging information.
+    All output to the console is piped to the next command. Be sure the command generating the piped output does not include additional logging information.
 
-!!!caveat
-    The middleware will currently read all piped input before processing the command. This will require the first command to completely finish before the second command starts so this is not yet suitable for streaming.  We hope to resolve this in a future release. If you need streaming, please consider helping us enhance this middleware.
+You can experiment with this using our [pipes example command](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.Example/Commands/Pipes.cs).
 
-
-
+ 

@@ -38,4 +38,5 @@ public void MigrateRecords(CancellationToken cancellationToken, List<int> ids)
 }
 ```
 
-Remember to pass the CancellationToken to all database, web and other service requests that take one.
+!!! tip
+    Remember to pass the CancellationToken to all database, web and service requests that take one.

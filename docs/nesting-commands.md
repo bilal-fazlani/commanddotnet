@@ -124,15 +124,15 @@ stash popped
 If you like to store your sub commands as external `.cs` files, you can that too with `[SubCommand]` attribute.
 
 ```c#
-    [ApplicationMetadata(Description = "Stashes all changes when executed without any arguments")]
-    public class Stash
+[ApplicationMetadata(Description = "Stashes all changes when executed without any arguments")]
+public class Stash
+{
+    [ApplicationMetadata(Description = "Applies last stashed changes")]
+    public void Pop()
     {
-        [ApplicationMetadata(Description = "Applies last stashed changes")]
-        public void Pop()
-        {
-            Console.WriteLine($"stash popped");
-        }
+        Console.WriteLine($"stash popped");
     }
+}
 ```
 
 ```c#
