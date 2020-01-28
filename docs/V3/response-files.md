@@ -53,13 +53,7 @@ There are a number of ways to use response files to improve usability and testib
 
 ### Inter-command communication
 
-Similar to [piped arguments](piped-arguments.md), a command could write arguments to a response file for use in another command.
-As an extra step, the path to the response file could be the piped argument.
-
-### Resume Session
-
-A long running application could maintain a session file with the last processed key or next key or a list of remaining keys. 
-If the app is cancelled or crashes, the user could start from scratch or select a @session-yyyymmdd.rsp to resume the operation.
+Similar to [piped arguments](piped-arguments.md), a command can write arguments to a response file for use in another command.  i.e. A list of ids to process.
 
 ### Fail File
 
@@ -98,6 +92,49 @@ Trouble shoot errors and deploy code with bug fixes.
 Second run: `Migrate --failFilePath failed2.txt @failed1.txt` to migrate all items in `failed1.txt` and capture failed ids to `failed2.txt`
 
 Rinse and repeat.
+
+### Resume Session
+
+A command that enumerates items can maintain a session file with arguments that allow resuming the proceess if cancelled or crashed.
+
+For example:
+
+``` c#
+public void Migrate([Option] string session, List<string> ids)
+{
+    if(!ids.Any())
+    {
+        ids = _repo.GetAllIds();
+    }
+    foreach(var id in ids.ToList())
+    {
+        _client.Migrate(id);
+        ids.RemoveAt(0);
+        File.WriteAll($"{session}.rsp", $"session={session} ids={string.join(',', ids)}");
+    }
+}
+```
+
+Run: `Migrate --session mysession` to capture session data to `mysession.rsp`
+
+`migrate.exe @mysession.rsp` to resume the operation. Since the session option is maintained, the session file will continue to update.
+ 
+### Pinning commands
+
+When commands (or options) are often repeated with the same values.
+
+> `Migrations --env test --username lala migrate-orders --customer acme ...`
+
+Compose fine-grained response files allowing to mix and match options
+
+* @test.rsp > `--env test --username lala`
+* @migrate-acme.rsp > `migrate-orders --customer acme`
+
+> `Migrations @test.rsp @migrate-acme-orders.rsp ...`
+
+This is an alternative to shell scripts, enabling mix & match for commonly used options.
+
+This is also useful for test scripts.
 
 ### Testing
 
