@@ -57,8 +57,8 @@ The following have been disabled by default and moved to middelware configuratio
 
 * Version option: `appRunner.UseVersionMiddleware()`
 * Prompting for missing arguments: `appRunner.UsePrompting(...)`
-* Name casing: `appRunner.UseNameCasing(...)` via CommandDotNet.NameCasing
-* Fluent validation: `appRunner.UseFluentValidation()` via CommandDotNet.FluentValidation nuget
+* Name casing: `appRunner.UseNameCasing(...)` via nuget: CommandDotNet.NameCasing
+* Fluent validation: `appRunner.UseFluentValidation()` via nuget: CommandDotNet.FluentValidation nuget
 
 ### Interceptor Methods
 
