@@ -1,4 +1,4 @@
-# v3 Changes
+# Changes
 
 v3 is a significant rewrite of CommandDotNet.
 

@@ -16,7 +16,7 @@ The framework is ideal for testing middleware components and end-to-end testing 
   * Removes created files on dispose
 * `TestDependencyResolver` a simple implementation of `IDependencyResolver`
   * usage: `appRunner.UseDependencyResolver(new TestDependencyResolver {dbSvc, httpSvc})`
-* `appRunner.CpatureState(...)` extension method that can be used to capture the point-in-time state of an object within the middleware pipeline.
+* `appRunner.CaptureState(...)` extension method that can be used to capture the point-in-time state of an object within the middleware pipeline.
 
 More details about Scenario testing can be found in our readme files [here](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.Tests.README.md)
 and [here](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.Tests/FeatureTests/README.md)
