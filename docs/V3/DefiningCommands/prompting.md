@@ -1,16 +1,21 @@
 #Prompting Middleware
 
+Prompting is supported for two scenarios:
+
+1. Prompting for values from within the command method.
+2. Prompting for arguments where values were not provided. 
+
 Enable prompting middleware with: `appRunner.UsePrompting(...)`
 
 Examples can be found in the [prompts](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.Example/Commands/Prompts.cs) 
 commands in the example app.
 
-## IPrompter
+## Prompting from within the command method
 
-This will register a [parameter resolver](parameter-resolvers.md) for `IPrompter`.
-The IPrompter can prompt for a single value or a list of values. 
+A [parameter resolver](parameter-resolvers.md) will be registered for `IPrompter`.
+The IPrompter can prompt for a single value or a list. 
 
-When prompting for a list of values, each entry is on a new line. Entering two empty lines will stop prompting for that value.
+When prompting for a list, each entry is on a new line. Entering two empty lines will stop prompting for that value.
 
 Use Ctrl+C to exit prompting, setting the out parameter `isCancellationRequested` to true.
 
@@ -20,11 +25,11 @@ Override the default IPrompter with the `prompterOverride` paramter
 
 `prompterOverride: context => new MyPrompter(context)`
 
-## Argument Prompting
+## Prompting for missing arguments
 
 `UsePrompting` enables argument prompting by default.  Use `promptForMissingArguments:false` to disable.
 
-Prompt text can be overridden using the `argumentPromptTextOverride` parameter.  
+Prompt text can be overridden using the `argumentPromptTextOverride` parameter. This example shows using a custom attribute to provide prompt text.
 
 ``` cs
 argumentPromptTextOverride: (context, argument) => $"{argument.CustomAttributes.Get<MyPromptTextAttribute>().PromptText}"
@@ -35,7 +40,7 @@ Arguments defined with nullable types or optional parameters will not be prompte
 This behavior can be changed using the `argumentFilter` parameter.
 
 ``` cs
-argumentFilter: argument => argument.CustomAttributes.Get<MyPromptTextAttribute>()?.Prompt ?? false
+argumentFilter: argument => argument.CustomAttributes.Get<MyPromptTextAttribute>()?.CanPrompt ?? false
 ```
 
-Use the [Password](passwords.md) type hide the input.
+Use the [Password](passwords.md) type to hide all characters.

@@ -29,20 +29,25 @@ nav:
       - Parameter types: parameter-types.md
       - Custom interceptors: custom-interceptors.md
   - Version 3 (Preview):
-    - Changes: V3/v3-changes.md
-    - V3/argument-terminology.md
-    - V3/argument-arity.md
-    - V3/option-or-operand.md
-    - V3/middleware.md
-    - V3/cancellation.md
-    - V3/interceptors.md
-    - V3/passwords.md
-    - V3/parameter-resolvers.md
-    - V3/piped-arguments.md
-    - V3/prompting.md
-    - V3/response-files.md
-    - V3/test-tools.md
-    - V3/newer-release-alerts.md
+    - Introduction: V3/index.md
+    - V3/v3-changes.md
+    - Defining Commands:
+      - V3/DefiningCommands/argument-terminology.md
+      - V3/DefiningCommands/argument-arity.md
+      - V3/DefiningCommands/argument-models.md
+      - V3/DefiningCommands/option-or-operand.md
+      - V3/DefiningCommands/passwords.md
+      - V3/DefiningCommands/piped-arguments.md
+      - V3/DefiningCommands/prompting.md
+    - Extensibility:
+      - V3/Extensibility/middleware.md
+      - V3/Extensibility/interceptors.md
+      - V3/Extensibility/parameter-resolvers.md
+    - Extras:
+      - V3/Extras/test-tools.md
+      - V3/Extras/cancellation.md
+      - V3/Extras/response-files.md
+      - V3/Extras/newer-release-alerts.md
 theme:
   feature:
     tabs: true
@@ -83,7 +88,7 @@ markdown_extensions:
 
 plugins:
   - search
-  - git-revision-date-localized     
+  #- git-revision-date-localized     
 
 # Customization
 extra:

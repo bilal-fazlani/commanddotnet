@@ -17,14 +17,14 @@ Git help describes the usage as `git stash store [-m|--message <message>] [-q|--
 
 Let's say we executed this command as follows: `git stash store -q -m 'my stash' e7a8621`
 
-Programmatically, the perspectives are:
+For programmatic perspective of the...
 
 * shell: every word is an argument. `git stash store -q -m 'my stash' e7a8621` 
 * application: the arguments are `stash store -q -m 'my stash' e7a8621`, as assigned to `Main(string[] args)`
 * `stash` command: the arguments are `store`. Once a subcommand is specified, all remaining arguments are for the subcommand.
 * `store` command: the arguments are `-q -m 'my stash' e7a8621`.
 
-Conceptually, the perspectives are:
+From the human perspective of...
 
 * developer: the arguments are `-q -m 'my stash' e7a8621`.
 * user: the arguments are `e7a8621`. `-q` and `-m` are options. Common conventions of help documentation distinguishes options from arguments.
@@ -43,7 +43,7 @@ Conceptually, the perspectives are:
 * For developers
     * terminoloy: `command`, `argument`, `option` and `operand`
     * types: `Command`, `IArgument`, `Option` and `Operand`.
-    * Option and Operand are the two types of IArgument
+    * Option and Operand are the two concrete types of IArgument
         * Option: named argument
         * Operand: positional argument
     * Command contains collections of Option, Operand and Command (as subcommands)
