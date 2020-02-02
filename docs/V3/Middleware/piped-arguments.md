@@ -1,4 +1,4 @@
-# Piped Arguments
+# Piped arguments
 
 ## What is piping?
 Piping is a way to pass the console output of a command to another command.
