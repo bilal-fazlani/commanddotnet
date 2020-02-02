@@ -35,10 +35,10 @@ namespace CommandDotNet.FluentValidation
                 var console = commandContext.Console;
                 failureResults.ForEach(f =>
                 {
-                    console.Out.WriteLine($"'{f.model.GetType().Name}' is invalid");
+                    console.Error.WriteLine($"'{f.model.GetType().Name}' is invalid");
                     foreach (var error in f.result.Errors)
                     {
-                        console.Out.WriteLine($"  {error.ErrorMessage}");
+                        console.Error.WriteLine($"  {error.ErrorMessage}");
                     }
                 });
                 console.Error.WriteLine();
