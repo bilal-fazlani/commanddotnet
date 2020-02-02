@@ -43,7 +43,7 @@ This behavior can be changed using the `argumentFilter` parameter.
 argumentFilter: argument => argument.CustomAttributes.Get<MyPromptTextAttribute>()?.CanPrompt ?? false
 ```
 
-Use the [Password](passwords.md) type to hide all characters for an argument.
+Use the [Password](../DefiningCommands/passwords.md) type to hide all characters for an argument.
 
 ```cs
 public void Login(string username, Password password){...}
