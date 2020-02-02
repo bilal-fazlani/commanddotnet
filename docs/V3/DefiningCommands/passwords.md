@@ -21,4 +21,4 @@ public class Api
 
 ## Prompting
 
-When using `Password` with the built-in [prompting features](prompting.md), password prompts will hide all characters.
+When using `Password` with the built-in [prompting features](../Middleware/prompting.md), password prompts will hide all characters.

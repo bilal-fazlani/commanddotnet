@@ -35,7 +35,7 @@ public void Add(int x, int y, [Option] int? radix)
 ```
 
 The exercise of distinguishing *what* vs *how* can bring clarity to your separation of concerns, leading to a cleaner interface.
-e.g. Identifying `--radix` as a *"how"* makes it an obvious candidate to promote to a parent command as shown in [interceptors](interceptors.md) example.
+e.g. Identifying `--radix` as a *"how"* makes it an obvious candidate to promote to a parent command as shown in [interceptors](../Extensibility/interceptors.md) example.
 
 ## Optional Operands
 
