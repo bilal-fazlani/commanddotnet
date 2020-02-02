@@ -31,6 +31,7 @@ nav:
   - Version 3 (Preview):
     - Introduction: V3/index.md
     - V3/v3-changes.md
+    - V3/getting-started.md
     - Defining Commands:
       - V3/DefiningCommands/argument-terminology.md
       - V3/DefiningCommands/argument-arity.md
