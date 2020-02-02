@@ -1,29 +1,32 @@
 # Argument Models
-Argument models provide a way to bundle a group of arguments in a class.
+Argument models provide a way to deinfe arguments in a class.
+
+This command to send an e-mail...
+
+```bash
+send --subject hi -a "myFile.txt" --body "just wanted you to review these files" bilal@bilal.com john@john.com
+```
+
+can be defined as
 
 ```c#
-public void SendEmail([Option]string subject, [Option(ShortName="a")]List<string> attachments, [Option]string body, [Argument]string from, [Argument]string to)
+public void SendEmail(
+    [Option]string subject, 
+    [Option]string body, 
+    [Argument]string from, 
+    [Argument]string to)
 {
 
 }
 ```
 
-this can be invoked from the shell with:
-
-```bash
-send --subject hi -a "myFile.txt" -a "important.docx" --body "just wanted you to review these files" bilal@bilal.com john@john.com
-```
-
-The same arguments can be defined with a class:
+or
 
 ```c#
 public class Email : IArgumentModel
 {
     [Option]
     public string Subject {get;set;}
-    
-    [Option(ShortName="a")]
-    public List<string> Attachments {get;set;}
     
     [Option]
     public string Body {get;set;}
@@ -34,11 +37,7 @@ public class Email : IArgumentModel
     [Operand]
     public string To {get;set;}
 }
-```
 
-and
-
-```c#
 public void SendEmail(Email email)
 {
 
@@ -61,6 +60,11 @@ public class SendEmailArgs : IArgumentModel
     public DryRun DryRun {get;set;}
     
     public Email Email {get;set;}
+}
+
+public void SendEmail(SendEmailArgs args)
+{
+
 }
 ```
 
