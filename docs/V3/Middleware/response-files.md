@@ -53,7 +53,7 @@ There are a number of ways to use response files to improve usability and testib
 
 ### Inter-command communication
 
-Similar to [piped arguments](piped-arguments.md), a command can write arguments to a response file for use in another command.  i.e. A list of ids to process.
+Similar to [piped arguments](../Middleware/piped-arguments.md), a command can write arguments to a response file for use in another command.  i.e. A list of ids to process.
 
 ### Fail File
 

@@ -1,5 +1,5 @@
 # Argument Models
-Argument models provide a way to deinfe arguments in a class.
+Argument models provide a way to define arguments in a class.
 
 This command to send an e-mail...
 
@@ -71,7 +71,7 @@ public void SendEmail(SendEmailArgs args)
 ### Benefits of argument models:
 
 * Common arguments can be extracted to models to enforce contracts across commands.  <br/>ex. DryRunModel ensures the same short name, long name, description, etc are consistent across all commands using this model.
-* [FluentValidation](fluent-validation-for-argument-models.md) framework can be used to validate the model
+* [FluentValidation](../Middleware/fluent-validation-for-argument-models.md) framework can be used to validate the model
 
 ### Caveat
 

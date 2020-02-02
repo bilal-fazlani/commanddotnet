@@ -25,7 +25,7 @@ The framework checks the cancellation token before every step in the pipeline.
 
 ## Using the CancellationToken
 
-The CancellationToken is easy to access in your commands thanks to [parameter resolvers](parameter-resolvers.md). 
+The CancellationToken is easy to access in your commands thanks to [parameter resolvers](../Extensibility/parameter-resolvers.md). 
 Simply add a parameter to your command or interceptor method.
 
 ``` c#

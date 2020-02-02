@@ -12,7 +12,7 @@ commands in the example app.
 
 ## Prompting from within the command method
 
-A [parameter resolver](parameter-resolvers.md) will be registered for `IPrompter`.
+A [parameter resolver](../Extensibility/parameter-resolvers.md) will be registered for `IPrompter`.
 The IPrompter can prompt for a single value or a list. 
 
 When prompting for a list, each entry is on a new line. Entering two empty lines will stop prompting for that value.
@@ -43,4 +43,8 @@ This behavior can be changed using the `argumentFilter` parameter.
 argumentFilter: argument => argument.CustomAttributes.Get<MyPromptTextAttribute>()?.CanPrompt ?? false
 ```
 
-Use the [Password](passwords.md) type to hide all characters.
+Use the [Password](passwords.md) type to hide all characters for an argument.
+
+```cs
+public void Login(string username, Password password){...}
+```

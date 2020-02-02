@@ -1,6 +1,6 @@
 # Parameter Resolvers
 
-Parameters defined in command and interceptor methods must be a valid paramter type as defined in [parameter-types](../../parameter-types.md).
+Parameters defined in command and interceptor methods must be a valid paramter type as defined in [parameter-types](parameter-types.md).
 
 There are times where your command method needs access to a service in the `CommandContext`, 
 say to write to the `IConsole` or perform a loop while checking the `CancellationToken`.
