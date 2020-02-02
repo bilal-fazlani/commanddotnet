@@ -1,4 +1,4 @@
-# v3 Changes
+# Changes
 
 v3 is a significant rewrite of CommandDotNet.
 
@@ -14,31 +14,30 @@ Check build warnings after updating and update obsolete references.  They'll be 
 ## What are the changes?
 
 ### New architecture
-The architecture is now based around a [middleware pipeline](middleware.md).
+The architecture is now based around a [middleware pipeline](Extensibility/middleware.md).
 
 ### Arguments terminology
-[Argument terminology](argument-terminology.md) has been updated and made consistent throughout the framework. The term "Parameters" is generally replaced with "Arguments".
+[Argument terminology](DefiningCommands/argument-terminology.md) has been updated and made consistent throughout the framework. The term "Parameters" is generally replaced with "Arguments".
 
 ### Constructor based dependency injection is now possible
 [read more below](#interceptor-methods)
 
 ## Summary of new features
 
-* [Response file](response-files.md) support 
+* [Response file](Middleware/response-files.md) support 
 * `HelpTextProvider` can be overridden to make targetted changes to a section of help.
 * [Test tools](test-tools.md), helpful for end-to-end test and testing framework extensions, like middleware components.
-* List operands can be populated from [piped arguments](piped-arguments.md).
-* [Parameter resolvers](parameter-resolvers.md).
-* [Ctrl+C support](cancellation.md) with CancellationToken.
-* [Arity](argument-arity.md) calculated for arguments and can be updated in middleware.
-* [Password] type added to prevent accidental logging of password values and hide passwords during prompting.
-* [Prompt](prompting.md) tool can be used directly in methods and honors Password and Ctrl+C and has several extensibility points.
+* [Parameter resolvers](Extensibility/parameter-resolvers.md).
+* [Ctrl+C support](Middleware/cancellation.md) with CancellationToken.
+* [Arity](DefiningCommands/argument-arity.md) calculated for arguments and can be updated in middleware.
+* [Password](DefiningCommands/passwords.md) type added to prevent accidental logging of password values and hide passwords during prompting.
+* [Prompt](Middleware/prompting.md) tool can be used directly in methods and honors Password and Ctrl+C and has several extensibility points.
 * Lists parameters can be defined as arrays or enumerables that can be streamed from piped input or files.
-* [Piped input](piped-arguments.md) can be mapped to operand lists.
+* [Piped input](Middleware/piped-arguments.md) can be mapped to operand lists.
 * SimpleInjector container support.
 * IoC runInScope to enable isolated instances in each run.
 * `IArgumentModel` instances can be resolved from containers. Defaults can be populated from configs and those values will appear in help.
-* [Newer Release Alerts](newer-release-alerts.md) to alert users when running an older verion of your application.
+* [Newer Release Alerts](Middleware/newer-release-alerts.md) to alert users when running an older verion of your application.
 * External dependencies Humanizr and FluentValidation have been extracted to nuget packages: CommandDotNet.NameCasing & CommandDotNet.FluentValidation.
 
 Several bugs were fixed along the way.
@@ -57,8 +56,8 @@ The following have been disabled by default and moved to middelware configuratio
 
 * Version option: `appRunner.UseVersionMiddleware()`
 * Prompting for missing arguments: `appRunner.UsePrompting(...)`
-* Name casing: `appRunner.UseNameCasing(...)` via CommandDotNet.NameCasing
-* Fluent validation: `appRunner.UseFluentValidation()` via CommandDotNet.FluentValidation nuget
+* Name casing: `appRunner.UseNameCasing(...)` via nuget: CommandDotNet.NameCasing
+* Fluent validation: `appRunner.UseFluentValidation()` via nuget: CommandDotNet.FluentValidation nuget
 
 ### Interceptor Methods
 

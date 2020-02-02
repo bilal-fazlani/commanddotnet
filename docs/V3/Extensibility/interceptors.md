@@ -53,7 +53,7 @@ Method name does *not* matter.  In our examples, we use `Interceptor`.
 
 Examples:
 
-* `public Task<int> MethodName(ExecutionDelegate next, CommandContext context)`
+* `public Task<int> MethodName(ExecutionDelegate next)`
 * `public Task<int> MethodName(InterceptorExecutionDelegate next)`
 
 
@@ -107,7 +107,9 @@ In addition to defining options, interceptor methods can define parameters of ty
 * IConsole
 * CancellationToken
 
-## Hooks for your commands
+## Recipes
+
+### Hooks for your commands
 
 Wrap `return next();` in try/catch/finally statements and use the interceptor as pre and post hooks for your commands.
 
@@ -130,7 +132,41 @@ Wrap `return next();` in try/catch/finally statements and use the interceptor as
     }
 ```
 
-## Hierarchy interaction
+### Convert to middleware
+
+Interceptor methods are effectively locally defined middleware methods. This makes it easy to start functionality as an interceptor and convert to middleware when appropriate.
+
+For example, the command hook pattern defined above could be converted to a middleware and used by all commands.
+
+``` c#
+public static class CommandHooksMiddlware
+{
+    public static AppRunner UseCommandHooks(this AppRunner appRunner)
+    {
+        return appRunner.Configure(c =>
+            c.UseMiddleware(Middleware, MiddlewareStages.PostBindValuesPreInvoke));
+    }
+
+    private static Task<int> Middleware(CommandContext commandContext, ExecutionDelegate next)
+    {
+        prehook();
+        try
+        {
+            return next(commandContext);
+        }
+        catch()
+        {
+            errorhook();
+        }
+        finally()
+        {
+            posthook();
+        }
+    }
+}
+```
+
+### Hierarchy interaction
 
 Interceptor methods will be run for all subcommands, including subcommands of subcommands.  If the interceptor should run only for subcommands defined in that class, follow this example to determine if the target command is for the same class instance as the current interceptor method.
 
