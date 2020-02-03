@@ -34,11 +34,12 @@ nav:
     - V3/getting-started.md
     - Defining Commands:
       - V3/DefiningCommands/argument-terminology.md
+      - V3/DefiningCommands/option-or-operand.md
       - V3/DefiningCommands/argument-arity.md
       - V3/DefiningCommands/argument-models.md
-      - V3/DefiningCommands/option-or-operand.md
       - V3/DefiningCommands/passwords.md
     - Extensibility:
+      - V3/Extensibility/help.md
       - V3/Extensibility/parameter-types.md
       - V3/Extensibility/parameter-resolvers.md
       - V3/Extensibility/middleware.md
