@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using CommandDotNet.Extensions;
 
@@ -39,7 +38,7 @@ namespace CommandDotNet.Help
             (_appSettings.AllowArgumentSeparator ? " [[--] <arg>...]" : null);
 
         protected virtual string AppName(Command command) =>
-            _appName ?? command.GetAppName(_appHelpSettings.UsageAppNameStyle);
+            _appName ?? command.GetAppName(_appHelpSettings);
 
         /// <summary>The current command and it's parents.  aka bread crumbs</summary>
         protected virtual string CommandPath(Command command) => command.GetPath();

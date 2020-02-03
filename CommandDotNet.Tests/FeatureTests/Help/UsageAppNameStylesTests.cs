@@ -12,17 +12,6 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         }
 
         [Fact]
-        public void AdaptiveStyleUsesGlobalToolStyle()
-        {
-            Verify(new Scenario<WithAppMetadataName>
-            {
-                Given = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.Adaptive } } },
-                WhenArgs = "-h",
-                Then = { ResultsContainsTexts = { "Usage: AppName" } }
-            });
-        }
-
-        [Fact]
         public void GlobalToolStyleUsesGlobalToolStyle()
         {
             Verify(new Scenario<WithAppMetadataName>
@@ -79,6 +68,17 @@ namespace CommandDotNet.Tests.FeatureTests.Help
                     ResultsContainsTexts = { $"Invalid configuration: {nameof(CommandAttribute)}.{nameof(CommandAttribute.Name)} is required " +
                                              $"for the root command when {nameof(UsageAppNameStyle)}.{nameof(UsageAppNameStyle.GlobalTool)} is specified." }
                 }
+            });
+        }
+
+        [Fact]
+        public void UsageAppNameSettingUsedWhenProvided()
+        {
+            Verify(new Scenario<WithAppMetadataName>
+            {
+                Given = { AppSettings = new AppSettings { Help = { UsageAppName = "WhatATool" } } },
+                WhenArgs = "-h",
+                Then = { ResultsContainsTexts = { "Usage: WhatATool" } }
             });
         }
 

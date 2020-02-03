@@ -7,12 +7,17 @@ namespace CommandDotNet.Help
 {
     internal static class HelpBuilderExtensions
     {
-        internal static string GetAppName(this Command command, UsageAppNameStyle usageAppNameStyle)
+        internal static string GetAppName(this Command command, AppHelpSettings appHelpSettings)
         {
-            switch (usageAppNameStyle)
+            if (!appHelpSettings.UsageAppName.IsNullOrEmpty())
+            {
+                return appHelpSettings.UsageAppName;
+            }
+
+            switch (appHelpSettings.UsageAppNameStyle)
             {
                 case UsageAppNameStyle.Adaptive:
-                    return GetAppNameAdaptive(command);
+                    return GetAppNameAdaptive();
                 case UsageAppNameStyle.DotNet:
                     return $"dotnet {GetAppFileName()}";
                 case UsageAppNameStyle.GlobalTool:
@@ -28,23 +33,12 @@ namespace CommandDotNet.Help
                 case UsageAppNameStyle.Executable:
                     return GetAppFileName();
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(UsageAppNameStyle), $"unknown style: {usageAppNameStyle}");
+                    throw new ArgumentOutOfRangeException(nameof(UsageAppNameStyle), $"unknown style: {appHelpSettings.UsageAppNameStyle}");
             }
         }
 
-        private static string GetAppNameAdaptive(Command command)
+        private static string GetAppNameAdaptive()
         {
-            var rootAppName = GetRootAppName(command);
-            if (rootAppName != null)
-            {
-                // https://github.com/bilal-fazlani/commanddotnet/issues/43
-                // CommandDotNet convention:
-                //   if root command has CommandAttribute.Name
-                //   assume tool will be used as dotnet Global Tool
-                //   and print usage accordingly
-                return rootAppName;
-            }
-
             string fileName = GetAppFileName();
             if (fileName != null)
             {

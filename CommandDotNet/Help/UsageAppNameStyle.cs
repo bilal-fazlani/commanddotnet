@@ -1,11 +1,10 @@
-﻿namespace CommandDotNet.Help
+﻿using System;
+
+namespace CommandDotNet.Help
 {
     public enum UsageAppNameStyle
     {
         /// <summary>
-        /// A combination of the other rules in this order:<br/>
-        /// <see cref="GlobalTool"/>
-        /// if the root command has a name specified in <see cref="CommandAttribute"/>,
         /// else <see cref="Executable"/> if the file extension is '.exe' <br/>
         /// else <see cref="DotNet"/>
         /// </summary>
@@ -15,6 +14,7 @@
         DotNet,
 
         /// <summary>"{rootCommand.CommandAttribute.Name}"</summary>
+        [Obsolete("configure via AppSettings.Help.UsageAppName instead")]
         GlobalTool,
 
         /// <summary>"{fileName}"</summary>

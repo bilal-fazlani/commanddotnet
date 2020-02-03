@@ -11,5 +11,10 @@
         /// <summary>Specify what AppName to use in the 'Usage:' example</summary>
         public UsageAppNameStyle UsageAppNameStyle { get; set; } = UsageAppNameStyle.Adaptive;
 
+        /// <summary>
+        /// The application name used in the Usage section of help documentation.<br/>
+        /// When specified, <see cref="UsageAppNameStyle"/> is ignored.
+        /// </summary>
+        public string UsageAppName { get; set; }
     }
 }

@@ -28,7 +28,7 @@ Commands:
   somecommand  cmd description
   SubApp       sub-app description
 
-Use ""SomeApp [command] --help"" for more information about a command.
+Use ""dotnet testhost.dll [command] --help"" for more information about a command.
 
 app extended help" }
             });
@@ -50,7 +50,7 @@ Commands:
   somecommand  cmd description
   SubApp       sub-app description
 
-Use ""SomeApp [command] --help"" for more information about a command.
+Use ""dotnet testhost.dll [command] --help"" for more information about a command.
 
 app extended help" }
             });
@@ -65,12 +65,12 @@ app extended help" }
                 WhenArgs = "SubApp -h",
                 Then = { Result = @"sub-app description
 
-Usage: SomeApp SubApp [command]
+Usage: dotnet testhost.dll SubApp [command]
 
 Commands:
   subdo
 
-Use ""SomeApp SubApp [command] --help"" for more information about a command.
+Use ""dotnet testhost.dll SubApp [command] --help"" for more information about a command.
 
 sub-app extended help" }
             });
@@ -85,13 +85,13 @@ sub-app extended help" }
                 WhenArgs = "SubApp -h",
                 Then = { Result = @"sub-app description
 
-Usage: SomeApp SubApp [command]
+Usage: dotnet testhost.dll SubApp [command]
 
 Commands:
 
   subdo
 
-Use ""SomeApp SubApp [command] --help"" for more information about a command.
+Use ""dotnet testhost.dll SubApp [command] --help"" for more information about a command.
 
 sub-app extended help" }
             });
@@ -106,7 +106,7 @@ sub-app extended help" }
                 WhenArgs = "somecommand -h",
                 Then = { Result = @"cmd description
 
-Usage: SomeApp somecommand [arguments]
+Usage: dotnet testhost.dll somecommand [arguments]
 
 Arguments:
   value
@@ -124,7 +124,7 @@ cmd extended help" }
                 WhenArgs = "somecommand -h",
                 Then = { Result = @"cmd description
 
-Usage: SomeApp somecommand [arguments]
+Usage: dotnet testhost.dll somecommand [arguments]
 
 Arguments:
 
