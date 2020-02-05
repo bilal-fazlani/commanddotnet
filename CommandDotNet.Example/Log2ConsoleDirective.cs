@@ -10,6 +10,10 @@ namespace CommandDotNet.Example
 {
     internal static class Log2ConsoleDirective
     {
+        /// <summary>
+        /// Output internal CommandDotNet logs to the console when user specifies 'log' or 'log:{level}'.<br/>
+        /// FYI: there aren't many logs at this time.
+        /// </summary>
         internal static AppRunner UseLog2ConsoleDirective(this AppRunner appRunner)
         {
             return appRunner.Configure(c =>

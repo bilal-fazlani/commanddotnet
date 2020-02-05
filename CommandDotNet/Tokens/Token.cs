@@ -4,9 +4,19 @@ namespace CommandDotNet.Tokens
 {
     public class Token
     {
+        /// <summary>
+        /// The raw value from the user input.
+        /// This will contain the punctuation used to denote option and argument names.
+        /// </summary>
         public string RawValue { get; }
+
+        /// <summary>Can be an Option name or an argument value</summary>
         public string Value { get; }
+
+        /// <summary>The <see cref="Tokens.TokenType"/></summary>
         public TokenType TokenType { get; }
+
+        /// <summary>When <see cref="TokenType"/> is <see cref="Tokens.TokenType.Option"/>, this will be populated.</summary>
         public OptionTokenType OptionTokenType { get; }
 
         public Token(

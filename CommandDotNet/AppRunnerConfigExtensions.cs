@@ -124,9 +124,14 @@ namespace CommandDotNet
         }
 
         /// <summary>Prefix a filepath with @ and it will be replaced by its contents during <see cref="MiddlewareStages.Tokenize"/></summary>
-        public static AppRunner UseResponseFiles(this AppRunner appRunner)
+        /// <param name="appRunner">The <see cref="AppRunner"/></param>
+        /// <param name="tokenTransformationOrder">
+        /// The order response files token transformation should be run in relation to other <see cref="TokenTransformation"/>s.<br/>
+        /// The default is 1. Change this if other transformations should be run before it.
+        /// </param>
+        public static AppRunner UseResponseFiles(this AppRunner appRunner, int tokenTransformationOrder = 1)
         {
-            return ExpandResponseFilesTransformation.UseResponseFiles(appRunner);
+            return ExpandResponseFilesTransformation.UseResponseFiles(appRunner, tokenTransformationOrder);
         }
 
         /// <summary>

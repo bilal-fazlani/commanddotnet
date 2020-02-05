@@ -6,9 +6,9 @@ namespace CommandDotNet.Tokens
 {
     internal static class ExpandResponseFilesTransformation
     {
-        internal static AppRunner UseResponseFiles(AppRunner appRunner)
+        internal static AppRunner UseResponseFiles(AppRunner appRunner, int order = 1)
         {
-            return appRunner.Configure(c => c.UseTokenTransformation("expand-response-files", 1, Transform));
+            return appRunner.Configure(c => c.UseTokenTransformation("expand-response-files", order, Transform));
         }
 
         private static TokenCollection Transform(CommandContext commandContext, TokenCollection tokenCollection)
