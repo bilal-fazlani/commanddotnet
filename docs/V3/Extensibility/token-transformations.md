@@ -47,3 +47,8 @@ OptionTokenType contains
 ## TokenCollections
 
 TokenCollections are an immutable collection of tokens with some convenience members to simplify transformations.
+
+!!! Tip
+    Use TokenCollection.Transform method to apply a func to tokens of specific types. 
+    This is an alternative to a foreach loop with a switch statement.
+    See the implementations linked above for examples.

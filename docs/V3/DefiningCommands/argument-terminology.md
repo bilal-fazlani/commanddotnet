@@ -1,6 +1,6 @@
-# Argument Terminology
+# Terminology
 
-Terminology for arguments is confusing. When should an argument be an option, switch, flag, argument or parameter. Should it be named or positional? Is an option always optional?
+Terminology for arguments can be confusing. When should an argument be an option, switch, flag, argument or parameter. Should it be named or positional? Is an option always optional?
 
 Part of the confusion is the overloaded nature of of the term `argument`, as explained in [this article](http://www.informit.com/articles/article.aspx?p=175771). Context determines what is considered an argument. 
 
