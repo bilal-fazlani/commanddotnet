@@ -43,7 +43,8 @@ nav:
       - V3/Extensibility/parameter-types.md
       - V3/Extensibility/parameter-resolvers.md
       - V3/Extensibility/middleware.md
-      - V3/Extensibility/interceptors.md
+      - V3/Extensibility/interceptors.md 
+      - V3/Extensibility/token-transformations.md
     - Middleware:
       - V3/Middleware/default-middleware.md
       - V3/Middleware/cancellation.md
