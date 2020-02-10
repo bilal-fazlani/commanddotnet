@@ -31,17 +31,20 @@ nav:
   - Version 3 (Preview):
     - Introduction: V3/index.md
     - V3/v3-changes.md
+    - V3/getting-started.md
     - Defining Commands:
       - V3/DefiningCommands/argument-terminology.md
+      - V3/DefiningCommands/option-or-operand.md
       - V3/DefiningCommands/argument-arity.md
       - V3/DefiningCommands/argument-models.md
-      - V3/DefiningCommands/option-or-operand.md
       - V3/DefiningCommands/passwords.md
     - Extensibility:
+      - V3/Extensibility/help.md
       - V3/Extensibility/parameter-types.md
       - V3/Extensibility/parameter-resolvers.md
       - V3/Extensibility/middleware.md
-      - V3/Extensibility/interceptors.md
+      - V3/Extensibility/interceptors.md 
+      - V3/Extensibility/token-transformations.md
     - Middleware:
       - V3/Middleware/default-middleware.md
       - V3/Middleware/cancellation.md

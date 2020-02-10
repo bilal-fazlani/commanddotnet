@@ -25,7 +25,7 @@ The architecture is now based around a [middleware pipeline](Extensibility/middl
 ## Summary of new features
 
 * [Response file](Middleware/response-files.md) support 
-* `HelpTextProvider` can be overridden to make targetted changes to a section of help.
+* [HelpTextProvider](Extensibility/help.md) can be overridden to make targetted changes to a section of help.
 * [Test tools](test-tools.md), helpful for end-to-end test and testing framework extensions, like middleware components.
 * [Parameter resolvers](Extensibility/parameter-resolvers.md).
 * [Ctrl+C support](Middleware/cancellation.md) with CancellationToken.
@@ -58,6 +58,8 @@ The following have been disabled by default and moved to middelware configuratio
 * Prompting for missing arguments: `appRunner.UsePrompting(...)`
 * Name casing: `appRunner.UseNameCasing(...)` via nuget: CommandDotNet.NameCasing
 * Fluent validation: `appRunner.UseFluentValidation()` via nuget: CommandDotNet.FluentValidation nuget
+
+* `AppSettings.Help.UsageAppNameStyle`: `UsageAppNameStyle.Adaptive` no longer defaults to `UsageAppNameStyle.Global`. Assign the global tool name to `AppSettings.Help.UsageAppName` instead.
 
 ### Interceptor Methods
 
