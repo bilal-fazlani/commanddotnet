@@ -59,7 +59,9 @@ Examples:
 
 ## Inherited options
 
-Inherited options provide a way to assign the interceptor option an an option of the executed subcommand.
+Inherited options provide a way to assign the interceptor option to the final executed subcommand.
+
+To the user, the option will appear as an option for executable subcommands instead of the defining command.
 
 Using the previous example, change `int radix` to `[Option(AssignToExecutableSubcommands = true)] int radix` 
 
@@ -68,6 +70,8 @@ Now in the shell:
 ``` bash
 dotnet calculator Add 1 2 --radix 2
 ```
+
+Notice `radix` is provided to the `Add` command instead of `calculator`
 
 ``` c#
 public class Calculator
