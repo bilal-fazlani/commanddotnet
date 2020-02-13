@@ -36,6 +36,7 @@ nav:
       - V3/DefiningCommands/argument-terminology.md
       - V3/DefiningCommands/commands.md
       - V3/DefiningCommands/subcommands.md
+      - V3/DefiningCommands/arguments.md
       - V3/DefiningCommands/option-or-operand.md
       - V3/DefiningCommands/argument-arity.md
       - V3/DefiningCommands/argument-models.md
