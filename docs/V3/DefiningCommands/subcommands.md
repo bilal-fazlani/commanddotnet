@@ -6,12 +6,16 @@ You can nest commands. Let's take `git` for example
 
 Let's mimic the same behavior using CommandDotNet:
 
+## Subcommand as a property
+
 ```c#
 [Command(Description = "Fake git application")]
 public class Git
 {
+    // Properties decorated with the [SubCommand] attribute
+    // will be registered as subcommands.
     [SubCommand]
-    public Stash Stash {get;set;} // Stash class is saved in a seperate file
+    public Stash Stash {get;set;}
 
     [Command(Description = "Commits all staged changes")]
     public void Commit([Option(ShortName = "m")]string commitMessage)
@@ -19,7 +23,8 @@ public class Git
         Console.WriteLine("Commit successful");
     }
 }
-
+```
+```c#
 [Command(Description = "Stashes all changes when executed without any arguments")]
 public class Stash
 {
@@ -42,8 +47,9 @@ public class Stash
     }
 }
 ```
+Notice the `Stash` property decorated with the `[SubCommand]` attribute.
 
-Here's how the help looks like now:
+The help will generate as:
 
 ```bash
 Fake git application
@@ -101,8 +107,10 @@ public class Git
         Console.WriteLine("Commit successful");
     }
 
-    [Command(Description = "Stashes all changes when executed without any arguments")]
+    // Nested classes decorated with the [SubCommand] attribute
+    // will also be registered as subcommands.
     [SubCommand]
+    [Command(Description = "Stashes all changes when executed without any arguments")]
     public class Stash
     {
         [DefaultMethod]

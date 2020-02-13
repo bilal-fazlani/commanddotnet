@@ -2,7 +2,7 @@
 
 Commands are be defined by methods and classes.
 
-Let's take our calculator example
+Using our calculator example...
 
 ```c#
 public class Calculator
@@ -27,18 +27,18 @@ class Program
 }
 ```
 
-`Calculator` is the root command and is not directly referenced in the terminal.
+__Calculator__ is the root command and is not directly referenced in the terminal.
 
-`Add` and `Subtract` are the commands. 
+__Add__ and __Subtract__ are the commands. 
 
 Command methods must:
 
 * be `public`
 * return `void`, `int`, `Task` or `Task<int>`
 
-Command methods can be async.
+Command methods may be async.
 
-When the return type is `int` the value is used as a the exit code.
+When the return type is `int` the value is used as the exit code.
 
 ## Command Attribute
 
