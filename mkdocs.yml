@@ -45,7 +45,6 @@ nav:
       - V3/DefiningCommands/passwords.md
     - Extensibility:
       - V3/Extensibility/help.md
-      - V3/Extensibility/directives.md
       - V3/Extensibility/parameter-types.md
       - V3/Extensibility/parameter-resolvers.md
       - V3/Extensibility/middleware.md
@@ -62,8 +61,8 @@ nav:
       - V3/Middleware/response-files.md
       #- V3/Middleware/version.md
       - V3/Middleware/newer-release-alerts.md
-    #- Extras
-      #- V3/Extras/directives.md
+    - Extras:
+      - V3/Extras/directives.md
       #- V3/Extras/exceptions.md
       #- V3/Extras/settings.md
     - V3/test-tools.md

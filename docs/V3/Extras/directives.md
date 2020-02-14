@@ -71,3 +71,12 @@ $ dotnet example.dll [parse:verbose] LaunchBigRocket mars -c aaron earth -c alex
 >>> no changes after: expand-clubbed-flags
 >>> no changes after: split-option-assignments
 ```
+
+## Custom directives
+
+Directives are middleware components.  
+See the [Debug](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet/Directives/DebugDirective.cs) 
+and [Parse](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet/Directives/ParseDirective.cs) directives
+for examples. 
+
+The presence of a directive is checked with `commandContext.Tokens.TryGetDirective("debug", out _))`.
