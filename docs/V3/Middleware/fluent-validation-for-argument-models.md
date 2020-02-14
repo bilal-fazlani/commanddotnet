@@ -2,8 +2,11 @@
 
 You can use [FluentValidation](https://github.com/JeremySkinner/FluentValidation) with this library to validate [argument models](../DefiningCommands/argument-models.md).
 
-Here's an example,
+## TLDR, How to enable 
+1. Add nuget package [FluentValidation](https://www.nuget.org/packages/CommandDotNet.FluentValidation)
+1. Enable the feature with `appRunner.UseFluentValidation()`.
 
+## Example
 ```c#
 class Program
 {

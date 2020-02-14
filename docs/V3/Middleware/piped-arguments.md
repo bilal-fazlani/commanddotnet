@@ -1,5 +1,8 @@
 # Piped arguments
 
+## TLDR, How to enable 
+Enable the feature with `appRunner.AppendPipedInputToOperandList()` or `appRunner.UseDefaultMiddleware()`.
+
 ## What is piping?
 Piping is a way to pass the console output of a command to another command.
 
@@ -20,8 +23,6 @@ In .net console apps, you can check piped input using `Console.IsInputRedirected
 Or... use the `AppendPipedInputToOperandList` middleware
 
 ## Using the middleware
-
-Enable the feature with `appRunner.AppendPipedInputToOperandList()`.
 
 Every command is allowed a single operand list. If one is defined and if piped input is available, it will be appended to this list. If the user pipes input and also specifies values for the operand, the two sources will be concatenated with piped input at the end.
 
@@ -57,9 +58,13 @@ public class Users
 }
 ```
 
-!!!tip
+!!!warn
     All output to the console is piped to the next command. Be sure the command generating the piped output does not include additional logging information.
 
 You can experiment with this using our [pipes example command](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.Example/Commands/Pipes.cs).
+
+!!!tip
+    When the collection type is streamable, like `IEnumerable<T>`, the values will be streamed to the enumerable as they're received from the publishing program,
+    otherwise the command will have to wait until the publishing program is complete before it can begin processing.
 
  
