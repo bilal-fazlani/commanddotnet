@@ -37,9 +37,11 @@ nav:
       - V3/DefiningCommands/commands.md
       - V3/DefiningCommands/subcommands.md
       - V3/DefiningCommands/arguments.md
-      - V3/DefiningCommands/option-or-operand.md
-      - V3/DefiningCommands/argument-arity.md
+      - V3/DefiningCommands/argument-collections.md
+      - V3/DefiningCommands/argument-types.md
       - V3/DefiningCommands/argument-models.md
+      - V3/DefiningCommands/argument-arity.md
+      - V3/DefiningCommands/option-or-operand.md
       - V3/DefiningCommands/passwords.md
     - Extensibility:
       - V3/Extensibility/help.md
@@ -48,14 +50,22 @@ nav:
       - V3/Extensibility/middleware.md
       - V3/Extensibility/interceptors.md 
       - V3/Extensibility/token-transformations.md
+      #- V3/Extensibility/directives.md
     - Middleware:
       - V3/Middleware/default-middleware.md
       - V3/Middleware/cancellation.md
+      #- V3/Middleware/dependency-injection.md
       - V3/Middleware/fluent-validation-for-argument-models.md
+      #- V3/Middleware/name-casing.md
       - V3/Middleware/piped-arguments.md
       - V3/Middleware/prompting.md
       - V3/Middleware/response-files.md
+      #- V3/Middleware/version.md
       - V3/Middleware/newer-release-alerts.md
+    #- Extras
+      #- V3/Extras/directives.md
+      #- V3/Extras/exceptions.md
+      #- V3/Extras/settings.md
     - V3/test-tools.md
 theme:
   feature:

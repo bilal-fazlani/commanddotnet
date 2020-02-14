@@ -107,4 +107,3 @@ When assigning option values, the following are the same
 * `--time tomorrow`
 * `--time=tomorrow`
 * `--time:tomorrow`
-    
