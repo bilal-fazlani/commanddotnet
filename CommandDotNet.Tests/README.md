@@ -15,18 +15,47 @@ The second pattern is run an instance of the AppRunner using `AppRunner.RunInMem
     {
         public int ExitCode { get; }
 
-        // the console output   
-        public string ConsoleOut { get; }
-        public string ConsoleError { get; }
+        /// <summary>
+        /// The combination of <see cref="Console.Error"/> and <see cref="Console.Out"/>
+        /// in the order they were written from the app.<br/>
+        /// This is how the output would appear in the shell.
+        /// </summary>
         public string ConsoleOutAndError { get; }
+
+        /// <summary>The error output only</summary>
+        public string ConsoleOut { get; }
+
+        /// <summary>The standard output only</summary>
+        public string ConsoleError { get; }
         
         // described in the scenario readme.md from above
+        /// <summary>
+        /// <see cref="TestOutputs"/> captured in the command class.
+        /// The command class must have a public <see cref="TestOutputs"/> property for this to work.<br/>
+        /// This is a convenience for testing how inputs are mapped into the command method parameters.<br/>
+        /// Useful for testing middleware components, not the business logic of your commands.
+        /// </summary>
         public TestOutputs TestOutputs { get; }
 
-        // helpers that normalize the help output which 
-        // can contain extra whitespace at the end of lines.
+        /// <summary>
+        /// Help generation leaves extra trailing spaces that are hard to account for in test verification.
+        /// This method removes trailing white space from each line and standardizes Environment.NewLine
+        /// for all line endings
+        /// </summary>
         public void OutputShouldBe(string expected){...}
+
+        /// <summary>
+        /// Help generation leaves extra trailing spaces that are hard to account for in test verification.
+        /// This method removes trailing white space from each line and standardizes Environment.NewLine
+        /// for all line endings
+        /// </summary>
         public bool OutputContains(string expected){...}
+
+        /// <summary>
+        /// Help generation leaves extra trailing spaces that are hard to account for in test verification.
+        /// This method removes trailing white space from each line and standardizes Environment.NewLine
+        /// for all line endings
+        /// </summary>
         public bool OutputNotContains(string expected){...}
     }
 ```
