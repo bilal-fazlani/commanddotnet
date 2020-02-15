@@ -1,24 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Example.DocExamples
 {
     public class RocketLauncher
     {
-        public void LaunchRocket1([Operand(
-            Name = "planet",
-            Description = "Name of the planet you wish the rocket to go")] string planetName)
+        public void LaunchRocket(
+            [Operand(Name = "planet", Description = "Name of the planet you wish the rocket to go")]
+            string planetName,
+            [Option(LongName = "turbo", ShortName = "t", Description = "Name of the planet you wish the rocket to go")]
+            bool turbo,
+            [Option(ShortName = "a", Description = "Abort the launch before takeoff", BooleanMode = BooleanMode.Explicit)] 
+            bool abort)
         { }
 
-        public void LaunchRocket2([Option(
-            LongName = "planet",
-            ShortName = "p",
-            Description = "Name of the planet you wish the rocket to go")] string planetName)
-        { }
-
-        public void LaunchRocket3([Option(ShortName = "p")] List<string> planets)
-        { }
-
-        public void LaunchRocket4(List<string> planets)
-        { }
+        public void LaunchBigRocket(
+            IEnumerable<string> planets, 
+            [Option(ShortName = "c")] string[] crew)
+        {
+            Console.Out.WriteLine($"planets: {string.Join(",", planets)}");
+            Console.Out.WriteLine($"crew: {string.Join(",", crew)}");
+        }
     }
 }

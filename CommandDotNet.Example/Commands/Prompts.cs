@@ -49,7 +49,7 @@ namespace CommandDotNet.Example.Commands
         }
 
         [Command(Description = "Echos the given text, demonstrating prompting for a single item")]
-        public void Echo(IConsole console, string text)
+        public void Echo(IConsole console, [Operand(Description = "the text to echo")]string text)
         {
             console.Out.WriteLine(text);
         }
