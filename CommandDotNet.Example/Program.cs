@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using CommandDotNet.Example.DocExamples;
 using CommandDotNet.FluentValidation;
 using CommandDotNet.NameCasing;
 using CommandDotNet.NewerReleasesAlerts;
@@ -9,7 +10,7 @@ namespace CommandDotNet.Example
     {
         static int Main(string[] args)
         {
-            return new AppRunner<Examples>()
+            return new AppRunner<RocketLauncher>()
                 .UseDefaultMiddleware()
                 .UseLog2ConsoleDirective()
                 .UseNameCasing(Case.KebabCase)

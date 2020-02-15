@@ -140,11 +140,42 @@ Arguments:
                 .VerifyScenario(TestOutputHelper, scenario);
         }
 
+        [Fact]
+        public void Exec_WhenInvalidValidator_PrintsError()
+        {
+            var scenario = new Scenario
+            {
+                WhenArgs = "InvalidSave",
+                Then =
+                {
+                    ExitCode = 1,
+                    ResultsContainsTexts =
+                    {
+                        @"CommandDotNet.FluentValidation.InvalidValidatorException: Could not create instance of InvalidPersonValidator. Please ensure it's injected via IoC or has a default constructor.
+This exception could also occur if default constructor threw an exception ---> System.MissingMethodException: No parameterless constructor defined for this object.",
+                        " ---> System.MissingMethodException: No parameterless constructor defined for this object." // assert stack trace is printed
+                    }
+                }
+            };
+
+            new AppRunner<App>()
+                .UseFluentValidation()
+                .UseDependencyResolver(
+                    new TestDependencyResolver(),
+                    useTryResolveForCommandClass: true)
+                .VerifyScenario(TestOutputHelper, scenario);
+        }
+
         public class App
         {
             public TestOutputs TestOutputs { get; set; }
 
             public void Save(Person person)
+            {
+                TestOutputs.Capture(person);
+            }
+
+            public void InvalidSave(InvalidPerson person)
             {
                 TestOutputs.Capture(person);
             }
@@ -161,6 +192,22 @@ Arguments:
         public class PersonValidator : AbstractValidator<Person>
         {
             public PersonValidator()
+            {
+                RuleFor(x => x.Id).GreaterThan(0);
+                RuleFor(x => x.Name).NotEmpty();
+                RuleFor(x => x.Email).NotEmpty().EmailAddress();
+            }
+        }
+
+        [Validator(typeof(InvalidPersonValidator))]
+        public class InvalidPerson : IArgumentModel
+        {
+            public int Id { get; set; }
+        }
+
+        public class InvalidPersonValidator : AbstractValidator<Person>
+        {
+            public InvalidPersonValidator(bool nonDefaultCtor)
             {
                 RuleFor(x => x.Id).GreaterThan(0);
                 RuleFor(x => x.Name).NotEmpty();

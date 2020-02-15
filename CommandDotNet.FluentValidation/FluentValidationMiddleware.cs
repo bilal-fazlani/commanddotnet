@@ -9,10 +9,6 @@ namespace CommandDotNet.FluentValidation
         /// <summary>Enables FluentValidation for <see cref="IArgumentModel"/>s</summary>
         public static AppRunner UseFluentValidation(this AppRunner appRunner)
         {
-            // TODO: move FluentValidation into a separate repo & nuget package?
-            //       there are other ways to do validation that could also
-            //       be applied to parameters
-
             return appRunner.Configure(c =>
                 c.UseMiddleware(Middleware, MiddlewareStages.PostBindValuesPreInvoke));
         }
@@ -25,26 +21,35 @@ namespace CommandDotNet.FluentValidation
                 .All
                 .SelectMany(i => i.Invocation.ParameterValues.OfType<IArgumentModel>());
 
-            var failureResults = paramValues
-                .Select(model => new { model, result = modelValidator.ValidateModel(model) })
-                .Where(v => v.result != null && !v.result.IsValid)
-                .ToList();
-
-            if (failureResults.Any())
+            try
             {
-                var console = commandContext.Console;
-                failureResults.ForEach(f =>
-                {
-                    console.Error.WriteLine($"'{f.model.GetType().Name}' is invalid");
-                    foreach (var error in f.result.Errors)
-                    {
-                        console.Error.WriteLine($"  {error.ErrorMessage}");
-                    }
-                });
-                console.Error.WriteLine();
+                var failureResults = paramValues
+                    .Select(model => new { model, result = modelValidator.ValidateModel(model) })
+                    .Where(v => v.result != null && !v.result.IsValid)
+                    .ToList();
 
-                return Task.FromResult(2);
+                if (failureResults.Any())
+                {
+                    var console = commandContext.Console;
+                    failureResults.ForEach(f =>
+                    {
+                        console.Error.WriteLine($"'{f.model.GetType().Name}' is invalid");
+                        foreach (var error in f.result.Errors)
+                        {
+                            console.Error.WriteLine($"  {error.ErrorMessage}");
+                        }
+                    });
+                    console.Error.WriteLine();
+
+                    return Task.FromResult(2);
+                }
             }
+            catch (InvalidValidatorException e)
+            {
+                commandContext.Console.Error.WriteLine(e.ToString());
+                return Task.FromResult(1);
+            }
+
             return next(commandContext);
         }
     }

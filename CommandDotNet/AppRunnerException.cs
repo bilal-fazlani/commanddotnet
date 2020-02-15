@@ -2,7 +2,7 @@
 
 namespace CommandDotNet
 {
-    public class AppRunnerException : Exception
+    internal class AppRunnerException : Exception
     {
         public AppRunnerException(string message) : base(message)
         {
