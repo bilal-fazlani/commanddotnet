@@ -51,6 +51,7 @@ dddd
 
 ## Included test tools
 
+The framework includes the following tools that can be used independently of the BDD Framework.
 
 ### [PromptResponder](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.TestTools/Prompts/PromptResponder.cs)
 
