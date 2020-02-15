@@ -53,7 +53,7 @@ nav:
     - Middleware:
       - V3/Middleware/default-middleware.md
       - V3/Middleware/cancellation.md
-      #- V3/Middleware/dependency-injection.md
+      - V3/Middleware/dependency-injection.md
       - V3/Middleware/fluent-validation-for-argument-models.md
       #- V3/Middleware/name-casing.md
       - V3/Middleware/piped-arguments.md
