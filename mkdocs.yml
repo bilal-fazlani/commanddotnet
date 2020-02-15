@@ -63,7 +63,7 @@ nav:
       - V3/Middleware/newer-release-alerts.md
     - Extras:
       - V3/Extras/directives.md
-      #- V3/Extras/exceptions.md
+      - V3/Extras/exceptions.md
       #- V3/Extras/settings.md
     - V3/test-tools.md
 theme:

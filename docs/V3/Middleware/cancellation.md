@@ -19,10 +19,11 @@ Traditionally, this is solved with a following steps:
 When enabled, the framework will:
 
 * set the `CommandContext.AppConfig.CancellationToken` with a new token.
+* register a [parameter resolver](../Extensibility/parameter-resolvers.md) for `CancellationToken`
 * cancel the token on
-  * `Console.CancelKepPress`
-  * `AppDomain.CurrentDomain.ProcessExit`
-  * `AppDomain.CurrentDomain.UnhandledException` when `UnhandledExceptionEventArgs.IsTerminating` == true
+    * `Console.CancelKepPress`
+    * `AppDomain.CurrentDomain.ProcessExit`
+    * `AppDomain.CurrentDomain.UnhandledException` when `UnhandledExceptionEventArgs.IsTerminating` == true
 
 The framework checks the cancellation token before every step in the pipeline.
 
