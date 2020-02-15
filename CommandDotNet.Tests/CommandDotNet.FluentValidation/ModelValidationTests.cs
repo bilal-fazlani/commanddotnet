@@ -1,3 +1,4 @@
+using CommandDotNet.Execution;
 using CommandDotNet.FluentValidation;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
@@ -80,7 +81,7 @@ Arguments:
                 .UseFluentValidation()
                 .UseDependencyResolver(
                     new TestDependencyResolver{new PersonValidator()}, 
-                    useTryResolveForCommandClass: true)
+                    commandClassResolveStrategy: ResolveStrategy.TryResolve)
                 .VerifyScenario(TestOutputHelper, scenario);
         }
 
@@ -96,8 +97,8 @@ Arguments:
             new AppRunner<App>()
                 .UseFluentValidation()
                 .UseDependencyResolver(
-                    new TestDependencyResolver { new PersonValidator() }, 
-                    useTryResolveForCommandClass: true)
+                    new TestDependencyResolver { new PersonValidator() },
+                    commandClassResolveStrategy: ResolveStrategy.TryResolve)
                 .VerifyScenario(TestOutputHelper, scenario);
         }
 
@@ -135,8 +136,8 @@ Arguments:
             new AppRunner<App>()
                 .UseFluentValidation()
                 .UseDependencyResolver(
-                    new TestDependencyResolver(), 
-                    useTryResolveForCommandClass: true)
+                    new TestDependencyResolver(),
+                    commandClassResolveStrategy: ResolveStrategy.TryResolve)
                 .VerifyScenario(TestOutputHelper, scenario);
         }
 
@@ -162,7 +163,7 @@ This exception could also occur if default constructor threw an exception ---> S
                 .UseFluentValidation()
                 .UseDependencyResolver(
                     new TestDependencyResolver(),
-                    useTryResolveForCommandClass: true)
+                    commandClassResolveStrategy: ResolveStrategy.TryResolve)
                 .VerifyScenario(TestOutputHelper, scenario);
         }
 

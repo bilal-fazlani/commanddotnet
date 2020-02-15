@@ -71,17 +71,12 @@ namespace CommandDotNet
         /// <summary>Use the <see cref="IDependencyResolver"/> to create the command classes.</summary>
         /// <param name="appRunner">the <see cref="AppRunner"/> instance</param>
         /// <param name="dependencyResolver">the <see cref="IDependencyResolver"/> to use</param>
-        /// <param name="useResolveForArgumentModel">
-        /// <see cref="IDependencyResolver.TryResolve"/> is the default to resolve <see cref="IArgumentModel"/>s.
-        /// Set this to true to use <see cref="IDependencyResolver.Resolve"/>.
-        /// If Resolve is used and returns null, this framework will attempt to
-        /// instantiate an instance.
+        /// <param name="runInScope">if provided, the scope will be created at the beginning of the run and disposed at the end</param>
+        /// <param name="argumentModelResolveStrategy">
+        /// the <see cref="ResolveStrategy"/> used to resolve <see cref="IArgumentModel"/>s.
         /// </param>
-        /// <param name="useTryResolveForCommandClass">
-        /// <see cref="IDependencyResolver.Resolve"/> is the default to resolve command classes.
-        /// Set this to true to use <see cref="IDependencyResolver.TryResolve"/>.
-        /// If Resolve is used and returns null, this framework will attempt to
-        /// instantiate an instance.
+        /// <param name="commandClassResolveStrategy">
+        /// the <see cref="ResolveStrategy"/> used to resolve command classes.
         /// </param>
         /// <param name="useLegacyInjectDependenciesAttribute"> 
         /// when true, resolve instances for properties marked with [InjectProperty].
@@ -90,12 +85,29 @@ namespace CommandDotNet
         public static AppRunner UseDependencyResolver(
             this AppRunner appRunner, 
             IDependencyResolver dependencyResolver,
-            bool useResolveForArgumentModel = false,
-            bool useTryResolveForCommandClass = false,
+            Func<CommandContext, IDisposable> runInScope = null,
+            ResolveStrategy argumentModelResolveStrategy = ResolveStrategy.TryResolve,
+            ResolveStrategy commandClassResolveStrategy = ResolveStrategy.Resolve,
             bool useLegacyInjectDependenciesAttribute = false)
         {
-            return DependencyResolverMiddleware.UseDependencyResolver(appRunner, dependencyResolver, 
-                useResolveForArgumentModel, useTryResolveForCommandClass, useLegacyInjectDependenciesAttribute);
+            DependencyResolverMiddleware.UseDependencyResolver(appRunner, dependencyResolver,
+                argumentModelResolveStrategy, commandClassResolveStrategy, useLegacyInjectDependenciesAttribute);
+
+            if (runInScope != null)
+            {
+                appRunner.Configure(b =>
+                {
+                    b.UseMiddleware((context, next) =>
+                        {
+                            using (runInScope(context))
+                            {
+                                return next(context);
+                            }
+                        }, MiddlewareStages.PreTokenize, int.MinValue + 10);
+                });
+            }
+
+            return appRunner;
         }
 
         /// <summary>

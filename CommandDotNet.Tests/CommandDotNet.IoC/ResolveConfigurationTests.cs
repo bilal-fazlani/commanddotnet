@@ -1,4 +1,5 @@
 using System;
+using CommandDotNet.Execution;
 using CommandDotNet.TestTools;
 using FluentAssertions;
 using Xunit;
@@ -29,7 +30,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         public void CommandClass_CanConfigureToUse_TryResolve()
         {
             new AppRunner<App>()
-                .UseDependencyResolver(new TestDependencyResolver(), useTryResolveForCommandClass: true)
+                .UseDependencyResolver(new TestDependencyResolver(), commandClassResolveStrategy: ResolveStrategy.TryResolve)
                 .RunInMem("Do", _testOutputHelper)
                 .ExitCode.Should().Be(0);
         }
@@ -47,7 +48,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         public void ArgumentModel_CanConfigureToUse_Resolve()
         {
             Assert.Throws<Exception>(() => new AppRunner<App>()
-                    .UseDependencyResolver(new TestDependencyResolver { new App() }, useResolveForArgumentModel: true)
+                    .UseDependencyResolver(new TestDependencyResolver { new App() }, argumentModelResolveStrategy: ResolveStrategy.Resolve)
                     .Run(new[] { "Do" }))
                 .Message.Should().Contain(
                     "Dependency not registered: CommandDotNet.Tests.CommandDotNet.IoC.ResolveConfigurationTests+ArgModel");

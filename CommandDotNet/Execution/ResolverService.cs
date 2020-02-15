@@ -8,8 +8,8 @@ namespace CommandDotNet.Execution
 {
     internal class ResolverService
     {
-        internal bool UseResolveForArgumentModel { get; set; }
-        internal bool UseTryResolveForCommandClass { get; set; }
+        internal ResolveStrategy ArgumentModelResolveStrategy { get; set; }
+        internal ResolveStrategy CommandClassResolveStrategy { get; set; }
         internal IDependencyResolver BackingResolver { private get; set; }
 
         internal object ResolveArgumentModel(Type modelType)
@@ -20,7 +20,7 @@ namespace CommandDotNet.Execution
             // other items in the scope or to load values
             // via the container, perhaps from configuration
             // sources.
-            return ConditionalTryResolve(modelType, out var item, !UseResolveForArgumentModel)
+            return ConditionalTryResolve(modelType, out var item, ArgumentModelResolveStrategy)
                 ? item
                 : Activator.CreateInstance(modelType);
         }
@@ -30,7 +30,7 @@ namespace CommandDotNet.Execution
             // Default uses Resolve so the container can throw an exception if the class isn't registered.
             // if null is returned, then the container gives consent for other the class to
             // be created by this framework. 
-            if (ConditionalTryResolve(classType, out var item, UseTryResolveForCommandClass))
+            if (ConditionalTryResolve(classType, out var item, CommandClassResolveStrategy))
             {
                 return item;
             }
@@ -73,7 +73,7 @@ namespace CommandDotNet.Execution
             commandContext.Services.Get<Disposables>()?.Items.ForEach(i => i.Dispose());
         }
 
-        private bool ConditionalTryResolve(Type type, out object item, bool useTry)
+        private bool ConditionalTryResolve(Type type, out object item, ResolveStrategy resolveStrategy)
         {
             if (BackingResolver == null)
             {
@@ -81,7 +81,7 @@ namespace CommandDotNet.Execution
                 return false;
             }
 
-            if (useTry)
+            if (resolveStrategy == ResolveStrategy.TryResolve)
             {
                 return BackingResolver.TryResolve(type, out item);
             }

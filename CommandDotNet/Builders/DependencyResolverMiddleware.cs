@@ -8,8 +8,8 @@ namespace CommandDotNet.Builders
     internal static class DependencyResolverMiddleware
     {
         internal static AppRunner UseDependencyResolver(AppRunner appRunner, IDependencyResolver dependencyResolver,
-            bool useResolveForArgumentModel,
-            bool useTryResolveForCommandClass,
+            ResolveStrategy argumentModelResolveStrategy,
+            ResolveStrategy commandClassResolveStrategy,
             bool useLegacyInjectDependenciesAttribute)
         {
             return appRunner.Configure(c =>
@@ -17,8 +17,8 @@ namespace CommandDotNet.Builders
                 c.DependencyResolver = dependencyResolver;
                 c.Services.Add(new ResolverService
                 {
-                    UseResolveForArgumentModel = useResolveForArgumentModel,
-                    UseTryResolveForCommandClass = useTryResolveForCommandClass
+                    ArgumentModelResolveStrategy = argumentModelResolveStrategy,
+                    CommandClassResolveStrategy = commandClassResolveStrategy
                 });
                 if (useLegacyInjectDependenciesAttribute)
                 {
