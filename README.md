@@ -5,6 +5,7 @@
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/CommandDotNet.svg)](https://www.nuget.org/packages/CommandDotNet)  [![NuGet](https://img.shields.io/nuget/dt/CommandDotNet.svg)](https://www.nuget.org/packages/CommandDotNet)
 [![Build Status](https://travis-ci.com/bilal-fazlani/commanddotnet.svg?branch=master)](https://travis-ci.com/bilal-fazlani/commanddotnet)
 [![GitHub last commit](https://img.shields.io/github/last-commit/bilal-fazlani/CommandDotNet.svg)]()
+![Discord](https://img.shields.io/discord/678568687556493322?label=Discord%20Chat)
 
 ---
 
@@ -23,3 +24,7 @@ Special thanks to [Drew Burlingame](https://github.com/drewburlingame) for conti
 ## Documentation
 
 https://bilal-fazlani.github.io/commanddotnet
+
+## Chat
+
+![Discord](https://img.shields.io/discord/678568687556493322?label=Discord%20Chat&style=for-the-badge)
