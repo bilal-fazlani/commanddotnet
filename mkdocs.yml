@@ -106,6 +106,9 @@ markdown_extensions:
 plugins:
   - search
   - git-revision-date-localized
+  - redirects:
+      redirect_maps:
+        'index.md': 'V2/index.md'
 
 # Customization
 extra:
