@@ -1,3 +1,5 @@
 FROM squidfunk/mkdocs-material
 
-RUN pip3 install mkdocs-git-revision-date-localized-plugin
+COPY requirements.txt ./
+
+RUN pip3 install -r requirements.txt
