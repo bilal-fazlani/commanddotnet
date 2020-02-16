@@ -1,1 +1,1 @@
-redirect: /V2
+redirect: V2
