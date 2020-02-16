@@ -1,4 +1,4 @@
-You can use [FluentValidation](https://github.com/JeremySkinner/FluentValidation) with this library to validate [argument models](argument-models.md).
+You can use [FluentValidation](https://github.com/JeremySkinner/FluentValidation) with this library to validate [argument models](./argument-models.md).
 
 Here's an example,
 

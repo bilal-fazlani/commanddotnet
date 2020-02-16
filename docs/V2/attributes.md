@@ -29,7 +29,7 @@ public void Subtract(int value1, int value2)
 
 `[SubCommand]` attribute indicates that targeted property is a SubCommand.
 
-See [Nesting commands](#nesting-commands) for examples
+See [Nesting commands](./nesting-commands.md) for examples
 
 ### Argument
 

@@ -6,28 +6,28 @@ site_url: https://bilal-fazlani.github.io/commanddotnet
 
 nav:
   - Current Version:
-    - Introduction: index.md
-    - Quick Start: quick-start.md
+    - Introduction: V2/index.md
+    - Quick Start: V2/quick-start.md
     - Defining Commands:
-      - Parameters: parameters.md
-      - Attributes: attributes.md
-      - Constructors: constructors.md
-      - Default method: default-method.md
-      - Default values: default-values.md
-      - Collections: collections.md
-      - Argument Models: argument-models.md
-      - Async methods: async-methods.md
-      - Custom return codes: custom-return-codes.md
-      - Nesting commands: nesting-commands.md
-      - Exceptions: exceptions.md
+      - Parameters: V2/parameters.md
+      - Attributes: V2/attributes.md
+      - Constructors: V2/constructors.md
+      - Default method: V2/default-method.md
+      - Default values: V2/default-values.md
+      - Collections: V2/collections.md
+      - Argument Models: V2/argument-models.md
+      - Async methods: V2/async-methods.md
+      - Custom return codes: V2/custom-return-codes.md
+      - Nesting commands: V2/nesting-commands.md
+      - Exceptions: V2/exceptions.md
     - Extras:
-      - directives.md
-      - Fluent validation for parameters: fluent-validation-for-argument-models.md
-      - Settings: settings.md
+      - V2/directives.md
+      - Fluent validation for parameters: V2/fluent-validation-for-argument-models.md
+      - Settings: V2/settings.md
     - Extensibility:
-      - Dependency Injection: dependency-injection.md
-      - Parameter types: parameter-types.md
-      - Custom interceptors: custom-interceptors.md
+      - Dependency Injection: V2/dependency-injection.md
+      - Parameter types: V2/parameter-types.md
+      - Custom interceptors: V2/custom-interceptors.md
   - Version 3 (Preview):
     - Introduction: V3/index.md
     - V3/v3-changes.md
@@ -64,7 +64,6 @@ nav:
     - Extras:
       - V3/Extras/directives.md
       - V3/Extras/exceptions.md
-      #- V3/Extras/settings.md
     - V3/test-tools.md
 theme:
   feature:

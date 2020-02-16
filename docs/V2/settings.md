@@ -106,7 +106,7 @@ Use "dotnet example.dll [command] --help" for more information about a command.
 
 ### Boolean mode
 
-In this library, there are two ways to parse boolean [Options](#options)
+In this library, there are two ways to parse boolean [Options](./parameters.md#options)
 
 !!! note
     Boolean mod is applicable only for `Options` and not for `Arguments` 
@@ -138,9 +138,9 @@ When you check the help of a command, you if you see `Flag` for a parameter, it 
 
 ##### Flag clubbing
 
-Clubbing of one letter [options](#options) is supported. For example,
+Clubbing of one letter [options](./parameters.md#options) is supported. For example,
 
-If a command has multiple [boolean flags](#boolean-mode) [options](#options) like:
+If a command has multiple [boolean flags](#boolean-mode) [options](./parameters.md#options) like:
 
 ```c#
 public void Print([Option(ShortName="c")]bool qwerty, bool e, bool x){ }
