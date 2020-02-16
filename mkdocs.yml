@@ -30,7 +30,7 @@ nav:
       - Custom interceptors: V2/custom-interceptors.md
   - Version 3 (Preview):
     - Introduction: V3/index.md
-    - V3/v3-changes.md
+    - V3/whats-new-in-v3.md
     - V3/getting-started.md
     - Defining Commands:
       - V3/DefiningCommands/argument-terminology.md

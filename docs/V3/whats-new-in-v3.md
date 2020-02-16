@@ -1,6 +1,6 @@
-# Changes
+# What's new in version 3
 
-v3 is a significant rewrite of CommandDotNet.
+Version 3 is a significant rewrite of CommandDotNet version 2.
 
 The framework has remained mostly backward compatible for basic scenarios. 
 Anything beyond basic scenarios will encounter a breaking change.
