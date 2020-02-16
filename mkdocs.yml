@@ -52,6 +52,7 @@ nav:
       - V3/Extensibility/token-transformations.md
     - Middleware:
       - V3/Middleware/default-middleware.md
+      - V3/Middleware/app-version.md
       - V3/Middleware/cancellation.md
       - V3/Middleware/dependency-injection.md
       - V3/Middleware/fluent-validation-for-argument-models.md
@@ -59,7 +60,6 @@ nav:
       - V3/Middleware/piped-arguments.md
       - V3/Middleware/prompting.md
       - V3/Middleware/response-files.md
-      #- V3/Middleware/version.md
       - V3/Middleware/newer-release-alerts.md
     - Extras:
       - V3/Extras/directives.md
