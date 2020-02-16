@@ -21,7 +21,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         private static string BuildName(ICustomAttributeProvider attributes, string memberName, CommandNodeType commandNodeType, AppConfig appConfig)
         {
             var overrideName = attributes.GetCustomAttributes(true).OfType<INameAndDescription>().FirstOrDefault()?.Name;
-            return appConfig.NameTransformation(memberName, overrideName, commandNodeType);
+            return appConfig.NameTransformation(attributes, memberName, overrideName, commandNodeType);
         }
 
         internal static bool IsOption(this ICustomAttributeProvider attributeProvider, ArgumentMode argumentMode)

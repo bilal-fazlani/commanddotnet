@@ -17,7 +17,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
         public void TransformNameForAllTypesShouldWork()
         {
             new AppRunner<App>()
-                .Configure(b => b.NameTransformation = (memberName, nameOverride, commandNodeType)
+                .Configure(b => b.NameTransformation = (attributes, memberName, nameOverride, commandNodeType)
                     => $"prefix-{memberName}")
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
@@ -36,7 +36,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
         public void TransformNameForOnlyCommandTypesShouldWork()
         {
             new AppRunner<App>()
-                .Configure(b => b.NameTransformation = (memberName, nameOverride, commandNodeType)
+                .Configure(b => b.NameTransformation = (attributes, memberName, nameOverride, commandNodeType)
                     => commandNodeType.IsCommand ? $"prefix-{memberName}" : memberName)
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
@@ -59,7 +59,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
         public void TransformNameForOnlyOperandTypesShouldWork()
         {
             new AppRunner<App>()
-                .Configure(b => b.NameTransformation = (memberName, nameOverride, commandNodeType)
+                .Configure(b => b.NameTransformation = (attributes, memberName, nameOverride, commandNodeType)
                     => commandNodeType.IsOperand ? $"prefix-{memberName}" : memberName)
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
