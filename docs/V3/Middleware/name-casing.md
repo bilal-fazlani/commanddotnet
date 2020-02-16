@@ -47,3 +47,17 @@ Use the `applyToNameOverrides` option to apply case conversion to migrateUser an
     * Lowercase cannot be converted to another case... except, the first letter will be capitalized for Pascal. Humanizer doesn't know where the second word starts.
     * Kebabcase cannot be converted to camelcase or lowercase. No idea why.
     * Camel and Pascal can be converted to any other case
+
+## Custom Name Transforamtions
+
+use `appRunner.Configure(c => c.NameTransformation = ...)` to apply custom name transformations.
+
+Example: [Humanizer middleare](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.NameCasing/HumanizerAppRunnerExtensions.cs)
+
+This example will lowercase all names
+
+```c#
+appRunner.Configure.NameTransformation = 
+    (attributes, memberName, nameOverride, commandNodeType) 
+        => (nameOverride ?? memberName).ToLower()`
+```
