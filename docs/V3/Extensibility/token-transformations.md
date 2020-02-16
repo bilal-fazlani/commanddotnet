@@ -48,7 +48,15 @@ OptionTokenType contains
 
 TokenCollections are an immutable collection of tokens with some convenience members to simplify transformations.
 
+* __Directives__: The tokens interpreted as [directives](../Extras/directives.md). This will always be empty when `AppSettings.DisableDirectives = false`.
+* __Arguments__: All arguments after the last directive and before the argument separator `--`
+* __Separated__: All arguments included after the argument separator  `--`. If there are multiple separators, the remaining separators will be tokens in this collection.
+
+
 !!! Tip
     Use TokenCollection.Transform method to apply a func to tokens of specific types. 
     This is an alternative to a foreach loop with a switch statement.
     See the implementations linked above for examples.
+
+    Use TokenCollection.ToArgsArray extension method to convert the tokens into a string
+    array that can be passed to another application.
