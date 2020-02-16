@@ -5,7 +5,7 @@ repo_url: 'https://github.com/bilal-fazlani/commanddotnet'
 site_url: https://bilal-fazlani.github.io/commanddotnet
 
 nav:
-  - Current Version:
+  - Version 2 (Current):
     - Introduction: V2/index.md
     - Quick Start: V2/quick-start.md
     - Defining Commands:
@@ -105,7 +105,10 @@ markdown_extensions:
 
 plugins:
   - search
-  #- git-revision-date-localized     
+  # - git-revision-date-localized
+  - redirects:
+      redirect_maps:
+        'index.md': 'V2/index.md'
 
 # Customization
 extra:
