@@ -5,13 +5,13 @@ This document assumes you're already familiar with the Dependency Injection (DI)
 ## TLDR, How to enable
 * [Autofac](https://autofac.org/)
     1. Add nuget package [CommandDotNet.IoC.Autofac](https://www.nuget.org/packages/CommandDotNet.IoC.Autofac)
-    1. Enable the feature with `appRunner.UseAutofac(...)`.
+    1. Enable the feature with `appRunner.UseAutofac(...)`
 * [MicrosoftDependencyInjection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1)
     1. Add nuget package [CommandDotNet.IoC.MicrosoftDependencyInjection](https://www.nuget.org/packages/CommandDotNet.IoC.MicrosoftDependencyInjection)
-    1. Enable the feature with `appRunner.UseMicrosoftDependencyInjection(...)`.
+    1. Enable the feature with `appRunner.UseMicrosoftDependencyInjection(...)`
 * [SimpleInjector](https://simpleinjector.org/)
     1. Add nuget package [CommandDotNet.IoC.SimpleInjector](https://www.nuget.org/packages/CommandDotNet.IoC.SimpleInjector)
-    1. Enable the feature with `appRunner.UseSimpleInjector(...)`.
+    1. Enable the feature with `appRunner.UseSimpleInjector(...)`
 * [Custom Resolver](#custom-resolvers)
     1. Enable with `appRunner.UseDependencyResolver(myCustomContainer, ...)`
 
