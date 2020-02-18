@@ -1,44 +1,68 @@
 ﻿using System;
-using CommandDotNet.Builders;
 
 namespace CommandDotNet.Extensions
 {
     public static class ArgumentExtensions
     {
-        public static bool IsHelpOption(this IArgument argument) => argument.Name == Constants.HelpOptionName;
+        /// <summary>Returns true if argument name is <see cref="Constants.HelpOptionName"/></summary>
+        public static bool IsHelpOption(this IArgument argument)
+        {
+            if (argument == null) throw new ArgumentNullException(nameof(argument));
 
-        public static bool IsAppVersionOption(this IArgument argument) =>
-            argument.Name == VersionMiddleware.VersionOptionName && argument.Parent.IsRootCommand();
+            return argument.Name == Constants.HelpOptionName;
+        }
 
-        internal static void SwitchAct(
+        /// <summary>Returns true if argument name is <see cref="Constants.VersionOptionName"/> and is on the root command.</summary>
+        public static bool IsAppVersionOption(this IArgument argument)
+        {
+            if (argument == null) throw new ArgumentNullException(nameof(argument));
+
+            return argument.Name == Constants.VersionOptionName && argument.Parent.IsRootCommand();
+        }
+
+        /// <summary>
+        /// For the given <see cref="argument"/>,
+        /// execute <see cref="operandAction"/> when <see cref="Operand"/>
+        /// and <see cref="optionAction"/> when <see cref="Option"/>
+        /// </summary>
+        public static void SwitchAct(
             this IArgument argument,
             Action<Operand> operandAction,
             Action<Option> optionAction)
         {
             switch (argument)
             {
+                case null:
+                    throw new ArgumentNullException(nameof(argument));
                 case Operand operand:
-                    operandAction(operand);
+                    operandAction?.Invoke(operand);
                     break;
                 case Option option:
-                    optionAction(option);
+                    optionAction?.Invoke(option);
                     break;
                 default:
                     throw new ArgumentException(BuildExMessage(argument));
             }
         }
 
-        internal static TResult SwitchFunc<TResult>(
+        /// <summary>
+        /// For the given <see cref="argument"/>,
+        /// execute <see cref="operandFunc"/> when <see cref="Operand"/>
+        /// and <see cref="optionFunc"/> when <see cref="Option"/>
+        /// </summary>
+        public static TResult SwitchFunc<TResult>(
             this IArgument argument,
             Func<Operand, TResult> operandFunc,
             Func<Option, TResult> optionFunc)
         {
             switch (argument)
             {
+                case null:
+                    throw new ArgumentNullException(nameof(argument));
                 case Operand operand:
-                    return operandFunc(operand);
+                    return operandFunc == null ? default : operandFunc(operand);
                 case Option option:
-                    return optionFunc(option);
+                    return optionFunc == null ? default : optionFunc(option);
                 default:
                     throw new ArgumentException(BuildExMessage(argument));
             }

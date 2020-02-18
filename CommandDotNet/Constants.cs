@@ -3,6 +3,7 @@
     public static class Constants
     {
         public static readonly string HelpOptionName = "help";
+        public static readonly string VersionOptionName = "version";
 
         /// <summary>The <see cref="InputValue.Source"/>es defined by this framework</summary>
         public static class InputValueSources

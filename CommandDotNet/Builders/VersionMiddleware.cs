@@ -6,7 +6,7 @@ namespace CommandDotNet.Builders
 {
     internal static class VersionMiddleware
     {
-        internal const string VersionOptionName = "version";
+        internal static readonly string VersionOptionName = Constants.VersionOptionName;
 
         internal static AppRunner UseVersionMiddleware(AppRunner appRunner)
         {
