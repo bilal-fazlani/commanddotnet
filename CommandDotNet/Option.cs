@@ -57,7 +57,7 @@ namespace CommandDotNet
 
             Parent = parent ?? throw new ArgumentNullException(nameof(parent));
             TypeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
-            Arity = arity;
+            Arity = arity ?? throw new ArgumentNullException(nameof(arity));
             DefinitionSource = definitionSource;
             IsInterceptorOption = isInterceptorOption;
             AssignToExecutableSubcommands = assignToExecutableSubcommands;

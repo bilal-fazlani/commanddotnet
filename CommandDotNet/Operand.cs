@@ -28,7 +28,7 @@ namespace CommandDotNet
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Parent = parent ?? throw new ArgumentNullException(nameof(parent));
             TypeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
-            Arity = arity;
+            Arity = arity ?? throw new ArgumentNullException(nameof(arity));
             DefinitionSource = definitionSource;
             Aliases = new[] {name};
             CustomAttributes = customAttributes ?? NullCustomAttributeProvider.Instance;

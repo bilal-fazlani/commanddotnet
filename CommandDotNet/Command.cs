@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using CommandDotNet.Builders;
+using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 
@@ -21,13 +22,15 @@ namespace CommandDotNet
         private readonly Dictionary<string, IArgumentNode> _argumentsByAlias = new Dictionary<string, IArgumentNode>();
 
         public Command(string name, 
-            ICustomAttributeProvider customAttributeProvider,
-            bool isExecutable,
+            ICustomAttributeProvider customAttributeProvider = null,
+            bool isExecutable = true,
             Command parent = null,
             string definitionSource = null)
         {
-            Name = name;
-            CustomAttributes = customAttributeProvider;
+            Name = name.IsNullOrEmpty() 
+                ? throw new ArgumentNullException(name) 
+                : name;
+            CustomAttributes = customAttributeProvider ?? NullCustomAttributeProvider.Instance;
             IsExecutable = isExecutable;
             Parent = parent;
             DefinitionSource = definitionSource;
