@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CommandDotNet
 {
@@ -6,7 +7,12 @@ namespace CommandDotNet
     public class TypeInfo : ITypeInfo
     {
         /// <summary>A bool with no display name</summary>
-        public static readonly TypeInfo Flag = new TypeInfo(typeof(bool), typeof(bool));
+        public static readonly TypeInfo Flag = Single<bool>();
+
+        public static TypeInfo Single<T>(string displayName = null) => new TypeInfo(typeof(T), typeof(T), displayName);
+        public static TypeInfo Enumerable<T>(string displayName = null) => new TypeInfo(typeof(IEnumerable<T>), typeof(T), displayName);
+        public static TypeInfo List<T>(string displayName = null) => new TypeInfo(typeof(List<T>), typeof(T), displayName);
+        public static TypeInfo Array<T>(string displayName = null) => new TypeInfo(typeof(T[]), typeof(T), displayName);
 
         /// <summary>The type of the property or parameter defining an argument</summary>
         public Type Type { get; }
