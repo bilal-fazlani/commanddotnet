@@ -39,8 +39,9 @@ namespace CommandDotNet
         
         /// <summary>
         /// Set to true to prevent tokenizing arguments as directives,
-        /// captured in <see cref="CommandContext.Tokens"/>.Directives
-        /// for use by middleware
+        /// captured in <see cref="CommandContext.Tokens"/>.
+        /// Arguments with the [directive syntax] will be tokenized
+        /// as values instead.
         /// </summary>
         public bool DisableDirectives { get; set; }
 
