@@ -109,7 +109,6 @@ plugins:
 
 # Customization
 extra:
-  disqus: 'command-dot-net'
   social:
     - type: 'github'
       link: 'https://github.com/bilal-fazlani'
