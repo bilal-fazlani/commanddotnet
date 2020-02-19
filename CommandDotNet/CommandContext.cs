@@ -1,4 +1,5 @@
-﻿using CommandDotNet.Execution;
+﻿using CommandDotNet.Builders;
+using CommandDotNet.Execution;
 using CommandDotNet.Parsing;
 using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
@@ -47,6 +48,16 @@ namespace CommandDotNet
         /// Can be used to store state for coordination between middleware and across middleware stages.
         /// </summary>
         public IServices Services { get; } = new Services();
+
+        /// <summary>
+        /// The application <see cref="IDependencyResolver"/>.<br/>
+        /// Set in <see cref="AppRunner.Configure"/>
+        /// </summary>
+        /// <remarks>
+        /// Delegate from AppConfig. Included here for easier discovery
+        /// and reduce confusion with <see cref="Services"/>
+        /// </remarks>
+        public IDependencyResolver DependencyResolver => AppConfig.DependencyResolver;
 
         public CommandContext(
             string[] originalArgs, 
