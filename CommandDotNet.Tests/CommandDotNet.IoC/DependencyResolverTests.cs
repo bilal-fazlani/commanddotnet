@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Autofac;
+using Autofac.Core.Registration;
 using CommandDotNet.Execution;
 using CommandDotNet.IoC.Autofac;
 using CommandDotNet.IoC.MicrosoftDependencyInjection;
@@ -27,7 +28,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         [Fact]
         public void MicrosoftDependencyInjection_ShouldWork()
         {
-            var serviceProvider = ConfigerMicrosoftServiceProvider();
+            var serviceProvider = ConfigureMicrosoftServiceProvider();
 
             new AppRunner<App>()
                 .UseMicrosoftDependencyInjection(serviceProvider)
@@ -37,11 +38,35 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         [Fact]
         public void MicrosoftDependencyInjection_CanSpecifyScope()
         {
-            var serviceProvider = ConfigerMicrosoftServiceProvider();
+            var serviceProvider = ConfigureMicrosoftServiceProvider();
 
             new AppRunner<App>()
                 .UseMicrosoftDependencyInjection(serviceProvider, runInScope: ctx => serviceProvider.CreateScope())
                 .RunInMem("Do", _testOutputHelper);
+        }
+
+        [Fact]
+        public void MicrosoftDependencyInjection_WhenUnregisteredType_ShouldThrowException()
+        {
+            var serviceProvider = ConfigureMicrosoftServiceProvider(skipApp: true);
+
+            Assert.Throws<InvalidOperationException>(() =>
+                new AppRunner<App>()
+                    .UseMicrosoftDependencyInjection(serviceProvider)
+                    .RunInMem("Do", _testOutputHelper)
+            ).Message.Should().StartWith("No service for type 'CommandDotNet.Tests.CommandDotNet.IoC.DependencyResolverTests+App'");
+        }
+
+        private static IServiceProvider ConfigureMicrosoftServiceProvider(bool skipApp = false)
+        {
+            IServiceCollection serviceCollection = new ServiceCollection();
+            if (!skipApp)
+            {
+                serviceCollection.AddScoped<App>();
+            }
+            serviceCollection.AddScoped<ISomeService, SomeService>();
+            IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
+            return serviceProvider;
         }
 
         [Fact]
@@ -62,6 +87,31 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
             new AppRunner<App>()
                 .UseAutofac(container, runInScope: ctx => container.BeginLifetimeScope())
                 .RunInMem("Do", _testOutputHelper);
+        }
+
+        [Fact]
+        public void Autofac_WhenUnregisteredType_ShouldThrowException()
+        {
+            var container = ConfigureAutofacContainer(skipApp: true);
+
+            Assert.Throws<ComponentNotRegisteredException>(() =>
+                new AppRunner<App>()
+                    .UseAutofac(container, runInScope: ctx => container.BeginLifetimeScope())
+                    .RunInMem("Do", _testOutputHelper)
+            ).Message.Should().StartWith("The requested service 'CommandDotNet.Tests.CommandDotNet.IoC.DependencyResolverTests+App'");
+
+        }
+
+        private static IContainer ConfigureAutofacContainer(bool skipApp = false)
+        {
+            ContainerBuilder containerBuilder = new ContainerBuilder();
+            if (!skipApp)
+            {
+                containerBuilder.RegisterType<App>();
+            }
+            containerBuilder.RegisterType<SomeService>().As<ISomeService>();
+            IContainer container = containerBuilder.Build();
+            return container;
         }
 
         [Fact]
@@ -101,21 +151,17 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
             services.FromCtor.Should().NotBeSameAs(svcBeforeRun);
         }
 
-        private static IContainer ConfigureAutofacContainer()
+        [Fact]
+        public void SimpleInjector_WhenUnregisteredType_ShouldThrowException()
         {
-            ContainerBuilder containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterType<App>();
-            containerBuilder.RegisterType<SomeService>().As<ISomeService>();
-            IContainer container = containerBuilder.Build();
-            return container;
-        }
+            var container = new Container();
+            // SimpleInjector will implicit register App if ISomeService is registered
 
-        private static IServiceProvider ConfigerMicrosoftServiceProvider()
-        {
-            IServiceCollection serviceCollection = new ServiceCollection();
-            serviceCollection.AddSingleton<ISomeService, SomeService>();
-            IServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
-            return serviceProvider;
+            Assert.Throws<ActivationException>(() =>
+                new AppRunner<App>()
+                    .UseSimpleInjector(container)
+                    .RunInMem("Do", _testOutputHelper)
+            ).Message.Should().StartWith("No registration for type DependencyResolverTests.App could be found and an implicit registration could not be made.");
         }
 
         class App

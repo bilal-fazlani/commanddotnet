@@ -1,5 +1,6 @@
 ﻿using System;
 using CommandDotNet.Builders;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CommandDotNet.IoC.MicrosoftDependencyInjection
 {
@@ -14,12 +15,12 @@ namespace CommandDotNet.IoC.MicrosoftDependencyInjection
 
         public object Resolve(Type type)
         {
-            return _serviceProvider.GetService(type);
+            return _serviceProvider.GetRequiredService(type);
         }
 
         public bool TryResolve(Type type, out object item)
         {
-            item = Resolve(type);
+            item = _serviceProvider.GetService(type);
             return item != null;
         }
     }
