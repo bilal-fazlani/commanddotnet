@@ -16,7 +16,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         }
 
         [Fact]
-        public void ShouldUseModelFromDependencyResovler()
+        public void ShouldUseModelFromDependencyResolver()
         {
             var argModel = new ArgModel {Text = "some default"};
             var testOutputs = new AppRunner<App>()

@@ -34,7 +34,7 @@ namespace CommandDotNet.TestTools
 
         public void Add<T>(T service)
         {
-            _services[typeof(T)] = service;
+            _services.Add(typeof(T), service);
         }
 
         public void AddOrUpdate<T>(T service)
