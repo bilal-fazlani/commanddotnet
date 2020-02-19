@@ -1,5 +1,4 @@
 using CommandDotNet.TestTools;
-using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
