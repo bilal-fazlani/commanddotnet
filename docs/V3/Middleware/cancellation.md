@@ -1,5 +1,10 @@
 # Ctrl+C and CancellationToken
 
+## TLDR, How to enable 
+Enable the feature with `appRunner.UseCancellationHandlers()` or `appRunner.UseDefaultMiddleware()`.
+
+## The problem space
+
 Console applications should stop gracefully when the user enters `Ctrl+C` or `Ctrl+Break`. 
 If your app is consuming the main thread the app will not exit right away.
 
@@ -11,15 +16,14 @@ Traditionally, this is solved with a following steps:
 
 ## Cancellation middleware
 
-CommandDotNet has middleware to simplify this. Configure with `appRunner.UseCancellationHandlers();`. 
-
-The framework will:
+When enabled, the framework will:
 
 * set the `CommandContext.AppConfig.CancellationToken` with a new token.
-* the token will be cancelled on
-  * `Console.CancelKepPress`
-  * `AppDomain.CurrentDomain.ProcessExit`
-  * `AppDomain.CurrentDomain.UnhandledException` when `UnhandledExceptionEventArgs.IsTerminating` == true
+* register a [parameter resolver](../Extensibility/parameter-resolvers.md) for `CancellationToken`
+* cancel the token on
+    * `Console.CancelKepPress`
+    * `AppDomain.CurrentDomain.ProcessExit`
+    * `AppDomain.CurrentDomain.UnhandledException` when `UnhandledExceptionEventArgs.IsTerminating` == true
 
 The framework checks the cancellation token before every step in the pipeline.
 

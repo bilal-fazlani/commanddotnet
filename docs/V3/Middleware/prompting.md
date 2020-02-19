@@ -1,11 +1,14 @@
 #Prompting Middleware
 
+## TLDR, How to enable 
+Enable the feature with `appRunner.UsePrompting()` or `appRunner.UseDefaultMiddleware()`.
+
+## Introduction
+
 Prompting is supported for two scenarios:
 
 1. Prompting for values from within the command method.
 2. Prompting for arguments where values were not provided. 
-
-Enable prompting middleware with: `appRunner.UsePrompting(...)`
 
 Examples can be found in the [prompts](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.Example/Commands/Prompts.cs) 
 commands in the example app.

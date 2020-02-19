@@ -1,8 +1,8 @@
-![parameters](./img/definitions.png)
+![parameters](../img/definitions.png)
 
 ### Arguments
 
-Arguments are simple as we saw already in the [introduction](#introduction). Arguments are the main parameters of the command and should be as less as possible. If you compare them to a english statement, argument is the *Subject* of the sentence. 
+Arguments are simple as we saw already in the [introduction](./index.md). Arguments are the main parameters of the command and should be as less as possible. If you compare them to a english statement, argument is the *Subject* of the sentence. 
 
 Let try an example of an english sentence `Please delete sample.docx file`
 

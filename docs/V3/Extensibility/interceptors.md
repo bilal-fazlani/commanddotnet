@@ -1,7 +1,8 @@
 # Interceptor methods
 
 Interceptor methods will be executed for all commands and subcommands of a class.
-Interceptor methods can define options to be provided in the shell. Interceptors cannot define operands because they are positional and positional arguments are only applicable for the target command.
+
+They can define options but cannot define operands.  This is because operands are positional and positional arguments are only applicable for the target command.
 
 Example:
 
@@ -22,7 +23,7 @@ public class Calculator
     public Task<int> Interceptor(
         InterceptorExecutionDelegate next,
         IConsole console,
-        int radix,)
+        int radix)
     {
         _calculator = Factory.GetCalculatorFor(radix);
         _console = console;
@@ -59,7 +60,9 @@ Examples:
 
 ## Inherited options
 
-Inherited options provide a way to assign the interceptor option an an option of the executed subcommand.
+Inherited options provide a way to assign the interceptor option to the final executed subcommand.
+
+To the user, the option will appear as an option for executable subcommands instead of the defining command.
 
 Using the previous example, change `int radix` to `[Option(AssignToExecutableSubcommands = true)] int radix` 
 
@@ -68,6 +71,8 @@ Now in the shell:
 ``` bash
 dotnet calculator Add 1 2 --radix 2
 ```
+
+Notice `radix` is provided to the `Add` command instead of `calculator`
 
 ``` c#
 public class Calculator
@@ -116,20 +121,24 @@ Wrap `return next();` in try/catch/finally statements and use the interceptor as
 ``` c#
     public Task<int> Interceptor(InterceptorExecutionDelegate next)
     {
-        prehook();
+        beforeCommandRun();
         try
         {
             return next();
         }
-        catch()
+        catch(Exception e)
         {
-            errorhook();
+            onError(e);
         }
         finally()
         {
-            posthook();
+            afterCommandRun();
         }
     }
+    
+    private void beforeCommandRun(){...}
+    private void onError(Exception e){...}
+    private void afterCommandRun(){...}
 ```
 
 ### Convert to middleware
@@ -141,26 +150,35 @@ For example, the command hook pattern defined above could be converted to a midd
 ``` c#
 public static class CommandHooksMiddlware
 {
-    public static AppRunner UseCommandHooks(this AppRunner appRunner)
+    public static AppRunner UseCommandHooks(
+        this AppRunner appRunner, 
+        Action beforeCommandRun, Action afterCommandRun, 
+        Action<Exception> onError, Action onFinally)
     {
         return appRunner.Configure(c =>
-            c.UseMiddleware(Middleware, MiddlewareStages.PostBindValuesPreInvoke));
+            c.UseMiddleware(
+                (ctx, next) => Middleware(ctx, next, beforeCommandRun, afterCommandRun, onError, onFinally), 
+                MiddlewareStages.PostBindValuesPreInvoke));
     }
 
-    private static Task<int> Middleware(CommandContext commandContext, ExecutionDelegate next)
+    private static Task<int> Middleware(
+        CommandContext commandContext, ExecutionDelegate next, 
+        Action beforeCommandRun, Action afterCommandRun, Action<Exception> onError, Action onFinally)
     {
-        prehook();
+        beforeCommandRun?.Invoke();
         try
         {
-            return next(commandContext);
+            var result = next(commandContext);
+            afterCommandRun?.Invoke();
+            return result;
         }
-        catch()
+        catch(Exception e)
         {
-            errorhook();
+            onError?.Invoke(e);
         }
         finally()
         {
-            posthook();
+            onFinally?.Invoke();
         }
     }
 }
@@ -175,7 +193,7 @@ Interceptor methods will be run for all subcommands, including subcommands of su
     {
         if(context.InvocationPipeline.TargetCommand.Instance == this)
         {
-            prehook();
+            beforeCommandRun();
         }
         return next();
     }

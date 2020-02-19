@@ -75,7 +75,7 @@ Notes:
 
  - **You can skip to pass any parameter. It will then fallback to the default value of parameter type**
 
- - **Any parameters in constructor are [Options](#option) by default and you can't have [Argument](#argument) attribute in constructor parameters**
+ - **Any parameters in constructor are [Options](./parameters.md#options) by default and you can't have [Argument](./parameters.md#arguments) attribute in constructor parameters**
 
  - **Only one constructor is supported. If there are multiple, it will pick up first defined constructor**
 

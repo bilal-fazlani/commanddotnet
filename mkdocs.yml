@@ -5,38 +5,43 @@ repo_url: 'https://github.com/bilal-fazlani/commanddotnet'
 site_url: https://bilal-fazlani.github.io/commanddotnet
 
 nav:
-  - Current Version:
-    - Introduction: index.md
-    - Quick Start: quick-start.md
+  - Version 2 (Current):
+    - Introduction: V2/index.md
+    - Quick Start: V2/quick-start.md
     - Defining Commands:
-      - Parameters: parameters.md
-      - Attributes: attributes.md
-      - Constructors: constructors.md
-      - Default method: default-method.md
-      - Default values: default-values.md
-      - Collections: collections.md
-      - Argument Models: argument-models.md
-      - Async methods: async-methods.md
-      - Custom return codes: custom-return-codes.md
-      - Nesting commands: nesting-commands.md
-      - Exceptions: exceptions.md
+      - Parameters: V2/parameters.md
+      - Attributes: V2/attributes.md
+      - Constructors: V2/constructors.md
+      - Default method: V2/default-method.md
+      - Default values: V2/default-values.md
+      - Collections: V2/collections.md
+      - Argument Models: V2/argument-models.md
+      - Async methods: V2/async-methods.md
+      - Custom return codes: V2/custom-return-codes.md
+      - Nesting commands: V2/nesting-commands.md
+      - Exceptions: V2/exceptions.md
     - Extras:
-      - directives.md
-      - Fluent validation for parameters: fluent-validation-for-argument-models.md
-      - Settings: settings.md
+      - V2/directives.md
+      - Fluent validation for parameters: V2/fluent-validation-for-argument-models.md
+      - Settings: V2/settings.md
     - Extensibility:
-      - Dependency Injection: dependency-injection.md
-      - Parameter types: parameter-types.md
-      - Custom interceptors: custom-interceptors.md
+      - Dependency Injection: V2/dependency-injection.md
+      - Parameter types: V2/parameter-types.md
+      - Custom interceptors: V2/custom-interceptors.md
   - Version 3 (Preview):
     - Introduction: V3/index.md
-    - V3/v3-changes.md
+    - V3/whats-new-in-v3.md
     - V3/getting-started.md
     - Defining Commands:
       - V3/DefiningCommands/argument-terminology.md
-      - V3/DefiningCommands/option-or-operand.md
-      - V3/DefiningCommands/argument-arity.md
+      - V3/DefiningCommands/commands.md
+      - V3/DefiningCommands/subcommands.md
+      - V3/DefiningCommands/arguments.md
+      - V3/DefiningCommands/argument-collections.md
+      - V3/DefiningCommands/argument-types.md
       - V3/DefiningCommands/argument-models.md
+      - V3/DefiningCommands/argument-arity.md
+      - V3/DefiningCommands/option-or-operand.md
       - V3/DefiningCommands/passwords.md
     - Extensibility:
       - V3/Extensibility/help.md
@@ -47,12 +52,18 @@ nav:
       - V3/Extensibility/token-transformations.md
     - Middleware:
       - V3/Middleware/default-middleware.md
+      - V3/Middleware/app-version.md
       - V3/Middleware/cancellation.md
+      - V3/Middleware/dependency-injection.md
       - V3/Middleware/fluent-validation-for-argument-models.md
+      - V3/Middleware/name-casing.md
       - V3/Middleware/piped-arguments.md
       - V3/Middleware/prompting.md
       - V3/Middleware/response-files.md
       - V3/Middleware/newer-release-alerts.md
+    - Extras:
+      - V3/Extras/directives.md
+      - V3/Extras/exceptions.md
     - V3/test-tools.md
 theme:
   feature:
@@ -94,11 +105,10 @@ markdown_extensions:
 
 plugins:
   - search
-  #- git-revision-date-localized     
+  - git-revision-date-localized
 
 # Customization
 extra:
-  disqus: 'command-dot-net'
   social:
     - type: 'github'
       link: 'https://github.com/bilal-fazlani'

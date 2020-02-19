@@ -3,7 +3,10 @@
 Response files are text files containing arguments that can be replaced by their contents in the command line.
 Micrsoft uses them in several applications including [msbuild](https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-response-files?view=vs-2019) and the [MIDL compiler](https://docs.microsoft.com/en-us/windows/win32/midl/response-files). 
 
-Lets start with an example:
+## TLDR, How to enable 
+Enable the feature with `appRunner.UseResponseFiles()` or `appRunner.UseDefaultMiddleware()`.
+
+## Example
 
 ``` c#
 public void Interceptor(string user, string pwd, string url)
@@ -53,7 +56,8 @@ There are a number of ways to use response files to improve usability and testib
 
 ### Inter-command communication
 
-Similar to [piped arguments](../Middleware/piped-arguments.md), a command can write arguments to a response file for use in another command.  i.e. A list of ids to process.
+Similar to [piped arguments](../Middleware/piped-arguments.md), a command can write arguments to a response file and that response file can be used by other commands. 
+This can be used to "pipe" options to other commands.
 
 ### Fail File
 
