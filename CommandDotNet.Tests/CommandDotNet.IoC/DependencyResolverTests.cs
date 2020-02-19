@@ -3,19 +3,12 @@ using CommandDotNet.Builders;
 using CommandDotNet.TestTools;
 using FluentAssertions;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.CommandDotNet.IoC
 {
     public class DependencyResolverTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
         private IDependencyResolver _resolver = new TestDependencyResolver {new Password("lala")};
-
-        public DependencyResolverTests(ITestOutputHelper testOutputHelper)
-        {
-            _testOutputHelper = testOutputHelper;
-        }
 
         [Fact]
         public void GenericResolve_GivenRegisteredType_ReturnsInstance()
