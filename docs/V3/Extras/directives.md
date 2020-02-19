@@ -8,7 +8,7 @@ Enable the feature with `appRunner.UseDebugDirective()` and `appRunner.UseParseD
 
 Directives must be the first arguments, surrounded by square brackets and will be removed from the arguments list during tokenization.
 
-To disable parsing directives, set `AppSettings.DisableDirectives = false`
+To disable parsing directives, set `AppSettings.DisableDirectives = true`
 
 ## Debug
 
