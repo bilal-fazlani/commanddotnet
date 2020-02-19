@@ -5,8 +5,7 @@
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AutoFixture.Xunit2" Version="4.8.0" />
-    <PackageReference Include="FluentAssertions" Version="5.8.0" />
+    <PackageReference Include="FluentAssertions" Version="5.10.2" />
     <PackageReference Include="FluentValidation" Version="7.6.103" />
     <PackageReference Include="JsonDiffPatch.Net" Version="2.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
