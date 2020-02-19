@@ -9,7 +9,10 @@ namespace CommandDotNet.Execution
     /// </summary>
     public enum ResolveStrategy
     {
+        /// <summary>Call resolve on container.</summary>
         Resolve,
+        /// <summary>Call resolve on container. If the container returns null, throw an</summary>
+        ResolveOrThrow,
         TryResolve
     }
 }

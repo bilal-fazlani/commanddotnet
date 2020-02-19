@@ -87,7 +87,16 @@ namespace CommandDotNet.Execution
             }
 
             item = BackingResolver.Resolve(type);
-            return item != null;
+            if (item != null)
+            {
+                return true;
+            }
+
+            if (resolveStrategy == ResolveStrategy.ResolveOrThrow)
+            {
+                throw new ResolverReturnedNullException(type);
+            }
+            return false;
         }
 
         private static void RegisterDisposable(CommandContext commandContext, object item)

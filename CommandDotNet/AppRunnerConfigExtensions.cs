@@ -73,11 +73,9 @@ namespace CommandDotNet
         /// <param name="dependencyResolver">the <see cref="IDependencyResolver"/> to use</param>
         /// <param name="runInScope">if provided, the scope will be created at the beginning of the run and disposed at the end</param>
         /// <param name="argumentModelResolveStrategy">
-        /// the <see cref="ResolveStrategy"/> used to resolve <see cref="IArgumentModel"/>s.
-        /// </param>
+        /// the <see cref="ResolveStrategy"/> used to resolve <see cref="IArgumentModel"/>s.</param>
         /// <param name="commandClassResolveStrategy">
-        /// the <see cref="ResolveStrategy"/> used to resolve command classes.
-        /// </param>
+        /// the <see cref="ResolveStrategy"/> used to resolve command classes. </param>
         /// <param name="useLegacyInjectDependenciesAttribute"> 
         /// when true, resolve instances for properties marked with [InjectProperty].
         /// This feature is deprecated and may be removed with next major release.
