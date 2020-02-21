@@ -1,8 +1,8 @@
 # Option vs Operand
 
-It is not always clear when to use an option vs operand. Below are a couple of strategies to help.
+It is not always clear when to use an option vs operand. Here are two different strategies
 
-## Every argument an option. 
+## Strategy 1: Every argument an option. 
 
 Set `AppSettings.DefaultArgumentMode` to `ArgumentMode.Option` and treat every argument as an option. 
 
@@ -20,7 +20,7 @@ Disadvantages
 
 Consider how often users will be using these commands. If use will generally be from scripts and automation, use all options for backward compatibility.
 
-## Operand as "what", Option as "how"
+## Strategy 2: Operand as "what", Option as "how"
 This approach that can lead to a more elegant design of your commands. 
 
 Consider [operands as *"what"*](https://en.wikipedia.org/wiki/Operand) the command operates on and options as *"how"* the command operates on them, as described in [this article](http://www.informit.com/articles/article.aspx?p=175771).
@@ -39,5 +39,6 @@ e.g. Identifying `--radix` as a *"how"* makes it an obvious candidate to promote
 
 ## Optional Operands
 
-Optional operands are a muddy topic. As a general rule, for simplicity, define them as options on the command. This is especially true if there is more than one. 
-This framework will assign positional arguments in the order they are received so if a user skipped the first optional operand and provided a value for the second one, the framework would still assign the value to the first one because it cannot understand the users intent. By defining these as options, users can specify intent with the name. This is similar to how C# uses optional parameters.
+Optional operands are a muddy topic. This framework will assign positional arguments in the order they are received so if a user skipped the first optional operand and provided a value for the second one, the framework would still assign the value to the first one because it cannot understand the users intent. 
+
+For simplicity, define them as options on the command. Then it's clear for the user and the framework when the optional argument is not provided. This is similar to how C# uses optional parameters, except name must be specified.
