@@ -145,4 +145,4 @@ OUTPUT
 Answer: 60
 ```
 
-Cool. You get the gist of this library. Let's move on.
+Cool. You get the gist of this framework. Let's move on.

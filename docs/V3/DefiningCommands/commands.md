@@ -122,3 +122,26 @@ Now executed as
 ```bash
 dotnet add.dll 1 2
 ```
+
+DefaultMethod doesn't have to be the only method in the class. It can be used with other methods as well. For example, the above example can be modified as shows below:
+
+```c#
+public class Calculator
+{
+    [DefaultMethod]
+    public void Add(int value1, int value2)
+    {
+        Console.WriteLine($"Answer:  {value1 + value2}");
+    }
+
+    public void Multiply(int value1, int value2)
+    {
+        Console.WriteLine($"Answer:  {value1 * value2}");
+    }
+}
+```
+
+Now, Calculator as a default "Add" command which can be executed by default when no command is given by user, and it also has a "Multiply" command which is a normal command and can be invoked in the normal fashion.
+
+!!!Note
+    There can be only one `[DefaultMethod]` in a class.
