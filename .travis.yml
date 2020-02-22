@@ -11,8 +11,6 @@ stages:
     - name: test
     - name: deploy
       if: tag IS present
-    - name: publish documentation
-      if: type = push AND branch = master
 
 #--------- TEST JOBS --------------
 jobs:
@@ -39,17 +37,6 @@ jobs:
           dotnet: 2.1
           env:
               - secure: rzK8y4HE7yCVPStFdVttd1ApJ15xGhiGObJsHifi5ulaR/4POUU5o+6Bf/kLxCbhPeK0VBT5Zlt2WUNYq19IF8PbwZqADMQwc8NJVYX78UEbtbq5NaI2xFTbLC5Ng8GWcl5cEhl68pTMHIbqkAmUW7H3ESQVqz7DBG2oehCWXlEggI6hiXgS/QWE/W6YdLMoitPZTATeM1FXs3ZT1IMRGCpcl4mVkK8bEr8fFemujWOD7ymZYZUAr97B9u6oPz/mgW0BsWKNQfHkS6t92N/1WZyX8voJ4hszKvJedYaw3u8FVJvG4KNhMtT24GQl2b8MCkqVo6U41kRHSfkg5uNIigSy/mYKyT8WQWf/bT/WrKyVSepKcHaT1rYdKac/hmOTa66804P44ZTa9l0J2r9fTEg7qPRmC83e81KprIg6WptE9UpN9bRjtzULa7gZyAtoO8TgUCEt1+siP/cGqUtU/gwG4Pv/Bgxy6CIda5NLzNDCTZqWdkJkdogKLFDzjawDn1LG8j8SlGo7h6wb92YcS+EQLww4fk6CSJU7IY35tfzxGG3onWvR9sUn4bjulROOIVAEmpwzLmuSsvQZ5Jv8dnp6m0KPJGHFJWzYPUsmVDFPRZul6y1MROIax36AtQnUCu3LMQu5dAwizOvmmE6DPopfJjn1gHiFHU/nSL7Qcgg=
-        #-----------------------------------
-
-        #--------- DOCUMENTATION PUBLISHING JOB ---------- 
-        - stage: publish documentation
-          name: update documentation on github pages
-          language: python
-          python: 3.6
-          script: ./publish_doc.sh
-          on: linux
-          env:
-            - secure: WuJ6fGlEUW7ZjYAdWmqB9EGCFvfpjvfB3lEITkFSWq7jZ+5eAwi2PbI5NyVV0l0hCmDDDrv8MaGgmOJUKLvtCbPthIEmkwSzV8qI9JGT+xzLeJG5ZQ1qPlZgfyz9fGGT6tzO5K+dc/5qMaTX4nHdHnLkwiRz9w853CciBxY6gn5aC3/j8znICnB1d3EbbzksWPwm0rnYgf3QHt0jT+p3r889kh27lWfQkokSeDo7nsHnn61EPNJSygenzSZgMA6U7OrnJATU99lbPtRH/VqkUHncAIA8M5iH+DS87VRRUNIanJNGr6/g9ikMtmhtJzJLzxvc8yPjHZJkekia0BMBI2ir4BB7aH2gQzX7QbdSUwCDdOhh40/EX5TaibonMKU1qWkFgsVxVcIA6Ls5/Kc1AduPnMSeJG5OZW3XDmoT6eBq2p3dMScAWY19piMC3zFU8sHYL6W/BWm57LMbwJzyjNNmLPP85c7zCD7Dy0C40DgRDRyEp9K1XY7WaNOfBO4y+I7bsFbzOU3KRkuDtytGgZ3wGfHfUd2p1AFbxhtqd79ppGcC6JMO57POo7+feBaS6N7MGrgLO3rGand8KZ0ZM8rAH3A1uxQ+Sk1D/6FBPErVzBvDUmFi67cKymNVi09ocKUK9hymGWeA1K70ascO5eT2LpdscbwB9J/WMO+LV7E=
         #-----------------------------------
 #-----------------------------------
 
