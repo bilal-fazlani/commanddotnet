@@ -1,4 +1,4 @@
-![parameters](../img/definitions.png)
+![parameters](./img/definitions.png)
 
 ### Arguments
 
