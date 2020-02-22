@@ -105,7 +105,7 @@ markdown_extensions:
 
 plugins:
   - search
-  # - git-revision-date-localized
+  - git-revision-date-localized
 
 # Customization
 extra:
