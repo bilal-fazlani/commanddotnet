@@ -52,7 +52,6 @@ TokenCollections are an immutable collection of tokens with some convenience mem
 * __Arguments__: All arguments after the last directive and before the argument separator `--`
 * __Separated__: All arguments included after the argument separator  `--`. If there are multiple separators, the remaining separators will be tokens in this collection.
 
-
 !!! Tip
     Use TokenCollection.Transform method to apply a func to tokens of specific types. 
     This is an alternative to a foreach loop with a switch statement.
@@ -60,3 +59,13 @@ TokenCollections are an immutable collection of tokens with some convenience mem
 
     Use TokenCollection.ToArgsArray extension method to convert the tokens into a string
     array that can be passed to another application.
+
+To access the Separated arguments in a command, add a `CommandContext` parameter and use `commandContext.Tokens.Separated`
+
+```c#
+public void PrintSeparatedArgs(CommandContext context, IConsole console)
+{
+    var separatedArgs = context.Tokens.Separated;
+    console.Out.Write(string.Join(' ', separatedArgs.ToArgsArray))
+}
+```
