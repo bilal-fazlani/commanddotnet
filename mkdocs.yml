@@ -71,8 +71,8 @@ theme:
   name: 'material'
   favicon: 'img/favicon.ico'
   palette:
-    primary: 'indigo'
-    accent: 'pink'  
+    primary: 'black'
+    accent: 'red'  
   logo: 'img/small-logo.svg'
 
 google_analytics:
