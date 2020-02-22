@@ -33,7 +33,7 @@ theme:
   name: 'material'
   favicon: 'img/favicon.ico'
   palette:
-    primary: 'black'
+    primary: 'indigo'
     accent: 'red'  
   logo: 'img/small-logo.svg'
 
