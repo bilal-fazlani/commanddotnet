@@ -6,6 +6,7 @@
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/CommandDotNet.svg?style=for-the-badge)](https://www.nuget.org/packages/CommandDotNet)
 [![NuGet](https://img.shields.io/nuget/dt/CommandDotNet.svg?style=for-the-badge)](https://www.nuget.org/packages/CommandDotNet)
 [![GitHub](https://img.shields.io/github/license/bilal-fazlani/commanddotnet?style=for-the-badge)](https://github.com/bilal-fazlani/commanddotnet/blob/master/LICENSE)
+![Netlify](https://img.shields.io/netlify/11a3718e-f340-4c65-81e2-9c49b6ebb842?label=Netlify%20Build&style=for-the-badge)
 
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/bilal-fazlani/CommandDotNet.svg?style=for-the-badge)]()

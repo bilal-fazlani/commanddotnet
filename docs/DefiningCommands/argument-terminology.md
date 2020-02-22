@@ -6,11 +6,11 @@ Part of the confusion is the overloaded nature of of the term `argument`, as exp
 
 TLDR: The terminology of this framework.
 
-![Argument Terminology Example](../../diagrams/ArgTermsExample.png)
+![Argument Terminology Example](./../diagrams/ArgTermsExample.png)
 
 ## Perspectives
 
-![Argument Perspectives](../../diagrams/ArgumentPerspectives.png)
+![Argument Perspectives](./../diagrams/ArgumentPerspectives.png)
 
 Let's look at the `git stash store` command to see how different perspectives see it. 
 Git help describes the usage as `git stash store [-m|--message <message>] [-q|--quiet] <commit>`. 
