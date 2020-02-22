@@ -30,4 +30,7 @@ Special thanks to [Drew Burlingame](https://github.com/drewburlingame) for conti
 
 ## Documentation
 
-https://bilal-fazlani.github.io/commanddotnet
+Verson 2 (Current): https://commanddotnet.bilal-fazlani.com
+
+Verson 3 (Preview): https://v3.commanddotnet.bilal-fazlani.com
+
