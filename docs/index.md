@@ -15,3 +15,7 @@ It provides **out of the box CLI help** with full customization options.
 ## Credits 🎉
 
 Special thanks to [Drew Burlingame](https://github.com/drewburlingame) for continuous support and contributions
+
+## Version 3 Preview
+
+Version 3 Preview is available on nuget. You can find documentation for V3 preview here 👉[https://v3.commanddotnet.bilal-fazlani.com](https://v3.commanddotnet.bilal-fazlani.com)

@@ -26,8 +26,6 @@ It provides **out of the box CLI help** with full customization options.
 
 Special thanks to [Drew Burlingame](https://github.com/drewburlingame) for continuous support and contributions
 
----
-
 ## Documentation
 
 Version 2 (Current): https://commanddotnet.bilal-fazlani.com
