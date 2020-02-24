@@ -7,7 +7,7 @@ strict: true
 
 
 nav:
-    - Introduction: index.md
+    - Introduction: fake.md
     - whats-new-in-v3.md
     - getting-started.md
     - Defining Commands:
