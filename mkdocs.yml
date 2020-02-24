@@ -2,6 +2,7 @@ site_name: CommandDotNet
 site_description: Model your command line application interface in a class
 repo_name: 'bilal-fazlani/commanddotnet'
 repo_url: 'https://github.com/bilal-fazlani/commanddotnet'
+edit_uri: 'edit/v3/docs/'
 
 nav:
     - Introduction: index.md
