@@ -13,7 +13,7 @@ static int Main(string[] args)
 ```
 
 !!! Note
-    New versionse of the library may include new middleware in this method. This will be indicated as a minor semantic version update to the package.
+    New versions of the library may include new middleware in this method. This will be indicated as a minor semantic version update to the package.
 
 !!! Note
     This list will never include middleware that requires an external dependency, like `FluentValidator`, `IoC` and `Humanizer`
