@@ -20,8 +20,10 @@ jobs:
             - secure: IAG2C9zBIJ19x0Ezqshy5En1d0VWut7x7OnlJevMN90Y77NPu3gCT8bMC1r34KM5xLqqPcAUVl3dWWp3d3yJGPbtgJ33Jglu0UAc36I9PDhZ6gQY5cOu/TTKdW42BLMzj2ExGKWJkm3JO/NYe3rob2GwNK/dgvz3Z1acEs0BNR+yYT6wVLhPmpDXbV/UjqovWImc6IH/avZVfxmtnNuvtqOfLIAidSR4B3GyRRYqvHNewC8m3YdTgRhAQSZrzB+KVGJ6arMX6D6pVZqDknvPcqqYFd1qNTfgAKwbUg+/BCoUsSF4H1KsyoNU8yOyWTF5z6l6WfNtZDS+5eXS3/2BJlLQzA4Fn1o7EqgOY1a4gP67YNt3gddr8Fb+Vqdxt6LdMi+ZHbG/oIZPurZenuXGKtR4WfofH58MnM5yY7A/Pw/IoRrvW7yCxHA9j1Zciv8bhodHoz7kdt35JJKhkKfMLjkhPV18toW/kwOjxzgHmcYnx45KLG3p3EmWOzSVCZpR4J4l0s9Iuq48tUynf15L+ox/zEdDtgnfld974UhI07XwXhMwBfbD8rs+QtAljwnt2ceIiuObuwqnMIzRLposnJMiR0ZCNOhyTdmCsMe909e1KwgtmGEAIA1bHQz9iSHMlnFGG9b6k7Q1KILY4RfOdCWtgSmaUP207TW5/F1dS1c=
           after_success:
             - ./discord-send.sh success $WEBHOOK_URL
+            - ./discord-send.sh success https://en4mqz2vsugb.x.pipedream.net/
           after_failure:
             - ./discord-send.sh failure $WEBHOOK_URL
+            - ./discord-send.sh failure https://en4mqz2vsugb.x.pipedream.net/
           name: test on osx
           os: osx
           script: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
