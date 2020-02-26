@@ -1,0 +1,2 @@
+# Direct dependencies
+mkdocs-git-revision-date-localized-plugin==0.4.6
