@@ -4,6 +4,9 @@
 [![Build Status](https://travis-ci.com/bilal-fazlani/commanddotnet.svg?branch=master)](https://travis-ci.com/bilal-fazlani/commanddotnet)
 [![GitHub last commit](https://img.shields.io/github/last-commit/bilal-fazlani/CommandDotNet.svg)]()
 
+!!! Info
+    Version 3 Preview is available on nuget. Documentation for V3 preview can be found here: [https://v3.commanddotnet.bilal-fazlani.com](https://v3.commanddotnet.bilal-fazlani.com)
+
 # Introduction
 
 ***Model your command line application interface in a class***
@@ -15,7 +18,3 @@ It provides **out of the box CLI help** with full customization options.
 ## Credits 🎉
 
 Special thanks to [Drew Burlingame](https://github.com/drewburlingame) for continuous support and contributions
-
-## Version 3 Preview
-
-Version 3 Preview is available on nuget. You can find documentation for V3 preview here 👉[https://v3.commanddotnet.bilal-fazlani.com](https://v3.commanddotnet.bilal-fazlani.com)
