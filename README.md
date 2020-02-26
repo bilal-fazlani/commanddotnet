@@ -14,6 +14,12 @@
 
 [![Discord](https://img.shields.io/discord/678568687556493322?label=Discord%20Chat&style=for-the-badge)](https://discord.gg/QFxKSeG)
 
+## Documentation
+
+Version 2 (Current): https://commanddotnet.bilal-fazlani.com
+
+Version 3 (Preview): https://v3.commanddotnet.bilal-fazlani.com
+
 ---
 
 ***Model your command line application interface in a class***
@@ -25,10 +31,4 @@ It provides **out of the box CLI help** with full customization options.
 ## Credits 🎉
 
 Special thanks to [Drew Burlingame](https://github.com/drewburlingame) for continuous support and contributions
-
-## Documentation
-
-Version 2 (Current): https://commanddotnet.bilal-fazlani.com
-
-Version 3 (Preview): https://v3.commanddotnet.bilal-fazlani.com
 
