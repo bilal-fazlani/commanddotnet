@@ -16,7 +16,8 @@ namespace CommandDotNet.Parsing
         internal static AppRunner AppendPipedInputToOperandList(AppRunner appRunner)
         {
             // -1 to ensure this middleware runs before any prompting so the value won't appear null
-            return appRunner.Configure(c => c.UseMiddleware(InjectPipedInputToOperandList, MiddlewareStages.PostParseInputPreBindValues, -1));
+            return appRunner.Configure(c => c.UseMiddleware(InjectPipedInputToOperandList, 
+                MiddlewareSteps.PipedInput.Stage, MiddlewareSteps.PipedInput.Order));
         }
 
         private static Task<int> InjectPipedInputToOperandList(CommandContext ctx, ExecutionDelegate next)

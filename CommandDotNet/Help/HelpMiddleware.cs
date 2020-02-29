@@ -11,7 +11,7 @@ namespace CommandDotNet.Help
             return appRunner.Configure(c =>
             {
                 c.BuildEvents.OnCommandCreated += AddHelpOption;
-                c.UseMiddleware(DisplayHelp, MiddlewareStages.ParseInput, int.MaxValue);
+                c.UseMiddleware(DisplayHelp, MiddlewareSteps.Help.Stage, MiddlewareSteps.Help.Order);
             });
         }
 
@@ -31,7 +31,6 @@ namespace CommandDotNet.Help
             {
                 Description = "Show help information",
                 IsMiddlewareOption = true,
-                Arity = ArgumentArity.Zero,
                 ShowInHelp = appSettingsHelp.PrintHelpOption
             };
 

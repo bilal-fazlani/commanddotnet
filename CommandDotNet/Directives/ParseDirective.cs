@@ -14,13 +14,13 @@ namespace CommandDotNet.Directives
         {
             return appRunner.Configure(c =>
             {
-                c.UseMiddleware(Report, MiddlewareStages.PreTokenize);
-                c.UseMiddleware(ExitAfterReport, MiddlewareStages.Tokenize, int.MaxValue-1);
+                c.UseMiddleware(ConfigureReportHooks, MiddlewareStages.PreTokenize);
+                c.UseMiddleware(ExitAfterTokenization, MiddlewareStages.Tokenize, MiddlewareSteps.CreateRootCommand.Order-100);
             });
         }
 
         // adapted from https://github.com/dotnet/command-line-api directives
-        private static Task<int> Report(CommandContext commandContext, ExecutionDelegate next)
+        private static Task<int> ConfigureReportHooks(CommandContext commandContext, ExecutionDelegate next)
         {
             if (commandContext.Tokens.TryGetDirective("parse", out string value))
             {
@@ -65,7 +65,7 @@ namespace CommandDotNet.Directives
             return next(commandContext);
         }
 
-        private static Task<int> ExitAfterReport(CommandContext commandContext, ExecutionDelegate next)
+        private static Task<int> ExitAfterTokenization(CommandContext commandContext, ExecutionDelegate next)
         {
             return commandContext.Tokens.TryGetDirective("parse", out _)
                 ? Task.FromResult(0)

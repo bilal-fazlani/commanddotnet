@@ -16,7 +16,7 @@ namespace CommandDotNet.Directives
             return appRunner.Configure(c =>
             {
                 c.Services.Add(new DebugDirectiveContext(waitForDebuggerToAttach ?? !InTestHarness));
-                c.UseMiddleware(AttachDebugger, MiddlewareStages.PreTokenize, int.MinValue);
+                c.UseMiddleware(AttachDebugger, MiddlewareSteps.DebugDirective.Stage, MiddlewareSteps.DebugDirective.Order);
             });
         }
 

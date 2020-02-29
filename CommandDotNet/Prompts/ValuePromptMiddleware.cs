@@ -11,8 +11,6 @@ namespace CommandDotNet.Prompts
     {
         private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
-        internal static readonly int MissingArgumentPromptsOrderWithinStage = int.MaxValue - 100;
-
         internal static AppRunner UsePrompting(
             AppRunner appRunner,
             Func<CommandContext, IPrompter> prompterOverride = null,
@@ -46,7 +44,7 @@ namespace CommandDotNet.Prompts
                     c.UseMiddleware(
                         (ctx, next) => PromptForMissingArguments(ctx, next,
                             new ArgumentPrompter(prompterOverride(ctx), argumentPromptTextOverride), argumentFilter), 
-                        MiddlewareStages.PostParseInputPreBindValues, MissingArgumentPromptsOrderWithinStage);
+                        MiddlewareSteps.ValuePromptMissingArguments.Stage, MiddlewareSteps.ValuePromptMissingArguments.Order);
                 }
             });
         }

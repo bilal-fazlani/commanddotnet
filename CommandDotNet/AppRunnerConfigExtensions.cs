@@ -101,7 +101,9 @@ namespace CommandDotNet
                             {
                                 return next(context);
                             }
-                        }, MiddlewareStages.PreTokenize, int.MinValue + 10);
+                        }, 
+                        MiddlewareSteps.DependencyResolver.BeginScope.Stage, 
+                        MiddlewareSteps.DependencyResolver.BeginScope.Order);
                 });
             }
 

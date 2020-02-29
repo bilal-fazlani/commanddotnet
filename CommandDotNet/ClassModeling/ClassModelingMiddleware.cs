@@ -13,10 +13,14 @@ namespace CommandDotNet.ClassModeling
         {
             return appRunner.Configure(c =>
             {
-                c.UseMiddleware((context, next) => CreateRootCommand(context, next, rootCommandType), MiddlewareStages.Tokenize, int.MaxValue);
-                c.UseMiddleware(AssembleInvocationPipelineMiddleware, MiddlewareStages.ParseInput);
-                c.UseMiddleware(BindValuesMiddleware.BindValues, MiddlewareStages.BindValues);
-                c.UseMiddleware(ResolveCommandClassesMiddleware.ResolveInstances, MiddlewareStages.BindValues);
+                c.UseMiddleware((context, next) => CreateRootCommand(context, next, rootCommandType), 
+                    MiddlewareSteps.CreateRootCommand.Stage, MiddlewareSteps.CreateRootCommand.Order);
+                c.UseMiddleware(AssembleInvocationPipelineMiddleware,
+                    MiddlewareSteps.AssembleInvocationPipeline.Stage, MiddlewareSteps.AssembleInvocationPipeline.Order);
+                c.UseMiddleware(BindValuesMiddleware.BindValues, 
+                    MiddlewareSteps.BindValues.Stage, MiddlewareSteps.BindValues.Order);
+                c.UseMiddleware(ResolveCommandClassesMiddleware.ResolveInstances,
+                    MiddlewareSteps.ResolveCommandClasses.Stage, MiddlewareSteps.ResolveCommandClasses.Order);
                 c.UseMiddleware(InvokeInvocationPipelineMiddleware, MiddlewareStages.Invoke, int.MaxValue);
             });
         }
