@@ -1,12 +1,30 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommandDotNet.Rendering;
+using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Directives
 {
     public static class Debugger
     {
+        /// <summary>Attaches a debugger if the [debug] directive exists</summary>
+        public static void AttachIfDebugDirective(string[] args, 
+            CancellationToken? cancellationToken = null, 
+            IConsole console = null)
+        {
+            if (args.HasDebugDirective())
+            {
+                Attach(
+                    cancellationToken ?? CancellationToken.None, 
+                    console ?? new SystemConsole(), 
+                    true);
+            }
+        }
+
+        /// <summary>Attaches a debugger</summary>
         public static void Attach(
             CancellationToken cancellationToken, 
             IConsole console,
@@ -27,6 +45,16 @@ namespace CommandDotNet.Directives
             {
                 Task.Delay(500, cancellationToken);
             }
+        }
+
+        internal static bool HasDebugDirective(this TokenCollection tokens)
+        {
+            return tokens.TryGetDirective("debug", out _);
+        }
+
+        private static bool HasDebugDirective(this string[] args)
+        {
+            return args.Any(a => a.Equals("[debug]", StringComparison.OrdinalIgnoreCase));
         }
     }
 }

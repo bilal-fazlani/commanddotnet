@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using CommandDotNet.Example.DocExamples;
+using CommandDotNet.Directives;
 using CommandDotNet.FluentValidation;
 using CommandDotNet.NameCasing;
 using CommandDotNet.NewerReleasesAlerts;
@@ -10,7 +11,9 @@ namespace CommandDotNet.Example
     {
         static int Main(string[] args)
         {
-            return new AppRunner<RocketLauncher>()
+            Debugger.AttachIfDebugDirective(args);
+
+            return new AppRunner<Examples>()
                 .UseDefaultMiddleware()
                 .UseLog2ConsoleDirective()
                 .UseNameCasing(Case.KebabCase)

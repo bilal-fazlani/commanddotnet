@@ -22,6 +22,25 @@ $ dotnet example.dll [debug] Add 1 2
 Attach your debugger to process 24236 ({exe name}).
 ```
 
+The debugger is attached early in the middleware pipeline, after the args have been tokenized. 
+Any logic before appRunner.Run will occur before stepping into the debugger.
+To attach immediately in the Main method, use `Debugger.AttachIfDebugDirective(args)`.
+
+```c#
+
+    class Program
+    {
+        static int Main(string[] args)
+        {
+            Debugger.AttachIfDebugDirective(args);
+            
+            // configuraation code here
+
+            new AppRunner<MyApp>().Run(args);
+        }
+    }
+```
+
 ## Parse
 
 Rules for including spaces in arguments and escaping special characters differ from shell to shell.  Sometimes it's not clear why arguments are not mapping correctly.
