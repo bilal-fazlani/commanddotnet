@@ -46,3 +46,19 @@ These parameters also exist for the AutoFac, MicrosoftDependencyInjection and Si
 ## Custom Resolvers
 
 To implement your own custom resolver, implement the `IDependencyResolver`. See the [TestDependencyResolver](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.TestTools/TestDependencyResolver.cs) for an example.
+
+## Registering all command classes
+
+Use `appRunner.GetCommandClassTypes()` to get all the command class types that could be instantiated from the AppRunner.
+
+```c#
+private static void RegisterSimpleInjector(AppRunner appRunner)
+{
+    var container = new SimpleInjector.Container();
+    foreach(Type type in appRunner.GetCommandClassTypes())
+    {
+        container.Register(type);
+    }
+    appRunner.UseSimpleInjector(container);
+}
+```

@@ -32,6 +32,7 @@ nav:
       - Middleware/default-middleware.md
       - Middleware/app-version.md
       - Middleware/cancellation.md
+      - Middleware/default-values-from-config.md
       - Middleware/dependency-injection.md
       - Middleware/fluent-validation-for-argument-models.md
       - Middleware/name-casing.md

@@ -49,6 +49,11 @@
             public static readonly int Order = Help.Order - 2000;
         }
 
+        /// <summary>Runs before <see cref="Help"/> to ensure default values are included in the help output</summary>
+        public static class SetArgumentDefaults
+        {
+            public static readonly MiddlewareStages Stage = Help.Stage;
+            public static readonly int Order = Help.Order - 1000;
         }
 
         /// <summary>Runs at the end of the <see cref="MiddlewareStages.ParseInput"/> stage</summary>

@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using CommandDotNet.Example.DocExamples;
+﻿using System.Collections.Specialized;
+using System.Linq;
 using CommandDotNet.Directives;
 using CommandDotNet.FluentValidation;
 using CommandDotNet.NameCasing;
@@ -13,11 +13,14 @@ namespace CommandDotNet.Example
         {
             Debugger.AttachIfDebugDirective(args);
 
+            var appSettings = new NameValueCollection{{ "notify.--retry-count", "2"}};
+
             return new AppRunner<Examples>()
                 .UseDefaultMiddleware()
                 .UseLog2ConsoleDirective()
                 .UseNameCasing(Case.KebabCase)
                 .UseFluentValidation()
+                .UseDefaultsFromAppSetting(appSettings, includeNamingConventions: true)
                 .UseNewerReleaseAlertOnGitHub("bilal-fazlani", "commanddotnet", 
                     skipCommand: command => command.GetParentCommands(true).Any(c => c.Name == "pipes"))
                 .Run(args);
