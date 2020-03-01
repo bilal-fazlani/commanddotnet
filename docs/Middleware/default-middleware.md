@@ -1,7 +1,7 @@
 # Default middleware
 
 To avoid the clutter and fatigue of enabling built-in middleware one-by-one, we've provided the `UseDefaultMiddleware` extension.
-This method will register all middleware that does not require an external dependency and can be run with sensible defaults configurations.
+This method will register all non-core middleware that does not require an external dependency and can be run with sensible defaults configurations.
 
 ```c#
 static int Main(string[] args)

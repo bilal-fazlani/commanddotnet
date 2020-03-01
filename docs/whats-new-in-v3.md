@@ -69,11 +69,11 @@ Constructor-based dependency injection was not possible because constructors wer
 
 Those constructors will need to be replaced with interceptor methods.  There are two signatures for interceptor methods.
 
-`Task<int> Inteceptor(CommandContext ctx, ExecutionDelegate next, ...)`
+`Task<int> Interceptor(CommandContext ctx, ExecutionDelegate next, ...)`
 
 and
 
-`Task<int> Inteceptor(InterceptorExecutionDelegate next, ...)`
+`Task<int> Interceptor(InterceptorExecutionDelegate next, ...)`
 
 The method name does not matter.  What does matter is the `Task<int>` return type and use of either `ExecutionDelegate` or `InterceptorExecutionDelegate`.  The former requires a `CommandContext`. Options can be defined in these methods but are not required.
 
