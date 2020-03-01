@@ -24,25 +24,46 @@ namespace CommandDotNet.Example
         {
             if(context.Tokens.TryGetDirective("log", out var logDirective))
             {
-                var parts = logDirective.Split(new []{':', '='});
-                var level = parts.Length == 2 
-                    ? (LogLevel) Enum.Parse(typeof(LogLevel), parts.Last(), ignoreCase: true) 
+                var parts = logDirective.Split(':', '=');
+                var level = parts.Length > 1
+                    ? (LogLevel) Enum.Parse(typeof(LogLevel), parts[1], ignoreCase: true) 
                     : LogLevel.Trace;
-                LogProvider.SetCurrentLogProvider(new ConsoleLogProvider(context.Console, level));
+                var dateTimeFormat = GetDateTimeFormat(parts);
+                LogProvider.SetCurrentLogProvider(new ConsoleLogProvider(context.Console, level, dateTimeFormat));
             }
 
             return next(context);
+        }
+
+        private static string GetDateTimeFormat(string[] parts)
+        {
+            if (parts.Length < 3)
+            {
+                return null;
+            }
+            switch (parts[2].ToLower())
+            {
+                case "date":
+                    return "yyyy/MM/dd";
+                case "time":
+                    return "HH:mm:ss";
+                case "datetime":
+                    return "yyyy/MM/dd HH:mm:ss";
+                default:
+                    return null;
+            }
         }
 
         private class ConsoleLogProvider : ILogProvider
         {
             private readonly IConsole _console;
             private readonly LogLevel _level;
+            private readonly string _dateTimeFormat;
 
-            public ConsoleLogProvider(IConsole console, LogLevel level)
+            public ConsoleLogProvider(IConsole console, LogLevel level, string dateTimeFormat)
             {
                 _console = console ?? throw new ArgumentNullException(nameof(console));
-                _level = level;
+                _dateTimeFormat = dateTimeFormat;
             }
 
             public Logger GetLogger(string name)
@@ -64,7 +85,10 @@ namespace CommandDotNet.Example
                     if (msg != null || exception != null)
                     {
                         var stream = level == LogLevel.Error || level == LogLevel.Fatal ? _console.Error : _console.Out;
-                        stream.WriteLine($"{level.ToString().First()} {name} > {msg} {exception}");
+                        msg = _dateTimeFormat != null
+                        ? $"{level.ToString().First()} {DateTime.Now.ToString(_dateTimeFormat)} {name} > {msg} {exception}"
+                        : $"{level.ToString().First()} {name} > {msg} {exception}";
+                        stream.WriteLine(msg);
                     }
 
                     return true;
