@@ -3,6 +3,7 @@ using CommandDotNet.Extensions;
 
 namespace CommandDotNet
 {
+    /// <summary>Arity describes how many values a user can or must provide for an argument</summary>
     public class ArgumentArity : IArgumentArity
     {
         public static readonly int Unlimited = int.MaxValue;
@@ -22,13 +23,15 @@ namespace CommandDotNet
                     $"{nameof(maximumNumberOfValues)} must be greater than or equal to {nameof(minimumNumberOfValues)}");
             }
 
-            MinimumNumberOfValues = minimumNumberOfValues;
-            MaximumNumberOfValues = maximumNumberOfValues;
+            Minimum = minimumNumberOfValues;
+            Maximum = maximumNumberOfValues;
         }
 
-        public int MinimumNumberOfValues { get; }
+        /// <summary>The minimum number of values the user must provide</summary>
+        public int Minimum { get; }
 
-        public int MaximumNumberOfValues { get; }
+        /// <summary>The maximum number of values the user must provide</summary>
+        public int Maximum { get; }
 
         public static IArgumentArity Zero => new ArgumentArity(0, 0);
 
@@ -40,6 +43,7 @@ namespace CommandDotNet
 
         public static IArgumentArity OneOrMore => new ArgumentArity(1, Unlimited);
 
+        /// <summary>Returns the default IArgumentArity for the given type</summary>
         public static IArgumentArity Default(Type type, bool hasDefaultValue, BooleanMode booleanMode)
         {
             if (type == typeof(bool) && booleanMode == BooleanMode.Unknown)
@@ -64,7 +68,7 @@ namespace CommandDotNet
 
         public override string ToString()
         {
-            return $"{nameof(ArgumentArity)}:{MinimumNumberOfValues}..{MaximumNumberOfValues}";
+            return $"{nameof(ArgumentArity)}:{Minimum}..{Maximum}";
         }
 
         public static bool operator ==(ArgumentArity x, ArgumentArity y) => (object)x == (object)y;
@@ -73,7 +77,7 @@ namespace CommandDotNet
 
         protected bool Equals(ArgumentArity other)
         {
-            return MinimumNumberOfValues == other.MinimumNumberOfValues && MaximumNumberOfValues == other.MaximumNumberOfValues;
+            return Minimum == other.Minimum && Maximum == other.Maximum;
         }
 
         public override bool Equals(object obj)
@@ -100,7 +104,7 @@ namespace CommandDotNet
         {
             unchecked
             {
-                return (MinimumNumberOfValues * 397) ^ MaximumNumberOfValues;
+                return (Minimum * 397) ^ Maximum;
             }
         }
     }
