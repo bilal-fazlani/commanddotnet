@@ -56,6 +56,11 @@ namespace CommandDotNet.Extensions
             return f.Method.GetGenericMethodDefinition().MakeGenericMethod(type).Invoke(null, null);
         }
 
+        internal static bool IsDefaultFor(this object defaultValue, Type type)
+        {
+            return Equals(defaultValue, type.GetDefaultValue());
+        }
+
         private static T GetDefaultValue<T>()
         {
             return default;

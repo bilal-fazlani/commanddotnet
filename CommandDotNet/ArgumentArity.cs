@@ -43,6 +43,17 @@ namespace CommandDotNet
 
         public static IArgumentArity OneOrMore => new ArgumentArity(1, Unlimited);
 
+        /// <summary>
+        /// Calculates a default IArgumentArity for the given argument.<br/>
+        /// Does NOT use the existing <see cref="IArgument.Arity"/>.
+        /// </summary>
+        public static IArgumentArity Default(IArgument argument)
+        {
+            var type = argument.TypeInfo.Type;
+            var hasDefaultValue = argument.DefaultValue != null && !argument.DefaultValue.IsDefaultFor(type);
+            return Default(type, hasDefaultValue, argument.Services.Get<BooleanMode>());
+        }
+
         /// <summary>Returns the default IArgumentArity for the given type</summary>
         public static IArgumentArity Default(Type type, bool hasDefaultValue, BooleanMode booleanMode)
         {

@@ -37,7 +37,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             // Enhancement: AppSetting.StrictDefaults: show any default values that will be used.
             //       If a value type doesn't have a default, it would be defined as a nullable type.
             //       Keeping this behavior for legacy support.
-            if (Equals(DefaultValue, propertyInfo.PropertyType.GetDefaultValue()))
+            if(DefaultValue.IsDefaultFor(propertyInfo.PropertyType))
             {
                 DefaultValue = DBNull.Value;
             }
