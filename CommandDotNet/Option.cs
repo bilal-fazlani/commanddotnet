@@ -152,6 +152,9 @@ namespace CommandDotNet
         /// </summary>
         public bool ShowInHelp { get; set; } = true;
 
+        /// <summary>True when the option is a bool with an arity of exactly zero</summary>
+        public bool IsFlag => ArgumentArity.Zero.Equals(Arity) && TypeInfo.UnderlyingType == typeof(bool);
+
         /// <summary>The attributes defined on the parameter or property that define this argument</summary>
         public ICustomAttributeProvider CustomAttributes { get; }
 
