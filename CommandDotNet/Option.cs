@@ -11,17 +11,6 @@ using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet
 {
-    public class ValueProxy
-    {
-        public Func<object> Getter { get; }
-        public Action<object> Setter { get; }
-
-        public ValueProxy(Func<object> getter, Action<object> setter)
-        {
-            Getter = getter;
-            Setter = setter;
-        }
-    }
     public sealed class Option : IArgument
     {
         private object _value;
