@@ -18,9 +18,9 @@
 
 ## Documentation
 
-Version 2 (Current): https://commanddotnet.bilal-fazlani.com
+Version 3 (Current): https://commanddotnet.bilal-fazlani.com
 
-Version 3 (Preview): https://v3.commanddotnet.bilal-fazlani.com
+Version 2 (Previous): https://v2--commanddotnet.netlify.com
 
 ***Model your command line application interface in a class***
 

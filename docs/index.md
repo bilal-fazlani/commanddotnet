@@ -26,3 +26,7 @@ Modify and extend the functionality of the framework through configuration and m
 ## Credits 🎉
 
 Special thanks to [Drew Burlingame](https://github.com/drewburlingame) for continuous support and contributions
+
+## V2
+
+Version 2 links: [Documentation](https://v2--commanddotnet.netlify.com/) and [GitHub](https://github.com/bilal-fazlani/commanddotnet/tree/v2) 
