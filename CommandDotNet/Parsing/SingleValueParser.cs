@@ -1,6 +1,5 @@
-﻿using System;
-using CommandDotNet.Exceptions;
-using CommandDotNet.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
 using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet.Parsing
@@ -13,29 +12,10 @@ namespace CommandDotNet.Parsing
         {
             _argumentTypeDescriptor = argumentTypeDescriptor;
         }
-        
-        public dynamic Parse(ArgumentInfo argumentInfo)
-        {
-            var value = argumentInfo.ValueInfo.Value;
-            return ParseString(argumentInfo, value);
-        }
 
-        public dynamic ParseString(ArgumentInfo argumentInfo, string value)
+        public object Parse(IArgument argument, IEnumerable<string> values)
         {
-            try
-            {
-                return _argumentTypeDescriptor.ParseString(argumentInfo, value);
-            }
-            catch (FormatException)
-            {
-                throw new ValueParsingException(
-                    $"'{value}' is not a valid {_argumentTypeDescriptor.GetDisplayName(argumentInfo)}");
-            }
-            catch (ArgumentException)
-            {
-                throw new ValueParsingException(
-                    $"'{value}' is not a valid {_argumentTypeDescriptor.GetDisplayName(argumentInfo)}");
-            }
+            return _argumentTypeDescriptor.ParseString(argument, values.SingleOrDefault());
         }
     }
 }

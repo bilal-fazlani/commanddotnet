@@ -1,36 +1,56 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
-using CommandDotNet.CommandInvoker;
-using CommandDotNet.Exceptions;
-using CommandDotNet.HelpGeneration;
-using CommandDotNet.MicrosoftCommandLineUtils;
-using CommandDotNet.Models;
+using System.Threading.Tasks;
+using CommandDotNet.ClassModeling;
+using CommandDotNet.Execution;
+using CommandDotNet.Extensions;
+using CommandDotNet.Help;
 using CommandDotNet.Parsing;
+using CommandDotNet.Rendering;
+using CommandDotNet.Tokens;
 
 [assembly: InternalsVisibleTo("CommandDotNet.Tests")]
+[assembly: InternalsVisibleTo("CommandDotNet.TestTools")]
 
 namespace CommandDotNet
 {
     /// <summary>
-    /// Creates a new instance of AppRunner
+    /// AppRunner is the entry class for this library.<br/>
+    /// Use this class to define settings and behaviors
+    /// and to execute the Type that defines your commands.<br/>
+    /// This is a convenience class for simpler declaration of RootCommandType
     /// </summary>
-    /// <typeparam name="T">Type of the application</typeparam>
-    public class AppRunner<T> where T : class
+    /// <typeparam name="TRootCommandType">Type of the application</typeparam>
+    public class AppRunner<TRootCommandType> : AppRunner where TRootCommandType : class
     {
-        internal IDependencyResolver DependencyResolver;
+        public AppRunner(AppSettings settings = null) : base(typeof(TRootCommandType), settings) { }
+    }
 
-        private readonly AppSettings _settings;
-        private readonly ParserBuilder _parserBuilder = new ParserBuilder();
+    /// <summary>
+    /// AppRunner is the entry class for this library.
+    /// Use this class to define settings and behaviors
+    /// and to execute the Type that defines your commands.
+    /// </summary>
+    public class AppRunner
+    {
+        private readonly AppConfigBuilder _appConfigBuilder;
 
-        public AppRunner(AppSettings settings = null)
+        public AppSettings AppSettings { get; }
+        public Type RootCommandType { get; }
+
+        public AppRunner(Type rootCommandType, AppSettings settings = null)
         {
-            _settings = settings ?? new AppSettings();
+            RootCommandType = rootCommandType ?? throw new ArgumentNullException(nameof(rootCommandType));
+            AppSettings = settings ?? new AppSettings();
+            _appConfigBuilder = new AppConfigBuilder(AppSettings);
+            AddCoreMiddleware();
+        }
 
-            // TODO: add .rsp file transformation as an extension option
+        public AppRunner Configure(Action<AppConfigBuilder> configureCallback)
+        {
+            configureCallback(_appConfigBuilder);
+            return this;
         }
 
         /// <summary>
@@ -43,146 +63,79 @@ namespace CommandDotNet
         {
             try
             {
-                AppCreator appCreator = new AppCreator(_settings);
-
-                CommandLineApplication app = appCreator.CreateApplication(typeof(T), DependencyResolver);
-
-                return app.Execute(_parserBuilder.Build(), args);
+                return RunAsync(args).Result;
             }
-            catch (AppRunnerException e)
+            catch (Exception e)
             {
-                _settings.Error.WriteLine(e.Message + "\n");
-#if DEBUG
-                _settings.Error.WriteLine(e.StackTrace);
-#endif
-                return 1;
-            }
-            catch (CommandParsingException e)
-            {
-                var optionHelp = e.Command.OptionHelp;
-                if (optionHelp != null)
-                {
-                    _settings.Out.WriteLine(
-                        $"Specify --{optionHelp.LongName} for a list of available options and commands.");
-                }
-
-                _settings.Error.WriteLine(e.Message + "\n");
-                e.Command.ShowHelp();
-
-#if DEBUG
-                _settings.Error.WriteLine(e.StackTrace);
-#endif
-
-                return 1;
-            }
-            catch (ValueParsingException e)
-            {
-                _settings.Error.WriteLine(e.Message + "\n");
-                return 2;
-            }
-            catch (AggregateException e) when (e.InnerExceptions.Any(x => x.GetBaseException() is AppRunnerException) ||
-                                               e.InnerExceptions.Any(x =>
-                                                   x.GetBaseException() is CommandParsingException))
-            {
-                foreach (var innerException in e.InnerExceptions)
-                {
-                    _settings.Error.WriteLine(innerException.GetBaseException().Message + "\n");
-#if DEBUG
-                    _settings.Error.WriteLine(innerException.GetBaseException().StackTrace);
-                    if (e.InnerExceptions.Count > 1)
-                        _settings.Error.WriteLine("-----------------------------------------------------------------");
-#endif
-                }
-
-                return 1;
-            }
-            catch (AggregateException e) when (e.InnerExceptions.Any(x =>
-                x.GetBaseException() is ArgumentValidationException))
-
-            {
-                ArgumentValidationException validationException =
-                    (ArgumentValidationException) e.InnerExceptions.FirstOrDefault(x =>
-                        x.GetBaseException() is ArgumentValidationException);
-
-                foreach (var failure in validationException.ValidationResult.Errors)
-                {
-                    _settings.Out.WriteLine(failure.ErrorMessage);
-                }
-
-                return 2;
-            }
-            catch (AggregateException e) when (e.InnerExceptions.Any(x => x.GetBaseException() is ValueParsingException)
-            )
-
-            {
-                ValueParsingException valueParsingException =
-                    (ValueParsingException) e.InnerExceptions.FirstOrDefault(x =>
-                        x.GetBaseException() is ValueParsingException);
-
-                _settings.Error.WriteLine(valueParsingException.Message + "\n");
-
-                return 2;
-            }
-            catch (AggregateException e) when (e.InnerExceptions.Any(x => x is TargetInvocationException))
-            {
-                TargetInvocationException ex =
-                    (TargetInvocationException) e.InnerExceptions.SingleOrDefault(x => x is TargetInvocationException);
-                ExceptionDispatchInfo.Capture(ex.InnerException ?? ex).Throw();
-                return 1; // this will never be called
-            }
-            catch (AggregateException e)
-            {
-                foreach (Exception innerException in e.InnerExceptions)
-                {
-                    ExceptionDispatchInfo.Capture(innerException).Throw();
-                }
-
-                return 1; // this will never be called if there is any inner exception
-            }
-            catch (ArgumentValidationException ex)
-            {
-                foreach (var failure in ex.ValidationResult.Errors)
-                {
-                    _settings.Out.WriteLine(failure.ErrorMessage);
-                }
-
-                return 2;
-            }
-            catch (TargetInvocationException ex)
-            {
-                ExceptionDispatchInfo.Capture(ex.InnerException ?? ex).Throw();
-                return 1; // this will never be called
+                return HandleException(e, _appConfigBuilder.Console);
             }
         }
 
-        public AppRunner<T> WithCustomHelpProvider(IHelpProvider customHelpProvider)
+        /// <summary>
+        /// Executes the specified command with given parameters
+        /// </summary>
+        /// <param name="args">Command line arguments</param>
+        /// <returns>If target method returns int, this method will return that value. Else, 
+        /// it will return 0 in case of success and 1 in case of unhandled exception</returns>
+        public async Task<int> RunAsync(params string[] args)
         {
-            _settings.CustomHelpProvider = customHelpProvider;
-            return this;
+            try
+            {
+                return await Execute(args).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                return HandleException(e, _appConfigBuilder.Console);
+            }
         }
 
-        public AppRunner<T> WithCommandInvoker(Func<ICommandInvoker, ICommandInvoker> commandInvokerProvider)
+        private async Task<int> Execute(string[] args)
         {
-            _settings.CommandInvoker = commandInvokerProvider(_settings.CommandInvoker);
-            return this;
+            var tokens = args.Tokenize(includeDirectives: !AppSettings.DisableDirectives);
+            
+            var appConfig = _appConfigBuilder.Build();
+            var commandContext = new CommandContext(args, tokens, appConfig);
+
+            var result = await commandContext.AppConfig.MiddlewarePipeline
+                .InvokePipeline(commandContext).ConfigureAwait(false);
+
+            appConfig.OnRunCompleted?.Invoke(new OnRunCompletedEventArgs(commandContext));
+
+            return result;
         }
 
-        public AppRunner<T> OverrideConsoleOut(TextWriter writer)
+        private void AddCoreMiddleware()
         {
-            _settings.Out = writer;
-            return this;
+            _appConfigBuilder
+                .UseMiddleware(TokenizerPipeline.TokenizeInputMiddleware, MiddlewareSteps.Tokenize.Stage, MiddlewareSteps.Tokenize.Order)
+                .UseMiddleware(CommandParser.ParseInputMiddleware, MiddlewareSteps.ParseInput.Stage, MiddlewareSteps.ParseInput.Order);
+
+            this.UseClassDefMiddleware(RootCommandType)
+                .UseHelpMiddleware();
+
+            // TODO: add middleware between stages to validate CommandContext is exiting a stage with required data populated
+            //       i.e. ParseResult should be fully populated after Parse stage
+            //            Invocation contexts should be fully populated after BindValues stage
+            //            (when ctor options are moved to a middleware method, invocation context should be populated in Parse stage)
         }
 
-        public AppRunner<T> OverrideConsoleError(TextWriter writer)
+        private static int HandleException(Exception ex, IConsole console)
         {
-            _settings.Error = writer;
-            return this;
-        }
-
-        public AppRunner<T> UseArgumentTransform(string name, int order, Func<Tokens, Tokens> transformation)
-        {
-            _parserBuilder.AddArgumentTransformation(name, order, transformation);
-            return this;
+            ex = ex.EscapeWrappers();
+            switch (ex)
+            {
+                case AppRunnerException appEx:
+                    console.Error.WriteLine(appEx.Message);
+                    appEx.PrintStackTrace(console);
+                    console.Error.WriteLine();
+                    return 1;
+                case AggregateException aggEx:
+                    ExceptionDispatchInfo.Capture(aggEx).Throw();
+                    return 1; // this will only be called if there are no inner exceptions
+                default:
+                    ExceptionDispatchInfo.Capture(ex).Throw();
+                    return 1; // this will only be called if there are no inner exceptions
+            }
         }
     }
 }

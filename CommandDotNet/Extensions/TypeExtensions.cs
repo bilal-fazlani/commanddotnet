@@ -4,56 +4,66 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using CommandDotNet.Attributes;
-using CommandDotNet.Models;
 
 namespace CommandDotNet.Extensions
 {
     internal static class TypeExtensions
     {
-        internal static IEnumerable<CommandInfo> GetCommandInfos(this Type type, AppSettings settings)
-        {
-            return type.GetDeclaredMethods()
-                .Where(m => !m.HasAttribute<DefaultMethodAttribute>())
-                .Select(mi => new CommandInfo(mi, settings));
-        }
-
-        internal static CommandInfo GetDefaultCommandInfo(this Type type, AppSettings settings)
-        {
-            return type.GetDeclaredMethods()
-                .Where(m => m.HasAttribute<DefaultMethodAttribute>())
-                .Select(mi => new CommandInfo(mi, settings))
-                .FirstOrDefault();
-        }
-
-        private static IEnumerable<MethodInfo> GetDeclaredMethods(this Type type)
+        internal static IEnumerable<MethodInfo> GetDeclaredMethods(this Type type)
         {
             return type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(m => !m.IsSpecialName)
-                .Where(m => !typeof(IDisposable).IsAssignableFrom(type) || m.Name != "Dispose");
+                .Where(m => !typeof(IDisposable).IsAssignableFrom(type) || m.Name != nameof(IDisposable.Dispose));
+        }
+
+        internal static bool IsNullableType(this Type type) => Nullable.GetUnderlyingType(type) != null;
+
+        internal static Type GetUnderlyingType(this Type type)
+        {
+            return Nullable.GetUnderlyingType(type)
+                   ?? type.GetListUnderlyingType()
+                   ?? type;
         }
 
         internal static Type GetListUnderlyingType(this Type type)
         {
-            return typeof(IEnumerable).IsAssignableFrom(type) && type.IsGenericType
-                ? type.GetGenericArguments().FirstOrDefault() 
-                : null;
+            return type.IsArray
+                ? type.GetElementType()
+                : typeof(IEnumerable).IsAssignableFrom(type) && type.IsGenericType
+                    ? type.GetGenericArguments().FirstOrDefault()
+                    : null;
+        }
+
+        internal static bool IsEnumerable(this Type type)
+        {
+            return type.GetInterfaces()
+                .Concat(type.ToEnumerable())
+                .Any(x => x == typeof(IEnumerable));
         }
 
         internal static bool IsCollection(this Type type)
         {
-            return type.GetInterfaces().Any(x => x == typeof(IEnumerable));
+            return type.GetInterfaces()
+                .Concat(type.ToEnumerable())
+                .Any(x => x.IsGenericType
+                    ? x.GetGenericTypeDefinition() == typeof(ICollection<>)
+                    : x == typeof(ICollection));
         }
-        
+
         internal static object GetDefaultValue(this Type type)
         {
             Func<object> f = GetDefaultValue<object>;
             return f.Method.GetGenericMethodDefinition().MakeGenericMethod(type).Invoke(null, null);
         }
 
+        internal static bool IsDefaultFor(this object defaultValue, Type type)
+        {
+            return Equals(defaultValue, type.GetDefaultValue());
+        }
+
         private static T GetDefaultValue<T>()
         {
-            return default(T);
+            return default;
         }
         
         internal static bool IsCompilerGenerated(this Type t) {

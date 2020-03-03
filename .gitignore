@@ -8,3 +8,4 @@ CommandDotNet.sln.DotSettings.user
 *.ncrunchsolution.user
 public
 site/
+*.user

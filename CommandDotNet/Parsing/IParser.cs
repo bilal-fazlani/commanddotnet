@@ -1,9 +1,9 @@
-﻿using CommandDotNet.Models;
+﻿using System.Collections.Generic;
 
 namespace CommandDotNet.Parsing
 {
     internal interface IParser
     {
-        dynamic Parse(ArgumentInfo argumentInfo);
+        object Parse(IArgument argument, IEnumerable<string> values);
     }
 }

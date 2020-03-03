@@ -1,5 +1,5 @@
 ﻿using System;
-using CommandDotNet.Models;
+using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet.Parsing
 {
@@ -12,18 +12,19 @@ namespace CommandDotNet.Parsing
             _appSettings = appSettings;
         }
 
-        public IParser CreateInstance(ArgumentInfo argumentInfo)
+        public IParser CreateInstance(IArgument argument)
         {
-            return argumentInfo.IsMultipleType
-                ? new ListParser(GetSingleValueParser(argumentInfo.UnderlyingType))
-                : (IParser)GetSingleValueParser(argumentInfo.Type);
+            return argument.Arity.AllowsMany()
+                ? new ListParser(
+                    argument.TypeInfo.Type, 
+                    argument.TypeInfo.UnderlyingType, 
+                    GetDescriptor(argument.TypeInfo.UnderlyingType))
+                : (IParser)new SingleValueParser(GetDescriptor(argument.TypeInfo.Type));
         }
 
-        internal SingleValueParser GetSingleValueParser(Type argumentType)
+        private IArgumentTypeDescriptor GetDescriptor(Type argumentType)
         {
-            var descriptor = _appSettings.ArgumentTypeDescriptors.GetDescriptorOrThrow(argumentType);
-            SingleValueParser singleValueParser = new SingleValueParser(descriptor);
-            return singleValueParser;
+            return _appSettings.ArgumentTypeDescriptors.GetDescriptorOrThrow(argumentType);
         }
     }
 }

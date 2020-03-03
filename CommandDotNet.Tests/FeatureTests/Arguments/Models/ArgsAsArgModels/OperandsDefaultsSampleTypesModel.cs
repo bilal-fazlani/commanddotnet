@@ -1,30 +1,29 @@
 using System;
 using System.Collections.Generic;
-using CommandDotNet.Attributes;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels
 {
     public class OperandsDefaultsSampleTypesModel : ISampleTypesArgumentsModel
     {
-        [Argument]
+        [Operand]
         public bool BoolArg { get; set; } = true;
 
-        [Argument]
+        [Operand]
         public string StringArg { get; set; } = "lala";
 
-        [Argument]
+        [Operand]
         public int StructArg { get; set; } = 3;
 
-        [Argument]
+        [Operand]
         public int? StructNArg { get; set; } = 4;
 
-        [Argument]
+        [Operand]
         public DayOfWeek EnumArg { get; set; } = DayOfWeek.Tuesday;
 
-        [Argument]
+        [Operand]
         public Uri ObjectArg { get; set; } = new Uri("http://google.com");
 
-        [Argument]
+        [Operand]
         public List<string> StringListArg { get; set; } = new List<string> {"red", "blue"};
     }
 }

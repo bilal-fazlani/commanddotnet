@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommandDotNet.Models;
 
 namespace CommandDotNet.TypeDescriptors
 {
@@ -9,31 +8,28 @@ namespace CommandDotNet.TypeDescriptors
         IArgumentTypeDescriptor, 
         IAllowedValuesTypeDescriptor
     {
-
         public bool CanSupport(Type type)
         {
             return type == typeof(bool);
         }
         
-        public string GetDisplayName(ArgumentInfo argumentInfo)
+        public string GetDisplayName(IArgument argument)
         {
-            return argumentInfo.IsImplicit
+            return argument.Arity.AllowsNone()
                 ? Constants.TypeDisplayNames.Flag
                 : Constants.TypeDisplayNames.Boolean;
         }
 
-        public object ParseString(ArgumentInfo argumentInfo, string value)
+        public object ParseString(IArgument argument, string value)
         {
-            return argumentInfo.IsImplicit
-                ? value == "on"
-                : bool.Parse(value);
+            return bool.Parse(value);
         }
 
-        public IEnumerable<string> GetAllowedValues(ArgumentInfo argumentInfo)
+        public IEnumerable<string> GetAllowedValues(IArgument argument)
         {
-            return argumentInfo.IsImplicit
+            return argument.Arity.AllowsNone()
                 ? Enumerable.Empty<string>()
-                : new List<string>() {"true", "false"};
+                : new List<string> { "true", "false" };
         }
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using CommandDotNet.Models;
 
 namespace CommandDotNet.TypeDescriptors
 {
@@ -12,20 +11,20 @@ namespace CommandDotNet.TypeDescriptors
         {
             return type.IsEnum;
         }
-        
-        public string GetDisplayName(ArgumentInfo argumentInfo)
+
+        public string GetDisplayName(IArgument argument)
         {
-            return argumentInfo.UnderlyingType.Name;
+            return argument.TypeInfo.UnderlyingType.Name;
         }
 
-        public object ParseString(ArgumentInfo argumentInfo, string value)
+        public object ParseString(IArgument argument, string value)
         {
-            return Enum.Parse(argumentInfo.UnderlyingType, value);
+            return Enum.Parse(argument.TypeInfo.UnderlyingType, value);
         }
 
-        public IEnumerable<string> GetAllowedValues(ArgumentInfo argumentInfo)
+        public IEnumerable<string> GetAllowedValues(IArgument argument)
         {
-            return Enum.GetNames(argumentInfo.UnderlyingType);
+            return Enum.GetNames(argument.TypeInfo.UnderlyingType);
         }
     }
 }

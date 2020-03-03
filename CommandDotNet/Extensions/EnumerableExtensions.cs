@@ -1,34 +1,77 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace CommandDotNet.Extensions
 {
     internal static class EnumerableExtensions
     {
-        internal static string ToCsv<T>(this IEnumerable<T> items, string separator = ",")
+        internal static bool IsNullOrEmpty<T>(this IEnumerable<T> items) => items == null || !items.Any();
+
+        internal static bool IsEmpty<T>(this IEnumerable<T> items) => !items.Any();
+
+        internal static IEnumerable<T> ToEnumerable<T>(this T instance)
+        {
+            yield return instance;
+        }
+
+        public static ICollection<T> ToCollection<T>(this IEnumerable<T> items) => items as ICollection<T> ?? items.ToList();
+
+        public static IReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> items) => items as IReadOnlyCollection<T> ?? items.ToList().AsReadOnly();
+
+        public static string ToCsv(this IEnumerable<string> items, string separator = ",")
         {
             return string.Join(separator, items);
         }
 
-        /// <summary>Joins the object.ToString() into a sorted delimited string. Useful for logging.</summary>
-        public static string ToOrderedCsv<T>(this IEnumerable<T> enumerable, string separator = ",")
+        public static string ToCsv<T>(this IEnumerable<T> items, string separator = ",")
         {
-            return enumerable
-                .Select(i => i?.ToString())
-                .ToOrderedCsv(separator);
+            return items.Select(i => i?.ToString()).ToCsv(separator);
+        }
+
+        internal static string ToCsv(this IEnumerable items, string separator = ",")
+        {
+            return items.Cast<object>().ToCsv(separator);
         }
 
         /// <summary>Joins the string into a sorted delimited string. Useful for logging.</summary>
-        public static string ToOrderedCsv(this IEnumerable<string> enumerable, string separator = ",")
+        public static string ToOrderedCsv(this IEnumerable<string> items, string separator = ",")
         {
-            return enumerable.OrderBy(i => i).ToCsv(separator);
+            return items.OrderBy(i => i).ToCsv(separator);
+        }
+
+        /// <summary>Joins the object.ToString() into a sorted delimited string. Useful for logging.</summary>
+        public static string ToOrderedCsv<T>(this IEnumerable<T> items, string separator = ",")
+        {
+            return items.Select(i => i?.ToString()).ToOrderedCsv(separator);
         }
 
         internal static string ToOrderedCsv(this IEnumerable items, string separator = ",")
         {
-            return items.Cast<object>().ToOrderedCsv();
+            return items.Cast<object>().ToOrderedCsv(separator);
+        }
+
+        internal static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
+        {
+            foreach (var item in items)
+            {
+                action(item);
+            }
+        }
+
+        internal static IEnumerable<string> EnumerateLinesUntilNull(this Func<string> readLine)
+        {
+            while (true)
+            {
+                var line = readLine();
+                if (line == null)
+                {
+                    yield break;
+                }
+
+                yield return line;
+            }
         }
     }
 }

@@ -1,38 +1,42 @@
 using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using CommandDotNet.Models;
+using CommandDotNet.Extensions;
 
 namespace CommandDotNet.TypeDescriptors
 {
     public class StringCtorTypeDescriptor : IArgumentTypeDescriptor
     {
-        private static readonly ConcurrentDictionary<Type, Converter> cache = new ConcurrentDictionary<Type, Converter>();
+        private static readonly Dictionary<Type, Converter> Cache = new Dictionary<Type, Converter>();
 
         public bool CanSupport(Type type)
         {
             return GetConverter(type).CanConvert;
         }
 
-        public string GetDisplayName(ArgumentInfo argumentInfo)
+        public string GetDisplayName(IArgument argument)
         {
-            return argumentInfo.UnderlyingType.Name;
+            return GetConverter(argument).StringConstructor.GetParameters().Single().Name;
         }
 
-        public object ParseString(ArgumentInfo argumentInfo, string value)
+        public object ParseString(IArgument argument, string value)
         {
-            var typeConverter = argumentInfo.IsMultipleType
-                ? GetConverter(argumentInfo.UnderlyingType)
-                : GetConverter(argumentInfo.Type);
-            return typeConverter.StringConstructor.Invoke(new []{ value });
+            return GetConverter(argument).StringConstructor.Invoke(new object[] { value });
+        }
+
+        private static Converter GetConverter(IArgument argument)
+        {
+            return argument.Arity.AllowsMany()
+                ? GetConverter(argument.TypeInfo.UnderlyingType)
+                : GetConverter(argument.TypeInfo.Type);
         }
 
         private static Converter GetConverter(Type type)
         {
-            return cache.GetOrAdd(type, t =>
+            return Cache.GetOrAdd(type, t =>
             {
-                var stringCtor = type.GetConstructors().FirstOrDefault(c =>
+                var stringCtor = t.GetConstructors().FirstOrDefault(c =>
                 {
                     var parameterInfos = c.GetParameters();
                     return parameterInfos.Length == 1 && parameterInfos.First().ParameterType == typeof(string);

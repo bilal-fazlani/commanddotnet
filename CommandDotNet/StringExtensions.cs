@@ -1,36 +1,23 @@
-﻿using Humanizer;
+﻿using System;
 
 namespace CommandDotNet
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
-        public static string ChangeCase(this string value, Case @case)
-        {
-            switch (@case)
-            {
-                case Case.DontChange:
-                    return value;
-                case Case.CamelCase:
-                    return value.Camelize();
-                case Case.PascalCase:
-                    return value.Dehumanize();
-                case Case.KebabCase:
-                    return value.Kebaberize();
-                case Case.LowerCase:
-                    return value.ToLowerInvariant();
-                default:
-                    return value;
-            }
-        }
+        internal static bool IsNullOrEmpty(this string value) => 
+            string.IsNullOrEmpty(value);
 
-        public static bool IsNullOrEmpty(this string value)
-        {
-            return string.IsNullOrEmpty(value);
-        }
+        internal static bool IsNullOrWhitespace(this string value) => 
+            string.IsNullOrWhiteSpace(value);
 
-        public static bool IsNullOrWhitespace(this string value)
-        {
-            return string.IsNullOrWhiteSpace(value);
-        }
+        internal static string UnlessNullOrWhitespace(this string value, Func<string, string> map = null) =>
+            value.IsNullOrWhitespace()
+                ? null
+                : map == null
+                    ? value
+                    : map(value);
+
+        internal static string[] SplitIntoLines(this string text, StringSplitOptions stringSplitOptions = StringSplitOptions.None) =>
+            text.Split(new[] { "\r\n", "\r", "\n" }, stringSplitOptions);
     }
 }

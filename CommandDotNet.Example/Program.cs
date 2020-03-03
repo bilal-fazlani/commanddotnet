@@ -1,6 +1,9 @@
-﻿using CommandDotNet.Attributes;
-using CommandDotNet.Example.Issues;
-using CommandDotNet.Models;
+﻿using System.Collections.Specialized;
+using System.Linq;
+using CommandDotNet.Directives;
+using CommandDotNet.FluentValidation;
+using CommandDotNet.NameCasing;
+using CommandDotNet.NewerReleasesAlerts;
 
 namespace CommandDotNet.Example
 {
@@ -8,36 +11,19 @@ namespace CommandDotNet.Example
     {
         static int Main(string[] args)
         {
-            // return Run<GitApplication>(args);
-            return Run<Examples>(args);
-        }
+            Debugger.AttachIfDebugDirective(args);
 
-        private static int Run<TApp>(string[] args) where TApp : class
-        {
-            AppRunner<TApp> appRunner = new AppRunner<TApp>(new AppSettings
-            {
-                Case = Case.KebabCase,
-                Help =
-                {
-                    TextStyle = HelpTextStyle.Detailed
-                }
-            });
-            return appRunner.Run(args);
-        }
+            var appSettings = new NameValueCollection{{ "notify.--retry-count", "2"}};
 
-        public class Examples
-        {
-            [SubCommand]
-            public GitApplication GitApplication { get; set; }
-
-            [SubCommand]
-            public ModelApp ModelApp { get; set; }
-
-            [SubCommand]
-            public MyApplication MyApplication { get; set; }
-
-            [SubCommand]
-            public IssueApps IssueApps { get; set; }
+            return new AppRunner<Examples>()
+                .UseDefaultMiddleware()
+                .UseLog2ConsoleDirective()
+                .UseNameCasing(Case.KebabCase)
+                .UseFluentValidation()
+                .UseDefaultsFromAppSetting(appSettings, includeNamingConventions: true)
+                .UseNewerReleaseAlertOnGitHub("bilal-fazlani", "commanddotnet", 
+                    skipCommand: command => command.GetParentCommands(true).Any(c => c.Name == "pipes"))
+                .Run(args);
         }
     }
 }

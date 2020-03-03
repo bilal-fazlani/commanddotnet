@@ -3,30 +3,34 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using CommandDotNet.Exceptions;
 
 namespace CommandDotNet.TypeDescriptors
 {
     public class ArgumentTypeDescriptors
     {
         private readonly List<IArgumentTypeDescriptor> _customDescriptors = new List<IArgumentTypeDescriptor>();
+
         private readonly List<IArgumentTypeDescriptor> _defaultDescriptors = new List<IArgumentTypeDescriptor>
-        {
-            new BoolTypeDescriptor(),
-            new EnumTypeDescriptor(),
-                
-            new DelegatedTypeDescriptor<string>(Constants.TypeDisplayNames.Text, (a,v) => v),
-            new DelegatedTypeDescriptor<char>(Constants.TypeDisplayNames.Character, (a,v) => char.Parse(v)),
-                
-            new DelegatedTypeDescriptor<long>(Constants.TypeDisplayNames.Number, (a, v) => long.Parse(v, CultureInfo.InvariantCulture)),
-            new DelegatedTypeDescriptor<int>(Constants.TypeDisplayNames.Number, (a, v) => int.Parse(v, CultureInfo.InvariantCulture)),
-            new DelegatedTypeDescriptor<short>(Constants.TypeDisplayNames.Number, (a, v) => short.Parse(v, CultureInfo.InvariantCulture)),
-            new DelegatedTypeDescriptor<decimal>(Constants.TypeDisplayNames.DecimalNumber, (a, v) => decimal.Parse(v, CultureInfo.InvariantCulture)),
-            new DelegatedTypeDescriptor<double>(Constants.TypeDisplayNames.DoubleNumber, (a, v) => double.Parse(v, CultureInfo.InvariantCulture)),
-            
-            new ComponentModelTypeDescriptor(),
-            new StringCtorTypeDescriptor()
-        };
+            {
+                new BoolTypeDescriptor(),
+                new EnumTypeDescriptor(),
+
+                new DelegatedTypeDescriptor<string>(Constants.TypeDisplayNames.Text, v => v),
+                new DelegatedTypeDescriptor<Password>(Constants.TypeDisplayNames.Text, v => new Password(v)),
+                new DelegatedTypeDescriptor<char>(Constants.TypeDisplayNames.Character, v => char.Parse(v)),
+
+                new DelegatedTypeDescriptor<long>(Constants.TypeDisplayNames.Number, v => long.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<int>(Constants.TypeDisplayNames.Number, v => int.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<short>(Constants.TypeDisplayNames.Number, v => short.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<decimal>(Constants.TypeDisplayNames.DecimalNumber, v => decimal.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<double>(Constants.TypeDisplayNames.DoubleNumber, v => double.Parse(v, CultureInfo.InvariantCulture)),
+
+                new ComponentModelTypeDescriptor(),
+                new StringCtorTypeDescriptor()
+            }
+            .Select(d => new ErrorReportingDescriptor(d))
+            .Cast<IArgumentTypeDescriptor>()
+            .ToList();
 
         public ArgumentTypeDescriptors()
         {
@@ -35,27 +39,41 @@ namespace CommandDotNet.TypeDescriptors
         internal ArgumentTypeDescriptors(ArgumentTypeDescriptors origin)
         {
             _customDescriptors = new List<IArgumentTypeDescriptor>(origin._customDescriptors);
-            _defaultDescriptors = new List<IArgumentTypeDescriptor>(origin._defaultDescriptors);
         }
 
+        /// <summary>Registers your customer descriptor</summary>
         public void Add(IArgumentTypeDescriptor argumentTypeDescriptor)
         {
-            _customDescriptors.Add(argumentTypeDescriptor);
+            _customDescriptors.Add(new ErrorReportingDescriptor(argumentTypeDescriptor));
         }
 
+        /// <summary>.
+        /// Returns the first descriptor that supports this type. Returns null if no descriptor found.<br/>
+        /// Custom descriptors are evaluated before built-in descriptors
+        /// </summary>
         public IArgumentTypeDescriptor GetDescriptor(Type type)
         {
             return _customDescriptors.FirstOrDefault(d => d.CanSupport(type))
                    ?? _defaultDescriptors.FirstOrDefault(d => d.CanSupport(type));
         }
 
+        /// <summary>.
+        /// Returns the first descriptor that supports this type. Throws AppRunnerException if no descriptor found.<br/>
+        /// Custom descriptors are evaluated before built-in descriptors
+        /// </summary>
         public IArgumentTypeDescriptor GetDescriptorOrThrow(Type type)
         {
-            return GetDescriptor(type) ?? throw new ValueParsingException(
-                       $"type : {type} is not supported. If it's an argument model, " +
-                       $"inherit from {nameof(IArgumentModel)}, otherwise " +
+            return GetDescriptor(type) ?? throw new AppRunnerException(
+                       $"type : {type} is not supported. " +
+                       Environment.NewLine +
+                       $"If it is an argument model, inherit from {nameof(IArgumentModel)}. " + 
+                       Environment.NewLine +
+                       $"If it is a service and not an argument, register using " +
+                       $"{nameof(AppRunner)}.{nameof(AppRunner.Configure)}(b => b.{nameof(AppConfigBuilder.UseParameterResolver)}(ctx => ...)); " +
+                       Environment.NewLine +
+                       "Otherwise, to support this type, " +
                        $"implement a {nameof(TypeConverter)} or {nameof(IArgumentTypeDescriptor)} " +
-                       "to support this type.");
+                       "or add a constructor with a single string parameter.");
         }
     }
 }

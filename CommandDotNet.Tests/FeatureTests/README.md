@@ -10,22 +10,32 @@ Let's look at an example to test flag clubbing.
 First, let's create the test class.
 
 ``` c#
-public class FlagClubbing : TestBase
+public class FlagClubbing
 {
-    public FlagClubbing(ITestOutputHelper output) : base(output)
+    private readonly ITestOutputHelper _testOutputHelper;
+
+    public FlagClubbing(ITestOutputHelper testOutputHelper)
     {
+        _testOutputHelper = testOutputHelper;
     }
 
     [Fact]
     public void TestName()
     {
-        // see examples of Given below
-        Verify(new Given<FlagApp>(...) {...});
+        new FlagApp()
+            .VerifyScenario(_testOutputHelper, new Scenario
+            {
+                WhenArgs = "Club",
+                Then =
+                {
+                    ...
+                }
+            });
     }
 }
 ```
 
-The class must extend from `TestBase` and pass `ITestOutputHelper` to the base class.  `ITestOutputHelper` is used to write to the xUnit output stream.
+The class  `ITestOutputHelper` to the base class.  `ITestOutputHelper` is used to write to the xUnit output stream.
 
 ## Example app
 
@@ -34,8 +44,8 @@ Next, let's create the `FlagApp` class containing the `club` command with a sing
 ``` c#
 public class FlagApp
 {
-    [InjectProperty]
-    public TestOutputs TestOutputs { get; set; }
+    // will be injected by the test framework
+    private TestOutputs TestOutputs { get; set; }
 
     public int Club([Option(ShortName="f")] bool flag)
     {
@@ -53,7 +63,7 @@ public class FlagApp
 ```
 We inject the `TestOutputs` property so we can capture the arguments passed to the command to compare against expectations.  (see more below)
 
-`TestOutputs` is a wrapper for a dictionary keyed by typed.  Only one instance of any type can be captured.  Since we only need to capture a single bool value, we can don't need the `ClubResult` class.  Such a class is very useful for more complex scenarios and for `IArgumentModel`s.  
+`TestOutputs` is a wrapper for a dictionary keyed by typed. Only one instance of any type can be captured. Classes like ClubResult are useful for capturing the content from multiple arguments.  
 
 ## Testing help output
 
@@ -74,18 +84,13 @@ There are two ways to test the output of help.
     - can result in false positives when checked values are not unique enough to the scenario
 
 ``` c#
-new Given<FlagApp>("help")
+new Scenario
 {
     WhenArgs = "club -h",
     Then =
     {
         // example of #1
         Result =  @"Usage: dotnet testhost.dll club [options]
-
-Options:
-
-  -h | --help
-  Show help information
 
   -f",
         // ... or ...
@@ -95,14 +100,14 @@ Options:
 };
 ```
 
-Note: there's a little black magic with the Result comparison.  The framework can leave extra spaces at the end of lines which is difficult to account for when specifying the expectation.  To help with this, the test framework will trim the end of every line and replace all line endings with `Environment.NewLine`.  This is done for the expecatation and actual result before comparing them.
+Note: there's a little black magic with the Result comparison.  The framework can leave extra spaces at the end of lines which is difficult to account for when specifying the expectation.  To help with this, the test framework will trim the end of every line and replace all line endings with `Environment.NewLine`.  This is done for the expectation and actual result before comparing them.
 
 ## Testing execution
 
 Execution consists of parsing commands and arguments, routing to the correct command method and mapping to the parameters.  To verify these options, we can specify expected exit codes, results and outputs captured in the command method via `TestOutputs`.  See the following examples.
 
 ``` c#
-new Given<FlagApp>("exec")
+new Scenario
 {
     WhenArgs = "club -f",
     Then =
@@ -123,7 +128,7 @@ Use `ResultsContainsTexts` to verify messages output to the console.  Results is
 Multiple `Outputs` can be expected.  The test framework will verify each exists and all properties match.
 
 ``` c#
-new Given<FlagApp>("exec failure")
+new Scenario
 {
     WhenArgs = "club -h",
     Then =
@@ -141,7 +146,7 @@ Use `ExitCode` to expect a result other than 0.
 ## Testing AppSettings overrides
 
 ``` c#
-new Given<FlagApp>("exec with custom appsettings")
+new Scenario
 {
     And = {AppSettings = new AppSettings{...}},
     WhenArgs = "club -f",
@@ -154,7 +159,7 @@ The default `AppSettings` can be overridden by passing one to the `And` clause.
 ## Injecting Dependencies
 
 ``` c#
-new Given<FlagApp>("exec with custom appsettings")
+new Scenario
 {
     And = {Dependencies = {new Service1(), new Service2()}},
     WhenArgs = "club -f",
@@ -173,8 +178,6 @@ Templates are included in CommandDotNet.sln.DotSettings to make it easer to crea
 Open Template Explorer and you'll find them in the `Solution "CommandDotNet" team-shared` layer.
 
 ## Summary
-
-Most scenarios can be modelled this way.  Overrides applied directly to `AppRunner` are not yet handled, for example, applying a CustomHelpProvider.
 
 Pull requests should include test coverage for their features.
 

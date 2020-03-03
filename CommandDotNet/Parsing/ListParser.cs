@@ -1,31 +1,53 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using CommandDotNet.Models;
+using CommandDotNet.Extensions;
+using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet.Parsing
 {
     internal class ListParser : IParser
     {
-        private readonly SingleValueParser _singleValueParser;
+        private readonly Type _type;
+        private readonly Type _underlyingType;
+        private readonly IArgumentTypeDescriptor _argumentTypeDescriptor;
 
-        public ListParser(SingleValueParser singleValueParser)
+        public ListParser(Type type, Type underlyingType, IArgumentTypeDescriptor argumentTypeDescriptor)
         {
-            _singleValueParser = singleValueParser;
+            _type = type;
+            _underlyingType = underlyingType;
+            _argumentTypeDescriptor = argumentTypeDescriptor;
         }
 
-        public dynamic Parse(ArgumentInfo argumentInfo)
+        public object Parse(IArgument argument, IEnumerable<string> values)
         {
-            Type listType = typeof(List<>).MakeGenericType(argumentInfo.UnderlyingType);
-            IList listInstance = (IList) Activator.CreateInstance(listType);
+            // TODO: when _type & values is IEnumerable but not ICollection
+            //       DO NOT enumerate values here as it could be a stream.
+            var listInstance = _type.IsArray
+                ? new ArrayList()
+                : _type.IsCollection()
+                    ? CreateGenericList()
+                    : null;
 
-            foreach (string stringValue in argumentInfo.ValueInfo.Values)
+            if (listInstance == null)
             {
-                dynamic value = _singleValueParser.ParseString(argumentInfo, stringValue);
-                listInstance.Add(value);
+                return values;
             }
 
-            return listInstance;
+            foreach (string stringValue in values)
+            {
+                listInstance.Add(_argumentTypeDescriptor.ParseString(argument, stringValue));
+            }
+
+            return _type.IsArray 
+                ? ((ArrayList)listInstance).ToArray(_underlyingType)
+                : listInstance;
+        }
+
+        private IList CreateGenericList()
+        {
+            var listType = typeof(List<>).MakeGenericType(_underlyingType);
+            return (IList) Activator.CreateInstance(listType);
         }
     }
 }

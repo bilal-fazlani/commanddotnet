@@ -2,23 +2,37 @@
 {
     public static class Constants
     {
-        public const string HelpTemplate = "-h | --help";
+        public static readonly string HelpOptionName = "help";
+        public static readonly string VersionOptionName = "version";
 
-        public static class TypeDisplayNames
+        /// <summary>The <see cref="InputValue.Source"/>es defined by this framework</summary>
+        public static class InputValueSources
         {
-            public const string Flag = null;
+            /// <summary>Values provided in the shell by the user or script</summary>
+            public static readonly string Argument = "argument";
 
-            public const string Number = "Number";
+            /// <summary>Values piped into the application</summary>
+            public static readonly string Piped = "piped";
 
-            public const string Boolean = "Boolean";
+            /// <summary>Values provided via user prompt</summary>
+            public static readonly string Prompt = "prompt";
+        }
 
-            public const string DoubleNumber = "Double";
+        internal static class TypeDisplayNames
+        {
+            public static readonly string Flag = null;
 
-            public const string DecimalNumber = "Decimal";
+            public static readonly string Number = "Number";
 
-            public const string Character = "Character";
+            public static readonly string Boolean = "Boolean";
 
-            public const string Text = "Text";
+            public static readonly string DoubleNumber = "Double";
+
+            public static readonly string DecimalNumber = "Decimal";
+
+            public static readonly string Character = "Character";
+
+            public static readonly string Text = "Text";
         }
     }
 }

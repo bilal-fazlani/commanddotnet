@@ -1,0 +1,55 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using CommandDotNet.Tokens;
+
+namespace CommandDotNet.Parsing
+{
+    public class ParseResult
+    {
+        /// <summary>The command that addressed by the command line arguments</summary>
+        public Command TargetCommand { get; }
+
+        /// <summary>
+        /// If extra operands were provided and <see cref="AppSettings.IgnoreUnexpectedOperands"/> is true,
+        /// The extra operands will be stored in the <see cref="RemainingOperands"/> collection.
+        /// </summary>
+        public IReadOnlyCollection<Token> RemainingOperands { get; }
+
+        /// <summary>
+        /// All arguments provided after the argument separator "--" will be stored
+        /// in the <see cref="SeparatedArguments"/> collection.
+        /// </summary>
+        public IReadOnlyCollection<Token> SeparatedArguments { get; }
+
+        /// <summary>
+        /// An exception encountered while parsing the commands.
+        /// Help should be printed for the <see cref="TargetCommand"/>
+        /// </summary>
+        public Exception ParseError { get; }
+
+        /// <summary>
+        /// Returns true if the help option was specified
+        /// for the target command or any of its parent commands
+        /// </summary>
+        public bool HelpWasRequested() =>
+            TargetCommand.GetParentCommands(includeCurrent: true).Any(c => c.HelpWasRequested());
+
+        public ParseResult(Command command,
+            IReadOnlyCollection<Token> remainingOperands,
+            IReadOnlyCollection<Token> separatedArguments)
+        {
+            TargetCommand = command ?? throw new ArgumentNullException(nameof(command));
+            RemainingOperands = remainingOperands ?? new List<Token>();
+            SeparatedArguments = separatedArguments ?? new List<Token>();
+        }
+
+        public ParseResult(Command command, Exception exception)
+        {
+            TargetCommand = command ?? throw new ArgumentNullException(nameof(command));
+            ParseError = exception ?? throw new ArgumentNullException(nameof(exception));
+            RemainingOperands = new List<Token>();
+            SeparatedArguments = new List<Token>();
+        }
+    }
+}

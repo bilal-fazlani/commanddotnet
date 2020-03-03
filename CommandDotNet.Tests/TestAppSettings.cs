@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using CommandDotNet.Models;
+using CommandDotNet.Help;
 using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet.Tests
@@ -13,10 +13,10 @@ namespace CommandDotNet.Tests
         /// disabling it for tests reduces the noise in help expectations
         /// and prevents tight coupling to the feature
         /// </summary>
-        public static AppSettings TestDefault => new AppSettings{EnableVersionOption = false};
-        
-        public static AppSettings BasicHelp => new AppSettings{Help = {TextStyle = HelpTextStyle.Basic}, EnableVersionOption = false};
-        public static AppSettings DetailedHelp => new AppSettings { Help = { TextStyle = HelpTextStyle.Detailed }, EnableVersionOption = false };
+        public static AppSettings TestDefault => new AppSettings();
+
+        public static AppSettings BasicHelp => new AppSettings {Help = {TextStyle = HelpTextStyle.Basic}};
+        public static AppSettings DetailedHelp => new AppSettings {Help = {TextStyle = HelpTextStyle.Detailed}};
 
         public static AppSettings Clone(this AppSettings original, Action<AppSettings> modify)
         {

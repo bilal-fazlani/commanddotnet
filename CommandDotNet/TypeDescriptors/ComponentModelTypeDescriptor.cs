@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel;
-using CommandDotNet.Models;
 
 namespace CommandDotNet.TypeDescriptors
 {
@@ -11,17 +10,17 @@ namespace CommandDotNet.TypeDescriptors
             var typeConverter = TypeDescriptor.GetConverter(type);
             return typeConverter.CanConvertFrom(typeof(string));
         }
-     
-        public string GetDisplayName(ArgumentInfo argumentInfo)
+
+        public string GetDisplayName(IArgument argument)
         {
-            return argumentInfo.UnderlyingType.Name;
+            return argument.TypeInfo.UnderlyingType.Name;
         }
 
-        public object ParseString(ArgumentInfo argumentInfo, string value)
+        public object ParseString(IArgument argument, string value)
         {
-            var typeConverter = argumentInfo.IsMultipleType
-                ? TypeDescriptor.GetConverter(argumentInfo.UnderlyingType)
-                : TypeDescriptor.GetConverter(argumentInfo.Type);
+            var typeConverter = argument.Arity.AllowsMany()
+                ? TypeDescriptor.GetConverter(argument.TypeInfo.UnderlyingType)
+                : TypeDescriptor.GetConverter(argument.TypeInfo.Type);
             return typeConverter.ConvertFrom(value);
         }
     }

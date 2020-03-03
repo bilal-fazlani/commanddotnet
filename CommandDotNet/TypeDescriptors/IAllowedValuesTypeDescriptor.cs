@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using CommandDotNet.Models;
 
 namespace CommandDotNet.TypeDescriptors
 {
@@ -8,6 +7,7 @@ namespace CommandDotNet.TypeDescriptors
     /// </summary>
     public interface IAllowedValuesTypeDescriptor
     {
-        IEnumerable<string> GetAllowedValues(ArgumentInfo argumentInfo);
+        /// <summary>The values allowed for the given type</summary>
+        IEnumerable<string> GetAllowedValues(IArgument argument);
     }
 }
