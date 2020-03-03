@@ -29,4 +29,4 @@ Special thanks to [Drew Burlingame](https://github.com/drewburlingame) for conti
 
 ## V2
 
-Version 2 links: [Documentation](https://v2--commanddotnet.netlify.com/) and [GitHub](https://github.com/bilal-fazlani/commanddotnet/tree/v2) 
+Version 2 links: [Documentation](https://v2.commanddotnet.bilal-fazlani.com/) and [GitHub](https://github.com/bilal-fazlani/commanddotnet/tree/v2) 
