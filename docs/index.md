@@ -5,7 +5,7 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/bilal-fazlani/CommandDotNet.svg)]()
 
 !!! Info
-    Version 3 Preview is available on nuget. Documentation for V3 preview can be found here: [https://v3.commanddotnet.bilal-fazlani.com](https://v3.commanddotnet.bilal-fazlani.com)
+    This documentation is for version 2 which is an older version of commanddotnet. Documentation for current version can be found here: [https://commanddotnet.bilal-fazlani.com](https://commanddotnet.bilal-fazlani.com)
 
 # Introduction
 
