@@ -24,9 +24,13 @@ Version 3 (Preview): https://v3.commanddotnet.bilal-fazlani.com
 
 ***Model your command line application interface in a class***
 
-The purpose of this **framework** is to let developers focus on the core logic of command line application and forget about how arguments are **parsed** & **validated**. This library also let's you structure your CLI app into a hierarchy of commands and subcommands and **invokes appropriate methods** in your app based on user input.
+The purpose of this **framework** is to let developers focus on the core logic of command line application by defining commands with methods and arguments with parameters. 
 
-It provides **out of the box CLI help** with full customization options.
+*Out-of-the-box* support for help documentation, subcommmands, dependency injection, validation, piping, prompting, passwords, response files and more. 
+
+Includes [test tools](https://commanddotnet.bilal-fazlani.com/test-tools) used by the framework to test all features of the framework.
+
+Modify and extend the functionality of the framework through configuration and middleware.
 
 ## Credits 🎉
 
