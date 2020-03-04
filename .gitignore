@@ -9,3 +9,4 @@ CommandDotNet.sln.DotSettings.user
 public
 site/
 *.user
+/CommandDotNet.Example/CommandDotNet.Example.exe

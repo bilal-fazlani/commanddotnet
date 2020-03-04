@@ -10,8 +10,8 @@ namespace CommandDotNet.Help
     public class HelpTextProvider : IHelpProvider
     {
         private readonly AppSettings _appSettings;
-        private readonly string _appName;
         private readonly AppHelpSettings _appHelpSettings;
+        private string _appName;
 
         public HelpTextProvider(AppSettings appSettings, string appName = null)
         {
@@ -32,13 +32,15 @@ namespace CommandDotNet.Help
 
         /// <summary>returns the body of the usage section</summary>
         protected virtual string SectionUsage(Command command) =>
+        (
             PadFront(command.Usage)
-            ?? $"{PadFront(AppName(command))}{PadFront(CommandPath(command))}" +
-            $"{PadFront(UsageSubcommand(command))}{PadFront(UsageOperand(command))}{PadFront(UsageOption(command))}" +
-            (_appSettings.AllowArgumentSeparator ? " [[--] <arg>...]" : null);
+            ?? $"{PadFront(AppName(command))}{PadFront(CommandPath(command))}"
+            + $"{PadFront(UsageSubcommand(command))}{PadFront(UsageOperand(command))}{PadFront(UsageOption(command))}"
+            + (_appSettings.AllowArgumentSeparator ? " [[--] <arg>...]" : null)
+        )?.Replace("%UsageAppName%", AppName(command));
 
         protected virtual string AppName(Command command) =>
-            _appName ?? command.GetAppName(_appHelpSettings);
+            _appName ?? (_appName = command.GetAppName(_appHelpSettings));
 
         /// <summary>The current command and it's parents.  aka bread crumbs</summary>
         protected virtual string CommandPath(Command command) => command.GetPath();
@@ -61,7 +63,7 @@ namespace CommandDotNet.Help
                 ? "[command]"
                 : null;
 
-        protected virtual string ExtendedHelpText(Command command) => command.ExtendedHelpText;
+        protected virtual string ExtendedHelpText(Command command) => command.ExtendedHelpText?.Replace("%UsageAppName%", AppName(command));
 
         /// <summary>returns the body of the options section</summary> 
         protected virtual string SectionOptions(Command command, bool includeInterceptorOptionsForExecutableCommands)
@@ -156,7 +158,8 @@ namespace CommandDotNet.Help
 
         protected virtual string CommandName(Command command) => command.Name;
 
-        protected virtual string CommandDescription(Command command) => command.Description.UnlessNullOrWhitespace();
+        protected virtual string CommandDescription(Command command) => 
+            command.Description.UnlessNullOrWhitespace()?.Replace("%UsageAppName%", AppName(command));
 
         protected virtual string ArgumentName<T>(T argument) where T : IArgument =>
             argument.SwitchFunc(

@@ -72,6 +72,21 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         }
 
         [Fact]
+        public void UsageAppNameTemplate_Should_ReplaceTemplateIn_Description_ExtendendHelp_UsageOverride()
+        {
+            Verify(new Scenario<UsageAppNameTemplate>
+            {
+                WhenArgs = "-h",
+                Then = { ResultsContainsTexts =
+                {
+                    "descr dotnet testhost.dll",
+                    "use dotnet testhost.dll",
+                    "ext dotnet testhost.dll"
+                } }
+            });
+        }
+
+        [Fact]
         public void UsageAppNameSettingUsedWhenProvided()
         {
             Verify(new Scenario<WithAppMetadataName>
@@ -89,6 +104,15 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         }
 
         public class WithoutAppMetadatName
+        {
+
+        }
+
+        [Command(
+            Description = "descr %UsageAppName%",
+            Usage = "use %UsageAppName%",
+            ExtendedHelpText = "ext %UsageAppName%")]
+        public class UsageAppNameTemplate
         {
 
         }
