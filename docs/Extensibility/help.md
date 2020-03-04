@@ -77,6 +77,8 @@ When `DotNet`, the name will be `Usage: dotnet {filename}`
 
 When `Adaptive`, if the file name ends with ".exe", then uses `Executable` else `DotNet`.
 
+`Adaptive` & `Executable` will also detect when the app is a [self-contained executable](https://docs.microsoft.com/en-us/dotnet/core/deploying/#produce-an-executable) and use the executable filename.
+
 ### UsageAppName
 
 When specified, this value will be used and `UsageAppNameStyle` will be ignored.

@@ -10,8 +10,8 @@ namespace CommandDotNet.Help
     public class HelpTextProvider : IHelpProvider
     {
         private readonly AppSettings _appSettings;
-        private readonly string _appName;
         private readonly AppHelpSettings _appHelpSettings;
+        private string _appName;
 
         public HelpTextProvider(AppSettings appSettings, string appName = null)
         {
@@ -38,7 +38,7 @@ namespace CommandDotNet.Help
             (_appSettings.AllowArgumentSeparator ? " [[--] <arg>...]" : null);
 
         protected virtual string AppName(Command command) =>
-            _appName ?? command.GetAppName(_appHelpSettings);
+            _appName ?? (_appName = command.GetAppName(_appHelpSettings));
 
         /// <summary>The current command and it's parents.  aka bread crumbs</summary>
         protected virtual string CommandPath(Command command) => command.GetPath();

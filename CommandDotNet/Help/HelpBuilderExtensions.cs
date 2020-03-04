@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using CommandDotNet.Extensions;
+using CommandDotNet.Logging;
 
 namespace CommandDotNet.Help
 {
     internal static class HelpBuilderExtensions
     {
+        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
+
         internal static string GetAppName(this Command command, AppHelpSettings appHelpSettings)
         {
             if (!appHelpSettings.UsageAppName.IsNullOrEmpty())
@@ -59,10 +63,28 @@ namespace CommandDotNet.Help
 
         private static string GetAppFileName()
         {
-            var hostAssembly = Assembly.GetEntryAssembly();
-            return hostAssembly == null 
-                ? null 
-                : Path.GetFileName(hostAssembly.Location);
+            var mainModuleFilePath = Process.GetCurrentProcess().MainModule?.FileName;
+            var hostAssemblyFilePath = Assembly.GetEntryAssembly()?.Location;
+
+            Log.Debug($"{nameof(mainModuleFilePath)}: {mainModuleFilePath}");
+            Log.Debug($"{nameof(hostAssemblyFilePath)}: {hostAssemblyFilePath}");
+            
+            var mainModuleFileName = Path.GetFileName(mainModuleFilePath);
+            var assemblyFileName = Path.GetFileName(hostAssemblyFilePath);
+
+            if (mainModuleFileName == null || mainModuleFileName.Equals("dotnet.exe") || assemblyFileName.EndsWith("exe"))
+            {
+                return assemblyFileName;
+            }
+
+            if (hostAssemblyFilePath.EndsWith(".dll") &&
+                mainModuleFilePath.EndsWith($"{Path.GetFileNameWithoutExtension(hostAssemblyFilePath)}.exe"))
+            {
+                // app is published as a single file
+                return mainModuleFileName;
+            }
+
+            return assemblyFileName;
         }
     }
 }
