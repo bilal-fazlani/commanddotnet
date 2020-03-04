@@ -66,7 +66,7 @@ Arguments:
                     WhenArgs = "-h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll [command] [arguments] [options]
+                        Result = @"Usage: dotnet testhost.dll [command] [options] [arguments]
 
 Arguments:
 
@@ -100,7 +100,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "Do -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                        Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
 
