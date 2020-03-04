@@ -2,6 +2,9 @@
 
 Help documentation is automatically generated for the application.
 
+!!! Tip
+    To change the application name in the usage section, see [UsageAppName](#usageappname) and [UsageAppNameStyle](#usageappnamestyle)
+
 ## Default Template
 
 The default template is as follows
@@ -82,6 +85,12 @@ When `Adaptive`, if the file name ends with ".exe", then uses `Executable` else 
 ### UsageAppName
 
 When specified, this value will be used and `UsageAppNameStyle` will be ignored.
+
+### %Usage-AppName%
+
+When you want to show usage examples a command description, extended help or overridden usage section, use `%Usage-AppName%`. This text will be replaced usage app name from one of the options above.  
+
+See this line `"Example: %Usage-AppName% [debug] [parse] [log:info] cancel-me"` in the [Example app](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/Examples.cs#L14).
 
 ## Custom Help Provider
 

@@ -11,7 +11,7 @@ namespace CommandDotNet.Example
                            "\n" +
                            "directives must be specified before any commands and arguments.\n" +
                            "\n" +
-                           "Example: dotnet CommandDotNet.Example.dll [debug] [parse] [log:info] cancel-me")]
+                           "Example: %UsageAppName% [debug] [parse] [log:info] cancel-me")]
     internal class Examples
     {
         [SubCommand]
