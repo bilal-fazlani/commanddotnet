@@ -26,7 +26,7 @@ For programmatic perspective of the...
 
 From the human perspective of...
 
-* developer: the arguments are `-q -m 'my stash' e7a8621`.
+* developer: the arguments are `-q -m 'my stash' e7a8621`. `-q` and `-m` are options. `'my stash'` and `e7a8621` are operands.
 * user: the arguments are `e7a8621`. `-q` and `-m` are options. Common conventions of help documentation distinguishes options from arguments.
 
 ## CommandDotNet Perspectives
