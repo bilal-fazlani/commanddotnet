@@ -63,6 +63,7 @@ namespace CommandDotNet.Example
             public ConsoleLogProvider(IConsole console, LogLevel level, string dateTimeFormat)
             {
                 _console = console ?? throw new ArgumentNullException(nameof(console));
+                _level = level;
                 _dateTimeFormat = dateTimeFormat;
             }
 
