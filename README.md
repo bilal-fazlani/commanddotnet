@@ -20,7 +20,7 @@
 
 Version 3 (Current): https://commanddotnet.bilal-fazlani.com
 
-Version 2 (Previous): https://v2--commanddotnet.netlify.com
+Version 2 (Previous): https://v2.commanddotnet.bilal-fazlani.com
 
 ***Model your command line application interface in a class***
 
