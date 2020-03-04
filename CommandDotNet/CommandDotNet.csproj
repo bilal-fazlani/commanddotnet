@@ -12,6 +12,8 @@
     <PackageIconUrl>https://raw.githubusercontent.com/bilal-fazlani/CommandDotNet/master/images/nuget-icon.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/bilal-fazlani/CommandDotNet</RepositoryUrl>
     <Version>1.0.0</Version>
+    <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
+    <PathMap>$(AppOutputBase)=CommandDotNet/</PathMap>
       <!--<NetStandardImplicitPackageVersion>2.0.2</NetStandardImplicitPackageVersion>-->
   </PropertyGroup>
   <PropertyGroup>
