@@ -80,18 +80,24 @@ namespace CommandDotNet.Parsing
             names = names.Where(n => !n.IsNullOrWhitespace()).ToList();
             console.Out.WriteLine();
             console.Out.WriteLine($"The most similar {title} is");
-            names.Select(name => (
-                    name, 
-                    distance: Levenshtein.ComputeDistance(unrecognizedValue, name),
-                    startsWith: GetStartsWithDistance(unrecognizedValue, name),
-                    sameness: GetSamenessDistance(unrecognizedValue, name),
-                    score: 0))
-                .OrderBy(v => v.distance / (v.startsWith + v.sameness + 1))
-                .ThenBy(v => v.distance + -v.sameness)
-                .ForEach(v => console.Out.WriteLine($"   {prefix}{v.name} (score1: {v.distance / (v.startsWith + v.sameness + 1)} score2: {v.distance + -v.sameness})"));
+            var tuples = names.Select(name => (
+                name, 
+                distance: Levenshtein.ComputeDistance(unrecognizedValue, name),
+                startsWith: GetStartsWithLength(unrecognizedValue, name),
+                sameness: GetSamenessLength(unrecognizedValue, name))).ToList();
+
+            var top3ByDistance = tuples.Where(v => v.distance < 4).OrderBy(v => v.distance).Take(3);
+            var top3ByStartsWith = tuples.OrderBy(v => v.startsWith).Take(3);
+            var top3BySameness = tuples.OrderBy(v => v.sameness).Take(3);
+
+            top3ByDistance.Union(top3ByStartsWith).Union(top3BySameness)
+                .OrderBy(v => v.distance + -v.startsWith + -v.sameness)
+                .Take(5)
+                .ForEach(v => console.Out.WriteLine($"   {prefix}{v.name}"));
+                //.ForEach(v => console.Out.WriteLine($"   {prefix}{v.name} (d:{v.distance} w:{v.startsWith} e:{v.sameness} s:{v.distance+-v.startsWith+-v.sameness})"));
         }
 
-        private static int GetStartsWithDistance(string first, string second)
+        private static int GetStartsWithLength(string first, string second)
         {
             for (int i = 0; i < Math.Min(first.Length, second.Length); i++)
             {
@@ -102,7 +108,7 @@ namespace CommandDotNet.Parsing
             return first.Length;
         }
 
-        private static int GetSamenessDistance(string first, string second)
+        private static int GetSamenessLength(string first, string second)
         {
             int same = 0;
             for (int i = 0; i < Math.Min(first.Length, second.Length); i++)
