@@ -27,7 +27,8 @@ namespace CommandDotNet
             bool excludePrompting = false,
             bool excludeResponseFiles = false,
             bool excludeVersionMiddleware = false,
-            bool excludeAppendPipedInputToOperandList = false)
+            bool excludeAppendPipedInputToOperandList = false,
+            bool excludeTypoSuggestions = false)
         {
             if (!excludeCancellationHandlers) appRunner.UseCancellationHandlers();
             if (!excludeDebugDirective) appRunner.UseDebugDirective();
@@ -36,8 +37,15 @@ namespace CommandDotNet
             if (!excludeResponseFiles) appRunner.UseResponseFiles();
             if (!excludeVersionMiddleware) appRunner.UseVersionMiddleware();
             if (!excludeAppendPipedInputToOperandList) appRunner.AppendPipedInputToOperandList();
+            if (!excludeTypoSuggestions) appRunner.UseTypoSuggestions();
 
             return appRunner;
+        }
+
+        /// <summary>When an invalid arguments is entered, suggests context based alternatives</summary>
+        public static AppRunner UseTypoSuggestions(this AppRunner appRunner)
+        {
+            return TypoSuggestionsMiddleware.UseTypoSuggestions(appRunner);
         }
 
         /// <summary>Adds the --version option to the app</summary>

@@ -134,7 +134,7 @@ namespace CommandDotNet.Parsing
                 }
 
                 // use the term "argument" for messages displayed to users
-                throw new CommandParsingException(command, $"Unrecognized command or argument '{token.RawValue}'");
+                throw new CommandParsingException(command, $"Unrecognized command or argument '{token.RawValue}'", unrecognizedArgument: token);
             }
 
             return ParseOperandResult.Succeeded;
@@ -149,7 +149,7 @@ namespace CommandDotNet.Parsing
             option = command.FindOption(optionTokenType.GetName());
             if (option == null)
             {
-                throw new CommandParsingException(command, $"Unrecognized option '{token.RawValue}'");
+                throw new CommandParsingException(command, $"Unrecognized option '{token.RawValue}'", unrecognizedArgument: token);
             }
 
             if (optionTokenType.IsClubbed)
