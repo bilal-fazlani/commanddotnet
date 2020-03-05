@@ -46,18 +46,12 @@ namespace CommandDotNet.Parsing
                         }
                         break;
                     case TokenType.Value:
-                        @out.WriteLine($"{cpe.UnrecognizedArgument.RawValue} is not a command or argument.  See '{usage} --help'");
+                        @out.WriteLine($"{cpe.UnrecognizedArgument.RawValue} is not a command.  See '{usage} --help'");
                         if (command.Subcommands.Any())
                         {
                             @out.WriteLine();
                             @out.WriteLine("The most similar command is");
                             command.Subcommands.ForEach(c => @out.WriteLine($"   {c.Name}"));
-                        }
-                        if (command.Operands.Any())
-                        {
-                            @out.WriteLine();
-                            @out.WriteLine("The most similar argument is");
-                            command.Operands.ForEach(c => @out.WriteLine($"   {c.Name}"));
                         }
                         break;
                     case TokenType.Directive:
