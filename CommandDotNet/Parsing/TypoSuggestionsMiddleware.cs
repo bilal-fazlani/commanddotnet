@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommandDotNet.Builders;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Help;
-using CommandDotNet.Rendering;
+using CommandDotNet.Logging;
 using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Parsing
 {
     internal static class TypoSuggestionsMiddleware
     {
+        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
+
         internal static AppRunner UseTypoSuggestions(AppRunner appRunner)
         {
             // -1 to ensure this middleware runs before any prompting so the value won't appear null
@@ -25,76 +28,86 @@ namespace CommandDotNet.Parsing
                 && ctx.ParseResult.ParseError is CommandParsingException cpe 
                 && cpe.UnrecognizedArgument != null)
             {
-                var @out = ctx.Console.Out;
                 var command = cpe.Command;
-                var usage = command.GetAppName(ctx.AppConfig.AppSettings.Help) + " " +  command.GetPath();
+                var tokenType = cpe.UnrecognizedArgument.TokenType;
 
-                var unrecognizedValue = cpe.UnrecognizedArgument.Value;
-
-                switch (cpe.UnrecognizedArgument.TokenType)
+                if ((tokenType == TokenType.Option &&
+                     TrySuggest(ctx, cpe, command.Options.Where(o => o.ShowInHelp).ToList(), "option", "--"))
+                    || (tokenType == TokenType.Value &&
+                        TrySuggest(ctx, cpe, command.Subcommands, "command", null)))
                 {
-                    case TokenType.Option:
-                        @out.WriteLine($"{cpe.UnrecognizedArgument.RawValue} is not an option.  See '{usage} --help'");
-                        if (command.Options.Any())
-                        {
-                            if (cpe.UnrecognizedArgument.OptionTokenType.IsLong)
-                            {
-                                command.Options
-                                    .Where(o => o.ShowInHelp)
-                                    .Select(o => o.LongName)
-                                    .WriteClosestPossibleMatches("option", unrecognizedValue, "--", ctx.Console);
-                            }
-                            else
-                            {
-                                command.Options
-                                    .Where(o => o.ShowInHelp)
-                                    .Select(o => o.ShortName.ToString())
-                                    .WriteClosestPossibleMatches("option", unrecognizedValue, "-", ctx.Console);
-                            }
-                        }
-                        break;
-                    case TokenType.Value:
-                        @out.WriteLine($"{cpe.UnrecognizedArgument.RawValue} is not a command.  See '{usage} --help'");
-                        if (command.Subcommands.Any())
-                        {
-                            command.Subcommands
-                                .Select(o => o.Name)
-                                .WriteClosestPossibleMatches("command", unrecognizedValue, null, ctx.Console);
-                        }
-                        break;
-                    case TokenType.Directive:
-                        // TODO: suggest other directives? We'd need a list of names which we don't collect atm.
-                    default:
-                        throw new ArgumentOutOfRangeException($"unknown {nameof(TokenType)}: {cpe.UnrecognizedArgument.TokenType}");
+                    return Task.FromResult(1);
                 }
-                return Task.FromResult(1);
+
+                // TODO: suggest other directives? We'd need a list of names which we don't collect atm.
             }
 
             return next(ctx);
         }
 
-        private static void WriteClosestPossibleMatches(this IEnumerable<string> names, 
-            string title, string unrecognizedValue, string prefix, IConsole console)
+        private static bool TrySuggest(
+            CommandContext ctx, CommandParsingException cpe, 
+            IReadOnlyCollection<IArgumentNode> argumentNodes, 
+            string argumentNodeType, string prefix)
         {
+            if (!argumentNodes.Any())
+            {
+                return false;
+            }
 
+            var unrecognizedValue = cpe.UnrecognizedArgument.Value;
+            var suggestions = argumentNodes
+                .SelectMany(o => o.Aliases.Where(a => a.Length > 1)) // skip short names
+                .GetSuggestions(unrecognizedValue);
+
+            if (!suggestions.Any())
+            {
+                return false;
+            }
+
+            var command = cpe.Command;
+            var usage = command.GetAppName(ctx.AppConfig.AppSettings.Help) + " " + command.GetPath();
+
+            var @out = ctx.Console.Out;
+            @out.WriteLine($"'{unrecognizedValue}' is not a {argumentNodeType}.  See '{usage} --help'");
+            @out.WriteLine();
+            @out.WriteLine($"Similar {argumentNodeType}s are");
+            suggestions.ForEach(name => @out.WriteLine($"   {prefix}{name}"));
+
+            return true;
+        }
+
+        private static List<string> GetSuggestions(this IEnumerable<string> names, string unrecognizedValue)
+        {
             names = names.Where(n => !n.IsNullOrWhitespace()).ToList();
-            console.Out.WriteLine();
-            console.Out.WriteLine($"The most similar {title} is");
-            var tuples = names.Select(name => (
-                name, 
-                distance: Levenshtein.ComputeDistance(unrecognizedValue, name),
-                startsWith: GetStartsWithLength(unrecognizedValue, name),
-                sameness: GetSamenessLength(unrecognizedValue, name))).ToList();
+            var tuples = names.Select(name =>
+            {
+                var distance = Levenshtein.ComputeDistance(unrecognizedValue, name);
+                var startsWith = GetStartsWithLength(unrecognizedValue, name);
+                var sameness = GetSamenessLength(unrecognizedValue, name);
+                return (name, distance, startsWith, sameness, score: distance + -startsWith + -sameness);
+            }).ToList();
 
-            var top3ByDistance = tuples.Where(v => v.distance < 4).OrderBy(v => v.distance).Take(3);
-            var top3ByStartsWith = tuples.OrderBy(v => v.startsWith).Take(3);
-            var top3BySameness = tuples.OrderBy(v => v.sameness).Take(3);
+            if (Log.IsDebugEnabled())
+            {
+                var withScores = tuples
+                    .OrderBy(v => v.score)
+                    .Select(v => $"  {v.name}  - distance:{v.distance} startsWith:{v.startsWith} sameness:{v.sameness} score:{v.score}");
+                Log.Debug($"scores:{Environment.NewLine}{withScores.ToCsv(Environment.NewLine)}");
+            }
 
-            top3ByDistance.Union(top3ByStartsWith).Union(top3BySameness)
+            bool IsSimilarEnough((string name, int distance, int startsWith, int sameness, int score) valueTuple)
+            {
+                return !(valueTuple.sameness == 0 && valueTuple.startsWith == 0 & valueTuple.distance > 3);
+            }
+
+            return tuples
+                .Where(v => v.score < 5)
+                .Where(IsSimilarEnough)
                 .OrderBy(v => v.distance + -v.startsWith + -v.sameness)
+                .Select(s => s.name)
                 .Take(5)
-                .ForEach(v => console.Out.WriteLine($"   {prefix}{v.name}"));
-                //.ForEach(v => console.Out.WriteLine($"   {prefix}{v.name} (d:{v.distance} w:{v.startsWith} e:{v.sameness} s:{v.distance+-v.startsWith+-v.sameness})"));
+                .ToList();
         }
 
         private static int GetStartsWithLength(string first, string second)
@@ -113,7 +126,7 @@ namespace CommandDotNet.Parsing
             int same = 0;
             for (int i = 0; i < Math.Min(first.Length, second.Length); i++)
             {
-                if (first[i] != second[i])
+                if (first[i] == second[i])
                     same++;
             }
 
