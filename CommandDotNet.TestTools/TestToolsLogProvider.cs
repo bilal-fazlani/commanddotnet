@@ -4,11 +4,11 @@ using CommandDotNet.Logging;
 
 namespace CommandDotNet.TestTools
 {
-    internal class TestToolsLogProvider : ILogProvider
+    public class TestToolsLogProvider : ILogProvider
     {
         private ILogger _logger;
 
-        internal static void InitLogProvider(ILogger logger)
+        public static void InitLogProvider(ILogger logger)
         {
             if (logger == null)
             {

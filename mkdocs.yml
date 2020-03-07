@@ -38,6 +38,7 @@ nav:
       - Middleware/piped-arguments.md
       - Middleware/prompting.md
       - Middleware/response-files.md
+      - Middleware/typo-suggestions.md
       - Middleware/newer-release-alerts.md
     - Extras:
       - Extras/directives.md
