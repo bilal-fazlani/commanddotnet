@@ -83,8 +83,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 var operandAttr = argumentDef.CustomAttributes.GetCustomAttribute<OperandAttribute>() 
                                   ?? (INameAndDescription) argumentDef.CustomAttributes.GetCustomAttribute<ArgumentAttribute>();
                 return new Operand(
-                    argumentDef.Name, 
-                    parent, 
+                    argumentDef.Name,
                     typeInfo,
                     ArgumentArity.Default(argumentDef.Type, argumentDef.HasDefaultValue, BooleanMode.Explicit), 
                     argumentDef.SourcePath,
@@ -111,7 +110,6 @@ namespace CommandDotNet.ClassModeling.Definitions
                 return new Option(
                     longName,
                     ParseShortName(argumentDef, optionAttr?.ShortName),
-                    parent, 
                     typeInfo, 
                     argumentArity, 
                     definitionSource: argumentDef.SourcePath,

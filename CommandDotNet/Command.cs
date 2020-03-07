@@ -14,6 +14,7 @@ namespace CommandDotNet
 {
     public sealed class Command : IArgumentNode
     {
+        private Command _parent;
         private readonly List<Option> _options = new List<Option>();
         private readonly List<Option> _optionsForExecutableSubcommands = new List<Option>();
         private readonly List<Operand> _operands = new List<Operand>();
@@ -60,7 +61,18 @@ namespace CommandDotNet
         /// Is null for the root command. Some parent commands are not executable
         /// but are defined only to group for other commands.
         /// </summary>
-        public Command Parent { get; }
+        public Command Parent
+        {
+            get => _parent;
+            set
+            {
+                if (_parent != null && _parent != value)
+                {
+                    throw new InvalidConfigurationException($"{nameof(Parent)} is already assigned for {this}.  Current={_parent} New={value}");
+                }
+                _parent = value;
+            }
+        }
 
         /// <summary>The aliases defined for this command</summary>
         public IReadOnlyCollection<string> Aliases { get; }
@@ -112,6 +124,7 @@ namespace CommandDotNet
 
         private void AddSubcommand(Command command)
         {
+            command.Parent = this;
             _subcommands.Add(command);
             RegisterArgumentByAliases(command);
             if (command.IsExecutable)
@@ -124,6 +137,7 @@ namespace CommandDotNet
 
         private void AddOperand(Operand operand)
         {
+            operand.Parent = this;
             var lastOperand = Operands.LastOrDefault();
             if (lastOperand != null && lastOperand.Arity.AllowsMany())
             {
@@ -137,6 +151,11 @@ namespace CommandDotNet
 
         private void AddOption(Option option)
         {
+            if (!option.AssignToExecutableSubcommands || option.Parent == null)
+            {
+                option.Parent = this;
+            }
+
             if (option.AssignToExecutableSubcommands)
             {
                 if (option.Parent == this)
@@ -144,7 +163,7 @@ namespace CommandDotNet
                     _optionsForExecutableSubcommands.Add(option);
                     this.GetDescendentCommands(includeCurrent: false)
                         .Where(c => c.IsExecutable)
-                        .ForEach(c => c.AddArgumentNode(option));
+                        .ForEach(c => c.AddOption(option));
                 }
                 if(IsExecutable)
                 {
@@ -181,10 +200,18 @@ namespace CommandDotNet
 
         public override string ToString()
         {
-            return $"{nameof(Command)}:{Name} " +
-                   $"operands:{_operands.Select(o => o.Name).ToCsv()} " +
-                   $"options:{_options.Select(o => o.Name).ToCsv()} " +
-                   $"commands:{_subcommands.Select(c => c.Name).ToCsv()}";
+            return $"Command {nameof(Command)}:{Name}  ({DefinitionSource})";
+        }
+
+        public string ToString(bool verbose)
+        {
+            return !verbose
+                ? $"Command {nameof(Command)}:{Name} ({DefinitionSource})"
+                : $"Command {nameof(Command)}:{Name} ({DefinitionSource})" +
+                  $"operands:{_operands.Select(o => o.Name).ToCsv()} " +
+                  $"options:{_options.Select(o => o.Name).ToCsv()} " +
+                  $"commands:{_subcommands.Select(c => c.Name).ToCsv()}";
+
         }
 
         public static bool operator ==(Command x, Command y) => (object) x == (object) y;
