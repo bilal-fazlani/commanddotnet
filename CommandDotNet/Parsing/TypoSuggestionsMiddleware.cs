@@ -15,11 +15,24 @@ namespace CommandDotNet.Parsing
     {
         private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
-        internal static AppRunner UseTypoSuggestions(AppRunner appRunner)
+        internal static AppRunner UseTypoSuggestions(AppRunner appRunner, int maxSuggestionCount)
         {
-            // -1 to ensure this middleware runs before any prompting so the value won't appear null
-            return appRunner.Configure(c => c.UseMiddleware(Middleware,
-                MiddlewareSteps.TypoSuggest.Stage, MiddlewareSteps.TypoSuggest.Order));
+            if (maxSuggestionCount < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(maxSuggestionCount), $"{maxSuggestionCount} must be > 0");
+            }
+
+            return appRunner.Configure(c =>
+            {
+                c.Services.Add(new Config {MaxSuggestionCount = maxSuggestionCount});   
+                c.UseMiddleware(Middleware,
+                    MiddlewareSteps.TypoSuggest.Stage, MiddlewareSteps.TypoSuggest.Order);
+            });
+        }
+
+        private class Config
+        {
+            public int MaxSuggestionCount;
         }
 
         private static Task<int> Middleware(CommandContext ctx, ExecutionDelegate next)
@@ -55,10 +68,13 @@ namespace CommandDotNet.Parsing
                 return false;
             }
 
-            var unrecognizedValue = cpe.UnrecognizedArgument.Value;
+            var config = ctx.AppConfig.Services.Get<Config>();
+
+            var typo = cpe.UnrecognizedArgument.Value;
             var suggestions = argumentNodes
                 .SelectMany(o => o.Aliases.Where(a => a.Length > 1)) // skip short names
-                .GetSuggestions(unrecognizedValue);
+                .GetSuggestions(typo, config.MaxSuggestionCount)
+                .ToList();
 
             if (!suggestions.Any())
             {
@@ -69,7 +85,7 @@ namespace CommandDotNet.Parsing
             var usage = command.GetAppName(ctx.AppConfig.AppSettings.Help) + " " + command.GetPath();
 
             var @out = ctx.Console.Out;
-            @out.WriteLine($"'{unrecognizedValue}' is not a {argumentNodeType}.  See '{usage} --help'");
+            @out.WriteLine($"'{typo}' is not a {argumentNodeType}.  See '{usage} --help'");
             @out.WriteLine();
             @out.WriteLine($"Similar {argumentNodeType}s are");
             suggestions.ForEach(name => @out.WriteLine($"   {prefix}{name}"));
@@ -77,37 +93,40 @@ namespace CommandDotNet.Parsing
             return true;
         }
 
-        private static List<string> GetSuggestions(this IEnumerable<string> names, string unrecognizedValue)
+        internal static IEnumerable<string> GetSuggestions(this IEnumerable<string> names, 
+            string typo, int maxSuggestionCount)
         {
             names = names.Where(n => !n.IsNullOrWhitespace()).ToList();
             var tuples = names.Select(name =>
-            {
-                var distance = Levenshtein.ComputeDistance(unrecognizedValue, name);
-                var startsWith = GetStartsWithLength(unrecognizedValue, name);
-                var sameness = GetSamenessLength(unrecognizedValue, name);
-                return (name, distance, startsWith, sameness, score: distance + -startsWith + -sameness);
-            }).ToList();
+                {
+                    var distance = -Levenshtein.ComputeDistance(typo, name);
+                    var startsWith = GetStartsWithLength(typo, name);
+                    var sameness = Math.Max(GetSamenessLength(typo, name), GetContainsLength(typo, name));
+                    return (name, distance, startsWith, sameness, score: distance + startsWith + sameness);
+                })
+                .OrderByDescending(v => v.score)
+                .ThenBy(v => v.startsWith)
+                .ThenBy(v => v.sameness)
+                .ThenBy(v => v.name)
+                .ToList();
 
             if (Log.IsDebugEnabled())
             {
                 var withScores = tuples
-                    .OrderBy(v => v.score)
                     .Select(v => $"  {v.name}  - distance:{v.distance} startsWith:{v.startsWith} sameness:{v.sameness} score:{v.score}");
                 Log.Debug($"scores:{Environment.NewLine}{withScores.ToCsv(Environment.NewLine)}");
             }
 
             bool IsSimilarEnough((string name, int distance, int startsWith, int sameness, int score) valueTuple)
             {
-                return !(valueTuple.sameness == 0 && valueTuple.startsWith == 0 & valueTuple.distance > 3);
+                return !(valueTuple.sameness == 0 && valueTuple.startsWith == 0 & valueTuple.distance < -3);
             }
 
             return tuples
-                .Where(v => v.score < 5)
+                .Where(v => v.score > -3)
                 .Where(IsSimilarEnough)
-                .OrderBy(v => v.distance + -v.startsWith + -v.sameness)
                 .Select(s => s.name)
-                .Take(5)
-                .ToList();
+                .Take(maxSuggestionCount);
         }
 
         private static int GetStartsWithLength(string first, string second)
@@ -131,6 +150,12 @@ namespace CommandDotNet.Parsing
             }
 
             return same;
+        }
+
+        private static int GetContainsLength(string first, string second)
+        {
+            var (small, large) = first.Length > second.Length ? (second, first) : (first, second);
+            return large.ToLower().Contains(small.ToLower()) ? small.Length : 0;
         }
     }
 }

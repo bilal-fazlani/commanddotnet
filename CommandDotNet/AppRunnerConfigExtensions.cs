@@ -43,9 +43,9 @@ namespace CommandDotNet
         }
 
         /// <summary>When an invalid arguments is entered, suggests context based alternatives</summary>
-        public static AppRunner UseTypoSuggestions(this AppRunner appRunner)
+        public static AppRunner UseTypoSuggestions(this AppRunner appRunner, int maxSuggestionCount = 5)
         {
-            return TypoSuggestionsMiddleware.UseTypoSuggestions(appRunner);
+            return TypoSuggestionsMiddleware.UseTypoSuggestions(appRunner, maxSuggestionCount);
         }
 
         /// <summary>Adds the --version option to the app</summary>
