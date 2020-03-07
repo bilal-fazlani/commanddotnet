@@ -12,21 +12,34 @@ namespace CommandDotNet
 {
     public sealed class Operand : IArgument
     {
+        private Command _parent;
         private object _value;
         private readonly ValueProxy _valueProxy;
 
+        [Obsolete("Use ctor without 'Command parent' parameter")]
         public Operand(
-            string name, 
-            Command parent, 
+            string name,
+            Command parent,
             TypeInfo typeInfo,
             IArgumentArity arity,
-            string definitionSource = null, 
+            string definitionSource = null,
+            ICustomAttributeProvider customAttributes = null,
+            ValueProxy valueProxy = null)
+            : this(name, typeInfo, arity, definitionSource, customAttributes, valueProxy)
+        {
+            _parent = parent ?? throw new ArgumentNullException(nameof(parent));
+        }
+
+        public Operand(
+            string name,
+            TypeInfo typeInfo,
+            IArgumentArity arity,
+            string definitionSource = null,
             ICustomAttributeProvider customAttributes = null,
             ValueProxy valueProxy = null)
         {
             _valueProxy = valueProxy;
             Name = name ?? throw new ArgumentNullException(nameof(name));
-            Parent = parent ?? throw new ArgumentNullException(nameof(parent));
             TypeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
             Arity = arity ?? throw new ArgumentNullException(nameof(arity));
             DefinitionSource = definitionSource;
@@ -77,7 +90,18 @@ namespace CommandDotNet
         }
 
         /// <summary>The <see cref="Command"/> that hosts this <see cref="Operand"/></summary>
-        public Command Parent { get; }
+        public Command Parent
+        {
+            get => _parent;
+            set
+            {
+                if (_parent != null && _parent != value)
+                {
+                    throw new InvalidConfigurationException($"{nameof(Parent)} is already assigned for {this}.  Current={_parent} New={value}");
+                }
+                _parent = value;
+            }
+        }
 
         /// <summary>The aliases defined for this argument</summary>
         public IReadOnlyCollection<string> Aliases { get; }

@@ -30,7 +30,7 @@ namespace CommandDotNet.Builders
             }
 
             var option = new Option(VersionOptionName, 'v', 
-                args.CommandBuilder.Command, TypeInfo.Flag, ArgumentArity.Zero, 
+                TypeInfo.Flag, ArgumentArity.Zero, 
                 definitionSource: typeof(VersionMiddleware).FullName)
             {
                 Description = "Show version information",
