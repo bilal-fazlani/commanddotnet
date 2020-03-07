@@ -1,4 +1,6 @@
-﻿using CommandDotNet.TestTools.Scenarios;
+﻿using System.Threading.Tasks;
+using CommandDotNet.TestTools.Scenarios;
+using CommandDotNet.TypeDescriptors;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -183,6 +185,50 @@ namespace CommandDotNet.Tests.FeatureTests
                     });
         }
 
+        [Fact]
+        public void Given_Interceptor_AndOptionTypo_ShowsSimilarOptions_NotCommands()
+        {
+            new AppRunner<InterceptorApp>()
+                .UseTypoSuggestions()
+                .VerifyScenario(_testOutputHelper,
+                    new Scenario
+                    {
+                        WhenArgs = "--users",
+                        Then =
+                        {
+                            ExitCode = 1,
+                            ResultsContainsTexts =
+                            {
+                                "'users' is not a option.  See 'dotnet testhost.dll  --help'",
+                                @"Similar options are
+   --username"
+                            }
+                        }
+                    });
+        }
+
+        [Fact]
+        public void Given_Interceptor_AndCommandTypo_ShowsSimilarCommands_NotOptions()
+        {
+            new AppRunner<InterceptorApp>()
+                .UseTypoSuggestions()
+                .VerifyScenario(_testOutputHelper,
+                    new Scenario
+                    {
+                        WhenArgs = "users",
+                        Then =
+                        {
+                            ExitCode = 1,
+                            ResultsContainsTexts =
+                            {
+                                "'users' is not a command.  See 'dotnet testhost.dll  --help'",
+                                @"Similar commands are
+   ListUsers"
+                            }
+                        }
+                    });
+        }
+
         public class App
         {
             public void User([Option] string username, [Option] string firstname, [Option] string lastname)
@@ -194,6 +240,16 @@ namespace CommandDotNet.Tests.FeatureTests
             public void Unregister() { }
 
             public void Similars([Option] string opt1, [Option] string opt2, [Option] string opt3, [Option] string opt4, [Option] string opt5) { }
+        }
+
+        public class InterceptorApp
+        {
+            public Task<int> Authenticate(InterceptorExecutionDelegate next, [Option] string username, [Option] string password)
+            {
+                return next();
+            }
+
+            public void ListUsers() { }
         }
     }
 }
