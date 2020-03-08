@@ -1,4 +1,4 @@
-#Prompting Middleware
+# Prompting
 
 ## TLDR, How to enable 
 Enable the feature with `appRunner.UsePrompting()` or `appRunner.UseDefaultMiddleware()`.
