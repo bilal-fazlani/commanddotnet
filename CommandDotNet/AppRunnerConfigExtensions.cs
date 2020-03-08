@@ -178,14 +178,16 @@ namespace CommandDotNet
         /// command_Name.--option_longName, command_Name.-option_shortName or command_Name.operand_Name<br/>
         /// command_Name can be excluded too and the config will be applied to all arguments matching the name.
         /// </param>
-        public static AppRunner UseDefaultsFromAppSetting(this AppRunner appRunner, NameValueCollection appSettings, bool includeNamingConventions = false)
+        /// <param name="sourceName">the source of the appSettings collection</param>
+        public static AppRunner UseDefaultsFromAppSetting(this AppRunner appRunner, NameValueCollection appSettings, 
+            bool includeNamingConventions = false, string sourceName = "AppSettings")
         {
             return includeNamingConventions
-                ? appRunner.UseDefaultsFromConfig(
+                ? appRunner.UseDefaultsFromConfig(sourceName,
                     DefaultSources.AppSetting.GetDefaultValue(appSettings, 
                         DefaultSources.AppSetting.GetKeyFromAttribute, 
                         DefaultSources.AppSetting.GetKeysFromConvention))
-                : appRunner.UseDefaultsFromConfig(
+                : appRunner.UseDefaultsFromConfig(sourceName,
                     DefaultSources.AppSetting.GetDefaultValue(appSettings, DefaultSources.AppSetting.GetKeyFromAttribute));
         }
 
@@ -193,16 +195,21 @@ namespace CommandDotNet
         /// When <see cref="EnvVarAttribute"/> is present, looks for the key in the provided envVars config.<br/>
         /// If envVars is not provided the default <see cref="Environment.GetEnvironmentVariables()"/>
         /// </summary>
-        public static AppRunner UseDefaultsFromEnvVar(this AppRunner appRunner, IDictionary envVars = null)
+        public static AppRunner UseDefaultsFromEnvVar(this AppRunner appRunner, IDictionary envVars = null, string sourceName = "EnvVar")
         {
-            return appRunner.UseDefaultsFromConfig(
+            return appRunner.UseDefaultsFromConfig(sourceName,
                 DefaultSources.EnvVar.GetDefaultValue(envVars, DefaultSources.EnvVar.GetKeyFromAttribute));
         }
 
         /// <summary>Provide your own strategies for setting argument defaults from a configuration source</summary>
         public static AppRunner UseDefaultsFromConfig(this AppRunner appRunner,
-            params Func<IArgument, string>[] getDefaultValueCallbacks)
-            => SetArgumentDefaultsMiddleware.SetArgumentDefaultsFrom(appRunner, getDefaultValueCallbacks);
+            params Func<IArgument, DefaultValue>[] getDefaultValueCallbacks)
+            => appRunner.UseDefaultsFromConfig("config", getDefaultValueCallbacks);
+
+        /// <summary>Provide your own strategies for setting argument defaults from a configuration source</summary>
+        public static AppRunner UseDefaultsFromConfig(this AppRunner appRunner, string sourceName,
+            params Func<IArgument, DefaultValue>[] getDefaultValueCallbacks)
+            => SetArgumentDefaultsMiddleware.SetArgumentDefaultsFrom(appRunner, sourceName, getDefaultValueCallbacks);
 
         /// <summary>
         /// Returns the list of all possible types that could be instantiated to execute commands.<br/>

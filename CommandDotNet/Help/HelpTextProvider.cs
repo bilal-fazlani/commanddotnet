@@ -185,7 +185,7 @@ namespace CommandDotNet.Help
         /// <summary></summary>
         protected virtual string ArgumentDefaultValue(IArgument argument)
         {
-            object defaultValue = argument.DefaultValue;
+            object defaultValue = argument.DefaultValue?.Value;
 
             if (defaultValue.IsNullValue())
             {

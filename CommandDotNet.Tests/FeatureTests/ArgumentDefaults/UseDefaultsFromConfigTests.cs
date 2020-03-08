@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             };
 
             new AppRunner<App>()
-                .UseDefaultsFromConfig(arg => "red")
+                .UseDefaultsFromConfig(arg => Config("red"))
                 .VerifyScenario(_testOutputHelper, scenario);
         }
 
@@ -38,7 +38,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             };
 
             new AppRunner<App>()
-                .UseDefaultsFromConfig(arg => "red")
+                .UseDefaultsFromConfig(arg => Config("red"))
                 .VerifyScenario(_testOutputHelper, scenario);
         }
 
@@ -52,21 +52,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             };
 
             new AppRunner<App>()
-                .UseDefaultsFromConfig(arg => "red,blue,green")
-                .VerifyScenario(_testOutputHelper, scenario);
-        }
-
-        [Fact]
-        public void GivenCsvValue_Should_SplitAsDefaultForCollectionArgument()
-        {
-            var scenario = new Scenario
-            {
-                WhenArgs = "List",
-                Then = { Outputs = { new []{ "red", "blue", "green" } } }
-            };
-
-            new AppRunner<App>()
-                .UseDefaultsFromConfig(arg => "red,blue,green")
+                .UseDefaultsFromConfig(arg => Config("red,blue,green"))
                 .VerifyScenario(_testOutputHelper, scenario);
         }
 
@@ -84,6 +70,11 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             new AppRunner<App>()
                 .UseDefaultsFromConfig(arg => null)
                 .VerifyScenario(_testOutputHelper, scenario);
+        }
+
+        private static DefaultValue Config(string value)
+        {
+            return new DefaultValue("test", "key", value);
         }
 
         public class App

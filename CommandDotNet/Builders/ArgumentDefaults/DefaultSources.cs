@@ -23,7 +23,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                 }
             }
 
-            public static Func<IArgument, string> GetDefaultValue(
+            public static Func<IArgument, DefaultValue> GetDefaultValue(
                 IDictionary envVars = null,
                 params GetArgumentKeysDelegate[] getKeysDelegates)
             {
@@ -67,7 +67,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                 }
             }
 
-            public static Func<IArgument, string> GetDefaultValue(
+            public static Func<IArgument, DefaultValue> GetDefaultValue(
                 NameValueCollection appSettings,
                 params GetArgumentKeysDelegate[] getKeysCallbacks)
             {
@@ -82,7 +82,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
             }
         }
 
-        private static Func<IArgument, string> GetValue(
+        private static Func<IArgument, DefaultValue> GetValue(
             string sourceName,
             GetArgumentKeysDelegate[] getKeys, 
             Func<string, string> getValueFromSource)
@@ -92,14 +92,23 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                 var value = getKeys
                     .SelectMany(cb => cb(argument))
                     .Select(key => (key, value:getValueFromSource(key)))
-                    .FirstOrDefault(v => v.value != null);
+                    .Where(v => v.value != null)
+                    .Select(v =>
+                    {
+                        object f = argument.Arity.AllowsMany()
+                            ? v.value.Split(',')
+                            : (object)v.value;
+                        return new DefaultValue(sourceName, v.key, f);
+                    })
+                    .FirstOrDefault();
                 
-                if (value.value != null)
+                if (value != null)
                 {
-                    Log.Debug($"found default value `{value}` in `{sourceName}` for `{argument}`");
+                    // do not include value in case it's a password
+                    Log.Debug($"found default value `{value}` for `{argument}`");
                 }
 
-                return value.value;
+                return value;
             };
         }
     }

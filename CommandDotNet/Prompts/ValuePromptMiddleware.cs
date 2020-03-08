@@ -79,7 +79,7 @@ namespace CommandDotNet.Prompts
                     option => !option.Arity.AllowsNone() // exclude flag options: help, version, ...
                 ))
                 .Where(a => argumentFilter == null || argumentFilter(a))
-                .Where(a => a.InputValues.IsEmpty() && a.DefaultValue.IsNullValue())
+                .Where(a => a.InputValues.IsEmpty() && (a.DefaultValue?.Value.IsNullValue() ?? true))
                 .TakeWhile(a => !commandContext.AppConfig.CancellationToken.IsCancellationRequested && !isCancellationRequested)
                 .ForEach(a =>
                 {

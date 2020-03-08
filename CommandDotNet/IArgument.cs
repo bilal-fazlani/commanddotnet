@@ -14,7 +14,7 @@ namespace CommandDotNet
         IArgumentArity Arity { get; set; }
 
         /// <summary>The default value for this argument</summary>
-        object DefaultValue { get; set; }
+        DefaultValue DefaultValue { get; set; }
 
         /// <summary>
         /// The allowed values for this argument, as defined by an <see cref="IAllowedValuesTypeDescriptor"/> for this type.

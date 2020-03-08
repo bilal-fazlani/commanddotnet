@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using CommandDotNet.Extensions;
+using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
@@ -173,9 +174,31 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                 .VerifyScenario(_testOutputHelper, scenario);
         }
 
+        [Theory]
+        [InlineData("List", "planets", "mars,pluto")]
+        [InlineData("List", "planets", "mars")]
+        public void CsvValues(string args, string key, string value)
+        {
+            var nvc = new NameValueCollection
+            {
+                {key, value}
+            };
+
+            var scenario = new Scenario
+            {
+                WhenArgs = args,
+                Then = { Outputs = { value.Split(",") }}
+            };
+
+            new AppRunner<App>()
+                .UseDefaultsFromAppSetting(nvc, includeNamingConventions: true)
+                .VerifyScenario(_testOutputHelper, scenario);
+        }
 
         public class App
         {
+            private TestOutputs TestOutputs { get; set; }
+
             public void ByConvention(
                 [Option(LongName = "option1", ShortName = "o")] string option1,
                 [Operand] string operand1,
@@ -195,6 +218,11 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             )
             {
 
+            }
+
+            public void List(string[] planets)
+            {
+                TestOutputs.CaptureIfNotNull(planets);
             }
         }
     }

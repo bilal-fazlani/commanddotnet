@@ -4,6 +4,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 {
     internal interface IArgumentDef: ISourceDef
     {
+        string ArgumentDefType { get; }
         CommandNodeType CommandNodeType { get; }
         Type Type { get; }
         bool HasDefaultValue { get; }

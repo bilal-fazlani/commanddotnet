@@ -117,7 +117,7 @@ namespace CommandDotNet
         public IArgumentArity Arity { get; set; }
 
         /// <summary>The default value for this argument</summary>
-        public object DefaultValue { get; set; } = DBNull.Value;
+        public DefaultValue DefaultValue { get; set; }
 
         /// <summary>
         /// The allowed values for this argument, as defined by an <see cref="IAllowedValuesTypeDescriptor"/> for this type.
@@ -128,7 +128,7 @@ namespace CommandDotNet
         /// <summary>
         /// The text values provided as input.
         /// Will be empty if no values were provided.<br/>
-        /// Sources provided by this framework can be found at <see cref="Constants.InputValueSources"/><br/>
+        /// Sources provided by this framework are named in the constants class <see cref="Constants.InputValueSources"/><br/>
         /// Flag options will contain a bool value.
         /// </summary>
         public ICollection<InputValue> InputValues { get; } = new List<InputValue>();

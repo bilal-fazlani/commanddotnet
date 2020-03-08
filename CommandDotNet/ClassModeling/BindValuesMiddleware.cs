@@ -49,9 +49,9 @@ namespace CommandDotNet.ClassModeling
                         return Task.FromResult(returnCode);
                     }
                 }
-                else if (argument.DefaultValue != null)
+                else if (argument.DefaultValue?.Value != null)
                 {
-                    var defaultValue = argument.DefaultValue;
+                    var defaultValue = argument.DefaultValue.Value;
                     // middleware could set the default to any type.
                     // string values could be assigned from attributes or config values
                     // so they are parsed as if submitted from the shell.
