@@ -32,7 +32,6 @@ jobs:
           script: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
         - name: test on windows
           os: windows
-          dotnet: 3.1.102
           script: dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
         #-----------------------------------
 
