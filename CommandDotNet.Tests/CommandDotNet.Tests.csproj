@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <LangVersion>7.2</LangVersion>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.10.2" />
