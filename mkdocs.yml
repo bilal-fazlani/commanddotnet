@@ -7,7 +7,7 @@ strict: true
 
 nav:
     - Introduction: index.md
-    - whats-new-in-v3.md
+    - whats-new-in-v4.md
     - getting-started.md
     - Defining Commands:
       - DefiningCommands/argument-terminology.md
