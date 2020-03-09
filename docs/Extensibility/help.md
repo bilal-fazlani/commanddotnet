@@ -12,7 +12,7 @@ The default template is as follows
 ```bash
 {description}
 
-Usage: {application} [command] [arguments] [options]
+Usage: {application} [command] [options] [arguments]
 
 Arguments:
 
@@ -57,6 +57,7 @@ new AppSettings
     Help
     {
         PrintHelpOption = true,
+        ExpandArgumentsInUsage = true,
         TextStyle = HelpTextStyle.Basic,
         UsageAppNameStyle = UsageAppNameStyle.Executable,
         UsageAppName = "GlobalToolName"
@@ -66,6 +67,18 @@ new AppSettings
 
 ### PrintHelpOption
 `PrintHelpOption` will include the help option in the list of options for every command.
+
+### ExpandArgumentsInUsage
+When true, arguments are expanded in the usage section so the names of all arguments are shown.
+
+Given the command: `Add(int value1, int value2, int value3 = 0)`
+
+Usage is `Add [arguments]` 
+
+When ExpandArgumentsInUsage = true
+
+Usage is `Add <value1> <value2> [<value3>]`
+
 
 ### TextStyle
 Default is `HelpTextStyle.Detailed`. `HelpTextStyle.Basic` changes the argument and option template to just `{name} {description}`

@@ -13,7 +13,7 @@ This is what help information looks like
 ```bash
 ~
 $ dotnet example.dll LaunchRocket -h
-Usage: dotnet example.dll LaunchRocket [arguments] [options]
+Usage: dotnet example.dll LaunchRocket [options] [arguments]
 
 Arguments:
 

@@ -16,5 +16,10 @@
         /// When specified, <see cref="UsageAppNameStyle"/> is ignored.
         /// </summary>
         public string UsageAppName { get; set; }
+
+        /// <summary>
+        /// When true, the usage section will expand arguments so the names of all arguments are shown.
+        /// </summary>
+        public bool ExpandArgumentsInUsage { get; set; }
     }
 }
