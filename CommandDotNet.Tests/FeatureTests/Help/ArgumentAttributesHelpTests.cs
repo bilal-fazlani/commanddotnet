@@ -23,7 +23,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
                         WhenArgs = "Do -h",
                         Then =
                         {
-                            Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                            Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
   operand   operand-descr
@@ -45,7 +45,7 @@ Options:
                         WhenArgs = "Do -h",
                         Then =
                         {
-                            Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                            Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
 

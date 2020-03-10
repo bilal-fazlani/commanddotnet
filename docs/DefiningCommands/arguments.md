@@ -53,7 +53,7 @@ public void LaunchRocket(
 and help looks like:
 
 ```bash
-Usage: dotnet CommandDotNet.Example.dll launch-rocket [arguments] [options]  
+Usage: dotnet CommandDotNet.Example.dll launch-rocket [options] [arguments]  
                                                                              
 Arguments:                                                                   
                                                                              
