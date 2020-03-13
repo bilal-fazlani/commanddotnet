@@ -24,7 +24,7 @@ namespace CommandDotNet.TestTools
             {
                 capture(context);
                 return exitAfterCapture 
-                    ? Task.FromResult<int>(0) 
+                    ? Task.FromResult(0) 
                     : next(context);
             }, middlewareStage, orderWithinStage));
         }
@@ -35,7 +35,8 @@ namespace CommandDotNet.TestTools
             ILogger logger,
             Func<TestConsole, string> onReadLine = null,
             IEnumerable<string> pipedInput = null,
-            IPromptResponder promptResponder = null)
+            IPromptResponder promptResponder = null,
+            bool returnResultOnError = false)
         {
             TestToolsLogProvider.InitLogProvider(logger);
 
@@ -49,19 +50,27 @@ namespace CommandDotNet.TestTools
             runner.Configure(c => c.Console = testConsole);
             var outputs = InjectTestOutputs(runner);
 
+            void LogResult()
+            {
+                logger?.WriteLine("\nconsole output:\n");
+                logger?.WriteLine(testConsole.Joined.ToString());
+            }
+
             try
             {
                 var exitCode = runner.Run(args);
-                var consoleOut = testConsole.Joined.ToString();
-
-                logger?.WriteLine("\nconsole output:\n");
-                logger?.WriteLine(consoleOut);
+                LogResult();
                 return new AppRunnerResult(exitCode, testConsole, outputs);
             }
             catch (Exception e)
             {
-                logger?.WriteLine("\nconsole output:\n");
-                logger?.WriteLine(testConsole.Joined.ToString());
+                if (returnResultOnError)
+                {
+                    testConsole.Error.WriteLine(e.Message);
+                    LogResult();
+                    return new AppRunnerResult(1, testConsole, outputs);
+                }
+                LogResult();
                 throw;
             }
         }

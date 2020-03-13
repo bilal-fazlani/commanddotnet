@@ -33,7 +33,8 @@ namespace CommandDotNet.TestTools.Scenarios
                     logger,
                     scenario.Given.OnReadLine,
                     scenario.Given.PipedInput,
-                    scenario.Given.OnPrompt);
+                    scenario.Given.OnPrompt,
+                    returnResultOnError: true);
 
                 AssertExitCodeAndErrorMessage(scenario, results);
 
@@ -47,7 +48,7 @@ namespace CommandDotNet.TestTools.Scenarios
                     AssertOutputItems(scenario, results);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 PrintContext(appRunner, logger);
                 if (results != null)
@@ -76,46 +77,65 @@ namespace CommandDotNet.TestTools.Scenarios
 
         private static void AssertExitCodeAndErrorMessage(IScenario scenario, AppRunnerResult result)
         {
-            var expectedExitCode = scenario.Then.ExitCode.GetValueOrDefault();
-            var missingHelpTexts = scenario.Then.ResultsContainsTexts
-                .Where(t => !result.OutputContains(t))
-                .ToList();
+            var sb = new StringBuilder();
 
-            var unexpectedHelpTexts = scenario.Then.ResultsNotContainsTexts
-                .Where(result.OutputContains)
-                .ToList();
+            AssertExitCode(scenario, result, sb);
 
-            if (expectedExitCode != result.ExitCode || missingHelpTexts.Count > 0 || unexpectedHelpTexts.Count > 0)
+            AssertMissingHelpTexts(scenario, result, sb);
+
+            AssertUnexpectedHelpTexts(scenario, result, sb);
+
+            if (sb.Length > 0)
             {
-                var sb = new StringBuilder();
-                sb.AppendLine($"ExitCode: expected={expectedExitCode} actual={result.ExitCode}");
-                if (missingHelpTexts.Count > 0)
-                {
-                    sb.AppendLine();
-                    sb.AppendLine($"Missing text in output:");
-                    foreach (var text in missingHelpTexts)
-                    {
-                        sb.AppendLine();
-                        sb.AppendLine($"  {text}");
-                    }
-                }
-                if (unexpectedHelpTexts.Count > 0)
-                {
-                    sb.AppendLine();
-                    sb.AppendLine($"Unexpected text in output:");
-                    foreach (var text in unexpectedHelpTexts)
-                    {
-                        sb.AppendLine();
-                        sb.AppendLine($"  {text}");
-                    }
-                }
-
                 sb.AppendLine();
                 sb.AppendLine("Console output <begin> ------------------------------");
                 sb.AppendLine(String.IsNullOrWhiteSpace(result.ConsoleOutAndError) ? "<no output>" : result.ConsoleOutAndError);
                 sb.AppendLine("Console output <end>   ------------------------------");
 
                 throw new AssertionFailedException(sb.ToString());
+            }
+        }
+
+        private static void AssertExitCode(IScenario scenario, AppRunnerResult result, StringBuilder sb)
+        {
+            var expectedExitCode = scenario.Then.ExitCode.GetValueOrDefault();
+            if (expectedExitCode != result.ExitCode)
+            {
+                sb.AppendLine($"ExitCode: expected={expectedExitCode} actual={result.ExitCode}");
+            }
+        }
+
+        private static void AssertMissingHelpTexts(IScenario scenario, AppRunnerResult result, StringBuilder sb)
+        {
+            var missingHelpTexts = scenario.Then.ResultsContainsTexts
+                .Where(t => !result.OutputContains(t))
+                .ToList();
+            if (missingHelpTexts.Count > 0)
+            {
+                sb.AppendLine();
+                sb.AppendLine($"Missing text in output:");
+                foreach (var text in missingHelpTexts)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine($"  {text}");
+                }
+            }
+        }
+
+        private static void AssertUnexpectedHelpTexts(IScenario scenario, AppRunnerResult result, StringBuilder sb)
+        {
+            var unexpectedHelpTexts = scenario.Then.ResultsNotContainsTexts
+                .Where(result.OutputContains)
+                .ToList();
+            if (unexpectedHelpTexts.Count > 0)
+            {
+                sb.AppendLine();
+                sb.AppendLine($"Unexpected text in output:");
+                foreach (var text in unexpectedHelpTexts)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine($"  {text}");
+                }
             }
         }
 
