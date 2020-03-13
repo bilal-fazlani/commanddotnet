@@ -47,5 +47,10 @@ namespace CommandDotNet.TypeDescriptors
             return (_innerDescriptor as IAllowedValuesTypeDescriptor)?.GetAllowedValues(argument)
                    ?? Enumerable.Empty<string>();
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(ErrorReportingDescriptor)} > {_innerDescriptor}";
+        }
     }
 }

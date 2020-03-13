@@ -4,7 +4,6 @@ namespace CommandDotNet.TestTools.Scenarios
 {
     public class Scenario : IScenario
     {
-        private readonly bool _includeArgsInToString;
         public string Name { get; }
 
         /// <summary>The starting context</summary>
@@ -27,17 +26,16 @@ namespace CommandDotNet.TestTools.Scenarios
         }
 
         /// <summary>Use this in data-driven tests to distinguish between scenarios</summary>
-        public Scenario(string name, bool includeArgsInToString = false)
+        public Scenario(string name)
         {
-            _includeArgsInToString = includeArgsInToString;
             Name = name;
         }
 
         public override string ToString()
         {
-            return !_includeArgsInToString 
-                ? Name
-                : $"{Name} > {WhenArgs ?? WhenArgsArray.ToCsv(" ")}";
+            return Name.IsNullOrWhitespace()
+                ? $"{nameof(Scenario)}: args={WhenArgs ?? WhenArgsArray.ToCsv(" ")}"
+                : $"{nameof(Scenario)}: {Name} > args={WhenArgs ?? WhenArgsArray.ToCsv(" ")}";
         }
     }
 }

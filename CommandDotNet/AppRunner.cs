@@ -39,6 +39,8 @@ namespace CommandDotNet
         public AppSettings AppSettings { get; }
         public Type RootCommandType { get; }
 
+        internal AppConfig AppConfig { get; private set; }
+
         public AppRunner(Type rootCommandType, AppSettings settings = null)
         {
             RootCommandType = rootCommandType ?? throw new ArgumentNullException(nameof(rootCommandType));
@@ -93,7 +95,7 @@ namespace CommandDotNet
         {
             var tokens = args.Tokenize(includeDirectives: !AppSettings.DisableDirectives);
             
-            var appConfig = _appConfigBuilder.Build();
+            var appConfig = AppConfig ?? (AppConfig = _appConfigBuilder.Build());
             var commandContext = new CommandContext(args, tokens, appConfig);
 
             var result = await commandContext.AppConfig.MiddlewarePipeline

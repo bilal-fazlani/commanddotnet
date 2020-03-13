@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
+using CommandDotNet.Extensions;
 using CommandDotNet.Help;
+using CommandDotNet.Logging;
 using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet
 {
-    public class AppSettings
+    public class AppSettings : ILogToString
     {
         private BooleanMode _booleanMode = BooleanMode.Implicit;
 
@@ -36,7 +40,14 @@ namespace CommandDotNet
         /// Operand is the default.
         /// </summary>
         public ArgumentMode DefaultArgumentMode { get; set; } = ArgumentMode.Operand;
-        
+
+        /// <summary>
+        /// When true, an <see cref="InvalidOperationException"/> will be thrown when operand order
+        /// cannot be determined due to missing <see cref="OperandAttribute"/> or <see cref="PositionFromPropertyOrderAttribute"/>.<br/>
+        /// Nested argument models must be attributed with <see cref="PositionFromPropertyOrderAttribute"/>
+        /// </summary>
+        public bool GuaranteeOperandOrderInArgumentModels { get; set; } = false;
+
         /// <summary>
         /// Set to true to prevent tokenizing arguments as directives,
         /// captured in <see cref="CommandContext.Tokens"/>.
@@ -81,5 +92,26 @@ namespace CommandDotNet
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return ToString(null);
+        }
+
+        public string ToString(string indent)
+        {
+            var appSettingsProps = this.GetType()
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .OrderBy(p => p.Name);
+
+            var prefix = $"{indent}  ";
+
+            var props = appSettingsProps.Select(p =>
+            {
+                var value = p.GetValue(this);
+                return $"{prefix}{p.Name}: {(value is ILogToString logToString ? logToString.ToString(prefix) : value)}";
+            });
+            return $"{indent}{nameof(AppSettings)}:{Environment.NewLine}{props.ToCsv(Environment.NewLine)}";
+        }
     }
 }

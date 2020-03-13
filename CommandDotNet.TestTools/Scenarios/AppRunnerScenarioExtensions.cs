@@ -26,10 +26,11 @@ namespace CommandDotNet.TestTools.Scenarios
             }
 
             AppRunnerResult results = null;
+            var args = scenario.WhenArgsArray ?? scenario.WhenArgs.SplitArgs();
             try
             {
                 results = appRunner.RunInMem(
-                    scenario.WhenArgsArray ?? scenario.WhenArgs.SplitArgs(),
+                    args,
                     logger,
                     scenario.Given.OnReadLine,
                     scenario.Given.PipedInput,
@@ -50,6 +51,8 @@ namespace CommandDotNet.TestTools.Scenarios
             }
             catch (Exception e)
             {
+                logger.WriteLine(scenario.ToString());
+                logger.WriteLine("");
                 PrintContext(appRunner, logger);
                 if (results != null)
                 {
@@ -63,16 +66,8 @@ namespace CommandDotNet.TestTools.Scenarios
 
         private static void PrintContext(AppRunner appRunner, ILogger logger)
         {
-            var appSettings = appRunner.AppSettings;
-            var appSettingsProps = appSettings.GetType()
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .OrderBy(p => p.Name);
             logger.WriteLine("");
-            logger.WriteLine($"AppSettings:");
-            foreach (var propertyInfo in appSettingsProps)
-            {
-                logger.WriteLine($"  {propertyInfo.Name}: {propertyInfo.GetValue(appSettings)}");
-            }
+            logger.WriteLine(appRunner.AppConfig.ToString("\t"));
         }
 
         private static void AssertExitCodeAndErrorMessage(IScenario scenario, AppRunnerResult result)
