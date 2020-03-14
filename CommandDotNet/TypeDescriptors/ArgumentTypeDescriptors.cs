@@ -7,7 +7,7 @@ using CommandDotNet.Extensions;
 
 namespace CommandDotNet.TypeDescriptors
 {
-    public class ArgumentTypeDescriptors: ILogToString
+    public class ArgumentTypeDescriptors: IComposableToString
     {
         private readonly List<IArgumentTypeDescriptor> _customDescriptors = new List<IArgumentTypeDescriptor>();
 

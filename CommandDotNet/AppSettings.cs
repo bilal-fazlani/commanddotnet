@@ -3,12 +3,11 @@ using System.Linq;
 using System.Reflection;
 using CommandDotNet.Extensions;
 using CommandDotNet.Help;
-using CommandDotNet.Logging;
 using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet
 {
-    public class AppSettings : ILogToString
+    public class AppSettings : IComposableToString
     {
         private BooleanMode _booleanMode = BooleanMode.Implicit;
 
@@ -102,7 +101,7 @@ namespace CommandDotNet
             var props = appSettingsProps.Select(p =>
             {
                 var value = p.GetValue(this);
-                return $"{prefix}{p.Name}: {(value is ILogToString logToString ? logToString.ToString(prefix) : value)}";
+                return $"{prefix}{p.Name}: {(value is IComposableToString logToString ? logToString.ToString(prefix) : value)}";
             });
             return $"{indent}{nameof(AppSettings)}:{Environment.NewLine}{props.ToCsv(Environment.NewLine)}";
         }

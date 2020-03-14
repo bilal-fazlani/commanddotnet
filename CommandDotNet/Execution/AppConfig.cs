@@ -12,7 +12,7 @@ using CommandDotNet.Tokens;
 namespace CommandDotNet.Execution
 {
     /// <summary>The application configuration</summary>
-    public class AppConfig : ILogToString
+    public class AppConfig : IComposableToString
     {
         /// <summary>The application settings</summary>
         public AppSettings AppSettings { get; }

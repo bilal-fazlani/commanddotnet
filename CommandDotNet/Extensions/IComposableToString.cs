@@ -1,6 +1,6 @@
 ﻿namespace CommandDotNet.Extensions
 {
-    public interface ILogToString
+    public interface IComposableToString
     {
         string ToString(string indent);
     }
