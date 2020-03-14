@@ -12,7 +12,7 @@ using CommandDotNet.Tokens;
 namespace CommandDotNet.Execution
 {
     /// <summary>The application configuration</summary>
-    public class AppConfig : IComposableToString
+    public class AppConfig : IIndentableToString
     {
         /// <summary>The application settings</summary>
         public AppSettings AppSettings { get; }
@@ -84,35 +84,36 @@ namespace CommandDotNet.Execution
 
         public override string ToString()
         {
-            return ToString(null);
+            return ToString(null, 0);
         }
 
-        public string ToString(string indent)
+        public string ToString(string indent, int depth = 0)
         {
             var nl = Environment.NewLine;
 
-            var prefix = $"{indent}  ";
+            var prefix = indent.Repeat(depth);
+            var prefix2 = indent.Repeat(depth + 1);
 
             var tokenTransformations = TokenTransformations
                 .OrderBy(t => t.Order)
-                .Select(t => $"{prefix}{t.Name}({t.Order})")
+                .Select(t => $"{prefix2}{t.Name}({t.Order})")
                 .ToCsv(nl);
 
             var middleware = MiddlewarePipeline
-                .Select(m => $"{prefix}{m.Method.FullName()}")
+                .Select(m => $"{prefix2}{m.Method.FullName()}")
                 .ToCsv(nl);
 
             var paramResolvers = ParameterResolversByType.Keys
-                .Select(k => $"{prefix}{k}")
+                .Select(k => $"{prefix2}{k}")
                 .ToCsv(nl);
 
             return $"{nameof(AppConfig)}:{nl}" +
-                   $"{AppSettings.ToString(indent)}{nl}" +
-                   $"{indent}DependencyResolver: {DependencyResolver}{nl}" +
-                   $"{indent}HelpProvider: {HelpProvider}{nl}" +
-                   $"{indent}TokenTransformations:{nl}{tokenTransformations}{nl}" +
-                   $"{indent}MiddlewarePipeline:{nl}{middleware}{nl}" +
-                   $"{indent}ParameterResolvers:{nl}{paramResolvers}{nl}";
+                   $"{prefix}{AppSettings.ToString(indent, depth+1)}{nl}" +
+                   $"{prefix}DependencyResolver: {DependencyResolver}{nl}" +
+                   $"{prefix}HelpProvider: {HelpProvider}{nl}" +
+                   $"{prefix}TokenTransformations:{nl}{tokenTransformations}{nl}" +
+                   $"{prefix}MiddlewarePipeline:{nl}{middleware}{nl}" +
+                   $"{prefix}ParameterResolvers:{nl}{paramResolvers}{nl}";
         }
     }
 }

@@ -7,7 +7,7 @@ using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet
 {
-    public class AppSettings : IComposableToString
+    public class AppSettings : IIndentableToString
     {
         private BooleanMode _booleanMode = BooleanMode.Implicit;
 
@@ -87,23 +87,23 @@ namespace CommandDotNet
 
         public override string ToString()
         {
-            return ToString(null);
+            return ToString(null, 0);
         }
 
-        public string ToString(string indent)
+        public string ToString(string indent, int depth = 0)
         {
             var appSettingsProps = this.GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                 .OrderBy(p => p.Name);
 
-            var prefix = $"{indent}  ";
+            var prefix = indent.Repeat(depth);
 
             var props = appSettingsProps.Select(p =>
             {
                 var value = p.GetValue(this);
-                return $"{prefix}{p.Name}: {(value is IComposableToString logToString ? logToString.ToString(prefix) : value)}";
+                return $"{prefix}{p.Name}: {(value is IIndentableToString logToString ? logToString.ToString(indent, depth+1) : value)}";
             });
-            return $"{indent}{nameof(AppSettings)}:{Environment.NewLine}{props.ToCsv(Environment.NewLine)}";
+            return $"{nameof(AppSettings)}:{Environment.NewLine}{props.ToCsv(Environment.NewLine)}";
         }
     }
 }

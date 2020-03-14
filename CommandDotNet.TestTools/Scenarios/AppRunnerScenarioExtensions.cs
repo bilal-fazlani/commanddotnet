@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using CommandDotNet.Extensions;
 using FluentAssertions;
@@ -67,7 +66,7 @@ namespace CommandDotNet.TestTools.Scenarios
         private static void PrintContext(AppRunner appRunner, ILogger logger)
         {
             logger.WriteLine("");
-            logger.WriteLine(appRunner.AppConfig.ToString("\t"));
+            logger.WriteLine(appRunner.ToString("  ", 0));
         }
 
         private static void AssertExitCodeAndErrorMessage(IScenario scenario, AppRunnerResult result)

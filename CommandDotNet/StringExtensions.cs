@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using CommandDotNet.Extensions;
 
 namespace CommandDotNet
 {
@@ -19,5 +21,7 @@ namespace CommandDotNet
 
         internal static string[] SplitIntoLines(this string text, StringSplitOptions stringSplitOptions = StringSplitOptions.None) =>
             text.Split(new[] { "\r\n", "\r", "\n" }, stringSplitOptions);
+
+        internal static string Repeat(this string value, int count) => Enumerable.Repeat(value, count).ToCsv(null);
     }
 }

@@ -32,7 +32,7 @@ namespace CommandDotNet
     /// Use this class to define settings and behaviors
     /// and to execute the Type that defines your commands.
     /// </summary>
-    public class AppRunner
+    public class AppRunner : IIndentableToString
     {
         private readonly AppConfigBuilder _appConfigBuilder;
 
@@ -138,6 +138,19 @@ namespace CommandDotNet
                     ExceptionDispatchInfo.Capture(ex).Throw();
                     return 1; // this will only be called if there are no inner exceptions
             }
+        }
+
+        public override string ToString()
+        {
+            return ToString(null, 0);
+        }
+
+        public string ToString(string indent, int depth = 0)
+        {
+            var prefix = indent.Repeat(depth);
+            return AppConfig == null
+                ? $"{prefix}{nameof(AppRunner)}<{RootCommandType.Name}>"
+                : $"{prefix}{nameof(AppRunner)}<{RootCommandType.Name}>:{Environment.NewLine}{indent.Repeat(depth+1)}{AppConfig.ToString(indent, depth+2)}";
         }
     }
 }

@@ -7,7 +7,7 @@ using CommandDotNet.Extensions;
 
 namespace CommandDotNet.TypeDescriptors
 {
-    public class ArgumentTypeDescriptors: IComposableToString
+    public class ArgumentTypeDescriptors: IIndentableToString
     {
         private readonly List<IArgumentTypeDescriptor> _customDescriptors = new List<IArgumentTypeDescriptor>();
 
@@ -79,12 +79,12 @@ namespace CommandDotNet.TypeDescriptors
 
         public override string ToString()
         {
-            return ToString(null);
+            return ToString(null, 0);
         }
 
-        public string ToString(string indent)
+        public string ToString(string indent, int depth = 0)
         {
-            var prefix = $"{indent}  ";
+            var prefix = indent.Repeat(depth);
             var descriptors = _defaultDescriptors
                 .Concat(_customDescriptors)
                 .Select(d => $"{prefix}{d}")

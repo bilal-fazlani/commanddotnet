@@ -20,7 +20,7 @@ namespace CommandDotNet.ClassModeling
                     MiddlewareSteps.AssembleInvocationPipeline.Stage, MiddlewareSteps.AssembleInvocationPipeline.Order);
                 c.UseMiddleware(BindValuesMiddleware.BindValues, 
                     MiddlewareSteps.BindValues.Stage, MiddlewareSteps.BindValues.Order);
-                c.UseMiddleware(ResolveCommandClassesMiddleware.ResolveInstances,
+                c.UseMiddleware(ResolveCommandClassesMiddleware.ResolveCommandClassInstances,
                     MiddlewareSteps.ResolveCommandClasses.Stage, MiddlewareSteps.ResolveCommandClasses.Order);
                 c.UseMiddleware(InvokeInvocationPipelineMiddleware, MiddlewareStages.Invoke, int.MaxValue);
             });
