@@ -7,7 +7,8 @@ namespace CommandDotNet.Builders.ArgumentDefaults
 {
     internal static class SetArgumentDefaultsMiddleware
     {
-        internal static AppRunner SetArgumentDefaultsFrom(AppRunner appRunner, Func<IArgument, string>[] getDefaultValueCallbacks)
+        internal static AppRunner SetArgumentDefaultsFrom(AppRunner appRunner, 
+            Func<IArgument, ArgumentDefault>[] getDefaultValueCallbacks)
         {
             // run before help command so help will display the updated defaults
             return appRunner.Configure(c =>
@@ -40,14 +41,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                 var value = config.GetDefaultValueCallbacks.Select(func => func(argument)).FirstOrDefault();
                 if (value != null)
                 {
-                    if (argument.Arity.AllowsMany())
-                    {
-                        argument.DefaultValue = value.Split(',');
-                    }
-                    else
-                    {
-                        argument.DefaultValue = value;
-                    }
+                    argument.Default = value;
                 }
             }
 
@@ -56,7 +50,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
 
         private class Config
         {
-            public Func<IArgument, string>[] GetDefaultValueCallbacks { get; set; }
+            public Func<IArgument, ArgumentDefault>[] GetDefaultValueCallbacks { get; set; }
         }
     }
 }

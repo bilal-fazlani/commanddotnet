@@ -1,4 +1,5 @@
-﻿using CommandDotNet.TestTools;
+﻿using System;
+using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
@@ -24,7 +25,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             };
 
             new AppRunner<App>()
-                .UseDefaultsFromConfig(arg => "red")
+                .UseDefaultsFromConfig(arg => Config("red"))
                 .VerifyScenario(_testOutputHelper, scenario);
         }
 
@@ -38,7 +39,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             };
 
             new AppRunner<App>()
-                .UseDefaultsFromConfig(arg => "red")
+                .UseDefaultsFromConfig(arg => Config("red"))
                 .VerifyScenario(_testOutputHelper, scenario);
         }
 
@@ -52,21 +53,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             };
 
             new AppRunner<App>()
-                .UseDefaultsFromConfig(arg => "red,blue,green")
-                .VerifyScenario(_testOutputHelper, scenario);
-        }
-
-        [Fact]
-        public void GivenCsvValue_Should_SplitAsDefaultForCollectionArgument()
-        {
-            var scenario = new Scenario
-            {
-                WhenArgs = "List",
-                Then = { Outputs = { new []{ "red", "blue", "green" } } }
-            };
-
-            new AppRunner<App>()
-                .UseDefaultsFromConfig(arg => "red,blue,green")
+                .UseDefaultsFromConfig(arg => Config("red,blue,green"))
                 .VerifyScenario(_testOutputHelper, scenario);
         }
 
@@ -82,8 +69,13 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             };
 
             new AppRunner<App>()
-                .UseDefaultsFromConfig(arg => null)
+                .UseDefaultsFromConfig(new Func<IArgument, ArgumentDefault>(arg => null))
                 .VerifyScenario(_testOutputHelper, scenario);
+        }
+
+        private static ArgumentDefault Config(string value)
+        {
+            return new ArgumentDefault("test", "key", value);
         }
 
         public class App
