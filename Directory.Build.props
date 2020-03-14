@@ -1,0 +1,29 @@
+<Project>
+ <PropertyGroup>
+    <LangVersion>7.2</LangVersion>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Bilal Fazlani, Drew Burlingame</Authors>
+    <PackageTags>dotnet core; console; argument parse;</PackageTags>
+    <PackageProjectUrl>https://github.com/bilal-fazlani/CommandDotNet</PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageIconUrl>https://raw.githubusercontent.com/bilal-fazlani/CommandDotNet/master/images/nuget-icon.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/bilal-fazlani/CommandDotNet</RepositoryUrl>
+    <Version>1.0.0</Version>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+ </PropertyGroup>
+ <PropertyGroup>
+    <!-- prettify stack traces by replacing build machine path with CommandDotNet -->
+    <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
+    <PathMap>$(AppOutputBase)=CommandDotNet/</PathMap>
+    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <IncludeSymbols>false</IncludeSymbols>
+    <!-- This is for future -->
+    <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
+    <!-- https://github.com/dotnet/sourcelink/blob/master/docs/README.md#embedallsources -->
+    <EmbedAllSources>true</EmbedAllSources>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+ </PropertyGroup>
+</Project>

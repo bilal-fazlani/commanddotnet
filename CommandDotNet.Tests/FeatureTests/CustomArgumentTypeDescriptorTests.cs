@@ -95,7 +95,7 @@ Arguments:
 
             public static Square Parse(string value)
             {
-                var parts = value.Split("x");
+                var parts = value.Split('x');
                 var length = int.Parse(parts[0]);
                 var width = int.Parse(parts[1]);
                 return new Square { Length = length, Width = width };

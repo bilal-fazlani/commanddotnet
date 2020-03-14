@@ -187,7 +187,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = new Scenario
             {
                 WhenArgs = args,
-                Then = { Outputs = { value.Split(",") } }
+                Then = { Outputs = { value.Split(',') } }
             };
 
             new AppRunner<App>()
