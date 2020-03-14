@@ -10,6 +10,24 @@ namespace CommandDotNet.ClassModeling.Definitions
         private readonly PropertyInfo _propertyInfo;
 
         public string ArgumentDefType => "Property";
+        
+        public CommandNodeType CommandNodeType { get; }
+
+        public string Name { get; }
+
+        public string SourcePath => _propertyInfo.FullName(includeNamespace: true);
+
+        public Type Type => _propertyInfo.PropertyType;
+
+        public bool HasDefaultValue { get; }
+
+        public object DefaultValue { get; }
+
+        public IArgument Argument { get; set; }
+
+        public ICustomAttributeProvider CustomAttributes => _propertyInfo;
+
+        public ValueProxy ValueProxy { get; }
 
         public PropertyArgumentDef(
             PropertyInfo propertyInfo,
@@ -39,31 +57,13 @@ namespace CommandDotNet.ClassModeling.Definitions
             // Enhancement: AppSetting.StrictDefaults: show any default values that will be used.
             //       If a value type doesn't have a default, it would be defined as a nullable type.
             //       Keeping this behavior for legacy support.
-            if(DefaultValue.IsDefaultFor(propertyInfo.PropertyType))
+            if (DefaultValue.IsDefaultFor(propertyInfo.PropertyType))
             {
                 DefaultValue = DBNull.Value;
             }
 
             HasDefaultValue = DefaultValue != DBNull.Value;
         }
-
-        public CommandNodeType CommandNodeType { get; }
-
-        public string Name { get; }
-
-        public string SourcePath => _propertyInfo.FullName(includeNamespace: true);
-
-        public Type Type => _propertyInfo.PropertyType;
-
-        public bool HasDefaultValue { get; }
-
-        public object DefaultValue { get; }
-
-        public IArgument Argument { get; set; }
-
-        public ICustomAttributeProvider CustomAttributes => _propertyInfo;
-
-        public ValueProxy ValueProxy { get; }
 
         public override string ToString()
         {
