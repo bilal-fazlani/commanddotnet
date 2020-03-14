@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 
@@ -18,6 +19,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         private ParameterInfo[] _parameters;
         private object[] _values;
 
+        private ArgumentMode _argumentMode;
         private ParameterInfo _nextParameterInfo;
         private List<ParameterInfo> _serviceParameters;
 
@@ -104,7 +106,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             var isMiddleware = _parameters.Any(IsExecutionDelegate);
 
-            var argumentMode = isMiddleware
+            _argumentMode = isMiddleware
                 ? ArgumentMode.Option
                 : _appConfig.AppSettings.DefaultArgumentMode;
             
@@ -112,7 +114,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             
             var parametersByName = _parameters.ToDictionary(
                 p => p.Name,
-                p => (param: p, args: GetArgsFromParameter(p, argumentMode).ToCollection()));
+                p => (param: p, args: GetArgsFromParameter(p).ToCollection()));
 
             var arguments = parametersByName.Values
                 .OrderBy(v => v.param.Position)
@@ -122,13 +124,12 @@ namespace CommandDotNet.ClassModeling.Definitions
             _argumentDefs = arguments;
         }
 
-        private IEnumerable<IArgumentDef> GetArgsFromParameter(ParameterInfo parameterInfo, ArgumentMode argumentMode)
+        private IEnumerable<IArgumentDef> GetArgsFromParameter(ParameterInfo parameterInfo)
         {
             if (parameterInfo.ParameterType.InheritsFrom<IArgumentModel>())
             {
                 return GetArgumentsFromModel(
                     parameterInfo.ParameterType,
-                    argumentMode,
                     null,
                     value => _values[parameterInfo.Position] = value);
             }
@@ -151,27 +152,30 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             return new ParameterArgumentDef(
                     parameterInfo,
-                    GetArgumentType(parameterInfo, argumentMode),
+                    GetArgumentType(parameterInfo, _argumentMode),
                     _appConfig,
                     _values)
                 .ToEnumerable();
         }
 
-        private IEnumerable<IArgumentDef> GetArgsFromProperty(PropertyInfo propertyInfo, ArgumentMode argumentMode, object modelInstance) =>
-            propertyInfo.PropertyType.InheritsFrom<IArgumentModel>()
+        private IEnumerable<IArgumentDef> GetArgsFromProperty(PropertyData propertyData, object modelInstance)
+        {
+            var propertyInfo = propertyData.PropertyInfo;
+            return propertyData.IsArgModel
                 ? GetArgumentsFromModel(
                     propertyInfo.PropertyType,
-                    argumentMode,
                     propertyInfo.GetValue(modelInstance),
-                    value => propertyInfo.SetValue(modelInstance, value))
+                    value => propertyInfo.SetValue(modelInstance, value), propertyData)
                 : new PropertyArgumentDef(
                         propertyInfo,
-                        GetArgumentType(propertyInfo, argumentMode),
+                        GetArgumentType(propertyInfo, _argumentMode),
                         _appConfig,
                         modelInstance)
                     .ToEnumerable();
+        }
 
-        private IEnumerable<IArgumentDef> GetArgumentsFromModel(Type modelType, ArgumentMode argumentMode, object existingDefault, Action<object> instanceCreated)
+        private IEnumerable<IArgumentDef> GetArgumentsFromModel(Type modelType, 
+            object existingDefault, Action<object> instanceCreated, PropertyData parentProperty = null)
         {
             var instance = existingDefault ?? _appConfig.ResolverService.ResolveArgumentModel(modelType);
 
@@ -182,7 +186,12 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             return modelType
                 .GetDeclaredProperties()
-                .SelectMany(propertyInfo => GetArgsFromProperty(propertyInfo, argumentMode, instance));
+                .Select(p => new PropertyData(
+                    _appConfig.AppSettings.GuaranteeOperandOrderInArgumentModels,
+                    p,
+                    parentProperty,
+                    GetArgumentType(p, _argumentMode)))
+                .SelectMany(propertyInfo => GetArgsFromProperty(propertyInfo, instance));
         }
 
         private static CommandNodeType GetArgumentType(ICustomAttributeProvider info, ArgumentMode argumentMode)
@@ -194,6 +203,59 @@ namespace CommandDotNet.ClassModeling.Definitions
         {
             return $"{MethodInfo.GetType().Name}:{MethodInfo?.DeclaringType?.Name}.{MethodInfo.Name}(" +
                    $"{MethodInfo.GetParameters().Select(p => $"{p.ParameterType} {p.Name}").ToCsv()})";
+        }
+
+        private class PropertyData
+        {
+            private readonly PropertyData _parentProperty;
+
+            public PropertyInfo PropertyInfo { get; }
+            public bool IsArgModel { get; }
+            public int? LineNumber { get; }
+
+            public PropertyData(bool guaranteeOrder, PropertyInfo propertyInfo, PropertyData parentProperty, CommandNodeType commandNode)
+            {
+                _parentProperty = parentProperty;
+                PropertyInfo = propertyInfo;
+                IsArgModel = propertyInfo.PropertyType.InheritsFrom<IArgumentModel>();
+                LineNumber = propertyInfo.GetCustomAttribute<PositionFromPropertyOrderAttribute>()?.CallerLineNumber
+                             ?? propertyInfo.GetCustomAttribute<OperandAttribute>()?.CallerLineNumber;
+
+                var isOperand = !IsArgModel && commandNode == CommandNodeType.Operand;
+
+                if (isOperand && guaranteeOrder)
+                {
+                    if (!LineNumber.HasValue)
+                    {
+                        throw new InvalidConfigurationException($"Operand property must be attributed with " +
+                                                                $"{nameof(OperandAttribute)} or {nameof(PositionFromPropertyOrderAttribute)} to guarantee consistent order. " +
+                                                                $"Property: {propertyInfo.DeclaringType?.FullName}.{propertyInfo.Name}");
+                    }
+
+                    var parentsWithoutLineNumber = ParentsWithoutLineNumber().ToList();
+                    if (parentsWithoutLineNumber.Any())
+                    {
+                        var props = parentsWithoutLineNumber
+                            .Select(p => p.PropertyInfo)
+                            .Select(p => $"  {p.DeclaringType?.FullName}.{p.Name}")
+                            .ToCsv(Environment.NewLine);
+                        throw new InvalidConfigurationException($"Operand property must be attributed with " +
+                                                                $"{nameof(OperandAttribute)} or {nameof(PositionFromPropertyOrderAttribute)} to guarantee consistent order. " +
+                                                                $"Properties:{Environment.NewLine}{props}");
+                    }
+                }
+            }
+
+            private IEnumerable<PropertyData> ParentsWithoutLineNumber()
+            {
+                for (var p = _parentProperty; p != null; p = p._parentProperty)
+                {
+                    if (!p.LineNumber.HasValue)
+                    {
+                        yield return p;
+                    }
+                }
+            }
         }
     }
 }

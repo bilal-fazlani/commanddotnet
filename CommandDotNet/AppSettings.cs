@@ -41,6 +41,15 @@ namespace CommandDotNet
         public ArgumentMode DefaultArgumentMode { get; set; } = ArgumentMode.Operand;
 
         /// <summary>
+        /// When true, an <see cref="InvalidOperationException"/> will be thrown when operand order
+        /// cannot be determined due to missing <see cref="OperandAttribute"/> or <see cref="PositionFromPropertyOrderAttribute"/>.<br/>
+        /// Nested argument models must be attributed with <see cref="PositionFromPropertyOrderAttribute"/><br/>
+        /// NOTE: this will default to true in the next major version.
+        /// Set to true now or explicitly set to false to avoid the breaking change.
+        /// </summary>
+        public bool GuaranteeOperandOrderInArgumentModels { get; set; } = false;
+
+        /// <summary>
         /// Set to true to prevent tokenizing arguments as directives,
         /// captured in <see cref="CommandContext.Tokens"/>.
         /// Arguments with the [directive syntax] will be tokenized
