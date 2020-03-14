@@ -76,7 +76,9 @@ namespace CommandDotNet.ClassModeling.Definitions
             TypeInfo typeInfo,
             bool isInterceptorOption)
         {
-            var defaultValue = argumentDef.HasDefaultValue ? argumentDef.DefaultValue : null;
+            var defaultValue = argumentDef.HasDefaultValue && !argumentDef.DefaultValue.IsNullValue()
+                ? new ArgumentDefault(argumentDef.ArgumentDefType, argumentDef.SourcePath, argumentDef.DefaultValue)
+                : null;
 
             if (argumentDef.CommandNodeType == CommandNodeType.Operand)
             {
@@ -91,7 +93,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                     argumentDef.ValueProxy)
                 {
                     Description = operandAttr?.Description,
-                    DefaultValue = defaultValue
+                    Default = defaultValue
                 };
             }
             
@@ -119,7 +121,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                     valueProxy: argumentDef.ValueProxy)
                 {
                     Description = optionAttr?.Description,
-                    DefaultValue = defaultValue
+                    Default = defaultValue
                 };
             }
 

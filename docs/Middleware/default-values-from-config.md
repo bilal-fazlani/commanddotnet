@@ -137,7 +137,7 @@ new AppRunner<MyApp>
                           .GetCustomAttribute<GitConfigAttribute>()
                           ?.Key
         return key != null && _gitConfigService.TryGetValue(key, out var value)
-            ? value
+            ? new ArgumentDefault("git-config", key, value)
             : null;
     }
     .Run(args);

@@ -9,6 +9,8 @@ namespace CommandDotNet.ClassModeling.Definitions
     {
         private readonly ParameterInfo _parameterInfo;
 
+        public string ArgumentDefType => "Parameter";
+
         public CommandNodeType CommandNodeType { get; }
 
         public string Name { get; }

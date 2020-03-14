@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CommandDotNet.Builders;
 using CommandDotNet.TypeDescriptors;
 
@@ -13,8 +14,11 @@ namespace CommandDotNet
         /// <summary>The <see cref="IArgumentArity"/> for this argument, describing how many values are allowed.</summary>
         IArgumentArity Arity { get; set; }
 
-        /// <summary>The default value for this argument</summary>
+        [Obsolete("Use Default instead. This enable middleware and custom help providers to report the source of a default value")]
         object DefaultValue { get; set; }
+
+        /// <summary>The default value for this argument</summary>
+        ArgumentDefault Default { get; set; }
 
         /// <summary>
         /// The allowed values for this argument, as defined by an <see cref="IAllowedValuesTypeDescriptor"/> for this type.
