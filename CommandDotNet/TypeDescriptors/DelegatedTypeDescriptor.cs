@@ -27,5 +27,10 @@ namespace CommandDotNet.TypeDescriptors
         {
             return _parseValueDelegate(value);
         }
+
+        public override string ToString()
+        {
+            return $"DelegatedTypeDescriptor: '{_displayName}'";
+        }
     }
 }

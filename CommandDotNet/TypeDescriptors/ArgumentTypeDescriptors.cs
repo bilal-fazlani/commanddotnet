@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using CommandDotNet.Extensions;
 
 namespace CommandDotNet.TypeDescriptors
 {
-    public class ArgumentTypeDescriptors
+    public class ArgumentTypeDescriptors: IIndentableToString
     {
         private readonly List<IArgumentTypeDescriptor> _customDescriptors = new List<IArgumentTypeDescriptor>();
 
@@ -74,6 +75,21 @@ namespace CommandDotNet.TypeDescriptors
                        "Otherwise, to support this type, " +
                        $"implement a {nameof(TypeConverter)} or {nameof(IArgumentTypeDescriptor)} " +
                        "or add a constructor with a single string parameter.");
+        }
+
+        public override string ToString()
+        {
+            return ToString(null, 0);
+        }
+
+        public string ToString(string indent, int depth = 0)
+        {
+            var prefix = indent.Repeat(depth);
+            var descriptors = _defaultDescriptors
+                .Concat(_customDescriptors)
+                .Select(d => $"{prefix}{d}")
+                .ToCsv(Environment.NewLine);
+            return $"{nameof(ArgumentTypeDescriptors)}:{Environment.NewLine}{descriptors}";
         }
     }
 }
