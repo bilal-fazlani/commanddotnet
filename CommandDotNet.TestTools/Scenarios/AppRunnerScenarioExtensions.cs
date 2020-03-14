@@ -92,27 +92,6 @@ namespace CommandDotNet.TestTools.Scenarios
 
         private static void AssertExitCode(IScenario scenario, AppRunnerResult result, StringBuilder sb)
         {
-            var sb = new StringBuilder();
-
-            AssertExitCode(scenario, result, sb);
-
-            AssertMissingHelpTexts(scenario, result, sb);
-
-            AssertUnexpectedHelpTexts(scenario, result, sb);
-
-            if (sb.Length > 0)
-            {
-                sb.AppendLine();
-                sb.AppendLine("Console output <begin> ------------------------------");
-                sb.AppendLine(String.IsNullOrWhiteSpace(result.ConsoleOutAndError) ? "<no output>" : result.ConsoleOutAndError);
-                sb.AppendLine("Console output <end>   ------------------------------");
-
-                throw new AssertionFailedException(sb.ToString());
-            }
-        }
-
-        private static void AssertExitCode(IScenario scenario, AppRunnerResult result, StringBuilder sb)
-        {
             var expectedExitCode = scenario.Then.ExitCode.GetValueOrDefault();
             if (expectedExitCode != result.ExitCode)
             {
