@@ -54,10 +54,10 @@ namespace CommandDotNet.Builders
 
         private static void Print(CommandContext commandContext, IConsole console)
         {
-            var versionInfo = VersionInfo.GetVersionInfo(commandContext);
+            var appInfo = AppInfo.GetAppInfo(commandContext);
 
-            console.Out.WriteLine(versionInfo.Filename);
-            console.Out.WriteLine(versionInfo.Version);
+            console.Out.WriteLine(appInfo.FileName);
+            console.Out.WriteLine(appInfo.Version);
         }
     }
 }

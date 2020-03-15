@@ -1,7 +1,5 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System;
 using System.Reflection;
-using CommandDotNet.Execution;
 
 namespace CommandDotNet.Builders
 {
@@ -10,6 +8,7 @@ namespace CommandDotNet.Builders
     /// For unit tests, use `AppRunner.Configure(c =&gt; c.Services.Set(new VersionInfo(...)))`
     /// to set to specific version
     /// </summary>
+    [Obsolete("Use AppInfo instead. It correctly detects self-contained single executable files")]
     public class VersionInfo
     {
         public string Filename { get; }
@@ -21,30 +20,17 @@ namespace CommandDotNet.Builders
             Version = version;
         }
 
+        [Obsolete("Use AppInfo.GetAppInfo")]
         public static VersionInfo GetVersionInfo(CommandContext commandContext)
         {
-            var appConfigServices = commandContext.AppConfig.Services;
-
-            var versionInfo = appConfigServices.Get<VersionInfo>();
-            if (versionInfo != null)
+            var svcs = commandContext.AppConfig.Services;
+            var versionInfo = svcs.Get<VersionInfo>();
+            if (versionInfo == null)
             {
-                return versionInfo;
+                var appInfo = AppInfo.GetAppInfo(commandContext);
+                svcs.AddOrUpdate(versionInfo = new VersionInfo(appInfo.FileName, appInfo.Version));
             }
 
-            var hostAssembly = Assembly.GetEntryAssembly();
-            if (hostAssembly == null)
-            {
-                throw new AppRunnerException(
-                    "Unable to determine version because Assembly.GetEntryAssembly() is null. " +
-                    "This is a known issue when running unit tests in .net framework. https://tinyurl.com/y6rnjqsg" +
-                    "Set the version info in AppRunner.Configure(c => c.Services.Set(new VersionInfo(...))) " +
-                    "to create a specific version for tests");
-            }
-
-            var filename = Path.GetFileName(hostAssembly.Location);
-            var fvi = FileVersionInfo.GetVersionInfo(hostAssembly.Location);
-            versionInfo = new VersionInfo(filename, fvi.ProductVersion);
-            appConfigServices.AddOrUpdate(versionInfo);
             return versionInfo;
         }
     }
