@@ -98,14 +98,12 @@ namespace CommandDotNet.Parsing
             NewSubCommand
         }
 
-        private ParseOperandResult ParseArgumentValue(Token token,
-            ref Command command,
-            ref Option option,
-            IEnumerator<Operand> operands)
+        private ParseOperandResult ParseArgumentValue(
+            Token token, ref Command command, ref Option option, IEnumerator<Operand> operands)
         {
             if (option != null)
             {
-                if (TryAddValue(option, token.Value))
+                if (TryAddValue(option, token))
                 {
                     option = null;
                     return ParseOperandResult.Succeeded;
@@ -124,7 +122,7 @@ namespace CommandDotNet.Parsing
             if (operands.MoveNext())
             {
                 var current = operands.Current;
-                GetArgumentParsedValues(current).Add(token.Value);
+                GetArgumentParsedValues(current).Add(new ValueFromToken(token.Value, token));
             }
             else
             {
@@ -162,42 +160,37 @@ namespace CommandDotNet.Parsing
             }
             if(option.Arity.AllowsNone())
             {
-                // No value is needed for this option
-                TryAddValue(option, null);
+                TryAddValue(option, token);
                 option = null;
             }
         }
 
-        private static ICollection<string> GetArgumentParsedValues(IArgument argument)
+        private static ICollection<ValueFromToken> GetArgumentParsedValues(IArgument argument)
         {
             // in most cases, this will be the first or only InputValues
             var source = Constants.InputValueSources.Argument;
             var parserValues = argument.InputValues.FirstOrDefault(iv => iv.Source == source);
             if (parserValues == null)
             {
-                parserValues = new InputValue(source, false, new List<string>());
+                parserValues = new InputValue(source, false, new List<ValueFromToken>());
                 argument.InputValues.Add(parserValues);
             }
 
-            return (List<string>)parserValues.Values;
+            return (List<ValueFromToken>)parserValues.ValuesFromTokens;
         }
 
-        private static bool TryAddValue(Option option, string value)
+        private static bool TryAddValue(Option option, Token token)
         {
             var values = GetArgumentParsedValues(option);
 
             if (option.Arity.AllowsMany())
             {
-                values.Add(value);
+                values.Add(new ValueFromToken(token.Value, token));
             }
             else if (option.Arity.AllowsNone())
             {
-                if (value != null)
-                {
-                    return false;
-                }
                 // Add a value to indicate that this option was specified
-                values.Add("true");
+                values.Add(new ValueFromToken("true", token));
             }
             else if (!option.Arity.AllowsMany())
             {
@@ -205,7 +198,7 @@ namespace CommandDotNet.Parsing
                 {
                     return false;
                 }
-                values.Add(value);
+                values.Add(new ValueFromToken(token.Value, token));
             }
             return true;
         }
