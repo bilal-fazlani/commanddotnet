@@ -19,6 +19,10 @@ namespace CommandDotNet.Tokens
         /// <summary>When <see cref="TokenType"/> is <see cref="Tokens.TokenType.Option"/>, this will be populated.</summary>
         public OptionTokenType OptionTokenType { get; }
 
+        public string SourceName { get; internal set; }
+
+        public Token SourceToken { get; internal set; }
+
         public Token(
             string rawValue,
             string value, 

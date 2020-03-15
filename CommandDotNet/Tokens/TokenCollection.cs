@@ -48,6 +48,7 @@ namespace CommandDotNet.Tokens
             }
         }
 
+        [Obsolete("Use Tokenizer.Tokenize extension method to generate tokens and TokenCollection.Transform to transform them. Ensures source tokens are correctly mapped.")]
         public TokenCollection(IEnumerable<Token> tokens)
         {
             _directives = new List<Token>();
@@ -102,10 +103,23 @@ namespace CommandDotNet.Tokens
             bool skipArguments = false,
             bool skipSeparated = false)
         {
+            Func<Token, IEnumerable<Token>> AssignSourceTokenToNewTokens()
+            {
+                return token => transformation(token).Select(t =>
+                {
+                    if (t.SourceName.IsNullOrWhitespace())
+                    {
+                        t.SourceToken = token;
+                    }
+
+                    return t;
+                });
+            }
+
             return new TokenCollection(
-                skipDirectives ? _directives : _directives.SelectMany(transformation).ToList(),
-                skipArguments ? _arguments : _arguments.SelectMany(transformation).ToList(),
-                skipSeparated ? _separated : _separated.SelectMany(transformation).ToList()
+                skipDirectives ? _directives : _directives.SelectMany(AssignSourceTokenToNewTokens()).ToList(),
+                skipArguments ? _arguments : _arguments.SelectMany(AssignSourceTokenToNewTokens()).ToList(),
+                skipSeparated ? _separated : _separated.SelectMany(AssignSourceTokenToNewTokens()).ToList()
             );
         }
 
