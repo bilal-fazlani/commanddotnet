@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CommandDotNet.Builders;
+﻿using CommandDotNet.Builders;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Help;
 using CommandDotNet.Logging;
 using CommandDotNet.Tokens;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CommandDotNet.Parsing
 {
@@ -96,12 +96,18 @@ namespace CommandDotNet.Parsing
         internal static IEnumerable<string> GetSuggestions(this IEnumerable<string> names, 
             string typo, int maxSuggestionCount)
         {
-            names = names.Where(n => !n.IsNullOrWhitespace()).ToList();
-            var tuples = names.Select(name =>
+            var tuples = names
+                .Where(n => !n.IsNullOrWhitespace())
+                .Select(name =>
                 {
+                    var rearranged = GetRearranged(typo).ToList();
+
                     var distance = -Levenshtein.ComputeDistance(typo, name);
                     var startsWith = GetStartsWithLength(typo, name);
-                    var sameness = Math.Max(GetSamenessLength(typo, name), GetContainsLength(typo, name));
+                    var sameness = rearranged.Max(n => GetSamenessLength(n, name));
+                    sameness = sameness == typo.Length 
+                        ? sameness * 2 //found possible match of compound words out-of-order
+                        : Math.Max(sameness, GetContainsLength(typo, name));
                     return (name, distance, startsWith, sameness, score: distance + startsWith + sameness);
                 })
                 .OrderByDescending(v => v.score)
@@ -156,6 +162,25 @@ namespace CommandDotNet.Parsing
         {
             var (small, large) = first.Length > second.Length ? (second, first) : (first, second);
             return large.ToLower().Contains(small.ToLower()) ? small.Length : 0;
+        }
+
+        private static IEnumerable<string> GetRearranged(string typo)
+        {
+            for (int i = 0; i < typo.Length; i++)
+            {
+                string name = "";
+
+                if (i < typo.Length - 1)
+                {
+                    name += typo.Substring(i);
+                }
+                if (i > 0)
+                {
+                    name += typo.Substring(0, i);
+                }
+
+                yield return name;
+            }
         }
     }
 }
