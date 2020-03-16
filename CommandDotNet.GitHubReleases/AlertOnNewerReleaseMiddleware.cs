@@ -89,8 +89,8 @@ namespace CommandDotNet.NewerReleasesAlerts
 
         private static bool TryGetCurrentVersion(CommandContext context, out SemVersion semVersion)
         {
-            var versionInfo = VersionInfo.GetVersionInfo(context);
-            return SemVersion.TryParse(versionInfo.Version, out semVersion);
+            var appInfo = AppInfo.GetAppInfo(context);
+            return SemVersion.TryParse(appInfo.Version, out semVersion);
 
         }
 
