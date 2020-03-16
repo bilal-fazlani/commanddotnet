@@ -14,10 +14,10 @@ namespace CommandDotNet
         /// <summary> Return all <see cref="Operand"/>s and <see cref="Option"/>s for the command</summary>
         /// <param name="command">The command</param>
         /// <param name="includeInterceptorOptions">When true, includes options from interceptors of all parent commands</param>
-        public static IEnumerable<IArgument> AllArguments(this Command command, bool includeInterceptorOptions = false)
+        public static IEnumerable<IArgument> AllArguments(this Command command, bool includeInterceptorOptions = false, bool excludeHiddenOptions = false)
         {
             return command.Operands.Cast<IArgument>()
-                .Concat(command.AllOptions(includeInterceptorOptions));
+                .Concat(command.AllOptions(includeInterceptorOptions).Where(o => !excludeHiddenOptions || o.ShowInHelp));
         }
 
         /// <summary>Return all <see cref="Option"/>s for the command.</summary>
