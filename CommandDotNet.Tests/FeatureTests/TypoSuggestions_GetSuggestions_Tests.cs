@@ -68,5 +68,16 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Should()
                 .BeEquivalentSequenceTo(expectedSuggestions);
         }
+
+        [Theory]
+        [InlineData("nameuser", "username,password", "username")]
+        [InlineData("treework", "worktree,trek", "worktree,trek")]
+        public void GivenWordsInWrongOrder(string typo, string options, string expectedSuggestions)
+        {
+            options.Split(",")
+                .GetSuggestions(typo, 5)
+                .Should()
+                .BeEquivalentSequenceTo(expectedSuggestions.Split(","));
+        }
     }
 }
