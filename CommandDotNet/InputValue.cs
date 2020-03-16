@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommandDotNet.Tokens;
 
 namespace CommandDotNet
 {
@@ -43,18 +42,6 @@ namespace CommandDotNet
             Source = source ?? throw new ArgumentNullException(nameof(source));
             IsStream = isStream;
             ValuesFromTokens = values ?? throw new ArgumentNullException(nameof(values));
-        }
-    }
-
-    public class ValueFromToken
-    {
-        public string Value { get; }
-        public Token Token { get; }
-
-        public ValueFromToken(string value, Token token)
-        {
-            Value = value;
-            Token = token ?? throw new ArgumentNullException(nameof(token));
         }
     }
 }

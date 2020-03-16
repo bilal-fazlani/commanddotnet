@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -192,17 +191,7 @@ namespace CommandDotNet.Help
                 return null;
             }
 
-            if (defaultValue is string)
-            {
-                return $"[{defaultValue}]";
-            }
-
-            if (defaultValue is IEnumerable collection)
-            {
-                return $"[{collection.ToCsv()}]";
-            }
-
-            return $"[{defaultValue}]";
+            return $"[{defaultValue.ValueToString()}]";
         }
 
         /// <summary>Row with default indent of 2 spaces</summary>
