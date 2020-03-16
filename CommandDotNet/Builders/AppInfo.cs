@@ -103,7 +103,8 @@ namespace CommandDotNet.Builders
 
             if (mainModuleFileName != null)
             {
-                if (!(appInfo.IsRunViaDotNetExe = mainModuleFileName.Equals("dotnet.exe")))
+                // osx uses 'dotnet' instead of 'dotnet.exe'
+                if (!(appInfo.IsRunViaDotNetExe = mainModuleFileName.Equals("dotnet.exe") || mainModuleFileName.Equals("dotnet")))
                 {
                     var entryAssemblyFileNameWithoutExt = Path.GetFileNameWithoutExtension(entryAssemblyFileName);
                     appInfo.IsSelfContainedExe = appInfo._isExe = mainModuleFileName.EndsWith($"{entryAssemblyFileNameWithoutExt}.exe");
