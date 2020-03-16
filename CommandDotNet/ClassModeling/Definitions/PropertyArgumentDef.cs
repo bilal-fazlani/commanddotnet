@@ -9,6 +9,8 @@ namespace CommandDotNet.ClassModeling.Definitions
     {
         private readonly PropertyInfo _propertyInfo;
 
+        public string ArgumentDefType => "Property";
+
         public PropertyArgumentDef(
             PropertyInfo propertyInfo,
             CommandNodeType commandNodeType,

@@ -1,13 +1,13 @@
-﻿using CommandDotNet.Builders;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using CommandDotNet.Builders;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Help;
 using CommandDotNet.Logging;
 using CommandDotNet.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CommandDotNet.Parsing
 {
@@ -163,7 +163,7 @@ namespace CommandDotNet.Parsing
             var (small, large) = first.Length > second.Length ? (second, first) : (first, second);
             return large.ToLower().Contains(small.ToLower()) ? small.Length : 0;
         }
-
+        
         private static IEnumerable<string> GetRearranged(string typo)
         {
             for (int i = 0; i < typo.Length; i++)

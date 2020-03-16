@@ -26,7 +26,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 WhenArgs = "Do -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
   operand
@@ -46,7 +46,7 @@ Options:
                 WhenArgs = "Do -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
 
@@ -70,7 +70,7 @@ Options:
                 WhenArgs = "Do -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
   operand
@@ -90,7 +90,7 @@ Options:
                 WhenArgs = "Do -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                    Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
 

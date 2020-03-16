@@ -50,7 +50,8 @@ namespace CommandDotNet
         public static IArgumentArity Default(IArgument argument)
         {
             var type = argument.TypeInfo.Type;
-            var hasDefaultValue = argument.DefaultValue != null && !argument.DefaultValue.IsDefaultFor(type);
+            var defaultValue = argument.Default?.Value;
+            var hasDefaultValue = defaultValue != null && !defaultValue.IsDefaultFor(type);
             return Default(type, hasDefaultValue, argument.Services.Get<BooleanMode>());
         }
 

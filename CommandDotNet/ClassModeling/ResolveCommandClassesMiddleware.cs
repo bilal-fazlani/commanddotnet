@@ -9,7 +9,7 @@ namespace CommandDotNet.ClassModeling
 {
     internal static class ResolveCommandClassesMiddleware
     {
-        internal static Task<int> ResolveInstances(CommandContext commandContext, ExecutionDelegate next)
+        internal static Task<int> ResolveCommandClassInstances(CommandContext commandContext, ExecutionDelegate next)
         {
             var pipeline = commandContext.InvocationPipeline;
 

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using CommandDotNet.Builders;
 using CommandDotNet.Builders.ArgumentDefaults;
 using CommandDotNet.ClassModeling.Definitions;
@@ -199,9 +200,20 @@ namespace CommandDotNet
                 DefaultSources.EnvVar.GetDefaultValue(envVars, DefaultSources.EnvVar.GetKeyFromAttribute));
         }
 
-        /// <summary>Provide your own strategies for setting argument defaults from a configuration source</summary>
+        [Obsolete("Use the UseDefaultsFromConfig that returns ArgumentDefaults")]
         public static AppRunner UseDefaultsFromConfig(this AppRunner appRunner,
             params Func<IArgument, string>[] getDefaultValueCallbacks)
+        {
+            Func<IArgument, ArgumentDefault> Convert(Func<IArgument, string> function)
+            {
+                return arg => new ArgumentDefault("UseDefaultsFromConfig", "", function(arg));
+            }
+            return UseDefaultsFromConfig(appRunner, getDefaultValueCallbacks.Select(Convert).ToArray());
+        }
+
+        /// <summary>Provide your own strategies for setting argument defaults from a configuration source</summary>
+        public static AppRunner UseDefaultsFromConfig(this AppRunner appRunner,
+            params Func<IArgument, ArgumentDefault>[] getDefaultValueCallbacks)
             => SetArgumentDefaultsMiddleware.SetArgumentDefaultsFrom(appRunner, getDefaultValueCallbacks);
 
         /// <summary>

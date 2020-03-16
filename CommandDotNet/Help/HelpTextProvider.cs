@@ -31,13 +31,14 @@ namespace CommandDotNet.Help
                 (null, ExtendedHelpText(command)));
 
         /// <summary>returns the body of the usage section</summary>
-        protected virtual string SectionUsage(Command command) =>
-        (
-            PadFront(command.Usage)
-            ?? $"{PadFront(AppName(command))}{PadFront(CommandPath(command))}"
-            + $"{PadFront(UsageSubcommand(command))}{PadFront(UsageOperand(command))}{PadFront(UsageOption(command))}"
-            + (_appSettings.AllowArgumentSeparator ? " [[--] <arg>...]" : null)
-        )?.Replace("%UsageAppName%", AppName(command));
+        protected virtual string SectionUsage(Command command)
+        {
+            var usage = PadFront(command.Usage)
+                           ?? $"{PadFront(AppName(command))}{PadFront(CommandPath(command))}"
+                           + $"{PadFront(UsageSubcommand(command))}{PadFront(UsageOption(command))}{PadFront(UsageOperand(command))}"
+                           + (_appSettings.AllowArgumentSeparator ? " [[--] <arg>...]" : null);
+            return usage?.Replace("%UsageAppName%", AppName(command));
+        }
 
         protected virtual string AppName(Command command) =>
             _appName ?? (_appName = command.GetAppName(_appHelpSettings));
@@ -48,7 +49,9 @@ namespace CommandDotNet.Help
         /// <summary>How operands are shown in the usage example</summary>
         protected virtual string UsageOperand(Command command) =>
             command.Operands.Any()
-                ? "[arguments]"
+                ? _appHelpSettings.ExpandArgumentsInUsage
+                    ? command.Operands.Select(o => o.Arity.Minimum == 0 ? $"[<{o.Name}>]" : $"<{o.Name}>").ToCsv(" ")
+                    : "[arguments]"
                 : null;
 
         /// <summary>How options are shown in the usage example</summary>
@@ -182,7 +185,7 @@ namespace CommandDotNet.Help
         /// <summary></summary>
         protected virtual string ArgumentDefaultValue(IArgument argument)
         {
-            object defaultValue = argument.DefaultValue;
+            object defaultValue = argument.Default?.Value;
 
             if (defaultValue.IsNullValue())
             {

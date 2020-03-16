@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using CommandDotNet.Builders;
+using CommandDotNet.Extensions;
 using CommandDotNet.Help;
 using CommandDotNet.Parsing;
 using CommandDotNet.Rendering;
@@ -10,7 +12,7 @@ using CommandDotNet.Tokens;
 namespace CommandDotNet.Execution
 {
     /// <summary>The application configuration</summary>
-    public class AppConfig
+    public class AppConfig : IIndentableToString
     {
         /// <summary>The application settings</summary>
         public AppSettings AppSettings { get; }
@@ -78,6 +80,40 @@ namespace CommandDotNet.Execution
             ResolverService = services.GetOrAdd(() => new ResolverService());
             ResolverService.BackingResolver = dependencyResolver;
             OnRunCompleted += args => ResolverService.OnRunCompleted(args.CommandContext);
+        }
+
+        public override string ToString()
+        {
+            return ToString(null, 0);
+        }
+
+        public string ToString(string indent, int depth = 0)
+        {
+            var nl = Environment.NewLine;
+
+            var prefix = indent.Repeat(depth);
+            var prefix2 = indent.Repeat(depth + 1);
+
+            var tokenTransformations = TokenTransformations
+                .OrderBy(t => t.Order)
+                .Select(t => $"{prefix2}{t.Name}({t.Order})")
+                .ToCsv(nl);
+
+            var middleware = MiddlewarePipeline
+                .Select(m => $"{prefix2}{m.Method.FullName()}")
+                .ToCsv(nl);
+
+            var paramResolvers = ParameterResolversByType.Keys
+                .Select(k => $"{prefix2}{k}")
+                .ToCsv(nl);
+
+            return $"{nameof(AppConfig)}:{nl}" +
+                   $"{prefix}{AppSettings.ToString(indent, depth+1)}{nl}" +
+                   $"{prefix}DependencyResolver: {DependencyResolver}{nl}" +
+                   $"{prefix}HelpProvider: {HelpProvider}{nl}" +
+                   $"{prefix}TokenTransformations:{nl}{tokenTransformations}{nl}" +
+                   $"{prefix}MiddlewarePipeline:{nl}{middleware}{nl}" +
+                   $"{prefix}ParameterResolvers:{nl}{paramResolvers}{nl}";
         }
     }
 }

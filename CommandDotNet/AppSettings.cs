@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
+using CommandDotNet.Extensions;
 using CommandDotNet.Help;
 using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet
 {
-    public class AppSettings
+    public class AppSettings : IIndentableToString
     {
         private BooleanMode _booleanMode = BooleanMode.Implicit;
 
@@ -36,7 +39,7 @@ namespace CommandDotNet
         /// Operand is the default.
         /// </summary>
         public ArgumentMode DefaultArgumentMode { get; set; } = ArgumentMode.Operand;
-        
+
         /// <summary>
         /// Set to true to prevent tokenizing arguments as directives,
         /// captured in <see cref="CommandContext.Tokens"/>.
@@ -81,5 +84,26 @@ namespace CommandDotNet
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return ToString(null, 0);
+        }
+
+        public string ToString(string indent, int depth = 0)
+        {
+            var appSettingsProps = this.GetType()
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .OrderBy(p => p.Name);
+
+            var prefix = indent.Repeat(depth);
+
+            var props = appSettingsProps.Select(p =>
+            {
+                var value = p.GetValue(this);
+                return $"{prefix}{p.Name}: {(value is IIndentableToString logToString ? logToString.ToString(indent, depth+1) : value)}";
+            });
+            return $"{nameof(AppSettings)}:{Environment.NewLine}{props.ToCsv(Environment.NewLine)}";
+        }
     }
 }

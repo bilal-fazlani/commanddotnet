@@ -13,22 +13,28 @@ namespace CommandDotNet.ClassModeling
         {
             return appRunner.Configure(c =>
             {
-                c.UseMiddleware((context, next) => CreateRootCommand(context, next, rootCommandType), 
+                c.Services.Add(new Config{RootCommandType = rootCommandType});
+                c.UseMiddleware(CreateRootCommand, 
                     MiddlewareSteps.CreateRootCommand.Stage, MiddlewareSteps.CreateRootCommand.Order);
                 c.UseMiddleware(AssembleInvocationPipelineMiddleware,
                     MiddlewareSteps.AssembleInvocationPipeline.Stage, MiddlewareSteps.AssembleInvocationPipeline.Order);
                 c.UseMiddleware(BindValuesMiddleware.BindValues, 
                     MiddlewareSteps.BindValues.Stage, MiddlewareSteps.BindValues.Order);
-                c.UseMiddleware(ResolveCommandClassesMiddleware.ResolveInstances,
+                c.UseMiddleware(ResolveCommandClassesMiddleware.ResolveCommandClassInstances,
                     MiddlewareSteps.ResolveCommandClasses.Stage, MiddlewareSteps.ResolveCommandClasses.Order);
                 c.UseMiddleware(InvokeInvocationPipelineMiddleware, MiddlewareStages.Invoke, int.MaxValue);
             });
         }
 
-        private static Task<int> CreateRootCommand(
-            CommandContext commandContext, ExecutionDelegate next, Type rootCommandType)
+        private class Config
         {
-            commandContext.RootCommand = ClassCommandDef.CreateRootCommand(rootCommandType, commandContext);
+            public Type RootCommandType;
+        }
+
+        private static Task<int> CreateRootCommand(CommandContext commandContext, ExecutionDelegate next)
+        {
+            var config = commandContext.AppConfig.Services.Get<Config>();
+            commandContext.RootCommand = ClassCommandDef.CreateRootCommand(config.RootCommandType, commandContext);
             return next(commandContext);
         }
 

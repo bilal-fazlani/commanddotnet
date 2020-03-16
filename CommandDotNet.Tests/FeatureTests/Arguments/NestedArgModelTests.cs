@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             {
                 Given = { AppSettings = BasicHelp },
                 WhenArgs = "Do -h",
-                Then = { Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                Then = { Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
   Operand1
@@ -40,7 +40,7 @@ Options:
             {
                 Given = { AppSettings = DetailedHelp },
                 WhenArgs = "Do -h",
-                Then = { Result = @"Usage: dotnet testhost.dll Do [arguments] [options]
+                Then = { Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
 

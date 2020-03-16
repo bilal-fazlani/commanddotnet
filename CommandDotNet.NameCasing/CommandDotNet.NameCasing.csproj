@@ -1,31 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>7.3</LangVersion>
-    <Authors>Bilal Fazlani, Drew Burlingame</Authors>
-    <NeutralLanguage>en-US</NeutralLanguage>
     <AssemblyTitle>CommandDotNet.NameCasing</AssemblyTitle>
     <Description>Uses Humanizer to transform the case of command and argument names</Description>
-    <PackageTags>dotnet core; console; argument parse;</PackageTags>
-    <PackageProjectUrl>https://github.com/bilal-fazlani/CommandDotNet</PackageProjectUrl>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageIconUrl>https://raw.githubusercontent.com/bilal-fazlani/CommandDotNet/master/images/nuget-icon.png</PackageIconUrl>
-    <RepositoryUrl>https://github.com/bilal-fazlani/CommandDotNet</RepositoryUrl>
-    <Version>1.0.0</Version>
-      <!--<NetStandardImplicitPackageVersion>2.0.2</NetStandardImplicitPackageVersion>-->
-  </PropertyGroup>
-  <PropertyGroup>
-    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
-    <IncludeSymbols>false</IncludeSymbols>
-    <!-- This is for future -->
-    <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
-    <!-- https://github.com/dotnet/sourcelink/blob/master/docs/README.md#embedallsources -->
-    <EmbedAllSources>true</EmbedAllSources>
-    <DebugType>embedded</DebugType>
-    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="output\**" />
@@ -36,13 +13,10 @@
   <ItemGroup>
     <None Remove="output\**" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Humanizer.Core" Version="2.7.9" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\CommandDotNet\CommandDotNet.csproj" />
   </ItemGroup>
-
 </Project>

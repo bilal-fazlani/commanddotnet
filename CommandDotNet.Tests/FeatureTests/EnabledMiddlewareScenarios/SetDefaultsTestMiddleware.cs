@@ -43,7 +43,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
             { 
                 if (defaults.TryGetValue(argument.Name, out var value))
                 {
-                    argument.DefaultValue = value;
+                    argument.Default = new ArgumentDefault("tests", "", value);
                 }
             }
 

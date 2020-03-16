@@ -24,7 +24,7 @@ namespace CommandDotNet.TestTools
             {
                 capture(context);
                 return exitAfterCapture 
-                    ? Task.FromResult<int>(0) 
+                    ? Task.FromResult(0) 
                     : next(context);
             }, middlewareStage, orderWithinStage));
         }
@@ -35,7 +35,8 @@ namespace CommandDotNet.TestTools
             ILogger logger,
             Func<TestConsole, string> onReadLine = null,
             IEnumerable<string> pipedInput = null,
-            IPromptResponder promptResponder = null)
+            IPromptResponder promptResponder = null,
+            bool returnResultOnError = false)
         {
             TestToolsLogProvider.InitLogProvider(logger);
 
@@ -49,54 +50,69 @@ namespace CommandDotNet.TestTools
             runner.Configure(c => c.Console = testConsole);
             var outputs = InjectTestOutputs(runner);
 
+            void LogResult()
+            {
+                logger?.WriteLine("\nconsole output:\n");
+                logger?.WriteLine(testConsole.Joined.ToString());
+            }
+
             try
             {
                 var exitCode = runner.Run(args);
-                var consoleOut = testConsole.Joined.ToString();
-
-                logger?.WriteLine("\nconsole output:\n");
-                logger?.WriteLine(consoleOut);
+                LogResult();
                 return new AppRunnerResult(exitCode, testConsole, outputs);
             }
             catch (Exception e)
             {
-                logger?.WriteLine("\nconsole output:\n");
-                logger?.WriteLine(testConsole.Joined.ToString());
+                if (returnResultOnError)
+                {
+                    testConsole.Error.WriteLine(e.Message);
+                    LogResult();
+                    return new AppRunnerResult(1, testConsole, outputs);
+                }
+                LogResult();
                 throw;
             }
         }
 
         private static TestOutputs InjectTestOutputs(AppRunner runner)
         {
-            TestOutputs outputs = new TestOutputs();
-            runner.Configure(c => c.UseMiddleware((context, next) =>
+            var outputs = new TestOutputs();
+            runner.Configure(c =>
             {
-                context.InvocationPipeline.All
-                    .Select(i => i.Instance)
-                    .ForEach(instance =>
-                    {
-                        instance.GetType()
-                            .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                            .Where(p => p.PropertyType == typeof(TestOutputs))
-                            .ForEach(p =>
-                            {
-                                // principal of least surprise
-                                // if the test class sets the instance, then use that instance
-                                var value = (TestOutputs) p.GetValue(instance);
-                                if (value == null)
-                                {
-                                    p.SetValue(instance, outputs);
-                                }
-                                else
-                                {
-                                    outputs.UseOutputsFromInstance(value);
-                                }
-                            });
-                    });
-                return next(context);
-            }, MiddlewareStages.PostBindValuesPreInvoke));
+                c.Services.Add(outputs);
+                c.UseMiddleware(InjectTestOutputs, MiddlewareStages.PostBindValuesPreInvoke);
+            });
 
             return outputs;
+        }
+
+        private static Task<int> InjectTestOutputs(CommandContext commandContext, ExecutionDelegate next)
+        {
+            var outputs = commandContext.AppConfig.Services.Get<TestOutputs>();
+            commandContext.InvocationPipeline.All
+                .Select(i => i.Instance)
+                .ForEach(instance =>
+                {
+                    instance.GetType()
+                        .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                        .Where(p => p.PropertyType == typeof(TestOutputs))
+                        .ForEach(p =>
+                        {
+                            // principal of least surprise
+                            // if the test class sets the instance, then use that instance
+                            var value = (TestOutputs)p.GetValue(instance);
+                            if (value == null)
+                            {
+                                p.SetValue(instance, outputs);
+                            }
+                            else
+                            {
+                                outputs.UseOutputsFromInstance(value);
+                            }
+                        });
+                });
+            return next(commandContext);
         }
     }
 }

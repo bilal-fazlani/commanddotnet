@@ -13,8 +13,8 @@ namespace CommandDotNet.Tests.UnitTests.Extensions
         static ArgumentExtensionTests()
         {
             var command = new Command("cmd");
-            AnOption = new Option("option", null, command, TypeInfo.Flag, ArgumentArity.ExactlyOne);
-            AnOperand = new Operand("operand", command, TypeInfo.Single<int>(), ArgumentArity.ExactlyOne);
+            AnOption = new Option("option", null, TypeInfo.Flag, ArgumentArity.ExactlyOne);
+            AnOperand = new Operand("operand", TypeInfo.Single<int>(), ArgumentArity.ExactlyOne);
         }
 
         [Fact]

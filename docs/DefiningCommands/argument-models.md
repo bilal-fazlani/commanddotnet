@@ -44,7 +44,7 @@ public void SendEmail(Email email)
 }
 ```
 
-### Composition
+## Composition
 
 An `IArgumentModel` can be composed from other `IArgumentModel`s allowing easy reuse of common arguments.
 
@@ -68,19 +68,23 @@ public void SendEmail(SendEmailArgs args)
 }
 ```
 
-### Benefits of argument models:
+## Benefits of argument models
 
 * Common arguments can be extracted to models to enforce contracts across commands.  <br/>ex. DryRunModel ensures the same short name, long name, description, etc are consistent across all commands using this model.
 * [FluentValidation](../Middleware/fluent-validation-for-argument-models.md) framework can be used to validate the model
 
-### Caveat
+## Caveat
 
-`Argument` position cannot be guaranteed to be consistent because the .Net Framework does not guarantee the order properties are reflected.
+`Operand` position cannot be guaranteed to be consistent because the .Net Framework does not guarantee the order properties are reflected.
 
 > The [GetProperties](https://docs.microsoft.com/en-us/dotnet/api/system.type.getproperties) method does not return properties in a particular order, such as alphabetical or declaration order. Order can differ on each machine the app is deployed to. Your code must not depend on the order in which properties are returned because that order is no guaranteed.
 
 This is not an issue with `Option` because options are named, not positional
 
 ### Recommendation 
-* Avoid modelling operands in argument models unless you need to validate them using FluentValidation.
-* If you do need to model operands and you have scripts in place, verify the scripts work as expected on each new machine, after .net framework updates and after new deployments.
+* Avoid defining operands in argument models
+* When operands are defined in argument models, order is not guaranteed so scripts are not reliable. 
+    Verify the scripts work as expected after
+    * deploy to a new machine
+    * redeploy to an existing machine
+    * .net framework updates

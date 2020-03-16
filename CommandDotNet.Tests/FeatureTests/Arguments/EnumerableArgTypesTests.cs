@@ -22,7 +22,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             {
                 Given = { AppSettings = BasicHelp },
                 WhenArgs = "EnumerableModel -h",
-                Then = { Result = @"Usage: dotnet testhost.dll EnumerableModel [arguments] [options]
+                Then = { Result = @"Usage: dotnet testhost.dll EnumerableModel [options] [arguments]
 
 Arguments:
   Args
@@ -39,7 +39,7 @@ Options:
             {
                 Given = { AppSettings = DetailedHelp },
                 WhenArgs = "EnumerableModel -h",
-                Then = { Result = @"Usage: dotnet testhost.dll EnumerableModel [arguments] [options]
+                Then = { Result = @"Usage: dotnet testhost.dll EnumerableModel [options] [arguments]
 
 Arguments:
 
@@ -58,7 +58,7 @@ Options:
             {
                 Given = {AppSettings = BasicHelp},
                 WhenArgs = "Enumerable -h",
-                Then = {Result = @"Usage: dotnet testhost.dll Enumerable [arguments] [options]
+                Then = {Result = @"Usage: dotnet testhost.dll Enumerable [options] [arguments]
 
 Arguments:
   args
@@ -75,7 +75,7 @@ Options:
             {
                 Given = {AppSettings = DetailedHelp},
                 WhenArgs = "Enumerable -h",
-                Then = {Result = @"Usage: dotnet testhost.dll Enumerable [arguments] [options]
+                Then = {Result = @"Usage: dotnet testhost.dll Enumerable [options] [arguments]
 
 Arguments:
 

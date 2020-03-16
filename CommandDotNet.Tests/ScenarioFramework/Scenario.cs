@@ -14,5 +14,10 @@ namespace CommandDotNet.Tests.ScenarioFramework
         public Scenario(string name) : base(name)
         {
         }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
     }
 }
