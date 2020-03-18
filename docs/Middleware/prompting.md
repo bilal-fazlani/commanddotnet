@@ -10,7 +10,7 @@ Prompting is supported for two scenarios:
 1. Prompting for values from within the command method.
 2. Prompting for arguments where values were not provided. 
 
-Examples can be found in the [prompts](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.Example/Commands/Prompts.cs) 
+Examples can be found in the [prompts](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/Commands/Prompts.cs) 
 commands in the example app.
 
 ## Prompting from within the command method

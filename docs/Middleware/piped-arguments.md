@@ -61,7 +61,7 @@ public class Users
 !!!warn
     All output to the console is piped to the next command. Be sure the command generating the piped output does not include additional logging information.
 
-You can experiment with this using our [pipes example command](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.Example/Commands/Pipes.cs).
+You can experiment with this using our [pipes example command](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/Commands/Pipes.cs).
 
 !!!tip
     When the collection type is streamable, like `IEnumerable<T>`, the values will be streamed to the enumerable as they're received from the publishing program,

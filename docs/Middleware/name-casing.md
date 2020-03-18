@@ -52,7 +52,7 @@ Use the `applyToNameOverrides` option to apply case conversion to migrateUser an
 
 use `appRunner.Configure(c => c.NameTransformation = ...)` to apply custom name transformations.
 
-Example: [Humanizer middleare](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.NameCasing/HumanizerAppRunnerExtensions.cs)
+Example: [Humanizer middleare](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.NameCasing/HumanizerAppRunnerExtensions.cs)
 
 This example will lowercase all names
 

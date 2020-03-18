@@ -8,8 +8,8 @@ nuget package: [CommandDotNet.TestTools](https://www.nuget.org/packages/CommandD
 
 ## The BDD framework
 
-More details about Scenario testing can be found in our readme files [here](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.Tests/README.md)
-and [here](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.Tests/FeatureTests/README.md)
+More details about Scenario testing can be found in our readme files [here](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Tests/README.md)
+and [here](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Tests/FeatureTests/README.md)
 
 
 ```c#
@@ -53,24 +53,24 @@ dddd
 
 The framework includes the following tools that can be used independently of the BDD Framework.
 
-### [PromptResponder](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.TestTools/Prompts/PromptResponder.cs)
+### [PromptResponder](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/Prompts/PromptResponder.cs)
 
 * Respond to and verify prompt requests, based on OnReadKey. Works with `IPrompter` middleware.
-* Examples: [prompting tests](https://github.com/bilal-fazlani/commanddotnet/tree/beta-v3/master/CommandDotNet.Tests/FeatureTests/Prompting)
+* Examples: [prompting tests](https://github.com/bilal-fazlani/commanddotnet/tree/master/CommandDotNet.Tests/FeatureTests/Prompting)
 
-### [TestConsole](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.TestTools/TestConsole.cs)
+### [TestConsole](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/TestConsole.cs)
 
 * capture output for assertions
 * provide piped input
 * handle ReadLine and ReadToEnd
 
-### [TempFiles](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.TestTools/TempFiles.cs)
+### [TempFiles](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/TempFiles.cs)
 
 * Creates temp files, give content and receive a file path.
 * Removes created files on dispose
-* Examples: [ResponseFileTests](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.Tests/FeatureTests/ResponseFileTests.cs)
+* Examples: [ResponseFileTests](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Tests/FeatureTests/ResponseFileTests.cs)
 
-### [TestDependencyResolver](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.TestTools/TestDependencyResolver.cs) 
+### [TestDependencyResolver](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/TestDependencyResolver.cs) 
 
 ```c#
 new AppRunner<App>()
@@ -78,14 +78,14 @@ new AppRunner<App>()
     .VerifyScenario(scenario);
 ```
 
-### [TestOutputs](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.TestTools/TestOutputs.cs)
+### [TestOutputs](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/TestOutputs.cs)
 
 `TestOutputs` can be added as a property to a test app and will be automatically injected by the test framework.
 
 This is useful for testing middleware and other extensions that can populate or modify arguments, by allowing you to capture those arguments and assert them in tests.
 
-### [CaptureState](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.TestTools/AppRunnerTestExtensions.cs#L20)
+### [CaptureState](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/AppRunnerTestExtensions.cs#L20)
 
 * `appRunner.CaptureState(...)` extension method that can be used to capture the point-in-time state of an object within the middleware pipeline.
-* Examples: [DefaultArityTests](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.Tests/FeatureTests/Arguments/DefaultArityTests.cs) and [Options_Name_Tests](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.Tests/FeatureTests/Arguments/Options_Name_Tests.cs)
+* Examples: [DefaultArityTests](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Tests/FeatureTests/Arguments/DefaultArityTests.cs) and [Options_Name_Tests](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Tests/FeatureTests/Arguments/Options_Name_Tests.cs)
 

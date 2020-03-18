@@ -45,7 +45,7 @@ These parameters also exist for the AutoFac, MicrosoftDependencyInjection and Si
 
 ## Custom Resolvers
 
-To implement your own custom resolver, implement the `IDependencyResolver`. See the [TestDependencyResolver](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet.TestTools/TestDependencyResolver.cs) for an example.
+To implement your own custom resolver, implement the `IDependencyResolver`. See the [TestDependencyResolver](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/TestDependencyResolver.cs) for an example.
 
 ## Registering all command classes
 

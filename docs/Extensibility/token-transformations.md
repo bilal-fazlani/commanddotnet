@@ -6,8 +6,8 @@ This feature is used internally to expand clubbed options and support [Response 
 
 See these implementations as examples:
 
-  * [ExpandClubbedOptionsTransformation](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet/Tokens/ExpandClubbedOptionsTransformation.cs)
-  * [ExpandResponseFilesTransformation](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet/Tokens/ExpandResponseFilesTransformation.cs)
+  * [ExpandClubbedOptionsTransformation](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Tokens/ExpandClubbedOptionsTransformation.cs)
+  * [ExpandResponseFilesTransformation](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Tokens/ExpandResponseFilesTransformation.cs)
 
 ## How to implement
 
