@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{6296
 		deploy.sh = deploy.sh
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandDotNet.NewerReleasesAlerts", "CommandDotNet.GitHubReleases\CommandDotNet.NewerReleasesAlerts.csproj", "{BB3E8869-107B-4E92-B6A2-2AB3A3CA2D3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandDotNet.NewerReleasesAlerts", "CommandDotNet.NewerReleasesAlerts\CommandDotNet.NewerReleasesAlerts.csproj", "{BB3E8869-107B-4E92-B6A2-2AB3A3CA2D3C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandDotNet.TestTools", "CommandDotNet.TestTools\CommandDotNet.TestTools.csproj", "{75706FAE-BFF4-42FC-A5A6-C49744C7967C}"
 EndProject

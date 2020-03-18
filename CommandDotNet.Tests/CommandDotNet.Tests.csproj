@@ -15,7 +15,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommandDotNet.FluentValidation\CommandDotNet.FluentValidation.csproj" />
-    <ProjectReference Include="..\CommandDotNet.GitHubReleases\CommandDotNet.NewerReleasesAlerts.csproj" />
+    <ProjectReference Include="..\CommandDotNet.NewerReleasesAlerts\CommandDotNet.NewerReleasesAlerts.csproj" />
     <ProjectReference Include="..\CommandDotNet.IoC.Autofac\CommandDotNet.IoC.Autofac.csproj" />
     <ProjectReference Include="..\CommandDotNet.IoC.MicrosoftDependencyInjection\CommandDotNet.IoC.MicrosoftDependencyInjection.csproj" />
     <ProjectReference Include="..\CommandDotNet.IoC.SimpleInjector\CommandDotNet.IoC.SimpleInjector.csproj" />
