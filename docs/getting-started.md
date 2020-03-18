@@ -145,4 +145,40 @@ OUTPUT
 Answer: 60
 ```
 
-Cool. You get the gist of this library. Let's move on.
+## Opt-In to additional features
+
+In the `Program.Main`, we configured the app with the basic feature set.
+```c#
+    return new AppRunner<Calculator>().Run(args);
+```
+
+To take advantage of many more additional features, such as
+[debug & parse directives](directives.md),
+[ctrl+c support](cancellation.md),
+[prompting](prompting.md),
+[piping](piped-arguments),
+[response files](response-files.md) and [typo suggestions](typo-suggestions.md), add `UseDefaultMiddleware()`
+
+```c#
+    return new AppRunner<Calculator>()
+        .UseDefaultMiddleware()
+        .Run(args);
+```
+
+see [Default Middleware](default-middleware.md) for more details and options for using default middleware.
+
+## Next Steps
+
+You get the gist of this library now. This may be all you need to start your app.
+
+Check out the
+
+* *Defining Commands* section to learn more details around defining commands, subcommands and arguments.
+
+* *Middleware* section to see the additional set of features available via middleware.
+
+* *Extensibility* section if the framework is missing a feature you need and you're interested in adding it yourself. For questions, ping us on our [Discord channel](https://discord.gg/QFxKSeG) or create a [GitHub Issue](https://github.com/bilal-fazlani/commanddotnet/issues)
+
+* *Extras* section for helpful debugging tools
+
+* *Test Tools* for a test package to help test console output with this framework. This is helpful for all apps, but especially helpful when definiing extensibility components. This package is used to test all of the CommandDotNet features.

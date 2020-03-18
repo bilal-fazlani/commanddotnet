@@ -107,12 +107,12 @@ See this line `"Example: %UsageAppName% [debug] [parse] [log:info] cancel-me"` i
 
 ## Custom Help Provider
 
-The template is driven by the [HelpTextProvider](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet/Help/HelpTextProvider.cs) class.
+The template is driven by the [HelpTextProvider](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Help/HelpTextProvider.cs) class.
 
 There are two options for overriding the behavior. 
 
 The first and simplest option is to inherit from `HelpTextProvider` and override the method for the section to modify.
 
-The second option is to implement a new [IHelpProvider](https://github.com/bilal-fazlani/commanddotnet/blob/beta-v3/master/CommandDotNet/Help/IHelpProvider.cs).
+The second option is to implement a new [IHelpProvider](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Help/IHelpProvider.cs).
 
 Configure the provider with: `appRunner.Configure(b => b.CustomHelpProvider = new MyHelpProvider());`
