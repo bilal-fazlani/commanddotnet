@@ -18,13 +18,6 @@ namespace CommandDotNet
         /// </summary>
         public BooleanMode BooleanMode { get; set; }
 
-        [Obsolete("Use AssignToExecutableSubcommands instead")]
-        public bool Inherited
-        {
-            get => AssignToExecutableSubcommands;
-            set => AssignToExecutableSubcommands = value;
-        }
-
         /// <summary>
         /// When true, this option is an Inherited option, defined by a command interceptor method
         /// and assigned to executable subcommands of the interceptor.<br/>

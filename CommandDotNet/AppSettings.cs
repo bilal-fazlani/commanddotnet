@@ -56,34 +56,9 @@ namespace CommandDotNet
         /// from the commandline to the parameter & property types for the command methods.
         /// </summary>
         public ArgumentTypeDescriptors ArgumentTypeDescriptors { get; internal set; } = new ArgumentTypeDescriptors();
-
-        #region Obsolete Members
-
-        [Obsolete("Use DefaultArgumentMode instead")]
-        public ArgumentMode MethodArgumentMode
-        {
-            get => DefaultArgumentMode;
-            set => DefaultArgumentMode = value;
-        }
-
-        [Obsolete("Use IgnoreUnexpectedArguments instead")]
-        public bool ThrowOnUnexpectedArgument
-        {
-            get => !IgnoreUnexpectedOperands;
-            set => IgnoreUnexpectedOperands = !value;
-        }
-
+        
         [Obsolete("this is only used to display the arg separator in help. it does not make the separated arguments available for use.")]
         public bool AllowArgumentSeparator { get; set; }
-
-        [Obsolete("Use Help.TextStyle")]
-        public HelpTextStyle HelpTextStyle
-        {
-            get => Help.TextStyle;
-            set => Help.TextStyle = value;
-        }
-
-        #endregion
 
         public override string ToString()
         {

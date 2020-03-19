@@ -10,7 +10,6 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
     {
         private static readonly AppSettings OperandMode = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Operand);
         private static readonly AppSettings OptionMode = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Option);
-        private static readonly AppSettings DeprecatedParameterMode = TestAppSettings.BasicHelp.Clone(a => a.MethodArgumentMode = ArgumentMode.Parameter);
 
         public DefaultArgumentModeTests(ITestOutputHelper output) : base(output)
         {
@@ -49,8 +48,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     {
                         @"Arguments:
   default
-  operand
-  argument",
+  operand",
                         @"Options:
   --option"
                     }
@@ -71,8 +69,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     {
                         @"Arguments:
   Default
-  Operand
-  Argument",
+  Operand",
                         @"Options:
   --Option"
                     }
@@ -112,8 +109,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     ResultsContainsTexts =
                     {
                         @"Arguments:
-  operand
-  argument",
+  operand",
                         @"Options:
   --default
   --option"
@@ -134,74 +130,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     ResultsContainsTexts =
                     {
                         @"Arguments:
-  Operand
-  Argument",
+  Operand",
                         @"Options:
   --Default
-  --Option"
-                    }
-                }
-            });
-        }
-
-        [Fact]
-        public void GivenObsoleteParameterMode_InInterceptor_NonAttributedParamsDefaultTo_Operand()
-        {
-            Verify(new Scenario<App>
-            {
-                Given = { AppSettings = DeprecatedParameterMode },
-                WhenArgs = "-h",
-                Then =
-                {
-                    ResultsNotContainsTexts = { "Arguments" },
-                    ResultsContainsTexts =
-                    {
-                        @"Options:
-  --ctorDefault
-  --ctorOption"
-                    }
-                }
-            });
-        }
-
-        [Fact]
-        public void GivenObsoleteParameterMode_InMethod_NonAttributedParamsDefaultTo_Operand()
-        {
-            Verify(new Scenario<App>
-            {
-                Given = { AppSettings = DeprecatedParameterMode },
-                WhenArgs = "Method -h",
-                Then =
-                {
-                    ResultsContainsTexts =
-                    {
-                        @"Arguments:
-  default
-  operand
-  argument",
-                        @"Options:
-  --option"
-                    }
-                }
-            });
-        }
-
-        [Fact]
-        public void GivenObsoleteParameterMode_InModel_NonAttributedParamsDefaultTo_Operand()
-        {
-            Verify(new Scenario<App>
-            {
-                Given = { AppSettings = DeprecatedParameterMode },
-                WhenArgs = "Model -h",
-                Then =
-                {
-                    ResultsContainsTexts =
-                    {
-                        @"Arguments:
-  Default
-  Operand
-  Argument",
-                        @"Options:
   --Option"
                     }
                 }
@@ -219,7 +150,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             {
             }
 
-            public void Method(string @default, [Operand] string operand, [Option] string option, [Argument] string argument)
+            public void Method(string @default, [Operand] string operand, [Option] string option)
             {
             }
         }
@@ -231,8 +162,6 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             public string Operand { get; set; }
             [Option]
             public string Option { get; set; }
-            [Argument]
-            public string Argument { get; set; }
         }
     }
 }

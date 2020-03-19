@@ -14,9 +14,6 @@ namespace CommandDotNet
         /// <summary>The <see cref="IArgumentArity"/> for this argument, describing how many values are allowed.</summary>
         IArgumentArity Arity { get; set; }
 
-        [Obsolete("Use Default instead. This enable middleware and custom help providers to report the source of a default value")]
-        object DefaultValue { get; set; }
-
         /// <summary>The default value for this argument</summary>
         ArgumentDefault Default { get; set; }
 

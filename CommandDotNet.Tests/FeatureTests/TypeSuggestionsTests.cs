@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using CommandDotNet.TestTools.Scenarios;
-using CommandDotNet.TypeDescriptors;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -66,7 +65,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Configure(c => 
                     c.BuildEvents.OnCommandCreated += a =>
                     {
-                        var option = new Option("usertype", null, a.CommandBuilder.Command, TypeInfo.Single<int>(), ArgumentArity.ExactlyOne)
+                        var option = new Option("usertype", null, TypeInfo.Single<int>(), ArgumentArity.ExactlyOne)
                         {
                             ShowInHelp = false
                         };
@@ -97,7 +96,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Configure(c =>
                     c.BuildEvents.OnCommandCreated += a =>
                     {
-                        var option = new Operand("usertype", a.CommandBuilder.Command, TypeInfo.Single<int>(), ArgumentArity.ExactlyOne);
+                        var option = new Operand("usertype", TypeInfo.Single<int>(), ArgumentArity.ExactlyOne);
                         a.CommandBuilder.AddArgument(option);
                     })
                 .UseTypoSuggestions()

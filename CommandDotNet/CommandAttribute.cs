@@ -13,23 +13,4 @@ namespace CommandDotNet
 
         public string ExtendedHelpText { get; set; }
     }
-
-    // keeping in this namespace for backwards compatibility with preview versions
-    [Obsolete("Use CommandAttribute instead")]
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class ApplicationMetadataAttribute : CommandAttribute
-    {
-
-    }
-}
-
-namespace CommandDotNet.Attributes
-{
-    // keeping in this namespace for backwards compatibility
-    [Obsolete("Use CommandAttribute instead")]
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class ApplicationMetadataAttribute : CommandAttribute
-    {
-
-    }
 }
