@@ -1,9 +1,7 @@
-﻿using System.Linq;
-using CommandDotNet.Extensions;
-using CommandDotNet.TestTools;
+﻿using CommandDotNet.Extensions;
+using CommandDotNet.Rendering;
 using CommandDotNet.TestTools.Scenarios;
 using CommandDotNet.Tokens;
-using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -57,29 +55,31 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void CanRegisterCustomTokenTransformation()
         {
-            var result = new AppRunner<App>()
+            new AppRunner<App>()
                 .Configure(c =>
                     c.UseTokenTransformation("test", 1,
                         (ctx, tokens) => tokens.Transform(
                             skipDirectives: true,
                             skipSeparated: true,
                             transformation: t =>
-                                t.TokenType == TokenType.Value && t.Value == "roses"
+                                t.TokenType == TokenType.Value && t.Value == "like"
                                     ? Tokenizer.TokenizeValue("roses").ToEnumerable()
                                     : t.ToEnumerable())))
-                .RunInMem("Do --opt1 smells like".SplitArgs(), _output);
-
-            result.TestOutputs.Get<string>().Should().Be("roses");
+                .VerifyScenario(_output, new Scenario
+                {
+                    WhenArgs = "Do --opt1 smells like",
+                    Then =
+                    {
+                        Result = "smells roses"
+                    }
+                });
         }
 
         public class App
         {
-            private TestOutputs TestOutputs { get; set; }
-
-            public int Do([Option] string opt1, string arg1 = "wet dog")
+            public void Do(IConsole console, [Option] string opt1, string arg1 = "wet dog")
             {
-                TestOutputs.Capture(opt1);
-                return opt1 == arg1 ? 0 : 1;
+                console.Out.Write($"{opt1} {arg1}");
             }
         }
     }
