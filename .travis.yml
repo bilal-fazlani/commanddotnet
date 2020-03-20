@@ -56,6 +56,8 @@ jobs:
           name: nuget & github release
           os: linux
           dotnet: 3.1
+          install:
+            - dotnet restore
           script: 
             - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
           script: 
