@@ -56,7 +56,7 @@ namespace CommandDotNet.Parsing
         public static IEnumerable<string> GetPipedInput(IConsole console)
         {
             Func<string> readLine = console.In.ReadLine;
-            return readLine.EnumerateLinesUntilNull();
+            return readLine.EnumeratePipedInput();
         }
     }
 }

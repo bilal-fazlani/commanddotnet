@@ -136,7 +136,7 @@ namespace CommandDotNet.TestTools
 
             public string ReadToEnd()
             {
-                return _onReadLine.EnumerateLinesUntilNull().ToCsv(Environment.NewLine);
+                return _onReadLine.EnumeratePipedInput().ToCsv(Environment.NewLine);
             }
         }
 
