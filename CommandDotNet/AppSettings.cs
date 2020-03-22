@@ -42,8 +42,8 @@ namespace CommandDotNet
 
         /// <summary>
         /// When true, an <see cref="InvalidOperationException"/> will be thrown when operand order
-        /// cannot be determined due to missing <see cref="OperandAttribute"/> or <see cref="PositionFromPropertyOrderAttribute"/>.<br/>
-        /// Nested argument models must be attributed with <see cref="PositionFromPropertyOrderAttribute"/><br/>
+        /// cannot be determined due to missing <see cref="OperandAttribute"/> or <see cref="OrderByPositionInClassAttribute"/>.<br/>
+        /// Nested argument models must be attributed with <see cref="OrderByPositionInClassAttribute"/><br/>
         /// NOTE: this will default to true in the next major version.
         /// Set to true now or explicitly set to false to avoid the breaking change.
         /// </summary>

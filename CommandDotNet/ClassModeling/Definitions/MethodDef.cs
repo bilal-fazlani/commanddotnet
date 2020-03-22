@@ -218,7 +218,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 _parentProperty = parentProperty;
                 PropertyInfo = propertyInfo;
                 IsArgModel = propertyInfo.PropertyType.InheritsFrom<IArgumentModel>();
-                LineNumber = propertyInfo.GetCustomAttribute<PositionFromPropertyOrderAttribute>()?.CallerLineNumber
+                LineNumber = propertyInfo.GetCustomAttribute<OrderByPositionInClassAttribute>()?.CallerLineNumber
                              ?? propertyInfo.GetCustomAttribute<OperandAttribute>()?.CallerLineNumber;
 
                 var isOperand = !IsArgModel && commandNode == CommandNodeType.Operand;
@@ -228,7 +228,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                     if (!LineNumber.HasValue)
                     {
                         throw new InvalidConfigurationException($"Operand property must be attributed with " +
-                                                                $"{nameof(OperandAttribute)} or {nameof(PositionFromPropertyOrderAttribute)} to guarantee consistent order. " +
+                                                                $"{nameof(OperandAttribute)} or {nameof(OrderByPositionInClassAttribute)} to guarantee consistent order. " +
                                                                 $"Property: {propertyInfo.DeclaringType?.FullName}.{propertyInfo.Name}");
                     }
 
@@ -240,7 +240,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                             .Select(p => $"  {p.DeclaringType?.FullName}.{p.Name}")
                             .ToCsv(Environment.NewLine);
                         throw new InvalidConfigurationException($"Operand property must be attributed with " +
-                                                                $"{nameof(OperandAttribute)} or {nameof(PositionFromPropertyOrderAttribute)} to guarantee consistent order. " +
+                                                                $"{nameof(OperandAttribute)} or {nameof(OrderByPositionInClassAttribute)} to guarantee consistent order. " +
                                                                 $"Properties:{Environment.NewLine}{props}");
                     }
                 }
