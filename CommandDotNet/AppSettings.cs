@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using CommandDotNet.Extensions;
 using CommandDotNet.Help;
+using CommandDotNet.Tokens;
 using CommandDotNet.TypeDescriptors;
 
 namespace CommandDotNet
@@ -50,10 +51,10 @@ namespace CommandDotNet
         public bool GuaranteeOperandOrderInArgumentModels { get; set; } = false;
 
         /// <summary>
-        /// Set to true to prevent tokenizing arguments as directives,
+        /// Set to true to prevent tokenizing arguments as <see cref="TokenType.Directive"/>,
         /// captured in <see cref="CommandContext.Tokens"/>.
         /// Arguments with the [directive syntax] will be tokenized
-        /// as values instead.
+        /// as <see cref="TokenType.Value"/>.
         /// </summary>
         public bool DisableDirectives { get; set; }
 

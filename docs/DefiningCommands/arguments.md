@@ -21,10 +21,6 @@ The operand attribute has the following properties:
 * __Name__: Used in help documentation only. Defaults to the method name.
 * __Description__: Used in help documentation.
 
-!!!Note
-    The OperandAttribute constructor contains a default parameter named __callerLineNumber. Ignore this parameter. 
-    It is autopopulated and used to guarantee order from properties. See more in [Argument Models](argument-models.md)
-
 ## Option Attribute
 
 The option attribute has the following properties:
