@@ -62,7 +62,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     {
                         ExitCode = 1,
                         Result = "Operand property must be attributed with OperandAttribute or " +
-                                 "PositionFromPropertyOrderAttribute to guarantee consistent order. " +
+                                 "OrderByPositionInClassAttribute to guarantee consistent order. " +
                                  "Property: CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedArgModel.Arg1"
                     }
                 });
@@ -142,7 +142,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     {
                         ExitCode = 1,
                         Result = "Operand property must be attributed with OperandAttribute or " +
-                                 "PositionFromPropertyOrderAttribute to guarantee consistent order. " +
+                                 "OrderByPositionInClassAttribute to guarantee consistent order. " +
                                  "Property: CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedArgModel.Arg1"
                     }
                 });
@@ -159,7 +159,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     {
                         ExitCode = 1,
                         Result = "Operand property must be attributed with OperandAttribute or " +
-                                 "PositionFromPropertyOrderAttribute to guarantee consistent order. " +
+                                 "OrderByPositionInClassAttribute to guarantee consistent order. " +
                                  @"Properties:
   CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedNestedModelAttributedArgModel.Model"
                     }
@@ -177,7 +177,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     {
                         ExitCode = 1,
                         Result = "Operand property must be attributed with OperandAttribute or " +
-                                 "PositionFromPropertyOrderAttribute to guarantee consistent order. " +
+                                 "OrderByPositionInClassAttribute to guarantee consistent order. " +
                                  "Property: CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedArgModel.Arg1"
                     }
                 });
@@ -194,7 +194,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     {
                         ExitCode = 1,
                         Result = "Operand property must be attributed with OperandAttribute or " +
-                                 "PositionFromPropertyOrderAttribute to guarantee consistent order. " +
+                                 "OrderByPositionInClassAttribute to guarantee consistent order. " +
                                  @"Properties:
   CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedNestedModelAttributedArgModel.Model
   CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+DeepNestedUnattributedArgModels.Model"
@@ -226,7 +226,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         // Valid & can verify order
         public class AttributedArgModel : IArgumentModel
         {
-            [PositionFromPropertyOrder]
+            [OrderByPositionInClass]
             public string Arg1 { get; set; }
 
             [Operand]
@@ -255,17 +255,17 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         // Invalid
         public class AttributedNestedModelUnattributedArgModel : IArgumentModel
         {
-            [PositionFromPropertyOrder]
+            [OrderByPositionInClass]
             public UnattributedArgModel Model { get; set; }
         }
 
         // Valid & can verify order
         public class AttributedNestedModelAttributedArgModel : IArgumentModel
         {
-            [PositionFromPropertyOrder]
+            [OrderByPositionInClass]
             public AttributedArgModel Model { get; set; }
 
-            [PositionFromPropertyOrder]
+            [OrderByPositionInClass]
             public string Arg2 { get; set; }
 
             [Operand]
