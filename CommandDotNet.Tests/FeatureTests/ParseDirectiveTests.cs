@@ -18,20 +18,51 @@ namespace CommandDotNet.Tests.FeatureTests
                 .VerifyScenario(TestOutputHelper,
                     new Scenario
                     {
-                        WhenArgs = "[parse:tokens;verbose] some -ab args to echo",
+                        WhenArgs = "[parse:transforms] some -ab args to echo",
                         Then =
                         {
                             ExitCode = 0, // method should not have been called
-                            Result = @"use [parse:help] to see additional parse options
+                            Result = @"command: some
+
+arguments:
+
+  args <Text>
+    value: args
+    inputs: args
+
+  to <Text>
+    value: to
+    inputs: to
+
+  echo <Text>
+    value: echo
+    inputs: echo
+
+options:
+
+  a <Flag>
+    value: True
+    inputs: true (from: -ab -> -a)
+
+  b <Flag>
+    value: True
+    inputs: true (from: -ab -> -b)
+
+  v <Text>
+    value:
+
+
+token transformations:
+
 >>> from shell
-  Directive: [parse:tokens;verbose]
+  Directive: [parse:transforms]
   Value    : some
   Option   : -ab
   Value    : args
   Value    : to
   Value    : echo
 >>> transformed after: expand-clubbed-flags
-  Directive: [parse:tokens;verbose]
+  Directive: [parse:transforms]
   Value    : some
   Option   : -a
   Option   : -b
@@ -51,13 +82,42 @@ namespace CommandDotNet.Tests.FeatureTests
                 .VerifyScenario(TestOutputHelper,
                     new Scenario
                     {
-                        WhenArgs = "[parse:tokens;verbose] some args to echo",
+                        WhenArgs = "[parse:transforms] some args to echo",
                         Then =
                         {
                             ExitCode = 0, // method should not have been called
-                            Result = @"use [parse:help] to see additional parse options
+                            Result = @"command: some
+
+arguments:
+
+  args <Text>
+    value: args
+    inputs: args
+
+  to <Text>
+    value: to
+    inputs: to
+
+  echo <Text>
+    value: echo
+    inputs: echo
+
+options:
+
+  a <Flag>
+    value:
+
+  b <Flag>
+    value:
+
+  v <Text>
+    value:
+
+
+token transformations:
+
 >>> from shell
-  Directive: [parse:tokens;verbose]
+  Directive: [parse:transforms]
   Value    : some
   Value    : args
   Value    : to

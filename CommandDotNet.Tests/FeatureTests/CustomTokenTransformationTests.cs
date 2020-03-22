@@ -17,42 +17,6 @@ namespace CommandDotNet.Tests.FeatureTests
         }
 
         [Fact]
-        public void ParseDirective_OutputsResults()
-        {
-            new AppRunner<App>()
-                .UseParseDirective()
-                .Configure(c =>
-                    c.UseTokenTransformation("test", 1,
-                        (ctx, tokens) => tokens.Transform(
-                            skipDirectives: true, 
-                            skipSeparated: true,
-                            transformation: t =>
-                                t.TokenType == TokenType.Value && t.Value == "like"
-                                    ? Tokenizer.TokenizeValue("roses").ToEnumerable()
-                                    : t.ToEnumerable())))
-                .VerifyScenario(_output, new Scenario
-                {
-                    WhenArgs = "[parse:tokens] Do --opt1 smells like",
-                    Then =
-                    {
-                        Result = @"use [parse:help] to see additional parse options
->>> from shell
-  Directive: [parse:tokens]
-  Value    : Do
-  Option   : --opt1
-  Value    : smells
-  Value    : like
->>> transformed after: test > expand-clubbed-flags > split-option-assignments
-  Directive: [parse:tokens]
-  Value    : Do
-  Option   : --opt1
-  Value    : smells
-  Value    : roses"
-                    }
-                });
-        }
-
-        [Fact]
         public void CanRegisterCustomTokenTransformation()
         {
             new AppRunner<App>()

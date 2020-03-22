@@ -64,14 +64,14 @@ Options:
 
   --ObjectArg                 <URI>        [http://google.com/]
 
-  --StringListArg (Multiple)  <TEXT>       [red,blue]
+  --StringListArg (Multiple)  <TEXT>       [red, blue]
 
-  --StructListArg (Multiple)  <NUMBER>     [3,4]
+  --StructListArg (Multiple)  <NUMBER>     [3, 4]
 
-  --EnumListArg (Multiple)    <DAYOFWEEK>  [Monday,Tuesday]
+  --EnumListArg (Multiple)    <DAYOFWEEK>  [Monday, Tuesday]
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
-  --ObjectListArg (Multiple)  <URI>        [http://google.com/,http://github.com/]" }
+  --ObjectListArg (Multiple)  <URI>        [http://google.com/, http://github.com/]" }
             });
         }
 

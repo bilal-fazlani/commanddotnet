@@ -105,15 +105,16 @@ namespace CommandDotNet.Tokens
         {
             Func<Token, IEnumerable<Token>> AssignSourceTokenToNewTokens()
             {
-                return token => transformation(token).Select(t =>
-                {
-                    if (t.SourceName.IsNullOrWhitespace())
+                return token => transformation(token)
+                    .Select(t =>
                     {
-                        t.SourceToken = token;
-                    }
+                        if (t.SourceToken == null && t != token)
+                        {
+                            t.SourceToken = token;
+                        }
 
-                    return t;
-                });
+                        return t;
+                    });
             }
 
             return new TokenCollection(
@@ -124,6 +125,7 @@ namespace CommandDotNet.Tokens
         }
 
         public IEnumerator<Token> GetEnumerator()
+
         {
             return _combined.GetEnumerator();
         }

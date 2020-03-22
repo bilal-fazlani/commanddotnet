@@ -26,7 +26,7 @@ namespace CommandDotNet.Extensions
 
             if (value is IEnumerable collection)
             {
-                return collection.Cast<object>().Select(i => i?.ToString()).ToCsv();
+                return collection.Cast<object>().Select(i => i?.ToString()).ToCsv(", ");
             }
 
             return value.ToString();

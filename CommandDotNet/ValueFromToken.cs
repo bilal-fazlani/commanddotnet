@@ -18,5 +18,10 @@ namespace CommandDotNet
             ValueToken = valueToken;
             OptionToken = optionToken;
         }
+
+        public override string ToString()
+        {
+            return $"{nameof(ValueFromToken)}={Value} {nameof(ValueToken)}:{ValueToken} {nameof(OptionToken)}:{OptionToken}";
+        }
     }
 }
