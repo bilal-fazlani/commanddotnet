@@ -4,5 +4,5 @@ mkdocs-material>=4
 Pygments>=2.4
 markdown>=3.2
 pymdown-extensions>=6.3,<7
-mkdocs-git-revision-date-localized-plugin==0.4.6
+# mkdocs-git-revision-date-localized-plugin==0.4.6
 mkdocs-autolinks-plugin
