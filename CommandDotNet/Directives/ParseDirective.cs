@@ -10,12 +10,6 @@ namespace CommandDotNet.Directives
 {
     internal static class ParseDirective
     {
-        /* Tests
-            - [parse:tokens]
-              - when requested
-              - when not requested but error caused other report not to trigger
-        */
-
         internal static AppRunner UseParseDirective(this AppRunner appRunner)
         {
             return appRunner.Configure(c =>
@@ -37,41 +31,49 @@ namespace CommandDotNet.Directives
             commandContext.Services.AddOrUpdate(parseContext);
             CaptureTransformations(commandContext, parseContext);
 
+            Action<string> writeln = commandContext.Console.Out.WriteLine;
+
             try
             {
                 // ParseReportByArg is run within this pipeline
                 var result = next(commandContext);
 
-                if (!parseContext.IncludeTokenization // already included
-                    && !parseContext.Reported         // already reported
-                    && commandContext.ParseResult.ParseError != null)
+                if (parseContext.IncludeTokenization)
+                {
+                    writeln(parseContext.Transformations.ToString());
+                }
+                else if (!parseContext.Reported)
                 {
                     // in case ParseReportByArg wasn't run due to parsing errors,
                     // output this the transformations as a temporary aid
-                    commandContext.Console.Out.WriteLine(parseContext.Transformations.ToString());
+                    writeln("Unable to map tokens to arguments. Falling back to token transformations.");
+                    writeln(parseContext.Transformations.ToString());
+                }
+                else
+                {
+                    writeln($"Use [parse:{ParseContext.IncludeTransformationsArgName}]" +
+                            " to include token transformations.");
                 }
 
                 return result;
             }
-            catch (Exception e) when (!parseContext.IncludeTokenization && !parseContext.Reported)
+            catch (Exception) when (!parseContext.IncludeTokenization && !parseContext.Reported)
             {
                 // in case ParseReportByArg wasn't run due to parsing errors,
                 // output this the transformations as a temporary aid
-                commandContext.Console.Out.WriteLine(parseContext.Transformations.ToString());
+                writeln("Unable to map tokens to arguments. Falling back to token transformations.");
+                writeln(parseContext.Transformations.ToString());
                 throw;
             }
         }
 
         private static Task<int> ParseReportByArg(CommandContext commandContext, ExecutionDelegate next)
         {
-            var settings = commandContext.Services.Get<ParseContext>();
-            if (settings != null)
+            var parseContext = commandContext.Services.Get<ParseContext>();
+            if (parseContext != null)
             {
                 ParseReporter.Report(commandContext);
-                settings.Reported = true;
-                commandContext.Console.Out.WriteLine(settings.IncludeTokenization
-                    ? settings.Transformations.ToString()
-                    : $"Use [parse:{ParseContext.IncludeTransformationsArgName}] to include token transformations.");
+                parseContext.Reported = true;
                 return Task.FromResult(0);
             }
 

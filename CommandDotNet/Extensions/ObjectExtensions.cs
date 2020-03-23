@@ -12,11 +12,16 @@ namespace CommandDotNet.Extensions
         }
 
         /// <summary></summary>
-        internal static string ValueToString(this object value)
+        internal static string ValueToString(this object value, bool isPassword = false)
         {
             if (value.IsNullValue())
             {
                 return null;
+            }
+
+            if (isPassword)
+            {
+                return Password.ValueReplacement;
             }
 
             if (value is string str)
