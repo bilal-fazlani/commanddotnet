@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using CommandDotNet.Extensions;
 using CommandDotNet.Logging;
 
 namespace CommandDotNet.TestTools
@@ -8,20 +9,25 @@ namespace CommandDotNet.TestTools
     {
         private ILogger _logger;
 
-        public static void InitLogProvider(ILogger logger)
+        public static IDisposable InitLogProvider(ILogger logger)
         {
             if (logger == null)
             {
                 throw new ArgumentNullException(nameof(logger));
             }
 
-            if (!(LogProvider.CurrentLogProvider is TestToolsLogProvider provider))
+            if (LogProvider.CurrentLogProvider is TestToolsLogProvider provider)
             {
-                provider = new TestToolsLogProvider();
+                provider._logger = logger;
+            }
+            else
+            {
+                provider = new TestToolsLogProvider { _logger = logger };
                 LogProvider.SetCurrentLogProvider(provider);
             }
 
-            provider._logger = logger;
+            LogProvider.IsDisabled = false;
+            return new DisposableAction(() => LogProvider.IsDisabled = true);
         }
 
         public Logging.Logger GetLogger(string name)

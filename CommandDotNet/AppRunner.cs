@@ -6,6 +6,7 @@ using CommandDotNet.ClassModeling;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Help;
+using CommandDotNet.Logging;
 using CommandDotNet.Parsing;
 using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
@@ -40,6 +41,8 @@ namespace CommandDotNet
         public Type RootCommandType { get; }
 
         internal AppConfig AppConfig { get; private set; }
+
+        static AppRunner() => LogProvider.IsDisabled = true;
 
         public AppRunner(Type rootCommandType, AppSettings settings = null)
         {

@@ -1,4 +1,4 @@
-﻿using CommandDotNet.Logging;
+﻿using System;
 using CommandDotNet.Parsing;
 using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
@@ -8,11 +8,18 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests
 {
-    public class TypoSuggestions_GetSuggestions_Tests
+    public class TypoSuggestions_GetSuggestions_Tests: IDisposable
     {
+        private readonly IDisposable _cleanup;
+
         public TypoSuggestions_GetSuggestions_Tests(ITestOutputHelper testOutputHelper)
         {
-            TestToolsLogProvider.InitLogProvider(testOutputHelper.AsLogger());
+            _cleanup = TestToolsLogProvider.InitLogProvider(testOutputHelper.AsLogger());
+        }
+
+        public void Dispose()
+        {
+            _cleanup.Dispose();
         }
 
         [Theory]
