@@ -38,40 +38,42 @@ namespace CommandDotNet.TestTools
             IPromptResponder promptResponder = null,
             bool returnResultOnError = false)
         {
-            TestToolsLogProvider.InitLogProvider(logger);
-
-            var testConsole = new TestConsole(
-                onReadLine,
-                pipedInput,
-                promptResponder == null
-                    ? (Func<TestConsole, ConsoleKeyInfo>)null
-                    : promptResponder.OnReadKey);
-                    
-            runner.Configure(c => c.Console = testConsole);
-            var outputs = InjectTestOutputs(runner);
-
-            void LogResult()
+            using (TestToolsLogProvider.InitLogProvider(logger))
             {
-                logger?.WriteLine("\nconsole output:\n");
-                logger?.WriteLine(testConsole.Joined.ToString());
-            }
+                var testConsole = new TestConsole(
+                    onReadLine,
+                    pipedInput,
+                    promptResponder == null
+                        ? (Func<TestConsole, ConsoleKeyInfo>) null
+                        : promptResponder.OnReadKey);
 
-            try
-            {
-                var exitCode = runner.Run(args);
-                LogResult();
-                return new AppRunnerResult(exitCode, testConsole, outputs);
-            }
-            catch (Exception e)
-            {
-                if (returnResultOnError)
+                runner.Configure(c => c.Console = testConsole);
+                var outputs = InjectTestOutputs(runner);
+
+                void LogResult()
                 {
-                    testConsole.Error.WriteLine(e.Message);
-                    LogResult();
-                    return new AppRunnerResult(1, testConsole, outputs);
+                    logger.WriteLine("\nconsole output:\n");
+                    logger.WriteLine(testConsole.Joined.ToString());
                 }
-                LogResult();
-                throw;
+
+                try
+                {
+                    var exitCode = runner.Run(args);
+                    LogResult();
+                    return new AppRunnerResult(exitCode, testConsole, outputs);
+                }
+                catch (Exception e)
+                {
+                    if (returnResultOnError)
+                    {
+                        testConsole.Error.WriteLine(e.Message);
+                        LogResult();
+                        return new AppRunnerResult(1, testConsole, outputs);
+                    }
+
+                    LogResult();
+                    throw;
+                }
             }
         }
 

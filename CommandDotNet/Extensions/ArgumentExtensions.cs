@@ -20,6 +20,9 @@ namespace CommandDotNet.Extensions
             return argument.Name == Constants.VersionOptionName && argument.Parent.IsRootCommand();
         }
 
+        public static bool IsObscured(this IArgument argument) =>
+            argument.TypeInfo.UnderlyingType == typeof(Password);
+
         /// <summary>
         /// For the given <see cref="argument"/>,
         /// execute <see cref="operandAction"/> when <see cref="Operand"/>
