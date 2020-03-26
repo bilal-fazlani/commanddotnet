@@ -12,6 +12,8 @@ namespace CommandDotNet
     /// </summary>
     public class Password
     {
+        public static readonly string ValueReplacement = "*****";
+
         private readonly string _password;
 
         public Password(string password)
@@ -19,11 +21,12 @@ namespace CommandDotNet
             _password = password ?? throw new ArgumentNullException(nameof(password));
         }
 
+
         public string GetPassword() => _password;
 
         public override string ToString()
         {
-            return _password.IsNullOrEmpty() ? "" : "*****";
+            return _password.IsNullOrEmpty() ? "" : ValueReplacement;
         }
 
         protected bool Equals(Password other)

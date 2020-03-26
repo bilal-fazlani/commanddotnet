@@ -73,6 +73,37 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                 .VerifyScenario(_testOutputHelper, scenario);
         }
 
+        [Fact]
+        public void GivenMultipleSources_AllAreUsed()
+        {
+            var scenario = new Scenario
+            {
+                WhenArgs = "Multi",
+                Then = { Outputs = { new []{"one", "two"}} }
+            };
+
+            new AppRunner<App>()
+                .UseDefaultsFromConfig(arg => arg.Name == "first" ? new ArgumentDefault("1", "1", "one") : null)
+                .UseDefaultsFromConfig(arg => arg.Name == "second" ? new ArgumentDefault("2", "2", "two") : null)
+                .VerifyScenario(_testOutputHelper, scenario);
+        }
+
+        [Fact]
+        public void GivenMultipleSources_FirstRegisteredWins()
+        {
+            var scenario = new Scenario
+            {
+                WhenArgs = "Multi",
+                Then = { Outputs = { new[] { "right one", "two" } } }
+            };
+
+            new AppRunner<App>()
+                .UseDefaultsFromConfig(arg => arg.Name == "first" ? new ArgumentDefault("1", "1", "right one") : null)
+                .UseDefaultsFromConfig(arg => arg.Name == "first" ? new ArgumentDefault("1", "1", "wrong one") : null)
+                .UseDefaultsFromConfig(arg => arg.Name == "second" ? new ArgumentDefault("2", "2", "two") : null)
+                .VerifyScenario(_testOutputHelper, scenario);
+        }
+
         private static ArgumentDefault Config(string value)
         {
             return new ArgumentDefault("test", "key", value);
@@ -81,6 +112,11 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
         public class App
         {
             TestOutputs TestOutputs { get; set; }
+
+            public void Multi([Operand] string first, [Operand] string second)
+            {
+                TestOutputs.Capture(new[] {first, second});
+            }
 
             public void Do([Operand] string op1)
             {

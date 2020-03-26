@@ -104,8 +104,16 @@ namespace CommandDotNet.Builders.ArgumentDefaults
 
                 if (value != null)
                 {
-                    // do not include value in case it's a password
-                    Log.Debug($"found default value `{value}` for `{argument}`");
+                    Log.DebugFormat("default value found in {1} for {0}: {2}={3}",
+                        argument,
+                        value.Source,
+                        value.Key,
+                        argument.IsObscured() ? Password.ValueReplacement : value.Value
+                    );
+                }
+                else
+                {
+                    Log.DebugFormat("default value not found in `{1}` for {0}", argument, sourceName);
                 }
 
                 return value;

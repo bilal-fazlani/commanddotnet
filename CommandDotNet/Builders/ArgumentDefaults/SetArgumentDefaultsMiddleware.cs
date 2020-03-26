@@ -13,16 +13,25 @@ namespace CommandDotNet.Builders.ArgumentDefaults
             // run before help command so help will display the updated defaults
             return appRunner.Configure(c =>
             {
-                var config = new Config
+                var config = c.Services.Get<Config>();
+                if (config == null)
                 {
-                    GetDefaultValueCallbacks = getDefaultValueCallbacks
-                };
-                c.Services.AddOrUpdate(config);
+                    config = new Config
+                    {
+                        GetDefaultValueCallbacks = getDefaultValueCallbacks
+                    };
+                    c.Services.Add(config);
 
-                // run before help so the default values can be displayed in the help text 
-                c.UseMiddleware(SetDefaults, 
-                    MiddlewareSteps.SetArgumentDefaults.Stage,
-                    MiddlewareSteps.SetArgumentDefaults.Order);
+                    // run before help so the default values can be displayed in the help text 
+                    c.UseMiddleware(SetDefaults,
+                        MiddlewareSteps.SetArgumentDefaults.Stage,
+                        MiddlewareSteps.SetArgumentDefaults.Order);
+                }
+                else
+                {
+                    config.GetDefaultValueCallbacks =
+                        config.GetDefaultValueCallbacks.Union(getDefaultValueCallbacks).ToArray();
+                }
             });
         }
 
@@ -38,7 +47,9 @@ namespace CommandDotNet.Builders.ArgumentDefaults
             
             foreach (var argument in command.AllArguments(true))
             {
-                var value = config.GetDefaultValueCallbacks.Select(func => func(argument)).FirstOrDefault();
+                var value = config.GetDefaultValueCallbacks
+                    .Select(func => func(argument))
+                    .FirstOrDefault(v => v != null);
                 if (value != null)
                 {
                     argument.Default = value;
