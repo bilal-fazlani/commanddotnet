@@ -10,56 +10,51 @@ namespace CommandDotNet.Directives.Parse
         /// <summary>
         /// Reports the command and the source of values for all arguments 
         /// </summary>
-        /// <param name="commandContext">the <see cref="CommandContext"/></param>
-        /// <param name="writeln">when null, uses <see cref="CommandContext"/>.<see cref="CommandContext.Console"/></param>
-        /// <param name="indent">the string to use for indents</param>
-        /// <param name="depth">how deep to start the indents for this report</param>
         public static void Report(CommandContext commandContext, 
-            Action<string> writeln = null, 
-            string indent = "  ", 
-            int depth = 0)
+            Action<string> writeln, Indent indent = null)
         {
-            var console = commandContext.Console;
             var command = commandContext.ParseResult.TargetCommand;
-            
-            writeln = writeln ?? console.Out.WriteLine;
-            var prefix = indent.Repeat(depth + 1);
 
-            writeln($"command: {command.GetPath()}");
-            writeln(null);
+            indent = indent ?? new Indent();
+
+            var path = command.GetPath();
+            writeln($"{indent}command: {(path.IsNullOrWhitespace() ? "(root)" : path)}");
 
             if (command.Operands.Any())
             {
-                writeln("arguments:");
                 writeln(null);
+                writeln($"{indent}arguments:");
                 foreach (var operand in command.Operands)
                 {
-                    PrintArg(operand, indent, s => writeln($"  {s}"));
+                    writeln(null);
+                    PrintArg(operand, indent.NextDepth, writeln);
                 }
             }
 
             var options = command.AllOptions(includeInterceptorOptions: true, excludeHiddenOptions: true).ToList();
             if (options.Any())
             {
-                writeln("options:");
                 writeln(null);
+                writeln($"{indent}options:");
                 foreach (var option in options)
                 {
-                    PrintArg(option, indent, s => writeln($"{prefix}{s}"));
+                    writeln(null);
+                    PrintArg(option, indent.NextDepth, writeln);
                 }
             }
         }
 
-        private static void PrintArg(IArgument argument, string indent, Action<string> writeln)
+        private static void PrintArg(IArgument argument, Indent indent, Action<string> writeln)
         {
-            bool isPassword = argument.TypeInfo.UnderlyingType == typeof(Password);
+            bool isObscured = argument.IsObscured();
+            var indent2 = indent.NextDepth;
 
-            writeln($"{argument.Name} <{argument.TypeInfo.DisplayName ?? (argument.Arity.AllowsNone() ? "Flag" : null)}>");
-            writeln($"{indent}value: {argument.Value?.ValueToString(isPassword)}");
+            writeln($"{indent}{argument.Name} <{argument.TypeInfo.DisplayName ?? (argument.Arity.AllowsNone() ? "Flag" : null)}>");
+            writeln($"{indent2}value: {argument.Value?.ValueToString(isObscured)}");
 
             if (argument.InputValues?.Any() ?? false)
             {
-                var pwd = isPassword ? Password.ValueReplacement : null;
+                var pwd = isObscured ? Password.ValueReplacement : null;
                 var values = argument.InputValues
                     .Select(iv => iv.Source == Constants.InputValueSources.Argument && argument.InputValues.Count == 1
                         ? $"{ValuesToString(iv, pwd)}" 
@@ -68,17 +63,17 @@ namespace CommandDotNet.Directives.Parse
 
                 if (values.Count == 1)
                 {
-                    writeln($"{indent}inputs: {values.Single()}");
+                    writeln($"{indent2}inputs: {values.Single()}");
                 }
                 else
                 {
-                    writeln($"{indent}inputs:");
-                    values.ForEach(v => writeln($"{indent}{indent}{v}"));
+                    writeln($"{indent2}inputs:");
+                    values.ForEach(v => writeln($"{indent2.NextDepth}{v}"));
                 }
             }
             else
             {
-                writeln($"{indent}inputs:");
+                writeln($"{indent2}inputs:");
             }
 
             if (argument.Default != null)
@@ -86,15 +81,13 @@ namespace CommandDotNet.Directives.Parse
                 // don't include source when the default is defined as a parameter or property.
                 // only show externally defined sources
                 writeln(argument.Default.Source.StartsWith("app.")
-                    ? $"{indent}default: {argument.Default.Value.ValueToString(isPassword)}"
-                    : $"{indent}default: source={argument.Default.Source} key={argument.Default.Key}: {argument.Default.Value.ValueToString(isPassword)}");
+                    ? $"{indent2}default: {argument.Default.Value.ValueToString(isObscured)}"
+                    : $"{indent2}default: source={argument.Default.Source} key={argument.Default.Key}: {argument.Default.Value.ValueToString(isObscured)}");
             }
             else
             {
-                writeln($"{indent}default:");
+                writeln($"{indent2}default:");
             }
-
-            writeln(null);
         }
 
         private static string ValuesToString(InputValue iv, string pwd)

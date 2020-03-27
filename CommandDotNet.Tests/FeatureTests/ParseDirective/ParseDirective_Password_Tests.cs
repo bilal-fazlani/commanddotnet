@@ -8,12 +8,12 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.ParseDirective
 {
-    public class Password_ParseDirectiveTests : IDisposable
+    public class ParseDirective_Password_Tests : IDisposable
     {
         private readonly ITestOutputHelper _output;
         private readonly TempFiles _tempFiles;
 
-        public Password_ParseDirectiveTests(ITestOutputHelper output)
+        public ParseDirective_Password_Tests(ITestOutputHelper output)
         {
             _output = output;
             _tempFiles = new TempFiles(_output.AsLogger());
@@ -48,7 +48,6 @@ options:
     value: *****
     inputs: ***** (from: -p *****)
     default: *****
-
 
 token transformations:
 
@@ -92,7 +91,6 @@ options:
     inputs: ***** (from: @{tempFile} -> -p *****)
     default: *****
 
-
 token transformations:
 
 >>> from shell
@@ -106,51 +104,6 @@ token transformations:
   Value    : me
   Option   : -p
   Value    : super-secret
->>> after: expand-clubbed-flags (no changes)
->>> after: split-option-assignments (no changes)"
-                        }
-                    });
-        }
-
-        [Fact]
-        public void Given_DefaultFromCustom_OnlyExposedInTokenTransformations()
-        {
-            var appSettings = new NameValueCollection
-            {
-                {"--password", "super-secret"}
-            };
-
-            new AppRunner<App>()
-                .UseDefaultsFromAppSetting(appSettings, includeNamingConventions: true)
-                .UseParseDirective()
-                .VerifyScenario(_output,
-                    new Scenario
-                    {
-                        WhenArgs = "[parse:t] Secure -u me",
-                        Then =
-                        {
-                            Result = @"command: Secure
-
-options:
-
-  username <Text>
-    value: me
-    inputs: me (from: -u me)
-    default:
-
-  password <Text>
-    value: *****
-    inputs:
-    default: source=AppSetting key=--password: *****
-
-
-token transformations:
-
->>> from shell
-  Directive: [parse:t]
-  Value    : Secure
-  Option   : -u
-  Value    : me
 >>> after: expand-clubbed-flags (no changes)
 >>> after: split-option-assignments (no changes)"
                         }
@@ -180,12 +133,55 @@ arguments:
     inputs: [prompt] *****
     default:
 
-
 token transformations:
 
 >>> from shell
   Directive: [parse:t]
   Value    : PromptSecure
+>>> after: expand-clubbed-flags (no changes)
+>>> after: split-option-assignments (no changes)"
+                        }
+                    });
+        }
+
+        [Fact]
+        public void Given_DefaultValueFromCustom_OnlyExposedInTokenTransformations()
+        {
+            var appSettings = new NameValueCollection
+            {
+                {"--password", "super-secret"}
+            };
+
+            new AppRunner<App>()
+                .UseDefaultsFromAppSetting(appSettings, includeNamingConventions: true)
+                .UseParseDirective()
+                .VerifyScenario(_output,
+                    new Scenario
+                    {
+                        WhenArgs = "[parse:t] Secure -u me",
+                        Then =
+                        {
+                            Result = @"command: Secure
+
+options:
+
+  username <Text>
+    value: me
+    inputs: me (from: -u me)
+    default:
+
+  password <Text>
+    value: *****
+    inputs:
+    default: source=AppSetting key=--password: *****
+
+token transformations:
+
+>>> from shell
+  Directive: [parse:t]
+  Value    : Secure
+  Option   : -u
+  Value    : me
 >>> after: expand-clubbed-flags (no changes)
 >>> after: split-option-assignments (no changes)"
                         }

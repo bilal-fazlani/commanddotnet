@@ -37,30 +37,34 @@ namespace CommandDotNet.Directives
             {
                 // ParseReportByArg is run within this pipeline
                 var result = next(commandContext);
-
-                if (parseContext.IncludeTokenization)
-                {
-                    writeln(parseContext.Transformations.ToString());
-                }
-                else if (!parseContext.Reported)
+                if (!parseContext.Reported)
                 {
                     // in case ParseReportByArg wasn't run due to parsing errors,
                     // output this the transformations as a temporary aid
-                    writeln("Unable to map tokens to arguments. Falling back to token transformations.");
+                    writeln(null);
+                    writeln(commandContext.ParseResult.HelpWasRequested() 
+                        ? "Help requested. Only token transformations are available."
+                        : "Unable to map tokens to arguments. Falling back to token transformations.");
+                    writeln(parseContext.Transformations.ToString());
+                }
+                else if (parseContext.IncludeTokenization)
+                {
                     writeln(parseContext.Transformations.ToString());
                 }
                 else
                 {
+                    writeln(null);
                     writeln($"Use [parse:{ParseContext.IncludeTransformationsArgName}]" +
                             " to include token transformations.");
                 }
 
-                return result;
+return result;
             }
-            catch (Exception) when (!parseContext.IncludeTokenization && !parseContext.Reported)
+            catch (Exception) when (!parseContext.Reported)
             {
                 // in case ParseReportByArg wasn't run due to parsing errors,
                 // output this the transformations as a temporary aid
+                writeln(null);
                 writeln("Unable to map tokens to arguments. Falling back to token transformations.");
                 writeln(parseContext.Transformations.ToString());
                 throw;
@@ -72,7 +76,9 @@ namespace CommandDotNet.Directives
             var parseContext = commandContext.Services.Get<ParseContext>();
             if (parseContext != null)
             {
-                ParseReporter.Report(commandContext);
+                ParseReporter.Report(
+                    commandContext, 
+                    commandContext.Console.Out.WriteLine);
                 parseContext.Reported = true;
                 return Task.FromResult(0);
             }

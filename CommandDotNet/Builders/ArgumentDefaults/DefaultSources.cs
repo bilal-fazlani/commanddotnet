@@ -104,12 +104,15 @@ namespace CommandDotNet.Builders.ArgumentDefaults
 
                 if (value != null)
                 {
-                    Log.DebugFormat("default value found in {1} for {0}: {2}={3}",
-                        argument,
-                        value.Source,
-                        value.Key,
-                        argument.IsObscured() ? Password.ValueReplacement : value.Value
-                    );
+                    if (Log.IsDebugEnabled())
+                    {
+                        Log.DebugFormat("default value found in {1} for {0}: {2}={3}",
+                            argument,
+                            value.Source,
+                            value.Key,
+                            value.Value.ValueToString(argument.IsObscured())
+                        );
+                    }
                 }
                 else
                 {
