@@ -90,7 +90,7 @@ namespace CommandDotNet.CommandLogger
             if (config.IncludeAppConfig)
             {
                 sb.AppendLine();
-                sb.AppendLine(commandContext.AppConfig.ToString("  ", 1));
+                sb.AppendLine(commandContext.AppConfig.ToString(indent.Increment()));
             }
 
             sb.AppendLine("***************************************");

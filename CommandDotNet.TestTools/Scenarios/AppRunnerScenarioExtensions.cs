@@ -68,7 +68,7 @@ namespace CommandDotNet.TestTools.Scenarios
         private static void PrintContext(AppRunner appRunner, ILogger logger)
         {
             logger.WriteLine("");
-            logger.WriteLine(appRunner.ToString("  ", 0));
+            logger.WriteLine(appRunner.ToString());
         }
 
         private static void AssertExitCodeAndErrorMessage(IScenario scenario, AppRunnerResult result)

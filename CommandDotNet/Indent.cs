@@ -24,12 +24,6 @@
         /// <summary>The value of <see cref="PadLeft"/> plus <see cref="SingleIndent"/> repeated <see cref="Depth"/> times</summary>
         public string Value { get; }
 
-        /// <summary>Returns an Indent with <see cref="Depth"/>+1<br/></summary>
-        public Indent Increment => _nextDepth ?? (_nextDepth = new Indent(this));
-
-        /// <summary>Returns an Indent with <see cref="Depth"/>-1<br/></summary>
-        public Indent Decrement => _previousDepth ?? this;
-
         private Indent(Indent previous)
         {
             SingleIndent = previous.SingleIndent;
@@ -46,16 +40,22 @@
             Value = singleIndent.Repeat(depth);
         }
 
-        /// <summary>Returns a new Indent with <see cref="Depth"/>+<see cref="by"/></summary>
-        public Indent Deeper(int by)
+        /// <summary>Returns a new Indent with <see cref="Depth"/>+<see cref="count"/></summary>
+        public Indent IncrementBy(int count)
         {
             var indent = this;
-            for (int i = 0; i < by; i++)
+            for (int i = 0; i < count; i++)
             {
-                indent = indent.Increment;
+                indent = indent.Increment();
             }
             return indent;
         }
+
+        /// <summary>Returns an Indent with <see cref="Depth"/>+1<br/></summary>
+        public Indent Increment() => _nextDepth ?? (_nextDepth = new Indent(this));
+
+        /// <summary>Returns an Indent with <see cref="Depth"/>-1<br/></summary>
+        public Indent Decrement() => _previousDepth ?? this;
 
         public override string ToString()
         {

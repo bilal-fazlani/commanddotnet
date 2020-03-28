@@ -79,15 +79,14 @@ namespace CommandDotNet.TypeDescriptors
 
         public override string ToString()
         {
-            return ToString(null, 0);
+            return ToString(new Indent());
         }
 
-        public string ToString(string indent, int depth = 0)
+        public string ToString(Indent indent)
         {
-            var prefix = indent.Repeat(depth);
             var descriptors = _defaultDescriptors
                 .Concat(_customDescriptors)
-                .Select(d => $"{prefix}{d}")
+                .Select(d => $"{indent}{d}")
                 .ToCsv(Environment.NewLine);
             return $"{nameof(ArgumentTypeDescriptors)}:{Environment.NewLine}{descriptors}";
         }

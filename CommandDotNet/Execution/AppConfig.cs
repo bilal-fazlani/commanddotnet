@@ -84,36 +84,34 @@ namespace CommandDotNet.Execution
 
         public override string ToString()
         {
-            return ToString(null, 0);
+            return ToString(new Indent());
         }
 
-        public string ToString(string indent, int depth = 0)
+        public string ToString(Indent indent)
         {
             var nl = Environment.NewLine;
-
-            var prefix = indent.Repeat(depth);
-            var prefix2 = indent.Repeat(depth + 1);
+            var indent2 = indent.Increment();
 
             var tokenTransformations = TokenTransformations
                 .OrderBy(t => t.Order)
-                .Select(t => $"{prefix2}{t.Name}({t.Order})")
+                .Select(t => $"{indent2}{t.Name}({t.Order})")
                 .ToCsv(nl);
 
             var middleware = MiddlewarePipeline
-                .Select(m => $"{prefix2}{m.Method.FullName()}")
+                .Select(m => $"{indent2}{m.Method.FullName()}")
                 .ToCsv(nl);
 
             var paramResolvers = ParameterResolversByType.Keys
-                .Select(k => $"{prefix2}{k}")
+                .Select(k => $"{indent2}{k}")
                 .ToCsv(nl);
 
             return $"{nameof(AppConfig)}:{nl}" +
-                   $"{prefix}{AppSettings.ToString(indent, depth+1)}{nl}" +
-                   $"{prefix}DependencyResolver: {DependencyResolver}{nl}" +
-                   $"{prefix}HelpProvider: {HelpProvider}{nl}" +
-                   $"{prefix}TokenTransformations:{nl}{tokenTransformations}{nl}" +
-                   $"{prefix}MiddlewarePipeline:{nl}{middleware}{nl}" +
-                   $"{prefix}ParameterResolvers:{nl}{paramResolvers}";
+                   $"{indent}{AppSettings.ToString(indent.Increment())}{nl}" +
+                   $"{indent}DependencyResolver: {DependencyResolver}{nl}" +
+                   $"{indent}HelpProvider: {HelpProvider}{nl}" +
+                   $"{indent}TokenTransformations:{nl}{tokenTransformations}{nl}" +
+                   $"{indent}MiddlewarePipeline:{nl}{middleware}{nl}" +
+                   $"{indent}ParameterResolvers:{nl}{paramResolvers}";
         }
     }
 }
