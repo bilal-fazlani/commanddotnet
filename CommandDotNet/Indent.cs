@@ -5,6 +5,7 @@
     /// </summary>
     public class Indent
     {
+        private readonly Indent _previousDepth;
         private Indent _nextDepth;
 
         /// <summary>The value of a single indent</summary>
@@ -13,16 +14,35 @@
         /// <summary>The number of <see cref="SingleIndent"/>s assigned to this indent</summary>
         public int Depth { get; }
 
-        /// <summary>The value of <see cref="SingleIndent"/> repeated <see cref="Depth"/> times</summary>
+        /// <summary>
+        /// Padding is added to <see cref="Value"/>.
+        /// <see cref="PadLeft"/> is passed to other <see cref="Indent"/> during <see cref="Increment"/>
+        /// but is included as part of <see cref="Value"/>.
+        /// </summary>
+        public string PadLeft { get; }
+
+        /// <summary>The value of <see cref="PadLeft"/> plus <see cref="SingleIndent"/> repeated <see cref="Depth"/> times</summary>
         public string Value { get; }
 
-        /// <summary>Returns a new Indent with <see cref="Depth"/>+1<br/></summary>
-        public Indent NextDepth => _nextDepth ?? (_nextDepth = new Indent(SingleIndent, Depth+1));
+        /// <summary>Returns an Indent with <see cref="Depth"/>+1<br/></summary>
+        public Indent Increment => _nextDepth ?? (_nextDepth = new Indent(this));
 
-        public Indent(string singleIndent = "  ", int depth = 0)
+        /// <summary>Returns an Indent with <see cref="Depth"/>-1<br/></summary>
+        public Indent Decrement => _previousDepth ?? this;
+
+        private Indent(Indent previous)
+        {
+            SingleIndent = previous.SingleIndent;
+            Depth = Depth + 1;
+            Value = previous.Value + SingleIndent;
+            _previousDepth = previous;
+        }
+
+        public Indent(string singleIndent = "  ", int depth = 0, string padLeft = "")
         {
             SingleIndent = singleIndent;
             Depth = depth;
+            PadLeft = padLeft;
             Value = singleIndent.Repeat(depth);
         }
 
@@ -32,7 +52,7 @@
             var indent = this;
             for (int i = 0; i < by; i++)
             {
-                indent = indent.NextDepth;
+                indent = indent.Increment;
             }
             return indent;
         }
