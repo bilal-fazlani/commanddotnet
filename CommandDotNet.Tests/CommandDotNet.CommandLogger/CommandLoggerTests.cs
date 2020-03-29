@@ -159,7 +159,12 @@ AppConfig:
     DefaultArgumentMode: Operand
     DisableDirectives: False
     GuaranteeOperandOrderInArgumentModels: False
-    Help: CommandDotNet.Help.AppHelpSettings
+    Help: AppHelpSettings:
+      ExpandArgumentsInUsage: False
+      PrintHelpOption: False
+      TextStyle: Detailed
+      UsageAppName:
+      UsageAppNameStyle: Adaptive
     IgnoreUnexpectedOperands: False
   DependencyResolver:
   HelpProvider: CommandDotNet.Help.HelpTextProvider

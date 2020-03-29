@@ -2,6 +2,6 @@
 {
     public interface IIndentableToString
     {
-        string ToString(string indent, int depth = 0);
+        string ToString(Indent indent);
     }
 }

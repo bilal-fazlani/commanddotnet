@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Reflection;
 using CommandDotNet.Extensions;
 using CommandDotNet.Help;
 using CommandDotNet.Tokens;
@@ -97,24 +95,12 @@ namespace CommandDotNet
 
         public override string ToString()
         {
-            return ToString(null, 0);
+            return ToString(new Indent());
         }
 
-        public string ToString(string indent, int depth = 0)
+        public string ToString(Indent indent)
         {
-            var appSettingsProps = this.GetType()
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .Where(p => !p.HasAttribute<ObsoleteAttribute>())
-                .OrderBy(p => p.Name);
-
-            var prefix = indent.Repeat(depth);
-
-            var props = appSettingsProps.Select(p =>
-            {
-                var value = p.GetValue(this);
-                return $"{prefix}{p.Name}: {(value is IIndentableToString logToString ? logToString.ToString(indent, depth+1) : value)}";
-            });
-            return $"{nameof(AppSettings)}:{Environment.NewLine}{props.ToCsv(Environment.NewLine)}";
+            return this.ToStringFromPublicProperties(indent);
         }
     }
 }

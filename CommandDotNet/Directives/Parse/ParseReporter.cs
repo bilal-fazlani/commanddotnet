@@ -27,7 +27,7 @@ namespace CommandDotNet.Directives.Parse
                 foreach (var operand in command.Operands)
                 {
                     writeln(null);
-                    PrintArg(operand, indent.Increment, writeln);
+                    PrintArg(operand, indent.Increment(), writeln);
                 }
             }
 
@@ -39,7 +39,7 @@ namespace CommandDotNet.Directives.Parse
                 foreach (var option in options)
                 {
                     writeln(null);
-                    PrintArg(option, indent.Increment, writeln);
+                    PrintArg(option, indent.Increment(), writeln);
                 }
             }
         }
@@ -47,7 +47,7 @@ namespace CommandDotNet.Directives.Parse
         private static void PrintArg(IArgument argument, Indent indent, Action<string> writeln)
         {
             bool isObscured = argument.IsObscured();
-            var indent2 = indent.Increment;
+            var indent2 = indent.Increment();
 
             writeln($"{indent}{argument.Name} <{argument.TypeInfo.DisplayName ?? (argument.Arity.AllowsNone() ? "Flag" : null)}>");
             writeln($"{indent2}value: {argument.Value?.ValueToString(isObscured)}");
@@ -68,7 +68,7 @@ namespace CommandDotNet.Directives.Parse
                 else
                 {
                     writeln($"{indent2}inputs:");
-                    values.ForEach(v => writeln($"{indent2.Increment}{v}"));
+                    values.ForEach(v => writeln($"{indent2.Increment()}{v}"));
                 }
             }
             else

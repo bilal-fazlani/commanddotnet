@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using System.Reflection;
+using static System.Environment;
 
 namespace CommandDotNet.Extensions
 {
@@ -35,6 +37,33 @@ namespace CommandDotNet.Extensions
             }
 
             return value.ToString();
+        }
+
+        internal static string ToStringFromPublicProperties(this object item, Indent indent = null)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            indent = indent ?? new Indent();
+
+            var props = item
+                .GetType()
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(p => !p.HasAttribute<ObsoleteAttribute>())
+                .OrderBy(p => p.Name)
+                .Select(p =>
+                {
+                    var value = p.GetValue(item);
+                    var stringValue = value is IIndentableToString logToString
+                        ? logToString.ToString(indent.Increment())
+                        : value;
+                    return $"{indent}{p.Name}: {stringValue}";
+                })
+                .ToCsv(NewLine);
+
+            return $"{item.GetType().Name}:{NewLine}{props}";
         }
     }
 }

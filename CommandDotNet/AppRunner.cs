@@ -148,15 +148,14 @@ namespace CommandDotNet
 
         public override string ToString()
         {
-            return ToString(null, 0);
+            return ToString(new Indent());
         }
 
-        public string ToString(string indent, int depth = 0)
+        public string ToString(Indent indent)
         {
-            var prefix = indent.Repeat(depth);
             return AppConfig == null
-                ? $"{prefix}{nameof(AppRunner)}<{RootCommandType.Name}>"
-                : $"{prefix}{nameof(AppRunner)}<{RootCommandType.Name}>:{Environment.NewLine}{indent.Repeat(depth+1)}{AppConfig.ToString(indent, depth+2)}";
+                ? $"{indent}{nameof(AppRunner)}<{RootCommandType.Name}>"
+                : $"{indent}{nameof(AppRunner)}<{RootCommandType.Name}>:{Environment.NewLine}{indent.Increment()}{AppConfig.ToString(indent.IncrementBy(2))}";
         }
     }
 }

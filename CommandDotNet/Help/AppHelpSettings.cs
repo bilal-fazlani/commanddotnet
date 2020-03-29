@@ -1,6 +1,8 @@
-﻿namespace CommandDotNet.Help
+﻿using CommandDotNet.Extensions;
+
+namespace CommandDotNet.Help
 {
-    public class AppHelpSettings
+    public class AppHelpSettings : IIndentableToString
     {
         /// <summary>When true, the help option will be included in the help for every command</summary>
         public bool PrintHelpOption { get; set; }
@@ -21,5 +23,15 @@
         /// When true, the usage section will expand arguments so the names of all arguments are shown.
         /// </summary>
         public bool ExpandArgumentsInUsage { get; set; }
+
+        public override string ToString()
+        {
+            return ToString(new Indent());
+        }
+
+        public string ToString(Indent indent)
+        {
+            return this.ToStringFromPublicProperties(indent);
+        }
     }
 }
