@@ -104,6 +104,7 @@ namespace CommandDotNet
         {
             var appSettingsProps = this.GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(p => !p.HasAttribute<ObsoleteAttribute>())
                 .OrderBy(p => p.Name);
 
             var prefix = indent.Repeat(depth);

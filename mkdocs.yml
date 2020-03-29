@@ -42,6 +42,7 @@ nav:
       - Middleware/newer-release-alerts.md
     - Extras:
       - Extras/directives.md
+      - Extras/command-logger.md
       - Extras/exceptions.md
     - test-tools.md
 theme:

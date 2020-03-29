@@ -25,7 +25,7 @@ namespace CommandDotNet.CommandLogger
                     includeSystemInfo,
                     includeAppConfig,
                     additionalInfoCallback));
-                c.UseMiddleware(CommandLogger, MiddlewareStages.PostBindValuesPreInvoke);
+                c.UseMiddleware(CommandLogger, MiddlewareStages.Invoke);
             });
         }
 

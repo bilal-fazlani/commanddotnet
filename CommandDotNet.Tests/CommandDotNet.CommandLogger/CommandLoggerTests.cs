@@ -142,18 +142,17 @@ options:
 
 AppConfig:
   AppSettings:
-    AllowArgumentSeparator: False
     ArgumentTypeDescriptors: ArgumentTypeDescriptors:
       ErrorReportingDescriptor > CommandDotNet.TypeDescriptors.BoolTypeDescriptor
       ErrorReportingDescriptor > CommandDotNet.TypeDescriptors.EnumTypeDescriptor
-      ErrorReportingDescriptor > DelegatedTypeDescriptor: 'Text'
-      ErrorReportingDescriptor > DelegatedTypeDescriptor: 'Text'
-      ErrorReportingDescriptor > DelegatedTypeDescriptor: 'Character'
-      ErrorReportingDescriptor > DelegatedTypeDescriptor: 'Number'
-      ErrorReportingDescriptor > DelegatedTypeDescriptor: 'Number'
-      ErrorReportingDescriptor > DelegatedTypeDescriptor: 'Number'
-      ErrorReportingDescriptor > DelegatedTypeDescriptor: 'Decimal'
-      ErrorReportingDescriptor > DelegatedTypeDescriptor: 'Double'
+      ErrorReportingDescriptor > DelegatedTypeDescriptor<String>: 'Text'
+      ErrorReportingDescriptor > DelegatedTypeDescriptor<Password>: 'Text'
+      ErrorReportingDescriptor > DelegatedTypeDescriptor<Char>: 'Character'
+      ErrorReportingDescriptor > DelegatedTypeDescriptor<Int64>: 'Number'
+      ErrorReportingDescriptor > DelegatedTypeDescriptor<Int32>: 'Number'
+      ErrorReportingDescriptor > DelegatedTypeDescriptor<Int16>: 'Number'
+      ErrorReportingDescriptor > DelegatedTypeDescriptor<Decimal>: 'Decimal'
+      ErrorReportingDescriptor > DelegatedTypeDescriptor<Double>: 'Double'
       ErrorReportingDescriptor > CommandDotNet.TypeDescriptors.ComponentModelTypeDescriptor
       ErrorReportingDescriptor > CommandDotNet.TypeDescriptors.StringCtorTypeDescriptor
     BooleanMode: Implicit
@@ -161,10 +160,7 @@ AppConfig:
     DisableDirectives: False
     GuaranteeOperandOrderInArgumentModels: False
     Help: CommandDotNet.Help.AppHelpSettings
-    HelpTextStyle: Detailed
     IgnoreUnexpectedOperands: False
-    MethodArgumentMode: Operand
-    ThrowOnUnexpectedArgument: True
   DependencyResolver:
   HelpProvider: CommandDotNet.Help.HelpTextProvider
   TokenTransformations:
@@ -178,8 +174,8 @@ AppConfig:
     HelpMiddleware.DisplayHelp
     BindValuesMiddleware.BindValues
     ResolveCommandClassesMiddleware.ResolveCommandClassInstances
-    CommandLoggerMiddleware.CommandLogger
     AppRunnerTestExtensions.InjectTestOutputs
+    CommandLoggerMiddleware.CommandLogger
     ClassModelingMiddleware.InvokeInvocationPipelineMiddleware
   ParameterResolvers:
     CommandDotNet.CommandContext
