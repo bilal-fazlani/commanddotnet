@@ -113,7 +113,7 @@ namespace CommandDotNet.Execution
                    $"{prefix}HelpProvider: {HelpProvider}{nl}" +
                    $"{prefix}TokenTransformations:{nl}{tokenTransformations}{nl}" +
                    $"{prefix}MiddlewarePipeline:{nl}{middleware}{nl}" +
-                   $"{prefix}ParameterResolvers:{nl}{paramResolvers}{nl}";
+                   $"{prefix}ParameterResolvers:{nl}{paramResolvers}";
         }
     }
 }

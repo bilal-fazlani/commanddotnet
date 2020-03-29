@@ -30,7 +30,7 @@ namespace CommandDotNet.TypeDescriptors
 
         public override string ToString()
         {
-            return $"DelegatedTypeDescriptor: '{_displayName}'";
+            return $"DelegatedTypeDescriptor<{typeof(T).Name}>: '{_displayName}'";
         }
     }
 }
