@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Reflection;
 using CommandDotNet.Extensions;
 using CommandDotNet.Help;
 using CommandDotNet.Tokens;
@@ -102,20 +100,7 @@ namespace CommandDotNet
 
         public string ToString(Indent indent)
         {
-            var props = this
-                .GetType()
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                .Where(p => !p.HasAttribute<ObsoleteAttribute>())
-                .OrderBy(p => p.Name)
-                .Select(p =>
-                {
-                    var value = p.GetValue(this);
-                    var stringValue = value is IIndentableToString logToString
-                        ? logToString.ToString(indent.Increment())
-                        : value;
-                    return $"{indent}{p.Name}: {stringValue}";
-                });
-            return $"{nameof(AppSettings)}:{Environment.NewLine}{props.ToCsv(Environment.NewLine)}";
+            return this.ToStringFromPublicProperties(indent);
         }
     }
 }
