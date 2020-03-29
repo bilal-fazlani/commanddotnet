@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using CommandDotNet.Extensions;
+using CommandDotNet.Logging;
 using CommandDotNet.Prompts;
 using CommandDotNet.Rendering;
 
@@ -22,6 +23,8 @@ namespace CommandDotNet.TestTools
     /// </summary>
     public class TestConsole : IConsole
     {
+        private static ILog Log = LogProvider.GetCurrentClassLogger();
+
         private readonly Func<TestConsole, ConsoleKeyInfo> _onReadKey;
 
         public TestConsole(
@@ -59,10 +62,7 @@ namespace CommandDotNet.TestTools
                 () =>
                 {
                     var input = onReadLine?.Invoke(this);
-                    // write to joined output so it can be logged for debugging
-                    joined.WriteLine();
-                    joined.WriteLine($"IConsole.ReadLine > {input}");
-                    joined.WriteLine();
+                    Log.Info($"IConsole.ReadLine > {input}");
                     return input;
                 });
         }
@@ -136,7 +136,7 @@ namespace CommandDotNet.TestTools
 
             public string ReadToEnd()
             {
-                return _onReadLine.EnumerateLinesUntilNull().ToCsv(Environment.NewLine);
+                return _onReadLine.EnumeratePipedInput().ToCsv(Environment.NewLine);
             }
         }
 

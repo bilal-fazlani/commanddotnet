@@ -8,19 +8,21 @@ namespace CommandDotNet.Tokens
     {
         internal const string SeparatorString = "--";
 
-        public static TokenCollection Tokenize(this IEnumerable<string> args, bool includeDirectives = false)
+        public static TokenCollection Tokenize(this IEnumerable<string> args, bool includeDirectives = false, string sourceName = "args")
         {
-            return new TokenCollection(ParseTokens(args, includeDirectives));
+            return new TokenCollection(ParseTokens(args, includeDirectives, sourceName));
         }
 
-        public static Token Tokenize(string arg, bool includeDirectives = false)
+        public static Token Tokenize(string arg, bool includeDirectives = false, string sourceName = "args")
         {
             Token token;
-            return (includeDirectives && TryTokenizeDirective(arg, out token))
-                   || TryTokenizeSeparator(arg, out token)
-                   || TryTokenizeOption(arg, out token)
+            token = (includeDirectives && TryTokenizeDirective(arg, out token))
+                                || TryTokenizeSeparator(arg, out token)
+                                || TryTokenizeOption(arg, out token)
                 ? token
                 : TokenizeValue(arg);
+            token.SourceName = sourceName;
+            return token;
         }
 
         public static bool TryTokenizeDirective(string arg, out Token token)
@@ -78,7 +80,7 @@ namespace CommandDotNet.Tokens
             return tokens.Select(t => t.RawValue).ToArray();
         }
 
-        private static IEnumerable<Token> ParseTokens(IEnumerable<string> args, bool includeDirectives)
+        private static IEnumerable<Token> ParseTokens(IEnumerable<string> args, bool includeDirectives, string sourceName)
         {
             bool foundSeparator = false;
 
@@ -86,10 +88,10 @@ namespace CommandDotNet.Tokens
             {
                 if (foundSeparator)
                 {
-                    yield return new Token(arg, arg, TokenType.Value);
+                    yield return new Token(arg, arg, TokenType.Value){SourceName = sourceName};
                 }
 
-                var token = Tokenize(arg, includeDirectives);
+                var token = Tokenize(arg, includeDirectives, sourceName);
 
                 includeDirectives = includeDirectives && token.TokenType == TokenType.Directive;
                 foundSeparator = token.TokenType == TokenType.Separator;

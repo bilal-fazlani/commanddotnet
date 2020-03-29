@@ -16,14 +16,13 @@ namespace CommandDotNet.ClassModeling
             var console = commandContext.Console;
             var parserFactory = new ParserFactory(commandContext.AppConfig.AppSettings);
 
-            bool SetFromStringInput(IArgument argument, IEnumerable<string> values, out int returnCode)
+            bool SetFromStringInput(IArgument argument, IEnumerable<string> values)
             {
                 try
                 {
                     var parser = parserFactory.CreateInstance(argument);
                     var value = parser.Parse(argument, values);
                     argument.Value = value;
-                    returnCode = 0;
                     return true;
                 }
                 catch (ValueParsingException ex)
@@ -31,7 +30,6 @@ namespace CommandDotNet.ClassModeling
                     console.Error.WriteLine($"Failure parsing value for {argument}.  values={values?.ToCsv()}");
                     console.Error.WriteLine(ex.Message);
                     console.Error.WriteLine();
-                    returnCode = 2;
                     return false;
                 }
             }
@@ -40,13 +38,15 @@ namespace CommandDotNet.ClassModeling
                 .SelectMany(ic => ic.Command.Options.Cast<IArgument>().Union(ic.Command.Operands))
                 .Where(a => a.GetArgumentDef() != null);
 
+            var bindFailure = Task.FromResult(2);
+
             foreach (var argument in arguments)
             {
                 if (argument.InputValues.Any())
                 {
-                    if (!SetFromStringInput(argument, argument.InputValues.SelectMany(iv => iv.Values), out int returnCode))
+                    if (!SetFromStringInput(argument, argument.InputValues.SelectMany(iv => iv.Values)))
                     {
-                        return Task.FromResult(returnCode);
+                        return bindFailure;
                     }
                 }
                 else if (argument.Default != null)
@@ -58,16 +58,16 @@ namespace CommandDotNet.ClassModeling
                     switch (defaultValue)
                     {
                         case string stringValue:
-                            if (!SetFromStringInput(argument, stringValue.ToEnumerable(), out int returnCode))
+                            if (!SetFromStringInput(argument, stringValue.ToEnumerable()))
                             {
-                                return Task.FromResult(returnCode);
+                                return bindFailure;
                             }
 
                             break;
                         case IEnumerable<string> multiString:
-                            if (!SetFromStringInput(argument, multiString, out returnCode))
+                            if (!SetFromStringInput(argument, multiString))
                             {
-                                return Task.FromResult(returnCode);
+                                return bindFailure;
                             }
 
                             break;
@@ -92,7 +92,7 @@ namespace CommandDotNet.ClassModeling
                                     $"Failure assigning value to {argument}. Value={defaultValue}");
                                 console.Error.WriteLine(ex.Message);
                                 console.Error.WriteLine();
-                                return Task.FromResult(2);
+                                return bindFailure;
                             }
 
                             break;

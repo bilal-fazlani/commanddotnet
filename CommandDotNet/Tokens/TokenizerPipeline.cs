@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
+using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Tokens
 {
@@ -25,6 +26,7 @@ namespace CommandDotNet.Tokens
                 try
                 {
                     var tempArgs = transformation.Transformation(commandContext, tokens);
+                    tempArgs.Where(t => t.SourceName.IsNullOrWhitespace()).ForEach(t => t.SourceName = transformation.Name);
                     appConfig.TokenizationEvents.TokenTransformation(commandContext, transformation, tokens, tempArgs);
                     tokens = tempArgs;
                 }

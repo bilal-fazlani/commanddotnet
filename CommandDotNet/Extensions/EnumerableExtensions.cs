@@ -60,7 +60,7 @@ namespace CommandDotNet.Extensions
             }
         }
 
-        internal static IEnumerable<string> EnumerateLinesUntilNull(this Func<string> readLine)
+        internal static IEnumerable<string> EnumeratePipedInput(this Func<string> readLine)
         {
             while (true)
             {

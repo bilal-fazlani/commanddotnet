@@ -29,6 +29,8 @@ namespace CommandDotNet.Example
                     ? (LogLevel) Enum.Parse(typeof(LogLevel), parts[1], ignoreCase: true) 
                     : LogLevel.Trace;
                 var dateTimeFormat = GetDateTimeFormat(parts);
+                
+                LogProvider.IsDisabled = false;
                 LogProvider.SetCurrentLogProvider(new ConsoleLogProvider(context.Console, level, dateTimeFormat));
             }
 

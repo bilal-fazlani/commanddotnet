@@ -46,6 +46,8 @@ namespace CommandDotNet
 
         public AppRunner(Type rootCommandType, AppSettings settings = null)
         {
+            LogProvider.IsDisabled = true;
+
             RootCommandType = rootCommandType ?? throw new ArgumentNullException(nameof(rootCommandType));
             AppSettings = settings ?? new AppSettings();
             _appConfigBuilder = new AppConfigBuilder(AppSettings);

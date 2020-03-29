@@ -77,7 +77,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             bool isInterceptorOption)
         {
             var defaultValue = argumentDef.HasDefaultValue && !argumentDef.DefaultValue.IsNullValue()
-                ? new ArgumentDefault(argumentDef.ArgumentDefType, argumentDef.SourcePath, argumentDef.DefaultValue)
+                ? new ArgumentDefault($"app.{argumentDef.ArgumentDefType}", argumentDef.SourcePath, argumentDef.DefaultValue)
                 : null;
 
             if (argumentDef.CommandNodeType == CommandNodeType.Operand)

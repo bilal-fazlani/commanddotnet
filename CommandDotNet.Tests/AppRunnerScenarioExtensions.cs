@@ -28,9 +28,9 @@ namespace CommandDotNet.Tests
             return runner.RunInMem(args, output?.AsLogger(), onReadLine, pipedInput);
         }
 
-        public static void VerifyScenario(this AppRunner appRunner, ITestOutputHelper output, IScenario scenario)
+        public static AppRunnerResult VerifyScenario(this AppRunner appRunner, ITestOutputHelper output, IScenario scenario)
         {
-            appRunner.VerifyScenario(output.AsLogger(), scenario);
+            return appRunner.VerifyScenario(output.AsLogger(), scenario);
         }
 
         public static ILogger AsLogger(this ITestOutputHelper testOutputHelper)

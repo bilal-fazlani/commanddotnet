@@ -11,13 +11,13 @@ namespace CommandDotNet.TestTools.Scenarios
     public static class AppRunnerScenarioExtensions
     {
         /// <summary>Run and verify the scenario expectations, output results to <see cref="Console"/></summary>
-        public static void VerifyScenario(this AppRunner appRunner, IScenario scenario)
+        public static AppRunnerResult VerifyScenario(this AppRunner appRunner, IScenario scenario)
         {
-            appRunner.VerifyScenario(new Logger(Console.WriteLine), scenario);
+            return appRunner.VerifyScenario(new Logger(Console.WriteLine), scenario);
         }
 
         /// <summary>Run and verify the scenario expectations using the given logger for output.</summary>
-        public static void VerifyScenario(this AppRunner appRunner, ILogger logger, IScenario scenario)
+        public static AppRunnerResult VerifyScenario(this AppRunner appRunner, ILogger logger, IScenario scenario)
         {
             if (scenario.WhenArgs != null && scenario.WhenArgsArray != null)
             {
@@ -47,6 +47,8 @@ namespace CommandDotNet.TestTools.Scenarios
                 {
                     AssertOutputItems(scenario, results);
                 }
+
+                return results;
             }
             catch (Exception e)
             {

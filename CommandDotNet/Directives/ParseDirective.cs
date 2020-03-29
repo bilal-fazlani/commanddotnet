@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using CommandDotNet.Directives.Parse;
 using CommandDotNet.Execution;
-using CommandDotNet.Extensions;
-using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Directives
@@ -14,67 +14,107 @@ namespace CommandDotNet.Directives
         {
             return appRunner.Configure(c =>
             {
-                c.UseMiddleware(ConfigureReportHooks, MiddlewareStages.PreTokenize);
-                c.UseMiddleware(ExitAfterTokenization, MiddlewareStages.Tokenize, MiddlewareSteps.CreateRootCommand.Order-100);
+                c.UseMiddleware(ConfigureParseReportByTokenTransform, MiddlewareStages.PreTokenize);
+                c.UseMiddleware(ParseReportByArg, MiddlewareStages.BindValues, MiddlewareSteps.BindValues.Order + 100);
             });
         }
 
         // adapted from https://github.com/dotnet/command-line-api directives
-        private static Task<int> ConfigureReportHooks(CommandContext commandContext, ExecutionDelegate next)
+        private static Task<int> ConfigureParseReportByTokenTransform(CommandContext commandContext, ExecutionDelegate next)
         {
-            if (commandContext.Tokens.TryGetDirective("parse", out string value))
+            if (!commandContext.Tokens.TryGetDirective("parse", out string value))
             {
-                var appConfig = commandContext.AppConfig;
-                var console = commandContext.Console;
+                return next(commandContext);
+            }
 
-                var parts = value.Split(":".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-                var verbose = parts.Length > 1 && parts[1].Equals("verbose", StringComparison.OrdinalIgnoreCase);
+            var parseContext = ParseContext.Parse(value);
+            commandContext.Services.AddOrUpdate(parseContext);
+            CaptureTransformations(commandContext, parseContext);
 
-                if (!verbose)
+            Action<string> writeln = commandContext.Console.Out.WriteLine;
+
+            try
+            {
+                // ParseReportByArg is run within this pipeline
+                var result = next(commandContext);
+                if (!parseContext.Reported)
                 {
-                    console.Out.WriteLine("use [parse:verbose] to see results after each transformation");
+                    // in case ParseReportByArg wasn't run due to parsing errors,
+                    // output this the transformations as a temporary aid
+                    writeln(null);
+                    writeln(commandContext.ParseResult.HelpWasRequested() 
+                        ? "Help requested. Only token transformations are available."
+                        : "Unable to map tokens to arguments. Falling back to token transformations.");
+                    writeln(parseContext.Transformations.ToString());
                 }
-
-                ReportTransformation(console, commandContext.Tokens, ">>> from shell");
-
-                if (verbose)
+                else if (parseContext.IncludeTokenization)
                 {
-                    appConfig.TokenizationEvents.OnTokenTransformation += args =>
-                    {
-                        if (args.PreTransformTokens.Count == args.PostTransformTokens.Count &&
-                            Enumerable.Range(0, args.PreTransformTokens.Count).All(i => args.PreTransformTokens[i] == args.PostTransformTokens[i]))
-                        {
-                            ReportTransformation(console, null, $">>> no changes after: {args.Transformation.Name}");
-                        }
-                        else
-                        {
-                            ReportTransformation(console, args.PostTransformTokens, $">>> transformed after: {args.Transformation.Name}");
-                        }
-                    };
+                    writeln(parseContext.Transformations.ToString());
                 }
                 else
                 {
-                    appConfig.TokenizationEvents.OnTokenizationCompleted += args =>
-                    {
-                        var transformations = appConfig.TokenTransformations.Select(t => t.Name).ToCsv(" > ");
-                        ReportTransformation(console, args.CommandContext.Tokens, $">>> transformed after: {transformations}");
-                    };
+                    writeln(null);
+                    writeln($"Use [parse:{ParseContext.IncludeTransformationsArgName}]" +
+                            " to include token transformations.");
                 }
+
+return result;
+            }
+            catch (Exception) when (!parseContext.Reported)
+            {
+                // in case ParseReportByArg wasn't run due to parsing errors,
+                // output this the transformations as a temporary aid
+                writeln(null);
+                writeln("Unable to map tokens to arguments. Falling back to token transformations.");
+                writeln(parseContext.Transformations.ToString());
+                throw;
+            }
+        }
+
+        private static Task<int> ParseReportByArg(CommandContext commandContext, ExecutionDelegate next)
+        {
+            var parseContext = commandContext.Services.Get<ParseContext>();
+            if (parseContext != null)
+            {
+                ParseReporter.Report(
+                    commandContext, 
+                    commandContext.Console.Out.WriteLine);
+                parseContext.Reported = true;
+                return Task.FromResult(0);
             }
 
             return next(commandContext);
         }
 
-        private static Task<int> ExitAfterTokenization(CommandContext commandContext, ExecutionDelegate next)
+        private static void CaptureTransformations(CommandContext commandContext, ParseContext parseContext)
         {
-            return commandContext.Tokens.TryGetDirective("parse", out _)
-                ? Task.FromResult(0)
-                : next(commandContext);
+            void WriteLine(string ln) => parseContext.Transformations.AppendLine(ln);
+
+            WriteLine(null);
+            WriteLine("token transformations:");
+            WriteLine(null);
+
+            CaptureTransformation(WriteLine, commandContext.Tokens, ">>> from shell");
+
+            commandContext.AppConfig.TokenizationEvents.OnTokenTransformation += args =>
+            {
+                if (args.PreTransformTokens.Count == args.PostTransformTokens.Count &&
+                    Enumerable.Range(0, args.PreTransformTokens.Count)
+                        .All(i => args.PreTransformTokens[i] == args.PostTransformTokens[i]))
+                {
+                    CaptureTransformation(WriteLine, null, $">>> after: {args.Transformation.Name} (no changes)");
+                }
+                else
+                {
+                    CaptureTransformation(WriteLine, args.PostTransformTokens,
+                        $">>> after: {args.Transformation.Name}");
+                }
+            };
         }
 
-        private static void ReportTransformation(IConsole consoleOut, TokenCollection args, string description)
+        private static void CaptureTransformation(Action<string> writeLine, TokenCollection args, string description)
         {
-            consoleOut.Out.WriteLine(description);
+            writeLine(description);
 
             if (args != null)
             {
@@ -83,8 +123,36 @@ namespace CommandDotNet.Directives
                 foreach (var arg in args)
                 {
                     var outputFormat = $"  {{0, -{maxTokenTypeNameLength}}}: {{1}}";
-                    consoleOut.Out.WriteLine(string.Format(outputFormat, arg.TokenType, arg.RawValue));
+                    writeLine(string.Format(outputFormat, arg.TokenType, arg.RawValue));
                 }
+            }
+        }
+
+        private class ParseContext
+        {
+            internal const string IncludeTransformationsArgName = "t";
+
+            internal bool IncludeTokenization;
+            internal bool Reported;
+            internal readonly StringBuilder Transformations = new StringBuilder();
+
+            internal static ParseContext Parse(string value)
+            {
+                var parts = value.Split(":".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+
+                if (parts.Length <= 1)
+                {
+                    return new ParseContext();
+                }
+
+                var settings = parts[1].Split(';')
+                    .Select(p => p.Split('='))
+                    .ToDictionary(p => p[0], p => p.Length > 1 ? p[1] : null, StringComparer.OrdinalIgnoreCase);
+
+                return new ParseContext
+                {
+                    IncludeTokenization = settings.ContainsKey(IncludeTransformationsArgName)
+                };
             }
         }
     }

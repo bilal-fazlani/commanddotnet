@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CommandDotNet
 {
@@ -16,14 +18,30 @@ namespace CommandDotNet
         /// </summary>
         public bool IsStream { get; }
 
+        private IEnumerable<string> _values;
+
         /// <summary>The text values</summary>
-        public IEnumerable<string> Values { get; set; }
+        public IEnumerable<string> Values
+        {
+            get => _values ?? ValuesFromTokens?.Select(v => v.Value);
+            set => _values = value;
+        }
+
+        /// <summary>The text values</summary>
+        public IEnumerable<ValueFromToken> ValuesFromTokens { get; set; }
 
         public InputValue(string source, bool isStream, IEnumerable<string> values)
         {
-            Source = source;
+            Source = source ?? throw new ArgumentNullException(nameof(source));
             IsStream = isStream;
-            Values = values;
+            Values = values ?? throw new ArgumentNullException(nameof(values));
+        }
+
+        public InputValue(string source, bool isStream, IEnumerable<ValueFromToken> values)
+        {
+            Source = source ?? throw new ArgumentNullException(nameof(source));
+            IsStream = isStream;
+            ValuesFromTokens = values ?? throw new ArgumentNullException(nameof(values));
         }
     }
 }

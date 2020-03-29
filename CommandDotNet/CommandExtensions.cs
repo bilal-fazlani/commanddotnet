@@ -14,23 +14,32 @@ namespace CommandDotNet
         /// <summary> Return all <see cref="Operand"/>s and <see cref="Option"/>s for the command</summary>
         /// <param name="command">The command</param>
         /// <param name="includeInterceptorOptions">When true, includes options from interceptors of all parent commands</param>
-        public static IEnumerable<IArgument> AllArguments(this Command command, bool includeInterceptorOptions = false)
+        public static IEnumerable<IArgument> AllArguments(this Command command, 
+            bool includeInterceptorOptions = false, bool excludeHiddenOptions = false)
         {
             return command.Operands.Cast<IArgument>()
-                .Concat(command.AllOptions(includeInterceptorOptions));
+                .Concat(command.AllOptions(includeInterceptorOptions, excludeHiddenOptions));
         }
 
         /// <summary>Return all <see cref="Option"/>s for the command.</summary>
         /// <param name="command">The command</param>
         /// <param name="includeInterceptorOptions">When true, includes options from interceptors of all parent commands</param>
-        public static IEnumerable<Option> AllOptions(this Command command, bool includeInterceptorOptions = false) =>
-            includeInterceptorOptions
+        public static IEnumerable<Option> AllOptions(this Command command, 
+            bool includeInterceptorOptions = false, bool excludeHiddenOptions = false)
+        {
+            var options = includeInterceptorOptions
                 ? command.Options
                     .Concat(command
                         .GetParentCommands()
                         .Reverse()
                         .SelectMany(c => c.Options.Where(o => o.IsInterceptorOption)))
                 : command.Options;
+            if (excludeHiddenOptions)
+            {
+                options = options.Where(o => o.ShowInHelp);
+            }
+            return options;
+        }
 
         /// <summary>returns the parents of the current command, sorted from closest to farthest parent</summary>
         public static IEnumerable<Command> GetParentCommands(this Command command, bool includeCurrent = false)
