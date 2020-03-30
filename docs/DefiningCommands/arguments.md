@@ -18,21 +18,29 @@ Use the `[Operand]` and `[Option]` attributes to explicity denote which argument
 
 The operand attribute has the following properties:
 
-* __Name__: Used in help documentation only. Defaults to the method name.
+* __Name__: Used in help documentation only. Defaults to the parameter or property name.
 * __Description__: Used in help documentation.
 
 ## Option Attribute
 
 The option attribute has the following properties:
 
-* __ShortName__: Using in help documentation and on the command line. Defaults to null.
-* __LongName__: Used in help documentation and on the command line. Defaults to the method name.
+* __LongName__: Used in help documentation and on the command line. Defaults to the parameter or property name.
+* __ShortName__: Used in help documentation and on the command line. Defaults to null.
 * __Description__: Used in help documentation.
 * __BooleanMode__: When the option is a `bool`, this determines if the presence of the option 
   indicates `true` (_Implicit_) or if the user must specify `true` or `false` (_Explicit_). 
     * The default is _Implicit_ and can be changed with `#!c# AppSettings.BooleanMode = BooleanMode.Explicit`
     * _Implicit_ boolean options are also called __Flags__
 * __AssignToExecutableSubcommands__: only valid when used in [Interceptor](../Extensibility/interceptors.md) methods.
+
+### ShortName and LongName interactions
+When ShortName is set, LongName will no longer default to the parameter or property name. If an option should have both a short and long name, then both attributes need to be set. This can result in duplicating the name that was already used to define the option.
+
+In the next major release, this behavior will change so that LongName will always default to the parameter or property name. 
+An option can be configured to have only a short name by setting `LongName = null`.
+
+In the meantime, this behavior can be achieved by setting `AppSettings.LongNameAlwaysDefaultsToSymbolName = true`
 
 ## Example
 
