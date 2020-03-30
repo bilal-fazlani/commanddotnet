@@ -19,8 +19,8 @@ namespace CommandDotNet.ClassModeling.Definitions
                 commandDef.SourcePath);
             command.Services.AddOrUpdate(commandDef);
 
-            var commandAttribute = commandDef.CustomAttributes.GetCustomAttribute<CommandAttribute>() 
-                                   ?? commandDef.CustomAttributes.GetCustomAttribute<ApplicationMetadataAttribute>();
+            var commandAttribute = commandDef.GetCustomAttribute<CommandAttribute>() 
+                                   ?? commandDef.GetCustomAttribute<ApplicationMetadataAttribute>();
             if (commandAttribute != null)
             {
                 command.Description = commandAttribute.Description;
@@ -82,8 +82,8 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             if (argumentDef.CommandNodeType == CommandNodeType.Operand)
             {
-                var operandAttr = argumentDef.CustomAttributes.GetCustomAttribute<OperandAttribute>() 
-                                  ?? (INameAndDescription) argumentDef.CustomAttributes.GetCustomAttribute<ArgumentAttribute>();
+                var operandAttr = argumentDef.GetCustomAttribute<OperandAttribute>() 
+                                  ?? (INameAndDescription) argumentDef.GetCustomAttribute<ArgumentAttribute>();
                 return new Operand(
                     argumentDef.Name,
                     typeInfo,
@@ -99,7 +99,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             
             if (argumentDef.CommandNodeType == CommandNodeType.Option)
             {
-                var optionAttr = argumentDef.CustomAttributes.GetCustomAttribute<OptionAttribute>();
+                var optionAttr = argumentDef.GetCustomAttribute<OptionAttribute>();
                 var booleanMode = GetOptionBooleanMode(argumentDef, appConfig.AppSettings.BooleanMode, optionAttr);
                 var argumentArity = ArgumentArity.Default(argumentDef.Type, argumentDef.HasDefaultValue, booleanMode);
 

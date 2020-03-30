@@ -16,7 +16,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
         {
             public static IEnumerable<string> GetKeyFromAttribute(IArgument argument)
             {
-                var key = argument.CustomAttributes.GetCustomAttribute<EnvVarAttribute>()?.Key;
+                var key = argument.GetCustomAttribute<EnvVarAttribute>()?.Key;
                 if (key != null)
                 {
                     yield return key;
@@ -44,7 +44,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
         {
             public static IEnumerable<string> GetKeyFromAttribute(IArgument argument)
             {
-                var key = argument.CustomAttributes.GetCustomAttribute<AppSettingAttribute>()?.Key;
+                var key = argument.GetCustomAttribute<AppSettingAttribute>()?.Key;
                 if (key != null)
                 {
                     yield return key;

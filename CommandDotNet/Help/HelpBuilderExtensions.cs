@@ -24,7 +24,6 @@ namespace CommandDotNet.Help
                     return $"dotnet {AppInfo.Instance.FileName}";
                 case UsageAppNameStyle.GlobalTool:
                     var rootAppName = command.GetRootCommand()
-                        .CustomAttributes?
                         .GetCustomAttribute<CommandAttribute>()?
                         .Name;
                     if (rootAppName == null)
