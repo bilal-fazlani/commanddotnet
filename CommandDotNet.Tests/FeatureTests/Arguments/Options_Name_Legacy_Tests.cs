@@ -7,11 +7,11 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class Options_Name_Tests
+    public class Options_Name_Legacy_Tests
     {
         private readonly Option[] _options;
 
-        public Options_Name_Tests(ITestOutputHelper testOutputHelper)
+        public Options_Name_Legacy_Tests(ITestOutputHelper testOutputHelper)
         {
             Command cmd = null;
             new AppRunner<App>()
