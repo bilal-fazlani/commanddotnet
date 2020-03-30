@@ -5,7 +5,6 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommandDotNet.CommandLogger\CommandDotNet.CommandLogger.csproj" />
     <ProjectReference Include="..\CommandDotNet.FluentValidation\CommandDotNet.FluentValidation.csproj" />
     <ProjectReference Include="..\CommandDotNet.NewerReleasesAlerts\CommandDotNet.NewerReleasesAlerts.csproj" />
     <ProjectReference Include="..\CommandDotNet.NameCasing\CommandDotNet.NameCasing.csproj" />

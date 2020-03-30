@@ -1,7 +1,6 @@
 using System;
 using System.Text;
 using System.Threading.Tasks;
-using CommandDotNet.CommandLogger;
 using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;
 using Xunit;
@@ -22,7 +21,7 @@ namespace CommandDotNet.Tests.CommandDotNet.CommandLogger
         public void PasswordsAreObscured()
         {
             new AppRunner<App>()
-                .UseCommandLogger()
+                .UseCommandLogger(excludeSystemInfo: true)
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     WhenArgs = "--password super-secret Do lala",
@@ -59,10 +58,10 @@ options:
         }
 
         [Fact]
-        public void SystemInfo_CanBe_Shown()
+        public void SystemInfo_IsShown_ByDefault()
         {
             new AppRunner<App>()
-                .UseCommandLogger(includeSystemInfo: true)
+                .UseCommandLogger()
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     WhenArgs = "Do",
@@ -108,7 +107,7 @@ Username      = {Environment.UserDomainName}\{Environment.UserName}
         public void AppConfig_CanBe_Shown()
         {
             new AppRunner<App>()
-                .UseCommandLogger(includeAppConfig:true)
+                .UseCommandLogger(excludeSystemInfo: true, includeAppConfig:true)
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     WhenArgs = "Do",
@@ -195,7 +194,7 @@ AppConfig:
         public void AdditionalInfo_CanBe_Null()
         {
             new AppRunner<App>()
-                .UseCommandLogger(additionalInfoCallback: ctx => null)
+                .UseCommandLogger(excludeSystemInfo: true, additionalInfoCallback: ctx => null)
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     WhenArgs = "Do",
@@ -235,7 +234,7 @@ options:
         public void AdditionalInfo_CanBe_Shown()
         {
             new AppRunner<App>()
-                .UseCommandLogger(additionalInfoCallback: ctx => new (string, string)[]
+                .UseCommandLogger(excludeSystemInfo: true, additionalInfoCallback: ctx => new (string, string)[]
                 {
                     ("header1", "value1" ),
                     ("header2", "value2" ),
@@ -285,7 +284,7 @@ header2  = value2
             var sb = new StringBuilder();
 
             new AppRunner<App>()
-                .UseCommandLogger(writerFactory: context => null)
+                .UseCommandLogger(excludeSystemInfo: true, writerFactory: context => null)
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     WhenArgs = "Do",
@@ -302,7 +301,7 @@ header2  = value2
             var sb = new StringBuilder();
 
             new AppRunner<App>()
-                .UseCommandLogger(writerFactory: context => text => sb.Append(text))
+                .UseCommandLogger(excludeSystemInfo: true, writerFactory: context => text => sb.Append(text))
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     WhenArgs = "Do",
