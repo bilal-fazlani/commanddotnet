@@ -216,6 +216,19 @@ namespace CommandDotNet
             params Func<IArgument, ArgumentDefault>[] getDefaultValueCallbacks)
             => SetArgumentDefaultsMiddleware.SetArgumentDefaultsFrom(appRunner, getDefaultValueCallbacks);
 
+        public static AppRunner UseCommandLogger(this AppRunner appRunner,
+            Func<CommandContext, Action<string>> writerFactory = null,
+            bool excludeSystemInfo = false,
+            bool includeAppConfig = false,
+            Func<CommandContext, IEnumerable<(string key, string value)>> additionalInfoCallback = null)
+        {
+            return CommandLoggerMiddleware.UseCommandLogger(appRunner, 
+                writerFactory, 
+                !excludeSystemInfo,
+                includeAppConfig, 
+                additionalInfoCallback);
+        }
+
         /// <summary>
         /// Returns the list of all possible types that could be instantiated to execute commands.<br/>
         /// Use get the list of types to register in your DI container.

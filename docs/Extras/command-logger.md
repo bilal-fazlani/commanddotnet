@@ -6,21 +6,21 @@ Directives are a great way to add troubleshooting tools to your application. See
 
 
 ## TLDR, How to enable 
-1. Add nuget package [CommandDotNet.CommandLogger](https://www.nuget.org/packages/CommandDotNet.CommandLogger)
-1. Enable the feature with `appRunner.UseCommandLogger()`
+1. Enable the feature with `appRunner.UseCommandLogger()` or use `appRunner.UseDefaultMiddleware()`
 
 ## Command logging
 
 This feature logs information about the command just before the command method is executed.
 
-The information logged includes
+The default behavior registers a `[cmdlog]` directive that outputs to the console using `CommandContext.Console.Out`.
 
-### Writer factory
+example usage: 
 
-By default, information will be logged to `CommandContext.Console.Out` for all commands. Use writerFactory to 
+```bash
+`dotnet example.com [cmdlog] add 1 2`
+```
 
-1. Change the target output: `writerFactory: ctx => Log.Info`
-1. Select which commands to log: `writerFactory: ctx => ctx.ParseResult.TargetCommand.CustomAttributes.HasAttribute<MyAttribute>()`
+## Outputs
 
 ### Command and arguments
 The command to be executed and the argument values as described in the [parse directive](directives.md#parse).
@@ -43,11 +43,23 @@ options:
       value: Aaron, Alex
       inputs: [prompt] Aaron, Alex
       default: Bilal
+
+  username <Text>
+      value: Bilal
+      inputs:
+      default: source=EnvVar key=Username: Bilal
+  
+  password <Text>
+      value: *****
+      inputs: [prompt] *****
+      default: source=EnvVar key=Password: *****
 ```
 
 ### System information
 
-System information can be included by setting `includeSystemInfo: true`. This is the default set.
+System information is included by default and can be excluded by setting `excludeSystemInfo: true`. 
+
+The default set of information is:
 
 ```bash
 Tool version  = testhost.dll 16.2.0
@@ -58,8 +70,7 @@ Username      = MyComputer\Me
 ```
 
 Additional information can be provided by setting the `additionalInfoCallback` parameter with a 
-`Func<CommandContext, IEnumerable<(string key, string value)>>`. This allows including configuration state
-from the CommandContext.
+`Func<CommandContext, IEnumerable<(string key, string value)>>`.  Any CommandContext state can be included.
 
 ### AppConfig
 
@@ -107,4 +118,47 @@ AppConfig:
     CommandDotNet.CommandContext
     CommandDotNet.Rendering.IConsole
     System.Threading.CancellationToken
+```
+
+## Replacing the default behavior
+
+Use `writerFactory` parameter to conditionally provide a target for the log. 
+
+If the factory returns null, the command will not be logged.
+
+How to use:
+
+1. Change the target output: `writerFactory: ctx => Log.Info`
+    * Logs every command to logging framework. No `[cmdlog]` directive
+1. Select which commands to log: `writerFactory: ctx => ctx.ParseResult.TargetCommand.HasAttribute<EnableCommandLogger>() ? ctx.Console.Out.WriteLine : (Action<string>)null`
+    * Logs only commands attributed with your custom `EnableCommandLoggerAttribute`. No `[cmdlog]` directive
+1. Allow user to enable as a [directive](directives.md): `writerFactory: ctx => ctx.Tokens.TryGetDirective("cmdlog", out _) ? ctx.Console.Out.WriteLine : (Action<string>)null`
+    * Usage: `dotnet example.com [cmdlog] add 1 2`
+    * Note: this is the default behavior.
+1. Blend the options (see code below)
+    * Always output to logs 
+    * output to the console when... 
+        * The user runs with the `[cmdlog]` directive
+        * The command is attributed with your custom `EnableCommandLoggerAttribute`
+
+```c#
+appRunner.UseCommandLogger(writerFactory: ctx => 
+{
+    // EnableCommandLogger is just an example name you could implement
+    if (ctx.Tokens.TryGetDirective("cmdlog", out string value)
+        || ctx.ParseResult.TargetCommand.HasAttribute<EnableCommandLogger>())
+    {
+        return Log.IsInfoEnabled()
+            ? log =>
+            {
+                Log.Info(log);
+                ctx.Console.Out.WriteLine(log);
+            }
+            : (Action<string>)ctx.Console.Out.WriteLine;
+    }
+
+    return Log.IsInfoEnabled()
+        ? Log.Info
+        : (Action<string>)null;
+});
 ```

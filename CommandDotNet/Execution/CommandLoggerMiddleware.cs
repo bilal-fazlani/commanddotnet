@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CommandDotNet.Builders;
+using CommandDotNet.Directives;
 using CommandDotNet.Directives.Parse;
-using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 
-namespace CommandDotNet.CommandLogger
+namespace CommandDotNet.Execution
 {
-    public static class CommandLoggerMiddleware
+    internal static class CommandLoggerMiddleware
     {
-        public static AppRunner UseCommandLogger(this AppRunner appRunner,
-            Func<CommandContext, Action<string>> writerFactory = null,
-            bool includeSystemInfo = false,
-            bool includeAppConfig = false,
-            Func<CommandContext, IEnumerable<(string key, string value)>> additionalInfoCallback = null)
+        internal static AppRunner UseCommandLogger(AppRunner appRunner,
+            Func<CommandContext, Action<string>> writerFactory,
+            bool includeSystemInfo,
+            bool includeAppConfig,
+            Func<CommandContext, IEnumerable<(string key, string value)>> additionalInfoCallback)
         {
             return appRunner.Configure(c =>
             {
@@ -49,15 +49,23 @@ namespace CommandDotNet.CommandLogger
             }
         }
 
+        private static Action<string> DefaultWriterFactory(CommandContext ctx)
+        {
+            return ctx.Tokens.TryGetDirective("cmdlog", out _) 
+                ? ctx.Console.Out.WriteLine 
+                : (Action<string>)null;
+        }
+
         private static Task<int> CommandLogger(CommandContext commandContext, ExecutionDelegate next)
         {
             var config = commandContext.AppConfig.Services.Get<LogConfig>();
-            var writer = config.WriterFactory(commandContext);
+            var writer = (config.WriterFactory ?? DefaultWriterFactory)(commandContext);
             if (writer != null)
             {
                 var header = BuildHeader(commandContext, config);
                 writer(header);
             }
+
             return next(commandContext);
         }
 
@@ -109,13 +117,15 @@ namespace CommandDotNet.CommandLogger
             return originalArgs;
         }
 
-        private static IEnumerable<(string name, string text)> GetOtherConfigInfo(CommandContext commandContext, LogConfig config)
+        private static IEnumerable<(string name, string text)> GetOtherConfigInfo(CommandContext commandContext,
+            LogConfig config)
         {
             if (config.IncludeSystemInfo)
             {
                 var appInfo = AppInfo.GetAppInfo(commandContext);
                 yield return ("Tool version", $"{appInfo.FileName} {appInfo.Version}");
-                yield return (".Net version", System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription.Trim());
+                yield return (".Net version",
+                    System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription.Trim());
                 yield return ("OS version", System.Runtime.InteropServices.RuntimeInformation.OSDescription.Trim());
                 yield return ("Machine", Environment.MachineName);
                 yield return ("Username", $"{Environment.UserDomainName}\\{Environment.UserName}");
