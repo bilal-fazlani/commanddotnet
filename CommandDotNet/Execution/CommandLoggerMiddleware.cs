@@ -42,7 +42,7 @@ namespace CommandDotNet.Execution
                 bool includeAppConfig,
                 Func<CommandContext, IEnumerable<(string, string)>> additionalHeadersCallback)
             {
-                WriterFactory = writerFactory ?? (ctx => ctx.Console.Out.WriteLine);
+                WriterFactory = writerFactory;
                 IncludeSystemInfo = includeSystemInfo;
                 IncludeAppConfig = includeAppConfig;
                 AdditionalHeadersCallback = additionalHeadersCallback;
