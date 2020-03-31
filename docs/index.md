@@ -1,9 +1,5 @@
 ![logo](./img/logo.svg){: style="width:20em"}
 
-[![NuGet Release](https://img.shields.io/nuget/v/CommandDotNet.svg)](https://www.nuget.org/packages/CommandDotNet)  [![NuGet](https://img.shields.io/nuget/dt/CommandDotNet.svg)](https://www.nuget.org/packages/CommandDotNet)
-[![Build Status](https://travis-ci.com/bilal-fazlani/commanddotnet.svg?branch=master)](https://travis-ci.com/bilal-fazlani/commanddotnet)
-[![GitHub last commit](https://img.shields.io/github/last-commit/bilal-fazlani/CommandDotNet.svg)]()
-
 !!! Info
     This documentation is for version 2 which is an older version of commanddotnet. Documentation for current version can be found here: [https://commanddotnet.bilal-fazlani.com](https://commanddotnet.bilal-fazlani.com)
 
