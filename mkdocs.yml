@@ -6,48 +6,59 @@ repo_url: 'https://github.com/bilal-fazlani/commanddotnet'
 strict: true
 
 nav:
-    - Introduction: index.md
-    - whats-new-in-v3.md
-    - getting-started.md
-    - Defining Commands:
-      - DefiningCommands/argument-terminology.md
-      - DefiningCommands/commands.md
-      - DefiningCommands/subcommands.md
-      - DefiningCommands/arguments.md
-      - DefiningCommands/argument-collections.md
-      - DefiningCommands/argument-types.md
-      - DefiningCommands/argument-models.md
-      - DefiningCommands/argument-arity.md
-      - DefiningCommands/option-or-operand.md
-      - DefiningCommands/passwords.md
-    - Extensibility:
-      - Extensibility/help.md
-      - Extensibility/parameter-types.md
-      - Extensibility/parameter-resolvers.md
-      - Extensibility/middleware.md
-      - Extensibility/interceptors.md 
-      - Extensibility/token-transformations.md
-    - Middleware:
-      - Middleware/default-middleware.md
-      - Middleware/app-version.md
-      - Middleware/cancellation.md
-      - Middleware/default-values-from-config.md
-      - Middleware/dependency-injection.md
-      - Middleware/fluent-validation-for-argument-models.md
-      - Middleware/name-casing.md
-      - Middleware/piped-arguments.md
-      - Middleware/prompting.md
-      - Middleware/response-files.md
-      - Middleware/typo-suggestions.md
-      - Middleware/newer-release-alerts.md
-    - Extras:
-      - Extras/directives.md
-      - Extras/command-logger.md
-      - Extras/exceptions.md
-    - test-tools.md
+    - Documentation:
+      - Introduction: index.md
+      - getting-started.md
+      - Defining Commands:
+        - DefiningCommands/argument-terminology.md
+        - DefiningCommands/commands.md
+        - DefiningCommands/subcommands.md
+        - DefiningCommands/arguments.md
+        - DefiningCommands/argument-collections.md
+        - DefiningCommands/argument-types.md
+        - DefiningCommands/argument-models.md
+        - DefiningCommands/argument-arity.md
+        - DefiningCommands/option-or-operand.md
+        - DefiningCommands/passwords.md
+      - Extensibility:
+        - Extensibility/help.md
+        - Extensibility/parameter-types.md
+        - Extensibility/parameter-resolvers.md
+        - Extensibility/middleware.md
+        - Extensibility/interceptors.md 
+        - Extensibility/token-transformations.md
+      - Middleware:
+        - Middleware/default-middleware.md
+        - Middleware/app-version.md
+        - Middleware/cancellation.md
+        - Middleware/default-values-from-config.md
+        - Middleware/dependency-injection.md
+        - Middleware/fluent-validation-for-argument-models.md
+        - Middleware/name-casing.md
+        - Middleware/piped-arguments.md
+        - Middleware/prompting.md
+        - Middleware/response-files.md
+        - Middleware/typo-suggestions.md
+        - Middleware/newer-release-alerts.md
+      - Extras:
+        - Extras/directives.md
+        - Extras/command-logger.md
+        - Extras/exceptions.md
+      - test-tools.md
+    - Release Notes:
+      - ReleaseNotes/whats-new-in-v3.md
+      - ReleaseNotes/CommandDotNet.md
+      - ReleaseNotes/CommandDotNet.FluentValidation.md
+      - ReleaseNotes/CommandDotNet.IoC.Autofac.md
+      - ReleaseNotes/CommandDotNet.IoC.MicrosoftDependencyInjection.md
+      - ReleaseNotes/CommandDotNet.IoC.SimpleInjector.md
+      - ReleaseNotes/CommandDotNet.NameCasing.md
+      - ReleaseNotes/CommandDotNet.TestTools.md
+    - Roadmap: 
+      - ReleaseNotes/roadmap.md
 theme:
   feature:
-    tabs: false
+    tabs: true
   name: 'material'
   favicon: 'img/favicon.ico'
   palette:

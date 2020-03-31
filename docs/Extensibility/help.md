@@ -101,7 +101,7 @@ When specified, this value will be used and `UsageAppNameStyle` will be ignored.
 
 ### %UsageAppName% Tempate
 
-When you want to show usage examples a command description, extended help or overridden usage section, use `%UsageAppName%`. This text will be replaced usage app name from one of the options above.  
+When you want to show usage examples in a command description, extended help or overridden usage section, use `%UsageAppName%`. This text will be replaced usage app name from one of the options above.  
 
 See this line `"Example: %UsageAppName% [debug] [parse] [log:info] cancel-me"` in the [Example app](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/Examples.cs#L14).
 
