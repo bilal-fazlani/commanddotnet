@@ -3,11 +3,11 @@
 CommandDotNet can be installed from [nuget.org](https://www.nuget.org/packages/CommandDotNet/)
 
 ``` bash tab=".NET CLI"
-dotnet add package CommandDotNet
+dotnet add package CommandDotNet --version 2.8.2
 ```
 
 ``` bash tab="Nuget Package Manager"
-Install-Package CommandDotNet
+Install-Package CommandDotNet -Version 2.8.2
 ```
 
 ## Let's build a calculator
