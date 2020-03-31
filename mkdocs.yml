@@ -7,7 +7,6 @@ strict: true
 
 nav:
     - Introduction: index.md
-    - whats-new-in-v3.md
     - getting-started.md
     - Defining Commands:
       - DefiningCommands/argument-terminology.md
@@ -45,6 +44,16 @@ nav:
       - Extras/command-logger.md
       - Extras/exceptions.md
     - test-tools.md
+    - Release Notes:
+      - ReleaseNotes/whats-new-in-v3.md
+      - ReleaseNotes/CommandDotNet.md
+      - ReleaseNotes/CommandDotNet.FluentValidation.md
+      - ReleaseNotes/CommandDotNet.IoC.Autofac.md
+      - ReleaseNotes/CommandDotNet.IoC.MicrosoftDependencyInjection.md
+      - ReleaseNotes/CommandDotNet.IoC.SimpleInjector.md
+      - ReleaseNotes/CommandDotNet.NameCasing.md
+      - ReleaseNotes/CommandDotNet.TestTools.md
+      - ReleaseNotes/roadmap.md
 theme:
   feature:
     tabs: false
