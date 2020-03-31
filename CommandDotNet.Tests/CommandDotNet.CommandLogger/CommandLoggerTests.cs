@@ -24,13 +24,13 @@ namespace CommandDotNet.Tests.CommandDotNet.CommandLogger
                 .UseCommandLogger(excludeSystemInfo: true)
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
-                    WhenArgs = "--password super-secret Do lala",
+                    WhenArgs = "[cmdlog] --password super-secret Do lala",
                     Then =
                     {
                         Result = $@"
 ***************************************
 Original input:
-  --password ***** Do lala
+  [cmdlog] --password ***** Do lala
 
 command: Do
 
@@ -64,13 +64,13 @@ options:
                 .UseCommandLogger()
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
-                    WhenArgs = "Do",
+                    WhenArgs = "[cmdlog] Do",
                     Then =
                     {
                         Result = $@"
 ***************************************
 Original input:
-  Do
+  [cmdlog] Do
 
 command: Do
 
@@ -110,13 +110,13 @@ Username      = {Environment.UserDomainName}\{Environment.UserName}
                 .UseCommandLogger(excludeSystemInfo: true, includeAppConfig:true)
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
-                    WhenArgs = "Do",
+                    WhenArgs = "[cmdlog] Do",
                     Then =
                     {
                         Result = $@"
 ***************************************
 Original input:
-  Do
+  [cmdlog] Do
 
 command: Do
 
@@ -198,13 +198,13 @@ AppConfig:
                 .UseCommandLogger(excludeSystemInfo: true, additionalInfoCallback: ctx => null)
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
-                    WhenArgs = "Do",
+                    WhenArgs = "[cmdlog] Do",
                     Then =
                     {
                         Result = $@"
 ***************************************
 Original input:
-  Do
+  [cmdlog] Do
 
 command: Do
 
@@ -243,13 +243,13 @@ options:
                 })
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
-                    WhenArgs = "Do",
+                    WhenArgs = "[cmdlog] Do",
                     Then =
                     {
                         Result = $@"
 ***************************************
 Original input:
-  Do
+  [cmdlog] Do
 
 command: Do
 
@@ -339,6 +339,30 @@ options:
     default:
 ***************************************
 ");
+        }
+
+        [Fact]
+        public void DefaultBehavior_DoesOutput_With_CmdLogDirective()
+        {
+            new AppRunner<App>()
+                .UseCommandLogger()
+                .VerifyScenario(_testOutputHelper, new Scenario
+                {
+                    WhenArgs = "[cmdlog] Do",
+                    Then = { ResultsContainsTexts = { "Original input:" } }
+                });
+        }
+
+        [Fact]
+        public void DefaultBehavior_DoesNotOutput_Without_CmdLogDirective()
+        {
+            new AppRunner<App>()
+                .UseCommandLogger()
+                .VerifyScenario(_testOutputHelper, new Scenario
+                {
+                    WhenArgs = "Do",
+                    Then = {Result = ""}
+                });
         }
 
         public class App
