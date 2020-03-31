@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static System.Environment;
 using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Help
@@ -21,22 +22,52 @@ namespace CommandDotNet.Help
         
         public virtual string GetHelpText(Command command) =>
             JoinSections(
-                (null, CommandDescription(command)),
+                (null, CommandDescription(command).TrimNewLines()),
                 ("Usage", SectionUsage(command)),
-                ("Arguments", SectionOperands(command)),
-                ("Options", SectionOptions(command, false)),
-                ("Options also available for subcommands", SectionOptions(command, true)),
-                ("Commands", SectionSubcommands(command)),
-                (null, ExtendedHelpText(command)));
+                ("Arguments", SectionOperands(command).TrimNewLines()),
+                ("Options", SectionOptions(command, false).TrimNewLines()),
+                ("Options also available for subcommands", SectionOptions(command, true).TrimNewLines()),
+                ("Commands", SectionSubcommands(command).TrimNewLines()),
+                (null, ExtendedHelpText(command).TrimNewLines()));
 
         /// <summary>returns the body of the usage section</summary>
         protected virtual string SectionUsage(Command command)
         {
-            var usage = PadFront(command.Usage)
-                           ?? $"{PadFront(AppName(command))}{PadFront(CommandPath(command))}"
-                           + $"{PadFront(UsageSubcommand(command))}{PadFront(UsageOption(command))}{PadFront(UsageOperand(command))}"
-                           + (_appSettings.AllowArgumentSeparator ? " [[--] <arg>...]" : null);
-            return usage?.Replace("%UsageAppName%", AppName(command));
+            if (command.Usage != null) return command.Usage;
+
+            var appName = AppName(command);
+            var root = $"{appName} {CommandPath(command)}".Trim();
+
+            var sb = new StringBuilder();
+
+            bool newLine = false;
+            string indent = " ";
+            if (command.IsExecutable && command.Subcommands.Any())
+            {
+                // put them both on a new line
+                newLine = true;
+                indent = "  ";
+            }
+
+            if (command.IsExecutable)
+            {
+                sb.Append($"{indent}{root}{PadFront(UsageOption(command))}{PadFront(UsageOperand(command))}");
+                if (_appSettings.AllowArgumentSeparator)
+                {
+                    sb.Append(" [[--] <arg>...]");
+                }
+
+                sb.AppendLine();
+            }
+
+            if (command.Subcommands.Any())
+            {
+                sb.AppendLine($"{indent}{root}{PadFront(UsageOptionForSubCommands(command))}{PadFront(UsageSubcommand(command))}");
+            }
+
+            var usage = sb.Replace("%UsageAppName%", appName).ToString().TrimNewLines();
+
+            return newLine ? $"{NewLine}{usage}" : usage;
         }
 
         protected virtual string AppName(Command command) =>
@@ -56,6 +87,13 @@ namespace CommandDotNet.Help
         /// <summary>How options are shown in the usage example</summary>
         protected virtual string UsageOption(Command command) =>
             command.Options.Any(o => o.ShowInHelp)
+                ? "[options]"
+                : null;
+
+        /// <summary>How options are shown in the usage example</summary>
+        protected virtual string UsageOptionForSubCommands(Command command) =>
+            command.AllOptions(includeInterceptorOptions: true, excludeHiddenOptions: true)
+                .Any(o => !o.AssignToExecutableSubcommands)
                 ? "[options]"
                 : null;
 
@@ -208,14 +246,14 @@ namespace CommandDotNet.Help
         protected virtual string FormatSectionHeader(string header)
             => "usage".Equals(header, StringComparison.OrdinalIgnoreCase)
                     ? $"{header}:"
-                    : $"{header}:{Environment.NewLine}{Environment.NewLine}";
+                    : $"{header}:{NewLine}{NewLine}";
 
         /// <summary>Joins the content into a single string, with headers and sections</summary>
         protected virtual string JoinSections(params (string header, string body)[] sections) =>
             sections
                 .Where(s => !s.body.IsNullOrWhitespace())
-                .Select(s => $"{(s.header.IsNullOrWhitespace() ? null : FormatSectionHeader(s.header))}{s.body.Trim('\n', '\r')}")
-                .ToCsv($"{Environment.NewLine}{Environment.NewLine}");
+                .Select(s => $"{(s.header.IsNullOrWhitespace() ? null : FormatSectionHeader(s.header))}{s.body}")
+                .ToCsv($"{NewLine}{NewLine}");
 
         private static string PadFront(string value) =>
             value.IsNullOrWhitespace() ? null : " " + value;
