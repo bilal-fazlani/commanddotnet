@@ -67,6 +67,7 @@ namespace CommandDotNet.TestTools
                     if (returnResultOnError)
                     {
                         testConsole.Error.WriteLine(e.Message);
+                        testConsole.Error.WriteLine(e.StackTrace);
                         LogResult();
                         return new AppRunnerResult(1, testConsole, outputs);
                     }
