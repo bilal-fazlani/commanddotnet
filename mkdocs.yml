@@ -22,6 +22,7 @@ nav:
         - DefiningCommands/passwords.md
       - Extensibility:
         - Extensibility/help.md
+        - Extensibility/directives.md
         - Extensibility/parameter-types.md
         - Extensibility/parameter-resolvers.md
         - Extensibility/middleware.md
@@ -40,10 +41,11 @@ nav:
         - Middleware/response-files.md
         - Middleware/typo-suggestions.md
         - Middleware/newer-release-alerts.md
-      - Extras:
-        - Extras/directives.md
-        - Extras/command-logger.md
-        - Extras/exceptions.md
+      - Diagnostics:
+        - Diagnostics/debug-directive.md
+        - Diagnostics/parse-directive.md
+        - Diagnostics/command-logger.md
+        - Diagnostics/exceptions.md
       - test-tools.md
     - Release Notes:
       - ReleaseNotes/whats-new-in-v3.md

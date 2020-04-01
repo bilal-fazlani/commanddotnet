@@ -1,10 +1,5 @@
 # Command Logger
 
-Directives are special arguments enabling cross cutting features.  We've loosely followed the pattern defined by  [System.CommandLine](https://github.com/dotnet/command-line-api/wiki/Features-overview#debugging) to provide two directives: Debug & Parse
-
-Directives are a great way to add troubleshooting tools to your application. See [Custom Directives](#custom-directives) at the bottom of this page for tips on adding your own.
-
-
 ## TLDR, How to enable 
 1. Enable the feature with `appRunner.UseCommandLogger()` or use `appRunner.UseDefaultMiddleware()`
 
@@ -23,7 +18,7 @@ example usage:
 ## Outputs
 
 ### Command and arguments
-The command to be executed and the argument values as described in the [parse directive](directives.md#parse).
+The command to be executed and the argument values as described in the [parse directive](parse-directive.md).
 
 ```bash
 command: LaunchRocket
@@ -128,25 +123,62 @@ If the factory returns null, the command will not be logged.
 
 How to use:
 
-1. Change the target output: `writerFactory: ctx => Log.Info`
-    * Logs every command to logging framework. No `[cmdlog]` directive
-1. Select which commands to log: `writerFactory: ctx => ctx.ParseResult.TargetCommand.HasAttribute<EnableCommandLogger>() ? ctx.Console.Out.WriteLine : (Action<string>)null`
-    * Logs only commands attributed with your custom `EnableCommandLoggerAttribute`. No `[cmdlog]` directive
-1. Allow user to enable as a [directive](directives.md): `writerFactory: ctx => ctx.Tokens.TryGetDirective("cmdlog", out _) ? ctx.Console.Out.WriteLine : (Action<string>)null`
-    * Usage: `dotnet example.com [cmdlog] add 1 2`
-    * Note: this is the default behavior.
-1. Blend the options (see code below)
-    * Always output to logs 
-    * output to the console when... 
-        * The user runs with the `[cmdlog]` directive
-        * The command is attributed with your custom `EnableCommandLoggerAttribute`
+#### Change the target output
+
+`writerFactory: ctx => Log.Info`
+
+Logs every command to logging framework. No `[cmdlog]` directive
+
+#### Enable via attribute
+
+`writerFactory: ctx => ctx.ParseResult.TargetCommand.HasAttribute<EnableCommandLogger>() ? ctx.Console.Out.WriteLine : (Action<string>)null`
+
+Logs only commands attributed with your custom `EnableCommandLoggerAttribute`. No `[cmdlog]` directive
+
+#### Enable via directive 
+
+Allow user to enable as a [directive](directives.md)
+`writerFactory: ctx => ctx.Tokens.TryGetDirective("cmdlog", out _) ? ctx.Console.Out.WriteLine : (Action<string>)null`
+
+Usage: `dotnet example.com [cmdlog] add 1 2`
+
+!!!Note
+    this is the default behavior.
+
+#### Enable via root option
+
+Add an intercepor method to your root command with an `--logcmd` option. This also makes the option visible to users via help.
+
+```c#
+public class RootApp
+{
+    public Task<int> Interceptor(InterceptorExecutionDelegate next, CommandContext ctx,
+        [Option(Description="Output the command wiht arguments and system info")] bool cmdlog)
+    {
+        if(cmdlog)
+        {
+            CommandLogger.Log(ctx);
+        }
+        next();
+    }
+}
+```
+
+used as `dotnet example.dll --logcmd Add 1 2`
+
+#### Blended, Enable via root option or attribute
+
+* Always output to logs 
+* output to the console when... 
+    * The user runs with the `[cmdlog]` directive
+    * The command is attributed with your custom `EnableCommandLoggerAttribute`
 
 ```c#
 appRunner.UseCommandLogger(writerFactory: ctx => 
 {
     // EnableCommandLogger is just an example name you could implement
-    if (ctx.Tokens.TryGetDirective("cmdlog", out string value)
-        || ctx.ParseResult.TargetCommand.HasAttribute<EnableCommandLogger>())
+    if (ctx.ParseResult.TargetCommand.HasAttribute<EnableCommandLogger>()
+        || (bool)ctx.RootCommand.Options.FindOption("logcmd").Value)
     {
         return Log.IsInfoEnabled()
             ? log =>
