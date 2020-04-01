@@ -6,6 +6,7 @@ using System.IO;
 
 namespace CommandDotNet.Rendering
 {
+    [Obsolete("No longer supported. Use a package like ColorConsole or Pastel")]
     public class AnsiConsole
     {
         private AnsiConsole(TextWriter writer, bool useConsoleColor)
