@@ -6,7 +6,7 @@ using System.Linq;
 using CommandDotNet.Builders;
 using CommandDotNet.Builders.ArgumentDefaults;
 using CommandDotNet.ClassModeling.Definitions;
-using CommandDotNet.Directives;
+using CommandDotNet.Diagnostics;
 using CommandDotNet.Execution;
 using CommandDotNet.Parsing;
 using CommandDotNet.Prompts;

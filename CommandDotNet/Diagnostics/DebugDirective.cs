@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using CommandDotNet.Directives;
 using CommandDotNet.Execution;
 
-namespace CommandDotNet.Directives
+namespace CommandDotNet.Diagnostics
 {
     internal static class DebugDirective
     {
