@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using CommandDotNet.Diagnostics;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
@@ -10,7 +11,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public DebugDirectiveTests(ITestOutputHelper output) : base(output)
         {
             // skip waiting for debugger to connect
-            Directives.DebugDirective.InTestHarness = true;
+            DebugDirective.InTestHarness = true;
         }
 
         [Fact]

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Linq;
-using CommandDotNet.Directives;
+using CommandDotNet.Diagnostics;
 using CommandDotNet.FluentValidation;
 using CommandDotNet.NameCasing;
 using CommandDotNet.NewerReleasesAlerts;

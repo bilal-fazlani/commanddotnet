@@ -2,11 +2,12 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CommandDotNet.Directives.Parse;
+using CommandDotNet.Diagnostics.Parse;
+using CommandDotNet.Directives;
 using CommandDotNet.Execution;
 using CommandDotNet.Tokens;
 
-namespace CommandDotNet.Directives
+namespace CommandDotNet.Diagnostics
 {
     internal static class ParseDirective
     {
