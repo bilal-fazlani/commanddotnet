@@ -1,5 +1,15 @@
 # CommandDotNet
 
+## 3.5.2 (pending)
+
+### Feature
+
+#### CommandLogger.Log
+
+Make CommandLogger a public class so commands, interceptors and middleware can run it directly.
+
+This makes the last pattern in the [command-logger.md] help possible, using an interceptor option to trigger the log.
+
 ## 3.5.1
 
 Fix bug: when enabled w/ default configuration, Command Logger no longer outputs unless [cmdlog] is specified
@@ -36,7 +46,7 @@ AppSettings.LongNameAlwaysDefaultsToSymbolName allows us to introduce the behavi
 
 #### Enhanced Parse directive
 
-The [parse directive](directives.md#parse) has been updated to show 
+The [parse directive](parse-directive.md) has been updated to show 
 
 * argument values
 * default values w/ sources 
