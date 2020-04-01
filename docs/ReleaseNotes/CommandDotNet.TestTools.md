@@ -1,5 +1,9 @@
 # CommandDotNet.TestTools
 
+## 1.1.1 (next)
+
+RunInMem will print the stacktrace for of a caught exception before returning the error response, otherwise the stacktrace is lost.
+
 ## 1.1.0
 
 Test prompting no longer prints an extraneous `$"IConsole.ReadLine > {input}"` as it's not consistent with console output. This is logged instead.
