@@ -153,7 +153,7 @@ In the `Program.Main`, we configured the app with the basic feature set.
 ```
 
 To take advantage of many more additional features, such as
-[debug & parse directives](directives.md),
+[debug](debug-directive.md) & [parse](parse-directive) directives,
 [ctrl+c support](cancellation.md),
 [prompting](prompting.md),
 [piping](piped-arguments),
@@ -179,6 +179,6 @@ Check out the
 
 * *Extensibility* section if the framework is missing a feature you need and you're interested in adding it yourself. For questions, ping us on our [Discord channel](https://discord.gg/QFxKSeG) or create a [GitHub Issue](https://github.com/bilal-fazlani/commanddotnet/issues)
 
-* *Extras* section for helpful debugging tools
+* *Diagnostics* section for a rich set of tools to simplify troubleshooting
 
 * *Test Tools* for a test package to help test console output with this framework. This is helpful for all apps, but especially helpful when definiing extensibility components. This package is used to test all of the CommandDotNet features.
