@@ -80,6 +80,8 @@ namespace CommandDotNet
         /// <summary>The source that defined this command</summary>
         public string DefinitionSource { get; }
 
+        public bool HandlesSeparatedArguments { get; set; }
+
         /// <summary>The <see cref="Command"/>s that can be accessed via this <see cref="Command"/></summary>
         public IReadOnlyCollection<Command> Subcommands => _subcommands.AsReadOnly();
 

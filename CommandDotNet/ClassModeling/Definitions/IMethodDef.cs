@@ -6,5 +6,6 @@ namespace CommandDotNet.ClassModeling.Definitions
     internal interface IMethodDef : IInvocation
     {
         IReadOnlyCollection<IArgumentDef> ArgumentDefs { get; }
+        bool HandlesSeparatedArguments { get; }
     }
 }

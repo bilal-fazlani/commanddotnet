@@ -14,6 +14,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         }
 
         public IReadOnlyCollection<IArgumentDef> ArgumentDefs { get; } = new IArgumentDef[0];
+        public bool HandlesSeparatedArguments { get; } = false;
         public MethodInfo MethodInfo { get; } = null;
 
         public IReadOnlyCollection<IArgument> Arguments { get; } = new IArgument[0];

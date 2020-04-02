@@ -4,10 +4,21 @@ namespace CommandDotNet.Extensions
 {
     internal static class MemberInfoExtensions
     {
-        internal static string FullName(this MemberInfo memberInfo, bool includeNamespace = false) =>
-            includeNamespace
-                ? $"{memberInfo.DeclaringType?.FullName}.{memberInfo.Name}"
-                : $"{memberInfo.DeclaringType?.Name}.{memberInfo.Name}";
+        internal static string FullName(this MemberInfo memberInfo, bool includeNamespace = false)
+        {
+            string typeName = null;
+            if (includeNamespace)
+            {
+                typeName = memberInfo.DeclaringType?.FullName;
+            }
+            else if (memberInfo.DeclaringType != null)
+            {
+                typeName = memberInfo.DeclaringType.IsNested
+                    ? $"{memberInfo.DeclaringType.DeclaringType?.Name}.{memberInfo.DeclaringType.Name}"
+                    : memberInfo.DeclaringType.Name;
+            }
+            return $"{typeName}.{memberInfo.Name}";
+        }
 
         internal static string FullName(this ParameterInfo parameterInfo, bool includeNamespace = false) =>
             includeNamespace

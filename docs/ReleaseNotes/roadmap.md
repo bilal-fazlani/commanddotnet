@@ -8,6 +8,8 @@ will result in breaking changes to behavior or the API.
 ### Features
 * default AppSettings.ExpandArgumentsInUsage to true.
 * default AppSettings.LongNameAlwaysDefaultsToSymbolName to true.
+* throw an exception when separated arguments are provided for a command that does not handle them.
+  * disable with AppSettings.___
 
 ### API
 * remove obsolete members

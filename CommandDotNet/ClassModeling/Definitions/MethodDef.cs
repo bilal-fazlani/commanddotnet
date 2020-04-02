@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 
@@ -21,9 +20,11 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         private ArgumentMode _argumentMode;
         private ParameterInfo _nextParameterInfo;
-        private List<ParameterInfo> _serviceParameters;
+        private readonly List<Action<CommandContext>> _resolvers = new List<Action<CommandContext>>();
 
         public MethodInfo MethodInfo { get; }
+
+        public bool HandlesSeparatedArguments { get; private set; }
 
         public IReadOnlyCollection<IArgumentDef> ArgumentDefs => EnsureInitialized(() => _argumentDefs);
 
@@ -73,10 +74,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 }
             }
 
-            _serviceParameters?.ForEach(p =>
-            {
-                _values[p.Position] = _appConfig.ParameterResolversByType[p.ParameterType](commandContext);
-            });
+            _resolvers?.ForEach(r => r(commandContext));
 
             return MethodInfo.Invoke(instance, _values);
         }
@@ -134,19 +132,28 @@ namespace CommandDotNet.ClassModeling.Definitions
                     value => _values[parameterInfo.Position] = value);
             }
 
-            if (_appConfig.ParameterResolversByType.ContainsKey(parameterInfo.ParameterType))
+            void AddResolver(Func<CommandContext, object> func)
             {
-                if(_serviceParameters == null)
-                {
-                    _serviceParameters = new List<ParameterInfo>();
-                }
-                _serviceParameters.Add(parameterInfo);
+                _resolvers.Add(context => _values[parameterInfo.Position] = func(context));
+            }
+
+            if (_appConfig.ParameterResolversByType.TryGetValue(parameterInfo.ParameterType, out var resolve))
+            {
+                AddResolver(resolve);
                 return Enumerable.Empty<IArgumentDef>();
             }
 
             if (IsExecutionDelegate(parameterInfo))
             {
                 _nextParameterInfo = parameterInfo;
+                return Enumerable.Empty<IArgumentDef>();
+            }
+
+            if (parameterInfo.HasAttribute<SeparatedArgumentsAttribute>())
+            {
+                HandlesSeparatedArguments = true;
+                ValidateSeparatedArgumentType(parameterInfo.ParameterType, parameterInfo.FullName(), true);
+                AddResolver(context => context.ParseResult.SeparatedArguments);
                 return Enumerable.Empty<IArgumentDef>();
             }
 
@@ -186,12 +193,33 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             return modelType
                 .GetDeclaredProperties()
-                .Select(p => new PropertyData(
-                    _appConfig.AppSettings.GuaranteeOperandOrderInArgumentModels,
-                    p,
-                    parentProperty,
-                    GetArgumentType(p, _argumentMode)))
+                .Select(p =>
+                {
+                    if (p.HasAttribute<SeparatedArgumentsAttribute>())
+                    {
+                        ValidateSeparatedArgumentType(p.PropertyType, p.FullName(), false);
+                        HandlesSeparatedArguments = true;
+                        _resolvers.Add(context => p.SetValue(instance, context.ParseResult.SeparatedArguments));
+                        return null;
+                    }
+                    return new PropertyData(
+                        _appConfig.AppSettings.GuaranteeOperandOrderInArgumentModels,
+                        p,
+                        parentProperty,
+                        GetArgumentType(p, _argumentMode));
+                })
+                .Where(p => p != null)
                 .SelectMany(propertyInfo => GetArgsFromProperty(propertyInfo, instance));
+        }
+
+        private static void ValidateSeparatedArgumentType(Type type, string name, bool isParameter)
+        {
+            if (!type.IsAssignableFrom(typeof(string[])))
+            {
+                throw new InvalidConfigurationException(
+                    $"{(isParameter ? "Parameter" : "Property")} '{name}' attributed with " +
+                    $"{nameof(SeparatedArgumentsAttribute)} must be assignable from string[]");
+            }
         }
 
         private static CommandNodeType GetArgumentType(ICustomAttributeProvider info, ArgumentMode argumentMode)

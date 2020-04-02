@@ -20,6 +20,7 @@ nav:
         - DefiningCommands/argument-arity.md
         - DefiningCommands/option-or-operand.md
         - DefiningCommands/passwords.md
+        - DefiningCommands/separated-arguments.md
       - Extensibility:
         - Extensibility/help.md
         - Extensibility/directives.md

@@ -42,6 +42,13 @@ namespace CommandDotNet.ClassModeling.Definitions
                 .Select(c => c.ToCommand(command, commandContext).Command)
                 .ForEach(commandBuilder.AddSubCommand);
 
+            command.HandlesSeparatedArguments =
+                command.IsExecutable
+                && (commandDef.InvokeMethodDef.HandlesSeparatedArguments
+                    || command.GetParentCommands(includeCurrent: true)
+                        .Select(c => c.Services.Get<ICommandDef>()?.InterceptorMethodDef)
+                        .Any(m => m != null && m.HandlesSeparatedArguments));
+
             commandContext.AppConfig.BuildEvents.CommandCreated(commandContext, commandBuilder);
 
             return commandBuilder;
