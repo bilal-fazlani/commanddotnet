@@ -30,11 +30,15 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public TestOutputs TestOutputs { get; }
 
-        public AppRunnerResult(int exitCode, TestConsole testConsole, TestOutputs testOutputs)
+        /// <summary>The <see cref="CommandContext"/> used during the run</summary>
+        public CommandContext CommandContext { get; }
+
+        public AppRunnerResult(int exitCode, TestConsole testConsole, TestOutputs testOutputs, CommandContext commandContext)
         {
             _testConsole = testConsole;
             ExitCode = exitCode;
             TestOutputs = testOutputs;
+            CommandContext = commandContext;
         }
 
         /// <summary>
