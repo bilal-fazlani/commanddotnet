@@ -161,7 +161,7 @@ To take advantage of many more additional features, such as
 [debug & parse directives](directives.md),
 [ctrl+c support](cancellation.md),
 [prompting](prompting.md),
-[piping](piped-arguments),
+[piping](piped-arguments.md),
 [response files](response-files.md) and [typo suggestions](typo-suggestions.md), add `UseDefaultMiddleware()`
 
 ```c#
