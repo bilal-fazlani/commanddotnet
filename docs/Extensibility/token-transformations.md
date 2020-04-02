@@ -23,7 +23,7 @@ appRunner.Configure(c => c.UseTokenTransformation(
     transformation: MyFunc));
 ```
 
-* __name__ is used for logging and the [Parse Directive](../../../directives)
+* __name__ is used for logging and the [Parse Directive](directives.md)
 * __order__ is the order the transformation should run in relation to other transformations.
 
 ## Tokens
