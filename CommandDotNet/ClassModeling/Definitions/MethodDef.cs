@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 
@@ -21,7 +20,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         private ArgumentMode _argumentMode;
         private ParameterInfo _nextParameterInfo;
-        private List<ParameterInfo> _serviceParameters;
+        private readonly List<Action<CommandContext>> _resolvers = new List<Action<CommandContext>>();
 
         public MethodInfo MethodInfo { get; }
 
@@ -73,10 +72,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 }
             }
 
-            _serviceParameters?.ForEach(p =>
-            {
-                _values[p.Position] = _appConfig.ParameterResolversByType[p.ParameterType](commandContext);
-            });
+            _resolvers?.ForEach(r => r(commandContext));
 
             return MethodInfo.Invoke(instance, _values);
         }
@@ -134,13 +130,9 @@ namespace CommandDotNet.ClassModeling.Definitions
                     value => _values[parameterInfo.Position] = value);
             }
 
-            if (_appConfig.ParameterResolversByType.ContainsKey(parameterInfo.ParameterType))
+            if (_appConfig.ParameterResolversByType.TryGetValue(parameterInfo.ParameterType, out var resolve))
             {
-                if(_serviceParameters == null)
-                {
-                    _serviceParameters = new List<ParameterInfo>();
-                }
-                _serviceParameters.Add(parameterInfo);
+                _resolvers.Add(context => _values[parameterInfo.Position] = resolve(context));
                 return Enumerable.Empty<IArgumentDef>();
             }
 
