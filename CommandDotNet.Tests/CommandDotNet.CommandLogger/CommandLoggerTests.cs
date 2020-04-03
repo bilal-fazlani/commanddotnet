@@ -172,6 +172,7 @@ AppConfig:
     expand-clubbed-flags(2147483647)
     split-option-assignments(2147483647)
   MiddlewarePipeline:
+    <>c__DisplayClass0_0.<CaptureState>b__1
     TokenizerPipeline.TokenizeInputMiddleware
     ClassModelingMiddleware.CreateRootCommand
     CommandParser.ParseInputMiddleware

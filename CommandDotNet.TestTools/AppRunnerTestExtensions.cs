@@ -29,6 +29,26 @@ namespace CommandDotNet.TestTools
             }, middlewareStage, orderWithinStage));
         }
 
+        /// <summary>
+        /// Convenience wrapper for <see cref="CaptureState"/> to capture state from the <see cref="CommandContext"/>
+        /// </summary>
+        public static T GetFromContext<T>(this AppRunner runner,
+            string[] args,
+            ILogger logger,
+            Func<CommandContext, T> capture,
+            MiddlewareStages middlewareStage = MiddlewareStages.PostBindValuesPreInvoke,
+            int? orderWithinStage = null)
+        {
+            T state = default;
+            runner.CaptureState(
+                    ctx => state = capture(ctx),
+                    exitAfterCapture: true,
+                    middlewareStage: middlewareStage,
+                    orderWithinStage: orderWithinStage)
+                .RunInMem(args, logger);
+            return state;
+        }
+
         /// <summary>Run the console in memory and get the results that would be output to the shell</summary>
         public static AppRunnerResult RunInMem(this AppRunner runner,
             string[] args,
@@ -47,6 +67,8 @@ namespace CommandDotNet.TestTools
                         ? (Func<TestConsole, ConsoleKeyInfo>) null
                         : promptResponder.OnReadKey);
 
+                CommandContext context = null;
+                runner.CaptureState(ctx => context = ctx, MiddlewareStages.PreTokenize);
                 runner.Configure(c => c.Console = testConsole);
                 var outputs = InjectTestOutputs(runner);
 
@@ -60,7 +82,7 @@ namespace CommandDotNet.TestTools
                 {
                     var exitCode = runner.Run(args);
                     LogResult();
-                    return new AppRunnerResult(exitCode, testConsole, outputs);
+                    return new AppRunnerResult(exitCode, testConsole, outputs, context);
                 }
                 catch (Exception e)
                 {
@@ -70,7 +92,7 @@ namespace CommandDotNet.TestTools
                         logger.WriteLine(e.Message);
                         logger.WriteLine(e.StackTrace);
                         LogResult();
-                        return new AppRunnerResult(1, testConsole, outputs);
+                        return new AppRunnerResult(1, testConsole, outputs, context);
                     }
 
                     LogResult();

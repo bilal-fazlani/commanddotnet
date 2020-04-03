@@ -67,6 +67,7 @@ namespace CommandDotNet.Parsing
                                     break;
                                 case ParseOperandResult.UnexpectedArgument:
                                     ignoreRemainingArguments = true;
+                                    remainingOperands.Add(token);
                                     break;
                                 case ParseOperandResult.NewSubCommand:
                                     operands = new OperandEnumerator(currentCommand.Operands);

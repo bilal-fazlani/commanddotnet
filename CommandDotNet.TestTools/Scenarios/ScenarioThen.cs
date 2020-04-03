@@ -21,7 +21,7 @@ namespace CommandDotNet.TestTools.Scenarios
         /// If specified, asserts all of the outputs are captured in the <see cref="TestOutputs"/>.
         /// And asserts no additional outputs were captured unless <see cref="AllowUnspecifiedOutputs"/> is true.
         /// </summary>
-        public List<object> Outputs { get; } = new List<object>();
+        public List<object> Outputs { get; set; } = new List<object>();
 
         /// <summary>When specified, asserts the given text segments are contained in the <see cref="Result"/></summary>
         public List<string> ResultsContainsTexts { get; set; } = new List<string>();

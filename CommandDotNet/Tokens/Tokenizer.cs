@@ -90,13 +90,15 @@ namespace CommandDotNet.Tokens
                 {
                     yield return new Token(arg, arg, TokenType.Value){SourceName = sourceName};
                 }
+                else
+                {
+                    var token = Tokenize(arg, includeDirectives, sourceName);
 
-                var token = Tokenize(arg, includeDirectives, sourceName);
+                    includeDirectives = includeDirectives && token.TokenType == TokenType.Directive;
+                    foundSeparator = token.TokenType == TokenType.Separator;
 
-                includeDirectives = includeDirectives && token.TokenType == TokenType.Directive;
-                foundSeparator = token.TokenType == TokenType.Separator;
-
-                yield return token;
+                    yield return token;
+                }
             }
         }
     }
