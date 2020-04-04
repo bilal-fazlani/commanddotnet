@@ -34,6 +34,11 @@ namespace CommandDotNet
             writer.Write(Environment.NewLine);
         }
 
+        public static void WriteLine(this IStandardStreamWriter writer, object value)
+        {
+            WriteLine(writer, value?.ToString());
+        }
+
         public static void WriteLine(this IStandardStreamWriter writer, string value)
         {
             if (writer == null)
@@ -43,6 +48,11 @@ namespace CommandDotNet
 
             writer.Write(value);
             writer.Write(Environment.NewLine);
+        }
+
+        public static void Write(this IStandardStreamWriter writer, object value)
+        {
+            writer.Write(value?.ToString());
         }
 
         private class AnonymousStandardStreamWriter : IStandardStreamWriter
