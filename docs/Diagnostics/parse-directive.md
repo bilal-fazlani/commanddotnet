@@ -63,6 +63,11 @@ To provide this mapping, the middleware pipeline must progress to the BindValues
 
 If that stage is not reached, the parse directive will fall back to printing just the token transformations.
 
+## Token Transformations
+
+!!!Warning
+    Passwords entered from the shell (not via prompts) can be exposed in token transformations if CommandDotNet was not able to map them to an argument and determine they should be obscured. 
+
 ```bash
 ~
 $ dotnet example.dll [parse] LaunchRocket mars earth jupiter @flight-plan.rsp

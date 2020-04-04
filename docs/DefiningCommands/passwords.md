@@ -19,6 +19,10 @@ public class Api
 
 ```
 
+
+!!!Warning
+    The best practice is not to require a password. This is *only slightly* more secure than using a string. For example, if the user provides a password as one of input arguments, it may be logged via [parse token transformations](parse-directive.md#token-transformations)
+
 ## Prompting
 
 When using `Password` with the built-in [prompting features](../Middleware/prompting.md), password prompts will hide all characters.
