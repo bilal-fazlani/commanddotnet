@@ -16,7 +16,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         }
 
         [Fact]
-        public void GivenOperandValueWithDash_FailsWithUnrecognizedOption()
+        public void Given_ParseSeparatedArgumentsFalse_OperandValueWithDash_FailsWithUnrecognizedOption()
         {
             new AppRunner<Math>()
                 .VerifyScenario(_output, new Scenario
@@ -31,9 +31,40 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         }
 
         [Fact]
-        public void GivenOperandValueWithDash_AndArgumentSeparator_Succeeds()
+        public void Given_ParseSeparatedArgumentsTrue_OperandValueWithDash_FailsWithUnrecognizedOption()
+        {
+            var appSettings = new AppSettings { ParseSeparatedArguments = true };
+            new AppRunner<Math>(appSettings)
+                .VerifyScenario(_output, new Scenario
+                {
+                    WhenArgs = "Add -1 -3",
+                    Then =
+                    {
+                        ExitCode = 1,
+                        ResultsContainsTexts = { "Unrecognized option '-1'" }
+                    }
+                });
+        }
+
+        [Fact]
+        public void Given_ParseSeparatedArgumentsFalse_OperandValueWithDash_AndArgumentSeparator_OperandsAreIgnored()
         {
             var result = new AppRunner<Math>()
+                .VerifyScenario(_output, new Scenario
+                {
+                    WhenArgs = "Add -- -1 -3",
+                    Then = { Result = "0" }
+                });
+
+            result.CommandContext.ParseResult.SeparatedArguments
+                .Should().BeEquivalentTo(new[] { "-1", "-3" });
+        }
+
+        [Fact]
+        public void Given_ParseSeparatedArgumentsTrue_OperandValueWithDash_AndArgumentSeparator_OperandsAreParsed()
+        {
+            var appSettings = new AppSettings {ParseSeparatedArguments = true};
+            var result = new AppRunner<Math>(appSettings)
                 .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "Add -- -1 -3",
@@ -45,9 +76,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         }
 
         [Fact]
-        public void GivenOperandValueWithDash_AndArgumentSeparator_ExtraArgsAreIgnoredAndCaptured()
+        public void Given_ParseSeparatedArgumentsTrue_And_IgnoreUnexpectedOperandsTrue_OperandValueWithDash_AndArgumentSeparator_OperandsAreParsed_And_ExtraArgsAreIgnoredAndCaptured()
         {
-            var result = new AppRunner<Math>(new AppSettings { IgnoreUnexpectedOperands = true })
+            var appSettings = new AppSettings {IgnoreUnexpectedOperands = true, ParseSeparatedArguments = true};
+            var result = new AppRunner<Math>(appSettings)
                 .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "Add -- -1 -3 -5 -7",

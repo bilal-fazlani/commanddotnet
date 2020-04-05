@@ -40,7 +40,12 @@ namespace CommandDotNet.Parsing
             Token currentOptionToken = null;
             IEnumerator<Operand> operands = new OperandEnumerator(currentCommand.Operands);
 
-            var tokens = commandContext.Tokens.Arguments.Concat(commandContext.Tokens.Separated);
+            IEnumerable<Token> tokens = commandContext.Tokens.Arguments;
+            
+            if (_appSettings.ParseSeparatedArguments)
+            {
+                tokens = tokens.Concat(commandContext.Tokens.Separated);
+            }
 
             foreach (var token in tokens)
             {

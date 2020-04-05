@@ -1,6 +1,7 @@
 ﻿using System;
 using CommandDotNet.Extensions;
 using CommandDotNet.Help;
+using CommandDotNet.Parsing;
 using CommandDotNet.Tokens;
 using CommandDotNet.TypeDescriptors;
 
@@ -35,10 +36,16 @@ namespace CommandDotNet
         public bool LongNameAlwaysDefaultsToSymbolName { get; set; }
 
         /// <summary>
-        /// When false, unexpected arguments will result in a parse failure with help message.<br/>
-        /// When true, unexpected arguments will be ignored
+        /// When false, unexpected operands will generate a parse failure.<br/>
+        /// When true, unexpected arguments will ignored and added to <see cref="ParseResult.RemainingOperands"/><br/>
         /// </summary>
         public bool IgnoreUnexpectedOperands { get; set; }
+
+        /// <summary>
+        /// Arguments after the argument separator '--' are added to <see cref="ParseResult.SeparatedArguments"/><br/>
+        /// When true, the arguments will be parsed as operands and also added to <see cref="ParseResult.SeparatedArguments"/>
+        /// </summary>
+        public bool ParseSeparatedArguments { get; set; }
 
         /// <summary>
         /// When arguments are not decorated with [Operand] or [Option]
