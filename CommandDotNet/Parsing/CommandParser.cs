@@ -41,11 +41,12 @@ namespace CommandDotNet.Parsing
             IEnumerator<Operand> operands = new OperandEnumerator(currentCommand.Operands);
 
             IEnumerable<Token> tokens = commandContext.Tokens.Arguments;
-            
-            if (_appSettings.ParseSeparatedArguments)
-            {
-                tokens = tokens.Concat(commandContext.Tokens.Separated);
-            }
+
+            // using TakeWhile ensures we're evaluating ParseSeparatedArguments
+            // with the final command. We know this because separated arguments
+            // can only contain operands.
+            tokens = tokens.Concat(commandContext.Tokens.Separated
+                .TakeWhile(t => currentCommand.ParseSeparatedArguments ?? _appSettings.ParseSeparatedArguments)            );
 
             foreach (var token in tokens)
             {

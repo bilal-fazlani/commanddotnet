@@ -77,6 +77,13 @@ namespace CommandDotNet
         /// <summary>The aliases defined for this command</summary>
         public IReadOnlyCollection<string> Aliases { get; }
 
+        /// <summary>
+        /// Overrides <see cref="AppSettings.ParseSeparatedArguments"/><br/>
+        /// Arguments after the argument separator '--' are added to <see cref="ParseResult.SeparatedArguments"/><br/>
+        /// When true, the arguments will be parsed as operands and also added to <see cref="ParseResult.SeparatedArguments"/>
+        /// </summary>
+        public bool? ParseSeparatedArguments { get; set; }
+
         /// <summary>The source that defined this command</summary>
         public string DefinitionSource { get; }
 

@@ -37,7 +37,7 @@ namespace CommandDotNet
 
         /// <summary>
         /// When false, unexpected operands will generate a parse failure.<br/>
-        /// When true, unexpected arguments will ignored and added to <see cref="ParseResult.RemainingOperands"/><br/>
+        /// When true, unexpected arguments will be ignored and added to <see cref="ParseResult.RemainingOperands"/><br/>
         /// </summary>
         public bool IgnoreUnexpectedOperands { get; set; }
 
