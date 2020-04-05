@@ -143,7 +143,7 @@ namespace CommandDotNet.Parsing
             }
             else
             {
-                if (_appSettings.IgnoreUnexpectedOperands)
+                if (command.IgnoreUnexpectedOperands ?? _appSettings.IgnoreUnexpectedOperands)
                 {
                     return ParseOperandResult.UnexpectedArgument;
                 }

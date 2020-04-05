@@ -26,6 +26,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 command.Description = commandAttribute.Description;
                 command.Usage = commandAttribute.Usage;
                 command.ExtendedHelpText = commandAttribute.ExtendedHelpText;
+                command.IgnoreUnexpectedOperands = commandAttribute.IgnoreUnexpectedOperandsAsNullable;
                 command.ParseSeparatedArguments = commandAttribute.ParseSeparatedArgumentsAsNullable;
             }
 

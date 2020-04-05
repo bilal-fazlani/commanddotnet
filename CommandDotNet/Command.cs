@@ -9,6 +9,7 @@ using CommandDotNet.Builders;
 using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
+using CommandDotNet.Parsing;
 
 namespace CommandDotNet
 {
@@ -76,6 +77,13 @@ namespace CommandDotNet
 
         /// <summary>The aliases defined for this command</summary>
         public IReadOnlyCollection<string> Aliases { get; }
+
+        /// <summary>
+        /// Overrides <see cref="AppSettings.IgnoreUnexpectedOperands"/><br/>
+        /// When false, unexpected operands will generate a parse failure.<br/>
+        /// When true, unexpected arguments will be ignored and added to <see cref="ParseResult.RemainingOperands"/><br/>
+        /// </summary>
+        public bool? IgnoreUnexpectedOperands { get; set; }
 
         /// <summary>
         /// Overrides <see cref="AppSettings.ParseSeparatedArguments"/><br/>
