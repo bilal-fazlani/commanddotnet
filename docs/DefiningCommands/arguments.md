@@ -9,7 +9,7 @@ As discussed in [Terminology](argument-terminology.md), Option and Operand are t
 
 By default, arguments are operands. Change the default by assigning `#!c# AppSettings.DefaultArgumentMode = ArgumentMode.Option`
 
-Use the `[Operand]` and `[Option]` attributes to explicity denote which argument type and configure the arguments.
+Use the `[Operand]` and `[Option]` attributes to explicity denote which argument type and to configure the arguments.
 
 !!!Tip
     See [Option vs Operand](option-or-operand.md) for recommendations on when to use one vs the other.
