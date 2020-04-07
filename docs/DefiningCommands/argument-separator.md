@@ -128,4 +128,4 @@ When `Random -- -1 __ 2 3`
 
 This diagram shows how the parser handles options and operands based on settings.
 
-![Argument Parse Behavior](ArgumentParseBehavior.png)
+![Argument Parse Behavior](./../diagrams/ArgumentParseBehavior.png)
