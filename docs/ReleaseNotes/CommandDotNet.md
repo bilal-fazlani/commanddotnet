@@ -8,7 +8,21 @@
 
 Make CommandLogger a public class so commands, interceptors and middleware can run it directly.
 
-This makes the last pattern in the [command-logger.md] help possible, using an interceptor option to trigger the log.
+This makes the last pattern in the [Command Logger](command-logger.md) help possible, using an interceptor option to trigger the log.
+
+### API
+
+#### Console Write___ extension methods
+
+Write an object to Console.Out and Console.Error.  The object will be converted to string.
+
+* `Write(this IStandardStreamWriter writer, object value)`
+* `WriteLine(this IStandardStreamWriter writer, object value)`
+
+Use `console.Write` and `console.WriteLine` to write to console.Out.
+
+* `Write(this IConsole console, object value)`
+* `WriteLine(this IConsole console, object value)`
 
 ## 3.5.1
 
