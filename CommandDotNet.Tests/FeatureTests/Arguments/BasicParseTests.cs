@@ -1,5 +1,7 @@
 using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -106,17 +108,63 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         }
 
         [Fact]
-        public void ExtraArgumentsNotAllowed()
+        public void Given_IgnoreExtraOperands_DisabledByAppSetting_Parse_ThrowsUnrecognized()
         {
-            Verify(new Scenario<App>
-            {
-                WhenArgs = "Add 2 3 4",
-                Then =
+            var results = new AppRunner<App>()
+                .VerifyScenario(base.TestOutputHelper, new Scenario
                 {
-                    ExitCode = 1,
-                    ResultsContainsTexts = { "Unrecognized command or argument '4'" }
-                }
-            });
+                    WhenArgs = "Add 2 3 4",
+                    Then =
+                    {
+                        ExitCode = 1,
+                        ResultsContainsTexts = { "Unrecognized command or argument '4'" }
+                    }
+                });
+
+            results.CommandContext.ParseResult.RemainingOperands.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void Given_IgnoreExtraOperands_DisabledByCommand_Parse_ThrowsUnrecognized()
+        {
+            var results = new AppRunner<App>(new AppSettings { IgnoreUnexpectedOperands = true })
+                .VerifyScenario(base.TestOutputHelper, new Scenario
+                {
+                    WhenArgs = "Add_DisabledIgnore 2 3 4",
+                    Then =
+                    {
+                        ExitCode = 1,
+                        ResultsContainsTexts = { "Unrecognized command or argument '4'" }
+                    }
+                });
+
+            results.CommandContext.ParseResult.RemainingOperands.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void Given_IgnoreExtraOperands_EnabledByAppSettings_CollectsRemaining()
+        {
+            var results = new AppRunner<App>(new AppSettings { IgnoreUnexpectedOperands = true })
+                .VerifyScenario(base.TestOutputHelper, new Scenario
+                {
+                    WhenArgs = "Add 2 3 4",
+                    Then = { Outputs = { new App.AddResults { X = 2, Y = 3, Op = "+" } } }
+                });
+
+            results.CommandContext.ParseResult.RemainingOperands.Should().BeEquivalentTo(new[] { "4" });
+        }
+
+        [Fact]
+        public void Given_IgnoreExtraOperands_EnabledByCommand_CollectsRemaining()
+        {
+            var results = new AppRunner<App>()
+                .VerifyScenario(base.TestOutputHelper, new Scenario
+                {
+                    WhenArgs = "Add_EnabledIgnore 2 3 4",
+                    Then = { Outputs = { new App.AddResults { X = 2, Y = 3 } } }
+                });
+
+            results.CommandContext.ParseResult.RemainingOperands.Should().BeEquivalentTo(new[] { "4" });
         }
 
         public class App
@@ -132,6 +180,18 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 string operation = "+")
             {
                 TestOutputs.Capture(new AddResults { X = x, Y = y, Op = operation });
+            }
+
+            [Command(IgnoreUnexpectedOperands = true)]
+            public void Add_EnabledIgnore(int x, int y)
+            {
+                TestOutputs.Capture(new AddResults { X = x, Y = y });
+            }
+
+            [Command(IgnoreUnexpectedOperands = false)]
+            public void Add_DisabledIgnore(int x, int y)
+            {
+                TestOutputs.Capture(new AddResults { X = x, Y = y });
             }
 
             public void Do([Operand] string arg)
