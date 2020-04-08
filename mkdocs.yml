@@ -60,9 +60,12 @@ nav:
     - Roadmap: 
       - ReleaseNotes/roadmap.md
 theme:
-  feature:
-    tabs: true
+  features:
+    - tabs
+    - instant
   name: 'material'
+  icon:
+    repo: fontawesome/brands/github
   favicon: 'img/favicon.ico'
   palette:
     primary: 'black'
@@ -91,6 +94,7 @@ markdown_extensions:
   - pymdownx.mark
   - pymdownx.smartsymbols
   - pymdownx.superfences
+  - pymdownx.tabbed
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.tilde
@@ -105,9 +109,9 @@ plugins:
 # Customization
 extra:
   social:
-    - type: 'github'
+    - icon: fontawesome/brands/github
       link: 'https://github.com/bilal-fazlani'
-    - type: 'twitter'
+    - icon: fontawesome/brands/twitter
       link: 'https://twitter.com/bilal_fazlani'
-    - type: 'linkedin'
+    - icon: fontawesome/brands/linkedin
       link: 'https://www.linkedin.com/in/bilal-fazlani/'

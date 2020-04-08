@@ -4,14 +4,19 @@
 
 CommandDotNet can be installed from [nuget.org](https://www.nuget.org/packages/CommandDotNet/)
 
-``` bash tab=".NET CLI"
-dotnet add package CommandDotNet
-```
+=== ".NET CLI"
 
-``` bash tab="Nuget Package Manager"
-Install-Package CommandDotNet
-```
+    ```
+    dotnet add package CommandDotNet
+    ```
 
+
+=== "Nuget Package Manager"
+
+    ```
+    Install-Package CommandDotNet
+    ```
+    
 ## Let's build a calculator
 
 Let's say you want to create a calculator console application which can perform 2 operations:
