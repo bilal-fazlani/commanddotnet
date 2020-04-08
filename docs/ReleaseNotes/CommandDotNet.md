@@ -1,6 +1,6 @@
 # CommandDotNet
 
-## 3.5.2
+## 3.6.0
 
 ### Feature
 
