@@ -1,4 +1,6 @@
-﻿namespace CommandDotNet.Execution
+﻿using System;
+
+namespace CommandDotNet.Execution
 {
     public static class MiddlewareSteps
     {
@@ -65,8 +67,23 @@
         /// <summary>Runs at the end of the <see cref="MiddlewareStages.ParseInput"/> stage</summary>
         public static class Help
         {
-            public static readonly MiddlewareStages Stage = MiddlewareStages.ParseInput;
-            public static readonly int Order = int.MaxValue;
+            [Obsolete("use Help.CheckIfShouldShowHelp or Help.PrintHelp")]
+            public static readonly MiddlewareStages Stage = CheckIfShouldShowHelp.Stage;
+
+            [Obsolete("use Help.CheckIfShouldShowHelp or Help.PrintHelp")]
+            public static readonly int Order = CheckIfShouldShowHelp.Order;
+
+            public static class CheckIfShouldShowHelp
+            {
+                public static readonly MiddlewareStages Stage = MiddlewareStages.ParseInput;
+                public static readonly int Order = int.MaxValue;
+            }
+
+            public static class PrintHelp
+            {
+                public static readonly MiddlewareStages Stage = MiddlewareStages.PreTokenize;
+                public static readonly int Order = -10000;
+            }
         }
 
         public static class PipedInput

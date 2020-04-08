@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CommandDotNet.Extensions;
 
@@ -95,5 +96,35 @@ namespace CommandDotNet
         /// <summary>Returns the input values for the argument with the given alias or null</summary>
         public static ICollection<InputValue> FindInputValues(this Command command, string alias) => 
             command.FindArgumentNode(alias) is IArgument argument ? argument.InputValues : null;
+
+        /// <summary>
+        /// Return the effective IgnoreUnexpectedOperands using the default
+        /// from <see cref="AppSettings.IgnoreUnexpectedOperands"/>
+        /// when <see cref="Command.IgnoreUnexpectedOperands"/> is not set.
+        /// </summary>
+        public static bool GetIgnoreUnexpectedOperands(this Command command, AppSettings appSettings)
+        {
+            if (appSettings == null)
+            {
+                throw new ArgumentNullException(nameof(appSettings));
+            }
+
+            return command?.IgnoreUnexpectedOperands ?? appSettings.IgnoreUnexpectedOperands;
+        }
+
+        /// <summary>
+        /// Return the effective <see cref="ArgumentSeparatorStrategy"/> using the default
+        /// from <see cref="AppSettings.DefaultArgumentSeparatorStrategy"/>
+        /// when <see cref="Command.ArgumentSeparatorStrategy"/> is not set.
+        /// </summary>
+        public static ArgumentSeparatorStrategy GetArgumentSeparatorStrategy(this Command command, AppSettings appSettings)
+        {
+            if (appSettings == null)
+            {
+                throw new ArgumentNullException(nameof(appSettings));
+            }
+
+            return command?.ArgumentSeparatorStrategy ?? appSettings.DefaultArgumentSeparatorStrategy;
+        }
     }
 }

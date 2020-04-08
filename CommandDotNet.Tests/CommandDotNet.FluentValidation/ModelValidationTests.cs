@@ -167,6 +167,32 @@ This exception could also occur if default constructor threw an exception",
                 .VerifyScenario(TestOutputHelper, scenario);
         }
 
+        [Fact]
+        public void Exec_IfShowHelpOnError_ShowsHelpAfterValidationMessage()
+        {
+            var scenario = new Scenario
+            {
+                WhenArgs = "Save",
+                Then =
+                {
+                    ExitCode = 2,
+                    ResultsContainsTexts =
+                    {
+                        @"'Person' is invalid
+  'Id' must be greater than '0'.
+  'Name' should not be empty.
+  'Email' should not be empty.
+
+Usage: dotnet testhost.dll Save [arguments]"
+                    }
+                }
+            };
+
+            new AppRunner<App>()
+                .UseFluentValidation(showHelpOnError: true)
+                .VerifyScenario(TestOutputHelper, scenario);
+        }
+
         public class App
         {
             public TestOutputs TestOutputs { get; set; }

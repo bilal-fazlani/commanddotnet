@@ -116,3 +116,19 @@ The first and simplest option is to inherit from `HelpTextProvider` and override
 The second option is to implement a new [IHelpProvider](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Help/IHelpProvider.cs).
 
 Configure the provider with: `appRunner.Configure(b => b.CustomHelpProvider = new MyHelpProvider());`
+
+## Printing Help
+
+There are two ways to print help, and both require an instance of `CommandContext`.
+
+### ShowHelpOnExit
+
+Set `CommandContext.ShowHelpOnExit = true` to let the middleware print the help. This will be the last output for the context. 
+
+Help will not print if an exceptions the middleware.
+
+### PrintHelp()
+
+The `ctx.PrintHelp()` extension method, available using `CommandDotNet.Help` namespace, will print help for the target command.
+
+If a target command was not determined, then help will print for the root command.

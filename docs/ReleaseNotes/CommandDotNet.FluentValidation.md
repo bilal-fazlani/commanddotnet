@@ -1,5 +1,9 @@
 # CommandDotNet.FluentValidation
 
+## 2.0.2
+
+Add `showHelpOnError` parameter to show help after validation errors
+
 ## 2.0.1
 
 improve stack traces with AppOutputBase and PathMap project settings

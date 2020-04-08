@@ -1,6 +1,8 @@
 # Argument Collections
 
-Let's enhance our rocket launcher to support multiple planets.
+With CommandDotNet, you can define a single Operand collection and many Option collections.
+
+Let's enhance our rocket launcher to visit multiple planets and specify a crew.
 
 ```c#
 public void LaunchRocket(
@@ -8,7 +10,7 @@ public void LaunchRocket(
     [Option(ShortName = "c", LongName = "crew")] string[] crew)
 ```
 
-This is what help information looks like
+Help looks like...
 
 ```bash
 ~
@@ -30,7 +32,7 @@ And this is how you call it
 dotnet example.dll LaunchRocket mars earth jupiter -c aaron -c alex
 ```
 
-and since options are not positional, they can be intermixed with arguments.
+and since options are not positional, they can be intermixed with operands.
 
 ```bash
 dotnet example.dll LaunchRocket mars -c aaron earth -c alex jupiter
@@ -40,11 +42,24 @@ planets: mars,earch,jupiter
 crew: aaron,alex
 ```
 
-!!!Caveat
-    There can be only 1 operand list per command, but you can have many option lists.
+## Operand Collections
+
+Only one collection is supported because it is not possible to determine which collection an operand belonged to if there were many.
+
+Operand collections must the be the last operand specified.
+
+## Option Collections
+
+Since options are named, you can have multiple option collections. Specify the option name for each entry as shown in the example above.
 
 ## Piping
 
 CommandDotNet provides middleware [to pipe input to operand collections](../Middleware/piped-arguments.md).
 
 If your parameter type is `IEnumerable<T>`, the operands will be streamed into the command.
+
+## Prompts
+
+See [prompting for missing arguments](prompting.md#prompting-for-missing-arguments) to see how prompting for collections works.
+
+[Replace the default prompter](prompting.md#prompting-from-within-the-command-method) to provide a different experience.

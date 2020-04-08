@@ -106,39 +106,9 @@ Username      = {Environment.UserDomainName}\{Environment.UserName}
         [Fact]
         public void AppConfig_CanBe_Shown()
         {
-            new AppRunner<App>()
-                .UseCommandLogger(excludeSystemInfo: true, includeAppConfig:true)
-                .VerifyScenario(_testOutputHelper, new Scenario
-                {
-                    WhenArgs = "[cmdlog] Do",
-                    Then =
-                    {
-                        Result = $@"
-***************************************
-Original input:
-  [cmdlog] Do
+            #region example AppConfig output
 
-command: Do
-
-arguments:
-
-  textOperand <Text>
-    value:
-    inputs:
-    default:
-
-options:
-
-  textOption <Text>
-    value:
-    inputs:
-    default:
-
-  password <Text>
-    value:
-    inputs:
-    default:
-
+            /*
 AppConfig:
   AppSettings:
     ArgumentTypeDescriptors: ArgumentTypeDescriptors:
@@ -187,7 +157,27 @@ AppConfig:
     CommandDotNet.CommandContext
     CommandDotNet.Rendering.IConsole
     System.Threading.CancellationToken
-***************************************"
+             */
+
+            #endregion
+
+            new AppRunner<App>()
+                .UseCommandLogger(excludeSystemInfo: true, includeAppConfig: true)
+                .VerifyScenario(_testOutputHelper, new Scenario
+                {
+                    WhenArgs = "[cmdlog] Do",
+                    Then =
+                    {
+                        ResultsContainsTexts =
+                        {
+                            "AppConfig:",
+                            "  AppSettings:",
+                            "  DependencyResolver:",
+                            "  HelpProvider:",
+                            "  TokenTransformations:",
+                            "  MiddlewarePipeline:",
+                            "  ParameterResolvers:"
+                        }
                     }
                 });
         }

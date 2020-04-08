@@ -40,7 +40,35 @@ namespace CommandDotNet.Parsing
             Token currentOptionToken = null;
             IEnumerator<Operand> operands = new OperandEnumerator(currentCommand.Operands);
 
-            foreach (var token in commandContext.Tokens.Arguments)
+            IEnumerable<Token> tokens = commandContext.Tokens.Arguments;
+
+            // using TakeWhile ensures we're evaluating ParseSeparatedArguments
+            // with the final command. We know this because separated arguments
+            // can only contain operands.
+            bool UsingEndOfOptions()
+            {
+                var separatorStrategy = currentCommand.GetArgumentSeparatorStrategy(_appSettings);
+                return separatorStrategy == ArgumentSeparatorStrategy.EndOfOptions;
+            }
+
+            IEnumerable<Token> EndOfOptionsTokens()
+            {
+                if (!UsingEndOfOptions())
+                {
+                    yield break;
+                }
+                foreach (var token in commandContext.Tokens.Separated)
+                {
+                    yield return token;
+                }
+            }
+
+
+            //tokens = tokens.Concat(EndOfOptionsTokens());
+
+            tokens = tokens.Concat(commandContext.Tokens.Separated.TakeWhile(t => UsingEndOfOptions()));
+
+            foreach (var token in tokens)
             {
                 switch (token.TokenType)
                 {
@@ -92,7 +120,7 @@ namespace CommandDotNet.Parsing
             }
 
             commandContext.ParseResult = new ParseResult(
-                currentCommand, 
+                currentCommand,
                 remainingOperands,
                 commandContext.Tokens.Separated);
         }
@@ -104,8 +132,8 @@ namespace CommandDotNet.Parsing
             NewSubCommand
         }
 
-        private ParseOperandResult ParseArgumentValue(Token token, 
-            ref Command command, ref Option currentOption, ref Token currentOptionToken, 
+        private ParseOperandResult ParseArgumentValue(Token token,
+            ref Command command, ref Option currentOption, ref Token currentOptionToken,
             IEnumerator<Operand> operands)
         {
             if (currentOption != null)
@@ -135,7 +163,7 @@ namespace CommandDotNet.Parsing
             }
             else
             {
-                if (_appSettings.IgnoreUnexpectedOperands)
+                if (command.GetIgnoreUnexpectedOperands(_appSettings))
                 {
                     return ParseOperandResult.UnexpectedArgument;
                 }
@@ -165,7 +193,7 @@ namespace CommandDotNet.Parsing
             {
                 throw new AppRunnerException($"SplitOptionAssignments transformation should have split values from all option tokens: {token}");
             }
-            if(option.Arity.AllowsNone())
+            if (option.Arity.AllowsNone())
             {
                 TryAddValue(option, null, token);
                 option = null;

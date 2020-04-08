@@ -1,6 +1,6 @@
 # CommandDotNet.TestTools
 
-## 1.1.1 (next)
+## 1.1.1
 
 RunInMem will print the stacktrace for of a caught exception before returning the error response, otherwise the stacktrace is lost.
 

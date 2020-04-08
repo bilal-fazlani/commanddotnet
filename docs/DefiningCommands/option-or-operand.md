@@ -21,7 +21,7 @@ Disadvantages
 Consider how often users will be using these commands. If use will generally be from scripts and automation, use all options for backward compatibility.
 
 ## Operand as "what", Option as "how"
-This approach that can lead to a more elegant design of your commands. 
+This approach can lead to a more elegant design of your commands. 
 
 Consider [operands as *"what"*](https://en.wikipedia.org/wiki/Operand) the command operates on and options as *"how"* the command operates on them, as described in [this article](http://www.informit.com/articles/article.aspx?p=175771).
 
@@ -35,9 +35,12 @@ public void Add(int x, int y, [Option] int? radix)
 ```
 
 The exercise of distinguishing *what* vs *how* can bring clarity to your separation of concerns, leading to a cleaner interface.
-e.g. Identifying `--radix` as a *"how"* makes it an obvious candidate to promote to a parent command as shown in [interceptors](../Extensibility/interceptors.md) example.
+e.g. Identifying `--radix` as a *"how"* makes it an obvious candidate to promote to a parent command as shown in [interceptors](../Extensibility/interceptors.md) example and then it is available for other math operations.
 
 ## Optional Operands
 
-Optional operands are a muddy topic. As a general rule, for simplicity, define them as options on the command. This is especially true if there is more than one. 
-This framework will assign positional arguments in the order they are received so if a user skipped the first optional operand and provided a value for the second one, the framework would still assign the value to the first one because it cannot understand the users intent. By defining these as options, users can specify intent with the name. This is similar to how C# uses optional parameters.
+Optional operands are a muddy topic. As a general rule, for simplicity, define them as options on the command. This is especially true if there are multiple. 
+
+This framework will assign positional arguments in the order they are specified in the shell so if a user skipped the first optional operand and provided a value for the second one, the framework would still assign the value to the first one because it cannot understand the users intent.
+
+By defining these as options, users can specify intent with the name. This is similar to how C# uses optional parameters.

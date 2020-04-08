@@ -44,7 +44,7 @@ When the return type is `int` the value is used as the exit code.
 
 Every public method will be interpreted as a command and the command name will be the method name.
 
-Use the `[Command]` attribute to change the command name and enhance help output.
+Use the `[Command]` attribute to change the command name, enhance help output and provide parser hints.
 
 ```c#
 public class Calculator
@@ -60,15 +60,10 @@ public class Calculator
 }
 ```
 
-INPUT
-
 ```bash
-dotnet example.dll Add --help
-```
+~
+$ dotnet add.dll Add --help
 
-OUTPUT
-
-```bash
 dotnet example.dll sum -h
 sums two numbers
 
@@ -83,6 +78,8 @@ Arguments:
 more details and examples
 
 ```
+
+Use `IgnoreUnexpectedOperands` & `ArgumentSeparatorStrategy` to override argument parsing behavior for the command. See [Argument Separator](argument-separator.md) for more details.
 
 ## Default Method
 

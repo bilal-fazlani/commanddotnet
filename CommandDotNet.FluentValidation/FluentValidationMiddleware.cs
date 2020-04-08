@@ -7,17 +7,32 @@ namespace CommandDotNet.FluentValidation
     public static class FluentValidationMiddleware
     {
         /// <summary>Enables FluentValidation for <see cref="IArgumentModel"/>s</summary>
-        public static AppRunner UseFluentValidation(this AppRunner appRunner)
+        /// <param name="appRunner">the <see cref="AppRunner"/></param>
+        /// <param name="showHelpOnError">when true, help will be display for the target command after the validation errors</param>
+        public static AppRunner UseFluentValidation(this AppRunner appRunner, bool showHelpOnError = false)
         {
             return appRunner.Configure(c =>
-                c.UseMiddleware(Middleware, MiddlewareStages.PostBindValuesPreInvoke));
+            {
+                c.Services.Add(new Config(showHelpOnError));
+                c.UseMiddleware(Middleware, MiddlewareStages.PostBindValuesPreInvoke);
+            });
         }
 
-        private static Task<int> Middleware(CommandContext commandContext, ExecutionDelegate next)
+        private class Config
         {
-            var modelValidator = new ModelValidator(commandContext.AppConfig.DependencyResolver);
+            public bool ShowHelpOnError { get; }
 
-            var paramValues = commandContext.InvocationPipeline
+            public Config(bool showHelpOnError)
+            {
+                ShowHelpOnError = showHelpOnError;
+            }
+        }
+
+        private static Task<int> Middleware(CommandContext ctx, ExecutionDelegate next)
+        {
+            var modelValidator = new ModelValidator(ctx.AppConfig.DependencyResolver);
+
+            var paramValues = ctx.InvocationPipeline
                 .All
                 .SelectMany(i => i.Invocation.ParameterValues.OfType<IArgumentModel>());
 
@@ -30,7 +45,7 @@ namespace CommandDotNet.FluentValidation
 
                 if (failureResults.Any())
                 {
-                    var console = commandContext.Console;
+                    var console = ctx.Console;
                     failureResults.ForEach(f =>
                     {
                         console.Error.WriteLine($"'{f.model.GetType().Name}' is invalid");
@@ -41,16 +56,18 @@ namespace CommandDotNet.FluentValidation
                     });
                     console.Error.WriteLine();
 
+                    ctx.ShowHelpOnExit = ctx.AppConfig.Services.Get<Config>().ShowHelpOnError;
+
                     return Task.FromResult(2);
                 }
             }
             catch (InvalidValidatorException e)
             {
-                commandContext.Console.Error.WriteLine(e.ToString());
+                ctx.Console.Error.WriteLine(e.ToString());
                 return Task.FromResult(1);
             }
 
-            return next(commandContext);
+            return next(ctx);
         }
     }
 }

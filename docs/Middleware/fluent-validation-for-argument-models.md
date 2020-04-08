@@ -3,8 +3,8 @@
 Use [FluentValidation](https://github.com/JeremySkinner/FluentValidation) with CommandDotNet to validate [argument models](../DefiningCommands/argument-models.md).
 
 ## TLDR, How to enable 
-1. Add nuget package [FluentValidation](https://www.nuget.org/packages/CommandDotNet.FluentValidation)
-1. Enable the feature with `appRunner.UseFluentValidation()`
+1. Add nuget package [FluentValidation](https://www.nuget.org/packages/CommandDotNet.FluentValidation) 
+1. Enable the feature with `appRunner.UseFluentValidation()`, or `appRunner.UseFluentValidation(showHelpOnError: true)` to print help when there are validation errors.
 
 ## Example
 ```c#

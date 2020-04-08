@@ -20,8 +20,8 @@ namespace CommandDotNet
         public TokenCollection Tokens { get; set; }
 
         /// <summary>
-        /// The root command for the type specified in <see cref="AppRunner{TRootCommandType}"/>. 
-        /// This is populated in the <see cref="MiddlewareStages.Build"/> stage.
+        /// The root command for the type specified in <see cref="AppRunner{TRootCommandType}"/>.  
+        /// This is populated in the <see cref="MiddlewareStages.Tokenize"/> stage.
         /// </summary>
         public Command RootCommand { get; set; }
 
@@ -42,6 +42,9 @@ namespace CommandDotNet
 
         /// <summary>The <see cref="IConsole"/>, defaulted from <see cref="Execution.AppConfig.Console"/>.</summary>
         public IConsole Console { get; set; }
+
+        /// <summary>When true, help will be displayed as the app exits</summary>
+        public bool ShowHelpOnExit { get; set; }
 
         /// <summary>
         /// Services registered for the lifetime of the <see cref="CommandContext"/>.<br/>

@@ -1,14 +1,63 @@
 # CommandDotNet
 
-## 3.5.2 (pending)
+## 3.5.2
 
 ### Feature
+
+#### Argument Separator following [Posix Guideline](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap12.html#tag_12_02) 10
+
+> The first -- argument that is not an option-argument should be accepted as a delimiter indicating the end of options. Any following arguments should be treated as operands, even if they begin with the '-' character.
+
+Before this release, all arguments following `--` were captured to `CommandContext.ParseResult.SeparatedArguments` and not made available for parsing. That prevented use of operands with values beginning with `-` or `--` or enclosed in square brackets when directives were not disabled.
+
+So `calculator.exe add -1 -2` was not possible.  With this release, `calculator.exe add -- -1 -2` is possible.  
+
+All arguments following `--` are still captured to `CommandContext.ParseResult.SeparatedArguments`, but now may include values for operands of the current command.  Compare w/ `CommandContext.ParseResult.RemainingOperands` to see if any were mapped into the command.
+
+See [Argument Separator](argument-separator.md) for more help.
+
+As part of this update, `CommandContext.ParseResult.SeparatedArguments` && `CommandContext.ParseResult.RemainingOperands` were changed from `IReadOnlyCollection<Token>` to `IReadOnlyCollection<string>`. 
 
 #### CommandLogger.Log
 
 Make CommandLogger a public class so commands, interceptors and middleware can run it directly.
 
-This makes the last pattern in the [command-logger.md] help possible, using an interceptor option to trigger the log.
+This makes the last pattern in the [Command Logger](command-logger.md) help possible, using an interceptor option to trigger the log.
+
+### API
+
+#### CommandContext.ShowHelpOnExit
+
+You can now trigger help to be display after validation checks have failed. See [help docs](../Extensibility/help.md#printing-help) for details.
+
+#### CommandContext.PrintHelp()
+
+`PrintHelp()` extension method enables printing help from anywhere there's a CommandContext
+
+#### exception.GetCommandContext()
+
+Most every exception that escapes the appRunner will have a CommandContext in the Data property.
+
+Use the `GetCommandContext()` extension method to get it and then PrintHelp or ParseReporter.Report or ...
+
+#### CommandAttribute parse hints
+
+The followingw were added to the CommandAttribute to override AppSettings for the given command.
+
+* `IgnoreUnexpectedArguments` to override `AppSettings.IgnoreUnexpectedArguments`
+* `ArgumentSeparatorStrategy` to override `AppSettings.DefaultArgumentSeparatorStrategy`
+
+#### Console Write___ extension methods
+
+Write an object to Console.Out and Console.Error.  The object will be converted to string.
+
+* `Write(this IStandardStreamWriter writer, object value)`
+* `WriteLine(this IStandardStreamWriter writer, object value)`
+
+Use `console.Write` and `console.WriteLine` to write to console.Out.
+
+* `Write(this IConsole console, object value)`
+* `WriteLine(this IConsole console, object value)`
 
 ## 3.5.1
 
