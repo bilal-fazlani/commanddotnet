@@ -71,7 +71,7 @@ public void SendEmail(SendEmailArgs args)
 ## Benefits of argument models
 
 * Common arguments can be extracted to models to enforce behaviors across commands. <br/>ex. `DryRun` ensures the same short name, long name, description, etc are consistent across all commands using this model.
-    * A [middleware](middleware.md) could be created to cancel a UnitOfWork when a dry-run is requested.
+    * A [middleware](../Extensibility/middleware.md) could be created to cancel a UnitOfWork when a dry-run is requested.
 * [FluentValidation](../Middleware/fluent-validation-for-argument-models.md) framework can be used to validate the model
 
 ## Guaranteeing the order of operands

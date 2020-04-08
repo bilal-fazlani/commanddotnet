@@ -153,11 +153,11 @@ In the `Program.Main`, we configured the app with the basic feature set.
 ```
 
 To take advantage of many more additional features, such as
-[debug](debug-directive.md) & [parse](parse-directive) directives,
-[ctrl+c support](cancellation.md),
-[prompting](prompting.md),
-[piping](piped-arguments.md),
-[response files](response-files.md) and [typo suggestions](typo-suggestions.md), add `UseDefaultMiddleware()`
+[debug](Diagnostics/debug-directive.md) & [parse](Diagnostics/parse-directive) directives,
+[ctrl+c support](Middleware/cancellation.md),
+[prompting](Middleware/prompting.md),
+[piping](Middleware/piped-arguments.md),
+[response files](Middleware/response-files.md) and [typo suggestions](Middleware/typo-suggestions.md), add `UseDefaultMiddleware()`
 
 ```c#
     return new AppRunner<Calculator>()
@@ -165,7 +165,7 @@ To take advantage of many more additional features, such as
         .Run(args);
 ```
 
-see [Default Middleware](default-middleware.md) for more details and options for using default middleware.
+see [Default Middleware](Middleware/default-middleware.md) for more details and options for using default middleware.
 
 ## Next Steps
 

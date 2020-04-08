@@ -1,6 +1,6 @@
 # Directives
 
-Directives are special arguments enabling cross cutting features.  We've loosely followed the pattern defined by  [System.CommandLine](https://github.com/dotnet/command-line-api/wiki/Features-overview#debugging) to start with two directives, [Debug](debug-directive.md) & [Parse](parse-directive.md).
+Directives are special arguments enabling cross cutting features.  We've loosely followed the pattern defined by  [System.CommandLine](https://github.com/dotnet/command-line-api/wiki/Features-overview#debugging) to start with two directives, [Debug](../Diagnostics/debug-directive.md) & [Parse](../Diagnostics/parse-directive.md).
 
 Directives are a great way to add troubleshooting tools to your application. See [Custom Directives](#custom-directives) at the bottom of this page for tips on adding your own.
 

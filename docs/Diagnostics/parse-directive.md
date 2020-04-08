@@ -5,9 +5,9 @@ Enable the feature with `appRunner.UseParseDirective()` or `appRunner.UseDefault
 
 ## Parse Directive
 
-Rules for including spaces in arguments and escaping special characters differ from shell to shell. Sometimes it's not clear why arguments are not mapping correctly. This problem can be compounded when using [token transformations](token-transformations.md) like [repsonse files](response-files.md) where the arguments are not easily discoverable by simply logging the arguments passed to Program.Main(string[] args)
+Rules for including spaces in arguments and escaping special characters differ from shell to shell. Sometimes it's not clear why arguments are not mapping correctly. This problem can be compounded when using [token transformations](../Extensibility/token-transformations.md) like [repsonse files](../Middleware/response-files.md) where the arguments are not easily discoverable by simply logging the arguments passed to Program.Main(string[] args)
 
-The `[parse]` [directive](directives.md) will display the targetted command and each argument with values and the inputs and defaults used to derive the values.
+The `[parse]` [directive](../Extensibility/directives.md) will display the targetted command and each argument with values and the inputs and defaults used to derive the values.
 
 ```bash
 ~
@@ -55,7 +55,7 @@ options:
 There are several things to notice here:
 
 * Multiple input sources can be displayed. (planets)
-* Defaults from [configs and env vars](default-values-from-config.md) are supported. (planets, username, password)
+* Defaults from [configs and env vars](../Middleware/default-values-from-config.md) are supported. (planets, username, password)
 * Passwords are obscured. (password)
 * Token transformations are unwrapped, making it possible to indentify exactly how an argument was provided, including any response files used. (turbo, slingshot)
 

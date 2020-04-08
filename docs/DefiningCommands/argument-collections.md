@@ -60,6 +60,6 @@ If your parameter type is `IEnumerable<T>`, the operands will be streamed into t
 
 ## Prompts
 
-See [prompting for missing arguments](prompting.md#prompting-for-missing-arguments) to see how prompting for collections works.
+See [prompting for missing arguments](../Middleware/prompting.md#prompting-for-missing-arguments) to see how prompting for collections works.
 
-[Replace the default prompter](prompting.md#prompting-from-within-the-command-method) to provide a different experience.
+[Replace the default prompter](../Middleware/prompting.md#prompting-from-within-the-command-method) to provide a different experience.

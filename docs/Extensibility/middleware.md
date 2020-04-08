@@ -12,7 +12,7 @@ As the middleware executes, it enhances the _CommandContext_.  The _CommandConte
 * Ease of extending the framework using external packages. Supports community enhancements while reducing the bloat of the framework code base.
 * Feature tests can exclude middleware that's not relevant to the tests.
 
-![Middleware](./../diagrams/MiddlewarePipeline.png){:style="float: right;"}
+![Middleware](../diagrams/MiddlewarePipeline.png){:style="float: right;"}
 
 ### Middleware Stages
 The core functionality of the framework and optional features have been implemented using middleware. 
