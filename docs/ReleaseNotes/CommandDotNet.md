@@ -1,6 +1,6 @@
 # CommandDotNet
 
-## 3.5.2 (pending)
+## 3.5.2
 
 ### Feature
 
@@ -25,6 +25,20 @@ Make CommandLogger a public class so commands, interceptors and middleware can r
 This makes the last pattern in the [Command Logger](command-logger.md) help possible, using an interceptor option to trigger the log.
 
 ### API
+
+#### CommandContext.ShowHelpOnExit
+
+You can now trigger help to be display after validation checks have failed. See [help docs](../Extensibility/help.md#printing-help) for details.
+
+#### CommandContext.PrintHelp()
+
+`PrintHelp()` extension method enables printing help from anywhere there's a CommandContext
+
+#### exception.GetCommandContext()
+
+Most every exception that escapes the appRunner will have a CommandContext in the Data property.
+
+Use the `GetCommandContext()` extension method to get it and then PrintHelp or ParseReporter.Report or ...
 
 #### CommandAttribute parse hints
 

@@ -43,3 +43,4 @@ will result in breaking changes to behavior or the API.
   * `appRunner.UseDefaultsFromConfig` extension method that returns string, in favor of method with same name returning `ArgumentDefault`
   * `TokenCollection` public ctor - Use `Tokenizer.Tokenize` extension method to generate tokens and `TokenCollection.Transform` to transform them. Ensures source tokens are correctly mapped.
   * `AnsiConsole` - no longer supported. Use a package like ColorConsole or Pastel.
+  * `MiddlewareSteps.Help.Stage` & `MiddlewareSteps.Help.Order` - replaced by nested `MiddlewareSteps.Help` classes
