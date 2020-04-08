@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using CommandDotNet.ClassModeling;
+using CommandDotNet.Diagnostics;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Help;
@@ -71,7 +72,7 @@ namespace CommandDotNet
         {
             try
             {
-                return RunAsync(args).Result;
+                return Execute(args).Result;
             }
             catch (Exception e)
             {
@@ -100,16 +101,24 @@ namespace CommandDotNet
         private async Task<int> Execute(string[] args)
         {
             var tokens = args.Tokenize(includeDirectives: !AppSettings.DisableDirectives);
-            
+
             var appConfig = AppConfig ?? (AppConfig = _appConfigBuilder.Build());
             var commandContext = new CommandContext(args, tokens, appConfig);
 
-            var result = await commandContext.AppConfig.MiddlewarePipeline
-                .InvokePipeline(commandContext).ConfigureAwait(false);
+            try
+            {
+                var result = await commandContext.AppConfig.MiddlewarePipeline
+                    .InvokePipeline(commandContext).ConfigureAwait(false);
 
-            appConfig.OnRunCompleted?.Invoke(new OnRunCompletedEventArgs(commandContext));
+                appConfig.OnRunCompleted?.Invoke(new OnRunCompletedEventArgs(commandContext));
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                ex.SetCommandContext(commandContext);
+                throw;
+            }
         }
 
         private void AddCoreMiddleware()
