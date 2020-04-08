@@ -4,6 +4,20 @@
 
 ### Feature
 
+#### Argument Separator following [Posix Guideline](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap12.html#tag_12_02) 10
+
+> The first -- argument that is not an option-argument should be accepted as a delimiter indicating the end of options. Any following arguments should be treated as operands, even if they begin with the '-' character.
+
+Before this release, all arguments following `--` were captured to `CommandContext.ParseResult.SeparatedArguments` and not made available for parsing. That prevented use of operands with values beginning with `-` or `--` or enclosed in square brackets when directives were not disabled.
+
+So `calculator.exe add -1 -2` was not possible.  With this release, `calculator.exe add -- -1 -2` is possible.  
+
+All arguments following `--` are still captured to `CommandContext.ParseResult.SeparatedArguments`, but now may include values for operands of the current command.  Compare w/ `CommandContext.ParseResult.RemainingOperands` to see if any were mapped into the command.
+
+See [Argument Separator](argument-separator.md) for more help.
+
+As part of this update, `CommandContext.ParseResult.SeparatedArguments` && `CommandContext.ParseResult.RemainingOperands` were changed from `IReadOnlyCollection<Token>` to `IReadOnlyCollection<string>`. 
+
 #### CommandLogger.Log
 
 Make CommandLogger a public class so commands, interceptors and middleware can run it directly.
@@ -11,6 +25,13 @@ Make CommandLogger a public class so commands, interceptors and middleware can r
 This makes the last pattern in the [Command Logger](command-logger.md) help possible, using an interceptor option to trigger the log.
 
 ### API
+
+#### CommandAttribute parse hints
+
+The followingw were added to the CommandAttribute to override AppSettings for the given command.
+
+* `IgnoreUnexpectedArguments` to override `AppSettings.IgnoreUnexpectedArguments`
+* `ArgumentSeparatorStrategy` to override `AppSettings.DefaultArgumentSeparatorStrategy`
 
 #### Console Write___ extension methods
 

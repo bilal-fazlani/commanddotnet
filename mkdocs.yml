@@ -19,7 +19,8 @@ nav:
         - DefiningCommands/argument-models.md
         - DefiningCommands/argument-arity.md
         - DefiningCommands/option-or-operand.md
-        - DefiningCommands/passwords.md
+        - DefiningCommands/passwords.md 
+        - DefiningCommands/argument-separator.md
       - Extensibility:
         - Extensibility/help.md
         - Extensibility/directives.md
