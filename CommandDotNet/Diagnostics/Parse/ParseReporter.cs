@@ -11,11 +11,12 @@ namespace CommandDotNet.Diagnostics.Parse
         /// Reports the command and the source of values for all arguments 
         /// </summary>
         public static void Report(CommandContext commandContext, 
-            Action<string> writeln, Indent indent = null)
+            Action<string> writeln = null, Indent indent = null)
         {
             var command = commandContext.ParseResult.TargetCommand;
 
             indent = indent ?? new Indent();
+            writeln = writeln ?? commandContext.Console.Out.WriteLine;
 
             var path = command.GetPath();
             writeln($"{indent}command: {(path.IsNullOrWhitespace() ? "(root)" : path)}");
