@@ -28,7 +28,7 @@ This makes the last pattern in the [Command Logger](command-logger.md) help poss
 
 #### CommandContext.ShowHelpOnExit
 
-You can now trigger help to be display after validation checks have failed. See [help docs](../Extensibility/help.md#printing-help) for details.
+You can now trigger help to be display after validation checks have failed. See [help docs](help.md#printing-help) for details.
 
 #### CommandContext.PrintHelp()
 

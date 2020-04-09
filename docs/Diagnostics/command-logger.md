@@ -12,7 +12,7 @@ The default behavior registers a `[cmdlog]` directive that outputs to the consol
 example usage: 
 
 ```bash
-`dotnet example.com [cmdlog] add 1 2`
+dotnet example.com [cmdlog] add 1 2
 ```
 
 ## Outputs

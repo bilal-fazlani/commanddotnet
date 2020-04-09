@@ -7,20 +7,20 @@ This command to send an e-mail...
 send --subject hi -a "myFile.txt" --body "just wanted you to review these files" bilal@bilal.com john@john.com
 ```
 
-can be defined as
+can be defined with a method as ...
 
 ```c#
 public void SendEmail(
     [Option]string subject, 
     [Option]string body, 
-    [Argument]string from, 
-    [Argument]string to)
+    [Operand]string from, 
+    [Operand]string to)
 {
 
 }
 ```
 
-or
+or with an argument model as ...
 
 ```c#
 public class Email : IArgumentModel
@@ -70,13 +70,17 @@ public void SendEmail(SendEmailArgs args)
 
 ## Benefits of argument models
 
-* Common arguments can be extracted to models to enforce behaviors across commands. <br/>ex. `DryRun` ensures the same short name, long name, description, etc are consistent across all commands using this model.
-    * A [middleware](middleware.md) could be created to cancel a UnitOfWork when a dry-run is requested.
-* [FluentValidation](../Middleware/fluent-validation-for-argument-models.md) framework can be used to validate the model
+* Common arguments can be extracted to models to enforce behaviors across commands. This ensures the same short name, long name, description, etc are consistent across all commands using this model.
+* A [middleware](middleware.md) could be created to cancel a UnitOfWork when a dry-run is requested.
+* [FluentValidation](../Arguments/fluent-validation-for-argument-models.md) framework can be used to validate the model.
+
+Take `DryRun` for example. Ask 5 different developers to add a dryrun option and you'll end up with 5 different casings for it. Add it to an IArgumentModel and everyone can use and the commands will have a consistent argument.  
+
+When you have the same model, you can add middleware that can check for the existing of that model and perform logic based on that.  Using the `DryRun` example, a UnitOfWork middleware could determine whether to commit or abort a transaction based on the value of the model.
 
 ## Guaranteeing the order of operands
 
-Operand position is not guaranteed to be consistent because the .Net Framework does not guarantee the order properties are reflected.
+Prior to version 3.2.0, operand position is not guaranteed to be consistent because the .Net Framework does not guarantee the order properties are reflected.
 
 > The [GetProperties](https://docs.microsoft.com/en-us/dotnet/api/system.type.getproperties) method does not return properties in a particular order, such as alphabetical or declaration order. Order can differ on each machine the app is deployed to. Your code must not depend on the order in which properties are returned because that order is no guaranteed.
 

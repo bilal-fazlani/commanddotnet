@@ -18,6 +18,22 @@ commands in the example app.
 A [parameter resolver](../Extensibility/parameter-resolvers.md) will be registered for `IPrompter`.
 The IPrompter can prompt for a single value or a list. 
 
+```c#
+[Command(Description = "knock-knock joke, demonstrating use of IPrompter")]
+public void Knock(IConsole console, IPrompter prompter)
+{
+    if (prompter.TryPromptForValue("who's there?", out var answer1, out bool isCancellationRequested) && !isCancellationRequested)
+    {
+        var answer2 = prompter.PromptForValue($"{answer1} who?", out isCancellationRequested);
+        if(!isCancellationRequested)
+        {
+            console.Out.WriteLine($"{answer2}");
+            console.Out.WriteLine("lulz");
+        }
+    }
+}
+```
+
 When prompting for a list, each entry is on a new line. Entering two empty lines will stop prompting for that value.
 
 Use Ctrl+C to exit prompting, setting the out parameter `isCancellationRequested` to true.
@@ -35,7 +51,7 @@ Override the default IPrompter with the `prompterOverride` paramter
 Prompt text can be overridden using the `argumentPromptTextOverride` parameter. This example shows using a custom attribute to provide prompt text.
 
 ``` cs
-argumentPromptTextOverride: (context, argument) => $"{argument.CustomAttributes.Get<MyPromptTextAttribute>().PromptText}"
+argumentPromptTextOverride: (context, argument) => $"{argument.CustomAttributes.Get<MyPromptAttribute>().PromptText}"
 ```
 
 By default, the arguments that will be prompted are those where `argument.Arity.RequiresAtLeastOne()` and no value was provided. 
@@ -43,10 +59,12 @@ Arguments defined with nullable types or optional parameters will not be prompte
 This behavior can be changed using the `argumentFilter` parameter.
 
 ``` cs
-argumentFilter: argument => argument.CustomAttributes.Get<MyPromptTextAttribute>()?.CanPrompt ?? false
+argumentFilter: argument => argument.CustomAttributes.Get<MyPromptAttribute>() != null
 ```
 
-Use the [Password](../DefiningCommands/passwords.md) type to hide all characters for an argument.
+## Passwords
+
+Use the [Password](../Arguments/passwords.md) type to hide all characters for an argument.
 
 ```cs
 public void Login(string username, Password password){...}

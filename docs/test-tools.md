@@ -6,6 +6,17 @@ The framework is ideal for testing middleware components and end-to-end testing 
 
 nuget package: [CommandDotNet.TestTools](https://www.nuget.org/packages/CommandDotNet.TestTools)
 
+=== ".NET CLI"
+
+    ```
+    dotnet add package CommandDotNet.TestTools
+    ```
+    
+=== "Nuget Package Manager"
+
+    ```
+    Install-Package CommandDotNet.TestTools
+    ```
 ## The BDD framework
 
 More details about Scenario testing can be found in our readme files [here](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Tests/README.md)

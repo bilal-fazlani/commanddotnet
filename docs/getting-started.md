@@ -60,15 +60,9 @@ Assuming our application's name is `example.dll`
 
 let's try and run this app from command line using dotnet
 
-INPUT
-
 ```bash
-dotnet example.dll --help
-```
-
-OUTPUT
-
-```bash
+~
+$ dotnet example.dll --help
 Usage: dotnet example.dll [command]
 
 Commands:
@@ -112,15 +106,9 @@ Awesome. Descriptions are not required but can be very useful depending upon the
 
 Now let's see if we can get further help for the add command.
 
-INPUT
-
 ```bash
-dotnet example.dll Add --help
-```
-
-OUTPUT
-
-```bash
+~
+$ dotnet example.dll Add --help
 Adds two numbers. duh!
 
 Usage: dotnet example.dll Add [arguments]
@@ -138,15 +126,9 @@ Ok, so here, it show what parameters are required for addition and their type.
 
 Let's try and add two numbers.
 
-INPUT
-
 ```bash
-dotnet example.dll Add 40 20
-```
-
-OUTPUT
-
-```bash
+~
+$ dotnet example.dll Add 40 20
 Answer: 60
 ```
 

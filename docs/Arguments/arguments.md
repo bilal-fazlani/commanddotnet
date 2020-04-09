@@ -100,9 +100,15 @@ so LongName must also be configured if you need both.
 | turbo | turbo | t | `-t | --turbo` |
 | t |  |  | `-t` |
 
+## Flags
+
+Flags are boolean options with a default value of false. The presence of the flag indicates true. This simplifies the user experience by allowing them to specifiy `-b` instead of `-b true`.  This also enables clubbing.
+
+Define them as Options with BooleanMode = BooleanMode.Implicit. Implicit is the default defined for `AppSettings.DefaultBooleanMode` or `OptionAttribute.BooleanMode`.
+
 ## Flag Clubbing
 
-Clubbing is when several flags are specified together using their short names. 
+Clubbing (aka bundling) is when several flags are specified together using their short names. 
 
 For example: `-abc` is the same as `-a -b -c`
 

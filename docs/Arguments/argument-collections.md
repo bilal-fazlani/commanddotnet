@@ -54,12 +54,12 @@ Since options are named, you can have multiple option collections. Specify the o
 
 ## Piping
 
-CommandDotNet provides middleware [to pipe input to operand collections](../Middleware/piped-arguments.md).
+CommandDotNet provides middleware [to pipe input to operand collections](../ArgumentValues/piped-arguments.md).
 
 If your parameter type is `IEnumerable<T>`, the operands will be streamed into the command.
 
 ## Prompts
 
-See [prompting for missing arguments](prompting.md#prompting-for-missing-arguments) to see how prompting for collections works.
+See [prompting for missing arguments](../ArgumentValues/prompting.md#prompting-for-missing-arguments) to see how prompting for collections works.
 
-[Replace the default prompter](prompting.md#prompting-from-within-the-command-method) to provide a different experience.
+[Replace the default prompter](../ArgumentValues/prompting.md#prompting-from-within-the-command-method) to provide a different experience.

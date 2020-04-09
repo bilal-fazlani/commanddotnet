@@ -2,7 +2,7 @@
 
 Token transformations are a way to tranform input arguments before they are mapped to commands.
 
-This feature is used internally to expand clubbed options and support [Response Files](../Middleware/response-files.md).
+This feature is used internally to expand clubbed options and support [Response Files](../ArgumentValues/response-files.md).
 
 See these implementations as examples:
 

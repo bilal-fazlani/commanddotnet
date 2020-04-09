@@ -8,45 +8,49 @@ strict: true
 nav:
     - Documentation:
       - Introduction: index.md
+      - features.md
       - getting-started.md
-      - Defining Commands:
-        - DefiningCommands/argument-terminology.md
-        - DefiningCommands/commands.md
-        - DefiningCommands/subcommands.md
-        - DefiningCommands/arguments.md
-        - DefiningCommands/argument-collections.md
-        - DefiningCommands/argument-types.md
-        - DefiningCommands/argument-models.md
-        - DefiningCommands/argument-arity.md
-        - DefiningCommands/option-or-operand.md
-        - DefiningCommands/passwords.md 
-        - DefiningCommands/argument-separator.md
+      - argument-terminology.md
+      - Commands:
+        - Commands/commands.md
+        - Commands/subcommands.md
+      - Arguments:
+        - Arguments/arguments.md
+        - Collections: Arguments/argument-collections.md
+        - Data Types: Arguments/argument-types.md
+        - Arguments/passwords.md 
+        - Argument Models: Arguments/argument-models.md
+        - Arguments/argument-arity.md
+        - Arguments/option-or-operand.md
+        - Arguments/fluent-validation-for-argument-models.md
+      - Argument Values:
+        - ArgumentValues/argument-separator.md
+        - ArgumentValues/piped-arguments.md
+        - ArgumentValues/prompting.md
+        - ArgumentValues/response-files.md
+        - AppSettings and<br/>Environment Variables: ArgumentValues/default-values-from-config.md
+      - Help:
+        - Help/help.md
+        - Help/typo-suggestions.md
+      - Diagnostics:
+        - Diagnostics/app-version.md
+        - Diagnostics/debug-directive.md
+        - Diagnostics/parse-directive.md
+        - Diagnostics/command-logger.md
+        - Diagnostics/exceptions.md
+      - Other Features:
+        - OtherFeatures/default-middleware.md
+        - Ctrl+C and<br/>CancellationToken: OtherFeatures/cancellation.md
+        - OtherFeatures/dependency-injection.md
+        - OtherFeatures/name-casing.md
+        - OtherFeatures/newer-release-alerts.md
       - Extensibility:
-        - Extensibility/help.md
         - Extensibility/directives.md
         - Extensibility/parameter-types.md
         - Extensibility/parameter-resolvers.md
         - Extensibility/middleware.md
         - Extensibility/interceptors.md 
         - Extensibility/token-transformations.md
-      - Middleware:
-        - Middleware/default-middleware.md
-        - Middleware/app-version.md
-        - Middleware/cancellation.md
-        - Middleware/default-values-from-config.md
-        - Middleware/dependency-injection.md
-        - Middleware/fluent-validation-for-argument-models.md
-        - Middleware/name-casing.md
-        - Middleware/piped-arguments.md
-        - Middleware/prompting.md
-        - Middleware/response-files.md
-        - Middleware/typo-suggestions.md
-        - Middleware/newer-release-alerts.md
-      - Diagnostics:
-        - Diagnostics/debug-directive.md
-        - Diagnostics/parse-directive.md
-        - Diagnostics/command-logger.md
-        - Diagnostics/exceptions.md
       - test-tools.md
     - Release Notes:
       - ReleaseNotes/whats-new-in-v3.md
@@ -89,6 +93,8 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.emoji:
       emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.escapeall:
+      nbsp: true
   - pymdownx.inlinehilite
   - pymdownx.magiclink
   - pymdownx.mark
@@ -104,7 +110,7 @@ markdown_extensions:
 plugins:
   - search
   # - git-revision-date-localized
-  - autolinks
+  # - autolinks
 
 # Customization
 extra:

@@ -3,17 +3,51 @@
 This document assumes you're already familiar with the Dependency Injection (DI) pattern. If not, the frameworks listed below describe the pattern in their documentation.
 
 ## TLDR, How to enable
-* [Autofac](https://autofac.org/)
-    1. Add nuget package [CommandDotNet.IoC.Autofac](https://www.nuget.org/packages/CommandDotNet.IoC.Autofac)
-    1. Enable the feature with `appRunner.UseAutofac(...)`
-* [MicrosoftDependencyInjection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1)
-    1. Add nuget package [CommandDotNet.IoC.MicrosoftDependencyInjection](https://www.nuget.org/packages/CommandDotNet.IoC.MicrosoftDependencyInjection)
-    1. Enable the feature with `appRunner.UseMicrosoftDependencyInjection(...)`
-* [SimpleInjector](https://simpleinjector.org/)
-    1. Add nuget package [CommandDotNet.IoC.SimpleInjector](https://www.nuget.org/packages/CommandDotNet.IoC.SimpleInjector)
-    1. Enable the feature with `appRunner.UseSimpleInjector(...)`
-* [Custom Resolver](#custom-resolvers)
-    1. Enable with `appRunner.UseDependencyResolver(myCustomContainer, ...)`
+=== "MicrosoftDependencyInjection"
+    === ".NET CLI"
+
+        ```
+        dotnet add package CommandDotNet.IoC.MicrosoftDependencyInjection
+        ```
+
+    === "Nuget Package Manager"
+
+        ```
+        Install-Package CommandDotNet.IoC.MicrosoftDependencyInjection
+        ```
+    Enable [MicrosoftDependencyInjection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1) with <br/> `appRunner.UseMicrosoftDependencyInjection(...)`
+
+=== "Autofac"
+    === ".NET CLI"
+
+        ```
+        dotnet add package CommandDotNet.IoC.Autofac
+        ```
+
+    === "Nuget Package Manager"
+
+        ```
+        Install-Package CommandDotNet.IoC.Autofac
+        ```
+    Enable [Autofac](https://autofac.org/) with <br/> `appRunner.UseAutofac(...)`
+
+=== "SimpleInjector"
+    === ".NET CLI"
+
+        ```
+        dotnet add package CommandDotNet.IoC.SimpleInjector
+        ```
+
+    === "Nuget Package Manager"
+
+        ```
+        Install-Package CommandDotNet.IoC.SimpleInjector
+        ```
+    Enable [SimpleInjector](https://simpleinjector.org/) with <br/> `appRunner.UseSimpleInjector(...)`
+
+=== "Custom & 3rd Party"
+
+    Enable the [custom resolver](#custom-resolvers) with <br/> `appRunner.UseDependencyResolver(myCustomContainer, ...)`
 
 ## Configuration options
 
@@ -44,6 +78,8 @@ public static AppRunner UseDependencyResolver(
 These parameters also exist for the AutoFac, MicrosoftDependencyInjection and SimpleInjector packages
 
 ## Custom Resolvers
+
+To implement another 3rd party resolver, follow the example for [one of the existing ones](https://github.com/bilal-fazlani/commanddotnet). Submit a PR so we can keep it up-to-date for you. 
 
 To implement your own custom resolver, implement the `IDependencyResolver`. See the [TestDependencyResolver](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/TestDependencyResolver.cs) for an example.
 
