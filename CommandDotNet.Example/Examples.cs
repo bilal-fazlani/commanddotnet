@@ -18,6 +18,9 @@ namespace CommandDotNet.Example
         public Git Git { get; set; }
 
         [SubCommand]
+        public Math Math { get; set; }
+
+        [SubCommand]
         public Models Models { get; set; }
 
         [SubCommand]
