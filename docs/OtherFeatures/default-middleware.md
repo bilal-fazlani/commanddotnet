@@ -1,6 +1,6 @@
 # Default middleware
 
-CommandDotNet has the notion of core middleware and optional middleware as described in [the Middleware Pipeline](middleware.md).
+CommandDotNet has the notion of core middleware and optional middleware as described in [the Middleware Pipeline](../Extensibility/middleware.md).
 
 Core middleware is the minimum set of middleware required to process arguments. They are always part of the pipeline and cannot be removed.
 

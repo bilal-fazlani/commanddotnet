@@ -1,6 +1,6 @@
 # Directives
 
-Directives are special arguments enabling cross cutting features.  We've loosely followed the pattern defined by  [System.CommandLine](https://github.com/dotnet/command-line-api/wiki/Features-overview#debugging) to start with two directives, [Debug](debug-directive.md) & [Parse](parse-directive.md).
+Directives are special arguments enabling cross cutting features.  We've loosely followed the pattern defined by  [System.CommandLine](https://github.com/dotnet/command-line-api/wiki/Features-overview#debugging) to start with two directives, [Debug](../Diagnostics/debug-directive.md) & [Parse](../Diagnostics/parse-directive.md).
 
 Directives are a great way to add troubleshooting tools to your application. See [Custom Directives](#custom-directives) at the bottom of this page for tips on adding your own.
 
@@ -11,7 +11,7 @@ Directives must be the first arguments, enclosed by square brackets and will be 
 dotnet example.dll [some-directive] -v [not-a-directive]
 ```
 
-To disable the directives feature entirely, set `AppSettings.DisableDirectives = true`. This is only needed if an application has starting arguments enclosed by square brackets and using the [argument separator](argument-separator.md) is not a suitable solution.
+To disable the directives feature entirely, set `AppSettings.DisableDirectives = true`. This is only needed if an application has starting arguments enclosed by square brackets and using the [argument separator](../ArgumentValues/argument-separator.md) is not a suitable solution.
 
 ## Custom directives
 

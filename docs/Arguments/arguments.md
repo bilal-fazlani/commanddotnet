@@ -2,7 +2,7 @@
 
 Arguments are defined as parameters of a method or properties of a class (see [Argument Models](argument-models.md))
 
-As discussed in [Terminology](argument-terminology.md), Option and Operand are the two concrete types of IArgument
+As discussed in [Terminology](../argument-terminology.md), Option and Operand are the two concrete types of IArgument
 
 * Option: named argument
 * Operand: positional argument

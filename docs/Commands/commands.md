@@ -79,7 +79,7 @@ more details and examples
 
 ```
 
-Use `IgnoreUnexpectedOperands` & `ArgumentSeparatorStrategy` to override argument parsing behavior for the command. See [Argument Separator](argument-separator.md) for more details.
+Use `IgnoreUnexpectedOperands` & `ArgumentSeparatorStrategy` to override argument parsing behavior for the command. See [Argument Separator](../ArgumentValues/argument-separator.md) for more details.
 
 ## Default Method
 

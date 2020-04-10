@@ -26,7 +26,7 @@ The architecture is now based around a [middleware pipeline](../Extensibility/mi
 
 * [Response file](../ArgumentValues/response-files.md) support 
 * [HelpTextProvider](../Help/help.md) can be overridden to make targetted changes to a section of help.
-* [Test tools](test-tools.md), helpful for end-to-end test and testing framework extensions, like middleware components.
+* [Test tools](../test-tools.md), helpful for end-to-end test and testing framework extensions, like middleware components.
 * [Parameter resolvers](../Extensibility/parameter-resolvers.md).
 * [Ctrl+C support](../OtherFeatures/cancellation.md) with CancellationToken.
 * [Arity](../Arguments/argument-arity.md) calculated for arguments and can be updated in middleware.

@@ -14,7 +14,7 @@ So `calculator.exe add -1 -2` was not possible.  With this release, `calculator.
 
 All arguments following `--` are still captured to `CommandContext.ParseResult.SeparatedArguments`, but now may include values for operands of the current command.  Compare w/ `CommandContext.ParseResult.RemainingOperands` to see if any were mapped into the command.
 
-See [Argument Separator](argument-separator.md) for more help.
+See [Argument Separator](../ArgumentValues/argument-separator.md) for more help.
 
 As part of this update, `CommandContext.ParseResult.SeparatedArguments` && `CommandContext.ParseResult.RemainingOperands` were changed from `IReadOnlyCollection<Token>` to `IReadOnlyCollection<string>`. 
 
@@ -22,13 +22,13 @@ As part of this update, `CommandContext.ParseResult.SeparatedArguments` && `Comm
 
 Make CommandLogger a public class so commands, interceptors and middleware can run it directly.
 
-This makes the last pattern in the [Command Logger](command-logger.md) help possible, using an interceptor option to trigger the log.
+This makes the last pattern in the [Command Logger](../Diagnostics/command-logger.md) help possible, using an interceptor option to trigger the log.
 
 ### API
 
 #### CommandContext.ShowHelpOnExit
 
-You can now trigger help to be display after validation checks have failed. See [help docs](help.md#printing-help) for details.
+You can now trigger help to be display after validation checks have failed. See [help docs](../Help/help.md#printing-help) for details.
 
 #### CommandContext.PrintHelp()
 
@@ -78,7 +78,7 @@ A middleware that will output...
 
 ... and then run the command. Output can be forwarded to console or logs or ...
 
-See [Command Logger help](command-logger.md) for more details
+See [Command Logger help](../Diagnostics/command-logger.md) for more details
 
 #### AppSettings.LongNameAlwaysDefaultsToSymbolName 
 
@@ -95,7 +95,7 @@ AppSettings.LongNameAlwaysDefaultsToSymbolName allows us to introduce the behavi
 
 #### Enhanced Parse directive
 
-The [parse directive](parse-directive.md) has been updated to show 
+The [parse directive](../Diagnostics/parse-directive.md) has been updated to show 
 
 * argument values
 * default values w/ sources 
@@ -132,7 +132,7 @@ Returns true if the type is `Password`
 
 * LogProvider.IsDisabled is set to true in AppRunner static ctor.
 
-#### [Guarantee Operand order in IArgumentModel](argument-models/#guaranteeing-the-order-of-operands)
+#### [Guarantee Operand order in IArgumentModel](../Arguments/argument-models.md/#guaranteeing-the-order-of-operands)
 
 The order of operands defined in IArgumentModel classes were never deterministic because .Net does not guarantee the order properties are reflected.
 
@@ -178,13 +178,13 @@ This is used in later versions for the Parse directive and CommandLogger feature
 
 #### Typo Suggestions
 
-[Typo Suggestions](typo-suggestions) middleware to suggest commands or options when a provided one wasn't found.
+[Typo Suggestions](../Help/typo-suggestions.md) middleware to suggest commands or options when a provided one wasn't found.
 
 #### AppSettings.ExpandArgumentsInUsage
 
 Expand arguments in the usage section so the names and order of all arguments are shown.
 
-See [help docs](help.md#expandargumentsinusage) for more details.
+See [help docs](../Help/help.md#expandargumentsinusage) for more details.
 
 [#186](https://github.com/bilal-fazlani/commanddotnet/issues/186), 
 
@@ -199,8 +199,8 @@ Option & Operand & Command should now be created without a parent command. Paren
 
 ### Feature
 
-#### [%UsageAppName%](help.md#usageappname-tempate) 
-To show usage examples in a command description, extended help or overridden usage section, use %UsageAppName%. This text will be replaced usage app name from one of the options above. See [the help docs](help.md#usageappname-tempate) for more.
+#### [%UsageAppName%](../Help/help.md#usageappname-tempate) 
+To show usage examples in a command description, extended help or overridden usage section, use %UsageAppName%. This text will be replaced usage app name from one of the options above. See [the help docs](../Help/help.md#usageappname-tempate) for more.
 
 ### API
 

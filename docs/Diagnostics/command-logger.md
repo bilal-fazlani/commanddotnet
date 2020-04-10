@@ -18,7 +18,7 @@ dotnet example.com [cmdlog] add 1 2
 ## Outputs
 
 ### Command and arguments
-The command to be executed and the argument values as described in the [parse directive](parse-directive.md).
+The command to be executed and the argument values as described in the [parse directive](../Diagnostics/parse-directive.md).
 
 ```bash
 command: LaunchRocket
@@ -137,7 +137,7 @@ Logs only commands attributed with your custom `EnableCommandLoggerAttribute`. N
 
 #### Enable via directive 
 
-Allow user to enable as a [directive](directives.md)
+Allow user to enable as a [directive](../Extensibility/directives.md)
 `writerFactory: ctx => ctx.Tokens.TryGetDirective("cmdlog", out _) ? ctx.Console.Out.WriteLine : (Action<string>)null`
 
 Usage: `dotnet example.com [cmdlog] add 1 2`
