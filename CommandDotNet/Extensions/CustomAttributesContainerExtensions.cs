@@ -19,12 +19,10 @@ namespace CommandDotNet.Extensions
 
         public static T GetCustomAttribute<T>(this ICustomAttributesContainer container) where T : Attribute
         {
-            if (container == null)
-            {
-                throw new ArgumentNullException(nameof(container));
-            }
-
-            return container.GetCustomAttributes<T>().SingleOrDefault();
+            return container
+                .GetCustomAttributes<T>()
+                .SingleOrDefaultOrThrow(
+                () => throw new AppRunnerException($"attempted to get a single {typeof(T).Name} from {container} but multiple exist"));
         }
 
         public static IEnumerable<T> GetCustomAttributes<T>(this ICustomAttributesContainer container) where T : Attribute
