@@ -3,8 +3,19 @@
 Use [Humanizer](https://github.com/Humanizr/Humanizer) with CommandDotNet to convert the case of command and arguments to PascalCase, camelCase, lowercase or kebab-case.
 
 ## TLDR, How to enable 
-1. Add nuget package [CommandDotNet.NameCasing](https://www.nuget.org/packages/CommandDotNet.NameCasing)
-1. Enable the feature with `appRunner.NameCasing(...)`
+
+=== ".NET CLI"
+
+    ```
+    dotnet add package CommandDotNet.NameCasing
+    ```
+    
+=== "Nuget Package Manager"
+
+    ```
+    Install-Package CommandDotNet.NameCasing
+    ```
+Enable the feature with `appRunner.NameCasing(...)`
 
 ## Case options
 

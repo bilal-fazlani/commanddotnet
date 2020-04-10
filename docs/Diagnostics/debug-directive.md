@@ -7,7 +7,7 @@ Enable the feature with `appRunner.UseDebugDirective()` or `appRunner.UseDefault
 
 Sometimes you just need to debug into a process and configuring the debug arguments in VS is too many extra steps.
 
-When the `[debug]` [directive](directives.md) is used, the process id will output to the console and wait for you to attach a debugger.
+When the `[debug]` [directive](../Extensibility/directives.md) is used, the process id will output to the console and wait for you to attach a debugger.
 
 ```bash
 $ dotnet example.dll [debug] Add 1 2

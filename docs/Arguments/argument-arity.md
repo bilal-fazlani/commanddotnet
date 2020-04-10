@@ -75,7 +75,7 @@ Consider there are two categories of default values
 1. Statically defined by the application developer, such as described in the [optional arguments](#optional-arguments) section. 
     * These can be inferred to mean the user is not required to enter a value. 
     * This could also be defined by an attribute or some other static mechanism.
-1. Default values specified by the user to simplify use of the application. For example, pulling default values from [Environment Variables and AppSettings](../Middleware/default-values-from-config.md). 
+1. Default values specified by the user to simplify use of the application. For example, pulling default values from [Environment Variables and AppSettings](../ArgumentValues/default-values-from-config.md). 
     * The application requires a value but the user does not have to enter it because it is defaulted by a middleware component.
 
 Any middleware updating the default values according to the first category should also update the arity. 

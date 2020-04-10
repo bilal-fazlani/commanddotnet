@@ -2,6 +2,8 @@
 
 This middleware will check a url for the latest version of your app and alert the user if a new release is found.
 
+This was created as proof-of-concept. It will make a web request every time the command is run. It is recommended to use `skipCommand` to have this run for specific commands, when --version is requested or to cache last request time locally to control the frequency of the request.
+
 ## Github
 
 use `appRunner.UseNewerReleaseAlertOnGitHub(organizationName, repositoryName, ...)` if your app is published as a GitHub release.
@@ -29,6 +31,16 @@ use `appRunner.UseNewerReleaseAlert(...)` to check any url.  `UseNewerReleaseAle
 * `overrideHttpRequestCallback`: append headers, auth info, etc
 * `skipCommand`: do not run for commands that pipe output or skip if the command is not the root command.
 
-nuget package: [CommandDotNet.NewerReleasesAlerts](https://www.nuget.org/packages/CommandDotNet.NewerReleasesAlerts)
+=== ".NET CLI"
+
+    ```
+    dotnet add package CommandDotNet.NewerReleasesAlerts
+    ```
+    
+=== "Nuget Package Manager"
+
+    ```
+    Install-Package CommandDotNet.NewerReleasesAlerts
+    ```
 
 Inspired by https://github.com/solidify/jira-azuredevops-migrator

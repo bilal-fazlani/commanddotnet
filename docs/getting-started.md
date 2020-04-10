@@ -60,15 +60,9 @@ Assuming our application's name is `example.dll`
 
 let's try and run this app from command line using dotnet
 
-INPUT
-
 ```bash
-dotnet example.dll --help
-```
-
-OUTPUT
-
-```bash
+~
+$ dotnet example.dll --help
 Usage: dotnet example.dll [command]
 
 Commands:
@@ -112,15 +106,9 @@ Awesome. Descriptions are not required but can be very useful depending upon the
 
 Now let's see if we can get further help for the add command.
 
-INPUT
-
 ```bash
-dotnet example.dll Add --help
-```
-
-OUTPUT
-
-```bash
+~
+$ dotnet example.dll Add --help
 Adds two numbers. duh!
 
 Usage: dotnet example.dll Add [arguments]
@@ -138,15 +126,9 @@ Ok, so here, it show what parameters are required for addition and their type.
 
 Let's try and add two numbers.
 
-INPUT
-
 ```bash
-dotnet example.dll Add 40 20
-```
-
-OUTPUT
-
-```bash
+~
+$ dotnet example.dll Add 40 20
 Answer: 60
 ```
 
@@ -158,11 +140,11 @@ In the `Program.Main`, we configured the app with the basic feature set.
 ```
 
 To take advantage of many more additional features, such as
-[debug](debug-directive.md) & [parse](parse-directive) directives,
-[ctrl+c support](cancellation.md),
-[prompting](prompting.md),
-[piping](piped-arguments.md),
-[response files](response-files.md) and [typo suggestions](typo-suggestions.md), add `UseDefaultMiddleware()`
+[debug](Diagnostics/debug-directive.md) & [parse](Diagnostics/parse-directive) directives,
+[ctrl+c support](OtherFeatures/cancellation.md),
+[prompting](ArgumentValues/prompting.md),
+[piping](ArgumentValues/piped-arguments.md),
+[response files](ArgumentValues/response-files.md) and [typo suggestions](Help/typo-suggestions.md), add `UseDefaultMiddleware()`
 
 ```c#
     return new AppRunner<Calculator>()
@@ -170,7 +152,7 @@ To take advantage of many more additional features, such as
         .Run(args);
 ```
 
-see [Default Middleware](default-middleware.md) for more details and options for using default middleware.
+see [Default Middleware](OtherFeatures/default-middleware.md) for more details and options for using default middleware.
 
 ## Next Steps
 
