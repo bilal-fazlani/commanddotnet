@@ -73,5 +73,39 @@ namespace CommandDotNet.Extensions
                 yield return line;
             }
         }
+
+        internal static T SingleOrDefaultOrThrow<T>(this IEnumerable<T> source, Action throwEx)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (throwEx == null)
+            {
+                throw new ArgumentNullException(nameof(throwEx));
+            }
+
+            if (source is ICollection<T> list)
+            {
+                switch (list.Count)
+                {
+                    case 0: return default;
+                    case 1: return list.First();
+                }
+            }
+            else
+            {
+                using (IEnumerator<T> e = source.GetEnumerator())
+                {
+                    if (!e.MoveNext()) return default(T);
+                    T result = e.Current;
+                    if (!e.MoveNext()) return result;
+                }
+            }
+
+            throwEx();
+            return default;
+        }
     }
 }

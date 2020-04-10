@@ -25,7 +25,7 @@ namespace CommandDotNet.Parsing
             return appRunner.Configure(c =>
             {
                 c.Services.Add(new Config {MaxSuggestionCount = maxSuggestionCount});   
-                c.UseMiddleware(Middleware,
+                c.UseMiddleware(TypoSuggest,
                     MiddlewareSteps.TypoSuggest.Stage, MiddlewareSteps.TypoSuggest.Order);
             });
         }
@@ -35,7 +35,7 @@ namespace CommandDotNet.Parsing
             public int MaxSuggestionCount;
         }
 
-        private static Task<int> Middleware(CommandContext ctx, ExecutionDelegate next)
+        private static Task<int> TypoSuggest(CommandContext ctx, ExecutionDelegate next)
         {
             if (ctx.ParseResult.ParseError != null 
                 && ctx.ParseResult.ParseError is CommandParsingException cpe 
