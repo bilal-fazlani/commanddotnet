@@ -38,6 +38,9 @@
 | \ \ \ \ \ \ Auto prompt for missing arguments (optional) | [docs](ArgumentValues/prompting.md#prompting-for-missing-arguments) ✔️ |
 | \ \ \ Default from EnvVar | [docs](ArgumentValues/default-values-from-config.md) ✔️ |
 | \ \ \ Default from AppSetting | [docs](ArgumentValues/default-values-from-config.md) ✔️ |
+|   **Validation** |  |
+| \ \ \ [FluentValidation](https://github.com/JeremySkinner/FluentValidation) for [argument models](Arguments/argument-models.md) | [docs](Arguments/fluent-validation-for-argument-models.md) ✔️ |
+| \ \ \ [Data Annotations](https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations) | [#253](https://github.com/bilal-fazlani/commanddotnet/issues/253) ❌ |
 |   **Help** |  |
 | \ \ \ Autocomplete | [#48](https://github.com/bilal-fazlani/commanddotnet/issues/48) ❌ |
 | \ \ \ Typo suggestions | [docs](Help/typo-suggestions.md) ✔️ |
@@ -51,11 +54,6 @@
 | \ \ \ \ \ \ show inputs and source<br/>\ \ \ \ \ \ \ \ \ _original source of value, including response file paths_ | ✔️ |
 | \ \ \ \ \ \ show defaults and source<br/>\ \ \ \ \ \ \ \ \ _including key if from EnvVar or AppSetting_ | ✔️ |
 | \ \ \ Command logging<br/>\ \ \ \ \ \ _show [parse](Diagnostics/parse-directive.md) output and optionally system info and app config_ | [docs](Diagnostics/command-logger.md) ✔️ |
-|   **Extensibility** |  |
-| \ \ \ Custom middleware | [docs](Extensibility/middleware.md) ✔️ |
-| \ \ \ Custom directives | [docs](Extensibility/directives.md) ✔️ |
-| \ \ \ Custom token transformations | [docs](Extensibility/token-transformations.md) ✔️ |
-| \ \ \ Custom parameter resolvers | [docs](Extensibility/parameter-resolvers.md) ✔️ |
 |   **Testing** | [docs](test-tools.md) |
 | \ \ \ BDD Framework<br/>\ \ \ \ \ \ _Test an app as if run from the console_ | ✔️ |
 | \ \ \ Supports parallel test<br/>\ \ \ \ \ \ _the whole framework avoids static state to support parallel test runs_ | ✔️ |
@@ -69,9 +67,11 @@
 | \ \ \ SimpleInjector | ✔️ |
 | \ \ \ Test injector | [docs](test-tools.md) ✔️ |
 | \ \ \ Custom | ✔️ |
-|   **Validation** |  |
-| \ \ \ [FluentValidation](https://github.com/JeremySkinner/FluentValidation) for [argument models](Arguments/argument-models.md) | [docs](Arguments/fluent-validation-for-argument-models.md) ✔️ |
-| \ \ \ [Data Annotations](https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations) | [#253](https://github.com/bilal-fazlani/commanddotnet/issues/253) ❌ |
 |   **Other** |  |
 | \ \ \ Ctrl+C | [docs](OtherFeatures/cancellation.md) ✔️ |
 | \ \ \ Name casing<br/>\ \ \ \ \ \ _consistent name casing via [Humanizer](https://github.com/Humanizr/Humanizer)_ | [docs](OtherFeatures/name-casing.md) ✔️ |
+|   **Extensibility** |  |
+| \ \ \ Custom middleware | [docs](Extensibility/middleware.md) ✔️ |
+| \ \ \ Custom directives | [docs](Extensibility/directives.md) ✔️ |
+| \ \ \ Custom token transformations | [docs](Extensibility/token-transformations.md) ✔️ |
+| \ \ \ Custom parameter resolvers | [docs](Extensibility/parameter-resolvers.md) ✔️ |
