@@ -13,6 +13,11 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public static string NormalizeLineEndings(this string text)
         {
+            if (text == null)
+            {
+                return null;
+            }
+
             // split text and trim white space from all lines
             var lines = text
                 .SplitIntoLines()
@@ -36,7 +41,7 @@ namespace CommandDotNet.TestTools
         public static IEnumerable<ConsoleKeyInfo> ToConsoleKeyInfos(this string text)
         {
             // "\r\n" would result in two ConsoleKey.Enter
-            return text.Replace("\r\n", "\r").Select(ToConsoleKeyInfo);
+            return text?.Replace("\r\n", "\r").Select(ToConsoleKeyInfo);
         }
 
         public static ConsoleKeyInfo ToConsoleKeyInfo(this char c)
@@ -79,6 +84,6 @@ namespace CommandDotNet.TestTools
             (T) Enum.Parse(typeof(T), text, ignoreCase);
 
         internal static bool TryParseEnum<T>(this string text, out T result, bool ignoreCase = false) where T : struct =>
-            Enum.TryParse<T>(text, ignoreCase, out result);
+            Enum.TryParse(text, ignoreCase, out result);
     }
 }
