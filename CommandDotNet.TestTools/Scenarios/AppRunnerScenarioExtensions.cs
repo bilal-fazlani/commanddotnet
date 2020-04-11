@@ -11,7 +11,7 @@ namespace CommandDotNet.TestTools.Scenarios
     public static class AppRunnerScenarioExtensions
     {
         /// <summary>Run and verify the scenario expectations, output results to <see cref="Console"/></summary>
-            public static AppRunnerResult Verify(this AppRunner appRunner, IScenario scenario)
+        public static AppRunnerResult Verify(this AppRunner appRunner, IScenario scenario)
         {
             return appRunner.Verify(null, scenario);
         }
@@ -52,42 +52,24 @@ namespace CommandDotNet.TestTools.Scenarios
             }
             catch (Exception e)
             {
+                logLine("");
                 logLine(scenario.ToString());
                 logLine("");
-                PrintContext(appRunner, logLine);
-                if (results != null)
-                {
-                    logLine("");
-                    logLine("App Results:");
-                    logLine(results.ConsoleOutAndError);
-                }
+                logLine(results?.CommandContext?.ToString());
+                logLine("");
+                logLine(appRunner.ToString());
                 throw;
             }
-        }
-
-        private static void PrintContext(AppRunner appRunner, Action<string> logLine)
-        {
-            logLine("");
-            logLine(appRunner.ToString());
         }
 
         private static void AssertExitCodeAndErrorMessage(IScenario scenario, AppRunnerResult result)
         {
             var sb = new StringBuilder();
-
             AssertExitCode(scenario, result, sb);
-
-            AssertMissingHelpTexts(scenario, result, sb);
-
-            AssertUnexpectedHelpTexts(scenario, result, sb);
-
+            AssertMissingOutputTexts(scenario, result, sb);
+            AssertUnexpectedOutputTexts(scenario, result, sb);
             if (sb.Length > 0)
             {
-                sb.AppendLine();
-                sb.AppendLine("Console output <begin> ------------------------------");
-                sb.AppendLine(String.IsNullOrWhiteSpace(result.ConsoleOutAndError) ? "<no output>" : result.ConsoleOutAndError);
-                sb.AppendLine("Console output <end>   ------------------------------");
-
                 throw new AssertionFailedException(sb.ToString());
             }
         }
@@ -101,7 +83,7 @@ namespace CommandDotNet.TestTools.Scenarios
             }
         }
 
-        private static void AssertMissingHelpTexts(IScenario scenario, AppRunnerResult result, StringBuilder sb)
+        private static void AssertMissingOutputTexts(IScenario scenario, AppRunnerResult result, StringBuilder sb)
         {
             var missingHelpTexts = scenario.Then.OutputContainsTexts
                 .Where(t => !result.OutputContains(t))
@@ -118,7 +100,7 @@ namespace CommandDotNet.TestTools.Scenarios
             }
         }
 
-        private static void AssertUnexpectedHelpTexts(IScenario scenario, AppRunnerResult result, StringBuilder sb)
+        private static void AssertUnexpectedOutputTexts(IScenario scenario, AppRunnerResult result, StringBuilder sb)
         {
             var unexpectedHelpTexts = scenario.Then.OutputNotContainsTexts
                 .Where(result.OutputContains)

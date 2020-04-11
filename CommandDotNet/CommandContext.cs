@@ -1,12 +1,16 @@
 ﻿using CommandDotNet.Builders;
+using CommandDotNet.Diagnostics.Parse;
 using CommandDotNet.Execution;
+using CommandDotNet.Extensions;
 using CommandDotNet.Parsing;
 using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
+using static System.Environment;
+
 
 namespace CommandDotNet
 {
-    public class CommandContext
+    public class CommandContext : IIndentableToString
     {
         /// <summary>The original string array and first parse of tokens</summary>
         public OriginalInput Original { get; }
@@ -71,6 +75,30 @@ namespace CommandDotNet
             Tokens = originalTokens;
             AppConfig = appConfig;
             Console = appConfig.Console;
+        }
+
+        public override string ToString()
+        {
+            return ToString(new Indent());
+        }
+
+        /// <summary>
+        /// Does not include OriginalInput or Tokens because they could contain passwords<br/>
+        /// Use <see cref="ParseReporter.Report"/> if those are needed.
+        /// </summary>
+        public string ToString(Indent indent)
+        {
+            // Do not include OriginalInput or Tokens because they
+            // could contain passwords.
+            // Use ParseResults instead if needed
+
+            indent = indent.Increment();
+
+            return $"{nameof(CommandContext)}:{NewLine}" +
+                   $"{indent}{nameof(RootCommand)}:{RootCommand}{NewLine}" +
+                   $"{indent}{nameof(ShowHelpOnExit)}:{ShowHelpOnExit}{NewLine}" +
+                   $"{indent}{nameof(ParseResult)}:{ParseResult?.ToString(indent.Increment())}{NewLine}" +
+                   $"{indent}{nameof(InvocationPipeline)}:{InvocationPipeline?.ToString(indent.Increment())}{NewLine}";
         }
     }
 }

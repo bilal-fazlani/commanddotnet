@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommandDotNet.Extensions;
 using CommandDotNet.Tokens;
+using static System.Environment;
 
 namespace CommandDotNet.Parsing
 {
-    public class ParseResult
+    public class ParseResult : IIndentableToString
     {
         /// <summary>The command that addressed by the command line arguments</summary>
         public Command TargetCommand { get; }
@@ -50,6 +52,20 @@ namespace CommandDotNet.Parsing
             ParseError = exception ?? throw new ArgumentNullException(nameof(exception));
             RemainingOperands = new string[0];
             SeparatedArguments = new string[0];
+        }
+
+        public override string ToString()
+        {
+            return ToString(new Indent());
+        }
+
+        public string ToString(Indent indent)
+        {
+            return $"{nameof(ParseResult)}:{NewLine}" +
+                   $"{indent}{nameof(TargetCommand)}:{TargetCommand}{NewLine}" +
+                   $"{indent}{nameof(RemainingOperands)}:{RemainingOperands.ToCsv()}{NewLine}" +
+                   $"{indent}{nameof(SeparatedArguments)}:{SeparatedArguments.ToCsv()}{NewLine}" +
+                   $"{indent}{nameof(ParseError)}:{ParseError?.Message}";
         }
     }
 }

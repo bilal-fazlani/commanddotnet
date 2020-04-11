@@ -164,7 +164,7 @@ namespace CommandDotNet
         {
             return AppConfig == null
                 ? $"{indent}{nameof(AppRunner)}<{RootCommandType.Name}>"
-                : $"{indent}{nameof(AppRunner)}<{RootCommandType.Name}>:{Environment.NewLine}{indent.Increment()}{AppConfig.ToString(indent.IncrementBy(2))}";
+                : $"{indent}{nameof(AppRunner)}<{RootCommandType.Name}>:{Environment.NewLine}{indent.Increment()}{AppConfig.ToString(indent.Increment())}";
         }
     }
 }
