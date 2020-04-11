@@ -1,5 +1,38 @@
 # CommandDotNet.TestTools
 
+## 2.0.0 (wip)
+
+This release has several breaking changes to improve readability and usability.
+
+### Scenario.Then Output vs Result
+
+Clean up naming confusion in Scenarios: Ouputs vs Result. 
+
+TestOutputs represented objects (usually parameters) that were captured in a command method. 
+They help test middleware and framework components. The `Then.Outputs` used a similar name but it 
+was more easily interpretted as `Console.Out` which was actually found in `Then.Result`.
+
+Renaming TestOutputs to TestCaptures made this simpler.
+
+To update, use find/replace
+
+* TestOutputs > TestCaptures
+* Outputs = > Captures =
+* Result = > Output =
+* ResultsContainsTexts > OutputContainsTexts
+* ResultsNotContainsTexts > OutputNotContainsTexts
+
+### Scenario.Given.AppSettings
+
+Removed ScenarioGiven.AppSettings. It did not work outside of old CommandDotNet test infrastructure. Apologies for any confusion it may have caused.
+
+### VerifyScenario -> Verify
+
+renamed VerifyScenario extension method to Verify. It reads better as `appRunner.Verify(new Scenario{...})`
+
+### ILogger -> Action<string>
+replaced ILogger with Action<string>. ILogger never ended up provided more value and was a needless abstraction.
+
 ## 1.1.1
 
 RunInMem will print the stacktrace for of a caught exception before returning the error response, otherwise the stacktrace is lost.
