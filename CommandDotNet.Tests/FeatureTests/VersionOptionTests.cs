@@ -19,7 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests
             var scenario = new Scenario
             {
                 WhenArgs = "-h",
-                Then = {ResultsContainsTexts = {"-v | --version  Show version information"}}
+                Then = {OutputContainsTexts = {"-v | --version  Show version information"}}
             };
 
             new AppRunner<App>(TestAppSettings.BasicHelp)
@@ -34,7 +34,7 @@ namespace CommandDotNet.Tests.FeatureTests
             {
                 WhenArgs = "-h",
                 Then = {
-                    ResultsContainsTexts = { @"  -v | --version          
+                    OutputContainsTexts = { @"  -v | --version          
   Show version information" }
                 }
             };
@@ -51,7 +51,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "-h",
-                    Then = { ResultsNotContainsTexts = { "-v | --version" } }
+                    Then = { OutputNotContainsTexts = { "-v | --version" } }
                 });
         }
 
@@ -62,7 +62,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "-h",
-                    Then = {ResultsNotContainsTexts = {"-v | --version"}}
+                    Then = {OutputNotContainsTexts = {"-v | --version"}}
                 });
         }
 
@@ -74,7 +74,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 WhenArgs = "--version",
                 Then =
                 {
-                    Result = @"testhost.dll
+                    Output = @"testhost.dll
 16.2.0"
                 }
             };
@@ -92,7 +92,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 WhenArgs = "-v",
                 Then =
                 {
-                    Result = @"testhost.dll
+                    Output = @"testhost.dll
 16.2.0"
                 }
             };
@@ -112,7 +112,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     Then =
                     {
                         ExitCode = 1,
-                        ResultsContainsTexts = { "Unrecognized option '--version'" }
+                        OutputContainsTexts = { "Unrecognized option '--version'" }
                     }
                 });
         }
@@ -127,7 +127,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     Then =
                     {
                         ExitCode = 1,
-                        ResultsContainsTexts = {"Unrecognized option '-v'"}
+                        OutputContainsTexts = {"Unrecognized option '-v'"}
                     }
                 });
         }

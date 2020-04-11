@@ -40,7 +40,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                     WhenArgs = "[parse] Do",
                     Then =
                     {
-                        Result = @"command: Do
+                        Output = @"command: Do
 
 arguments:
 
@@ -81,7 +81,7 @@ Use [parse:t] to include token transformations."
                     WhenArgs = "[parse] Do",
                     Then =
                     {
-                        Result = @"command: Do
+                        Output = @"command: Do
 
 arguments:
 

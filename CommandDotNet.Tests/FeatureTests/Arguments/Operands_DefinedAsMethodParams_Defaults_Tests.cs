@@ -26,7 +26,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<OperandsDefaults>(BasicHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "ArgsDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
 
 Arguments:
   boolArg
@@ -45,7 +45,7 @@ Arguments:
             new AppRunner<OperandsDefaults>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "ArgsDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
 
 Arguments:
 
@@ -73,7 +73,7 @@ Arguments:
             new AppRunner<OperandsDefaults>(BasicHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "StructListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
 
 Arguments:
   structListArg" }
@@ -86,7 +86,7 @@ Arguments:
             new AppRunner<OperandsDefaults>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "StructListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
 
 Arguments:
 
@@ -100,7 +100,7 @@ Arguments:
             new AppRunner<OperandsDefaults>(BasicHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "EnumListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
 
 Arguments:
   enumListArg" }
@@ -113,7 +113,7 @@ Arguments:
             new AppRunner<OperandsDefaults>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "EnumListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
 
 Arguments:
 
@@ -128,7 +128,7 @@ Arguments:
             new AppRunner<OperandsDefaults>(BasicHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "ObjectListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
 
 Arguments:
   objectListArg" }
@@ -141,7 +141,7 @@ Arguments:
             new AppRunner<OperandsDefaults>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "ObjectListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
 
 Arguments:
 
@@ -157,7 +157,7 @@ Arguments:
                 WhenArgs = "ArgsDefaults true green 1 2 Monday http://google.com yellow orange",
                 Then =
                 {
-                    Outputs = { new ParametersSampleTypesResults
+                    Captured = { new ParametersSampleTypesResults
                     {
                         BoolArg = true,
                         StringArg = "green",
@@ -179,7 +179,7 @@ Arguments:
                 WhenArgs = "ArgsDefaults",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new ParametersSampleTypesResults
                         {
@@ -196,7 +196,7 @@ Arguments:
 
         private class OperandsDefaults : IArgsDefaultsSampleTypesMethod
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void ArgsDefaults(
                 [Operand] bool boolArg = true,
@@ -207,26 +207,26 @@ Arguments:
                 [Operand] Uri objectArg = null,
                 [Operand] List<string> stringListArg = null)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(
+                TestCaptures.Capture(new ParametersSampleTypesResults(
                     boolArg, stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
             }
 
             public void StructListDefaults(
                 [Operand] List<int> structListArg = null)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(structListArg));
+                TestCaptures.Capture(new ParametersSampleTypesResults(structListArg));
             }
 
             public void EnumListDefaults(
                 [Operand] List<DayOfWeek> enumListArg = null)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(enumListArg));
+                TestCaptures.Capture(new ParametersSampleTypesResults(enumListArg));
             }
 
             public void ObjectListDefaults(
                 [Operand] List<Uri> objectListArg = null)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(objectListArg));
+                TestCaptures.Capture(new ParametersSampleTypesResults(objectListArg));
             }
         }
     }

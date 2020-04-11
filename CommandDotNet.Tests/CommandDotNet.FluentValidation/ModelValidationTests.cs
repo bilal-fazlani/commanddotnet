@@ -26,7 +26,7 @@ namespace CommandDotNet.Tests.CommandDotNet.FluentValidation
                 WhenArgs = "Save -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll Save [arguments]
+                    Output = @"Usage: dotnet testhost.dll Save [arguments]
 
 Arguments:
 
@@ -52,7 +52,7 @@ Arguments:
                 Then =
                 {
                     ExitCode = 2,
-                    Result = @"'Person' is invalid
+                    Output = @"'Person' is invalid
   'Id' must be greater than '0'.
   'Name' should not be empty.
   'Email' should not be empty."
@@ -73,7 +73,7 @@ Arguments:
                 Then =
                 {
                     ExitCode = 2,
-                    Result = @"'Person' is invalid
+                    Output = @"'Person' is invalid
   'Id' must be greater than '0'.
   'Name' should not be empty.
   'Email' should not be empty."
@@ -94,7 +94,7 @@ Arguments:
             var scenario = new Scenario
             {
                 WhenArgs = "Save 1 john john@doe.com",
-                Then = {Outputs = {new Person {Id = 1, Name = "john", Email = "john@doe.com"}}}
+                Then = {Captured = {new Person {Id = 1, Name = "john", Email = "john@doe.com"}}}
             };
 
             new AppRunner<App>()
@@ -114,7 +114,7 @@ Arguments:
                 Then =
                 {
                     ExitCode = 2,
-                    ResultsContainsTexts = {"'Person' is invalid"}
+                    OutputContainsTexts = {"'Person' is invalid"}
                 }
             };
 
@@ -132,7 +132,7 @@ Arguments:
                 Then =
                 {
                     ExitCode = 2,
-                    ResultsContainsTexts = {"'Person' is invalid"}
+                    OutputContainsTexts = {"'Person' is invalid"}
                 }
             };
 
@@ -153,7 +153,7 @@ Arguments:
                 Then =
                 {
                     ExitCode = 1,
-                    ResultsContainsTexts =
+                    OutputContainsTexts =
                     {
                         @"CommandDotNet.FluentValidation.InvalidValidatorException: Could not create instance of InvalidPersonValidator. Please ensure it's injected via IoC or has a default constructor.
 This exception could also occur if default constructor threw an exception",
@@ -179,7 +179,7 @@ This exception could also occur if default constructor threw an exception",
                 Then =
                 {
                     ExitCode = 2,
-                    ResultsContainsTexts =
+                    OutputContainsTexts =
                     {
                         @"'Person' is invalid
   'Id' must be greater than '0'.
@@ -198,16 +198,16 @@ Usage: dotnet testhost.dll Save [arguments]"
 
         public class App
         {
-            public TestOutputs TestOutputs { get; set; }
+            public TestCaptures TestCaptures { get; set; }
 
             public void Save(Person person)
             {
-                TestOutputs.Capture(person);
+                TestCaptures.Capture(person);
             }
 
             public void InvalidSave(InvalidPerson person)
             {
-                TestOutputs.Capture(person);
+                TestCaptures.Capture(person);
             }
         }
 

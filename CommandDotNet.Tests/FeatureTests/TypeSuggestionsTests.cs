@@ -27,7 +27,7 @@ namespace CommandDotNet.Tests.FeatureTests
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "'user' is not a option.  See 'dotnet testhost.dll User --help'",
                                 @"Similar options are
@@ -49,7 +49,7 @@ namespace CommandDotNet.Tests.FeatureTests
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "'user' is not a option.  See 'dotnet testhost.dll User --help'",
                                 @"Similar options are
@@ -80,7 +80,7 @@ namespace CommandDotNet.Tests.FeatureTests
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "'user' is not a option.  See 'dotnet testhost.dll User --help'",
                                 @"Similar options are
@@ -108,7 +108,7 @@ namespace CommandDotNet.Tests.FeatureTests
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "'user' is not a option.  See 'dotnet testhost.dll User --help'",
                                 @"Similar options are
@@ -130,7 +130,7 @@ namespace CommandDotNet.Tests.FeatureTests
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "'egister' is not a command.  See 'dotnet testhost.dll  --help'",
                                 @"Similar commands are
@@ -153,7 +153,7 @@ namespace CommandDotNet.Tests.FeatureTests
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "'opt' is not a option.  See 'dotnet testhost.dll Similars --help'",
                                 @"Similar options are
@@ -177,7 +177,7 @@ namespace CommandDotNet.Tests.FeatureTests
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "Unrecognized option '--lala'"
                             }
@@ -197,7 +197,7 @@ namespace CommandDotNet.Tests.FeatureTests
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "'users' is not a option.  See 'dotnet testhost.dll  --help'",
                                 @"Similar options are
@@ -219,7 +219,7 @@ namespace CommandDotNet.Tests.FeatureTests
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "'users' is not a command.  See 'dotnet testhost.dll  --help'",
                                 @"Similar commands are

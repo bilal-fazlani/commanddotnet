@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<App>().VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "Add -o * 2 3",
-                    Then = {Outputs = {new App.AddResults {X = 2, Y = 3, Op = "*"}}}
+                    Then = {Captured = {new App.AddResults {X = 2, Y = 3, Op = "*"}}}
                 });
         }
 
@@ -31,7 +31,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<App>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Add 2 3 -o *",
-                Then = { Outputs = { new App.AddResults { X = 2, Y = 3, Op = "*" } } }
+                Then = { Captured = { new App.AddResults { X = 2, Y = 3, Op = "*" } } }
             });
         }
 
@@ -41,7 +41,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<App>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Add 2 3 -o:*",
-                Then = { Outputs = { new App.AddResults { X = 2, Y = 3, Op = "*" } } }
+                Then = { Captured = { new App.AddResults { X = 2, Y = 3, Op = "*" } } }
             });
         }
 
@@ -51,7 +51,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<App>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Add 2 3 -o=*",
-                Then = { Outputs = { new App.AddResults { X = 2, Y = 3, Op = "*" } } }
+                Then = { Captured = { new App.AddResults { X = 2, Y = 3, Op = "*" } } }
             });
         }
 
@@ -63,7 +63,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 WhenArgsArray = new[] { "Do", "~!@#$%^&*()_= +[]\\{} |;':\",./<>?" },
                 Then =
                 {
-                    Outputs = { "~!@#$%^&*()_= +[]\\{} |;':\",./<>?" }
+                    Captured = { "~!@#$%^&*()_= +[]\\{} |;':\",./<>?" }
                 }
             });
         }
@@ -76,7 +76,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 WhenArgsArray = new[] { "Do", "[some (parenthesis) {curly} and [bracketed] text]" },
                 Then =
                 {
-                    Outputs = { "[some (parenthesis) {curly} and [bracketed] text]" }
+                    Captured = { "[some (parenthesis) {curly} and [bracketed] text]" }
                 }
             });
         }
@@ -90,7 +90,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 Then =
                 {
                     ExitCode = 1,
-                    ResultsContainsTexts = {"missing argument 'Y'"}
+                    OutputContainsTexts = {"missing argument 'Y'"}
                 }
             });
         }
@@ -104,7 +104,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 Then =
                 {
                     ExitCode = 1,
-                    ResultsContainsTexts = {"Unrecognized command or argument '%'"}
+                    OutputContainsTexts = {"Unrecognized command or argument '%'"}
                 }
             });
         }
@@ -119,7 +119,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 1,
-                        ResultsContainsTexts = { "Unrecognized command or argument '4'" }
+                        OutputContainsTexts = { "Unrecognized command or argument '4'" }
                     }
                 });
 
@@ -136,7 +136,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 1,
-                        ResultsContainsTexts = { "Unrecognized command or argument '4'" }
+                        OutputContainsTexts = { "Unrecognized command or argument '4'" }
                     }
                 });
 
@@ -150,7 +150,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "Add 2 3 4",
-                    Then = { Outputs = { new App.AddResults { X = 2, Y = 3, Op = "+" } } }
+                    Then = { Captured = { new App.AddResults { X = 2, Y = 3, Op = "+" } } }
                 });
 
             results.CommandContext.ParseResult.RemainingOperands.Should().BeEquivalentTo("4");
@@ -163,7 +163,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "Add_EnabledIgnore 2 3 4",
-                    Then = { Outputs = { new App.AddResults { X = 2, Y = 3 } } }
+                    Then = { Captured = { new App.AddResults { X = 2, Y = 3 } } }
                 });
 
             results.CommandContext.ParseResult.RemainingOperands.Should().BeEquivalentTo("4");
@@ -171,7 +171,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         private class App
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Add(
                 [Operand(Description = "the first operand")]
@@ -181,24 +181,24 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 [Option(ShortName = "o", LongName = "operator", Description = "the operation to apply")]
                 string operation = "+")
             {
-                TestOutputs.Capture(new AddResults { X = x, Y = y, Op = operation });
+                TestCaptures.Capture(new AddResults { X = x, Y = y, Op = operation });
             }
 
             [Command(IgnoreUnexpectedOperands = true)]
             public void Add_EnabledIgnore(int x, int y)
             {
-                TestOutputs.Capture(new AddResults { X = x, Y = y });
+                TestCaptures.Capture(new AddResults { X = x, Y = y });
             }
 
             [Command(IgnoreUnexpectedOperands = false)]
             public void Add_DisabledIgnore(int x, int y)
             {
-                TestOutputs.Capture(new AddResults { X = x, Y = y });
+                TestCaptures.Capture(new AddResults { X = x, Y = y });
             }
 
             public void Do([Operand] string arg)
             {
-                TestOutputs.Capture(arg);
+                TestCaptures.Capture(arg);
             }
 
             public class AddResults

@@ -31,7 +31,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         WhenArgs = $"{nameof(App.List)}",
                         Then =
                         {
-                            Outputs = {new List<string> {"aaa", "bbb"}}
+                            Captured = {new List<string> {"aaa", "bbb"}}
                         }
                     });
         }
@@ -48,7 +48,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         WhenArgs = $"{nameof(App.List)} aaa bbb",
                         Then =
                         {
-                            Outputs = {new List<string> {"aaa", "bbb", "ccc", "ddd"}}
+                            Captured = {new List<string> {"aaa", "bbb", "ccc", "ddd"}}
                         }
                     });
         }
@@ -65,7 +65,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         WhenArgs = $"{nameof(App.Single)} single",
                         Then =
                         {
-                            Outputs = {"single"}
+                            Captured = {"single"}
                         }
                     });
         }
@@ -82,7 +82,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         WhenArgs = $"{nameof(App.SingleAndList)} single",
                         Then =
                         {
-                            Outputs =
+                            Captured =
                             {
                                 "single",
                                 new List<string> {"aaa", "bbb"}
@@ -111,7 +111,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         WhenArgs = $"{nameof(StreamingApp.Stream)}",
                         Then =
                         {
-                            Outputs = {new List<string> {"aaa", "bbb"}}
+                            Captured = {new List<string> {"aaa", "bbb"}}
                         }
                     });
         }
@@ -147,32 +147,32 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         public class App
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Single([Operand] string singleArg)
             {
-                TestOutputs.CaptureIfNotNull(singleArg);
+                TestCaptures.CaptureIfNotNull(singleArg);
             }
 
             public void List([Operand] List<string> listArgs)
             {
-                TestOutputs.CaptureIfNotNull(listArgs);
+                TestCaptures.CaptureIfNotNull(listArgs);
             }
 
             public void SingleAndList([Operand] string singleArg, [Operand] List<string> listArgs)
             {
-                TestOutputs.CaptureIfNotNull(singleArg);
-                TestOutputs.CaptureIfNotNull(listArgs);
+                TestCaptures.CaptureIfNotNull(singleArg);
+                TestCaptures.CaptureIfNotNull(listArgs);
             }
         }
 
         public class StreamingApp
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Stream(IEnumerable<string> input)
             {
-                TestOutputs.Capture(input.ToList());
+                TestCaptures.Capture(input.ToList());
             }
         }
     }

@@ -27,7 +27,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {
-                        Result = @"arg1 (Text): part"
+                        Output = @"arg1 (Text): part"
                     }
                 });
         }
@@ -48,7 +48,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new App.DoResult
                             {
@@ -56,7 +56,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                                 Opt1 = "simple"
                             }
                         },
-                        Result = @"arg1 (Text): take2
+                        Output = @"arg1 (Text): take2
 opt1 (Text): simple"
                     }
                 });
@@ -75,7 +75,7 @@ opt1 (Text): simple"
                     WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {
-                        Result = @"arg1 (Text):
+                        Output = @"arg1 (Text):
 opt1 (Text):"
                     }
                 });
@@ -92,8 +92,8 @@ opt1 (Text):"
                     WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {
-                        Outputs = { new App.DoResult{Arg1 = "maybe", Opt1 = "maybe"}},
-                        Result = @"arg1 (Text): maybe
+                        Captured = { new App.DoResult{Arg1 = "maybe", Opt1 = "maybe"}},
+                        Output = @"arg1 (Text): maybe
 opt1 (Text): maybe"
                     }
                 });
@@ -101,11 +101,11 @@ opt1 (Text): maybe"
 
         class App
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Do([Option] string opt1, string arg1)
             {
-                TestOutputs.Capture(new DoResult { Opt1 = opt1, Arg1 = arg1 });
+                TestCaptures.Capture(new DoResult { Opt1 = opt1, Arg1 = arg1 });
             }
 
             public class DoResult

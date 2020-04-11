@@ -34,7 +34,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     WhenArgs = "Do --opt1 smells like",
                     Then =
                     {
-                        Result = "smells roses"
+                        Output = "smells roses"
                     }
                 });
         }

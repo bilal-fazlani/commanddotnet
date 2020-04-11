@@ -22,7 +22,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<NestedModelApp>(BasicHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Do -h",
-                Then = { Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
   Operand1
@@ -40,7 +40,7 @@ Options:
             new AppRunner<NestedModelApp>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Do -h",
-                Then = { Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
 
@@ -64,7 +64,7 @@ Options:
                 WhenArgs = "Do --Option1 aaa --Option2 bbb ccc ddd",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new ParentModel
                         {
@@ -78,11 +78,11 @@ Options:
 
         private class NestedModelApp
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Do(ParentModel parameterModel)
             {
-                TestOutputs.Capture(parameterModel);
+                TestCaptures.Capture(parameterModel);
             }
         }
 

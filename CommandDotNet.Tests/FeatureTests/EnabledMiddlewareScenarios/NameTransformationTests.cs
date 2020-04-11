@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                     WhenArgs = "prefix-Do -h",
                     Then =
                     {
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             "prefix-Do", "prefix-option1", "prefix-operand1"
                         }
@@ -43,11 +43,11 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                     WhenArgs = "prefix-Do -h",
                     Then =
                     {
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             "prefix-Do", "option1", "operand1"
                         },
-                        ResultsNotContainsTexts =
+                        OutputNotContainsTexts =
                         {
                             "prefix-option1", "prefix-operand1"
                         }
@@ -66,11 +66,11 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                     WhenArgs = "Do -h",
                     Then =
                     {
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             "Do", "option1", "prefix-operand1"
                         },
-                        ResultsNotContainsTexts =
+                        OutputNotContainsTexts =
                         {
                             "prefix-option1"
                         }

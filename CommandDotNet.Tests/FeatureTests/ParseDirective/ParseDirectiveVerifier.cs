@@ -103,9 +103,9 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                         Then =
                         {
                             ExitCode = throwBeforeBind ? 1 : 0,
-                            Result = expectedResult,
-                            ResultsContainsTexts = contains,
-                            ResultsNotContainsTexts = notContains
+                            Output = expectedResult,
+                            OutputContainsTexts = contains,
+                            OutputNotContainsTexts = notContains
                         }
                     });
 

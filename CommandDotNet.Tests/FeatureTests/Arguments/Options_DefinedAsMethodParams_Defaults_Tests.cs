@@ -28,7 +28,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 WhenArgs = "ArgsDefaults -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
+                    Output = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
 Options:
   --boolArg
@@ -50,7 +50,7 @@ Options:
                 WhenArgs = "ArgsDefaults -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
+                    Output = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
 Options:
 
@@ -80,7 +80,7 @@ Options:
                 WhenArgs = "StructListDefaults -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll StructListDefaults [options]
+                    Output = @"Usage: dotnet testhost.dll StructListDefaults [options]
 
 Options:
   --structListArg"
@@ -96,7 +96,7 @@ Options:
                 WhenArgs = "StructListDefaults -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll StructListDefaults [options]
+                    Output = @"Usage: dotnet testhost.dll StructListDefaults [options]
 
 Options:
 
@@ -113,7 +113,7 @@ Options:
                 WhenArgs = "EnumListDefaults -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll EnumListDefaults [options]
+                    Output = @"Usage: dotnet testhost.dll EnumListDefaults [options]
 
 Options:
   --enumListArg"
@@ -129,7 +129,7 @@ Options:
                 WhenArgs = "EnumListDefaults -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll EnumListDefaults [options]
+                    Output = @"Usage: dotnet testhost.dll EnumListDefaults [options]
 
 Options:
 
@@ -147,7 +147,7 @@ Options:
                 WhenArgs = "ObjectListDefaults -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll ObjectListDefaults [options]
+                    Output = @"Usage: dotnet testhost.dll ObjectListDefaults [options]
 
 Options:
   --objectListArg"
@@ -163,7 +163,7 @@ Options:
                 WhenArgs = "ObjectListDefaults -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll ObjectListDefaults [options]
+                    Output = @"Usage: dotnet testhost.dll ObjectListDefaults [options]
 
 Options:
 
@@ -181,7 +181,7 @@ Options:
                            "--objectArg http://google.com --stringListArg yellow --stringListArg orange",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new ParametersSampleTypesResults
                         {
@@ -206,7 +206,7 @@ Options:
                 WhenArgs = "ArgsDefaults",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new ParametersSampleTypesResults
                         {
@@ -229,7 +229,7 @@ Options:
                 WhenArgs = "StructListDefaults --structListArg 23 --structListArg 5 --structListArg 7",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new ParametersSampleTypesResults
                         {
@@ -248,7 +248,7 @@ Options:
                 WhenArgs = "EnumListDefaults --enumListArg Friday --enumListArg Tuesday --enumListArg Thursday",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new ParametersSampleTypesResults
                         {
@@ -267,7 +267,7 @@ Options:
                 WhenArgs = "ObjectListDefaults --objectListArg http://google.com --objectListArg http://apple.com --objectListArg http://github.com",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new ParametersSampleTypesResults
                         {
@@ -285,7 +285,7 @@ Options:
 
         private class OptionsDefaults : IArgsDefaultsSampleTypesMethod
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void ArgsDefaults(
                 [Option] bool boolArg = true,
@@ -296,26 +296,26 @@ Options:
                 [Option] Uri objectArg = null,
                 [Option] List<string> stringListArg = null)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(
+                TestCaptures.Capture(new ParametersSampleTypesResults(
                     boolArg, stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
             }
 
             public void StructListDefaults(
                 [Option] List<int> structListArg = null)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(structListArg));
+                TestCaptures.Capture(new ParametersSampleTypesResults(structListArg));
             }
 
             public void EnumListDefaults(
                 [Option] List<DayOfWeek> enumListArg = null)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(enumListArg));
+                TestCaptures.Capture(new ParametersSampleTypesResults(enumListArg));
             }
 
             public void ObjectListDefaults(
                 [Option] List<Uri> objectListArg = null)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(objectListArg));
+                TestCaptures.Capture(new ParametersSampleTypesResults(objectListArg));
             }
         }
     }

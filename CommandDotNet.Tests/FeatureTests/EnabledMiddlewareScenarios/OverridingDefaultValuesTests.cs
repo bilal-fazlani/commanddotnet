@@ -39,7 +39,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                         WhenArgs = "ArgsDefaults",
                         Then =
                         {
-                            Outputs = { new ParametersSampleTypesResults
+                            Captured = { new ParametersSampleTypesResults
                             {
                                 BoolArg = true,
                                 StringArg = "green",
@@ -59,7 +59,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                         WhenArgs = "OperandsDefaultsModel",
                         Then =
                         {
-                            Outputs = { new OperandsDefaultsSampleTypesModel
+                            Captured = { new OperandsDefaultsSampleTypesModel
                             {
                                 BoolArg = true,
                                 StringArg = "green",
@@ -95,7 +95,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                     WhenArgs = "ArgsDefaults",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new ParametersSampleTypesResults
                             {
@@ -118,7 +118,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                     WhenArgs = "EnumListDefaults",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new ParametersSampleTypesResults(new List<DayOfWeek> {DayOfWeek.Monday, DayOfWeek.Friday})
                         }
@@ -132,7 +132,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                         WhenArgs = "ObjectListDefaults",
                         Then =
                         {
-                            Outputs =
+                            Captured =
                             {
                                 new ParametersSampleTypesResults(new List<Uri>
                                 {
@@ -160,7 +160,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                         WhenArgs = "OptionsDefaultsModel",
                         Then =
                         {
-                            Outputs = { new OptionsDefaultsSampleTypesModel
+                            Captured = { new OptionsDefaultsSampleTypesModel
                             {
                                 StructArg = 1,
                             } }
@@ -185,7 +185,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                         Then =
                         {
                             ExitCode = 2,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "Failure assigning value to Option: StructNArg",
                                 "CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels.OptionsDefaultsSampleTypesModel.StructNArg",
@@ -198,7 +198,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
 
         class App : IArgsDefaultsSampleTypesMethod
         {
-            public TestOutputs TestOutputs { get; set; }
+            public TestCaptures TestCaptures { get; set; }
 
             public void ArgsDefaults(
                 [Option] bool boolArg = true,
@@ -209,36 +209,36 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                 [Option] Uri objectArg = null,
                 [Option] List<string> stringListArg = null)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(
+                TestCaptures.Capture(new ParametersSampleTypesResults(
                     boolArg, stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
             }
 
             public void StructListDefaults(
                 [Option] List<int> structListArg = null)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(structListArg));
+                TestCaptures.Capture(new ParametersSampleTypesResults(structListArg));
             }
 
             public void EnumListDefaults(
                 [Option] List<DayOfWeek> enumListArg = null)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(enumListArg));
+                TestCaptures.Capture(new ParametersSampleTypesResults(enumListArg));
             }
 
             public void ObjectListDefaults(
                 [Option] List<Uri> objectListArg = null)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(objectListArg));
+                TestCaptures.Capture(new ParametersSampleTypesResults(objectListArg));
             }
 
             public void OperandsDefaultsModel(OperandsDefaultsSampleTypesModel model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
 
             public void OptionsDefaultsModel(OptionsDefaultsSampleTypesModel model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
         }
     }

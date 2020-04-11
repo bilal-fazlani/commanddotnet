@@ -36,7 +36,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     WhenArgs = $"Do @{responseFile}",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new App.DoResult {arg1 = $"@{responseFile}"}
                         }
@@ -56,7 +56,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     WhenArgs = $"Do @{responseFile}",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new App.DoResult
                             {
@@ -80,7 +80,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     WhenArgs = $"Do @{responseFile}",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new App.DoResult
                             {
@@ -104,7 +104,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     WhenArgs = $"Do arg1value @{responseFile}",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new App.DoResult
                             {
@@ -133,11 +133,11 @@ namespace CommandDotNet.Tests.FeatureTests
 
         public class App
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Do([Option] string opt1, string arg1)
             {
-                TestOutputs.Capture(new DoResult { opt1 = opt1, arg1 = arg1 });
+                TestCaptures.Capture(new DoResult { opt1 = opt1, arg1 = arg1 });
             }
 
             public class DoResult

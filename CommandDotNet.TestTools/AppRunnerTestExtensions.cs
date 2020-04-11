@@ -70,7 +70,7 @@ namespace CommandDotNet.TestTools
                 CommandContext context = null;
                 runner.CaptureState(ctx => context = ctx, MiddlewareStages.PreTokenize);
                 runner.Configure(c => c.Console = testConsole);
-                var outputs = InjectTestOutputs(runner);
+                var outputs = InjectTestCaptures(runner);
 
                 void LogResult()
                 {
@@ -101,33 +101,33 @@ namespace CommandDotNet.TestTools
             }
         }
 
-        private static TestOutputs InjectTestOutputs(AppRunner runner)
+        private static TestCaptures InjectTestCaptures(AppRunner runner)
         {
-            var outputs = new TestOutputs();
+            var outputs = new TestCaptures();
             runner.Configure(c =>
             {
                 c.Services.Add(outputs);
-                c.UseMiddleware(InjectTestOutputs, MiddlewareStages.PostBindValuesPreInvoke);
+                c.UseMiddleware(InjectTestCaptures, MiddlewareStages.PostBindValuesPreInvoke);
             });
 
             return outputs;
         }
 
-        private static Task<int> InjectTestOutputs(CommandContext commandContext, ExecutionDelegate next)
+        private static Task<int> InjectTestCaptures(CommandContext commandContext, ExecutionDelegate next)
         {
-            var outputs = commandContext.AppConfig.Services.Get<TestOutputs>();
+            var outputs = commandContext.AppConfig.Services.Get<TestCaptures>();
             commandContext.InvocationPipeline.All
                 .Select(i => i.Instance)
                 .ForEach(instance =>
                 {
                     instance.GetType()
                         .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                        .Where(p => p.PropertyType == typeof(TestOutputs))
+                        .Where(p => p.PropertyType == typeof(TestCaptures))
                         .ForEach(p =>
                         {
                             // principal of least surprise
                             // if the test class sets the instance, then use that instance
-                            var value = (TestOutputs)p.GetValue(instance);
+                            var value = (TestCaptures)p.GetValue(instance);
                             if (value == null)
                             {
                                 p.SetValue(instance, outputs);

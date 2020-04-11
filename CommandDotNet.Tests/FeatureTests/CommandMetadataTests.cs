@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "-h",
-                Then = { Result = @"app description
+                Then = { Output = @"app description
 
 Usage: some usage examples
 
@@ -41,7 +41,7 @@ app extended help" }
             new AppRunner<App>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "-h",
-                Then = { Result = @"app description
+                Then = { Output = @"app description
 
 Usage: some usage examples
 
@@ -62,7 +62,7 @@ app extended help" }
             new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "SubApp -h",
-                Then = { Result = @"sub-app description
+                Then = { Output = @"sub-app description
 
 Usage: dotnet testhost.dll SubApp [command]
 
@@ -81,7 +81,7 @@ sub-app extended help" }
             new AppRunner<App>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "SubApp -h",
-                Then = { Result = @"sub-app description
+                Then = { Output = @"sub-app description
 
 Usage: dotnet testhost.dll SubApp [command]
 
@@ -101,7 +101,7 @@ sub-app extended help" }
             new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "somecommand -h",
-                Then = { Result = @"cmd description
+                Then = { Output = @"cmd description
 
 Usage: dotnet testhost.dll somecommand [arguments]
 
@@ -118,7 +118,7 @@ cmd extended help" }
             new AppRunner<App>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "somecommand -h",
-                Then = { Result = @"cmd description
+                Then = { Output = @"cmd description
 
 Usage: dotnet testhost.dll somecommand [arguments]
 

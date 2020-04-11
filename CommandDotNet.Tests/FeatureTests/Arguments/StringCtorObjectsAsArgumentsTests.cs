@@ -23,7 +23,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Do -h",
-                Then = {Result = @"Usage: dotnet testhost.dll Do [arguments]
+                Then = {Output = @"Usage: dotnet testhost.dll Do [arguments]
 
 Arguments:
   arg" }
@@ -36,7 +36,7 @@ Arguments:
             new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "DoList -h",
-                Then = { Result = @"Usage: dotnet testhost.dll DoList [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll DoList [arguments]
 
 Arguments:
   args" }
@@ -49,7 +49,7 @@ Arguments:
             new AppRunner<App>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Do -h",
-                Then = {Result = @"Usage: dotnet testhost.dll Do [arguments]
+                Then = {Output = @"Usage: dotnet testhost.dll Do [arguments]
 
 Arguments:
 
@@ -63,7 +63,7 @@ Arguments:
             new AppRunner<App>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "DoList -h",
-                Then = { Result = @"Usage: dotnet testhost.dll DoList [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll DoList [arguments]
 
 Arguments:
 
@@ -79,7 +79,7 @@ Arguments:
                 WhenArgs = "DoList some-value another-value",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new List<StringCtorObject>
                         {
@@ -97,22 +97,22 @@ Arguments:
             new AppRunner<App>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Do some-value",
-                Then = { Outputs = { new StringCtorObject("some-value") } }
+                Then = { Captured = { new StringCtorObject("some-value") } }
             });
         }
 
         private class App
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Do(StringCtorObject arg)
             {
-                TestOutputs.Capture(arg);
+                TestCaptures.Capture(arg);
             }
 
             public void DoList(List<StringCtorObject> args)
             {
-                TestOutputs.Capture(args);
+                TestCaptures.Capture(args);
             }
         }
 

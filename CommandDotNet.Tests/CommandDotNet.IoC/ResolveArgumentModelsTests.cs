@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
             var testOutputs = new AppRunner<App>()
                 .UseDependencyResolver(new TestDependencyResolver {new App(), argModel})
                 .RunInMem("Do lala", _testOutputHelper)
-                .TestOutputs;
+                .TestCaptures;
 
             var resolvedArgModel = testOutputs.Get<ArgModel>();
             resolvedArgModel.Should().BeSameAs(argModel);
@@ -38,11 +38,11 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
         class App
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Do(ArgModel argModel)
             {
-                TestOutputs.Capture(argModel);
+                TestCaptures.Capture(argModel);
             }
         }
 

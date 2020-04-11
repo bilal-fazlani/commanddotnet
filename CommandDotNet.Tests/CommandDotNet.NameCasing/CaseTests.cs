@@ -94,7 +94,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
                     WhenArgs = "-h",
                     Then =
                     {
-                        ResultsContainsTexts = commandNames.ToList()
+                        OutputContainsTexts = commandNames.ToList()
                     }
                 });
         }

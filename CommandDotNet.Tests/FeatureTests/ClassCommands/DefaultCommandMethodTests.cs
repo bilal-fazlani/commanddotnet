@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                 WhenArgs = "-h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll [command]
+                    Output = @"Usage: dotnet testhost.dll [command]
 
 Commands:
   AnotherCommand
@@ -42,7 +42,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 WhenArgs = "-h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll [command]
+                    Output = @"Usage: dotnet testhost.dll [command]
 
 Commands:
 
@@ -61,7 +61,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 WhenArgs = "-h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll [command] [arguments]
+                    Output = @"Usage: dotnet testhost.dll [command] [arguments]
 
 Arguments:
   text  some text
@@ -82,7 +82,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 WhenArgs = "-h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll [command] [arguments]
+                    Output = @"Usage: dotnet testhost.dll [command] [arguments]
 
 Arguments:
 
@@ -107,7 +107,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 WhenArgs = "AnotherCommand -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll AnotherCommand"
+                    Output = @"Usage: dotnet testhost.dll AnotherCommand"
                 }
             });
         }
@@ -120,7 +120,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 WhenArgs = null,
                 Then =
                 {
-                    Outputs = { WithoutDefaultArgsApp.DefaultMethodExecuted }
+                    Captured = { WithoutDefaultArgsApp.DefaultMethodExecuted }
                 }
             });
         }
@@ -133,7 +133,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 WhenArgs = "abcde",
                 Then =
                 {
-                    Outputs = { "abcde" }
+                    Captured = { "abcde" }
                 }
             });
         }
@@ -146,7 +146,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 WhenArgs = "AnotherCommand",
                 Then =
                 {
-                    Outputs = { false }
+                    Captured = { false }
                 }
             });
         }
@@ -160,7 +160,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 Then =
                 {
                     ExitCode = 1,
-                    ResultsContainsTexts = { "Unrecognized command or argument 'abcde'"}
+                    OutputContainsTexts = { "Unrecognized command or argument 'abcde'"}
                 }
             });
         }
@@ -169,35 +169,35 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         {
             public const string DefaultMethodExecuted = "default executed";
 
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             [DefaultMethod]
             public void DefaultMethod()
             {
-                TestOutputs.Capture(DefaultMethodExecuted);
+                TestCaptures.Capture(DefaultMethodExecuted);
             }
 
             public void AnotherCommand()
             {
-                TestOutputs.Capture(false);
+                TestCaptures.Capture(false);
             }
         }
 
         private class WithDefaultArgsApp
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             [DefaultMethod]
             public void DefaultMethod(
                 [Operand(Description = "some text")]
                 string text)
             {
-                TestOutputs.Capture(text);
+                TestCaptures.Capture(text);
             }
 
             public void AnotherCommand()
             {
-                TestOutputs.Capture(false);
+                TestCaptures.Capture(false);
             }
         }
     }

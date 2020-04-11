@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     WhenArgs = "Do -h",
-                    Then = { ResultsContainsTexts = { "Usage: dotnet testhost.dll Do <arg1> <arg2> [<optional>]" } }
+                    Then = { OutputContainsTexts = { "Usage: dotnet testhost.dll Do <arg1> <arg2> [<optional>]" } }
                 });
         }
 
@@ -32,7 +32,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     WhenArgs = "Do2 -h",
-                    Then = { ResultsContainsTexts = { "Usage: dotnet testhost.dll Do2 [options] <arg1> <arg2> [<optional>]" } }
+                    Then = { OutputContainsTexts = { "Usage: dotnet testhost.dll Do2 [options] <arg1> <arg2> [<optional>]" } }
                 });
         }
 

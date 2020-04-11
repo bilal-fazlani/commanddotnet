@@ -25,7 +25,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 WhenArgs = "Do -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                    Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
   ModelArg
@@ -47,7 +47,7 @@ Options:
             new AppRunner<App>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Do -h",
-                Then = { Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
 
@@ -79,7 +79,7 @@ Options:
                            "red green blue orange",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new Model
                         {
@@ -109,7 +109,7 @@ Options:
                            "blue --paramOptionList poF orange --paramOptionList poG",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new Model
                         {
@@ -128,7 +128,7 @@ Options:
 
         private class App
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Do(
                 Model model,
@@ -137,8 +137,8 @@ Options:
                 [Option] List<string> paramOptionList,
                 [Operand] List<string> paramArgList)
             {
-                TestOutputs.Capture(model);
-                TestOutputs.Capture(new Params(paramArg, paramOption, paramOptionList, paramArgList));
+                TestCaptures.Capture(model);
+                TestCaptures.Capture(new Params(paramArg, paramOption, paramOptionList, paramArgList));
             }
         }
 

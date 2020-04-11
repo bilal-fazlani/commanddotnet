@@ -30,12 +30,12 @@ The second pattern is run an instance of the AppRunner using `AppRunner.RunInMem
         
         // described in the scenario readme.md from above
         /// <summary>
-        /// <see cref="TestOutputs"/> captured in the command class.
-        /// The command class must have a public <see cref="TestOutputs"/> property for this to work.<br/>
+        /// <see cref="TestCaptures"/> captured in the command class.
+        /// The command class must have a public <see cref="TestCaptures"/> property for this to work.<br/>
         /// This is a convenience for testing how inputs are mapped into the command method parameters.<br/>
         /// Useful for testing middleware components, not the business logic of your commands.
         /// </summary>
-        public TestOutputs TestOutputs { get; }
+        public TestCaptures TestCaptures { get; }
 
         /// <summary>
         /// Help generation leaves extra trailing spaces that are hard to account for in test verification.

@@ -23,21 +23,21 @@ namespace CommandDotNet.TestTools
         public string ConsoleOut => _testConsole.Out.ToString();
 
         /// <summary>
-        /// <see cref="TestOutputs"/> captured in the command class.
-        /// The command class must have a public <see cref="TestOutputs"/> property for this to work.<br/>
+        /// <see cref="TestCaptures"/> captured in the command class.
+        /// The command class must have a public <see cref="TestCaptures"/> property for this to work.<br/>
         /// This is a convenience for testing how inputs are mapped into the command method parameters.<br/>
         /// Useful for testing middleware components, not the business logic of your commands.
         /// </summary>
-        public TestOutputs TestOutputs { get; }
+        public TestCaptures TestCaptures { get; }
 
         /// <summary>The <see cref="CommandContext"/> used during the run</summary>
         public CommandContext CommandContext { get; }
 
-        public AppRunnerResult(int exitCode, TestConsole testConsole, TestOutputs testOutputs, CommandContext commandContext)
+        public AppRunnerResult(int exitCode, TestConsole testConsole, TestCaptures testCaptures, CommandContext commandContext)
         {
             _testConsole = testConsole;
             ExitCode = exitCode;
-            TestOutputs = testOutputs;
+            TestCaptures = testCaptures;
             CommandContext = commandContext;
         }
 

@@ -26,8 +26,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 WhenArgs = "-h",
                 Then =
                 {
-                    ResultsNotContainsTexts = { "Arguments" },
-                    ResultsContainsTexts =
+                    OutputNotContainsTexts = { "Arguments" },
+                    OutputContainsTexts =
                     {
                         @"Options:
   --ctorDefault
@@ -45,7 +45,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 WhenArgs = "Method -h",
                 Then =
                 {
-                    ResultsContainsTexts =
+                    OutputContainsTexts =
                     {
                         @"Arguments:
   default
@@ -66,7 +66,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 WhenArgs = "Model -h",
                 Then =
                 {
-                    ResultsContainsTexts =
+                    OutputContainsTexts =
                     {
                         @"Arguments:
   Default
@@ -87,8 +87,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 WhenArgs = "-h",
                 Then =
                 {
-                    ResultsNotContainsTexts = { "Arguments" },
-                    ResultsContainsTexts =
+                    OutputNotContainsTexts = { "Arguments" },
+                    OutputContainsTexts =
                     {
                         @"Options:
   --ctorDefault
@@ -106,7 +106,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 WhenArgs = "Method -h",
                 Then =
                 {
-                    ResultsContainsTexts =
+                    OutputContainsTexts =
                     {
                         @"Arguments:
   operand
@@ -127,7 +127,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 WhenArgs = "Model -h",
                 Then =
                 {
-                    ResultsContainsTexts =
+                    OutputContainsTexts =
                     {
                         @"Arguments:
   Operand
@@ -148,8 +148,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 WhenArgs = "-h",
                 Then =
                 {
-                    ResultsNotContainsTexts = { "Arguments" },
-                    ResultsContainsTexts =
+                    OutputNotContainsTexts = { "Arguments" },
+                    OutputContainsTexts =
                     {
                         @"Options:
   --ctorDefault
@@ -167,7 +167,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 WhenArgs = "Method -h",
                 Then =
                 {
-                    ResultsContainsTexts =
+                    OutputContainsTexts =
                     {
                         @"Arguments:
   default
@@ -188,7 +188,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 WhenArgs = "Model -h",
                 Then =
                 {
-                    ResultsContainsTexts =
+                    OutputContainsTexts =
                     {
                         @"Arguments:
   Default

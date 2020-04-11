@@ -49,7 +49,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
             var testOutputs = new AppRunner<App>()
                 .UseSimpleInjector(container, runInScope: ctx => AsyncScopedLifestyle.BeginScope(container))
                 .RunInMem("Do", _testOutputHelper)
-                .TestOutputs;
+                .TestCaptures;
 
             var services = testOutputs.Get<App.Services>();
 
@@ -73,7 +73,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         class App
         {
             private readonly ISomeService _someService;
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public App(ISomeService someService)
             {
@@ -82,7 +82,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
             public Task<int> Intercept(CommandContext context, ExecutionDelegate next)
             {
-                TestOutputs.Capture(new Services
+                TestCaptures.Capture(new Services
                 {
                     FromCtor = _someService,
                     FromInterceptor = (ISomeService)context.AppConfig.DependencyResolver.Resolve(typeof(ISomeService))

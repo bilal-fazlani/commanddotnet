@@ -28,7 +28,7 @@ namespace CommandDotNet.Tests.FeatureTests
                         Then =
                         {
                             ExitCode = 1, // method should have been called
-                            ResultsContainsTexts = { "Unrecognized command or argument '[debug]'" }
+                            OutputContainsTexts = { "Unrecognized command or argument '[debug]'" }
                         }
                     });
         }
@@ -46,7 +46,7 @@ namespace CommandDotNet.Tests.FeatureTests
                         Then =
                         {
                             ExitCode = 5, // method should have been called
-                            ResultsContainsTexts = {$"Attach your debugger to process {processId} (dotnet)."}
+                            OutputContainsTexts = {$"Attach your debugger to process {processId} (dotnet)."}
                         }
                     });
         }

@@ -75,10 +75,10 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
         class App
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
             public void Do(ArgModel argModel)
             {
-                TestOutputs.Capture(argModel);
+                TestCaptures.Capture(argModel);
             }
         }
 

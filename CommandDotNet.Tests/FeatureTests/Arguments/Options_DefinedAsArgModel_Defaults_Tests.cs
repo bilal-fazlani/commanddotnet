@@ -25,7 +25,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<OptionsDefaults>(BasicHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "ArgsDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
+                Then = { Output = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
 Options:
   --BoolArg
@@ -47,7 +47,7 @@ Options:
             new AppRunner<OptionsDefaults>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "ArgsDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
+                Then = { Output = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
 Options:
 
@@ -88,7 +88,7 @@ Options:
                            "--ObjectListArg http://apple.com --ObjectListArg http://github.com",
                 Then =
                 {
-                    Outputs = { new OptionsDefaultsSampleTypesModel
+                    Captured = { new OptionsDefaultsSampleTypesModel
                     {
                         StringArg = "green",
                         StructArg = 1,
@@ -116,18 +116,18 @@ Options:
                 WhenArgs = "ArgsDefaults",
                 Then =
                 {
-                    Outputs = { new OptionsDefaultsSampleTypesModel() }
+                    Captured = { new OptionsDefaultsSampleTypesModel() }
                 }
             });
         }
 
         private class OptionsDefaults
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void ArgsDefaults(OptionsDefaultsSampleTypesModel model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
         }
     }

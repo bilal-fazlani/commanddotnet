@@ -27,7 +27,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 WhenArgs = "ArgsNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments]
 
 Arguments:
   BoolArg
@@ -49,7 +49,7 @@ Arguments:
                 WhenArgs = "ArgsNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments]
 
 Arguments:
 
@@ -80,7 +80,7 @@ Arguments:
                 WhenArgs = "StructListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll StructListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll StructListNoDefault [arguments]
 
 Arguments:
   StructListArg"
@@ -96,7 +96,7 @@ Arguments:
                 WhenArgs = "StructListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll StructListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll StructListNoDefault [arguments]
 
 Arguments:
 
@@ -113,7 +113,7 @@ Arguments:
                 WhenArgs = "EnumListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments]
 
 Arguments:
   EnumListArg"
@@ -129,7 +129,7 @@ Arguments:
                 WhenArgs = "EnumListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments]
 
 Arguments:
 
@@ -147,7 +147,7 @@ Arguments:
                 WhenArgs = "ObjectListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments]
 
 Arguments:
   ObjectListArg"
@@ -163,7 +163,7 @@ Arguments:
                 WhenArgs = "ObjectListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments]
 
 Arguments:
 
@@ -180,7 +180,7 @@ Arguments:
                 WhenArgs = "ArgsNoDefault true green 1 2 Monday http://google.com yellow orange",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new OperandsNoDefaultsSampleTypesModel
                         {
@@ -205,7 +205,7 @@ Arguments:
                 WhenArgs = "ArgsNoDefault",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new OperandsNoDefaultsSampleTypesModel
                         {
@@ -225,7 +225,7 @@ Arguments:
                 WhenArgs = "StructListNoDefault 23 5 7",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new OperandsNoDefaultsStructListArgumentModel
                         {
@@ -244,7 +244,7 @@ Arguments:
                 WhenArgs = "EnumListNoDefault Friday Tuesday Thursday",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new OperandsNoDefaultsEnumListArgumentModel
                         {
@@ -263,7 +263,7 @@ Arguments:
                 WhenArgs = "ObjectListNoDefault http://google.com http://apple.com http://github.com",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new OperandsNoDefaultsObjectListArgumentModel
                         {
@@ -281,26 +281,26 @@ Arguments:
 
         private class OperandsNoDefaults
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void ArgsNoDefault(OperandsNoDefaultsSampleTypesModel model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
 
             public void StructListNoDefault(OperandsNoDefaultsStructListArgumentModel model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
 
             public void EnumListNoDefault(OperandsNoDefaultsEnumListArgumentModel model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
 
             public void ObjectListNoDefault(OperandsNoDefaultsObjectListArgumentModel model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
         }
     }

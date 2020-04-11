@@ -45,14 +45,14 @@ Next, let's create the `FlagApp` class containing the `club` command with a sing
 public class FlagApp
 {
     // will be injected by the test framework
-    private TestOutputs TestOutputs { get; set; }
+    private TestCaptures TestCaptures { get; set; }
 
     public int Club([Option(ShortName="f")] bool flag)
     {
         Console.Out("clubbing");
-        TestOutputs.Capture(flag);
+        TestCaptures.Capture(flag);
         // ... or ...
-        TestOutputs.Capture(new ClubResult{ Flag = flag });
+        TestCaptures.Capture(new ClubResult{ Flag = flag });
     }
 
     public class ClubResult
@@ -61,9 +61,9 @@ public class FlagApp
     }
 }
 ```
-We inject the `TestOutputs` property so we can capture the arguments passed to the command to compare against expectations.  (see more below)
+We inject the `TestCaptures` property so we can capture the arguments passed to the command to compare against expectations.  (see more below)
 
-`TestOutputs` is a wrapper for a dictionary keyed by typed. Only one instance of any type can be captured. Classes like ClubResult are useful for capturing the content from multiple arguments.  
+`TestCaptures` is a wrapper for a dictionary keyed by typed. Only one instance of any type can be captured. Classes like ClubResult are useful for capturing the content from multiple arguments.  
 
 ## Testing help output
 
@@ -90,12 +90,12 @@ new Scenario
     Then =
     {
         // example of #1
-        Result =  @"Usage: dotnet testhost.dll club [options]
+        Output =  @"Usage: dotnet testhost.dll club [options]
 
   -f",
         // ... or ...
         // example of #2
-        ResultsContainsTexts = { "club", "-f" }
+        OutputContainsTexts = { "club", "-f" }
     }
 };
 ```
@@ -104,7 +104,7 @@ Note: there's a little black magic with the Result comparison.  The framework ca
 
 ## Testing execution
 
-Execution consists of parsing commands and arguments, routing to the correct command method and mapping to the parameters.  To verify these options, we can specify expected exit codes, results and outputs captured in the command method via `TestOutputs`.  See the following examples.
+Execution consists of parsing commands and arguments, routing to the correct command method and mapping to the parameters.  To verify these options, we can specify expected exit codes, results and outputs captured in the command method via `TestCaptures`.  See the following examples.
 
 ``` c#
 new Scenario
@@ -112,20 +112,20 @@ new Scenario
     WhenArgs = "club -f",
     Then =
     {
-        ResultsContainsTexts = { "clubbing" },
-        AllowUnspecifiedOutputs = true,
-        Outputs = { new ClubResult{ Flag = true }}
+        OutputContainsTexts = { "clubbing" },
+        AllowUnspecifiedCaptures = true,
+        Captured = { new ClubResult{ Flag = true }}
     }
 };
 ```
 
 A success example.  
 
-Use `ResultsContainsTexts` to verify messages output to the console.  Results is a merge of both `Standard` and `Error` output streams.  We haven't had a need to separate them for these tests.
+Use `OutputContainsTexts` to verify messages output to the console.  `Output` is a merge of both `Standard` and `Error` output streams.  We haven't had a need to separate them for these tests.
 
-`AllowUnspecifiedOutputs` allows other outputs to be included.  This is useful when the command class has Constructor Options that are validated by other tests.  This is false by default.
+`AllowUnspecifiedCaptures` allows other outputs to be included.  This is useful when the command class has Constructor Options that are validated by other tests.  This is false by default.
 
-Multiple `Outputs` can be expected.  The test framework will verify each exists and all properties match.
+Multiple `Captured` can be expected.  The test framework will verify each exists and all properties match.
 
 ``` c#
 new Scenario
@@ -134,7 +134,7 @@ new Scenario
     Then =
     {
         ExitCode = 1,
-        ResultsContainsTexts = { "Unrecognized option '-h'" }
+        OutputContainsTexts = { "Unrecognized option '-h'" }
     }
 };
 ```
@@ -142,19 +142,6 @@ new Scenario
 A failure example.  
 
 Use `ExitCode` to expect a result other than 0.
-
-## Testing AppSettings overrides
-
-``` c#
-new Scenario
-{
-    And = {AppSettings = new AppSettings{...}},
-    WhenArgs = "club -f",
-    Then = {...}
-};
-```
-
-The default `AppSettings` can be overridden by passing one to the `And` clause.
 
 ## Injecting Dependencies
 

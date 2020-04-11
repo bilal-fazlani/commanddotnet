@@ -35,7 +35,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 1,
-                        ResultsContainsTexts = { "Unrecognized option '-1'" }
+                        OutputContainsTexts = { "Unrecognized option '-1'" }
                     }
                 });
         }
@@ -50,7 +50,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 1,
-                        ResultsContainsTexts = { "Unrecognized option '-1'" }
+                        OutputContainsTexts = { "Unrecognized option '-1'" }
                     }
                 });
         }
@@ -65,7 +65,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 1,
-                        ResultsContainsTexts = { "Unrecognized option '-1'" }
+                        OutputContainsTexts = { "Unrecognized option '-1'" }
                     }
                 });
         }
@@ -77,7 +77,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "Add -- -1 -3",
-                    Then = { Result = "0" }
+                    Then = { Output = "0" }
                 });
 
             result.CommandContext.ParseResult.SeparatedArguments
@@ -91,7 +91,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "Add_PassThru -- -1 -3",
-                    Then = { Result = "0" }
+                    Then = { Output = "0" }
                 });
 
             result.CommandContext.ParseResult.SeparatedArguments
@@ -105,7 +105,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "Add -- -1 -3",
-                    Then = { Result = "-4" }
+                    Then = { Output = "-4" }
                 });
 
             result.CommandContext.ParseResult.SeparatedArguments
@@ -119,7 +119,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "Add_EndOfOptions -- -1 -3",
-                    Then = { Result = "-4" }
+                    Then = { Output = "-4" }
                 });
 
             result.CommandContext.ParseResult.SeparatedArguments
@@ -135,7 +135,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "Add -- -1 -3 -5 -7",
-                    Then = { Result = "-4" }
+                    Then = { Output = "-4" }
                 });
 
             result.CommandContext.ParseResult.RemainingOperands
@@ -154,7 +154,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "Add_EndOfOptions -- -1 -3 -5 -7",
-                    Then = { Result = "-4" }
+                    Then = { Output = "-4" }
                 });
 
             result.CommandContext.ParseResult.RemainingOperands
@@ -175,7 +175,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "Add -- -1 -3 -- -5 -7",
-                    Then = { Result = "-4" }
+                    Then = { Output = "-4" }
                 });
 
             result.CommandContext.ParseResult.RemainingOperands
@@ -196,7 +196,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "Add -- -1 -3 __ -5 -7",
-                    Then = { Result = "-4" }
+                    Then = { Output = "-4" }
                 });
 
             result.CommandContext.ParseResult.RemainingOperands

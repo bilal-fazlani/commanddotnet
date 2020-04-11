@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             {
                 // because the value should not be provided
                 WhenArgs = "Do -h",
-                Then = { Result = @"Usage: dotnet testhost.dll Do [options]
+                Then = { Output = @"Usage: dotnet testhost.dll Do [options]
 
 Options:
 
@@ -35,7 +35,7 @@ Options:
             new AppRunner<FlagApp>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Do --flag",
-                Then = { Outputs = { true } }
+                Then = { Captured = { true } }
             });
         }
 
@@ -45,7 +45,7 @@ Options:
             new AppRunner<FlagApp>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Do",
-                Then = { Outputs = { false } }
+                Then = { Captured = { false } }
             });
         }
 
@@ -55,24 +55,24 @@ Options:
             new AppRunner<FlagApp>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Club -ab",
-                Then = { Outputs = { new ClubResults { FlagA = true, FlagB = true } } }
+                Then = { Captured = { new ClubResults { FlagA = true, FlagB = true } } }
             });
         }
 
         private class FlagApp
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Do([Option] bool flag)
             {
-                TestOutputs.Capture(flag);
+                TestCaptures.Capture(flag);
             }
 
             public void Club(
                 [Option(ShortName = "a")] bool flagA, 
                 [Option(ShortName = "b")] bool flagB)
             {
-                TestOutputs.Capture(new ClubResults{FlagA = flagA, FlagB = flagB});
+                TestCaptures.Capture(new ClubResults{FlagA = flagA, FlagB = flagB});
             }
         }
 

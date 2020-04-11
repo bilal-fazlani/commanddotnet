@@ -35,7 +35,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                         WhenArgs = "[parse:t] Secure -u me -p super-secret",
                         Then =
                         {
-                            Result = @"command: Secure
+                            Output = @"command: Secure
 
 options:
 
@@ -77,7 +77,7 @@ token transformations:
                         WhenArgs = $"[parse:t] Secure @{tempFile}",
                         Then =
                         {
-                            Result = $@"command: Secure
+                            Output = $@"command: Secure
 
 options:
 
@@ -123,7 +123,7 @@ token transformations:
                         WhenArgs = "[parse:t] PromptSecure",
                         Then =
                         {
-                            Result = @"password (Text):
+                            Output = @"password (Text):
 command: PromptSecure
 
 arguments:
@@ -161,7 +161,7 @@ token transformations:
                         WhenArgs = "[parse:t] Secure -u me",
                         Then =
                         {
-                            Result = @"command: Secure
+                            Output = @"command: Secure
 
 options:
 

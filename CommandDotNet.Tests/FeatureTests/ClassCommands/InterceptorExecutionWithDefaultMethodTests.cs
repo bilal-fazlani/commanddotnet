@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                     WhenArgs = "-h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll [command] [arguments]
+                        Output = @"Usage: dotnet testhost.dll [command] [arguments]
 
 Arguments:
 
@@ -48,7 +48,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "Do -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Do [arguments]
+                        Output = @"Usage: dotnet testhost.dll Do [arguments]
 
 Arguments:
 
@@ -66,7 +66,7 @@ Arguments:
                     WhenArgs = "-h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll [command] [options] [arguments]
+                        Output = @"Usage: dotnet testhost.dll [command] [options] [arguments]
 
 Arguments:
 
@@ -100,7 +100,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "Do -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                        Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
 
@@ -122,7 +122,7 @@ Options:
                     WhenArgs = "Do 1",
                     Then =
                     {
-                        Outputs = { true, 1 }
+                        Captured = { true, 1 }
                     }
                 });
         }
@@ -136,7 +136,7 @@ Options:
                     WhenArgs = "1",
                     Then =
                     {
-                        Outputs = { true, 1 }
+                        Captured = { true, 1 }
                     }
                 });
         }
@@ -150,7 +150,7 @@ Options:
                     WhenArgs = "--stringOpt lala Do 1",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new AppWithInteceptorOptions.InterceptOptions {stringOpt = "lala"},
                             1
@@ -168,7 +168,7 @@ Options:
                     WhenArgs = "--stringOpt lala 1",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new AppWithInteceptorOptions.InterceptOptions {stringOpt = "lala"},
                             1
@@ -179,34 +179,34 @@ Options:
 
         class AppWithNoInterceptorOptions
         {
-            public TestOutputs TestOutputs { get; set; }
+            public TestCaptures TestCaptures { get; set; }
 
             public Task<int> Intercept(InterceptorExecutionDelegate next)
             {
-                TestOutputs.Capture(true);
+                TestCaptures.Capture(true);
                 return next();
             }
 
             [DefaultMethod]
             public void Default(int defaultArg)
             {
-                TestOutputs.Capture(defaultArg);
+                TestCaptures.Capture(defaultArg);
             }
 
             public void Do(int arg1)
             {
-                TestOutputs.Capture(arg1);
+                TestCaptures.Capture(arg1);
             }
         }
 
         class AppWithInteceptorOptions
         {
-            public TestOutputs TestOutputs { get; set; }
+            public TestCaptures TestCaptures { get; set; }
 
             public Task<int> Intercept(InterceptorExecutionDelegate next,
                 InterceptOptions interceptOptions)
             {
-                TestOutputs.Capture(interceptOptions);
+                TestCaptures.Capture(interceptOptions);
                 if (interceptOptions.skipCmd)
                 {
                     return Task.FromResult(0);
@@ -221,12 +221,12 @@ Options:
             [DefaultMethod]
             public void Default(int defaultArg)
             {
-                TestOutputs.Capture(defaultArg);
+                TestCaptures.Capture(defaultArg);
             }
 
             public void Do(int arg1)
             {
-                TestOutputs.Capture(arg1);
+                TestCaptures.Capture(arg1);
             }
 
             public class InterceptOptions : IArgumentModel

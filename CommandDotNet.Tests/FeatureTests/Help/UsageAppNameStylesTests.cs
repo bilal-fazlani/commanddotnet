@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             new AppRunner<WithAppMetadataName>(appSettings).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "-h",
-                Then = { ResultsContainsTexts = { "Usage: AppName" } }
+                Then = { OutputContainsTexts = { "Usage: AppName" } }
             });
         }
 
@@ -32,7 +32,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             new AppRunner<WithoutAppMetadatName>(appSettings).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "-h",
-                Then = { ResultsContainsTexts = { "Usage: dotnet testhost.dll" } }
+                Then = { OutputContainsTexts = { "Usage: dotnet testhost.dll" } }
             });
         }
 
@@ -43,7 +43,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             new AppRunner<WithAppMetadataName>(appSettings).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "-h",
-                Then = { ResultsContainsTexts = { "Usage: testhost.dll" } }
+                Then = { OutputContainsTexts = { "Usage: testhost.dll" } }
             });
         }
 
@@ -54,7 +54,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             new AppRunner<WithoutAppMetadatName>(appSettings).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "-h",
-                Then = { ResultsContainsTexts = { "Usage: dotnet testhost.dll" } }
+                Then = { OutputContainsTexts = { "Usage: dotnet testhost.dll" } }
             });
         }
 
@@ -68,7 +68,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
                 Then =
                 {
                     ExitCode = 1,
-                    ResultsContainsTexts = { $"Invalid configuration: {nameof(CommandAttribute)}.{nameof(CommandAttribute.Name)} is required " +
+                    OutputContainsTexts = { $"Invalid configuration: {nameof(CommandAttribute)}.{nameof(CommandAttribute.Name)} is required " +
                                              $"for the root command when {nameof(UsageAppNameStyle)}.{nameof(UsageAppNameStyle.GlobalTool)} is specified." }
                 }
             });
@@ -80,7 +80,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             new AppRunner<UsageAppNameTemplate>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "-h",
-                Then = { ResultsContainsTexts =
+                Then = { OutputContainsTexts =
                 {
                     "descr dotnet testhost.dll",
                     "use dotnet testhost.dll",
@@ -96,7 +96,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             new AppRunner<WithAppMetadataName>(appSettings).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "-h",
-                Then = { ResultsContainsTexts = { "Usage: WhatATool" } }
+                Then = { OutputContainsTexts = { "Usage: WhatATool" } }
             });
         }
 

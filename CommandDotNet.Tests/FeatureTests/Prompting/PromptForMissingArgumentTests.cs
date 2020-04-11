@@ -29,12 +29,12 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     WhenArgs = $"{nameof(App.Do)} something --opt1 simple",
                     Then =
                     {
-                        Outputs = {new App.DoResult
+                        Captured = {new App.DoResult
                         {
                             Arg1 = "something",
                             Opt1 = "simple"
                         }},
-                        Result = ""
+                        Output = ""
                     }
                 });
         }
@@ -50,12 +50,12 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     WhenArgs = $"{nameof(App.Do)} something",
                     Then =
                     {
-                        Outputs = {new App.DoResult
+                        Captured = {new App.DoResult
                         {
                             Arg1 = "something",
                             Opt1 = "simple"
                         }},
-                        Result = "opt1 (Text): simple"
+                        Output = "opt1 (Text): simple"
                     }
                 });
         }
@@ -71,12 +71,12 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     WhenArgs = $"{nameof(App.Do)} --opt1 simple",
                     Then =
                     {
-                        Outputs = {new App.DoResult
+                        Captured = {new App.DoResult
                         {
                             Arg1 = "something",
                             Opt1 = "simple"
                         }},
-                        Result = "arg1 (Text): something"
+                        Output = "arg1 (Text): something"
                     }
                 });
         }
@@ -98,7 +98,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new App.DoResult
                             {
@@ -106,7 +106,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                                 Opt1 = "simple"
                             }
                         },
-                        Result = @"arg1 (Text): something
+                        Output = @"arg1 (Text): something
 opt1 (Text): simple"
                     }
                 });
@@ -123,8 +123,8 @@ opt1 (Text): simple"
                     WhenArgs = $"{nameof(App.DoList)} something simple",
                     Then =
                     {
-                        Outputs = {new List<string>{"something", "simple"}},
-                        Result = ""
+                        Captured = {new List<string>{"something", "simple"}},
+                        Output = ""
                     }
                 });
         }
@@ -140,8 +140,8 @@ opt1 (Text): simple"
                     WhenArgs = $"{nameof(App.DoList)}",
                     Then =
                     {
-                        Outputs = {new List<string>{"something", "simple"}},
-                        Result = @"args (Text) [<enter> once to begin new value. <enter> twice to finish]:
+                        Captured = {new List<string>{"something", "simple"}},
+                        Output = @"args (Text) [<enter> once to begin new value. <enter> twice to finish]:
 something
 simple"
                     }
@@ -159,7 +159,7 @@ simple"
                     WhenArgs = $"{nameof(App.DoList)}",
                     Then =
                     {
-                        Outputs = {new List<string>{"something", "simple", "'or not'", "\"so simple\""}}
+                        Captured = {new List<string>{"something", "simple", "'or not'", "\"so simple\""}}
                     }
                 });
         }
@@ -175,7 +175,7 @@ simple"
                     WhenArgs = $"{nameof(HierApp.Do)} --inherited1 2",
                     Then =
                     {
-                        Outputs = {new HierApp.InterceptResult {Intercept1 = 1, Inherited1 = 2}}
+                        Captured = {new HierApp.InterceptResult {Intercept1 = 1, Inherited1 = 2}}
                     }
                 });
         }
@@ -191,7 +191,7 @@ simple"
                     WhenArgs = $" --intercept1 1 {nameof(HierApp.Do)}",
                     Then =
                     {
-                        Outputs = {new HierApp.InterceptResult {Intercept1 = 1, Inherited1 = 2}}
+                        Captured = {new HierApp.InterceptResult {Intercept1 = 1, Inherited1 = 2}}
                     }
                 });
         }
@@ -209,8 +209,8 @@ simple"
                     WhenArgs = $"{nameof(App.Secure)}",
                     Then =
                     {
-                        Outputs = { new App.SecureResult{User = "lala", Password = new Password("fishies")}},
-                        Result = @"user (Text): lala
+                        Captured = { new App.SecureResult{User = "lala", Password = new Password("fishies")}},
+                        Output = @"user (Text): lala
 password (Text): "
                     }
                 });
@@ -229,8 +229,8 @@ password (Text): "
                     WhenArgs = $"{nameof(App.Secure)}",
                     Then =
                     {
-                        Outputs = { new App.SecureResult{User = "lala", Password = new Password("new")}},
-                        Result = @"user (Text): lala
+                        Captured = { new App.SecureResult{User = "lala", Password = new Password("new")}},
+                        Output = @"user (Text): lala
 password (Text): "
                     }
                 });
@@ -245,7 +245,7 @@ password (Text): "
                 {
                     Given = { OnPrompt = Respond.FailOnPrompt },
                     WhenArgs = $"{nameof(App.Flags)}",
-                    Then = { Result = ""}
+                    Then = { Output = ""}
                 });
         }
 
@@ -262,7 +262,7 @@ password (Text): "
                         new Answer("false", prompt => prompt.StartsWith("b "))
                         )},
                     WhenArgs = $"{nameof(App.Flags)}",
-                    Then = { Outputs = { (flagA: true, flagB: false) } }
+                    Then = { Captured = { (flagA: true, flagB: false) } }
                 });
         }
 
@@ -277,8 +277,8 @@ password (Text): "
                     WhenArgs = $"{nameof(App.Bool)}",
                     Then =
                     {
-                        Outputs = { true },
-                        Result = "operand1 (Boolean): true"
+                        Captured = { true },
+                        Output = "operand1 (Boolean): true"
                     }
                 });
         }
@@ -294,8 +294,8 @@ password (Text): "
                     WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {
-                        Outputs = { new App.DoResult{Arg1 = "fishies", Opt1 = "fishies"}},
-                        Result = @"lala (Text): fishies
+                        Captured = { new App.DoResult{Arg1 = "fishies", Opt1 = "fishies"}},
+                        Output = @"lala (Text): fishies
 lala (Text): fishies"
                     }
                 });
@@ -312,8 +312,8 @@ lala (Text): fishies"
                     WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {
-                        Outputs = {new App.DoResult {Arg1 = "something"}},
-                        Result = @"arg1 (Text): something"
+                        Captured = {new App.DoResult {Arg1 = "something"}},
+                        Output = @"arg1 (Text): something"
                     }
                 });
         }
@@ -333,39 +333,39 @@ lala (Text): fishies"
                         PipedInput = pipedInput
                     },
                     WhenArgs = $"{nameof(App.DoList)}",
-                    Then = { Outputs = { pipedInput.ToList() } }
+                    Then = { Captured = { pipedInput.ToList() } }
                 });
         }
 
         class App
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Do([Option] string opt1, string arg1)
             {
-                TestOutputs.Capture(new DoResult{Opt1 = opt1, Arg1 = arg1});
+                TestCaptures.Capture(new DoResult{Opt1 = opt1, Arg1 = arg1});
             }
 
             public void DoList(List<string> args)
             {
-                TestOutputs.CaptureIfNotNull(args);
+                TestCaptures.CaptureIfNotNull(args);
             }
 
             public void Secure(string user, Password password)
             {
-                TestOutputs.Capture(new SecureResult{User = user, Password = password});
+                TestCaptures.Capture(new SecureResult{User = user, Password = password});
             }
 
             public void Flags(
                 [Option(ShortName = "a")] bool flagA,
                 [Option(ShortName = "b")] bool flagB)
             {
-                TestOutputs.Capture((flagA, flagB));
+                TestCaptures.Capture((flagA, flagB));
             }
 
             public void Bool(bool operand1)
             {
-                TestOutputs.Capture(operand1);
+                TestCaptures.Capture(operand1);
             }
 
             public class DoResult
@@ -383,11 +383,11 @@ lala (Text): fishies"
 
         class HierApp
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public Task<int> Intercept(InterceptorExecutionDelegate next, int intercept1, [Option(AssignToExecutableSubcommands = true)] int inherited1)
             {
-                TestOutputs.Capture(new InterceptResult { Intercept1 = intercept1, Inherited1 = inherited1 });
+                TestCaptures.Capture(new InterceptResult { Intercept1 = intercept1, Inherited1 = inherited1 });
                 return next();
             }
 

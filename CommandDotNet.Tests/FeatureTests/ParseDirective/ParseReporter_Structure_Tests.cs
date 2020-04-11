@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                     WhenArgs = "[parse] Do",
                     Then =
                     {
-                        Result = @"command: Do
+                        Output = @"command: Do
 
 arguments:
 

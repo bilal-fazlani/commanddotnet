@@ -41,12 +41,12 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                 ? new Scenario
                 {
                     WhenArgs = "ByAttribute -h",
-                    Then = { ResultsContainsTexts = { $"{nameToInclude}  <TEXT>  [red]" } }
+                    Then = { OutputContainsTexts = { $"{nameToInclude}  <TEXT>  [red]" } }
                 }
                 : new Scenario
                 {
                     WhenArgs = "ByAttribute -h",
-                    Then = { ResultsNotContainsTexts = { $"{nameToInclude}  <TEXT>  [red]" } }
+                    Then = { OutputNotContainsTexts = { $"{nameToInclude}  <TEXT>  [red]" } }
                 };
 
             new AppRunner<App>()
@@ -68,7 +68,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = new Scenario
             {
                 WhenArgs = args,
-                Then = { Outputs = { value.Split(',') } }
+                Then = { Captured = { value.Split(',') } }
             };
 
             new AppRunner<App>()
@@ -78,7 +78,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
         public class App
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void ByAttribute(
                 [EnvVar("opt1")] [Option(LongName = "option1", ShortName = "o")]
@@ -94,7 +94,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
             public void List(string[] planets)
             {
-                TestOutputs.CaptureIfNotNull(planets);
+                TestCaptures.CaptureIfNotNull(planets);
             }
         }
     }

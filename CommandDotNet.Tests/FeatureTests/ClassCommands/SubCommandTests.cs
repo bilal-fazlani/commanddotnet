@@ -55,7 +55,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                     WhenArgs = null,
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll [command]
+                        Output = @"Usage: dotnet testhost.dll [command]
 
 Commands:
 
@@ -70,7 +70,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "-h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll [command]
+                        Output = @"Usage: dotnet testhost.dll [command]
 
 Commands:
 
@@ -85,7 +85,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "Second -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Second [command]
+                        Output = @"Usage: dotnet testhost.dll Second [command]
 
 Commands:
 
@@ -100,7 +100,7 @@ Use ""dotnet testhost.dll Second [command] --help"" for more information about a
                     WhenArgs = "Second Third -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Second Third [command]
+                        Output = @"Usage: dotnet testhost.dll Second Third [command]
 
 Commands:
 
@@ -112,84 +112,84 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
                 new Scenario<T>($"{name} - can execute 1st level local command")
                 {
                     WhenArgs = "Do1 --Opt1 1111 somearg",
-                    Then = {Outputs = {new ArgModel1 {Opt1 = "1111", Arg1 = "somearg"}}}
+                    Then = {Captured = {new ArgModel1 {Opt1 = "1111", Arg1 = "somearg"}}}
                 },
                 new Scenario<T>($"{name} - can execute 2nd level local command")
                 {
                     WhenArgs = "Second Do2 --Opt2 1111 somearg",
-                    Then = {Outputs = {new ArgModel2 {Opt2 = "1111", Arg2 = "somearg"}}}
+                    Then = {Captured = {new ArgModel2 {Opt2 = "1111", Arg2 = "somearg"}}}
                 },
                 new Scenario<T>($"{name} - can execute 3rd level local command")
                 {
                     WhenArgs = "Second Third Do3 --Opt3 1111 somearg",
-                    Then = {Outputs = {new ArgModel3 {Opt3 = "1111", Arg3 = "somearg"}}}
+                    Then = {Captured = {new ArgModel3 {Opt3 = "1111", Arg3 = "somearg"}}}
                 }
             };
 
         private class ThreeLevelsApp
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             [SubCommand]
             public Second Second { get; set; }
 
             public void Do1(ArgModel1 model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
         }
 
         private class Second
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             [SubCommand]
             public Third Third { get; set; }
 
             public void Do2(ArgModel2 model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
         }
 
         private class Third
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Do3(ArgModel3 model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
         }
 
         private class NestedThreeLevelsApp
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
 
             public void Do1(ArgModel1 model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
 
             [SubCommand]
             public class Second
             {
-                private TestOutputs TestOutputs { get; set; }
+                private TestCaptures TestCaptures { get; set; }
 
                 public void Do2(ArgModel2 model)
                 {
-                    TestOutputs.Capture(model);
+                    TestCaptures.Capture(model);
                 }
 
                 [SubCommand]
                 public class Third
                 {
-                    private TestOutputs TestOutputs { get; set; }
+                    private TestCaptures TestCaptures { get; set; }
 
                     public void Do3(ArgModel3 model)
                     {
-                        TestOutputs.Capture(model);
+                        TestCaptures.Capture(model);
                     }
                 }
             }

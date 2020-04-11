@@ -38,14 +38,14 @@ namespace CommandDotNet.TestTools.Scenarios
 
                 AssertExitCodeAndErrorMessage(scenario, results);
 
-                if (scenario.Then.Result != null)
+                if (scenario.Then.Output != null)
                 {
-                    results.OutputShouldBe(scenario.Then.Result);
+                    results.OutputShouldBe(scenario.Then.Output);
                 }
 
-                if (scenario.Then.Outputs.Count > 0)
+                if (scenario.Then.Captured.Count > 0)
                 {
-                    AssertOutputItems(scenario, results);
+                    AssertCapturedItems(scenario, results);
                 }
 
                 return results;
@@ -103,7 +103,7 @@ namespace CommandDotNet.TestTools.Scenarios
 
         private static void AssertMissingHelpTexts(IScenario scenario, AppRunnerResult result, StringBuilder sb)
         {
-            var missingHelpTexts = scenario.Then.ResultsContainsTexts
+            var missingHelpTexts = scenario.Then.OutputContainsTexts
                 .Where(t => !result.OutputContains(t))
                 .ToList();
             if (missingHelpTexts.Count > 0)
@@ -120,7 +120,7 @@ namespace CommandDotNet.TestTools.Scenarios
 
         private static void AssertUnexpectedHelpTexts(IScenario scenario, AppRunnerResult result, StringBuilder sb)
         {
-            var unexpectedHelpTexts = scenario.Then.ResultsNotContainsTexts
+            var unexpectedHelpTexts = scenario.Then.OutputNotContainsTexts
                 .Where(result.OutputContains)
                 .ToList();
             if (unexpectedHelpTexts.Count > 0)
@@ -135,25 +135,25 @@ namespace CommandDotNet.TestTools.Scenarios
             }
         }
 
-        private static void AssertOutputItems(IScenario scenario, AppRunnerResult results)
+        private static void AssertCapturedItems(IScenario scenario, AppRunnerResult results)
         {
-            foreach (var expectedOutput in scenario.Then.Outputs)
+            foreach (var expectedOutput in scenario.Then.Captured)
             {
-                var actualOutput = results.TestOutputs.Get(expectedOutput.GetType());
+                var actualOutput = results.TestCaptures.Get(expectedOutput.GetType());
                 actualOutput.Should()
-                    .NotBeNull(because: $"{expectedOutput.GetType().Name} should have been output in test run");
+                    .NotBeNull(because: $"{expectedOutput.GetType().Name} should have been captured in the test run but wasn't");
                 actualOutput.Should().BeEquivalentTo(expectedOutput);
             }
 
-            var actualOutputs = results.TestOutputs.Outputs;
-            if (!scenario.Then.AllowUnspecifiedOutputs && actualOutputs.Count > scenario.Then.Outputs.Count)
+            var actualOutputs = results.TestCaptures.Captured;
+            if (!scenario.Then.AllowUnspecifiedCaptures && actualOutputs.Count > scenario.Then.Captured.Count)
             {
-                var expectedOutputTypes = new HashSet<Type>(scenario.Then.Outputs.Select(o => o.GetType()));
+                var expectedOutputTypes = new HashSet<Type>(scenario.Then.Captured.Select(o => o.GetType()));
                 var unexpectedTypes = actualOutputs.Keys
                     .Where(t => !expectedOutputTypes.Contains(t))
                     .ToOrderedCsv();
 
-                throw new AssertionFailedException($"Unexpected output: {unexpectedTypes}");
+                throw new AssertionFailedException($"Unexpected captures: {unexpectedTypes}");
             }
         }
     }

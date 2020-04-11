@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                     WhenArgs = "-h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll [command] [options]
+                        Output = @"Usage: dotnet testhost.dll [command] [options]
 
 Options:
 
@@ -52,7 +52,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     Then =
                     {
                         ExitCode = 1,
-                        ResultsContainsTexts = { "Unrecognized option '--inheritedOpt'" }
+                        OutputContainsTexts = { "Unrecognized option '--inheritedOpt'" }
                     }
                 });
         }
@@ -66,7 +66,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "Do -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                        Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
 
@@ -90,7 +90,7 @@ Options:
                     WhenArgs = "--interceptorOpt lala Do --inheritedOpt fishies --opt1 5 10",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new App.InterceptResult
                             {
@@ -116,7 +116,7 @@ Options:
                     WhenArgs = "ChildApp Do -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll ChildApp Do [options]
+                        Output = @"Usage: dotnet testhost.dll ChildApp Do [options]
 
 Options:
 
@@ -134,7 +134,7 @@ Options:
                     WhenArgs = "--interceptorOpt lala ChildApp Do --inheritedOpt fishies",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new App.InterceptResult
                             {
@@ -159,7 +159,7 @@ Options:
                     WhenArgs = "ChildApp -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll ChildApp [command]
+                        Output = @"Usage: dotnet testhost.dll ChildApp [command]
 
 Commands:
 
@@ -180,14 +180,14 @@ Use ""dotnet testhost.dll ChildApp [command] --help"" for more information about
                     Then =
                     {
                         ExitCode = 1,
-                        ResultsContainsTexts = { "Unrecognized option '--inheritedOpt'" }
+                        OutputContainsTexts = { "Unrecognized option '--inheritedOpt'" }
                     }
                 });
         }
 
         class App
         {
-            public TestOutputs TestOutputs { get; set; }
+            public TestCaptures TestCaptures { get; set; }
 
             [SubCommand]
             public ChildApp ChildApp { get; set; }
@@ -196,13 +196,13 @@ Use ""dotnet testhost.dll ChildApp [command] --help"" for more information about
                 string interceptorOpt,
                 [Option(AssignToExecutableSubcommands = true)] string inheritedOpt)
             {
-                TestOutputs.Capture(new InterceptResult { InheritedOpt = inheritedOpt, InterceptorOpt = interceptorOpt });
+                TestCaptures.Capture(new InterceptResult { InheritedOpt = inheritedOpt, InterceptorOpt = interceptorOpt });
                 return next();
             }
 
             public void Do(int arg1, [Option]int opt1)
             {
-                TestOutputs.Capture(new DoResult{Arg1 = arg1, Opt1 = opt1});
+                TestCaptures.Capture(new DoResult{Arg1 = arg1, Opt1 = opt1});
             }
 
             public class InterceptResult
@@ -220,11 +220,11 @@ Use ""dotnet testhost.dll ChildApp [command] --help"" for more information about
 
         class ChildApp
         {
-            public TestOutputs TestOutputs { get; set; }
+            public TestCaptures TestCaptures { get; set; }
 
             public void Do()
             {
-                TestOutputs.Capture(new DoResult{Executed = true});
+                TestCaptures.Capture(new DoResult{Executed = true});
             }
 
             public class DoResult

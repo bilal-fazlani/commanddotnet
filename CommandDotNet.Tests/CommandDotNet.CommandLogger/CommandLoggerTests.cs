@@ -27,7 +27,7 @@ namespace CommandDotNet.Tests.CommandDotNet.CommandLogger
                     WhenArgs = "[cmdlog] --password super-secret Do lala",
                     Then =
                     {
-                        Result = $@"
+                        Output = $@"
 ***************************************
 Original input:
   [cmdlog] --password ***** Do lala
@@ -67,7 +67,7 @@ options:
                     WhenArgs = "[cmdlog] Do",
                     Then =
                     {
-                        Result = $@"
+                        Output = $@"
 ***************************************
 Original input:
   [cmdlog] Do
@@ -168,7 +168,7 @@ AppConfig:
                     WhenArgs = "[cmdlog] Do",
                     Then =
                     {
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             "AppConfig:",
                             "  AppSettings:",
@@ -192,7 +192,7 @@ AppConfig:
                     WhenArgs = "[cmdlog] Do",
                     Then =
                     {
-                        Result = $@"
+                        Output = $@"
 ***************************************
 Original input:
   [cmdlog] Do
@@ -237,7 +237,7 @@ options:
                     WhenArgs = "[cmdlog] Do",
                     Then =
                     {
-                        Result = $@"
+                        Output = $@"
 ***************************************
 Original input:
   [cmdlog] Do
@@ -282,7 +282,7 @@ header2  = value2
                     WhenArgs = "Do",
                     Then =
                     {
-                        Result = ""
+                        Output = ""
                     }
                 });
         }
@@ -299,7 +299,7 @@ header2  = value2
                     WhenArgs = "Do",
                     Then =
                     {
-                        Result = ""
+                        Output = ""
                     }
                 });
 
@@ -340,7 +340,7 @@ options:
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     WhenArgs = "[cmdlog] Do",
-                    Then = { ResultsContainsTexts = { "Original input:" } }
+                    Then = { OutputContainsTexts = { "Original input:" } }
                 });
         }
 
@@ -352,7 +352,7 @@ options:
                 .VerifyScenario(_testOutputHelper, new Scenario
                 {
                     WhenArgs = "Do",
-                    Then = {Result = ""}
+                    Then = {Output = ""}
                 });
         }
 

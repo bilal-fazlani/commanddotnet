@@ -23,7 +23,7 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<DisposableApp>(BasicHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "-h",
-                Then = {ResultsNotContainsTexts = {"Dispose"}}
+                Then = {OutputNotContainsTexts = {"Dispose"}}
             });
         }
 
@@ -33,7 +33,7 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<DisposableApp>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "-h",
-                Then = {ResultsNotContainsTexts = {"Dispose"}}
+                Then = {OutputNotContainsTexts = {"Dispose"}}
             });
         }
 
@@ -43,7 +43,7 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<NotDisposableApp>(BasicHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "-h",
-                Then = { ResultsContainsTexts = { @"Commands:
+                Then = { OutputContainsTexts = { @"Commands:
   Dispose  " } }
             });
         }
@@ -54,7 +54,7 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<NotDisposableApp>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "-h",
-                Then = { ResultsContainsTexts = { @"Commands:
+                Then = { OutputContainsTexts = { @"Commands:
 
   Dispose  " } }
             });
@@ -66,7 +66,7 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<DisposableApp>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Do",
-                Then = {Outputs = {true}}
+                Then = {Captured = {true}}
             });
         }
 
@@ -76,13 +76,13 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<NotDisposableApp>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Dispose",
-                Then = { Outputs = { true } }
+                Then = { Captured = { true } }
             });
         }
 
         private class DisposableApp : IDisposable
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Do()
             {
@@ -90,19 +90,19 @@ namespace CommandDotNet.Tests.FeatureTests
 
             public void Dispose()
             {
-                TestOutputs.Capture(true);
+                TestCaptures.Capture(true);
             }
         }
 
         private class NotDisposableApp
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             // use the name Dispose to prove it can be a command name
             // and that the Dispose name is filtered out only for IDisposable's
             public void Dispose()
             {
-                TestOutputs.Capture(true);
+                TestCaptures.Capture(true);
             }
         }
 

@@ -27,7 +27,7 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<App>(BasicHelpWithDescriptor).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Do -h",
-                Then = { Result = @"Usage: dotnet testhost.dll Do [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll Do [arguments]
 
 Arguments:
   square" }
@@ -40,7 +40,7 @@ Arguments:
             new AppRunner<App>(DetailedHelpWithDescriptor).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Do -h",
-                Then = { Result = @"Usage: dotnet testhost.dll Do [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll Do [arguments]
 
 Arguments:
 
@@ -54,7 +54,7 @@ Arguments:
             new AppRunner<App>(BasicHelpWithDescriptor).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Do 2x3",
-                Then = { Outputs = { new Square { Length = 2, Width = 3 } } }
+                Then = { Captured = { new Square { Length = 2, Width = 3 } } }
             });
         }
 
@@ -67,7 +67,7 @@ Arguments:
                 Then =
                 {
                     ExitCode = 1,
-                    ResultsContainsTexts =
+                    OutputContainsTexts =
                     {
                         "type : CommandDotNet.Tests.FeatureTests.CustomArgumentTypeDescriptorTests+Square is not supported. ",
                         "If it is an argument model, inherit from IArgumentModel. ",
@@ -79,11 +79,11 @@ Arguments:
 
         private class App
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Do(Square square)
             {
-                TestOutputs.Capture(square);
+                TestCaptures.Capture(square);
             }
         }
 

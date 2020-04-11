@@ -33,7 +33,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                     WhenArgs = "Do",
                     Then =
                     {
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             $"A newer release exists. Current:{version} Latest:",
                             $"Download from https://github.com/{organizationName}/{repositoryName}/releases/tag/"
@@ -58,7 +58,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                     WhenArgs = "Do",
                     Then =
                     {
-                        ResultsNotContainsTexts =
+                        OutputNotContainsTexts =
                         {
                             $"A newer release exists. Current:{version} Latest:",
                             $"Download from https://github.com/{organizationName}/{repositoryName}/releases/tag/"
@@ -84,7 +84,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                     WhenArgs = "Do",
                     Then =
                     {
-                        ResultsNotContainsTexts =
+                        OutputNotContainsTexts =
                         {
                             $"A newer release exists. Current:{version} Latest:",
                             $"Download from https://github.com/{organizationName}/{repositoryName}/releases/tag/"
@@ -95,7 +95,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
 
         public class App
         {
-            public TestOutputs TestOutputs { get; set; }
+            public TestCaptures TestCaptures { get; set; }
 
             public void Do()
             {

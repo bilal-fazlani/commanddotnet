@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = new Scenario
             {
                 WhenArgs = "Do",
-                Then = {Outputs = { "red" }}
+                Then = {Captured = { "red" }}
             };
 
             new AppRunner<App>()
@@ -35,7 +35,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = new Scenario
             {
                 WhenArgs = "Default",
-                Then = { Outputs = { "red" } }
+                Then = { Captured = { "red" } }
             };
 
             new AppRunner<App>()
@@ -49,7 +49,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = new Scenario
             {
                 WhenArgs = "Do",
-                Then = { Outputs = { "red,blue,green" } }
+                Then = { Captured = { "red,blue,green" } }
             };
 
             new AppRunner<App>()
@@ -65,7 +65,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = new Scenario
             {
                 WhenArgs = "Default",
-                Then = { Outputs = { "lala" } }
+                Then = { Captured = { "lala" } }
             };
 
             new AppRunner<App>()
@@ -79,7 +79,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = new Scenario
             {
                 WhenArgs = "Multi",
-                Then = { Outputs = { new []{"one", "two"}} }
+                Then = { Captured = { new []{"one", "two"}} }
             };
 
             new AppRunner<App>()
@@ -94,7 +94,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = new Scenario
             {
                 WhenArgs = "Multi",
-                Then = { Outputs = { new[] { "right one", "two" } } }
+                Then = { Captured = { new[] { "right one", "two" } } }
             };
 
             new AppRunner<App>()
@@ -111,26 +111,26 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
         public class App
         {
-            TestOutputs TestOutputs { get; set; }
+            TestCaptures TestCaptures { get; set; }
 
             public void Multi([Operand] string first, [Operand] string second)
             {
-                TestOutputs.Capture(new[] {first, second});
+                TestCaptures.Capture(new[] {first, second});
             }
 
             public void Do([Operand] string op1)
             {
-                TestOutputs.Capture(op1);
+                TestCaptures.Capture(op1);
             }
 
             public void List([Operand] string[] ops)
             {
-                TestOutputs.Capture(ops);
+                TestCaptures.Capture(ops);
             }
 
             public void Default([Operand] string op1 = "lala")
             {
-                TestOutputs.CaptureIfNotNull(op1);
+                TestCaptures.CaptureIfNotNull(op1);
             }
         }
     }

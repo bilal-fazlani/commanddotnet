@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                     WhenArgs = "-h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll [command]
+                        Output = @"Usage: dotnet testhost.dll [command]
 
 Commands:
 
@@ -44,7 +44,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "Do -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Do [arguments]
+                        Output = @"Usage: dotnet testhost.dll Do [arguments]
 
 Arguments:
 
@@ -62,7 +62,7 @@ Arguments:
                     WhenArgs = "-h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll [command] [options]
+                        Output = @"Usage: dotnet testhost.dll [command] [options]
 
 Options:
 
@@ -90,7 +90,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "Do -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Do [arguments]
+                        Output = @"Usage: dotnet testhost.dll Do [arguments]
 
 Arguments:
 
@@ -108,7 +108,7 @@ Arguments:
                     WhenArgs = "Do 1",
                     Then =
                     {
-                        Outputs = { true, 1 }
+                        Captured = { true, 1 }
                     }
                 });
         }
@@ -122,7 +122,7 @@ Arguments:
                     WhenArgs = "--stringOpt lala Do 1",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new AppWithInteceptorOptions.InterceptOptions {stringOpt = "lala"},
                             1
@@ -141,7 +141,7 @@ Arguments:
                     Then =
                     {
                         // does not contain output from Do method
-                        Outputs = { new AppWithInteceptorOptions.InterceptOptions{skipCmd = true} }
+                        Captured = { new AppWithInteceptorOptions.InterceptOptions{skipCmd = true} }
                     }
                 });
         }
@@ -156,7 +156,7 @@ Arguments:
                     Then =
                     {
                         ExitCode = 5,
-                        Outputs =
+                        Captured =
                         {
                             new AppWithInteceptorOptions.InterceptOptions {useReturnCode = 5},
                             1
@@ -167,28 +167,28 @@ Arguments:
 
         class AppWithNoInterceptorOptions
         {
-            public TestOutputs TestOutputs { get; set; }
+            public TestCaptures TestCaptures { get; set; }
 
             public Task<int> Intercept(InterceptorExecutionDelegate next)
             {
-                TestOutputs.Capture(true);
+                TestCaptures.Capture(true);
                 return next();
             }
 
             public void Do(int arg1)
             {
-                TestOutputs.Capture(arg1);
+                TestCaptures.Capture(arg1);
             }
         }
 
         class AppWithInteceptorOptions
         {
-            public TestOutputs TestOutputs { get; set; }
+            public TestCaptures TestCaptures { get; set; }
 
             public Task<int> Intercept(InterceptorExecutionDelegate next,
                 InterceptOptions interceptOptions)
             {
-                TestOutputs.Capture(interceptOptions);
+                TestCaptures.Capture(interceptOptions);
                 if (interceptOptions.skipCmd)
                 {
                     return Task.FromResult(0);
@@ -202,7 +202,7 @@ Arguments:
 
             public void Do(int arg1)
             {
-                TestOutputs.Capture(arg1);
+                TestCaptures.Capture(arg1);
             }
 
             public class InterceptOptions : IArgumentModel

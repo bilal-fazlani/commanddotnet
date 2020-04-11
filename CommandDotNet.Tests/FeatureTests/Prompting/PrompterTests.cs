@@ -25,7 +25,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                 {
                     Given = { OnPrompt = Respond.With("who's there")},
                     WhenArgs = "Do",
-                    Then = { Result = @"knock knock: who's there
+                    Then = { Output = @"knock knock: who's there
 who's there"}
                 });
         }

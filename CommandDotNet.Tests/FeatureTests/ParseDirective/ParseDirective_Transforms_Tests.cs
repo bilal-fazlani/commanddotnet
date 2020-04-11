@@ -23,7 +23,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                     WhenArgs = "[parse:t] Do",
                     Then =
                     {
-                        ResultsContainsTexts = { @"token transformations:
+                        OutputContainsTexts = { @"token transformations:
 
 >>> from shell
   Directive: [parse:t]
@@ -45,7 +45,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                     Then =
                     {
                         ExitCode = 1,
-                        ResultsContainsTexts = { @"token transformations:
+                        OutputContainsTexts = { @"token transformations:
 
 >>> from shell
   Directive: [parse:t]

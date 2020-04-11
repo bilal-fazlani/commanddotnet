@@ -43,7 +43,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                     WhenArgs = "[parse] Do",
                     Then =
                     {
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             @"opd <Text>
     value: opd_stuff
@@ -71,7 +71,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                     WhenArgs = "[parse] Do opd_stuff",
                     Then =
                     {
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             @"opdList <Text>
     value: one, two, three
@@ -94,7 +94,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                     WhenArgs = "[parse] Do opd_stuff four five six",
                     Then =
                     {
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             @" opdList <Text>
     value: four, five, six, one, two, three
@@ -119,7 +119,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                     WhenArgs = $"[parse] Do @{file}",
                     Then =
                     {
-                        Result = $@"command: Do
+                        Output = $@"command: Do
 
 arguments:
 

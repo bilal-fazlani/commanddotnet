@@ -61,7 +61,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 1,
-                        Result = "Operand property must be attributed with OperandAttribute or " +
+                        Output = "Operand property must be attributed with OperandAttribute or " +
                                  "OrderByPositionInClassAttribute to guarantee consistent order. " +
                                  "Property: CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedArgModel.Arg1"
                     }
@@ -78,7 +78,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 0,
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             @"Arguments:
   Operand1",
@@ -99,7 +99,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 0,
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             @"Arguments:
   Arg1
@@ -119,7 +119,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 0,
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             @"Arguments:
   Arg1
@@ -141,7 +141,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 1,
-                        Result = "Operand property must be attributed with OperandAttribute or " +
+                        Output = "Operand property must be attributed with OperandAttribute or " +
                                  "OrderByPositionInClassAttribute to guarantee consistent order. " +
                                  "Property: CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedArgModel.Arg1"
                     }
@@ -158,7 +158,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 1,
-                        Result = "Operand property must be attributed with OperandAttribute or " +
+                        Output = "Operand property must be attributed with OperandAttribute or " +
                                  "OrderByPositionInClassAttribute to guarantee consistent order. " +
                                  @"Properties:
   CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedNestedModelAttributedArgModel.Model"
@@ -176,7 +176,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 1,
-                        Result = "Operand property must be attributed with OperandAttribute or " +
+                        Output = "Operand property must be attributed with OperandAttribute or " +
                                  "OrderByPositionInClassAttribute to guarantee consistent order. " +
                                  "Property: CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedArgModel.Arg1"
                     }
@@ -193,7 +193,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 1,
-                        Result = "Operand property must be attributed with OperandAttribute or " +
+                        Output = "Operand property must be attributed with OperandAttribute or " +
                                  "OrderByPositionInClassAttribute to guarantee consistent order. " +
                                  @"Properties:
   CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedNestedModelAttributedArgModel.Model

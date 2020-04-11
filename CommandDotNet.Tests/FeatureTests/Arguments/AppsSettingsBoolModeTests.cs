@@ -27,7 +27,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 WhenArgs = "Do -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                    Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
   operand
@@ -46,7 +46,7 @@ Options:
                 WhenArgs = "Do -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                    Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
 
@@ -69,7 +69,7 @@ Options:
                 WhenArgs = "Do -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                    Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
   operand
@@ -88,7 +88,7 @@ Options:
                 WhenArgs = "Do -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                    Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
 
@@ -109,7 +109,7 @@ Options:
             {
                 // bool value 'true' is operand
                 WhenArgs = "Do true",
-                Then = { Outputs = { new Result(false, true) } }
+                Then = { Captured = { new Result(false, true) } }
             });
         }
 
@@ -120,7 +120,7 @@ Options:
             {
                 // bool value 'false' is operand
                 WhenArgs = "Do --option false",
-                Then = { Outputs = { new Result(true, false) } }
+                Then = { Captured = { new Result(true, false) } }
             });
         }
 
@@ -133,7 +133,7 @@ Options:
                 Then =
                 {
                     ExitCode = 2,
-                    ResultsContainsTexts = { "'2' is not a valid Boolean" }
+                    OutputContainsTexts = { "'2' is not a valid Boolean" }
                 }
             });
         }
@@ -147,7 +147,7 @@ Options:
                 Then =
                 {
                     ExitCode = 1,
-                    ResultsContainsTexts = { "Missing value for option 'option'" }
+                    OutputContainsTexts = { "Missing value for option 'option'" }
                 }
             });
         }
@@ -158,26 +158,26 @@ Options:
             new AppRunner<App>(ExplicitBasicHelp).VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Do --option false true",
-                Then = { Outputs = { new Result(false, true) } }
+                Then = { Captured = { new Result(false, true) } }
             });
         }
 
         private class App
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Do(
                 [Option] bool option, 
                 [Operand] bool operand)
             {
-                TestOutputs.Capture(new Result(option, operand));
+                TestCaptures.Capture(new Result(option, operand));
             }
 
             public void Do2(
                 [Option] bool option,
                 [Operand] int number)
             {
-                TestOutputs.Capture(new Result(option, number));
+                TestCaptures.Capture(new Result(option, number));
             }
         }
 
