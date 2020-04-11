@@ -34,8 +34,8 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public static T GetFromContext<T>(this AppRunner runner,
             string[] args,
-            ILogger logger,
             Func<CommandContext, T> capture,
+            Action<string> logger = null,
             MiddlewareStages middlewareStage = MiddlewareStages.PostBindValuesPreInvoke,
             int? orderWithinStage = null)
         {
@@ -51,14 +51,27 @@ namespace CommandDotNet.TestTools
 
         /// <summary>Run the console in memory and get the results that would be output to the shell</summary>
         public static AppRunnerResult RunInMem(this AppRunner runner,
-            string[] args,
-            ILogger logger,
+            string args,
+            Action<string> logLine = null,
             Func<TestConsole, string> onReadLine = null,
             IEnumerable<string> pipedInput = null,
             IPromptResponder promptResponder = null,
             bool returnResultOnError = false)
         {
-            using (TestToolsLogProvider.InitLogProvider(logger))
+            return runner.RunInMem(args.SplitArgs(), logLine, onReadLine, pipedInput, promptResponder, returnResultOnError);
+        }
+
+        /// <summary>Run the console in memory and get the results that would be output to the shell</summary>
+        public static AppRunnerResult RunInMem(this AppRunner runner,
+            string[] args,
+            Action<string> logLine = null,
+            Func<TestConsole, string> onReadLine = null,
+            IEnumerable<string> pipedInput = null,
+            IPromptResponder promptResponder = null,
+            bool returnResultOnError = false)
+        {
+            logLine = logLine ?? Console.WriteLine;
+            using (TestToolsLogProvider.InitLogProvider(logLine))
             {
                 var testConsole = new TestConsole(
                     onReadLine,
@@ -74,8 +87,8 @@ namespace CommandDotNet.TestTools
 
                 void LogResult()
                 {
-                    logger.WriteLine("\nconsole output:\n");
-                    logger.WriteLine(testConsole.Joined.ToString());
+                    logLine("\nconsole output:\n");
+                    logLine(testConsole.Joined.ToString());
                 }
 
                 try
@@ -89,8 +102,8 @@ namespace CommandDotNet.TestTools
                     if (returnResultOnError)
                     {
                         testConsole.Error.WriteLine(e.Message);
-                        logger.WriteLine(e.Message);
-                        logger.WriteLine(e.StackTrace);
+                        logLine(e.Message);
+                        logLine(e.StackTrace);
                         LogResult();
                         return new AppRunnerResult(1, testConsole, outputs, context);
                     }

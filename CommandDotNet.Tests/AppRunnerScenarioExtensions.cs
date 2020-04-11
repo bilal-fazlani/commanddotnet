@@ -9,19 +9,6 @@ namespace CommandDotNet.Tests
 {
     public static class AppRunnerScenarioExtensions
     {
-        public static T GetFromContext<T>(this AppRunner runner,
-            string args,
-            ITestOutputHelper output,
-            Func<CommandContext, T> capture, 
-            MiddlewareStages middlewareStage = MiddlewareStages.PostBindValuesPreInvoke)
-        {
-            return runner.GetFromContext(
-                args.SplitArgs(), 
-                output?.AsLogger(), 
-                capture,
-                middlewareStage);
-        }
-
         public static AppRunnerResult RunInMem(
             this AppRunner runner,
             string args,
@@ -29,7 +16,7 @@ namespace CommandDotNet.Tests
             Func<TestConsole, string> onReadLine = null,
             IEnumerable<string> pipedInput = null)
         {
-            return runner.RunInMem(args.SplitArgs(), output?.AsLogger(), onReadLine, pipedInput);
+            return runner.RunInMem(args, output.WriteLine, onReadLine, pipedInput);
         }
 
         public static AppRunnerResult RunInMem(
@@ -39,18 +26,12 @@ namespace CommandDotNet.Tests
             Func<TestConsole, string> onReadLine = null,
             IEnumerable<string> pipedInput = null)
         {
-            return runner.RunInMem(args, output?.AsLogger(), onReadLine, pipedInput);
+            return runner.RunInMem(args, output.WriteLine, onReadLine, pipedInput);
         }
 
         public static AppRunnerResult VerifyScenario(this AppRunner appRunner, ITestOutputHelper output, IScenario scenario)
         {
-            return appRunner.VerifyScenario(output.AsLogger(), scenario);
+            return appRunner.VerifyScenario(output.WriteLine, scenario);
         }
-
-        public static ILogger AsLogger(this ITestOutputHelper testOutputHelper)
-        {
-            return new Logger(testOutputHelper.WriteLine);
-        }
-
     }
 }

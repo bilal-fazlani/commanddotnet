@@ -17,7 +17,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public ResponseFileTests(ITestOutputHelper output)
         {
             _output = output;
-            _tempFiles = new TempFiles(_output.AsLogger());
+            _tempFiles = new TempFiles(_output.WriteLine);
         }
 
         public void Dispose()

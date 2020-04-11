@@ -13,11 +13,23 @@ namespace CommandDotNet.TestTools.Scenarios
         /// <summary>Run and verify the scenario expectations, output results to <see cref="Console"/></summary>
         public static AppRunnerResult VerifyScenario(this AppRunner appRunner, IScenario scenario)
         {
-            return appRunner.VerifyScenario(new Logger(Console.WriteLine), scenario);
+            return appRunner.Verify(null, scenario);
         }
 
         /// <summary>Run and verify the scenario expectations using the given logger for output.</summary>
-        public static AppRunnerResult VerifyScenario(this AppRunner appRunner, ILogger logger, IScenario scenario)
+        public static AppRunnerResult VerifyScenario(this AppRunner appRunner, Action<string> logLine, IScenario scenario)
+        {
+            return appRunner.Verify(null, scenario);
+        }
+
+        /// <summary>Run and verify the scenario expectations, output results to <see cref="Console"/></summary>
+            public static AppRunnerResult Verify(this AppRunner appRunner, IScenario scenario)
+        {
+            return appRunner.Verify(null, scenario);
+        }
+
+        /// <summary>Run and verify the scenario expectations using the given logger for output.</summary>
+        public static AppRunnerResult Verify(this AppRunner appRunner, Action<string> logLine, IScenario scenario)
         {
             if (scenario.WhenArgs != null && scenario.WhenArgsArray != null)
             {
@@ -30,7 +42,7 @@ namespace CommandDotNet.TestTools.Scenarios
             {
                 results = appRunner.RunInMem(
                     args,
-                    logger,
+                    logLine,
                     scenario.Given.OnReadLine,
                     scenario.Given.PipedInput,
                     scenario.Given.OnPrompt,
@@ -52,23 +64,23 @@ namespace CommandDotNet.TestTools.Scenarios
             }
             catch (Exception e)
             {
-                logger.WriteLine(scenario.ToString());
-                logger.WriteLine("");
-                PrintContext(appRunner, logger);
+                logLine(scenario.ToString());
+                logLine("");
+                PrintContext(appRunner, logLine);
                 if (results != null)
                 {
-                    logger.WriteLine("");
-                    logger.WriteLine("App Results:");
-                    logger.WriteLine(results.ConsoleOutAndError);
+                    logLine("");
+                    logLine("App Results:");
+                    logLine(results.ConsoleOutAndError);
                 }
                 throw;
             }
         }
 
-        private static void PrintContext(AppRunner appRunner, ILogger logger)
+        private static void PrintContext(AppRunner appRunner, Action<string> logLine)
         {
-            logger.WriteLine("");
-            logger.WriteLine(appRunner.ToString());
+            logLine("");
+            logLine(appRunner.ToString());
         }
 
         private static void AssertExitCodeAndErrorMessage(IScenario scenario, AppRunnerResult result)

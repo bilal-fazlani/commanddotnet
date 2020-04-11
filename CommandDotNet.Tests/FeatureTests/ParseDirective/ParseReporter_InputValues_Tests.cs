@@ -18,7 +18,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         public ParseReporter_InputValues_Tests(ITestOutputHelper output)
         {
             _output = output;
-            _tempFiles = new TempFiles(_output.AsLogger());
+            _tempFiles = new TempFiles(_output.WriteLine);
         }
 
         public void Dispose()

@@ -14,7 +14,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
         public TypoSuggestions_GetSuggestions_Tests(ITestOutputHelper testOutputHelper)
         {
-            _cleanup = TestToolsLogProvider.InitLogProvider(testOutputHelper.AsLogger());
+            _cleanup = TestToolsLogProvider.InitLogProvider(testOutputHelper.WriteLine);
         }
 
         public void Dispose()
