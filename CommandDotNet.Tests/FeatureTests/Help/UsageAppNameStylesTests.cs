@@ -18,7 +18,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         public void GlobalToolStyleUsesGlobalToolStyle()
         {
             var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.GlobalTool } };
-            new AppRunner<WithAppMetadataName>(appSettings).VerifyScenario(_output, new Scenario
+            new AppRunner<WithAppMetadataName>(appSettings).Verify(_output, new Scenario
             {
                 WhenArgs = "-h",
                 Then = { OutputContainsTexts = { "Usage: AppName" } }
@@ -29,7 +29,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         public void DotNetStyleUsesDotNetStyle()
         {
             var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.DotNet } };
-            new AppRunner<WithoutAppMetadatName>(appSettings).VerifyScenario(_output, new Scenario
+            new AppRunner<WithoutAppMetadatName>(appSettings).Verify(_output, new Scenario
             {
                 WhenArgs = "-h",
                 Then = { OutputContainsTexts = { "Usage: dotnet testhost.dll" } }
@@ -40,7 +40,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         public void ExecutableStyleUsesExecutableStyle()
         {
             var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.Executable } };
-            new AppRunner<WithAppMetadataName>(appSettings).VerifyScenario(_output, new Scenario
+            new AppRunner<WithAppMetadataName>(appSettings).Verify(_output, new Scenario
             {
                 WhenArgs = "-h",
                 Then = { OutputContainsTexts = { "Usage: testhost.dll" } }
@@ -51,7 +51,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         public void AdaptiveStyleFallsBackToDotNetStyle()
         {
             var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.Adaptive } };
-            new AppRunner<WithoutAppMetadatName>(appSettings).VerifyScenario(_output, new Scenario
+            new AppRunner<WithoutAppMetadatName>(appSettings).Verify(_output, new Scenario
             {
                 WhenArgs = "-h",
                 Then = { OutputContainsTexts = { "Usage: dotnet testhost.dll" } }
@@ -62,7 +62,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         public void GlobalToolStyleThrowsConfigurationException()
         {
             var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.GlobalTool } };
-            new AppRunner<WithoutAppMetadatName>(appSettings).VerifyScenario(_output, new Scenario
+            new AppRunner<WithoutAppMetadatName>(appSettings).Verify(_output, new Scenario
             {
                 WhenArgs = "-h",
                 Then =
@@ -77,7 +77,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         [Fact]
         public void UsageAppNameTemplate_Should_ReplaceTemplateIn_Description_ExtendedHelp_UsageOverride()
         {
-            new AppRunner<UsageAppNameTemplate>().VerifyScenario(_output, new Scenario
+            new AppRunner<UsageAppNameTemplate>().Verify(_output, new Scenario
             {
                 WhenArgs = "-h",
                 Then = { OutputContainsTexts =
@@ -93,7 +93,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         public void UsageAppNameSettingUsedWhenProvided()
         {
             var appSettings = new AppSettings { Help = { UsageAppName = "WhatATool" } };
-            new AppRunner<WithAppMetadataName>(appSettings).VerifyScenario(_output, new Scenario
+            new AppRunner<WithAppMetadataName>(appSettings).Verify(_output, new Scenario
             {
                 WhenArgs = "-h",
                 Then = { OutputContainsTexts = { "Usage: WhatATool" } }

@@ -17,7 +17,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         public void BasicHelp_Includes_Description()
         {
             new AppRunner<App>(TestAppSettings.BasicHelp)
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "Do -h",
@@ -39,7 +39,7 @@ Options:
         public void DetailedHelp_Includes_Description()
         {
             new AppRunner<App>(TestAppSettings.DetailedHelp)
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "Do -h",

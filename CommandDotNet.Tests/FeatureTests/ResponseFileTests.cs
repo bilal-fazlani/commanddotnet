@@ -31,7 +31,7 @@ namespace CommandDotNet.Tests.FeatureTests
             var responseFile = _tempFiles.CreateTempFile("--opt1 opt1value arg1value");
 
             new AppRunner<App>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = $"Do @{responseFile}",
                     Then =
@@ -51,7 +51,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
             new AppRunner<App>()
                 .UseResponseFiles()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = $"Do @{responseFile}",
                     Then =
@@ -75,7 +75,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
             new AppRunner<App>()
                 .UseResponseFiles()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = $"Do @{responseFile}",
                     Then =
@@ -99,7 +99,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
             new AppRunner<App>()
                 .UseResponseFiles()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = $"Do arg1value @{responseFile}",
                     Then =

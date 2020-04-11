@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public void Directives_CanBeDisabled()
         {
             new AppRunner<App>(new AppSettings {DisableDirectives = true})
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "[debug] Do",
@@ -39,7 +39,7 @@ namespace CommandDotNet.Tests.FeatureTests
             var processId = Process.GetCurrentProcess().Id;
             new AppRunner<App>()
                 .UseDebugDirective()
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "[debug] Do",

@@ -20,7 +20,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void When_IDisposable_BasicHelp_DoesNotInclude_DisposeMethod()
         {
-            new AppRunner<DisposableApp>(BasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<DisposableApp>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "-h",
                 Then = {OutputNotContainsTexts = {"Dispose"}}
@@ -30,7 +30,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void When_IDisposable_DetailedHelp_DoesNotInclude_DisposeMethod()
         {
-            new AppRunner<DisposableApp>(DetailedHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<DisposableApp>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "-h",
                 Then = {OutputNotContainsTexts = {"Dispose"}}
@@ -40,7 +40,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void When_NotIDisposable_BasicHelp_DoesNotInclude_DisposeMethod()
         {
-            new AppRunner<NotDisposableApp>(BasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<NotDisposableApp>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "-h",
                 Then = { OutputContainsTexts = { @"Commands:
@@ -51,7 +51,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void When_NotIDisposable_DetailedHelp_DoesNotInclude_DisposeMethod()
         {
-            new AppRunner<NotDisposableApp>(DetailedHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<NotDisposableApp>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "-h",
                 Then = { OutputContainsTexts = { @"Commands:
@@ -63,7 +63,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void When_IDisposable_CallsDisposeMethod()
         {
-            new AppRunner<DisposableApp>().VerifyScenario(_output, new Scenario
+            new AppRunner<DisposableApp>().Verify(_output, new Scenario
             {
                 WhenArgs = "Do",
                 Then = {Captured = {true}}
@@ -73,7 +73,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void When_NotIDisposable_CallsDisposeMethod()
         {
-            new AppRunner<NotDisposableApp>().VerifyScenario(_output, new Scenario
+            new AppRunner<NotDisposableApp>().Verify(_output, new Scenario
             {
                 WhenArgs = "Dispose",
                 Then = { Captured = { true } }

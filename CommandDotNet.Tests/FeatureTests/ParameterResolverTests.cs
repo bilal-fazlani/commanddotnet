@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public void ParameterServices_AreNotIncludedInBasicHelp()
         {
             new AppRunner<App>(TestAppSettings.BasicHelp)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -38,7 +38,7 @@ Options:
         public void ParameterServices_AreNotIncludedInDetailedHelp()
         {
             new AppRunner<App>(TestAppSettings.DetailedHelp)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -58,7 +58,7 @@ Options:
         {
             new AppRunner<App>()
                 .Configure(c => c.CancellationToken = new CancellationTokenSource().Token)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
             {
                 WhenArgs = "Do 7 --stringOption optValue",
                 Then =
@@ -95,7 +95,7 @@ Options:
         public void ExternalParameterService_WhenNotRegistered_ResultContainsActionableErrorMessage()
         {
             new AppRunner<SomeServiceApp>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do",
                     Then =
@@ -116,7 +116,7 @@ Options:
             var someSvc = new SomeService();
             new AppRunner<SomeServiceApp>()
                 .Configure(b => b.UseParameterResolver(ctx => someSvc))
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do",
                     Then =

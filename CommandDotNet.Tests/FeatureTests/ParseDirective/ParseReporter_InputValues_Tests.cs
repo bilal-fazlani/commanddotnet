@@ -32,7 +32,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             new AppRunner<App>()
                 .UseParseDirective()
                 .UsePrompting(promptForMissingArguments: true)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given =
                     {
@@ -65,7 +65,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             new AppRunner<App>()
                 .UseParseDirective()
                 .AppendPipedInputToOperandList()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = {PipedInput = new[] {"one, two, three"}},
                     WhenArgs = "[parse] Do opd_stuff",
@@ -88,7 +88,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             new AppRunner<App>()
                 .UseParseDirective()
                 .AppendPipedInputToOperandList()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { PipedInput = new[] { "one, two, three" } },
                     WhenArgs = "[parse] Do opd_stuff four five six",
@@ -114,7 +114,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             new AppRunner<App>()
                 .UseResponseFiles()
                 .UseParseDirective()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = $"[parse] Do @{file}",
                     Then =

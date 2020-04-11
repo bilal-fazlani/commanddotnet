@@ -19,7 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         public void WhenChildCommandsAreNotRequested_TheirInterceptorsAreNotExecuted()
         {
             new AppRunner<App>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "--name gramps Greet",
                     Then =
@@ -38,7 +38,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             // this test also proves we can NOT use the same option name for each command because they will conflict.
             // TODO: allow same name. Requires update to how ArgumentValues are keyed.
             new AppRunner<App>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "--name gramps Child --name2 pops GrandChild --name3 junior Greet",
                     Then =
@@ -57,7 +57,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             // this test also proves we can NOT use the same option name for each command because they will conflict.
             // TODO: allow same name. Requires update to how ArgumentValues are keyed.
             new AppRunner<App>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "--name gramps GrandChild --name3 junior Greet",
                     Then =

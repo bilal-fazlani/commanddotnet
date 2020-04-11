@@ -17,7 +17,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void Help_DoesNotInclude_BoolTypeOrAllowedArgumentValues()
         {
-            new AppRunner<FlagApp>().VerifyScenario(_output, new Scenario
+            new AppRunner<FlagApp>().Verify(_output, new Scenario
             {
                 // because the value should not be provided
                 WhenArgs = "Do -h",
@@ -32,7 +32,7 @@ Options:
         [Fact]
         public void WhenFlagIsSpecified_ValueIsTrue()
         {
-            new AppRunner<FlagApp>().VerifyScenario(_output, new Scenario
+            new AppRunner<FlagApp>().Verify(_output, new Scenario
             {
                 WhenArgs = "Do --flag",
                 Then = { Captured = { true } }
@@ -42,7 +42,7 @@ Options:
         [Fact]
         public void WhenFlagIsNotSpecified_ValueIsFalse()
         {
-            new AppRunner<FlagApp>().VerifyScenario(_output, new Scenario
+            new AppRunner<FlagApp>().Verify(_output, new Scenario
             {
                 WhenArgs = "Do",
                 Then = { Captured = { false } }
@@ -52,7 +52,7 @@ Options:
         [Fact]
         public void FlagsCanBeClubbed()
         {
-            new AppRunner<FlagApp>().VerifyScenario(_output, new Scenario
+            new AppRunner<FlagApp>().Verify(_output, new Scenario
             {
                 WhenArgs = "Club -ab",
                 Then = { Captured = { new ClubResults { FlagA = true, FlagB = true } } }

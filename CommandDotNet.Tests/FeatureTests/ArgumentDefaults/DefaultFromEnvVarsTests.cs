@@ -52,7 +52,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             new AppRunner<App>()
                 .UseDefaultsFromEnvVar(
                     new Dictionary<string,string> { { key, "red" } })
-                .VerifyScenario(_output, scenario);
+                .Verify(_output, scenario);
         }
 
         [Theory]
@@ -73,7 +73,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
             new AppRunner<App>()
                 .UseDefaultsFromAppSetting(nvc, includeNamingConventions: true)
-                .VerifyScenario(_output, scenario);
+                .Verify(_output, scenario);
         }
 
         public class App

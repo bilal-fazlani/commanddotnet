@@ -89,7 +89,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
 
             new AppRunner<App2>()
                 .UseNameCasing(@case, applyToNameOverrides)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "-h",
                     Then =

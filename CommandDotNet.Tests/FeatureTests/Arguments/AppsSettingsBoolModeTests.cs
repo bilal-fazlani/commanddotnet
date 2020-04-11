@@ -22,7 +22,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void WhenExplicit_BasicHelp_DoesNotIncludeAllowedValues()
         {
-            new AppRunner<App>(ExplicitBasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(ExplicitBasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do -h",
                 Then =
@@ -41,7 +41,7 @@ Options:
         [Fact]
         public void WhenExplicit_DetailedHelp_IncludesAllowedValues()
         {
-            new AppRunner<App>(ExplicitDetailedHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(ExplicitDetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do -h",
                 Then =
@@ -64,7 +64,7 @@ Options:
         [Fact]
         public void WhenImplicit_BasicHelp_DoesNotIncludeAllowedValues()
         {
-            new AppRunner<App>(ImplicitBasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(ImplicitBasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do -h",
                 Then =
@@ -83,7 +83,7 @@ Options:
         [Fact]
         public void WhenImplicit_DetailedHelp_DoesNotIncludeAllowedValuesForOption()
         {
-            new AppRunner<App>(ImplicitDetailedHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(ImplicitDetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do -h",
                 Then =
@@ -105,7 +105,7 @@ Options:
         [Fact]
         public void WhenImplicit_Exec_OptionsIsFalseIfNotSpecified()
         {
-            new AppRunner<App>(ImplicitBasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(ImplicitBasicHelp).Verify(_output, new Scenario
             {
                 // bool value 'true' is operand
                 WhenArgs = "Do true",
@@ -116,7 +116,7 @@ Options:
         [Fact]
         public void WhenImplicit_Exec_OptionsIsTrueIfSpecified()
         {
-            new AppRunner<App>(ImplicitBasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(ImplicitBasicHelp).Verify(_output, new Scenario
             {
                 // bool value 'false' is operand
                 WhenArgs = "Do --option false",
@@ -127,7 +127,7 @@ Options:
         [Fact]
         public void WhenExplicit_Exec_OptionValueMustFollowTheArgument()
         {
-            new AppRunner<App>(ExplicitBasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(ExplicitBasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do2 --option 2",
                 Then =
@@ -141,7 +141,7 @@ Options:
         [Fact]
         public void WhenExplicit_Exec_OptionValueIsRequired()
         {
-            new AppRunner<App>(ExplicitBasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(ExplicitBasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do --option",
                 Then =
@@ -155,7 +155,7 @@ Options:
         [Fact]
         public void WhenExplicit_Exec_SpecifiedOptionValueIsUsed()
         {
-            new AppRunner<App>(ExplicitBasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(ExplicitBasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do --option false true",
                 Then = { Captured = { new Result(false, true) } }

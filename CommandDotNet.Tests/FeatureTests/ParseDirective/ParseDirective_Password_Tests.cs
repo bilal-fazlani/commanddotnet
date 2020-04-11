@@ -29,7 +29,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         {
             new AppRunner<App>()
                 .UseParseDirective()
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "[parse:t] Secure -u me -p super-secret",
@@ -71,7 +71,7 @@ token transformations:
             new AppRunner<App>()
                 .UseResponseFiles()
                 .UseParseDirective()
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = $"[parse:t] Secure @{tempFile}",
@@ -116,7 +116,7 @@ token transformations:
             new AppRunner<App>()
                 .UsePrompting()
                 .UseParseDirective()
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         Given = { OnPrompt = Respond.With("super-secret")},
@@ -155,7 +155,7 @@ token transformations:
             new AppRunner<App>()
                 .UseDefaultsFromAppSetting(appSettings, includeNamingConventions: true)
                 .UseParseDirective()
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "[parse:t] Secure -u me",

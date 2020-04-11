@@ -28,7 +28,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                 .Configure(c => c.Services.AddOrUpdate(new AppInfo("blah", version)))
                 .UseNewerReleaseAlertOnGitHub(organizationName, repositoryName,
                     overrideHttpRequestCallback: (client, uri) => Task.FromResult(BuildGitHubApiResponse("1.0.1")))
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do",
                     Then =
@@ -53,7 +53,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                 .Configure(c => c.Services.AddOrUpdate(new AppInfo("blah", version)))
                 .UseNewerReleaseAlertOnGitHub(organizationName, repositoryName, 
                     overrideHttpRequestCallback: (client, uri) => Task.FromResult(BuildGitHubApiResponse("1.0.0")))
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do",
                     Then =
@@ -79,7 +79,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                 .UseNewerReleaseAlertOnGitHub(organizationName, repositoryName,
                     overrideHttpRequestCallback: (client, uri) => Task.FromResult(BuildGitHubApiResponse("1.0.1")),
                     skipCommand:command => true)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do",
                     Then =

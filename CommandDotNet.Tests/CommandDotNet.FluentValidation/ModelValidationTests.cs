@@ -40,7 +40,7 @@ Arguments:
 
             new AppRunner<App>()
                 .UseFluentValidation()
-                .VerifyScenario(_output, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -61,7 +61,7 @@ Arguments:
 
             new AppRunner<App>()
                 .UseFluentValidation()
-                .VerifyScenario(_output, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -85,7 +85,7 @@ Arguments:
                 .UseDependencyResolver(
                     new TestDependencyResolver{new PersonValidator()}, 
                     commandClassResolveStrategy: ResolveStrategy.TryResolve)
-                .VerifyScenario(_output, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -102,7 +102,7 @@ Arguments:
                 .UseDependencyResolver(
                     new TestDependencyResolver { new PersonValidator() },
                     commandClassResolveStrategy: ResolveStrategy.TryResolve)
-                .VerifyScenario(_output, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -120,7 +120,7 @@ Arguments:
 
             new AppRunner<App>()
                 .UseFluentValidation()
-                .VerifyScenario(_output, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -141,7 +141,7 @@ Arguments:
                 .UseDependencyResolver(
                     new TestDependencyResolver(),
                     commandClassResolveStrategy: ResolveStrategy.TryResolve)
-                .VerifyScenario(_output, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -167,7 +167,7 @@ This exception could also occur if default constructor threw an exception",
                 .UseDependencyResolver(
                     new TestDependencyResolver(),
                     commandClassResolveStrategy: ResolveStrategy.TryResolve)
-                .VerifyScenario(_output, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -193,7 +193,7 @@ Usage: dotnet testhost.dll Save [arguments]"
 
             new AppRunner<App>()
                 .UseFluentValidation(showHelpOnError: true)
-                .VerifyScenario(_output, scenario);
+                .Verify(_output, scenario);
         }
 
         public class App

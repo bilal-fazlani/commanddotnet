@@ -96,7 +96,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
 
             var result = appRunner
                 .UseParseDirective()
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = $"{parse} {args}",

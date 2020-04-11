@@ -19,7 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         public void InterceptorMethod_WithNoOptions_Help4Parent_NoImpact()
         {
             new AppRunner<AppWithNoInterceptorOptions>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "-h",
                     Then =
@@ -43,7 +43,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         public void InterceptorMethod_WithNoOptions_Help4Child_NoImpact()
         {
             new AppRunner<AppWithNoInterceptorOptions>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then =
@@ -61,7 +61,7 @@ Arguments:
         public void InterceptorMethod_WithOptions_Help4Parent_ContainsInterceptorOptions()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "-h",
                     Then =
@@ -95,7 +95,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         public void InterceptorMethod_WithOptions_Help4Child_NoImpact()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then =
@@ -117,7 +117,7 @@ Options:
         public void InterceptorMethod_WithNoOptions_IsDetectedAndUsed()
         {
             new AppRunner<AppWithNoInterceptorOptions>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do 1",
                     Then =
@@ -131,7 +131,7 @@ Options:
         public void InterceptorMethod_WithNoOptions_AndDefaultMethod_IsDetectedAndUsed()
         {
             new AppRunner<AppWithNoInterceptorOptions>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "1",
                     Then =
@@ -145,7 +145,7 @@ Options:
         public void InterceptorMethod_WithOptions_IsDetectedAndUsed()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "--stringOpt lala Do 1",
                     Then =
@@ -163,7 +163,7 @@ Options:
         public void InterceptorMethod_WithOptions_AndDefaultMethod_IsDetectedAndUsed()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "--stringOpt lala 1",
                     Then =

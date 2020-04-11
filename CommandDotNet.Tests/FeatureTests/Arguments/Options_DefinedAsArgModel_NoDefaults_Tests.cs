@@ -22,7 +22,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void SampleTypes_BasicHelp()
         {
-            new AppRunner<OptionsNoDefaults>(BasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<OptionsNoDefaults>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "ArgsDefaults -h",
                 Then = { Output = @"Usage: dotnet testhost.dll ArgsDefaults [options]
@@ -44,7 +44,7 @@ Options:
         [Fact]
         public void SampleTypes_DetailedHelp()
         {
-            new AppRunner<OptionsNoDefaults>(DetailedHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<OptionsNoDefaults>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "ArgsDefaults -h",
                 Then = { Output = @"Usage: dotnet testhost.dll ArgsDefaults [options]
@@ -78,7 +78,7 @@ Options:
         [Fact]
         public void SampleTypes_Exec_Named()
         {
-            new AppRunner<OptionsNoDefaults>().VerifyScenario(_output, new Scenario
+            new AppRunner<OptionsNoDefaults>().Verify(_output, new Scenario
             {
                 WhenArgs = "ArgsDefaults --StringArg green --StructArg 1 --StructNArg 2 " +
                            "--EnumArg Monday --ObjectArg http://google.com " +
@@ -111,7 +111,7 @@ Options:
         [Fact]
         public void SampleTypes_Exec_OptionsNotRequired()
         {
-            new AppRunner<OptionsNoDefaults>().VerifyScenario(_output, new Scenario
+            new AppRunner<OptionsNoDefaults>().Verify(_output, new Scenario
             {
                 WhenArgs = "ArgsDefaults",
                 Then =

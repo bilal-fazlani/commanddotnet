@@ -18,7 +18,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         public void Given_ExpandArgumentsInUsage_Then_ArgumentsAreListedByName()
         {
             new AppRunner<App>(new AppSettings { Help = {ExpandArgumentsInUsage = true}})
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then = { OutputContainsTexts = { "Usage: dotnet testhost.dll Do <arg1> <arg2> [<optional>]" } }
@@ -29,7 +29,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         public void Given_ExpandArgumentsInUsage_Then_ArgumentsAreListedAfterOptions()
         {
             new AppRunner<App>(new AppSettings { Help = { ExpandArgumentsInUsage = true } })
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do2 -h",
                     Then = { OutputContainsTexts = { "Usage: dotnet testhost.dll Do2 [options] <arg1> <arg2> [<optional>]" } }

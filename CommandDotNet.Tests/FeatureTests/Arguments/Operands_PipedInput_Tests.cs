@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         Given = {PipedInput = new[] {"aaa", "bbb"}},
@@ -41,7 +41,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         Given = {PipedInput = new[] {"ccc", "ddd"}},
@@ -58,7 +58,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         Given = {PipedInput = new[] {"aaa"}},
@@ -75,7 +75,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         Given = {PipedInput = new[] {"aaa", "bbb"}},
@@ -104,7 +104,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                             return next(context);
                         }, 
                         MiddlewareStages.Invoke, -1))
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         Given = {PipedInput = stream},

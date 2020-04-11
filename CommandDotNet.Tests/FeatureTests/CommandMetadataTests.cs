@@ -18,7 +18,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void App_BasicHelp_DisplaysCommandAttrData()
         {
-            new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "-h",
                 Then = { Output = @"app description
@@ -38,7 +38,7 @@ app extended help" }
         [Fact]
         public void App_DetailedHelp_DisplaysCommandAttrData()
         {
-            new AppRunner<App>(DetailedHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "-h",
                 Then = { Output = @"app description
@@ -59,7 +59,7 @@ app extended help" }
         [Fact]
         public void NestedApp_BasicHelp_DisplaysCommandAttrData()
         {
-            new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "SubApp -h",
                 Then = { Output = @"sub-app description
@@ -78,7 +78,7 @@ sub-app extended help" }
         [Fact]
         public void NestedApp_DetailedHelp_DisplaysCommandAttrData()
         {
-            new AppRunner<App>(DetailedHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "SubApp -h",
                 Then = { Output = @"sub-app description
@@ -98,7 +98,7 @@ sub-app extended help" }
         [Fact]
         public void Command_BasicHelp_DisplaysCommandAttrData()
         {
-            new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "somecommand -h",
                 Then = { Output = @"cmd description
@@ -115,7 +115,7 @@ cmd extended help" }
         [Fact]
         public void Command_DetailedHelp_DisplaysCommandAttrData()
         {
-            new AppRunner<App>(DetailedHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "somecommand -h",
                 Then = { Output = @"cmd description
@@ -133,7 +133,7 @@ cmd extended help" }
         [Fact]
         public void Command_Exec_UsesNameFromCommandAttrData()
         {
-            new AppRunner<App>().VerifyScenario(_output, new Scenario
+            new AppRunner<App>().Verify(_output, new Scenario
             {
                 WhenArgs = "somecommand 5",
                 Then = { ExitCode = 5 }
@@ -143,7 +143,7 @@ cmd extended help" }
         [Fact]
         public void NestedApp_Command_Exec_UsesNameFromCommandAttrData()
         {
-            new AppRunner<App>().VerifyScenario(_output, new Scenario
+            new AppRunner<App>().Verify(_output, new Scenario
             {
                 WhenArgs = "SubApp subdo 5",
                 Then = { ExitCode = 5 }

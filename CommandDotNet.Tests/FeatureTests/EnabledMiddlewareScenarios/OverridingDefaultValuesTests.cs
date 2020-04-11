@@ -33,7 +33,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
             };
             new AppRunner<App>()
                 .SetDefaults(overrides)
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "ArgsDefaults",
@@ -53,7 +53,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                     });
             new AppRunner<App>()
                 .SetDefaults(overrides)
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "OperandsDefaultsModel",
@@ -89,7 +89,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
             };
             new AppRunner<App>()
                 .SetDefaults(overrides)
-                .VerifyScenario(_output,
+                .Verify(_output,
                 new Scenario
                 {
                     WhenArgs = "ArgsDefaults",
@@ -112,7 +112,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                 });
             new AppRunner<App>()
                 .SetDefaults(overrides)
-                .VerifyScenario(_output,
+                .Verify(_output,
                 new Scenario
                 {
                     WhenArgs = "EnumListDefaults",
@@ -126,7 +126,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                 });
             new AppRunner<App>()
                 .SetDefaults(overrides)
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "ObjectListDefaults",
@@ -154,7 +154,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
             };
             new AppRunner<App>()
                 .SetDefaults(overrides)
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "OptionsDefaultsModel",
@@ -178,7 +178,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
             };
             new AppRunner<App>()
                 .SetDefaults(overrides)
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "OptionsDefaultsModel",

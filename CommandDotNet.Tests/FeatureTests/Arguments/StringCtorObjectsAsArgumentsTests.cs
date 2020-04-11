@@ -20,7 +20,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void BasicHelp_Includes_StringCtorObjects()
         {
-            new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do -h",
                 Then = {Output = @"Usage: dotnet testhost.dll Do [arguments]
@@ -33,7 +33,7 @@ Arguments:
         [Fact]
         public void BasicHelp_List_Includes_StringCtorObjects()
         {
-            new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "DoList -h",
                 Then = { Output = @"Usage: dotnet testhost.dll DoList [arguments]
@@ -46,7 +46,7 @@ Arguments:
         [Fact]
         public void DetailedHelp_Includes_StringCtorObjects()
         {
-            new AppRunner<App>(DetailedHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do -h",
                 Then = {Output = @"Usage: dotnet testhost.dll Do [arguments]
@@ -60,7 +60,7 @@ Arguments:
         [Fact]
         public void DetailedHelp_List_Includes_StringCtorObjects()
         {
-            new AppRunner<App>(DetailedHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "DoList -h",
                 Then = { Output = @"Usage: dotnet testhost.dll DoList [arguments]
@@ -74,7 +74,7 @@ Arguments:
         [Fact]
         public void Exec_ConvertsStringToObject()
         {
-            new AppRunner<App>().VerifyScenario(_output, new Scenario
+            new AppRunner<App>().Verify(_output, new Scenario
             {
                 WhenArgs = "DoList some-value another-value",
                 Then =
@@ -94,7 +94,7 @@ Arguments:
         [Fact]
         public void Exec_List_ConvertsStringToObject()
         {
-            new AppRunner<App>().VerifyScenario(_output, new Scenario
+            new AppRunner<App>().Verify(_output, new Scenario
             {
                 WhenArgs = "Do some-value",
                 Then = { Captured = { new StringCtorObject("some-value") } }

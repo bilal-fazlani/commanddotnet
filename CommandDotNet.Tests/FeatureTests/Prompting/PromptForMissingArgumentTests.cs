@@ -23,7 +23,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.FailOnPrompt },
                     WhenArgs = $"{nameof(App.Do)} something --opt1 simple",
@@ -44,7 +44,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With("simple", prompt => prompt.StartsWith("opt1")) },
                     WhenArgs = $"{nameof(App.Do)} something",
@@ -65,7 +65,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With("something", prompt => prompt.StartsWith("arg1")) },
                     WhenArgs = $"{nameof(App.Do)} --opt1 simple",
@@ -86,7 +86,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given =
                     {
@@ -117,7 +117,7 @@ opt1 (Text): simple"
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With("yes")},
                     WhenArgs = $"{nameof(App.DoList)} something simple",
@@ -134,7 +134,7 @@ opt1 (Text): simple"
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.WithList(new []{"something", "simple"}) },
                     WhenArgs = $"{nameof(App.DoList)}",
@@ -153,7 +153,7 @@ simple"
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.WithList(new[] { "something", "simple", "'or not'", "\"so simple\"" }) },
                     WhenArgs = $"{nameof(App.DoList)}",
@@ -169,7 +169,7 @@ simple"
         {
             new AppRunner<HierApp>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = {OnPrompt = Respond.With("1", prompt => prompt.StartsWith("intercept1"))},
                     WhenArgs = $"{nameof(HierApp.Do)} --inherited1 2",
@@ -185,7 +185,7 @@ simple"
         {
             new AppRunner<HierApp>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With("2", prompt => prompt.StartsWith("inherited1")) },
                     WhenArgs = $" --intercept1 1 {nameof(HierApp.Do)}",
@@ -201,7 +201,7 @@ simple"
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With(
                         new Answer("lala", prompt => prompt.StartsWith("user")), 
@@ -221,7 +221,7 @@ password (Text): "
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With(
                         new Answer("lala", prompt => prompt.StartsWith("user")), 
@@ -241,7 +241,7 @@ password (Text): "
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.FailOnPrompt },
                     WhenArgs = $"{nameof(App.Flags)}",
@@ -255,7 +255,7 @@ password (Text): "
 
             new AppRunner<App>(new AppSettings { BooleanMode = BooleanMode.Explicit })
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With(
                         new Answer("true", prompt => prompt.StartsWith("a ")),
@@ -271,7 +271,7 @@ password (Text): "
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With("true", prompt => prompt.StartsWith("operand1")) },
                     WhenArgs = $"{nameof(App.Bool)}",
@@ -288,7 +288,7 @@ password (Text): "
         {
             new AppRunner<App>()
                 .UsePrompting(argumentPromptTextOverride: (ctx, arg) => "lala")
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With("fishies", reuse: true) },
                     WhenArgs = $"{nameof(App.Do)}",
@@ -306,7 +306,7 @@ lala (Text): fishies"
         {
             new AppRunner<App>()
                 .UsePrompting(argumentFilter: arg => arg.Name == "arg1")
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = {OnPrompt = Respond.With("something", prompt => prompt.StartsWith("arg1"))},
                     WhenArgs = $"{nameof(App.Do)}",
@@ -325,7 +325,7 @@ lala (Text): fishies"
             new AppRunner<App>()
                 .UsePrompting()
                 .AppendPipedInputToOperandList()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given =
                     {

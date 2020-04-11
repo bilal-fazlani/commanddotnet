@@ -19,7 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         public void DeclaringCommands_InheritedOptions_NotShown_InHelp()
         {
             new AppRunner<App>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "-h",
                     Then =
@@ -46,7 +46,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             // TODO: Does this really make sense?  Should inherited options be specified in either location?  It seems confusing. 
             //       What's the purpose of this feature?
             new AppRunner<App>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "--interceptorOpt lala --inheritedOpt fishies Do --opt1 5 10",
                     Then =
@@ -61,7 +61,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         public void ExecutableLocalSubcommands_InheritedOptions_AreShown_InHelp()
         {
             new AppRunner<App>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then =
@@ -85,7 +85,7 @@ Options:
         public void ExecutableLocalSubcommands_InheritedOptions_AreAccepted()
         {
             new AppRunner<App>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "--interceptorOpt lala Do --inheritedOpt fishies --opt1 5 10",
                     Then =
@@ -111,7 +111,7 @@ Options:
         public void ExecutableNestedSubcommands_InheritedOptions_AreShown_InHelp()
         {
             new AppRunner<App>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "ChildApp Do -h",
                     Then =
@@ -129,7 +129,7 @@ Options:
         public void ExecutableNestedSubcommands_InheritedOptions_AreAccepted()
         {
             new AppRunner<App>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "--interceptorOpt lala ChildApp Do --inheritedOpt fishies",
                     Then =
@@ -154,7 +154,7 @@ Options:
         public void NonExecutableSubcommands_InheritedOptions_NotShown_InHelp()
         {
             new AppRunner<App>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "ChildApp -h",
                     Then =
@@ -174,7 +174,7 @@ Use ""dotnet testhost.dll ChildApp [command] --help"" for more information about
         public void NonExecutableSubcommands_InheritedOptions_NotAccepted()
         {
             new AppRunner<App>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "--interceptorOpt lala ChildApp --inheritedOpt fishies",
                     Then =

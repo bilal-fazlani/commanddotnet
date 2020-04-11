@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using CommandDotNet.Execution;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit.Abstractions;
@@ -29,9 +28,9 @@ namespace CommandDotNet.Tests
             return runner.RunInMem(args, output.WriteLine, onReadLine, pipedInput);
         }
 
-        public static AppRunnerResult VerifyScenario(this AppRunner appRunner, ITestOutputHelper output, IScenario scenario)
+        public static AppRunnerResult Verify(this AppRunner appRunner, ITestOutputHelper output, IScenario scenario)
         {
-            return appRunner.VerifyScenario(output.WriteLine, scenario);
+            return appRunner.Verify(output.WriteLine, scenario);
         }
     }
 }

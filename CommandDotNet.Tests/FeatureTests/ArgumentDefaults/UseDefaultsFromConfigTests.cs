@@ -26,7 +26,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
             new AppRunner<App>()
                 .UseDefaultsFromConfig(arg => Config("red"))
-                .VerifyScenario(_output, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
             new AppRunner<App>()
                 .UseDefaultsFromConfig(arg => Config("red"))
-                .VerifyScenario(_output, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
             new AppRunner<App>()
                 .UseDefaultsFromConfig(arg => Config("red,blue,green"))
-                .VerifyScenario(_output, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
             new AppRunner<App>()
                 .UseDefaultsFromConfig(new Func<IArgument, ArgumentDefault>(arg => null))
-                .VerifyScenario(_output, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             new AppRunner<App>()
                 .UseDefaultsFromConfig(arg => arg.Name == "first" ? new ArgumentDefault("1", "1", "one") : null)
                 .UseDefaultsFromConfig(arg => arg.Name == "second" ? new ArgumentDefault("2", "2", "two") : null)
-                .VerifyScenario(_output, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                 .UseDefaultsFromConfig(arg => arg.Name == "first" ? new ArgumentDefault("1", "1", "right one") : null)
                 .UseDefaultsFromConfig(arg => arg.Name == "first" ? new ArgumentDefault("1", "1", "wrong one") : null)
                 .UseDefaultsFromConfig(arg => arg.Name == "second" ? new ArgumentDefault("2", "2", "two") : null)
-                .VerifyScenario(_output, scenario);
+                .Verify(_output, scenario);
         }
 
         private static ArgumentDefault Config(string value)

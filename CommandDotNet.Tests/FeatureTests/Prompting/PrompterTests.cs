@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With("who's there")},
                     WhenArgs = "Do",

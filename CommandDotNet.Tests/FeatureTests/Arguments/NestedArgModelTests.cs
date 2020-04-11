@@ -19,7 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void NestedModel_BasicHelp_IncludesNestedOperandsAndOptions()
         {
-            new AppRunner<NestedModelApp>(BasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<NestedModelApp>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do -h",
                 Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -37,7 +37,7 @@ Options:
         [Fact]
         public void NestedModel_DetailedHelp_IncludesNestedOperandsAndOptions()
         {
-            new AppRunner<NestedModelApp>(DetailedHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<NestedModelApp>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do -h",
                 Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -59,7 +59,7 @@ Options:
         [Fact]
         public void NestedModel_Exec_MapsNestedOperandsAndOptions()
         {
-            new AppRunner<NestedModelApp>(BasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<NestedModelApp>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do --Option1 aaa --Option2 bbb ccc ddd",
                 Then =

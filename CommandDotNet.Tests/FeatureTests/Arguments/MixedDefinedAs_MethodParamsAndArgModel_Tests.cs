@@ -20,7 +20,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void BasicHelp_IncludesModelAndParamDefinedArgs()
         {
-            new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do -h",
                 Then =
@@ -44,7 +44,7 @@ Options:
         [Fact]
         public void DetailedHelp_IncludesModelAndParamDefinedArgs()
         {
-            new AppRunner<App>(DetailedHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do -h",
                 Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -72,7 +72,7 @@ Options:
         [Fact]
         public void Exec_MapsToAllArgs()
         {
-            new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do --ModelOption moA --ModelOptionList moB --ModelOptionList moC " +
                            "--paramOption poA --paramOptionList poB --paramOptionList poC " +
@@ -102,7 +102,7 @@ Options:
         [Fact]
         public void Exec_OptionsCanBeIncludedAfterArguments()
         {
-            new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
+            new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do --paramOptionList poB --paramOptionList poC " +
                            "red --paramOptionList poD green --paramOptionList poE " +

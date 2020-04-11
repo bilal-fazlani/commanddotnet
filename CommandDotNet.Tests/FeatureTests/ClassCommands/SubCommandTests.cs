@@ -39,7 +39,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         [MemberData(nameof(Scenarios))]
         public void Active(IScenarioForApp scenario)
         {
-            new AppRunner(scenario.AppType).VerifyScenario(_output, scenario);
+            new AppRunner(scenario.AppType).Verify(_output, scenario);
         }
 
         public static IEnumerable<object[]> Scenarios => 

@@ -11,18 +11,6 @@ namespace CommandDotNet.TestTools.Scenarios
     public static class AppRunnerScenarioExtensions
     {
         /// <summary>Run and verify the scenario expectations, output results to <see cref="Console"/></summary>
-        public static AppRunnerResult VerifyScenario(this AppRunner appRunner, IScenario scenario)
-        {
-            return appRunner.Verify(null, scenario);
-        }
-
-        /// <summary>Run and verify the scenario expectations using the given logger for output.</summary>
-        public static AppRunnerResult VerifyScenario(this AppRunner appRunner, Action<string> logLine, IScenario scenario)
-        {
-            return appRunner.Verify(null, scenario);
-        }
-
-        /// <summary>Run and verify the scenario expectations, output results to <see cref="Console"/></summary>
             public static AppRunnerResult Verify(this AppRunner appRunner, IScenario scenario)
         {
             return appRunner.Verify(null, scenario);

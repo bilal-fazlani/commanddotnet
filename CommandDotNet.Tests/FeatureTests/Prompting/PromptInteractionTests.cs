@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With(new Answer("part".ToConsoleKeyInfos().AppendCtrlCKey())) },
                     WhenArgs = $"{nameof(App.Do)}",
@@ -39,7 +39,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
 
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With(
                         new Answer(arg1Answer, prompt => prompt.StartsWith("arg1")),
@@ -67,7 +67,7 @@ opt1 (Text): simple"
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With(
                         new Answer("take1".ToConsoleKeyInfos().AppendEscapeKey().AppendEscapeKey(), prompt => prompt.StartsWith("arg1")),
@@ -86,7 +86,7 @@ opt1 (Text):"
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With("yes\b\b\b\bno\b\b\bmaybe", reuse: true) },
                     WhenArgs = $"{nameof(App.Do)}",
