@@ -1,18 +1,18 @@
 using System;
 using System.Linq;
 using CommandDotNet.Extensions;
-using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class BigArgumentsSetsTests : TestBase
+    public class BigArgumentsSetsTests
     {
         private readonly ITestOutputHelper _output;
 
-        public BigArgumentsSetsTests(ITestOutputHelper output) : base(output)
+        public BigArgumentsSetsTests(ITestOutputHelper output)
         {
             _output = output;
         }
@@ -141,7 +141,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 marg_49 = 49,
                 marg_50 = 50
             };
-            Verify(new Scenario<App>
+            new AppRunner<App>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Do " +
                            "--mopt_01=1 --mopt_02=2 --mopt_03=3 --mopt_04=4 --mopt_05=5 --mopt_06=6 --mopt_07=7 --mopt_08=8 --mopt_09=9 --mopt_10=10 --mopt_11=11 --mopt_12=12 --mopt_13=13 --mopt_14=14 --mopt_15=15 --mopt_16=16 --mopt_17=17 --mopt_18=18 --mopt_19=19 --mopt_20=20 --mopt_21=21 --mopt_22=22 --mopt_23=23 --mopt_24=24 --mopt_25=25 --mopt_26=26 --mopt_27=27 --mopt_28=28 --mopt_29=29 --mopt_30=30 --mopt_31=31 --mopt_32=32 --mopt_33=33 --mopt_34=34 --mopt_35=35 --mopt_36=36 --mopt_37=37 --mopt_38=38 --mopt_39=39 --mopt_40=40 --mopt_41=41 --mopt_42=42 --mopt_43=43 --mopt_44=44 --mopt_45=45 --mopt_46=46 --mopt_47=47 --mopt_48=48 --mopt_49=49 --mopt_50=50 " +
@@ -152,7 +152,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             });
         }
 
-        public class App
+        private class App
         {
             private TestOutputs TestOutputs { get; set; }
             public void Do(Model model,

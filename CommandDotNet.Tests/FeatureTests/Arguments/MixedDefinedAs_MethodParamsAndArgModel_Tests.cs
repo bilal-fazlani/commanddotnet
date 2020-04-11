@@ -1,26 +1,27 @@
 using System.Collections.Generic;
-using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class MixedDefinedAs_MethodParamsAndArgModel_Tests : TestBase
+    public class MixedDefinedAs_MethodParamsAndArgModel_Tests
     {
+        private readonly ITestOutputHelper _output;
         private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
-        public MixedDefinedAs_MethodParamsAndArgModel_Tests(ITestOutputHelper output) : base(output)
+        public MixedDefinedAs_MethodParamsAndArgModel_Tests(ITestOutputHelper output)
         {
+            _output = output;
         }
 
         [Fact]
         public void BasicHelp_IncludesModelAndParamDefinedArgs()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
             {
-                Given = {AppSettings = BasicHelp},
                 WhenArgs = "Do -h",
                 Then =
                 {
@@ -43,9 +44,8 @@ Options:
         [Fact]
         public void DetailedHelp_IncludesModelAndParamDefinedArgs()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "Do -h",
                 Then = { Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
@@ -72,9 +72,8 @@ Options:
         [Fact]
         public void Exec_MapsToAllArgs()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "Do --ModelOption moA --ModelOptionList moB --ModelOptionList moC " +
                            "--paramOption poA --paramOptionList poB --paramOptionList poC " +
                            "red green blue orange",
@@ -103,9 +102,8 @@ Options:
         [Fact]
         public void Exec_OptionsCanBeIncludedAfterArguments()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "Do --paramOptionList poB --paramOptionList poC " +
                            "red --paramOptionList poD green --paramOptionList poE " +
                            "blue --paramOptionList poF orange --paramOptionList poG",
@@ -128,7 +126,7 @@ Options:
             });
         }
 
-        public class App
+        private class App
         {
             private TestOutputs TestOutputs { get; set; }
 
@@ -144,7 +142,7 @@ Options:
             }
         }
 
-        public class Model : IArgumentModel
+        private class Model : IArgumentModel
         {
             [Operand]
             public string ModelArg { get; set; }
@@ -156,7 +154,7 @@ Options:
             public List<string> ModelOptionList { get; set; }
         }
 
-        public class Params
+        private class Params
         {
             public string ParamArg { get; set; }
 

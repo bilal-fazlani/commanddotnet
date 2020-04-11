@@ -8,10 +8,13 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 {
-    public class SubCommandTests : TestBase
+    public class SubCommandTests
     {
-        public SubCommandTests(ITestOutputHelper output) : base(output)
+        private readonly ITestOutputHelper _output;
+
+        public SubCommandTests(ITestOutputHelper output)
         {
+            _output = output;
         }
 
         [Fact]
@@ -36,7 +39,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         [MemberData(nameof(Scenarios))]
         public void Active(IScenarioForApp scenario)
         {
-            Verify(scenario);
+            new AppRunner(scenario.AppType).VerifyScenario(_output, scenario);
         }
 
         public static IEnumerable<object[]> Scenarios => 
@@ -123,7 +126,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
                 }
             };
 
-        public class ThreeLevelsApp
+        private class ThreeLevelsApp
         {
             private TestOutputs TestOutputs { get; set; }
 
@@ -136,7 +139,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
             }
         }
 
-        public class Second
+        private class Second
         {
             private TestOutputs TestOutputs { get; set; }
 
@@ -149,7 +152,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
             }
         }
 
-        public class Third
+        private class Third
         {
             private TestOutputs TestOutputs { get; set; }
 
@@ -159,7 +162,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
             }
         }
 
-        public class NestedThreeLevelsApp
+        private class NestedThreeLevelsApp
         {
             private TestOutputs TestOutputs { get; set; }
 
@@ -192,7 +195,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
             }
         }
 
-        public class ArgModel1 : IArgumentModel
+        private class ArgModel1 : IArgumentModel
         {
             [Option]
             public string Opt1 { get; set; }
@@ -200,7 +203,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
             public string Arg1 { get; set; }
         }
 
-        public class ArgModel2 : IArgumentModel
+        private class ArgModel2 : IArgumentModel
         {
             [Option]
             public string Opt2 { get; set; }
@@ -208,7 +211,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
             public string Arg2 { get; set; }
         }
 
-        public class ArgModel3 : IArgumentModel
+        private class ArgModel3 : IArgumentModel
         {
             [Option]
             public string Opt3 { get; set; }

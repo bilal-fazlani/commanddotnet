@@ -1,25 +1,26 @@
-using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class NestedArgModelTests : TestBase
+    public class NestedArgModelTests
     {
+        private readonly ITestOutputHelper _output;
         private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
-        public NestedArgModelTests(ITestOutputHelper output) : base(output)
+        public NestedArgModelTests(ITestOutputHelper output)
         {
+            _output = output;
         }
 
         [Fact]
         public void NestedModel_BasicHelp_IncludesNestedOperandsAndOptions()
         {
-            Verify(new Scenario<NestedModelApp>
+            new AppRunner<NestedModelApp>(BasicHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "Do -h",
                 Then = { Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
@@ -36,9 +37,8 @@ Options:
         [Fact]
         public void NestedModel_DetailedHelp_IncludesNestedOperandsAndOptions()
         {
-            Verify(new Scenario<NestedModelApp>
+            new AppRunner<NestedModelApp>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "Do -h",
                 Then = { Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
@@ -59,9 +59,8 @@ Options:
         [Fact]
         public void NestedModel_Exec_MapsNestedOperandsAndOptions()
         {
-            Verify(new Scenario<NestedModelApp>
+            new AppRunner<NestedModelApp>(BasicHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "Do --Option1 aaa --Option2 bbb ccc ddd",
                 Then =
                 {
@@ -77,7 +76,7 @@ Options:
             });
         }
 
-        public class NestedModelApp
+        private class NestedModelApp
         {
             private TestOutputs TestOutputs { get; set; }
 
@@ -87,7 +86,7 @@ Options:
             }
         }
 
-        public class ParentModel: IArgumentModel
+        private class ParentModel: IArgumentModel
         {
             [Option]
             public string Option1 { get; set; }
@@ -98,7 +97,7 @@ Options:
             public NestedModel NestedModel { get; set; }
         }
 
-        public class NestedModel : IArgumentModel
+        private class NestedModel : IArgumentModel
         {
             [Option]
             public string Option2 { get; set; }

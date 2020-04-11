@@ -1,20 +1,23 @@
-using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class Options_Flags_Tests : TestBase
+    public class Options_Flags_Tests
     {
-        public Options_Flags_Tests(ITestOutputHelper output) : base(output)
+        private readonly ITestOutputHelper _output;
+
+        public Options_Flags_Tests(ITestOutputHelper output)
         {
+            _output = output;
         }
 
         [Fact]
         public void Help_DoesNotInclude_BoolTypeOrAllowedArgumentValues()
         {
-            Verify(new Scenario<FlagApp>
+            new AppRunner<FlagApp>().VerifyScenario(_output, new Scenario
             {
                 // because the value should not be provided
                 WhenArgs = "Do -h",
@@ -29,7 +32,7 @@ Options:
         [Fact]
         public void WhenFlagIsSpecified_ValueIsTrue()
         {
-            Verify(new Scenario<FlagApp>
+            new AppRunner<FlagApp>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Do --flag",
                 Then = { Outputs = { true } }
@@ -39,7 +42,7 @@ Options:
         [Fact]
         public void WhenFlagIsNotSpecified_ValueIsFalse()
         {
-            Verify(new Scenario<FlagApp>
+            new AppRunner<FlagApp>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Do",
                 Then = { Outputs = { false } }
@@ -49,7 +52,7 @@ Options:
         [Fact]
         public void FlagsCanBeClubbed()
         {
-            Verify(new Scenario<FlagApp>
+            new AppRunner<FlagApp>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Club -ab",
                 Then = { Outputs = { new ClubResults { FlagA = true, FlagB = true } } }
@@ -73,7 +76,7 @@ Options:
             }
         }
 
-        public class ClubResults
+        private class ClubResults
         {
             public bool FlagA { get; set; }
             public bool FlagB { get; set; }

@@ -1,24 +1,25 @@
-﻿using CommandDotNet.Tests.ScenarioFramework;
+﻿using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests
 {
-    public class CommandMetadataTests : TestBase
+    public class CommandMetadataTests
     {
+        private readonly ITestOutputHelper _output;
         private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
-        public CommandMetadataTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public CommandMetadataTests(ITestOutputHelper output)
         {
+            _output = output;
         }
 
         [Fact]
         public void App_BasicHelp_DisplaysCommandAttrData()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "-h",
                 Then = { Result = @"app description
 
@@ -37,9 +38,8 @@ app extended help" }
         [Fact]
         public void App_DetailedHelp_DisplaysCommandAttrData()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "-h",
                 Then = { Result = @"app description
 
@@ -59,9 +59,8 @@ app extended help" }
         [Fact]
         public void NestedApp_BasicHelp_DisplaysCommandAttrData()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "SubApp -h",
                 Then = { Result = @"sub-app description
 
@@ -79,9 +78,8 @@ sub-app extended help" }
         [Fact]
         public void NestedApp_DetailedHelp_DisplaysCommandAttrData()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "SubApp -h",
                 Then = { Result = @"sub-app description
 
@@ -100,9 +98,8 @@ sub-app extended help" }
         [Fact]
         public void Command_BasicHelp_DisplaysCommandAttrData()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(BasicHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "somecommand -h",
                 Then = { Result = @"cmd description
 
@@ -118,9 +115,8 @@ cmd extended help" }
         [Fact]
         public void Command_DetailedHelp_DisplaysCommandAttrData()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "somecommand -h",
                 Then = { Result = @"cmd description
 
@@ -137,7 +133,7 @@ cmd extended help" }
         [Fact]
         public void Command_Exec_UsesNameFromCommandAttrData()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "somecommand 5",
                 Then = { ExitCode = 5 }
@@ -147,7 +143,7 @@ cmd extended help" }
         [Fact]
         public void NestedApp_Command_Exec_UsesNameFromCommandAttrData()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "SubApp subdo 5",
                 Then = { ExitCode = 5 }
@@ -160,7 +156,7 @@ cmd extended help" }
             Usage = "some usage examples",
             Name = "SomeApp",
             ExtendedHelpText = "app extended help")]
-        public class App
+        private class App
         {
             [Command(
                 Description = "cmd description",

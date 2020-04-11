@@ -4,10 +4,13 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests
 {
-    public class VersionOptionTests : TestBase
+    public class VersionOptionTests
     {
-        public VersionOptionTests(ITestOutputHelper output) : base(output)
+        private readonly ITestOutputHelper _output;
+
+        public VersionOptionTests(ITestOutputHelper output)
         {
+            _output = output;
         }
 
         [Fact]
@@ -21,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
             new AppRunner<App>(TestAppSettings.BasicHelp)
                 .UseVersionMiddleware()
-                .VerifyScenario(TestOutputHelper, scenario);
+                .VerifyScenario(_output, scenario);
         }
 
         [Fact]
@@ -38,14 +41,14 @@ namespace CommandDotNet.Tests.FeatureTests
 
             new AppRunner<App>(TestAppSettings.DetailedHelp)
                 .UseVersionMiddleware()
-                .VerifyScenario(TestOutputHelper, scenario);
+                .VerifyScenario(_output, scenario);
         }
 
         [Fact]
         public void WhenVersionDisabled_BasicHelp_DoesNotIncludeVersionOption()
         {
             new AppRunner<App>(TestAppSettings.BasicHelp)
-                .VerifyScenario(TestOutputHelper, new Scenario
+                .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "-h",
                     Then = { ResultsNotContainsTexts = { "-v | --version" } }
@@ -56,7 +59,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public void WhenVersionDisabled_DetailedHelp_DoesNotIncludeVersionOption()
         {
             new AppRunner<App>(TestAppSettings.DetailedHelp)
-                .VerifyScenario(TestOutputHelper, new Scenario
+                .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "-h",
                     Then = {ResultsNotContainsTexts = {"-v | --version"}}
@@ -78,7 +81,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
             new AppRunner<App>()
                 .UseVersionMiddleware()
-                .VerifyScenario(TestOutputHelper, scenario);
+                .VerifyScenario(_output, scenario);
         }
 
         [Fact]
@@ -96,14 +99,14 @@ namespace CommandDotNet.Tests.FeatureTests
             
             new AppRunner<App>()
                 .UseVersionMiddleware()
-                .VerifyScenario(TestOutputHelper, scenario);
+                .VerifyScenario(_output, scenario);
         }
 
         [Fact]
         public void WhenVersionDisabled_Version_LongName_NotRecognized()
         {
             new AppRunner<App>()
-                .VerifyScenario(TestOutputHelper, new Scenario
+                .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "--version",
                     Then =
@@ -118,7 +121,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public void WhenVersionDisabled_Version_ShortName_NotRecognized()
         {
             new AppRunner<App>()
-                .VerifyScenario(TestOutputHelper, new Scenario
+                .VerifyScenario(_output, new Scenario
                 {
                     WhenArgs = "-v",
                     Then =

@@ -1,25 +1,26 @@
-using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 {
-    public class DefaultCommandMethodTests : TestBase
+    public class DefaultCommandMethodTests
     {
+        private readonly ITestOutputHelper _output;
         private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
         
-        public DefaultCommandMethodTests(ITestOutputHelper output) : base(output)
+        public DefaultCommandMethodTests(ITestOutputHelper output)
         {
+            _output = output;
         }
 
         [Fact]
         public void WithoutDefaultArgs_BasicHelp_IncludesOtherCommands()
         {
-            Verify(new Scenario<WithoutDefaultArgsApp>
+            new AppRunner<WithoutDefaultArgsApp>(BasicHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "-h",
                 Then =
                 {
@@ -36,9 +37,8 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         [Fact]
         public void WithoutDefaultArgs_DetailedHelp_IncludesOtherCommands()
         {
-            Verify(new Scenario<WithoutDefaultArgsApp>
+            new AppRunner<WithoutDefaultArgsApp>().VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "-h",
                 Then =
                 {
@@ -56,9 +56,8 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         [Fact]
         public void WithDefaultArgs_BasicHelp_IncludesArgsAndOtherCommands()
         {
-            Verify(new Scenario<WithDefaultArgsApp>
+            new AppRunner<WithDefaultArgsApp>(BasicHelp).VerifyScenario(_output, new Scenario
             {
-                Given = {AppSettings = BasicHelp},
                 WhenArgs = "-h",
                 Then =
                 {
@@ -78,9 +77,8 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         [Fact]
         public void WithDefaultArgs_DetailedHelp_IncludesArgsAndOtherCommands()
         {
-            Verify(new Scenario<WithDefaultArgsApp>
+            new AppRunner<WithDefaultArgsApp>().VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "-h",
                 Then =
                 {
@@ -104,9 +102,8 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         [Fact]
         public void WithDefaultArgs_Help_ForAnotherCommand_DoesNotIncludeDefaultArgs()
         {
-            Verify(new Scenario<WithDefaultArgsApp>
+            new AppRunner<WithDefaultArgsApp>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "AnotherCommand -h",
                 Then =
                 {
@@ -118,7 +115,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         [Fact]
         public void WithoutDefaultArgs_Execute_works()
         {
-            Verify(new Scenario<WithoutDefaultArgsApp>
+            new AppRunner<WithoutDefaultArgsApp>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = null,
                 Then =
@@ -131,7 +128,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         [Fact]
         public void WithDefaultArgs_Execute_works()
         {
-            Verify(new Scenario<WithDefaultArgsApp>
+            new AppRunner<WithDefaultArgsApp>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "abcde",
                 Then =
@@ -144,7 +141,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         [Fact]
         public void WithDefaultArgs_Execute_AnotherCommand_WorksWithoutParams()
         {
-            Verify(new Scenario<WithDefaultArgsApp>
+            new AppRunner<WithDefaultArgsApp>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "AnotherCommand",
                 Then =
@@ -157,7 +154,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         [Fact]
         public void WithDefaultArgs_Execute_AnotherCommand_FailsWithDefaultParams()
         {
-            Verify(new Scenario<WithDefaultArgsApp>
+            new AppRunner<WithDefaultArgsApp>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "AnotherCommand abcde",
                 Then =
@@ -168,7 +165,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             });
         }
 
-        public class WithoutDefaultArgsApp
+        private class WithoutDefaultArgsApp
         {
             public const string DefaultMethodExecuted = "default executed";
 
@@ -186,7 +183,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             }
         }
 
-        public class WithDefaultArgsApp
+        private class WithDefaultArgsApp
         {
             private TestOutputs TestOutputs { get; set; }
 

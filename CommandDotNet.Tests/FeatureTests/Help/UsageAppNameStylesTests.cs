@@ -1,22 +1,25 @@
 using CommandDotNet.Help;
-using CommandDotNet.Tests.ScenarioFramework;
+using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Help
 {
-    public class UsageAppNameStylesTests : TestBase
+    public class UsageAppNameStylesTests
     {
-        public UsageAppNameStylesTests(ITestOutputHelper output) : base(output)
+        private readonly ITestOutputHelper _output;
+
+        public UsageAppNameStylesTests(ITestOutputHelper output)
         {
+            _output = output;
         }
 
         [Fact]
         public void GlobalToolStyleUsesGlobalToolStyle()
         {
-            Verify(new Scenario<WithAppMetadataName>
+            var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.GlobalTool } };
+            new AppRunner<WithAppMetadataName>(appSettings).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.GlobalTool } } },
                 WhenArgs = "-h",
                 Then = { ResultsContainsTexts = { "Usage: AppName" } }
             });
@@ -25,9 +28,9 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         [Fact]
         public void DotNetStyleUsesDotNetStyle()
         {
-            Verify(new Scenario<WithoutAppMetadatName>
+            var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.DotNet } };
+            new AppRunner<WithoutAppMetadatName>(appSettings).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.DotNet } } },
                 WhenArgs = "-h",
                 Then = { ResultsContainsTexts = { "Usage: dotnet testhost.dll" } }
             });
@@ -36,9 +39,9 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         [Fact]
         public void ExecutableStyleUsesExecutableStyle()
         {
-            Verify(new Scenario<WithAppMetadataName>
+            var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.Executable } };
+            new AppRunner<WithAppMetadataName>(appSettings).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.Executable } } },
                 WhenArgs = "-h",
                 Then = { ResultsContainsTexts = { "Usage: testhost.dll" } }
             });
@@ -47,9 +50,9 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         [Fact]
         public void AdaptiveStyleFallsBackToDotNetStyle()
         {
-            Verify(new Scenario<WithoutAppMetadatName>
+            var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.Adaptive } };
+            new AppRunner<WithoutAppMetadatName>(appSettings).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.Adaptive } } },
                 WhenArgs = "-h",
                 Then = { ResultsContainsTexts = { "Usage: dotnet testhost.dll" } }
             });
@@ -58,9 +61,9 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         [Fact]
         public void GlobalToolStyleThrowsConfigurationException()
         {
-            Verify(new Scenario<WithoutAppMetadatName>
+            var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.GlobalTool } };
+            new AppRunner<WithoutAppMetadatName>(appSettings).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.GlobalTool } } },
                 WhenArgs = "-h",
                 Then =
                 {
@@ -72,9 +75,9 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         }
 
         [Fact]
-        public void UsageAppNameTemplate_Should_ReplaceTemplateIn_Description_ExtendendHelp_UsageOverride()
+        public void UsageAppNameTemplate_Should_ReplaceTemplateIn_Description_ExtendedHelp_UsageOverride()
         {
-            Verify(new Scenario<UsageAppNameTemplate>
+            new AppRunner<UsageAppNameTemplate>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "-h",
                 Then = { ResultsContainsTexts =
@@ -89,21 +92,21 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         [Fact]
         public void UsageAppNameSettingUsedWhenProvided()
         {
-            Verify(new Scenario<WithAppMetadataName>
+            var appSettings = new AppSettings { Help = { UsageAppName = "WhatATool" } };
+            new AppRunner<WithAppMetadataName>(appSettings).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = new AppSettings { Help = { UsageAppName = "WhatATool" } } },
                 WhenArgs = "-h",
                 Then = { ResultsContainsTexts = { "Usage: WhatATool" } }
             });
         }
 
         [Command(Name = "AppName")]
-        public class WithAppMetadataName
+        private class WithAppMetadataName
         {
 
         }
 
-        public class WithoutAppMetadatName
+        private class WithoutAppMetadatName
         {
 
         }
@@ -112,7 +115,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             Description = "descr %UsageAppName%",
             Usage = "use %UsageAppName%",
             ExtendedHelpText = "ext %UsageAppName%")]
-        public class UsageAppNameTemplate
+        private class UsageAppNameTemplate
         {
 
         }

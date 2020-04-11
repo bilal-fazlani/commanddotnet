@@ -1,28 +1,29 @@
 using System;
 using System.Collections.Generic;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
-using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class Options_DefinedAsArgModel_Defaults_Tests : TestBase
+    public class Options_DefinedAsArgModel_Defaults_Tests
     {
+        private readonly ITestOutputHelper _output;
         private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
-        public Options_DefinedAsArgModel_Defaults_Tests(ITestOutputHelper output) : base(output)
+        public Options_DefinedAsArgModel_Defaults_Tests(ITestOutputHelper output)
         {
+            _output = output;
         }
 
         [Fact]
         public void SampleTypes_BasicHelp_IncludesAll()
         {
-            Verify(new Scenario<OptionsDefaults>
+            new AppRunner<OptionsDefaults>(BasicHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "ArgsDefaults -h",
                 Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
@@ -43,9 +44,8 @@ Options:
         [Fact]
         public void SampleTypes_DetailedHelp_IncludesAll()
         {
-            Verify(new Scenario<OptionsDefaults>
+            new AppRunner<OptionsDefaults>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "ArgsDefaults -h",
                 Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
@@ -78,7 +78,7 @@ Options:
         [Fact]
         public void SampleTypes_Exec_OptionsCanBeAssignedByName()
         {
-            Verify(new Scenario<OptionsDefaults>
+            new AppRunner<OptionsDefaults>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "ArgsDefaults --StringArg green --StructArg 1 --StructNArg 2 " +
                            "--EnumArg Monday --ObjectArg http://google.com " +
@@ -111,7 +111,7 @@ Options:
         [Fact]
         public void SampleTypes_Exec_OptionsAreNotRequired()
         {
-            Verify(new Scenario<OptionsDefaults>
+            new AppRunner<OptionsDefaults>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "ArgsDefaults",
                 Then =

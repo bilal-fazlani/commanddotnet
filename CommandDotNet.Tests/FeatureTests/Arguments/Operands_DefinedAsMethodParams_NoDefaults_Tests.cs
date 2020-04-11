@@ -2,28 +2,29 @@ using System;
 using System.Collections.Generic;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsParams;
-using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class Operands_DefinedAsMethodParams_NoDefaults_Tests : TestBase
+    public class Operands_DefinedAsMethodParams_NoDefaults_Tests
     {
+        private readonly ITestOutputHelper _output;
         private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
-        public Operands_DefinedAsMethodParams_NoDefaults_Tests(ITestOutputHelper output) : base(output)
+        public Operands_DefinedAsMethodParams_NoDefaults_Tests(ITestOutputHelper output)
         {
+            _output = output;
         }
 
         [Fact]
         public void SampleTypes_BasicHelp()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>(BasicHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "ArgsNoDefault -h",
                 Then =
                 {
@@ -44,9 +45,8 @@ Arguments:
         [Fact]
         public void SampleTypes_DetailedHelp()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "ArgsNoDefault -h",
                 Then =
                 {
@@ -76,9 +76,8 @@ Arguments:
         [Fact]
         public void StructList_BasicHelp()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>(BasicHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "StructListNoDefault -h",
                 Then =
                 {
@@ -93,9 +92,8 @@ Arguments:
         [Fact]
         public void StructList_DetailedHelp()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "StructListNoDefault -h",
                 Then =
                 {
@@ -111,9 +109,8 @@ Arguments:
         [Fact]
         public void EnumList_BasicHelp()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>(BasicHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "EnumListNoDefault -h",
                 Then =
                 {
@@ -128,9 +125,8 @@ Arguments:
         [Fact]
         public void EnumList_DetailedHelp()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "EnumListNoDefault -h",
                 Then =
                 {
@@ -147,9 +143,8 @@ Arguments:
         [Fact]
         public void ObjectList_BasicHelp()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>(BasicHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "ObjectListNoDefault -h",
                 Then =
                 {
@@ -164,9 +159,8 @@ Arguments:
         [Fact]
         public void ObjectList_DetailedHelp()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>(DetailedHelp).VerifyScenario(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "ObjectListNoDefault -h",
                 Then =
                 {
@@ -182,7 +176,7 @@ Arguments:
         [Fact]
         public void SampleTypes_Exec_Positional()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "ArgsNoDefault true green 1 2 Monday http://google.com yellow orange",
                 Then =
@@ -207,7 +201,7 @@ Arguments:
         [Fact]
         public void SampleTypes_Exec_OperandsNotRequired()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "ArgsNoDefault",
                 Then =
@@ -227,7 +221,7 @@ Arguments:
         [Fact]
         public void StructList_Exec_Positional()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "StructListNoDefault 23 5 7",
                 Then =
@@ -246,7 +240,7 @@ Arguments:
         [Fact]
         public void EnumList_Exec_Positional()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "EnumListNoDefault Friday Tuesday Thursday",
                 Then =
@@ -265,7 +259,7 @@ Arguments:
         [Fact]
         public void ObjectList_Exec_Positional()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>().VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "ObjectListNoDefault http://google.com http://apple.com http://github.com",
                 Then =
