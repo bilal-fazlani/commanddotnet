@@ -7,9 +7,6 @@ namespace CommandDotNet.TestTools.Scenarios
 {
     public class ScenarioGiven
     {
-        /// <summary>Set this to override the default <see cref="AppSettings"/></summary>
-        public AppSettings AppSettings { get; set; }
-
         /// <summary>
         /// Use this delegate to mimic input in response to a <see cref="IConsole"/>.In.ReadLine()<br/>
         /// Use <see cref="TestConsole"/>.Out.ToString() to get the output up to that point.
