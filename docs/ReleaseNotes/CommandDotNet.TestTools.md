@@ -22,6 +22,10 @@ To update, use find/replace
 * ResultsContainsTexts > OutputContainsTexts
 * ResultsNotContainsTexts > OutputNotContainsTexts
 
+### AppRunnerResult.ConsoleOutAndError -> ConsoleAll
+
+Renamed AppRunnerResult.ConsoleOutAndError to ConsoleAll
+
 ### Scenario.Given.AppSettings
 
 Removed ScenarioGiven.AppSettings. It did not work outside of old CommandDotNet test infrastructure. Apologies for any confusion it may have caused.

@@ -14,7 +14,7 @@ namespace CommandDotNet.TestTools
         /// in the order they were written from the app.<br/>
         /// This is how the output would appear in the shell.
         /// </summary>
-        public string ConsoleOutAndError => _testConsole.Joined.ToString();
+        public string ConsoleAll => _testConsole.All.ToString();
 
         /// <summary>The error output only</summary>
         public string ConsoleError => _testConsole.Error.ToString();
@@ -48,7 +48,7 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public void OutputShouldBe(string expected)
         {
-            var actual = ConsoleOutAndError.NormalizeLineEndings();
+            var actual = ConsoleAll.NormalizeLineEndings();
             expected = expected.NormalizeLineEndings();
             actual.Should().Be(expected);
         }
@@ -60,7 +60,7 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public bool OutputContains(string expected)
         {
-            var actual = ConsoleOutAndError.NormalizeLineEndings();
+            var actual = ConsoleAll.NormalizeLineEndings();
             expected = expected.NormalizeLineEndings();
             return actual.Contains(expected);
         }
@@ -72,7 +72,7 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public bool OutputNotContains(string expected)
         {
-            var actual = ConsoleOutAndError.NormalizeLineEndings();
+            var actual = ConsoleAll.NormalizeLineEndings();
             expected = expected.NormalizeLineEndings();
             return !actual.Contains(expected);
         }

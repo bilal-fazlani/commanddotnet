@@ -54,10 +54,10 @@ namespace CommandDotNet.TestTools
                 }
             }
 
-            var joined = new StandardStreamWriter();
-            Joined = joined;
-            Out = new StandardStreamWriter(joined);
-            Error = new StandardStreamWriter(joined);
+            var all = new StandardStreamWriter();
+            All = all;
+            Out = new StandardStreamWriter(all);
+            Error = new StandardStreamWriter(all);
             In = new StandardStreamReader(
                 () =>
                 {
@@ -76,7 +76,7 @@ namespace CommandDotNet.TestTools
         /// <summary>
         /// This is the combined output for <see cref="Error"/> and <see cref="Out"/> in the order the lines were output.
         /// </summary>
-        public IStandardStreamWriter Joined { get; }
+        public IStandardStreamWriter All { get; }
 
         public bool IsOutputRedirected { get; } = false;
 

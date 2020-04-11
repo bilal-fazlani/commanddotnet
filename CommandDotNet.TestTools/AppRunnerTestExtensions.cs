@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.TestTools.Prompts;
+using static System.Environment;
 
 namespace CommandDotNet.TestTools
 {
@@ -70,7 +71,7 @@ namespace CommandDotNet.TestTools
             IPromptResponder promptResponder = null,
             bool returnResultOnError = false)
         {
-            logLine = logLine ?? Console.WriteLine;
+            logLine = logLine ?? (l => {});
             using (TestToolsLogProvider.InitLogProvider(logLine))
             {
                 var testConsole = new TestConsole(
@@ -79,23 +80,25 @@ namespace CommandDotNet.TestTools
                     promptResponder == null
                         ? (Func<TestConsole, ConsoleKeyInfo>) null
                         : promptResponder.OnReadKey);
+                runner.Configure(c => c.Console = testConsole);
 
                 CommandContext context = null;
                 runner.CaptureState(ctx => context = ctx, MiddlewareStages.PreTokenize);
-                runner.Configure(c => c.Console = testConsole);
-                var outputs = InjectTestCaptures(runner);
+                var captures = InjectTestCaptures(runner);
 
                 void LogResult()
                 {
-                    logLine("\nconsole output:\n");
-                    logLine(testConsole.Joined.ToString());
+                    var consoleAll = testConsole.All.ToString();
+                    logLine($"{NewLine}Console output <begin> ------------------------------");
+                    logLine(consoleAll.IsNullOrWhitespace() ? "<no output>" : consoleAll);
+                    logLine($"Console output <end> ------------------------------{NewLine}");
                 }
 
                 try
                 {
                     var exitCode = runner.Run(args);
                     LogResult();
-                    return new AppRunnerResult(exitCode, testConsole, outputs, context);
+                    return new AppRunnerResult(exitCode, testConsole, captures, context);
                 }
                 catch (Exception e)
                 {
@@ -105,7 +108,7 @@ namespace CommandDotNet.TestTools
                         logLine(e.Message);
                         logLine(e.StackTrace);
                         LogResult();
-                        return new AppRunnerResult(1, testConsole, outputs, context);
+                        return new AppRunnerResult(1, testConsole, captures, context);
                     }
 
                     LogResult();
