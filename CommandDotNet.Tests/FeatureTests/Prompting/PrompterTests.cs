@@ -9,11 +9,11 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
 {
     public class PrompterTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public PrompterTests(ITestOutputHelper testOutputHelper)
+        public PrompterTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .VerifyScenario(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With("who's there")},
                     WhenArgs = "Do",

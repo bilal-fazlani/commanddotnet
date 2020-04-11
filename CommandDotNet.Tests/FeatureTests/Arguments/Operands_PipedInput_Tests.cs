@@ -12,11 +12,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class Operands_PipedInput_Tests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public Operands_PipedInput_Tests(ITestOutputHelper testOutputHelper)
+        public Operands_PipedInput_Tests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
         
         [Fact]
@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .VerifyScenario(_testOutputHelper,
+                .VerifyScenario(_output,
                     new Scenario
                     {
                         Given = {PipedInput = new[] {"aaa", "bbb"}},
@@ -41,7 +41,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .VerifyScenario(_testOutputHelper,
+                .VerifyScenario(_output,
                     new Scenario
                     {
                         Given = {PipedInput = new[] {"ccc", "ddd"}},
@@ -58,7 +58,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .VerifyScenario(_testOutputHelper,
+                .VerifyScenario(_output,
                     new Scenario
                     {
                         Given = {PipedInput = new[] {"aaa"}},
@@ -75,7 +75,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .VerifyScenario(_testOutputHelper,
+                .VerifyScenario(_output,
                     new Scenario
                     {
                         Given = {PipedInput = new[] {"aaa", "bbb"}},
@@ -104,7 +104,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                             return next(context);
                         }, 
                         MiddlewareStages.Invoke, -1))
-                .VerifyScenario(_testOutputHelper,
+                .VerifyScenario(_output,
                     new Scenario
                     {
                         Given = {PipedInput = stream},

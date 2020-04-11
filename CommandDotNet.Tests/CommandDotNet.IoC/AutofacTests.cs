@@ -13,11 +13,11 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 {
     public class AutofacTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public AutofacTests(ITestOutputHelper testOutputHelper)
+        public AutofacTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
@@ -27,7 +27,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
             new AppRunner<App>()
                 .UseAutofac(container)
-                .RunInMem("Do", _testOutputHelper);
+                .RunInMem("Do", _output);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
             new AppRunner<App>()
                 .UseAutofac(container, runInScope: ctx => container.BeginLifetimeScope())
-                .RunInMem("Do", _testOutputHelper);
+                .RunInMem("Do", _output);
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
             Assert.Throws<ComponentNotRegisteredException>(() =>
                 new AppRunner<App>()
                     .UseAutofac(container, runInScope: ctx => container.BeginLifetimeScope())
-                    .RunInMem("Do", _testOutputHelper)
+                    .RunInMem("Do", _output)
             ).Message.Should().StartWith("The requested service 'CommandDotNet.Tests.CommandDotNet.IoC.AutofacTests+App'");
 
         }

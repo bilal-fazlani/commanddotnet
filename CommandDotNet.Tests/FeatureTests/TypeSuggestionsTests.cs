@@ -8,11 +8,11 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class TypeSuggestionsTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public TypeSuggestionsTests(ITestOutputHelper testOutputHelper)
+        public TypeSuggestionsTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
@@ -20,7 +20,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>()
                 .UseDefaultMiddleware()
-                .VerifyScenario(_testOutputHelper,
+                .VerifyScenario(_output,
                     new Scenario
                     {
                         WhenArgs = "User --user",
@@ -42,7 +42,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>()
                 .UseTypoSuggestions()
-                .VerifyScenario(_testOutputHelper,
+                .VerifyScenario(_output,
                     new Scenario
                     {
                         WhenArgs = "User --user",
@@ -73,7 +73,7 @@ namespace CommandDotNet.Tests.FeatureTests
                         a.CommandBuilder.AddArgument(option);
                     })
                 .UseTypoSuggestions()
-                .VerifyScenario(_testOutputHelper,
+                .VerifyScenario(_output,
                     new Scenario
                     {
                         WhenArgs = "User --user",
@@ -101,7 +101,7 @@ namespace CommandDotNet.Tests.FeatureTests
                         a.CommandBuilder.AddArgument(option);
                     })
                 .UseTypoSuggestions()
-                .VerifyScenario(_testOutputHelper,
+                .VerifyScenario(_output,
                     new Scenario
                     {
                         WhenArgs = "User --user",
@@ -123,7 +123,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>()
                 .UseTypoSuggestions()
-                .VerifyScenario(_testOutputHelper,
+                .VerifyScenario(_output,
                     new Scenario
                     {
                         WhenArgs = "egister",
@@ -146,7 +146,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>()
                 .UseTypoSuggestions(3)
-                .VerifyScenario(_testOutputHelper,
+                .VerifyScenario(_output,
                     new Scenario
                     {
                         WhenArgs = "Similars --opt",
@@ -170,7 +170,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>()
                 .UseTypoSuggestions()
-                .VerifyScenario(_testOutputHelper,
+                .VerifyScenario(_output,
                     new Scenario
                     {
                         WhenArgs = "Similars --lala",
@@ -190,7 +190,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<InterceptorApp>()
                 .UseTypoSuggestions()
-                .VerifyScenario(_testOutputHelper,
+                .VerifyScenario(_output,
                     new Scenario
                     {
                         WhenArgs = "--users",
@@ -212,7 +212,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<InterceptorApp>()
                 .UseTypoSuggestions()
-                .VerifyScenario(_testOutputHelper,
+                .VerifyScenario(_output,
                     new Scenario
                     {
                         WhenArgs = "users",

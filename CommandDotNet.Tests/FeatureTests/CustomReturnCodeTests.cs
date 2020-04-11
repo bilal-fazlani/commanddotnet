@@ -6,11 +6,11 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class CustomReturnCodeTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public CustomReturnCodeTests(ITestOutputHelper testOutputHelper)
+        public CustomReturnCodeTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Theory]
@@ -19,7 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public void Test(string commandName, int expectedExitCode)
         {
             var result = new AppRunner<App>()
-                .RunInMem(new[] { commandName }, _testOutputHelper);
+                .RunInMem(new[] { commandName }, _output);
             
             result.ExitCode.Should().Be(expectedExitCode);
         }

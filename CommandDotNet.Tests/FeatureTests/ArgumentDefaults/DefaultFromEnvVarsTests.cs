@@ -9,11 +9,11 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 {
     public class DefaultFromEnvVarsTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public DefaultFromEnvVarsTests(ITestOutputHelper testOutputHelper)
+        public DefaultFromEnvVarsTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
         
         [Theory]
@@ -52,7 +52,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             new AppRunner<App>()
                 .UseDefaultsFromEnvVar(
                     new Dictionary<string,string> { { key, "red" } })
-                .VerifyScenario(_testOutputHelper, scenario);
+                .VerifyScenario(_output, scenario);
         }
 
         [Theory]
@@ -73,7 +73,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
             new AppRunner<App>()
                 .UseDefaultsFromAppSetting(nvc, includeNamingConventions: true)
-                .VerifyScenario(_testOutputHelper, scenario);
+                .VerifyScenario(_output, scenario);
         }
 
         public class App

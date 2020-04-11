@@ -8,11 +8,11 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class AsyncTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public AsyncTests(ITestOutputHelper testOutputHelper)
+        public AsyncTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Theory]
@@ -23,7 +23,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public void TestAsyncFunctionality(string commandName, int expectedCode)
         {
             var result = new AppRunner<App>()
-                .RunInMem(new[] {commandName}, _testOutputHelper);
+                .RunInMem(new[] {commandName}, _output);
 
             result.ExitCode.Should().Be(expectedCode, $"command '{commandName}' is expected to return '{expectedCode}'" );
             

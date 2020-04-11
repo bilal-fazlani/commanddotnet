@@ -12,18 +12,18 @@ First, let's create the test class.
 ``` c#
 public class FlagClubbing
 {
-    private readonly ITestOutputHelper _testOutputHelper;
+    private readonly ITestOutputHelper _output;
 
-    public FlagClubbing(ITestOutputHelper testOutputHelper)
+    public FlagClubbing(ITestOutputHelper output)
     {
-        _testOutputHelper = testOutputHelper;
+        _output = output;
     }
 
     [Fact]
     public void TestName()
     {
         new FlagApp()
-            .VerifyScenario(_testOutputHelper, new Scenario
+            .VerifyScenario(_output, new Scenario
             {
                 WhenArgs = "Club",
                 Then =

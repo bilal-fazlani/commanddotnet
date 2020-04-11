@@ -9,17 +9,17 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 {
     public class ConstructorInjectionTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public ConstructorInjectionTests(ITestOutputHelper testOutputHelper)
+        public ConstructorInjectionTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
         public void ShouldInstantiateCommandClassUsingCtorWithMostInjectableServices()
         {
-            var result = new AppRunner<UseLargestCtorApp>().RunInMem("Do", _testOutputHelper);
+            var result = new AppRunner<UseLargestCtorApp>().RunInMem("Do", _output);
 
             result.TestCaptures.Get<CommandContext>().Should().NotBeNull();
             result.TestCaptures.Get<TestConsole>().Should().NotBeNull();

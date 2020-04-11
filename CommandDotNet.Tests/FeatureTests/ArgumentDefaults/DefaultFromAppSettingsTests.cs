@@ -9,11 +9,11 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 {
     public class DefaultFromAppSettingsTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public DefaultFromAppSettingsTests(ITestOutputHelper testOutputHelper)
+        public DefaultFromAppSettingsTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Theory]
@@ -55,7 +55,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                 .UseDefaultsFromAppSetting(
                     new NameValueCollection {{key, "red"}},
                     includeNamingConventions: true)
-                .VerifyScenario(_testOutputHelper, scenario);
+                .VerifyScenario(_output, scenario);
         }
 
         [Theory]
@@ -94,7 +94,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             new AppRunner<App>()
                 .UseDefaultsFromAppSetting(
                     new NameValueCollection { { key, "red" } })
-                .VerifyScenario(_testOutputHelper, scenario);
+                .VerifyScenario(_output, scenario);
         }
 
         [Theory]
@@ -142,7 +142,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                 .UseDefaultsFromAppSetting(
                     new NameValueCollection { { key, "red" } },
                     includeNamingConventions: true)
-                .VerifyScenario(_testOutputHelper, scenario);
+                .VerifyScenario(_output, scenario);
         }
 
         [Theory]
@@ -171,7 +171,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
             new AppRunner<App>()
                 .UseDefaultsFromAppSetting(nvc, includeNamingConventions: true)
-                .VerifyScenario(_testOutputHelper, scenario);
+                .VerifyScenario(_output, scenario);
         }
 
         [Theory]
@@ -192,7 +192,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
             new AppRunner<App>()
                 .UseDefaultsFromAppSetting(nvc, includeNamingConventions: true)
-                .VerifyScenario(_testOutputHelper, scenario);
+                .VerifyScenario(_output, scenario);
         }
 
         public class App

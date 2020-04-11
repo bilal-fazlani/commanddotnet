@@ -6,18 +6,18 @@ namespace CommandDotNet.Tests.FeatureTests.Help
 {
     public class ArgumentAttributesHelpTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public ArgumentAttributesHelpTests(ITestOutputHelper testOutputHelper)
+        public ArgumentAttributesHelpTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
         public void BasicHelp_Includes_Description()
         {
             new AppRunner<App>(TestAppSettings.BasicHelp)
-                .VerifyScenario(_testOutputHelper,
+                .VerifyScenario(_output,
                     new Scenario
                     {
                         WhenArgs = "Do -h",
@@ -39,7 +39,7 @@ Options:
         public void DetailedHelp_Includes_Description()
         {
             new AppRunner<App>(TestAppSettings.DetailedHelp)
-                .VerifyScenario(_testOutputHelper,
+                .VerifyScenario(_output,
                     new Scenario
                     {
                         WhenArgs = "Do -h",

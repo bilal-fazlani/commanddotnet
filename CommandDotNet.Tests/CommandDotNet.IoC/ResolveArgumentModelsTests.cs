@@ -7,11 +7,11 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 {
     public class ResolveArgumentModelsTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public ResolveArgumentModelsTests(ITestOutputHelper testOutputHelper)
+        public ResolveArgumentModelsTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
@@ -20,7 +20,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
             var argModel = new ArgModel {Text = "some default"};
             var testOutputs = new AppRunner<App>()
                 .UseDependencyResolver(new TestDependencyResolver {new App(), argModel})
-                .RunInMem("Do lala", _testOutputHelper)
+                .RunInMem("Do lala", _output)
                 .TestCaptures;
 
             var resolvedArgModel = testOutputs.Get<ArgModel>();
@@ -32,7 +32,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         {
             new AppRunner<App>()
                 .UseDependencyResolver(new TestDependencyResolver { new ArgModel { Text = "default from resolver" } })
-                .RunInMem("Do -h", _testOutputHelper)
+                .RunInMem("Do -h", _output)
                 .ConsoleOut.Should().Contain("default from resolver");
         }
 

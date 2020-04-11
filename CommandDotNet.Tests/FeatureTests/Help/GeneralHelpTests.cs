@@ -6,31 +6,31 @@ namespace CommandDotNet.Tests.FeatureTests.Help
 {
     public class GeneralHelpTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public GeneralHelpTests(ITestOutputHelper testOutputHelper)
+        public GeneralHelpTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
         public void QuestionMark_ShowsHelp()
         {
-            var result = new AppRunner<App>().RunInMem("-?".SplitArgs(), _testOutputHelper);
+            var result = new AppRunner<App>().RunInMem("-?".SplitArgs(), _output);
             result.OutputContains("Usage: dotnet testhost.dll [command]");
         }
 
         [Fact]
         public void ShortName_ShowsHelp()
         {
-            var result = new AppRunner<App>().RunInMem("-h".SplitArgs(), _testOutputHelper);
+            var result = new AppRunner<App>().RunInMem("-h".SplitArgs(), _output);
             result.OutputContains("Usage: dotnet testhost.dll [command]");
         }
 
         [Fact]
         public void LongName_ShowsHelp()
         {
-            var result = new AppRunner<App>().RunInMem("--help".SplitArgs(), _testOutputHelper);
+            var result = new AppRunner<App>().RunInMem("--help".SplitArgs(), _output);
             result.OutputContains("Usage: dotnet testhost.dll [command]");
         }
 

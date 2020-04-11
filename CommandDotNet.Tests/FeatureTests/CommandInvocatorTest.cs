@@ -11,11 +11,11 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class CommandInvokerTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public CommandInvokerTests(ITestOutputHelper testOutputHelper)
+        public CommandInvokerTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
@@ -123,7 +123,7 @@ namespace CommandDotNet.Tests.FeatureTests
             }
 
             var args = $"NotifyOwner --Number {carNumber} --owner {ownerName}".SplitArgs();
-            return appRunner.RunInMem(args, _testOutputHelper);
+            return appRunner.RunInMem(args, _output);
         }
         
         public class App
