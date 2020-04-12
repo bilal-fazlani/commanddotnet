@@ -33,7 +33,7 @@ namespace CommandDotNet.Execution
         {
             var indent2 = indent.Increment();
             var root = $"{nameof(InvocationPipeline)}:{NewLine}" +
-                       $"{indent}{nameof(TargetCommand)}:{TargetCommand.ToString(indent2)}";
+                       $"{indent}{nameof(TargetCommand)}:{TargetCommand?.ToString(indent2)}";
 
             var hasInterceptors = AncestorInterceptors?.Any() ?? false;
             if (!hasInterceptors)

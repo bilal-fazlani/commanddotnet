@@ -2,7 +2,18 @@
 
 ## 2.0.0 (wip)
 
-This release has several breaking changes to improve readability and usability.
+This release focuses on usability, readability and discoverability.
+
+The tooling was initially designed for CommandDotNet with an aspiration for general use. The tooling did work for other projects but required those projects to write shims to make the tooling more useful.
+
+The primary test extensions: `RunInMem` and `Verify` are now easier to use, provide a more consistent experience and no longer duplicated output in some scenarios.
+
+### TestConfig
+
+TestConfig provides settings primarily to determine what is logged during a test run, on success and on error.
+
+more details here: (TBD)
+
 
 ### Scenario.Then Output vs Result
 

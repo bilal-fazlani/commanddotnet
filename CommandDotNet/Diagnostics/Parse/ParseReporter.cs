@@ -23,11 +23,11 @@ namespace CommandDotNet.Diagnostics.Parse
 
             if (command.Operands.Any())
             {
-                writeln(null);
+                writeln("");
                 writeln($"{indent}arguments:");
                 foreach (var operand in command.Operands)
                 {
-                    writeln(null);
+                    writeln("");
                     PrintArg(operand, indent.Increment(), writeln);
                 }
             }
@@ -35,11 +35,11 @@ namespace CommandDotNet.Diagnostics.Parse
             var options = command.AllOptions(includeInterceptorOptions: true, excludeHiddenOptions: true).ToList();
             if (options.Any())
             {
-                writeln(null);
+                writeln("");
                 writeln($"{indent}options:");
                 foreach (var option in options)
                 {
-                    writeln(null);
+                    writeln("");
                     PrintArg(option, indent.Increment(), writeln);
                 }
             }

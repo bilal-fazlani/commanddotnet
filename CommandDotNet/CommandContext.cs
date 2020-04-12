@@ -88,15 +88,30 @@ namespace CommandDotNet
         /// </summary>
         public string ToString(Indent indent)
         {
+            return ToString(indent, false);
+        }
+
+        /// <summary>
+        /// Does not include OriginalInput or Tokens because they could contain passwords<br/>
+        /// WARN: includeOriginalArgs could expose passwords.
+        /// </summary>
+        public string ToString(Indent indent, bool includeOriginalArgs)
+        {
             // Do not include OriginalInput or Tokens because they
             // could contain passwords.
             // Use ParseResults instead if needed
 
             indent = indent.Increment();
 
+            var insecure = includeOriginalArgs
+                ? $"{indent}Original.Args:{Original.Args.ToCsv(" ")}{NewLine}" +
+                  $"{indent}{nameof(Tokens)}:{Tokens.ToArgsArray().ToCsv(" ")}{NewLine}"
+                : "";
+
             return $"{nameof(CommandContext)}:{NewLine}" +
                    $"{indent}{nameof(RootCommand)}:{RootCommand}{NewLine}" +
                    $"{indent}{nameof(ShowHelpOnExit)}:{ShowHelpOnExit}{NewLine}" +
+                   $"{insecure}" +
                    $"{indent}{nameof(ParseResult)}:{ParseResult?.ToString(indent.Increment())}{NewLine}" +
                    $"{indent}{nameof(InvocationPipeline)}:{InvocationPipeline?.ToString(indent.Increment())}{NewLine}";
         }

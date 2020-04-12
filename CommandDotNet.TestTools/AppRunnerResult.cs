@@ -6,6 +6,8 @@ namespace CommandDotNet.TestTools
     public class AppRunnerResult
     {
         private readonly TestConsole _testConsole;
+        internal AppRunner Runner { get; }
+        internal TestConfig Config { get; }
 
         public int ExitCode { get; }
 
@@ -33,12 +35,23 @@ namespace CommandDotNet.TestTools
         /// <summary>The <see cref="CommandContext"/> used during the run</summary>
         public CommandContext CommandContext { get; }
 
-        public AppRunnerResult(int exitCode, TestConsole testConsole, TestCaptures testCaptures, CommandContext commandContext)
+        /// <summary>
+        /// The exception that escaped from <see cref="AppRunner.Run"/><br/>
+        /// Can only populated when <see cref="TestConfig.OnErrorConfig.CaptureAndReturnResult"/> is true.
+        /// </summary>
+        public Exception EscapedException { get; }
+
+        public AppRunnerResult(int exitCode, AppRunner runner,
+            CommandContext commandContext, TestConsole testConsole, TestCaptures testCaptures,
+            TestConfig config, Exception escapedException = null)
         {
             _testConsole = testConsole;
             ExitCode = exitCode;
             TestCaptures = testCaptures;
             CommandContext = commandContext;
+            Runner = runner;
+            Config = config;
+            EscapedException = escapedException;
         }
 
         /// <summary>

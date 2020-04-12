@@ -11,31 +11,50 @@ namespace CommandDotNet.TestTools.Scenarios
     public static class AppRunnerScenarioExtensions
     {
         /// <summary>Run and verify the scenario expectations, output results to <see cref="Console"/></summary>
-        public static AppRunnerResult Verify(this AppRunner appRunner, IScenario scenario)
+        public static AppRunnerResult Verify(this AppRunner appRunner, IScenario scenario, 
+            Action<string> logLine = null, TestConfig config = null)
         {
-            return appRunner.Verify(null, scenario);
+            return appRunner.Verify(logLine, config, scenario);
         }
 
         /// <summary>Run and verify the scenario expectations using the given logger for output.</summary>
-        public static AppRunnerResult Verify(this AppRunner appRunner, Action<string> logLine, IScenario scenario)
+        public static AppRunnerResult Verify(this AppRunner appRunner, Action<string> logLine, TestConfig config, IScenario scenario)
         {
             if (scenario.WhenArgs != null && scenario.WhenArgsArray != null)
             {
                 throw new InvalidOperationException($"Both {nameof(scenario.WhenArgs)} and {nameof(scenario.WhenArgsArray)} were specified.  Only one can be specified.");
             }
 
+            logLine = logLine ?? Console.WriteLine;
+            config = config ?? TestConfig.Default;
+
             AppRunnerResult results = null;
             var args = scenario.WhenArgsArray ?? scenario.WhenArgs.SplitArgs();
+
+            var origOnSuccess = config.OnSuccess;
+            if (!config.OnError.CaptureAndReturnResult)
+            {
+                config = config.Where(c =>
+                {
+                    // silence success in RunInMem so results are not printed
+                    // twice when asserts fail below.
+                    // success will be replaced and printed again.
+                    c.OnSuccess = TestConfig.Silent.OnSuccess;
+                    c.OnError.CaptureAndReturnResult = true;
+                });
+            }
+            results = appRunner.RunInMem(
+                args,
+                logLine,
+                scenario.Given.OnReadLine,
+                scenario.Given.PipedInput,
+                scenario.Given.OnPrompt,
+                config);
+
+            config.OnSuccess = origOnSuccess;
+
             try
             {
-                results = appRunner.RunInMem(
-                    args,
-                    logLine,
-                    scenario.Given.OnReadLine,
-                    scenario.Given.PipedInput,
-                    scenario.Given.OnPrompt,
-                    returnResultOnError: true);
-
                 AssertExitCodeAndErrorMessage(scenario, results);
 
                 if (scenario.Then.Output != null)
@@ -48,18 +67,20 @@ namespace CommandDotNet.TestTools.Scenarios
                     AssertCapturedItems(scenario, results);
                 }
 
-                return results;
+                results.LogResult(logLine);
             }
             catch (Exception e)
             {
-                logLine("");
-                logLine(scenario.ToString());
-                logLine("");
-                logLine(results?.CommandContext?.ToString());
-                logLine("");
-                logLine(appRunner.ToString());
+                if (!config.Source.IsNullOrWhitespace())
+                {
+                    logLine("");
+                    logLine($"TestConfig source:{config.Source}");
+                }
+                results.LogResult(logLine, onError: true);
                 throw;
             }
+
+            return results;
         }
 
         private static void AssertExitCodeAndErrorMessage(IScenario scenario, AppRunnerResult result)

@@ -30,7 +30,7 @@ namespace CommandDotNet.TestTools
             return new DisposableAction(() => LogProvider.IsDisabled = true);
         }
 
-        public Logging.Logger GetLogger(string name)
+        public Logger GetLogger(string name)
         {
             return (level, messageFunc, exception, parameters) =>
             {

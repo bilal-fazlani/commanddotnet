@@ -30,7 +30,8 @@ namespace CommandDotNet.Tests
 
         public static AppRunnerResult Verify(this AppRunner appRunner, ITestOutputHelper output, IScenario scenario)
         {
-            return appRunner.Verify(output.WriteLine, scenario);
+            // use Test.Default to force testing of TestConfig.GetDefaultFromSubClass()
+            return appRunner.Verify(output.WriteLine, TestConfig.Default, scenario);
         }
     }
 }

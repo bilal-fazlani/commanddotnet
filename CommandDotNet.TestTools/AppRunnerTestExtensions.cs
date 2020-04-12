@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using CommandDotNet.Diagnostics.Parse;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.TestTools.Prompts;
@@ -46,7 +47,7 @@ namespace CommandDotNet.TestTools
                     exitAfterCapture: true,
                     middlewareStage: middlewareStage,
                     orderWithinStage: orderWithinStage)
-                .RunInMem(args, logger);
+                .RunInMem(args, logger, config: TestConfig.Silent);
             return state;
         }
 
@@ -57,9 +58,9 @@ namespace CommandDotNet.TestTools
             Func<TestConsole, string> onReadLine = null,
             IEnumerable<string> pipedInput = null,
             IPromptResponder promptResponder = null,
-            bool returnResultOnError = false)
+            TestConfig config = null)
         {
-            return runner.RunInMem(args.SplitArgs(), logLine, onReadLine, pipedInput, promptResponder, returnResultOnError);
+            return runner.RunInMem(args.SplitArgs(), logLine, onReadLine, pipedInput, promptResponder, config);
         }
 
         /// <summary>Run the console in memory and get the results that would be output to the shell</summary>
@@ -69,10 +70,16 @@ namespace CommandDotNet.TestTools
             Func<TestConsole, string> onReadLine = null,
             IEnumerable<string> pipedInput = null,
             IPromptResponder promptResponder = null,
-            bool returnResultOnError = false)
+            TestConfig config = null)
         {
-            logLine = logLine ?? (l => {});
-            using (TestToolsLogProvider.InitLogProvider(logLine))
+            logLine = logLine ?? Console.WriteLine;
+            config = config ?? TestConfig.Default;
+
+            IDisposable logProvider = config.PrintCommandDotNetLogs
+                ? TestToolsLogProvider.InitLogProvider(logLine)
+                : new DisposableAction(() => { });
+
+            using (logProvider)
             {
                 var testConsole = new TestConsole(
                     onReadLine,
@@ -86,35 +93,77 @@ namespace CommandDotNet.TestTools
                 runner.CaptureState(ctx => context = ctx, MiddlewareStages.PreTokenize);
                 var captures = InjectTestCaptures(runner);
 
-                void LogResult()
-                {
-                    var consoleAll = testConsole.All.ToString();
-                    logLine($"{NewLine}Console output <begin> ------------------------------");
-                    logLine(consoleAll.IsNullOrWhitespace() ? "<no output>" : consoleAll);
-                    logLine($"Console output <end> ------------------------------{NewLine}");
-                }
-
                 try
                 {
                     var exitCode = runner.Run(args);
-                    LogResult();
-                    return new AppRunnerResult(exitCode, testConsole, captures, context);
+                    return new AppRunnerResult(exitCode, runner, context, testConsole, captures, config)
+                        .LogResult(logLine);
                 }
                 catch (Exception e)
                 {
-                    if (returnResultOnError)
+                    if (!config.Source.IsNullOrWhitespace())
+                    {
+                        logLine("");
+                        logLine($"TestConfig source:{config.Source}");
+                    }
+
+                    var result = new AppRunnerResult(1, runner, context, testConsole, captures, config, e);
+                    if (config.OnError.CaptureAndReturnResult)
                     {
                         testConsole.Error.WriteLine(e.Message);
                         logLine(e.Message);
                         logLine(e.StackTrace);
-                        LogResult();
-                        return new AppRunnerResult(1, testConsole, captures, context);
+                        return result.LogResult(logLine, onError: true);
                     }
 
-                    LogResult();
+                    result.LogResult(logLine, onError: true);
                     throw;
                 }
             }
+        }
+
+        internal static AppRunnerResult LogResult(this AppRunnerResult result, Action<string> logLine, bool onError = false)
+        {
+            var print = onError || result.EscapedException != null 
+                ? result.Config.OnError.Print 
+                : result.Config.OnSuccess.Print;
+
+            if (print.ConsoleOutput)
+            {
+                var consoleAll = result.ConsoleAll;
+                if (consoleAll.EndsWith(Environment.NewLine))
+                {
+                    // logLine adds a NewLine and if the console output ends with NewLine
+                    // then an extra NewLine will appear in the output which will be misleading.
+                    consoleAll = consoleAll.Substring(0, consoleAll.Length - NewLine.Length);
+                }
+                logLine($"{NewLine}Console output <begin> ------------------------------");
+                logLine(consoleAll.IsNullOrWhitespace() ? "<no output>" : consoleAll);
+                logLine($"Console output <end> ------------------------------{NewLine}");
+            }
+
+            var context = result.CommandContext;
+            if (print.CommandContext)
+            {
+                logLine("");
+                logLine(context?.ToString(new Indent(), includeOriginalArgs: true));
+            }
+
+            if (print.ParseReport && context?.ParseResult != null)
+            {
+                logLine("");
+                logLine($"{NewLine}Parse report <begin> ------------------------------");
+                ParseReporter.Report(context, logLine);
+                logLine($"Parse report <end> ------------------------------{NewLine}");
+            }
+
+            if (print.AppConfig)
+            {
+                logLine("");
+                logLine(result.Runner.ToString());
+            }
+
+            return result;
         }
 
         private static TestCaptures InjectTestCaptures(AppRunner runner)
