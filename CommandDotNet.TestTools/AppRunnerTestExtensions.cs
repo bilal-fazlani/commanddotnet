@@ -101,12 +101,6 @@ namespace CommandDotNet.TestTools
                 }
                 catch (Exception e)
                 {
-                    if (!config.Source.IsNullOrWhitespace())
-                    {
-                        logLine("");
-                        logLine($"TestConfig source:{config.Source}");
-                    }
-
                     var result = new AppRunnerResult(1, runner, context, testConsole, captures, config, e);
                     if (config.OnError.CaptureAndReturnResult)
                     {

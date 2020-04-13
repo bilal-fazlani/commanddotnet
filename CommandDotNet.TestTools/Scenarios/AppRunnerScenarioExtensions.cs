@@ -71,11 +71,6 @@ namespace CommandDotNet.TestTools.Scenarios
             }
             catch (Exception e)
             {
-                if (!config.Source.IsNullOrWhitespace())
-                {
-                    logLine("");
-                    logLine($"TestConfig source:{config.Source}");
-                }
                 results.LogResult(logLine, onError: true);
                 throw;
             }

@@ -1,9 +1,5 @@
 # Test Tools
 
-One of the perks of using this framework is that commands are just methods and methods are easily unit tested. Most of your tests can be unit tests, as is best-practice.
-
-These tools enable you to provide end-to-end testing with the same experience as the console. 
-
 #### TLDR, How to enable 
 
 nuget package: [CommandDotNet.TestTools](https://www.nuget.org/packages/CommandDotNet.TestTools)
@@ -24,15 +20,16 @@ nuget package: [CommandDotNet.TestTools](https://www.nuget.org/packages/CommandD
 
 ## Testing Console Apps
 
-The framework is ideal for end-to-end testing and testing middleware components.
+One of the perks of using this framework is that commands are just methods and methods are easily unit tested. Most of your tests can be unit tests, as is best-practice.
 
-## Testing Middleware
+These tools enable you to provide end-to-end testing as if running the app in a console.
 
-CommandDotNet features are tested extensively using these test tools and so they are well suited to testing middleware and other extensibility components. 
+!!! Note
+    These test tools are used to test all of the CommandDotNet features.<br/>They are well suited to testing middleware and other extensibility components. 
 
 ## Two testing patterns
 
-The tool provides extension methods facilitating two different testing patterns.
+The tool provides extension methods facilitating two testing patterns.
 
 === "Standard"
 
@@ -62,7 +59,7 @@ The tool provides extension methods facilitating two different testing patterns.
     }
     ```
 
-=== "BDD Style"
+=== "BDD"
 
     ```c#
     public class PipedInputTests
@@ -95,17 +92,49 @@ The tool provides extension methods facilitating two different testing patterns.
     }
     ```
 
-### Standard Style
+With both patterns use an extension method that runs a fully configured AppRunner.
 
-lala descriptions
+### Standard
 
-### BDD Style
+The standard style uses the `RunInMem` extension method which will  
 
-lala descriptions
+* Configure CommandDotNet logging
+* Configure TestConsole with 
+    * pipedInput
+    * onReadLine
+    * promptResponder
+* Execute appRunner.Run(args)
+* If enabled, prints
+    * Console Output
+    * CommandContext
+    * AppConfig
+* Return AppRunnerResult with
+    * ExitCode
+    * TestConsole
+    * TestCaptures
+    * CommandContext
+
+See [Run in Memory](run-in-mem.md) for more details.
+
+### BDD
+
+The BDD style uses the `Verify` extension method which wraps `RunInMem` with assertions defined in a BDD manner using [object initializers](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/object-and-collection-initializers) for some syntactic goodness.
+
+* Assert
+  * ExitCode
+  * Error Message
+  * Console Output
+  * TestCaptures
+* On Error
+  * Capture & Return ExitCode 1
+
+See [BDD](bdd.md) for more details.
 
 This approach works well with BDD frameworks like [SpecFlow](https://specflow.org/) where scenarios can be defined in other sources and mapped to code. 
 
-### Program
+## Testing your application
+
+When testing an application, use the same method to generate and configure the AppRunner for the console and tests. In this example, the `GetAppRunner()` method is made public so that tests can   
 
 ```c#
 public class Program
