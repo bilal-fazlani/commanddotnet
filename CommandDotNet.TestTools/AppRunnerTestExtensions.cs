@@ -130,7 +130,7 @@ namespace CommandDotNet.TestTools
 
             if (print.ConsoleOutput)
             {
-                var consoleAll = result.ConsoleAll;
+                var consoleAll = result.Console.AllText();
                 if (consoleAll.EndsWith(Environment.NewLine))
                 {
                     // logLine adds a NewLine and if the console output ends with NewLine

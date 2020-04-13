@@ -30,7 +30,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     c.UseMiddleware(Throw, MiddlewareStages.PostTokenizePreParseInput);
                 })
                 .RunInMem(new string[0], _output)
-                .ConsoleAll.Should().BeEmpty();
+                .Console.AllText().Should().BeEmpty();
         }
 
         [Fact]

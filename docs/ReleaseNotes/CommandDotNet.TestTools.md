@@ -32,7 +32,13 @@ To update, use find/replace
 * ResultsContainsTexts > OutputContainsTexts
 * ResultsNotContainsTexts > OutputNotContainsTexts
 
-### AppRunnerResult.ConsoleOutAndError -> ConsoleAll
+### AppRunnerResult.Console___ properties moved to TestConsole
+
+* AppRunnerResult.ConsoleOutAndError -> AppRunnerResult.Console.AllText()
+* AppRunnerResult.ConsoleOut -> AppRunnerResult.Console.OutText()
+* AppRunnerResult.ConsoleError -> AppRunnerResult.Console.ErrorText()
+
+### AppRunnerResult.ConsoleOut -> Console.AllText()
 
 Renamed AppRunnerResult.ConsoleOutAndError to ConsoleAll
 

@@ -5,24 +5,12 @@ namespace CommandDotNet.TestTools
 {
     public class AppRunnerResult
     {
-        private readonly TestConsole _testConsole;
         internal AppRunner Runner { get; }
         internal TestConfig Config { get; }
 
         public int ExitCode { get; }
 
-        /// <summary>
-        /// The combination of <see cref="Console.Error"/> and <see cref="Console.Out"/>
-        /// in the order they were written from the app.<br/>
-        /// This is how the output would appear in the shell.
-        /// </summary>
-        public string ConsoleAll => _testConsole.All.ToString();
-
-        /// <summary>The error output only</summary>
-        public string ConsoleError => _testConsole.Error.ToString();
-
-        /// <summary>The standard output only</summary>
-        public string ConsoleOut => _testConsole.Out.ToString();
+        public TestConsole Console { get; }
 
         /// <summary>
         /// <see cref="TestCaptures"/> captured in the command class.
@@ -45,11 +33,11 @@ namespace CommandDotNet.TestTools
             CommandContext commandContext, TestConsole testConsole, TestCaptures testCaptures,
             TestConfig config, Exception escapedException = null)
         {
-            _testConsole = testConsole;
             ExitCode = exitCode;
-            TestCaptures = testCaptures;
-            CommandContext = commandContext;
             Runner = runner;
+            CommandContext = commandContext;
+            Console = testConsole;
+            TestCaptures = testCaptures;
             Config = config;
             EscapedException = escapedException;
         }
@@ -61,7 +49,7 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public void OutputShouldBe(string expected)
         {
-            var actual = ConsoleAll.NormalizeLineEndings();
+            var actual = Console.AllText(normalizeLineEndings:true);
             expected = expected.NormalizeLineEndings();
             actual.Should().Be(expected);
         }
@@ -73,7 +61,7 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public bool OutputContains(string expected)
         {
-            var actual = ConsoleAll.NormalizeLineEndings();
+            var actual = Console.AllText(normalizeLineEndings: true);
             expected = expected.NormalizeLineEndings();
             return actual.Contains(expected);
         }
@@ -85,9 +73,7 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public bool OutputNotContains(string expected)
         {
-            var actual = ConsoleAll.NormalizeLineEndings();
-            expected = expected.NormalizeLineEndings();
-            return !actual.Contains(expected);
+            return !OutputContains(expected);
         }
     }
 }

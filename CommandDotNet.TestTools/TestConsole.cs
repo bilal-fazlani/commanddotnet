@@ -67,16 +67,51 @@ namespace CommandDotNet.TestTools
                 });
         }
 
-        public IStandardStreamWriter Error { get; }
-
-        public IStandardStreamWriter Out { get; }
-
-        public string OutLastLine => Out.ToString().SplitIntoLines().Last();
-
         /// <summary>
         /// This is the combined output for <see cref="Error"/> and <see cref="Out"/> in the order the lines were output.
         /// </summary>
         public IStandardStreamWriter All { get; }
+
+        public IStandardStreamWriter Out { get; }
+
+        public IStandardStreamWriter Error { get; }
+
+        public string OutLastLine => Out.ToString().SplitIntoLines().Last();
+
+        /// <summary>
+        /// The combination of <see cref="Console.Error"/> and <see cref="Console.Out"/>
+        /// in the order they were written from the app.<br/>
+        /// This is how the output would appear in the shell.
+        /// </summary>
+        /// <param name="normalizeLineEndings">
+        /// Trims white space from all lines to ensure consistent results for test assertions.<br/>
+        /// This is to deal with whitespace padding when some lines don't need all elements.
+        /// </param>
+        public string AllText(bool normalizeLineEndings = false) => normalizeLineEndings
+            ? All.ToString().NormalizeLineEndings()
+            : All.ToString();
+
+        /// <summary>
+        /// The accumulated text of the <see cref="Console.Out"/> stream.
+        /// </summary>
+        /// <param name="normalizeLineEndings">
+        /// Trims white space from all lines to ensure consistent results for test assertions.<br/>
+        /// This is to deal with whitespace padding when some lines don't need all elements.
+        /// </param>
+        public string OutText(bool normalizeLineEndings = false) => normalizeLineEndings
+            ? Out.ToString().NormalizeLineEndings()
+            : Out.ToString();
+
+        /// <summary>
+        /// The accumulated text of the <see cref="Console.Error"/> stream.
+        /// </summary>
+        /// <param name="normalizeLineEndings">
+        /// Trims white space from all lines to ensure consistent results for test assertions.<br/>
+        /// This is to deal with whitespace padding when some lines don't need all elements.
+        /// </param>
+        public string ErrorText(bool normalizeLineEndings = false) => normalizeLineEndings 
+            ? Error.ToString().NormalizeLineEndings() 
+            : Error.ToString();
 
         public bool IsOutputRedirected { get; } = false;
 

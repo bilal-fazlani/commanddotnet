@@ -32,8 +32,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         {
             new AppRunner<App>()
                 .UseDependencyResolver(new TestDependencyResolver { new ArgModel { Text = "default from resolver" } })
-                .RunInMem("Do -h", _output)
-                .ConsoleOut.Should().Contain("default from resolver");
+                .RunInMem("Do -h", _output).Console.OutText().Should().Contain("default from resolver");
         }
 
         class App

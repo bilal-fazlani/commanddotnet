@@ -112,8 +112,9 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             if (showsHelp && showsTokens)
             {
                 // help before token transformations
-                var helpIndex = result.ConsoleOut.IndexOf("Usage: dotnet testhost.dll ");
-                var tokensIndex = result.ConsoleOut.IndexOf("token transformations:");
+                var consoleOut = result.Console.OutText();
+                var helpIndex = consoleOut.IndexOf("Usage: dotnet testhost.dll ");
+                var tokensIndex = consoleOut.IndexOf("token transformations:");
                 tokensIndex.Should().BeLessThan(helpIndex);
             }
         }
