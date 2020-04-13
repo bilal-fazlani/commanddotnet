@@ -12,8 +12,7 @@ The primary test extensions: `RunInMem` and `Verify` are now easier to use, prov
 
 TestConfig provides settings primarily to determine what is logged during a test run, on success and on error.
 
-more details here: (TBD)
-
+See [TestConfig docs](../TestTools/test-config.md) for more details.
 
 ### Scenario.Then Output vs Result
 

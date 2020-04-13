@@ -38,6 +38,8 @@ nav:
         - Diagnostics/parse-directive.md
         - Diagnostics/command-logger.md
         - Diagnostics/exceptions.md
+      - Testing:
+        - TestTools/test-tools.md
       - Other Features:
         - OtherFeatures/default-middleware.md
         - Ctrl+C and<br/>CancellationToken: OtherFeatures/cancellation.md
@@ -51,7 +53,6 @@ nav:
         - Extensibility/middleware.md
         - Extensibility/interceptors.md 
         - Extensibility/token-transformations.md
-      - test-tools.md
     - Release Notes:
       - ReleaseNotes/whats-new-in-v3.md
       - ReleaseNotes/CommandDotNet.md
