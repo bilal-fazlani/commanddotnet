@@ -134,7 +134,7 @@ Arguments:
   y  <NUMBER>
 ```
 
-Here we see arguments for addition and their type.
+Here we see arguments for addition and their type.  See the [Arguments](Arguments/arguments.md) section for more options.
 
 Let's try and add two numbers.
 
@@ -214,6 +214,12 @@ Check out the
 
 * [Argument Values](ArgumentValues/argument-separator.md) section for more about providing values to arguments.
 
-* [Help](Help/help.md) section for options to modify help and other help features.
+* [Help](Help/help.md) section for options to modify help and other help features. 
+ 
+* [Diagnostics](Diagnostics/app-version.md) section for a rich set of tools to simplify troubleshooting
 
-* [Test Tools](test-tools.md) section for a test package to test console output with this framework. These tools enable you to provide end-to-end testing with the same experience as the console as well as testing middleware and other extensibility components. This package is used to test all of the CommandDotNet features.
+* [Other Features](OtherFeatures/default-middleware.md) section to see the additional features available.
+
+* [Extensibility](Extensibility/directives.md) section if the framework is missing a feature you need and you're interested in adding it yourself. For questions, ping us on our [Discord channel](https://discord.gg/QFxKSeG) or create a [GitHub Issue](https://github.com/bilal-fazlani/commanddotnet/issues)
+
+* [Test Tools](TestTools/test-tools.md) section for a test package to test console output with this framework. These tools enable you to provide end-to-end testing with the same experience as the console as well as testing middleware and other extensibility components. This package is used to test all of the CommandDotNet features.
