@@ -160,12 +160,18 @@ You get the gist of this library now. This may be all you need to start your app
 
 Check out the
 
-* *Defining Commands* section to learn more details around defining commands, subcommands and arguments.
+* [Commands](Commands/commands.md) section for more about defining commands, subcommands and arguments.
 
-* *Middleware* section to see the additional set of features available via middleware.
+* [Arguments](Arguments/arguments.md) section for more about defining arguments.
 
-* *Extensibility* section if the framework is missing a feature you need and you're interested in adding it yourself. For questions, ping us on our [Discord channel](https://discord.gg/QFxKSeG) or create a [GitHub Issue](https://github.com/bilal-fazlani/commanddotnet/issues)
+* [Argument Values](ArgumentValues/argument-separator.md) section for more about providing values to arguments.
 
-* *Diagnostics* section for a rich set of tools to simplify troubleshooting
+* [Help](Help/help.md) section for options to modify help and other help features.
 
-* *Test Tools* for a test package to help test console output with this framework. This is helpful for all apps, but especially helpful when definiing extensibility components. This package is used to test all of the CommandDotNet features.
+* [Diagnostics](Diagnostics/app-version.md) section for a rich set of tools to simplify troubleshooting
+
+* [Other Features](OtherFeatures/default-middleware.md) section to see the additional features available.
+
+* [Extensibility](Extensibility/directives.md) section if the framework is missing a feature you need and you're interested in adding it yourself. For questions, ping us on our [Discord channel](https://discord.gg/QFxKSeG) or create a [GitHub Issue](https://github.com/bilal-fazlani/commanddotnet/issues)
+
+* [Test Tools](test-tools.md) for a test package to help test console output with this framework. This is helpful for all apps, but especially helpful when definiing extensibility components. This package is used to test all of the CommandDotNet features.
