@@ -32,7 +32,7 @@ namespace CommandDotNet.Diagnostics
             commandContext.Services.AddOrUpdate(parseContext);
             CaptureTransformations(commandContext, parseContext);
 
-            Action<string> writeln = commandContext.Console.Out.WriteLine;
+            var writer = commandContext.Console.Out;
 
             try
             {
@@ -42,32 +42,32 @@ namespace CommandDotNet.Diagnostics
                 {
                     // in case ParseReportByArg wasn't run due to parsing errors,
                     // output this the transformations as a temporary aid
-                    writeln(null);
-                    writeln(commandContext.ParseResult.HelpWasRequested() 
+                    writer.WriteLine(null);
+                    writer.WriteLine(commandContext.ParseResult.HelpWasRequested() 
                         ? "Help requested. Only token transformations are available."
                         : "Unable to map tokens to arguments. Falling back to token transformations.");
-                    writeln(parseContext.Transformations.ToString());
+                    writer.WriteLine(parseContext.Transformations.ToString(), avoidExtraNewLine: true);
                 }
                 else if (parseContext.IncludeTokenization)
                 {
-                    writeln(parseContext.Transformations.ToString());
+                    writer.WriteLine(parseContext.Transformations.ToString(), avoidExtraNewLine: true);
                 }
                 else
                 {
-                    writeln(null);
-                    writeln($"Use [parse:{ParseContext.IncludeTransformationsArgName}]" +
+                    writer.WriteLine(null);
+                    writer.WriteLine($"Use [parse:{ParseContext.IncludeTransformationsArgName}]" +
                             " to include token transformations.");
                 }
 
-return result;
+                return result;
             }
             catch (Exception) when (!parseContext.Reported)
             {
                 // in case ParseReportByArg wasn't run due to parsing errors,
                 // output this the transformations as a temporary aid
-                writeln(null);
-                writeln("Unable to map tokens to arguments. Falling back to token transformations.");
-                writeln(parseContext.Transformations.ToString());
+                writer.WriteLine(null);
+                writer.WriteLine("Unable to map tokens to arguments. Falling back to token transformations.");
+                writer.WriteLine(parseContext.Transformations.ToString(), avoidExtraNewLine: true);
                 throw;
             }
         }

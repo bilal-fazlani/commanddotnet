@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CommandDotNet.Tokens;
+using static System.Environment;
 
 namespace CommandDotNet.TestTools
 {
@@ -24,10 +25,9 @@ namespace CommandDotNet.TestTools
                 .Select(l => l.TrimEnd());
 
             // join with a consistent line ending
-            var result = string.Join(Environment.NewLine, lines);
+            var result = string.Join(NewLine, lines);
 
-            // trim extra empty line endings so tests are easier to write with less wasted space.
-            return result.TrimEnd(Environment.NewLine.ToCharArray());
+            return result;
         }
 
         /// <summary>Split the arguments using <see cref="CommandLineStringSplitter"/></summary>

@@ -55,7 +55,8 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                             Arg1 = "something",
                             Opt1 = "simple"
                         }},
-                        Output = "opt1 (Text): simple"
+                        Output = @"opt1 (Text): simple
+"
                     }
                 });
         }
@@ -76,7 +77,8 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                             Arg1 = "something",
                             Opt1 = "simple"
                         }},
-                        Output = "arg1 (Text): something"
+                        Output = @"arg1 (Text): something
+"
                     }
                 });
         }
@@ -107,7 +109,8 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                             }
                         },
                         Output = @"arg1 (Text): something
-opt1 (Text): simple"
+opt1 (Text): simple
+"
                     }
                 });
         }
@@ -143,7 +146,9 @@ opt1 (Text): simple"
                         Captured = {new List<string>{"something", "simple"}},
                         Output = @"args (Text) [<enter> once to begin new value. <enter> twice to finish]:
 something
-simple"
+simple
+
+"
                     }
                 });
         }
@@ -211,7 +216,8 @@ simple"
                     {
                         Captured = { new App.SecureResult{User = "lala", Password = new Password("fishies")}},
                         Output = @"user (Text): lala
-password (Text): "
+password (Text): 
+"
                     }
                 });
         }
@@ -231,7 +237,8 @@ password (Text): "
                     {
                         Captured = { new App.SecureResult{User = "lala", Password = new Password("new")}},
                         Output = @"user (Text): lala
-password (Text): "
+password (Text): 
+"
                     }
                 });
         }
@@ -278,7 +285,8 @@ password (Text): "
                     Then =
                     {
                         Captured = { true },
-                        Output = "operand1 (Boolean): true"
+                        Output = @"operand1 (Boolean): true
+"
                     }
                 });
         }
@@ -296,7 +304,8 @@ password (Text): "
                     {
                         Captured = { new App.DoResult{Arg1 = "fishies", Opt1 = "fishies"}},
                         Output = @"lala (Text): fishies
-lala (Text): fishies"
+lala (Text): fishies
+"
                     }
                 });
         }
@@ -313,7 +322,8 @@ lala (Text): fishies"
                     Then =
                     {
                         Captured = {new App.DoResult {Arg1 = "something"}},
-                        Output = @"arg1 (Text): something"
+                        Output = @"arg1 (Text): something
+"
                     }
                 });
         }

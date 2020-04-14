@@ -27,10 +27,14 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<App>(BasicHelpWithDescriptor).Verify(_output, new Scenario
             {
                 WhenArgs = "Do -h",
-                Then = { Output = @"Usage: dotnet testhost.dll Do [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll Do [arguments]
 
 Arguments:
-  square" }
+  square
+"
+                }
             });
         }
 
@@ -40,11 +44,15 @@ Arguments:
             new AppRunner<App>(DetailedHelpWithDescriptor).Verify(_output, new Scenario
             {
                 WhenArgs = "Do -h",
-                Then = { Output = @"Usage: dotnet testhost.dll Do [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll Do [arguments]
 
 Arguments:
 
-  square  <!!SQUARE!!>" }
+  square  <!!SQUARE!!>
+"
+                }
             });
         }
 

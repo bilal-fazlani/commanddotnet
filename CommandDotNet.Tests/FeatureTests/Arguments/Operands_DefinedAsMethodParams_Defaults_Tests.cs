@@ -26,7 +26,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<OperandsDefaults>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "ArgsDefaults -h",
-                Then = { Output = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
 
 Arguments:
   boolArg
@@ -35,7 +37,9 @@ Arguments:
   structNArg
   enumArg
   objectArg
-  stringListArg" }
+  stringListArg
+"
+                }
             });
         }
 
@@ -45,7 +49,9 @@ Arguments:
             new AppRunner<OperandsDefaults>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "ArgsDefaults -h",
-                Then = { Output = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
 
 Arguments:
 
@@ -63,7 +69,9 @@ Arguments:
 
   objectArg                 <URI>
 
-  stringListArg (Multiple)  <TEXT>" }
+  stringListArg (Multiple)  <TEXT>
+"
+                }
             });
         }
 
@@ -73,10 +81,14 @@ Arguments:
             new AppRunner<OperandsDefaults>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "StructListDefaults -h",
-                Then = { Output = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
 
 Arguments:
-  structListArg" }
+  structListArg
+"
+                }
             });
         }
 
@@ -86,11 +98,15 @@ Arguments:
             new AppRunner<OperandsDefaults>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "StructListDefaults -h",
-                Then = { Output = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
 
 Arguments:
 
-  structListArg (Multiple)  <NUMBER>" }
+  structListArg (Multiple)  <NUMBER>
+"
+                }
             });
         }
 
@@ -100,10 +116,14 @@ Arguments:
             new AppRunner<OperandsDefaults>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "EnumListDefaults -h",
-                Then = { Output = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
 
 Arguments:
-  enumListArg" }
+  enumListArg
+"
+                }
             });
         }
 
@@ -113,12 +133,16 @@ Arguments:
             new AppRunner<OperandsDefaults>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "EnumListDefaults -h",
-                Then = { Output = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
 
 Arguments:
 
   enumListArg (Multiple)  <DAYOFWEEK>
-  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday" }
+  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+"
+                }
             });
         }
 
@@ -128,10 +152,14 @@ Arguments:
             new AppRunner<OperandsDefaults>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "ObjectListDefaults -h",
-                Then = { Output = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
 
 Arguments:
-  objectListArg" }
+  objectListArg
+"
+                }
             });
         }
 
@@ -141,11 +169,15 @@ Arguments:
             new AppRunner<OperandsDefaults>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "ObjectListDefaults -h",
-                Then = { Output = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
 
 Arguments:
 
-  objectListArg (Multiple)  <URI>" }
+  objectListArg (Multiple)  <URI>
+"
+                }
             });
         }
 

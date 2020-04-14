@@ -54,9 +54,13 @@ namespace CommandDotNet.FluentValidation
                             console.Error.WriteLine($"  {error.ErrorMessage}");
                         }
                     });
-                    console.Error.WriteLine();
 
                     ctx.ShowHelpOnExit = ctx.AppConfig.Services.Get<Config>().ShowHelpOnError;
+
+                    if (ctx.ShowHelpOnExit)
+                    {
+                        console.Error.WriteLine();
+                    }
 
                     return Task.FromResult(2);
                 }

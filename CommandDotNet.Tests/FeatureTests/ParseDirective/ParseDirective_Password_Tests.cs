@@ -59,7 +59,8 @@ token transformations:
   Option   : -p
   Value    : super-secret
 >>> after: expand-clubbed-flags (no changes)
->>> after: split-option-assignments (no changes)"
+>>> after: split-option-assignments (no changes)
+"
                         }
                     });
         }
@@ -105,7 +106,8 @@ token transformations:
   Option   : -p
   Value    : super-secret
 >>> after: expand-clubbed-flags (no changes)
->>> after: split-option-assignments (no changes)"
+>>> after: split-option-assignments (no changes)
+"
                         }
                     });
         }
@@ -139,7 +141,8 @@ token transformations:
   Directive: [parse:t]
   Value    : PromptSecure
 >>> after: expand-clubbed-flags (no changes)
->>> after: split-option-assignments (no changes)"
+>>> after: split-option-assignments (no changes)
+"
                         }
                     });
         }
@@ -183,7 +186,8 @@ token transformations:
   Option   : -u
   Value    : me
 >>> after: expand-clubbed-flags (no changes)
->>> after: split-option-assignments (no changes)"
+>>> after: split-option-assignments (no changes)
+"
                         }
                     });
         }

@@ -37,7 +37,8 @@ Arguments:
   structNArg
   enumArg
   objectArg
-  stringListArg"
+  stringListArg
+"
                 }
             });
         }
@@ -68,7 +69,8 @@ Arguments:
 
   objectArg                 <URI>
 
-  stringListArg (Multiple)  <TEXT>"
+  stringListArg (Multiple)  <TEXT>
+"
                 }
             });
         }
@@ -84,7 +86,8 @@ Arguments:
                     Output = @"Usage: dotnet testhost.dll StructListNoDefault [arguments]
 
 Arguments:
-  structListArg"
+  structListArg
+"
                 }
             });
         }
@@ -101,7 +104,8 @@ Arguments:
 
 Arguments:
 
-  structListArg (Multiple)  <NUMBER>"
+  structListArg (Multiple)  <NUMBER>
+"
                 }
             });
         }
@@ -117,7 +121,8 @@ Arguments:
                     Output = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments]
 
 Arguments:
-  enumListArg"
+  enumListArg
+"
                 }
             });
         }
@@ -135,7 +140,8 @@ Arguments:
 Arguments:
 
   enumListArg (Multiple)  <DAYOFWEEK>
-  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
+  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+"
                 }
             });
         }
@@ -151,7 +157,8 @@ Arguments:
                     Output = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments]
 
 Arguments:
-  objectListArg"
+  objectListArg
+"
                 }
             });
         }
@@ -168,7 +175,8 @@ Arguments:
 
 Arguments:
 
-  objectListArg (Multiple)  <URI>"
+  objectListArg (Multiple)  <URI>
+"
                 }
             });
         }

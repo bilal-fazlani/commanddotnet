@@ -36,7 +36,8 @@ Options:
   --ModelOption
   --ModelOptionList
   --paramOption
-  --paramOptionList"
+  --paramOptionList
+"
                 }
             });
         }
@@ -65,7 +66,8 @@ Options:
 
   --paramOption                 <TEXT>
 
-  --paramOptionList (Multiple)  <TEXT>" }
+  --paramOptionList (Multiple)  <TEXT>
+" }
             });
         }
 

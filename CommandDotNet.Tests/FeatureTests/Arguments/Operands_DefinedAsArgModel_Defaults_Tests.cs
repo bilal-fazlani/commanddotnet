@@ -34,7 +34,8 @@ Arguments:
   StructNArg
   EnumArg
   ObjectArg
-  StringListArg" }
+  StringListArg
+" }
             });
         }
 
@@ -62,7 +63,8 @@ Arguments:
 
   ObjectArg                 <URI>        [http://google.com/]
 
-  StringListArg (Multiple)  <TEXT>       [red, blue]" }
+  StringListArg (Multiple)  <TEXT>       [red, blue]
+" }
             });
         }
 
@@ -75,7 +77,8 @@ Arguments:
                 Then = { Output = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
 
 Arguments:
-  StructListArg" }
+  StructListArg
+" }
             });
         }
 
@@ -89,7 +92,8 @@ Arguments:
 
 Arguments:
 
-  StructListArg (Multiple)  <NUMBER>  [3, 4]" }
+  StructListArg (Multiple)  <NUMBER>  [3, 4]
+" }
             });
         }
 
@@ -102,7 +106,8 @@ Arguments:
                 Then = { Output = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
 
 Arguments:
-  EnumListArg" }
+  EnumListArg
+" }
             });
         }
 
@@ -117,7 +122,8 @@ Arguments:
 Arguments:
 
   EnumListArg (Multiple)  <DAYOFWEEK>  [Monday, Tuesday]
-  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday" }
+  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+" }
             });
         }
 
@@ -130,7 +136,8 @@ Arguments:
                 Then = { Output = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
 
 Arguments:
-  ObjectListArg" }
+  ObjectListArg
+" }
             });
         }
 
@@ -144,7 +151,8 @@ Arguments:
 
 Arguments:
 
-  ObjectListArg (Multiple)  <URI>  [http://google.com/, http://github.com/]" }
+  ObjectListArg (Multiple)  <URI>  [http://google.com/, http://github.com/]
+" }
             });
         }
 

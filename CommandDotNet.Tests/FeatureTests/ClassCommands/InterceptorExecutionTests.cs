@@ -30,7 +30,8 @@ Commands:
 
   Do
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+"
                     }
                 });
         }
@@ -48,7 +49,8 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
 
 Arguments:
 
-  arg1  <NUMBER>"
+  arg1  <NUMBER>
+"
                     }
                 });
         }
@@ -76,7 +78,8 @@ Commands:
 
   Do
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+"
                     }
                 });
         }
@@ -94,7 +97,8 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
 
 Arguments:
 
-  arg1  <NUMBER>"
+  arg1  <NUMBER>
+"
                     }
                 });
         }

@@ -25,7 +25,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<OptionsNoDefaults>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "ArgsDefaults -h",
-                Then = { Output = @"Usage: dotnet testhost.dll ArgsDefaults [options]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
 Options:
   --BoolArg
@@ -37,7 +39,9 @@ Options:
   --StringListArg
   --StructListArg
   --EnumListArg
-  --ObjectListArg" }
+  --ObjectListArg
+"
+                }
             });
         }
 
@@ -47,7 +51,9 @@ Options:
             new AppRunner<OptionsNoDefaults>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "ArgsDefaults -h",
-                Then = { Output = @"Usage: dotnet testhost.dll ArgsDefaults [options]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll ArgsDefaults [options]
 
 Options:
 
@@ -71,7 +77,9 @@ Options:
   --EnumListArg (Multiple)    <DAYOFWEEK>
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
-  --ObjectListArg (Multiple)  <URI>" }
+  --ObjectListArg (Multiple)  <URI>
+"
+                }
             });
         }
 

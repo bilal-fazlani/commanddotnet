@@ -30,7 +30,8 @@ Arguments:
 
 Options:
   --Option1
-  --Option2" }
+  --Option2
+" }
             });
         }
 
@@ -52,7 +53,8 @@ Options:
 
   --Option1  <TEXT>
 
-  --Option2  <TEXT>" }
+  --Option2  <TEXT>
+" }
             });
         }
 

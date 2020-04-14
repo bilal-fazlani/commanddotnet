@@ -75,7 +75,8 @@ namespace CommandDotNet.Tests.FeatureTests
                 Then =
                 {
                     Output = @"testhost.dll
-16.2.0"
+16.2.0
+"
                 }
             };
 
@@ -93,7 +94,8 @@ namespace CommandDotNet.Tests.FeatureTests
                 Then =
                 {
                     Output = @"testhost.dll
-16.2.0"
+16.2.0
+"
                 }
             };
             

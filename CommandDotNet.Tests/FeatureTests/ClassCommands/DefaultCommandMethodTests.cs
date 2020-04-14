@@ -29,7 +29,8 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 Commands:
   AnotherCommand
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+"
                 }
             });
         }
@@ -48,7 +49,8 @@ Commands:
 
   AnotherCommand
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+"
                 }
             });
         }
@@ -69,7 +71,8 @@ Arguments:
 Commands:
   AnotherCommand
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+"
                 }
             });
         }
@@ -93,7 +96,8 @@ Commands:
 
   AnotherCommand
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+"
                 }
             });
         }
@@ -107,7 +111,8 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 WhenArgs = "AnotherCommand -h",
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll AnotherCommand"
+                    Output = @"Usage: dotnet testhost.dll AnotherCommand
+"
                 }
             });
         }

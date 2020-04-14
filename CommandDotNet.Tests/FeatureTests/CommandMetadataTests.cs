@@ -21,7 +21,9 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "-h",
-                Then = { Output = @"app description
+                Then =
+                {
+                    Output = @"app description
 
 Usage: some usage examples
 
@@ -31,7 +33,9 @@ Commands:
 
 Use ""dotnet testhost.dll [command] --help"" for more information about a command.
 
-app extended help" }
+app extended help
+"
+                }
             });
         }
 
@@ -41,7 +45,9 @@ app extended help" }
             new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "-h",
-                Then = { Output = @"app description
+                Then =
+                {
+                    Output = @"app description
 
 Usage: some usage examples
 
@@ -52,7 +58,9 @@ Commands:
 
 Use ""dotnet testhost.dll [command] --help"" for more information about a command.
 
-app extended help" }
+app extended help
+"
+                }
             });
         }
 
@@ -62,7 +70,9 @@ app extended help" }
             new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "SubApp -h",
-                Then = { Output = @"sub-app description
+                Then =
+                {
+                    Output = @"sub-app description
 
 Usage: dotnet testhost.dll SubApp [command]
 
@@ -71,7 +81,9 @@ Commands:
 
 Use ""dotnet testhost.dll SubApp [command] --help"" for more information about a command.
 
-sub-app extended help" }
+sub-app extended help
+"
+                }
             });
         }
 
@@ -81,7 +93,9 @@ sub-app extended help" }
             new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "SubApp -h",
-                Then = { Output = @"sub-app description
+                Then =
+                {
+                    Output = @"sub-app description
 
 Usage: dotnet testhost.dll SubApp [command]
 
@@ -91,7 +105,9 @@ Commands:
 
 Use ""dotnet testhost.dll SubApp [command] --help"" for more information about a command.
 
-sub-app extended help" }
+sub-app extended help
+"
+                }
             });
         }
 
@@ -101,14 +117,18 @@ sub-app extended help" }
             new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "somecommand -h",
-                Then = { Output = @"cmd description
+                Then =
+                {
+                    Output = @"cmd description
 
 Usage: dotnet testhost.dll somecommand [arguments]
 
 Arguments:
   value
 
-cmd extended help" }
+cmd extended help
+"
+                }
             });
         }
 
@@ -118,7 +138,9 @@ cmd extended help" }
             new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "somecommand -h",
-                Then = { Output = @"cmd description
+                Then =
+                {
+                    Output = @"cmd description
 
 Usage: dotnet testhost.dll somecommand [arguments]
 
@@ -126,7 +148,9 @@ Arguments:
 
   value  <NUMBER>
 
-cmd extended help" }
+cmd extended help
+"
+                }
             });
         }
 

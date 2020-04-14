@@ -144,7 +144,6 @@ namespace CommandDotNet
                 case AppRunnerException appEx:
                     console.Error.WriteLine(appEx.Message);
                     appEx.PrintStackTrace(console);
-                    console.Error.WriteLine();
                     return 1;
                 case AggregateException aggEx:
                     ExceptionDispatchInfo.Capture(aggEx).Throw();

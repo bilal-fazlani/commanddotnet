@@ -23,10 +23,14 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do -h",
-                Then = {Output = @"Usage: dotnet testhost.dll Do [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll Do [arguments]
 
 Arguments:
-  arg" }
+  arg
+"
+                }
             });
         }
 
@@ -36,10 +40,14 @@ Arguments:
             new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "DoList -h",
-                Then = { Output = @"Usage: dotnet testhost.dll DoList [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll DoList [arguments]
 
 Arguments:
-  args" }
+  args
+"
+                }
             });
         }
 
@@ -49,11 +57,15 @@ Arguments:
             new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do -h",
-                Then = {Output = @"Usage: dotnet testhost.dll Do [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll Do [arguments]
 
 Arguments:
 
-  arg  <FILENAME>" }
+  arg  <FILENAME>
+"
+                }
             });
         }
 
@@ -63,11 +75,15 @@ Arguments:
             new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "DoList -h",
-                Then = { Output = @"Usage: dotnet testhost.dll DoList [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll DoList [arguments]
 
 Arguments:
 
-  args (Multiple)  <FILENAME>" }
+  args (Multiple)  <FILENAME>
+"
+                }
             });
         }
 

@@ -66,7 +66,8 @@ options:
     inputs:
     default: source=EnvVar key=optList: four, five, six
 
-Use [parse:t] to include token transformations."
+Use [parse:t] to include token transformations.
+"
                     }
                 });
         }
@@ -107,7 +108,8 @@ options:
     inputs:
     default: one, two, three
 
-Use [parse:t] to include token transformations."
+Use [parse:t] to include token transformations.
+"
                     }
                 });
         }

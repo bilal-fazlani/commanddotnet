@@ -52,9 +52,8 @@ namespace CommandDotNet.Diagnostics
                 sb.AppendLine(commandContext.AppConfig.ToString(indent.Increment()));
             }
 
-            sb.AppendLine("***************************************");
-
-            writer = writer ?? commandContext.Console.Out.WriteLine;
+            sb.Append("***************************************");
+            writer = writer ?? commandContext.Console.Out.Write;
             writer(sb.ToString());
         }
 

@@ -35,7 +35,8 @@ Commands:
   ChildApp
   Do
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+"
                     }
                 });
         }
@@ -76,7 +77,8 @@ Options:
 
   --opt1          <NUMBER>
 
-  --inheritedOpt  <TEXT>"
+  --inheritedOpt  <TEXT>
+"
                     }
                 });
         }
@@ -120,7 +122,8 @@ Options:
 
 Options:
 
-  --inheritedOpt  <TEXT>"
+  --inheritedOpt  <TEXT>
+"
                     }
                 });
         }
@@ -165,7 +168,8 @@ Commands:
 
   Do
 
-Use ""dotnet testhost.dll ChildApp [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll ChildApp [command] --help"" for more information about a command.
+"
                     }
                 });
         }

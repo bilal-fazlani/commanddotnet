@@ -52,7 +52,8 @@ options:
     value: *****
     inputs: ***** (from: --password *****)
     default:
-***************************************"
+***************************************
+"
                     }
                 });
         }
@@ -98,7 +99,8 @@ Tool version  = testhost.dll 16.2.0
 OS version    = {System.Runtime.InteropServices.RuntimeInformation.OSDescription.Trim()}
 Machine       = {Environment.MachineName}
 Username      = {Environment.UserDomainName}\{Environment.UserName}
-***************************************"
+***************************************
+"
                     }
                 });
         }
@@ -217,7 +219,8 @@ options:
     value:
     inputs:
     default:
-***************************************"
+***************************************
+"
                     }
                 });
         }
@@ -265,7 +268,8 @@ options:
 
 header1  = value1
 header2  = value2
-***************************************"
+***************************************
+"
                     }
                 });
         }
@@ -293,7 +297,7 @@ header2  = value2
             var sb = new StringBuilder();
 
             new AppRunner<App>()
-                .UseCommandLogger(excludeSystemInfo: true, writerFactory: context => text => sb.Append(text))
+                .UseCommandLogger(excludeSystemInfo: true, writerFactory: context => text => sb.AppendLine(text))
                 .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do",

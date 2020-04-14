@@ -23,10 +23,14 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.With("who's there")},
+                    Given = {OnPrompt = Respond.With("who's there")},
                     WhenArgs = "Do",
-                    Then = { Output = @"knock knock: who's there
-who's there"}
+                    Then =
+                    {
+                        Output = @"knock knock: who's there
+who's there
+"
+                    }
                 });
         }
 

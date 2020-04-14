@@ -21,11 +21,15 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             {
                 // because the value should not be provided
                 WhenArgs = "Do -h",
-                Then = { Output = @"Usage: dotnet testhost.dll Do [options]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll Do [options]
 
 Options:
 
-  --flag" }
+  --flag
+"
+                }
             });
         }
 

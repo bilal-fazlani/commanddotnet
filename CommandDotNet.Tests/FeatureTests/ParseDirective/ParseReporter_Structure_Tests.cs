@@ -45,7 +45,8 @@ options:
     inputs:
     default:
 
-Use [parse:t] to include token transformations."
+Use [parse:t] to include token transformations.
+"
                     }
                 });
         }

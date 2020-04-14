@@ -62,7 +62,8 @@ Commands:
   Do1
   Second
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+"
                     }
                 },
                 new Scenario<T>($"{name} - help includes 1st level commands and 2nd level app")
@@ -77,7 +78,8 @@ Commands:
   Do1
   Second
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+"
                     }
                 },
                 new Scenario<T>($"{name} - help for 2nd level app includes 2nd level commands and 3rd level app")
@@ -92,7 +94,8 @@ Commands:
   Do2
   Third
 
-Use ""dotnet testhost.dll Second [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll Second [command] --help"" for more information about a command.
+"
                     }
                 },
                 new Scenario<T>($"{name} - help for 3rd level app includes 3rd level commands")
@@ -106,7 +109,8 @@ Commands:
 
   Do3
 
-Use ""dotnet testhost.dll Second Third [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll Second Third [command] --help"" for more information about a command.
+"
                     }
                 },
                 new Scenario<T>($"{name} - can execute 1st level local command")

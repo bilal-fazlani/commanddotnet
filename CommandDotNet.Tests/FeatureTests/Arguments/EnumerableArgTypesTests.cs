@@ -29,7 +29,8 @@ Arguments:
   Args
 
 Options:
-  --Options" }
+  --Options
+" }
             });
         }
 
@@ -47,7 +48,8 @@ Arguments:
 
 Options:
 
-  --Options (Multiple)  <TEXT>" }
+  --Options (Multiple)  <TEXT>
+" }
             });
         }
 
@@ -63,7 +65,8 @@ Arguments:
   args
 
 Options:
-  --options" }
+  --options
+" }
             });
         }
 
@@ -81,7 +84,8 @@ Arguments:
 
 Options:
 
-  --options (Multiple)  <TEXT>" }
+  --options (Multiple)  <TEXT>
+" }
             });
         }
 

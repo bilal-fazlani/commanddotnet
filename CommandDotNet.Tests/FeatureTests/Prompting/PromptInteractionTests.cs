@@ -27,7 +27,8 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {
-                        Output = @"arg1 (Text): part"
+                        Output = @"arg1 (Text): part
+"
                     }
                 });
         }
@@ -57,7 +58,8 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                             }
                         },
                         Output = @"arg1 (Text): take2
-opt1 (Text): simple"
+opt1 (Text): simple
+"
                     }
                 });
         }
@@ -76,7 +78,8 @@ opt1 (Text): simple"
                     Then =
                     {
                         Output = @"arg1 (Text):
-opt1 (Text):"
+opt1 (Text):
+"
                     }
                 });
         }
@@ -94,7 +97,8 @@ opt1 (Text):"
                     {
                         Captured = { new App.DoResult{Arg1 = "maybe", Opt1 = "maybe"}},
                         Output = @"arg1 (Text): maybe
-opt1 (Text): maybe"
+opt1 (Text): maybe
+"
                     }
                 });
         }

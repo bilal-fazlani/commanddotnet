@@ -125,12 +125,6 @@ namespace CommandDotNet.TestTools
             if (print.ConsoleOutput)
             {
                 var consoleAll = result.Console.AllText();
-                if (consoleAll.EndsWith(Environment.NewLine))
-                {
-                    // logLine adds a NewLine and if the console output ends with NewLine
-                    // then an extra NewLine will appear in the output which will be misleading.
-                    consoleAll = consoleAll.Substring(0, consoleAll.Length - NewLine.Length);
-                }
                 logLine($"{NewLine}Console output <begin> ------------------------------");
                 logLine(consoleAll.IsNullOrWhitespace() ? "<no output>" : consoleAll);
                 logLine($"Console output <end> ------------------------------{NewLine}");

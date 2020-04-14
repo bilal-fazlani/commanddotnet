@@ -210,19 +210,19 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             public void Add(IConsole console, int x, int y)
             {
-                console.WriteLine(x + y);
+                console.Write(x + y);
             }
 
             [Command(ArgumentSeparatorStrategy = ArgumentSeparatorStrategy.EndOfOptions)]
             public void Add_EndOfOptions(IConsole console, int x, int y)
             {
-                console.WriteLine(x + y);
+                console.Write(x + y);
             }
 
             [Command(ArgumentSeparatorStrategy = ArgumentSeparatorStrategy.PassThru)]
             public void Add_PassThru(IConsole console, int x, int y)
             {
-                console.WriteLine(x + y);
+                console.Write(x + y);
             }
         }
     }

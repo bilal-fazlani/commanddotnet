@@ -24,13 +24,17 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do -h",
-                    Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                    Then =
+                    {
+                        Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
   intOperand
 
 Options:
-  --stringOption" }
+  --stringOption
+"
+                    }
                 });
         }
 
@@ -41,7 +45,9 @@ Options:
                 .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do -h",
-                    Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                    Then =
+                    {
+                        Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
 
@@ -49,7 +55,9 @@ Arguments:
 
 Options:
 
-  --stringOption  <TEXT>" }
+  --stringOption  <TEXT>
+"
+                    }
                 });
         }
 
