@@ -40,8 +40,13 @@ nav:
         - Diagnostics/exceptions.md
       - Testing:
         - TestTools/test-tools.md
-        - TestTools/test-config.md
-        - TestTools/testing-prompts.md
+        - Patterns:
+          - TestTools/testing-console-apps.md
+          - TestTools/run-in-mem.md
+          - TestTools/bdd.md
+          - TestTools/test-config.md
+          - TestTools/testing-piped-input.md
+          - TestTools/testing-prompts.md
       - Other Features:
         - OtherFeatures/default-middleware.md
         - Ctrl+C and<br/>CancellationToken: OtherFeatures/cancellation.md
