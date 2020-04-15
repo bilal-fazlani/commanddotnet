@@ -19,7 +19,7 @@ The purpose of this **framework** is to let developers focus on the core logic o
 
 *Out-of-the-box* support for help documentation, subcommmands, dependency injection, validation, piping, prompting, passwords, response files and more. 
 
-Includes [test tools](TestTools/test-tools.md) used by the framework to test all features of the framework.
+Includes [test tools](TestTools/overview.md) used by the framework to test all features of the framework.
 
 Modify and extend the functionality of the framework through configuration and middleware.
 

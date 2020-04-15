@@ -1,6 +1,6 @@
 # CommandDotNet.TestTools
 
-## 2.0.0 (wip)
+## 2.0.0 (upcoming)
 
 This release focuses on usability, readability and discoverability.
 
@@ -17,7 +17,7 @@ The primary test extensions: `RunInMem` and `Verify` are now easier to use, prov
 
 TestConfig provides settings primarily to determine what is logged during a test run, on success and on error.
 
-See [TestConfig docs](../TestTools/test-config.md) for more details.
+See [TestConfig docs](../TestTools/Harness/test-config.md) for more details.
 
 ### Scenario.Then Output vs Result
 

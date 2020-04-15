@@ -1,5 +1,11 @@
 # CommandDotNet
 
+## 3.6.1 (upcoming)
+
+### Remove extraneous NewLine
+
+A few components could leave an extra NewLine hanging around. This has been removed for cleaner test exception handling.  Affects CommandLogger, FluentValidation, ParseDirective and when AppRunner prints an exception before exit.
+
 ## 3.6.0
 
 ### Feature

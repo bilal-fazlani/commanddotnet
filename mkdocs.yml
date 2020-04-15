@@ -39,14 +39,11 @@ nav:
         - Diagnostics/command-logger.md
         - Diagnostics/exceptions.md
       - Testing:
-        - TestTools/test-tools.md
-        - Patterns:
-          - TestTools/testing-console-apps.md
-          - TestTools/run-in-mem.md
-          - TestTools/bdd.md
-          - TestTools/test-config.md
-          - TestTools/testing-piped-input.md
-          - TestTools/testing-prompts.md
+        - TestTools/overview.md
+        - Harness:
+          - TestTools/Harness/run-in-mem.md
+          - TestTools/Harness/bdd.md
+          - TestTools/Harness/test-config.md
       - Other Features:
         - OtherFeatures/default-middleware.md
         - Ctrl+C and<br/>CancellationToken: OtherFeatures/cancellation.md

@@ -178,7 +178,7 @@ Answer: 60
     }
     ```
 
-See [Test Tools](TestTools/test-tools.md) in the Testing help section for more details 
+See [Test Tools](TestTools/overview.md) in the Testing help section for more details 
 
 ## Opt-In to additional features
 
@@ -222,4 +222,4 @@ Check out the
 
 * [Extensibility](Extensibility/directives.md) section if the framework is missing a feature you need and you're interested in adding it yourself. For questions, ping us on our [Discord channel](https://discord.gg/QFxKSeG) or create a [GitHub Issue](https://github.com/bilal-fazlani/commanddotnet/issues)
 
-* [Test Tools](TestTools/test-tools.md) section for a test package to test console output with this framework. These tools enable you to provide end-to-end testing with the same experience as the console as well as testing middleware and other extensibility components. This package is used to test all of the CommandDotNet features.
+* [Test Tools](TestTools/overview.md) section for a test package to test console output with this framework. These tools enable you to provide end-to-end testing with the same experience as the console as well as testing middleware and other extensibility components. This package is used to test all of the CommandDotNet features.

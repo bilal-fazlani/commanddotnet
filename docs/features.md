@@ -54,7 +54,7 @@
 | \ \ \ \ \ \ show inputs and source<br/>\ \ \ \ \ \ \ \ \ _original source of value, including response file paths_ | ✔️ |
 | \ \ \ \ \ \ show defaults and source<br/>\ \ \ \ \ \ \ \ \ _including key if from EnvVar or AppSetting_ | ✔️ |
 | \ \ \ Command logging<br/>\ \ \ \ \ \ _show [parse](Diagnostics/parse-directive.md) output and optionally system info and app config_ | [docs](Diagnostics/command-logger.md) ✔️ |
-|   **Testing** | [docs](TestTools/test-tools.md) |
+|   **Testing** | [docs](TestTools/overview.md) |
 | \ \ \ BDD Framework<br/>\ \ \ \ \ \ _Test an app as if run from the console_ | ✔️ |
 | \ \ \ Supports parallel test<br/>\ \ \ \ \ \ _the whole framework avoids static state to support parallel test runs_ | ✔️ |
 | \ \ \ TestConsole | ✔️ |  |
@@ -65,7 +65,7 @@
 | \ \ \ MicrosoftDependencyInjection | ✔️ |
 | \ \ \ Autofac | ✔️ |
 | \ \ \ SimpleInjector | ✔️ |
-| \ \ \ Test injector | [docs](TestTools/test-tools.md) ✔️ |
+| \ \ \ Test injector | [docs](TestTools/overview.md) ✔️ |
 | \ \ \ Custom | ✔️ |
 |   **Other** |  |
 | \ \ \ Ctrl+C | [docs](OtherFeatures/cancellation.md) ✔️ |
