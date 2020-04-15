@@ -44,7 +44,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                 {
                     Given = { OnPrompt = Respond.With(
                         new Answer(arg1Answer, prompt => prompt.StartsWith("arg1")),
-                        new Answer("simple", prompt => prompt.StartsWith("opt1")))
+                        new TextAnswer("simple", prompt => prompt.StartsWith("opt1")))
                     },
                     WhenArgs = $"{nameof(App.Do)}",
                     Then =
@@ -73,7 +73,7 @@ opt1 (Text): simple
                 {
                     Given = { OnPrompt = Respond.With(
                         new Answer("take1".ToConsoleKeyInfos().AppendEscapeKey().AppendEscapeKey(), prompt => prompt.StartsWith("arg1")),
-                        new Answer("not-used", prompt => prompt.StartsWith("arg1"))) },
+                        new TextAnswer("not-used", prompt => prompt.StartsWith("arg1"))) },
                     WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {
@@ -91,7 +91,7 @@ opt1 (Text):
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.With("yes\b\b\b\bno\b\b\bmaybe", reuse: true) },
+                    Given = { OnPrompt = Respond.WithText("yes\b\b\b\bno\b\b\bmaybe", reuse: true) },
                     WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {

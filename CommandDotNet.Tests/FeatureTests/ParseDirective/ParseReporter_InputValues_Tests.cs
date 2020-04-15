@@ -37,8 +37,8 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                     Given =
                     {
                         OnPrompt = Respond.With(
-                            new Answer("opd_stuff", s => s.Contains("opd (Text):")),
-                            new Answer(new[] {"one", "two", "three"}, s => !s.Contains("opd (Text):")))
+                            new TextAnswer("opd_stuff", s => s.Contains("opd (Text):")),
+                            new ListAnswer(new[] {"one", "two", "three"}, s => !s.Contains("opd (Text):")))
                     },
                     WhenArgs = "[parse] Do",
                     Then =

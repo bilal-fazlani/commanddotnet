@@ -8,6 +8,11 @@ The tooling was initially designed for CommandDotNet with an aspiration for gene
 
 The primary test extensions: `RunInMem` and `Verify` are now easier to use, provide a more consistent experience and no longer duplicated output in some scenarios.
 
+### PromptResponder
+
+* Extract IAnswer and split answers into separate types: TextAnswer, ListAnswer, Answer, FailAnswer
+* replace FailOnPromptResponder with FailAnswer
+
 ### TestConfig
 
 TestConfig provides settings primarily to determine what is logged during a test run, on success and on error.

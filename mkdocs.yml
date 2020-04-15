@@ -41,6 +41,7 @@ nav:
       - Testing:
         - TestTools/test-tools.md
         - TestTools/test-config.md
+        - TestTools/testing-prompts.md
       - Other Features:
         - OtherFeatures/default-middleware.md
         - Ctrl+C and<br/>CancellationToken: OtherFeatures/cancellation.md

@@ -23,7 +23,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = {OnPrompt = Respond.With("who's there")},
+                    Given = {OnPrompt = Respond.WithText("who's there")},
                     WhenArgs = "Do",
                     Then =
                     {

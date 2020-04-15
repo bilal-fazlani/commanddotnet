@@ -49,6 +49,20 @@ namespace CommandDotNet.TestTools
             return new ConsoleKeyInfo(c, c.ToConsoleKey(), false, false, false);
         }
 
+        /// <summary>
+        /// Convert the char to a <see cref="ConsoleKey"/>.
+        /// Defaults to <see cref="ConsoleKey.Oem1"/> if a key is not found<br/>
+        /// This is does not an exhaustive list of special cases.<br/>
+        /// ' ' <see cref="ConsoleKey.Spacebar"/><br/>
+        /// '+' <see cref="ConsoleKey.Add"/><br/>
+        /// '-' <see cref="ConsoleKey.Subtract"/><br/>
+        /// '*' <see cref="ConsoleKey.Multiply"/><br/>
+        /// '/' <see cref="ConsoleKey.Divide"/><br/>
+        /// '\b' <see cref="ConsoleKey.Backspace"/><br/>
+        /// '\t' <see cref="ConsoleKey.Tab"/><br/>
+        /// '\n' <see cref="ConsoleKey.Enter"/><br/>
+        /// '\r' <see cref="ConsoleKey.Enter"/><br/>
+        /// </summary>
         public static ConsoleKey ToConsoleKey(this char c)
         {
             switch (c)

@@ -121,7 +121,7 @@ token transformations:
                 .Verify(_output,
                     new Scenario
                     {
-                        Given = { OnPrompt = Respond.With("super-secret")},
+                        Given = { OnPrompt = Respond.WithText("super-secret")},
                         WhenArgs = "[parse:t] PromptSecure",
                         Then =
                         {

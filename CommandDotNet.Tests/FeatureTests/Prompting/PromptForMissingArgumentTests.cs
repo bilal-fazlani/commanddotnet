@@ -25,7 +25,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.FailOnPrompt },
+                    Given = { OnPrompt = Respond.FailOnPrompt() },
                     WhenArgs = $"{nameof(App.Do)} something --opt1 simple",
                     Then =
                     {
@@ -46,7 +46,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.With("simple", prompt => prompt.StartsWith("opt1")) },
+                    Given = { OnPrompt = Respond.WithText("simple", prompt => prompt.StartsWith("opt1")) },
                     WhenArgs = $"{nameof(App.Do)} something",
                     Then =
                     {
@@ -68,7 +68,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.With("something", prompt => prompt.StartsWith("arg1")) },
+                    Given = { OnPrompt = Respond.WithText("something", prompt => prompt.StartsWith("arg1")) },
                     WhenArgs = $"{nameof(App.Do)} --opt1 simple",
                     Then =
                     {
@@ -93,8 +93,8 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     Given =
                     {
                         OnPrompt = Respond.With(
-                            new Answer("something", prompt => prompt.StartsWith("arg1")),
-                            new Answer("simple", prompt => prompt.StartsWith("opt1"))
+                            new TextAnswer("something", prompt => prompt.StartsWith("arg1")),
+                            new TextAnswer("simple", prompt => prompt.StartsWith("opt1"))
                         )
                     },
                     WhenArgs = $"{nameof(App.Do)}",
@@ -122,7 +122,7 @@ opt1 (Text): simple
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.With("yes")},
+                    Given = { OnPrompt = Respond.WithText("yes")},
                     WhenArgs = $"{nameof(App.DoList)} something simple",
                     Then =
                     {
@@ -176,7 +176,7 @@ simple
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = {OnPrompt = Respond.With("1", prompt => prompt.StartsWith("intercept1"))},
+                    Given = {OnPrompt = Respond.WithText("1", prompt => prompt.StartsWith("intercept1"))},
                     WhenArgs = $"{nameof(HierApp.Do)} --inherited1 2",
                     Then =
                     {
@@ -192,7 +192,7 @@ simple
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.With("2", prompt => prompt.StartsWith("inherited1")) },
+                    Given = { OnPrompt = Respond.WithText("2", prompt => prompt.StartsWith("inherited1")) },
                     WhenArgs = $" --intercept1 1 {nameof(HierApp.Do)}",
                     Then =
                     {
@@ -209,8 +209,8 @@ simple
                 .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With(
-                        new Answer("lala", prompt => prompt.StartsWith("user")), 
-                        new Answer("fishies", prompt => prompt.StartsWith("password")))},
+                        new TextAnswer("lala", prompt => prompt.StartsWith("user")), 
+                        new TextAnswer("fishies", prompt => prompt.StartsWith("password")))},
                     WhenArgs = $"{nameof(App.Secure)}",
                     Then =
                     {
@@ -225,13 +225,15 @@ password (Text):
         [Fact]
         public void WhenPasswordMissing_BackspaceDoesNotRemovePromptText()
         {
+            // \b is Console for Backspace
+
             new AppRunner<App>()
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With(
-                        new Answer("lala", prompt => prompt.StartsWith("user")), 
-                        new Answer("fishies\b\b\b\b\b\b\bnew", prompt => prompt.StartsWith("password")))},
+                        new TextAnswer("lala", prompt => prompt.StartsWith("user")), 
+                        new TextAnswer("fishies\b\b\b\b\b\b\bnew", prompt => prompt.StartsWith("password")))},
                     WhenArgs = $"{nameof(App.Secure)}",
                     Then =
                     {
@@ -250,7 +252,7 @@ password (Text):
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.FailOnPrompt },
+                    Given = { OnPrompt = Respond.FailOnPrompt() },
                     WhenArgs = $"{nameof(App.Flags)}",
                     Then = { Output = ""}
                 });
@@ -265,8 +267,8 @@ password (Text):
                 .Verify(_output, new Scenario
                 {
                     Given = { OnPrompt = Respond.With(
-                        new Answer("true", prompt => prompt.StartsWith("a ")),
-                        new Answer("false", prompt => prompt.StartsWith("b "))
+                        new TextAnswer("true", prompt => prompt.StartsWith("a ")),
+                        new TextAnswer("false", prompt => prompt.StartsWith("b "))
                         )},
                     WhenArgs = $"{nameof(App.Flags)}",
                     Then = { Captured = { (flagA: true, flagB: false) } }
@@ -280,7 +282,7 @@ password (Text):
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.With("true", prompt => prompt.StartsWith("operand1")) },
+                    Given = { OnPrompt = Respond.WithText("true", prompt => prompt.StartsWith("operand1")) },
                     WhenArgs = $"{nameof(App.Bool)}",
                     Then =
                     {
@@ -298,7 +300,7 @@ password (Text):
                 .UsePrompting(argumentPromptTextOverride: (ctx, arg) => "lala")
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.With("fishies", reuse: true) },
+                    Given = { OnPrompt = Respond.WithText("fishies", reuse: true) },
                     WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {
@@ -317,7 +319,7 @@ lala (Text): fishies
                 .UsePrompting(argumentFilter: arg => arg.Name == "arg1")
                 .Verify(_output, new Scenario
                 {
-                    Given = {OnPrompt = Respond.With("something", prompt => prompt.StartsWith("arg1"))},
+                    Given = {OnPrompt = Respond.WithText("something", prompt => prompt.StartsWith("arg1"))},
                     WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {
@@ -339,7 +341,7 @@ lala (Text): fishies
                 {
                     Given =
                     {
-                        OnPrompt = Respond.FailOnPrompt,
+                        OnPrompt = Respond.FailOnPrompt(),
                         PipedInput = pipedInput
                     },
                     WhenArgs = $"{nameof(App.DoList)}",
