@@ -83,24 +83,12 @@ namespace CommandDotNet.TestTools
         /// in the order they were written from the app.<br/>
         /// This is how the output would appear in the shell.
         /// </summary>
-        /// <param name="normalizeLineEndings">
-        /// Trims white space from all lines to ensure consistent results for test assertions.<br/>
-        /// This is to deal with whitespace padding when some lines don't need all elements.
-        /// </param>
-        public string AllText(bool normalizeLineEndings = false) => normalizeLineEndings
-            ? All.ToString().NormalizeLineEndings()
-            : All.ToString();
+        public string AllText() => All.ToString();
 
         /// <summary>
         /// The accumulated text of the <see cref="Console.Out"/> stream.
         /// </summary>
-        /// <param name="normalizeLineEndings">
-        /// Trims white space from all lines to ensure consistent results for test assertions.<br/>
-        /// This is to deal with whitespace padding when some lines don't need all elements.
-        /// </param>
-        public string OutText(bool normalizeLineEndings = false) => normalizeLineEndings
-            ? Out.ToString().NormalizeLineEndings()
-            : Out.ToString();
+        public string OutText() => Out.ToString();
 
         /// <summary>
         /// The accumulated text of the <see cref="Console.Error"/> stream.
@@ -109,9 +97,7 @@ namespace CommandDotNet.TestTools
         /// Trims white space from all lines to ensure consistent results for test assertions.<br/>
         /// This is to deal with whitespace padding when some lines don't need all elements.
         /// </param>
-        public string ErrorText(bool normalizeLineEndings = false) => normalizeLineEndings 
-            ? Error.ToString().NormalizeLineEndings() 
-            : Error.ToString();
+        public string ErrorText() => Error.ToString();
 
         public bool IsOutputRedirected { get; } = false;
 

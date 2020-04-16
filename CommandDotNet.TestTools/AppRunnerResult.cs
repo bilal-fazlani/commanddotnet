@@ -49,8 +49,7 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public void OutputShouldBe(string expected)
         {
-            var actual = Console.AllText(normalizeLineEndings:true);
-            expected = expected.NormalizeLineEndings();
+            var actual = Console.AllText();
             actual.Should().Be(expected);
         }
 
@@ -61,8 +60,7 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public bool OutputContains(string expected)
         {
-            var actual = Console.AllText(normalizeLineEndings: true);
-            expected = expected.NormalizeLineEndings();
+            var actual = Console.AllText();
             return actual.Contains(expected);
         }
 

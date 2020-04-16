@@ -2,6 +2,9 @@
 
 When implementing new features, there are two patterns for writing feature tests.
 
+
+* *AppRunner extensions
+
 ## BDD Scenario pattern
 This [readme.md](FeatureTests/README.md) will walk you through how to use it.  This pattern gives a succint, declarative way to specify the scenario from the perspective of calling the app from the command line.
 

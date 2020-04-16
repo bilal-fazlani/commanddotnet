@@ -144,7 +144,7 @@ opt1 (Text): simple
                     Then =
                     {
                         Captured = {new List<string>{"something", "simple"}},
-                        Output = @"args (Text) [<enter> once to begin new value. <enter> twice to finish]:
+                        Output = @"args (Text) [<enter> once to begin new value. <enter> twice to finish]: 
 something
 simple
 

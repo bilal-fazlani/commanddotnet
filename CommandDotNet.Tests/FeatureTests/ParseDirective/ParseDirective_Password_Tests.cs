@@ -125,7 +125,7 @@ token transformations:
                         WhenArgs = "[parse:t] PromptSecure",
                         Then =
                         {
-                            Output = @"password (Text):
+                            Output = @"password (Text): 
 command: PromptSecure
 
 arguments:

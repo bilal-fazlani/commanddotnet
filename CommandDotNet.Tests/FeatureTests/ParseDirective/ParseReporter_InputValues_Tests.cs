@@ -75,7 +75,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                         {
                             @"opdList <Text>
     value: one, two, three
-    inputs: [piped stream] 
+    inputs: [piped stream]
     default:"
                         }
                     }
@@ -100,7 +100,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
     value: four, five, six, one, two, three
     inputs:
       [argument] four, five, six
-      [piped stream] 
+      [piped stream]
     default:"
                         }
                     }

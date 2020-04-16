@@ -317,19 +317,19 @@ command: Do
 arguments:
 
   textOperand <Text>
-    value: 
+    value:
     inputs:
     default:
 
 options:
 
   textOption <Text>
-    value: 
+    value:
     inputs:
     default:
 
   password <Text>
-    value: 
+    value:
     inputs:
     default:
 ***************************************

@@ -77,8 +77,8 @@ opt1 (Text): simple
                     WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {
-                        Output = @"arg1 (Text):
-opt1 (Text):
+                        Output = @"arg1 (Text): 
+opt1 (Text): 
 "
                     }
                 });

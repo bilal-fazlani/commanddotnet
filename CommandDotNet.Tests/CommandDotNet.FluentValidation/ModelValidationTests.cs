@@ -30,9 +30,9 @@ namespace CommandDotNet.Tests.CommandDotNet.FluentValidation
 
 Arguments:
 
-  Id     <NUMBER>      
+  Id     <NUMBER>
 
-  Name   <TEXT>        
+  Name   <TEXT>
 
   Email  <TEXT>
 "
@@ -158,8 +158,8 @@ Arguments:
                     ExitCode = 1,
                     OutputContainsTexts =
                     {
-                        @"CommandDotNet.FluentValidation.InvalidValidatorException: Could not create instance of InvalidPersonValidator. Please ensure it's injected via IoC or has a default constructor.
-This exception could also occur if default constructor threw an exception",
+                        "CommandDotNet.FluentValidation.InvalidValidatorException: Could not create instance of InvalidPersonValidator. Please ensure it's injected via IoC or has a default constructor.",
+                        "This exception could also occur if default constructor threw an exception",
                         " ---> System.MissingMethodException: No parameterless constructor defined for this object" // assert stack trace is printed
                     }
                 }

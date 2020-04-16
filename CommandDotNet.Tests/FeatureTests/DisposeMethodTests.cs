@@ -44,7 +44,7 @@ namespace CommandDotNet.Tests.FeatureTests
             {
                 WhenArgs = "-h",
                 Then = { OutputContainsTexts = { @"Commands:
-  Dispose  " } }
+  Dispose" } }
             });
         }
 
@@ -56,7 +56,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 WhenArgs = "-h",
                 Then = { OutputContainsTexts = { @"Commands:
 
-  Dispose  " } }
+  Dispose" } }
             });
         }
 

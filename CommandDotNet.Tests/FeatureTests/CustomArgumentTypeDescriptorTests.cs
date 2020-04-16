@@ -77,8 +77,8 @@ Arguments:
                     ExitCode = 1,
                     OutputContainsTexts =
                     {
-                        "type : CommandDotNet.Tests.FeatureTests.CustomArgumentTypeDescriptorTests+Square is not supported. ",
-                        "If it is an argument model, inherit from IArgumentModel. ",
+                        "type : CommandDotNet.Tests.FeatureTests.CustomArgumentTypeDescriptorTests+Square is not supported.",
+                        "If it is an argument model, inherit from IArgumentModel.",
                         "Otherwise, to support this type, implement a TypeConverter or IArgumentTypeDescriptor or add a constructor with a single string parameter."
                     }
                 }

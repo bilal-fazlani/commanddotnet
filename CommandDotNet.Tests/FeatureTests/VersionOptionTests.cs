@@ -34,7 +34,7 @@ namespace CommandDotNet.Tests.FeatureTests
             {
                 WhenArgs = "-h",
                 Then = {
-                    OutputContainsTexts = { @"  -v | --version          
+                    OutputContainsTexts = { @"  -v | --version
   Show version information" }
                 }
             };

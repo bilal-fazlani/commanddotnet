@@ -159,10 +159,10 @@ Options:
         [Fact]
         public void WhenExplicit_Exec_SpecifiedOptionValueIsUsed()
         {
-            new AppRunner<App>(ExplicitBasicHelp).Verify(_output, new Scenario
+            var result = new AppRunner<App>(ExplicitBasicHelp).Verify(_output, new Scenario
             {
                 WhenArgs = "Do --option false true",
-                Then = { Captured = { new Result(false, true) } }
+                Then = {Captured = {new Result(false, true)}}
             });
         }
 

@@ -47,6 +47,12 @@ To update, use find/replace
 
 Renamed AppRunnerResult.ConsoleOutAndError to ConsoleAll
 
+### AppRunnerResult Output assertions
+
+No longer trim trailing whitespace and replace line endings. 
+
+This was originally necessary to support the HelpTextProvider and inconsistencies with NewLine's used.  Those have all been fixed so we no longer need to do this.
+
 ### Scenario.Given.AppSettings
 
 Removed ScenarioGiven.AppSettings. It did not work outside of old CommandDotNet test infrastructure. Apologies for any confusion it may have caused.
