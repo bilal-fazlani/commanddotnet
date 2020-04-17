@@ -26,11 +26,6 @@ namespace CommandDotNet.TestTools.Scenarios
                                                     $"{nameof(scenario.When)}.{nameof(scenario.When.ArgsArray)} were specified. " +
                                                     "Only one can be specified.");
             }
-            if (scenario.When.Args == null && scenario.When.ArgsArray == null)
-            {
-                throw new InvalidOperationException($"{nameof(scenario.When)}.{nameof(scenario.When.Args)} or " +
-                                                    $"{nameof(scenario.When)}.{nameof(scenario.When.ArgsArray)} is required.");
-            }
 
             logLine = logLine ?? Console.WriteLine;
             config = config ?? TestConfig.Default;
