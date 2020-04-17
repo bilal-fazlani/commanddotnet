@@ -1,6 +1,6 @@
 # CommandDotNet
 
-## 3.6.1 (upcoming)
+## 3.6.1
 
 ### Remove extraneous NewLine
 

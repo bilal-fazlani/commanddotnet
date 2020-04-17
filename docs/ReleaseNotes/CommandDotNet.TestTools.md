@@ -1,6 +1,6 @@
 # CommandDotNet.TestTools
 
-## 2.0.0 (upcoming)
+## 2.0.0
 
 This release focuses on usability, readability and discoverability.
 
