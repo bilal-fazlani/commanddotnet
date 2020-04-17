@@ -32,7 +32,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                 .Verify(_output,
                     new Scenario
                     {
-                        WhenArgs = "[parse:t] Secure -u me -p super-secret",
+                        When = { Args = $"[parse:t] Secure -u me -p super-secret" },
                         Then =
                         {
                             Output = @"command: Secure
@@ -75,7 +75,7 @@ token transformations:
                 .Verify(_output,
                     new Scenario
                     {
-                        WhenArgs = $"[parse:t] Secure @{tempFile}",
+                        When = {Args =  $"[parse:t] Secure @{tempFile}"},
                         Then =
                         {
                             Output = $@"command: Secure
@@ -121,8 +121,11 @@ token transformations:
                 .Verify(_output,
                     new Scenario
                     {
-                        Given = { OnPrompt = Respond.WithText("super-secret")},
-                        WhenArgs = "[parse:t] PromptSecure",
+                        When =
+                        {
+                            Args = "[parse:t] PromptSecure",
+                            OnPrompt = Respond.WithText("super-secret")
+                        },
                         Then =
                         {
                             Output = @"password (Text): 
@@ -161,7 +164,7 @@ token transformations:
                 .Verify(_output,
                     new Scenario
                     {
-                        WhenArgs = "[parse:t] Secure -u me",
+                        When = {Args = "[parse:t] Secure -u me"},
                         Then =
                         {
                             Output = @"command: Secure

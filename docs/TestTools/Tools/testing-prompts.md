@@ -44,8 +44,11 @@ Notice `Respond.WithText` in the examples below.
             .UsePrompting()
             .Verify(_output, new Scenario
             {
-                Given = {OnPrompt = Respond.WithText("who's there")},
-                WhenArgs = "TellAJoke",
+                When = 
+                {
+                    Args = "TellAJoke",
+                    OnPrompt = Respond.WithText("who's there")
+                },
                 Then =
                 {
                     Output = @"knock knock: who's there

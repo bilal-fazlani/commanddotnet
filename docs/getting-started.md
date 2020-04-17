@@ -171,7 +171,7 @@ Answer: 60
         {
             new AppRunner<Calculator>().Verify(new Scenario
             {
-                WhenArgs = "Add 40 20",
+                When = { Args = "Add 40 20" },
                 Then = { Output = @"60" }
             });
         }

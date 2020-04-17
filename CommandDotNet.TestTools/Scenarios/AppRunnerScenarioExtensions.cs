@@ -20,16 +20,16 @@ namespace CommandDotNet.TestTools.Scenarios
         /// <summary>Run and verify the scenario expectations using the given logger for output.</summary>
         public static AppRunnerResult Verify(this AppRunner appRunner, Action<string> logLine, TestConfig config, IScenario scenario)
         {
-            if (scenario.WhenArgs != null && scenario.WhenArgsArray != null)
+            if (scenario.When.Args != null && scenario.When.ArgsArray != null)
             {
-                throw new InvalidOperationException($"Both {nameof(scenario.WhenArgs)} and {nameof(scenario.WhenArgsArray)} were specified.  Only one can be specified.");
+                throw new InvalidOperationException($"Both {nameof(scenario.When.Args)} and {nameof(scenario.When.ArgsArray)} were specified.  Only one can be specified.");
             }
 
             logLine = logLine ?? Console.WriteLine;
             config = config ?? TestConfig.Default;
 
             AppRunnerResult results = null;
-            var args = scenario.WhenArgsArray ?? scenario.WhenArgs.SplitArgs();
+            var args = scenario.When.ArgsArray ?? scenario.When.Args.SplitArgs();
 
             var origOnSuccess = config.OnSuccess;
             if (!config.OnError.CaptureAndReturnResult)
@@ -46,9 +46,9 @@ namespace CommandDotNet.TestTools.Scenarios
             results = appRunner.RunInMem(
                 args,
                 logLine,
-                scenario.Given.OnReadLine,
-                scenario.Given.PipedInput,
-                scenario.Given.OnPrompt,
+                scenario.When.OnReadLine,
+                scenario.When.PipedInput,
+                scenario.When.OnPrompt,
                 config);
 
             config.OnSuccess = origOnSuccess;

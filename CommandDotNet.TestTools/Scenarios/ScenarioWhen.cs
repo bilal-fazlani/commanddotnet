@@ -5,8 +5,17 @@ using CommandDotNet.TestTools.Prompts;
 
 namespace CommandDotNet.TestTools.Scenarios
 {
-    public class ScenarioGiven
+    public class ScenarioWhen
     {
+        /// <summary>
+        /// The input as would be typed in the shell.
+        /// Can handle quoted strings. 
+        /// </summary>
+        public string Args { get; set; }
+
+        /// <summary>Use this for tested arguments that can contain spaces</summary>
+        public string[] ArgsArray { get; set; }
+
         /// <summary>
         /// Use this delegate to mimic input in response to a <see cref="IConsole"/>.In.ReadLine()<br/>
         /// Use <see cref="TestConsole"/>.Out.ToString() to get the output up to that point.

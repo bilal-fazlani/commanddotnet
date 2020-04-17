@@ -23,8 +23,11 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.With(new Answer("part".ToConsoleKeyInfos().AppendCtrlCKey())) },
-                    WhenArgs = $"{nameof(App.Do)}",
+                    When =
+                    {
+                        Args = $"{nameof(App.Do)}",
+                        OnPrompt = Respond.With(new Answer("part".ToConsoleKeyInfos().AppendCtrlCKey()))
+                    },
                     Then =
                     {
                         Output = @"arg1 (Text): part
@@ -42,11 +45,13 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.With(
-                        new Answer(arg1Answer, prompt => prompt.StartsWith("arg1")),
-                        new TextAnswer("simple", prompt => prompt.StartsWith("opt1")))
+                    When =
+                    {
+                        Args = $"{nameof(App.Do)}",
+                        OnPrompt = Respond.With(
+                            new Answer(arg1Answer, prompt => prompt.StartsWith("arg1")),
+                            new TextAnswer("simple", prompt => prompt.StartsWith("opt1")))
                     },
-                    WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {
                         Captured =
@@ -71,10 +76,13 @@ opt1 (Text): simple
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.With(
-                        new Answer("take1".ToConsoleKeyInfos().AppendEscapeKey().AppendEscapeKey(), prompt => prompt.StartsWith("arg1")),
-                        new TextAnswer("not-used", prompt => prompt.StartsWith("arg1"))) },
-                    WhenArgs = $"{nameof(App.Do)}",
+                    When=
+                    {
+                        Args = $"{nameof(App.Do)}",
+                        OnPrompt = Respond.With(
+                            new Answer("take1".ToConsoleKeyInfos().AppendEscapeKey().AppendEscapeKey(), prompt => prompt.StartsWith("arg1")),
+                            new TextAnswer("not-used", prompt => prompt.StartsWith("arg1")))
+                    },
                     Then =
                     {
                         Output = @"arg1 (Text): 
@@ -91,8 +99,11 @@ opt1 (Text):
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.WithText("yes\b\b\b\bno\b\b\bmaybe", reuse: true) },
-                    WhenArgs = $"{nameof(App.Do)}",
+                    When =
+                    {
+                        Args = $"{nameof(App.Do)}",
+                        OnPrompt = Respond.WithText("yes\b\b\b\bno\b\b\bmaybe", reuse: true)
+                    },
                     Then =
                     {
                         Captured = { new App.DoResult{Arg1 = "maybe", Opt1 = "maybe"}},

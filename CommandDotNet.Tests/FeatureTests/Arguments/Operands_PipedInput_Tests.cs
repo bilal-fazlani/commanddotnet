@@ -27,8 +27,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .Verify(_output,
                     new Scenario
                     {
-                        Given = {PipedInput = new[] {"aaa", "bbb"}},
-                        WhenArgs = $"{nameof(App.List)}",
+                        When =
+                        {
+                            Args = $"{nameof(App.List)}",
+                            PipedInput = new[] {"aaa", "bbb"}
+                        },
                         Then =
                         {
                             Captured = {new List<string> {"aaa", "bbb"}}
@@ -44,8 +47,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .Verify(_output,
                     new Scenario
                     {
-                        Given = {PipedInput = new[] {"ccc", "ddd"}},
-                        WhenArgs = $"{nameof(App.List)} aaa bbb",
+                        When =
+                        {
+                            Args = $"{nameof(App.List)} aaa bbb",
+                            PipedInput = new[] {"ccc", "ddd"}
+                        },
                         Then =
                         {
                             Captured = {new List<string> {"aaa", "bbb", "ccc", "ddd"}}
@@ -61,8 +67,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .Verify(_output,
                     new Scenario
                     {
-                        Given = {PipedInput = new[] {"aaa"}},
-                        WhenArgs = $"{nameof(App.Single)} single",
+                        When =
+                        {
+                            Args = $"{nameof(App.Single)} single",
+                            PipedInput = new[] {"aaa"}
+                        },
                         Then =
                         {
                             Captured = {"single"}
@@ -78,8 +87,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .Verify(_output,
                     new Scenario
                     {
-                        Given = {PipedInput = new[] {"aaa", "bbb"}},
-                        WhenArgs = $"{nameof(App.SingleAndList)} single",
+                        When =
+                        {
+                            Args = $"{nameof(App.SingleAndList)} single",
+                            PipedInput = new[] {"aaa", "bbb"}
+                        },
                         Then =
                         {
                             Captured =
@@ -102,13 +114,16 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         {
                             stream.EnumerationIsPremature = false;
                             return next(context);
-                        }, 
+                        },
                         MiddlewareStages.Invoke, -1))
                 .Verify(_output,
                     new Scenario
                     {
-                        Given = {PipedInput = stream},
-                        WhenArgs = $"{nameof(StreamingApp.Stream)}",
+                        When =
+                        {
+                            Args = $"{nameof(StreamingApp.Stream)}",
+                            PipedInput = stream
+                        },
                         Then =
                         {
                             Captured = {new List<string> {"aaa", "bbb"}}

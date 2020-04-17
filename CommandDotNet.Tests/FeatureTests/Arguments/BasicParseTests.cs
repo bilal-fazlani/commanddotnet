@@ -19,10 +19,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void MethodIsCalledWithExpectedValues()
         {
             new AppRunner<App>().Verify(_output, new Scenario
-                {
-                    WhenArgs = "Add -o * 2 3",
-                    Then = {Captured = {new App.AddResults {X = 2, Y = 3, Op = "*"}}}
-                });
+            {
+                When = {Args = "Add -o * 2 3"},
+                Then = {Captured = {new App.AddResults {X = 2, Y = 3, Op = "*"}}}
+            });
         }
 
         [Fact]
@@ -30,8 +30,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>().Verify(_output, new Scenario
             {
-                WhenArgs = "Add 2 3 -o *",
-                Then = { Captured = { new App.AddResults { X = 2, Y = 3, Op = "*" } } }
+                When = {Args = "Add 2 3 -o *"},
+                Then = {Captured = {new App.AddResults {X = 2, Y = 3, Op = "*"}}}
             });
         }
 
@@ -40,8 +40,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>().Verify(_output, new Scenario
             {
-                WhenArgs = "Add 2 3 -o:*",
-                Then = { Captured = { new App.AddResults { X = 2, Y = 3, Op = "*" } } }
+                When = {Args = "Add 2 3 -o:*"},
+                Then = {Captured = {new App.AddResults {X = 2, Y = 3, Op = "*"}}}
             });
         }
 
@@ -50,8 +50,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>().Verify(_output, new Scenario
             {
-                WhenArgs = "Add 2 3 -o=*",
-                Then = { Captured = { new App.AddResults { X = 2, Y = 3, Op = "*" } } }
+                When = {Args = "Add 2 3 -o=*"},
+                Then = {Captured = {new App.AddResults {X = 2, Y = 3, Op = "*"}}}
             });
         }
 
@@ -60,11 +60,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>().Verify(_output, new Scenario
             {
-                WhenArgsArray = new[] { "Do", "~!@#$%^&*()_= +[]\\{} |;':\",./<>?" },
-                Then =
-                {
-                    Captured = { "~!@#$%^&*()_= +[]\\{} |;':\",./<>?" }
-                }
+                When = {ArgsArray = new[] {"Do", "~!@#$%^&*()_= +[]\\{} |;':\",./<>?"}},
+                Then = {Captured = {"~!@#$%^&*()_= +[]\\{} |;':\",./<>?"}}
             });
         }
 
@@ -73,11 +70,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>().Verify(_output, new Scenario
             {
-                WhenArgsArray = new[] { "Do", "[some (parenthesis) {curly} and [bracketed] text]" },
-                Then =
-                {
-                    Captured = { "[some (parenthesis) {curly} and [bracketed] text]" }
-                }
+                When = {ArgsArray = new[] {"Do", "[some (parenthesis) {curly} and [bracketed] text]"}},
+                Then = {Captured = {"[some (parenthesis) {curly} and [bracketed] text]"}}
             });
         }
 
@@ -86,7 +80,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>().Verify(_output, new Scenario
             {
-                WhenArgs = "Add 2",
+                When = {Args = "Add 2"},
                 Then =
                 {
                     ExitCode = 1,
@@ -100,7 +94,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>().Verify(_output, new Scenario
             {
-                WhenArgs = "Add 2 3 -o * %",
+                When = {Args = "Add 2 3 -o * %"},
                 Then =
                 {
                     ExitCode = 1,
@@ -115,11 +109,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             var results = new AppRunner<App>()
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "Add 2 3 4",
+                    When = {Args = "Add 2 3 4"},
                     Then =
                     {
                         ExitCode = 1,
-                        OutputContainsTexts = { "Unrecognized command or argument '4'" }
+                        OutputContainsTexts = {"Unrecognized command or argument '4'"}
                     }
                 });
 
@@ -129,14 +123,14 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void Given_IgnoreExtraOperands_DisabledByCommand_Parse_ThrowsUnrecognized()
         {
-            var results = new AppRunner<App>(new AppSettings { IgnoreUnexpectedOperands = true })
+            var results = new AppRunner<App>(new AppSettings {IgnoreUnexpectedOperands = true})
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "Add_DisabledIgnore 2 3 4",
+                    When = {Args = "Add_DisabledIgnore 2 3 4"},
                     Then =
                     {
                         ExitCode = 1,
-                        OutputContainsTexts = { "Unrecognized command or argument '4'" }
+                        OutputContainsTexts = {"Unrecognized command or argument '4'"}
                     }
                 });
 
@@ -146,11 +140,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void Given_IgnoreExtraOperands_EnabledByAppSettings_CollectsRemaining()
         {
-            var results = new AppRunner<App>(new AppSettings { IgnoreUnexpectedOperands = true })
+            var results = new AppRunner<App>(new AppSettings {IgnoreUnexpectedOperands = true})
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "Add 2 3 4",
-                    Then = { Captured = { new App.AddResults { X = 2, Y = 3, Op = "+" } } }
+                    When = {Args = "Add 2 3 4"},
+                    Then = {Captured = {new App.AddResults {X = 2, Y = 3, Op = "+"}}}
                 });
 
             results.CommandContext.ParseResult.RemainingOperands.Should().BeEquivalentTo("4");
@@ -162,8 +156,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             var results = new AppRunner<App>()
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "Add_EnabledIgnore 2 3 4",
-                    Then = { Captured = { new App.AddResults { X = 2, Y = 3 } } }
+                    When = {Args = "Add_EnabledIgnore 2 3 4"},
+                    Then = {Captured = {new App.AddResults {X = 2, Y = 3}}}
                 });
 
             results.CommandContext.ParseResult.RemainingOperands.Should().BeEquivalentTo("4");
@@ -174,10 +168,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             private TestCaptures TestCaptures { get; set; }
 
             public void Add(
-                [Operand(Description = "the first operand")]
-                int x,
-                [Operand(Description = "the second operand")]
-                int y,
+                [Operand(Description = "the first operand")] int x,
+                [Operand(Description = "the second operand")] int y,
                 [Option(ShortName = "o", LongName = "operator", Description = "the operation to apply")]
                 string operation = "+")
             {

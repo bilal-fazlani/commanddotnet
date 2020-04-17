@@ -25,8 +25,11 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.FailOnPrompt() },
-                    WhenArgs = $"{nameof(App.Do)} something --opt1 simple",
+                    When =
+                    {
+                        Args = $"{nameof(App.Do)} something --opt1 simple",
+                        OnPrompt = Respond.FailOnPrompt()
+                    },
                     Then =
                     {
                         Captured = {new App.DoResult
@@ -46,8 +49,11 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.WithText("simple", prompt => prompt.StartsWith("opt1")) },
-                    WhenArgs = $"{nameof(App.Do)} something",
+                    When =
+                    {
+                        Args = $"{nameof(App.Do)} something",
+                        OnPrompt = Respond.WithText("simple", prompt => prompt.StartsWith("opt1"))
+                    },
                     Then =
                     {
                         Captured = {new App.DoResult
@@ -68,8 +74,11 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.WithText("something", prompt => prompt.StartsWith("arg1")) },
-                    WhenArgs = $"{nameof(App.Do)} --opt1 simple",
+                    When =
+                    {
+                        Args = $"{nameof(App.Do)} --opt1 simple",
+                        OnPrompt = Respond.WithText("something", prompt => prompt.StartsWith("arg1"))
+                    },
                     Then =
                     {
                         Captured = {new App.DoResult
@@ -90,14 +99,14 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given =
+                    When =
                     {
+                        Args = $"{nameof(App.Do)}",
                         OnPrompt = Respond.With(
                             new TextAnswer("something", prompt => prompt.StartsWith("arg1")),
                             new TextAnswer("simple", prompt => prompt.StartsWith("opt1"))
                         )
                     },
-                    WhenArgs = $"{nameof(App.Do)}",
                     Then =
                     {
                         Captured =
@@ -122,8 +131,11 @@ opt1 (Text): simple
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.WithText("yes")},
-                    WhenArgs = $"{nameof(App.DoList)} something simple",
+                    When =
+                    {
+                        Args = $"{nameof(App.DoList)} something simple",
+                        OnPrompt = Respond.WithText("yes")
+                    },
                     Then =
                     {
                         Captured = {new List<string>{"something", "simple"}},
@@ -139,8 +151,11 @@ opt1 (Text): simple
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.WithList(new []{"something", "simple"}) },
-                    WhenArgs = $"{nameof(App.DoList)}",
+                    When =
+                    {
+                        Args = $"{nameof(App.DoList)}",
+                        OnPrompt = Respond.WithList(new []{"something", "simple"})
+                    },
                     Then =
                     {
                         Captured = {new List<string>{"something", "simple"}},
@@ -160,8 +175,11 @@ simple
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.WithList(new[] { "something", "simple", "'or not'", "\"so simple\"" }) },
-                    WhenArgs = $"{nameof(App.DoList)}",
+                    When =
+                    {
+                        Args = $"{nameof(App.DoList)}",
+                        OnPrompt = Respond.WithList(new[] { "something", "simple", "'or not'", "\"so simple\"" })
+                    },
                     Then =
                     {
                         Captured = {new List<string>{"something", "simple", "'or not'", "\"so simple\""}}
@@ -176,8 +194,11 @@ simple
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = {OnPrompt = Respond.WithText("1", prompt => prompt.StartsWith("intercept1"))},
-                    WhenArgs = $"{nameof(HierApp.Do)} --inherited1 2",
+                    When =
+                    {
+                        Args = $"{nameof(HierApp.Do)} --inherited1 2",
+                        OnPrompt = Respond.WithText("1", prompt => prompt.StartsWith("intercept1"))
+                    },
                     Then =
                     {
                         Captured = {new HierApp.InterceptResult {Intercept1 = 1, Inherited1 = 2}}
@@ -192,8 +213,11 @@ simple
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.WithText("2", prompt => prompt.StartsWith("inherited1")) },
-                    WhenArgs = $" --intercept1 1 {nameof(HierApp.Do)}",
+                    When =
+                    {
+                        Args = $" --intercept1 1 {nameof(HierApp.Do)}",
+                        OnPrompt = Respond.WithText("2", prompt => prompt.StartsWith("inherited1"))
+                    },
                     Then =
                     {
                         Captured = {new HierApp.InterceptResult {Intercept1 = 1, Inherited1 = 2}}
@@ -208,10 +232,13 @@ simple
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.With(
-                        new TextAnswer("lala", prompt => prompt.StartsWith("user")), 
-                        new TextAnswer("fishies", prompt => prompt.StartsWith("password")))},
-                    WhenArgs = $"{nameof(App.Secure)}",
+                    When =
+                    {
+                        Args = $"{nameof(App.Secure)}",
+                        OnPrompt = Respond.With(
+                            new TextAnswer("lala", prompt => prompt.StartsWith("user")),
+                            new TextAnswer("fishies", prompt => prompt.StartsWith("password")))
+                    },
                     Then =
                     {
                         Captured = { new App.SecureResult{User = "lala", Password = new Password("fishies")}},
@@ -231,10 +258,13 @@ password (Text):
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.With(
-                        new TextAnswer("lala", prompt => prompt.StartsWith("user")), 
-                        new TextAnswer("fishies\b\b\b\b\b\b\bnew", prompt => prompt.StartsWith("password")))},
-                    WhenArgs = $"{nameof(App.Secure)}",
+                    When =
+                    {
+                        Args = $"{nameof(App.Secure)}",
+                        OnPrompt = Respond.With(
+                            new TextAnswer("lala", prompt => prompt.StartsWith("user")),
+                            new TextAnswer("fishies\b\b\b\b\b\b\bnew", prompt => prompt.StartsWith("password")))
+                    },
                     Then =
                     {
                         Captured = { new App.SecureResult{User = "lala", Password = new Password("new")}},
@@ -252,8 +282,11 @@ password (Text):
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.FailOnPrompt() },
-                    WhenArgs = $"{nameof(App.Flags)}",
+                    When =
+                    {
+                        Args = $"{nameof(App.Flags)}",
+                        OnPrompt = Respond.FailOnPrompt()
+                    },
                     Then = { Output = ""}
                 });
         }
@@ -266,11 +299,14 @@ password (Text):
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.With(
-                        new TextAnswer("true", prompt => prompt.StartsWith("a ")),
-                        new TextAnswer("false", prompt => prompt.StartsWith("b "))
-                        )},
-                    WhenArgs = $"{nameof(App.Flags)}",
+                    When =
+                    {
+                        Args = $"{nameof(App.Flags)}",
+                        OnPrompt = Respond.With(
+                            new TextAnswer("true", prompt => prompt.StartsWith("a ")),
+                            new TextAnswer("false", prompt => prompt.StartsWith("b "))
+                        )
+                    },
                     Then = { Captured = { (flagA: true, flagB: false) } }
                 });
         }
@@ -282,8 +318,11 @@ password (Text):
                 .UsePrompting()
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.WithText("true", prompt => prompt.StartsWith("operand1")) },
-                    WhenArgs = $"{nameof(App.Bool)}",
+                    When =
+                    {
+                        Args = $"{nameof(App.Bool)}",
+                        OnPrompt = Respond.WithText("true", prompt => prompt.StartsWith("operand1"))
+                    },
                     Then =
                     {
                         Captured = { true },
@@ -300,8 +339,11 @@ password (Text):
                 .UsePrompting(argumentPromptTextOverride: (ctx, arg) => "lala")
                 .Verify(_output, new Scenario
                 {
-                    Given = { OnPrompt = Respond.WithText("fishies", reuse: true) },
-                    WhenArgs = $"{nameof(App.Do)}",
+                    When =
+                    {
+                        Args = $"{nameof(App.Do)}",
+                        OnPrompt = Respond.WithText("fishies", reuse: true)
+                    },
                     Then =
                     {
                         Captured = { new App.DoResult{Arg1 = "fishies", Opt1 = "fishies"}},
@@ -319,8 +361,11 @@ lala (Text): fishies
                 .UsePrompting(argumentFilter: arg => arg.Name == "arg1")
                 .Verify(_output, new Scenario
                 {
-                    Given = {OnPrompt = Respond.WithText("something", prompt => prompt.StartsWith("arg1"))},
-                    WhenArgs = $"{nameof(App.Do)}",
+                    When =
+                    {
+                        Args = $"{nameof(App.Do)}",
+                        OnPrompt = Respond.WithText("something", prompt => prompt.StartsWith("arg1"))
+                    },
                     Then =
                     {
                         Captured = {new App.DoResult {Arg1 = "something"}},
@@ -339,12 +384,12 @@ lala (Text): fishies
                 .AppendPipedInputToOperandList()
                 .Verify(_output, new Scenario
                 {
-                    Given =
+                    When =
                     {
-                        OnPrompt = Respond.FailOnPrompt(),
-                        PipedInput = pipedInput
+                        Args = $"{nameof(App.DoList)}",
+                        PipedInput = pipedInput,
+                        OnPrompt = Respond.FailOnPrompt()
                     },
-                    WhenArgs = $"{nameof(App.DoList)}",
                     Then = { Captured = { pipedInput.ToList() } }
                 });
         }

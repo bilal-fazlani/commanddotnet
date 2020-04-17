@@ -34,13 +34,13 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                 .UsePrompting(promptForMissingArguments: true)
                 .Verify(_output, new Scenario
                 {
-                    Given =
+                    When =
                     {
+                        Args = "[parse] Do",
                         OnPrompt = Respond.With(
                             new TextAnswer("opd_stuff", s => s.Contains("opd (Text):")),
                             new ListAnswer(new[] {"one", "two", "three"}, s => !s.Contains("opd (Text):")))
                     },
-                    WhenArgs = "[parse] Do",
                     Then =
                     {
                         OutputContainsTexts =
@@ -67,8 +67,11 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                 .AppendPipedInputToOperandList()
                 .Verify(_output, new Scenario
                 {
-                    Given = {PipedInput = new[] {"one, two, three"}},
-                    WhenArgs = "[parse] Do opd_stuff",
+                    When =
+                    {
+                        Args = "[parse] Do opd_stuff",
+                        PipedInput = new[] {"one, two, three"}
+                    },
                     Then =
                     {
                         OutputContainsTexts =
@@ -90,8 +93,11 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                 .AppendPipedInputToOperandList()
                 .Verify(_output, new Scenario
                 {
-                    Given = { PipedInput = new[] { "one, two, three" } },
-                    WhenArgs = "[parse] Do opd_stuff four five six",
+                    When =
+                    {
+                        Args = "[parse] Do opd_stuff four five six",
+                        PipedInput = new[] { "one, two, three" }
+                    },
                     Then =
                     {
                         OutputContainsTexts =
@@ -116,7 +122,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                 .UseParseDirective()
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = $"[parse] Do @{file}",
+                    When = {Args = $"[parse] Do @{file}"},
                     Then =
                     {
                         Output = $@"command: Do

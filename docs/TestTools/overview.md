@@ -72,8 +72,11 @@ The tool provides two extension methods to execute an AppRunner in memory and co
                 .AppendPipedInputToOperandList()
                 .Verify(new Scenario
                 {
-                    Given = { PipedInput = new[] { "ccc", "ddd" } },
-                    WhenArgs = "List aaa bbb",
+                    When = 
+                    {
+                        Args = "List aaa bbb",
+                        PipedInput = new[] { "ccc", "ddd" } 
+                    },
                     Then =
                     {
                         Output = @"aaa
@@ -131,7 +134,7 @@ public class ProgramTests
         Program.GetAppRunner()
             .Verify(new Scenario
             {
-                WhenArgs = "checkout lala",
+                When = { Args = "checkout lala" },
                 Then = { 
                     Output = "error: pathspec 'lala' did not match any file(s) known to git" 
                 }
@@ -144,7 +147,7 @@ public class ProgramTests
         Program.GetAppRunner()
             .Verify(new Scenario
             {
-                WhenArgs = "checkout -b lala",
+                When = { Args = "checkout -b lala" },
                 Then = { 
                     Output = "Switched to a new branch 'lala'" 
                 }

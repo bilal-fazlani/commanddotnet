@@ -38,8 +38,11 @@ Simply supply an IEnumerable<string> to the optional PipedInput parameter or pro
                 .AppendPipedInputToOperandList()
                 .Verify(new Scenario
                 {
-                    Given = { PipedInput = new[] { "ccc", "ddd" } },
-                    WhenArgs = "List aaa bbb",
+                    When = 
+                    {
+                        Args = "List aaa bbb",
+                        PipedInput = new[] { "ccc", "ddd" } 
+                    },
                     Then =
                     {
                         Output = @"aaa

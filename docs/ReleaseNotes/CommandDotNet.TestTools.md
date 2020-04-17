@@ -37,6 +37,18 @@ To update, use find/replace
 * ResultsContainsTexts > OutputContainsTexts
 * ResultsNotContainsTexts > OutputNotContainsTexts
 
+### Scenerio.Given moved to Scenario.When
+
+The properties in Given were all user inputs that would occur after the arguments are provided so it makes more sense to include them in When.
+
+Given is the context of the fully configured AppRunner.
+
+This better aligns with the intent of the Given-When-Then style.
+
+### Scenario.WhenArgs & WhenArgsArray moved to Scenario.When
+
+`Scenario.WhenArgs = ...` -> `Scenario.When = {Args = ...}`
+
 ### AppRunnerResult.Console___ properties moved to TestConsole
 
 * AppRunnerResult.ConsoleOutAndError -> AppRunnerResult.Console.AllText()
