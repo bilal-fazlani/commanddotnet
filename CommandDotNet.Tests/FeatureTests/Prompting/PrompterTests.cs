@@ -1,4 +1,5 @@
-﻿using CommandDotNet.Prompts;
+﻿using System.Threading;
+using CommandDotNet.Prompts;
 using CommandDotNet.Rendering;
 using CommandDotNet.TestTools.Prompts;
 using CommandDotNet.TestTools.Scenarios;
@@ -9,11 +10,9 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
 {
     public class PrompterTests
     {
-        private readonly ITestOutputHelper _output;
-
         public PrompterTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
@@ -21,7 +20,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {

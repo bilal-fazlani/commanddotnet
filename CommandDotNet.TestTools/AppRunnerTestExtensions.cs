@@ -37,7 +37,7 @@ namespace CommandDotNet.TestTools
         public static T GetFromContext<T>(this AppRunner runner,
             string[] args,
             Func<CommandContext, T> capture,
-            Action<string> logger = null,
+            Action<string> logLine = null,
             MiddlewareStages middlewareStage = MiddlewareStages.PostBindValuesPreInvoke,
             int? orderWithinStage = null)
         {
@@ -47,7 +47,7 @@ namespace CommandDotNet.TestTools
                     exitAfterCapture: true,
                     middlewareStage: middlewareStage,
                     orderWithinStage: orderWithinStage)
-                .RunInMem(args, logger, config: TestConfig.Silent);
+                .RunInMem(args, logLine, config: TestConfig.Silent);
             return state;
         }
 
