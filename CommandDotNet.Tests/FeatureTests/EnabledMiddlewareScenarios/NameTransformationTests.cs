@@ -6,11 +6,11 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
 {
     public class NameTransformationTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public NameTransformationTests(ITestOutputHelper testOutputHelper)
+        public NameTransformationTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
@@ -19,12 +19,12 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
             new AppRunner<App>()
                 .Configure(b => b.NameTransformation = (attributes, memberName, nameOverride, commandNodeType)
                     => $"prefix-{memberName}")
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "prefix-Do -h",
                     Then =
                     {
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             "prefix-Do", "prefix-option1", "prefix-operand1"
                         }
@@ -38,16 +38,16 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
             new AppRunner<App>()
                 .Configure(b => b.NameTransformation = (attributes, memberName, nameOverride, commandNodeType)
                     => commandNodeType.IsCommand ? $"prefix-{memberName}" : memberName)
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "prefix-Do -h",
                     Then =
                     {
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             "prefix-Do", "option1", "operand1"
                         },
-                        ResultsNotContainsTexts =
+                        OutputNotContainsTexts =
                         {
                             "prefix-option1", "prefix-operand1"
                         }
@@ -61,16 +61,16 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
             new AppRunner<App>()
                 .Configure(b => b.NameTransformation = (attributes, memberName, nameOverride, commandNodeType)
                     => commandNodeType.IsOperand ? $"prefix-{memberName}" : memberName)
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then =
                     {
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             "Do", "option1", "prefix-operand1"
                         },
-                        ResultsNotContainsTexts =
+                        OutputNotContainsTexts =
                         {
                             "prefix-option1"
                         }

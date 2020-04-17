@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using CommandDotNet.Execution;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit.Abstractions;
@@ -9,19 +8,7 @@ namespace CommandDotNet.Tests
 {
     public static class AppRunnerScenarioExtensions
     {
-        public static T GetFromContext<T>(this AppRunner runner,
-            string args,
-            ITestOutputHelper output,
-            Func<CommandContext, T> capture, 
-            MiddlewareStages middlewareStage = MiddlewareStages.PostBindValuesPreInvoke)
-        {
-            return runner.GetFromContext(
-                args.SplitArgs(), 
-                output?.AsLogger(), 
-                capture,
-                middlewareStage);
-        }
-
+        [Obsolete("Use RunInMem without `output` or `logLine`")]
         public static AppRunnerResult RunInMem(
             this AppRunner runner,
             string args,
@@ -29,9 +16,10 @@ namespace CommandDotNet.Tests
             Func<TestConsole, string> onReadLine = null,
             IEnumerable<string> pipedInput = null)
         {
-            return runner.RunInMem(args.SplitArgs(), output?.AsLogger(), onReadLine, pipedInput);
+            return runner.RunInMem(args, output.WriteLine, onReadLine, pipedInput);
         }
 
+        [Obsolete("Use RunInMem without `output` or `logLine`")]
         public static AppRunnerResult RunInMem(
             this AppRunner runner,
             string[] args,
@@ -39,18 +27,38 @@ namespace CommandDotNet.Tests
             Func<TestConsole, string> onReadLine = null,
             IEnumerable<string> pipedInput = null)
         {
-            return runner.RunInMem(args, output?.AsLogger(), onReadLine, pipedInput);
+            return runner.RunInMem(args, output.WriteLine, onReadLine, pipedInput);
         }
 
-        public static AppRunnerResult VerifyScenario(this AppRunner appRunner, ITestOutputHelper output, IScenario scenario)
+        [Obsolete("Use Verify without `output` or `logLine`")]
+        public static AppRunnerResult Verify(this AppRunner appRunner, ITestOutputHelper output, IScenario scenario)
         {
-            return appRunner.VerifyScenario(output.AsLogger(), scenario);
+            // use Test.Default to force testing of TestConfig.GetDefaultFromSubClass()
+            return appRunner.Verify(output.WriteLine, TestConfig.Default, scenario);
         }
 
-        public static ILogger AsLogger(this ITestOutputHelper testOutputHelper)
+        public static AppRunnerResult RunInMem(
+            this AppRunner runner,
+            string args,
+            Func<TestConsole, string> onReadLine = null,
+            IEnumerable<string> pipedInput = null)
         {
-            return new Logger(testOutputHelper.WriteLine);
+            return runner.RunInMem(args, Ambient.Output.WriteLine, onReadLine, pipedInput);
         }
 
+        public static AppRunnerResult RunInMem(
+            this AppRunner runner,
+            string[] args,
+            Func<TestConsole, string> onReadLine = null,
+            IEnumerable<string> pipedInput = null)
+        {
+            return runner.RunInMem(args, Ambient.Output.WriteLine, onReadLine, pipedInput);
+        }
+
+        public static AppRunnerResult Verify(this AppRunner appRunner, IScenario scenario)
+        {
+            // use Test.Default to force testing of TestConfig.GetDefaultFromSubClass()
+            return appRunner.Verify(Ambient.Output.WriteLine, TestConfig.Default, scenario);
+        }
     }
 }

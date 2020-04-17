@@ -10,11 +10,11 @@ namespace CommandDotNet.Tests.CommandDotNet.CommandLogger
 {
     public class CommandLoggerTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public CommandLoggerTests(ITestOutputHelper testOutputHelper)
+        public CommandLoggerTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
@@ -22,12 +22,12 @@ namespace CommandDotNet.Tests.CommandDotNet.CommandLogger
         {
             new AppRunner<App>()
                 .UseCommandLogger(excludeSystemInfo: true)
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "[cmdlog] --password super-secret Do lala",
                     Then =
                     {
-                        Result = $@"
+                        Output = $@"
 ***************************************
 Original input:
   [cmdlog] --password ***** Do lala
@@ -52,7 +52,8 @@ options:
     value: *****
     inputs: ***** (from: --password *****)
     default:
-***************************************"
+***************************************
+"
                     }
                 });
         }
@@ -62,12 +63,12 @@ options:
         {
             new AppRunner<App>()
                 .UseCommandLogger()
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "[cmdlog] Do",
                     Then =
                     {
-                        Result = $@"
+                        Output = $@"
 ***************************************
 Original input:
   [cmdlog] Do
@@ -98,7 +99,8 @@ Tool version  = testhost.dll 16.2.0
 OS version    = {System.Runtime.InteropServices.RuntimeInformation.OSDescription.Trim()}
 Machine       = {Environment.MachineName}
 Username      = {Environment.UserDomainName}\{Environment.UserName}
-***************************************"
+***************************************
+"
                     }
                 });
         }
@@ -163,12 +165,12 @@ AppConfig:
 
             new AppRunner<App>()
                 .UseCommandLogger(excludeSystemInfo: true, includeAppConfig: true)
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "[cmdlog] Do",
                     Then =
                     {
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             "AppConfig:",
                             "  AppSettings:",
@@ -187,12 +189,12 @@ AppConfig:
         {
             new AppRunner<App>()
                 .UseCommandLogger(excludeSystemInfo: true, additionalInfoCallback: ctx => null)
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "[cmdlog] Do",
                     Then =
                     {
-                        Result = $@"
+                        Output = $@"
 ***************************************
 Original input:
   [cmdlog] Do
@@ -217,7 +219,8 @@ options:
     value:
     inputs:
     default:
-***************************************"
+***************************************
+"
                     }
                 });
         }
@@ -232,12 +235,12 @@ options:
                     ("header2", "value2" ),
 
                 })
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "[cmdlog] Do",
                     Then =
                     {
-                        Result = $@"
+                        Output = $@"
 ***************************************
 Original input:
   [cmdlog] Do
@@ -265,7 +268,8 @@ options:
 
 header1  = value1
 header2  = value2
-***************************************"
+***************************************
+"
                     }
                 });
         }
@@ -277,12 +281,12 @@ header2  = value2
 
             new AppRunner<App>()
                 .UseCommandLogger(excludeSystemInfo: true, writerFactory: context => null)
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do",
                     Then =
                     {
-                        Result = ""
+                        Output = ""
                     }
                 });
         }
@@ -293,13 +297,13 @@ header2  = value2
             var sb = new StringBuilder();
 
             new AppRunner<App>()
-                .UseCommandLogger(excludeSystemInfo: true, writerFactory: context => text => sb.Append(text))
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .UseCommandLogger(excludeSystemInfo: true, writerFactory: context => text => sb.AppendLine(text))
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do",
                     Then =
                     {
-                        Result = ""
+                        Output = ""
                     }
                 });
 
@@ -313,19 +317,19 @@ command: Do
 arguments:
 
   textOperand <Text>
-    value: 
+    value:
     inputs:
     default:
 
 options:
 
   textOption <Text>
-    value: 
+    value:
     inputs:
     default:
 
   password <Text>
-    value: 
+    value:
     inputs:
     default:
 ***************************************
@@ -337,10 +341,10 @@ options:
         {
             new AppRunner<App>()
                 .UseCommandLogger()
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "[cmdlog] Do",
-                    Then = { ResultsContainsTexts = { "Original input:" } }
+                    Then = { OutputContainsTexts = { "Original input:" } }
                 });
         }
 
@@ -349,10 +353,10 @@ options:
         {
             new AppRunner<App>()
                 .UseCommandLogger()
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do",
-                    Then = {Result = ""}
+                    Then = {Output = ""}
                 });
         }
 

@@ -1,91 +1,88 @@
 using System;
-using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests
 {
-
-    public class DisposeMethodTests : TestBase
+    public class DisposeMethodTests
     {
+        private readonly ITestOutputHelper _output;
         private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
-        public DisposeMethodTests(ITestOutputHelper output) : base(output)
+        public DisposeMethodTests(ITestOutputHelper output)
         {
+            _output = output;
         }
 
         [Fact]
         public void When_IDisposable_BasicHelp_DoesNotInclude_DisposeMethod()
         {
-            Verify(new Scenario<DisposableApp>
+            new AppRunner<DisposableApp>(BasicHelp).Verify(_output, new Scenario
             {
-                Given = {AppSettings = BasicHelp},
                 WhenArgs = "-h",
-                Then = {ResultsNotContainsTexts = {"Dispose"}}
+                Then = {OutputNotContainsTexts = {"Dispose"}}
             });
         }
 
         [Fact]
         public void When_IDisposable_DetailedHelp_DoesNotInclude_DisposeMethod()
         {
-            Verify(new Scenario<DisposableApp>
+            new AppRunner<DisposableApp>(DetailedHelp).Verify(_output, new Scenario
             {
-                Given = {AppSettings = DetailedHelp},
                 WhenArgs = "-h",
-                Then = {ResultsNotContainsTexts = {"Dispose"}}
+                Then = {OutputNotContainsTexts = {"Dispose"}}
             });
         }
 
         [Fact]
         public void When_NotIDisposable_BasicHelp_DoesNotInclude_DisposeMethod()
         {
-            Verify(new Scenario<NotDisposableApp>
+            new AppRunner<NotDisposableApp>(BasicHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "-h",
-                Then = { ResultsContainsTexts = { @"Commands:
-  Dispose  " } }
+                Then = { OutputContainsTexts = { @"Commands:
+  Dispose" } }
             });
         }
 
         [Fact]
         public void When_NotIDisposable_DetailedHelp_DoesNotInclude_DisposeMethod()
         {
-            Verify(new Scenario<NotDisposableApp>
+            new AppRunner<NotDisposableApp>(DetailedHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "-h",
-                Then = { ResultsContainsTexts = { @"Commands:
+                Then = { OutputContainsTexts = { @"Commands:
 
-  Dispose  " } }
+  Dispose" } }
             });
         }
 
         [Fact]
         public void When_IDisposable_CallsDisposeMethod()
         {
-            Verify(new Scenario<DisposableApp>
+            new AppRunner<DisposableApp>().Verify(_output, new Scenario
             {
                 WhenArgs = "Do",
-                Then = {Outputs = {true}}
+                Then = {Captured = {true}}
             });
         }
 
         [Fact]
         public void When_NotIDisposable_CallsDisposeMethod()
         {
-            Verify(new Scenario<NotDisposableApp>
+            new AppRunner<NotDisposableApp>().Verify(_output, new Scenario
             {
                 WhenArgs = "Dispose",
-                Then = { Outputs = { true } }
+                Then = { Captured = { true } }
             });
         }
 
-        public class DisposableApp : IDisposable
+        private class DisposableApp : IDisposable
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Do()
             {
@@ -93,17 +90,19 @@ namespace CommandDotNet.Tests.FeatureTests
 
             public void Dispose()
             {
-                TestOutputs.Capture(true);
+                TestCaptures.Capture(true);
             }
         }
 
-        public class NotDisposableApp
+        private class NotDisposableApp
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
+            // use the name Dispose to prove it can be a command name
+            // and that the Dispose name is filtered out only for IDisposable's
             public void Dispose()
             {
-                TestOutputs.Capture(true);
+                TestCaptures.Capture(true);
             }
         }
 

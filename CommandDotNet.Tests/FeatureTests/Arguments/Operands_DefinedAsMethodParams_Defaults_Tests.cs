@@ -2,30 +2,33 @@ using System;
 using System.Collections.Generic;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsParams;
-using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class Operands_DefinedAsMethodParams_Defaults_Tests : TestBase
+    public class Operands_DefinedAsMethodParams_Defaults_Tests
     {
+        private readonly ITestOutputHelper _output;
         private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
-        public Operands_DefinedAsMethodParams_Defaults_Tests(ITestOutputHelper output) : base(output)
+        public Operands_DefinedAsMethodParams_Defaults_Tests(ITestOutputHelper output)
         {
+            _output = output;
         }
 
         [Fact]
         public void SampleTypes_BasicHelp()
         {
-            Verify(new Scenario<OperandsDefaults>
+            new AppRunner<OperandsDefaults>(BasicHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "ArgsDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
 
 Arguments:
   boolArg
@@ -34,18 +37,21 @@ Arguments:
   structNArg
   enumArg
   objectArg
-  stringListArg" }
+  stringListArg
+"
+                }
             });
         }
 
         [Fact]
         public void SampleTypes_DetailedHelp()
         {
-            Verify(new Scenario<OperandsDefaults>
+            new AppRunner<OperandsDefaults>(DetailedHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "ArgsDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
 
 Arguments:
 
@@ -63,107 +69,127 @@ Arguments:
 
   objectArg                 <URI>
 
-  stringListArg (Multiple)  <TEXT>" }
+  stringListArg (Multiple)  <TEXT>
+"
+                }
             });
         }
 
         [Fact]
         public void StructList_BasicHelp()
         {
-            Verify(new Scenario<OperandsDefaults>
+            new AppRunner<OperandsDefaults>(BasicHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "StructListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
 
 Arguments:
-  structListArg" }
+  structListArg
+"
+                }
             });
         }
 
         [Fact]
         public void StructList_DetailedHelp()
         {
-            Verify(new Scenario<OperandsDefaults>
+            new AppRunner<OperandsDefaults>(DetailedHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "StructListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
 
 Arguments:
 
-  structListArg (Multiple)  <NUMBER>" }
+  structListArg (Multiple)  <NUMBER>
+"
+                }
             });
         }
 
         [Fact]
         public void EnumList_BasicHelp()
         {
-            Verify(new Scenario<OperandsDefaults>
+            new AppRunner<OperandsDefaults>(BasicHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "EnumListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
 
 Arguments:
-  enumListArg" }
+  enumListArg
+"
+                }
             });
         }
 
         [Fact]
         public void EnumList_DetailedHelp()
         {
-            Verify(new Scenario<OperandsDefaults>
+            new AppRunner<OperandsDefaults>(DetailedHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "EnumListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
 
 Arguments:
 
   enumListArg (Multiple)  <DAYOFWEEK>
-  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday" }
+  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+"
+                }
             });
         }
 
         [Fact]
         public void ObjectList_BasicHelp()
         {
-            Verify(new Scenario<OperandsDefaults>
+            new AppRunner<OperandsDefaults>(BasicHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "ObjectListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
 
 Arguments:
-  objectListArg" }
+  objectListArg
+"
+                }
             });
         }
 
         [Fact]
         public void ObjectList_DetailedHelp()
         {
-            Verify(new Scenario<OperandsDefaults>
+            new AppRunner<OperandsDefaults>(DetailedHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "ObjectListDefaults -h",
-                Then = { Result = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
+                Then =
+                {
+                    Output = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
 
 Arguments:
 
-  objectListArg (Multiple)  <URI>" }
+  objectListArg (Multiple)  <URI>
+"
+                }
             });
         }
 
         [Fact]
         public void SampleTypes_Exec_Positional()
         {
-            Verify(new Scenario<OperandsDefaults>
+            new AppRunner<OperandsDefaults>().Verify(_output, new Scenario
             {
                 WhenArgs = "ArgsDefaults true green 1 2 Monday http://google.com yellow orange",
                 Then =
                 {
-                    Outputs = { new ParametersSampleTypesResults
+                    Captured = { new ParametersSampleTypesResults
                     {
                         BoolArg = true,
                         StringArg = "green",
@@ -180,12 +206,12 @@ Arguments:
         [Fact]
         public void SampleTypes_Exec_OperandsNotRequired_UsesDefaults()
         {
-            Verify(new Scenario<OperandsDefaults>
+            new AppRunner<OperandsDefaults>().Verify(_output, new Scenario
             {
                 WhenArgs = "ArgsDefaults",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new ParametersSampleTypesResults
                         {
@@ -202,7 +228,7 @@ Arguments:
 
         private class OperandsDefaults : IArgsDefaultsSampleTypesMethod
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void ArgsDefaults(
                 [Operand] bool boolArg = true,
@@ -213,26 +239,26 @@ Arguments:
                 [Operand] Uri objectArg = null,
                 [Operand] List<string> stringListArg = null)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(
+                TestCaptures.Capture(new ParametersSampleTypesResults(
                     boolArg, stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
             }
 
             public void StructListDefaults(
                 [Operand] List<int> structListArg = null)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(structListArg));
+                TestCaptures.Capture(new ParametersSampleTypesResults(structListArg));
             }
 
             public void EnumListDefaults(
                 [Operand] List<DayOfWeek> enumListArg = null)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(enumListArg));
+                TestCaptures.Capture(new ParametersSampleTypesResults(enumListArg));
             }
 
             public void ObjectListDefaults(
                 [Operand] List<Uri> objectListArg = null)
             {
-                TestOutputs.Capture(new ParametersSampleTypesResults(objectListArg));
+                TestCaptures.Capture(new ParametersSampleTypesResults(objectListArg));
             }
         }
     }

@@ -8,11 +8,11 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class TypeSuggestionsTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public TypeSuggestionsTests(ITestOutputHelper testOutputHelper)
+        public TypeSuggestionsTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
@@ -20,14 +20,14 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>()
                 .UseDefaultMiddleware()
-                .VerifyScenario(_testOutputHelper,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "User --user",
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "'user' is not a option.  See 'dotnet testhost.dll User --help'",
                                 @"Similar options are
@@ -42,14 +42,14 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>()
                 .UseTypoSuggestions()
-                .VerifyScenario(_testOutputHelper,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "User --user",
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "'user' is not a option.  See 'dotnet testhost.dll User --help'",
                                 @"Similar options are
@@ -73,14 +73,14 @@ namespace CommandDotNet.Tests.FeatureTests
                         a.CommandBuilder.AddArgument(option);
                     })
                 .UseTypoSuggestions()
-                .VerifyScenario(_testOutputHelper,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "User --user",
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "'user' is not a option.  See 'dotnet testhost.dll User --help'",
                                 @"Similar options are
@@ -101,14 +101,14 @@ namespace CommandDotNet.Tests.FeatureTests
                         a.CommandBuilder.AddArgument(option);
                     })
                 .UseTypoSuggestions()
-                .VerifyScenario(_testOutputHelper,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "User --user",
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "'user' is not a option.  See 'dotnet testhost.dll User --help'",
                                 @"Similar options are
@@ -123,14 +123,14 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>()
                 .UseTypoSuggestions()
-                .VerifyScenario(_testOutputHelper,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "egister",
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "'egister' is not a command.  See 'dotnet testhost.dll  --help'",
                                 @"Similar commands are
@@ -146,14 +146,14 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>()
                 .UseTypoSuggestions(3)
-                .VerifyScenario(_testOutputHelper,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "Similars --opt",
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "'opt' is not a option.  See 'dotnet testhost.dll Similars --help'",
                                 @"Similar options are
@@ -170,14 +170,14 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>()
                 .UseTypoSuggestions()
-                .VerifyScenario(_testOutputHelper,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "Similars --lala",
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "Unrecognized option '--lala'"
                             }
@@ -190,14 +190,14 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<InterceptorApp>()
                 .UseTypoSuggestions()
-                .VerifyScenario(_testOutputHelper,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "--users",
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "'users' is not a option.  See 'dotnet testhost.dll  --help'",
                                 @"Similar options are
@@ -212,14 +212,14 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<InterceptorApp>()
                 .UseTypoSuggestions()
-                .VerifyScenario(_testOutputHelper,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "users",
                         Then =
                         {
                             ExitCode = 1,
-                            ResultsContainsTexts =
+                            OutputContainsTexts =
                             {
                                 "'users' is not a command.  See 'dotnet testhost.dll  --help'",
                                 @"Similar commands are

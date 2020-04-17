@@ -6,11 +6,11 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class OnRunCompletedTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public OnRunCompletedTests(ITestOutputHelper testOutputHelper)
+        public OnRunCompletedTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 {
                     wasCalled = true;
                 })
-                .RunInMem("", _testOutputHelper);
+                .RunInMem("", _output);
 
             wasCalled.Should().BeTrue();
         }

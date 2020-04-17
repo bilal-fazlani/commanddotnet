@@ -5,10 +5,16 @@ using CommandDotNet.TestTools.Prompts;
 
 namespace CommandDotNet.TestTools.Scenarios
 {
-    public class ScenarioGiven
+    public class ScenarioWhen
     {
-        /// <summary>Set this to override the default <see cref="AppSettings"/></summary>
-        public AppSettings AppSettings { get; set; }
+        /// <summary>
+        /// The input as would be typed in the shell.
+        /// Can handle quoted strings. 
+        /// </summary>
+        public string Args { get; set; }
+
+        /// <summary>Use this for tested arguments that can contain spaces</summary>
+        public string[] ArgsArray { get; set; }
 
         /// <summary>
         /// Use this delegate to mimic input in response to a <see cref="IConsole"/>.In.ReadLine()<br/>

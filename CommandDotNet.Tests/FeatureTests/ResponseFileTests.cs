@@ -17,7 +17,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public ResponseFileTests(ITestOutputHelper output)
         {
             _output = output;
-            _tempFiles = new TempFiles(_output.AsLogger());
+            _tempFiles = new TempFiles(_output.WriteLine);
         }
 
         public void Dispose()
@@ -31,12 +31,12 @@ namespace CommandDotNet.Tests.FeatureTests
             var responseFile = _tempFiles.CreateTempFile("--opt1 opt1value arg1value");
 
             new AppRunner<App>()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = $"Do @{responseFile}",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new App.DoResult {arg1 = $"@{responseFile}"}
                         }
@@ -51,12 +51,12 @@ namespace CommandDotNet.Tests.FeatureTests
 
             new AppRunner<App>()
                 .UseResponseFiles()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = $"Do @{responseFile}",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new App.DoResult
                             {
@@ -75,12 +75,12 @@ namespace CommandDotNet.Tests.FeatureTests
 
             new AppRunner<App>()
                 .UseResponseFiles()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = $"Do @{responseFile}",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new App.DoResult
                             {
@@ -99,12 +99,12 @@ namespace CommandDotNet.Tests.FeatureTests
 
             new AppRunner<App>()
                 .UseResponseFiles()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = $"Do arg1value @{responseFile}",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new App.DoResult
                             {
@@ -133,11 +133,11 @@ namespace CommandDotNet.Tests.FeatureTests
 
         public class App
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Do([Option] string opt1, string arg1)
             {
-                TestOutputs.Capture(new DoResult { opt1 = opt1, arg1 = arg1 });
+                TestCaptures.Capture(new DoResult { opt1 = opt1, arg1 = arg1 });
             }
 
             public class DoResult

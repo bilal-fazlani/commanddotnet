@@ -17,11 +17,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         private static readonly ArgumentArity ZeroToMany = new ArgumentArity(0, int.MaxValue);
         private static readonly ArgumentArity OneToMany = new ArgumentArity(1, int.MaxValue);
 
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public DefaultArityTests(ITestOutputHelper testOutputHelper)
+        public DefaultArityTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
@@ -131,7 +131,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     ctx => operands = Operands.FromCommand(ctx.ParseResult.TargetCommand),
                     MiddlewareStages.PostParseInputPreBindValues,
                     exitAfterCapture: true)
-                .RunInMem($"{methodName}", _testOutputHelper);
+                .RunInMem($"{methodName}", _output);
             return operands;
         }
 

@@ -8,23 +8,23 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 {
     public class InterceptorExecutionMultilevelNestingTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public InterceptorExecutionMultilevelNestingTests(ITestOutputHelper testOutputHelper)
+        public InterceptorExecutionMultilevelNestingTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
         public void WhenChildCommandsAreNotRequested_TheirInterceptorsAreNotExecuted()
         {
             new AppRunner<App>()
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "--name gramps Greet",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             "Hello, my name is gramps. My child is null. My grandchild is null."
                         }
@@ -38,12 +38,12 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             // this test also proves we can NOT use the same option name for each command because they will conflict.
             // TODO: allow same name. Requires update to how ArgumentValues are keyed.
             new AppRunner<App>()
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "--name gramps Child --name2 pops GrandChild --name3 junior Greet",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             "Hello, my name is junior. My parent is pops. My grandparent is gramps."
                         }
@@ -57,12 +57,12 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             // this test also proves we can NOT use the same option name for each command because they will conflict.
             // TODO: allow same name. Requires update to how ArgumentValues are keyed.
             new AppRunner<App>()
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "--name gramps GrandChild --name3 junior Greet",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             "Hello, my name is junior. My parent is null. My grandparent is gramps."
                         }
@@ -72,7 +72,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 
         class App
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
             
             [SubCommand]
             public Child Child { get; set; }
@@ -97,12 +97,12 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                 return next();
             }
 
-            public void Greet() => TestOutputs.Capture($"Hello, my name is {Name}. My child is {Child?.Name ?? "null"}. My grandchild is {GrandChild?.Name ?? "null"}.");
+            public void Greet() => TestCaptures.Capture($"Hello, my name is {Name}. My child is {Child?.Name ?? "null"}. My grandchild is {GrandChild?.Name ?? "null"}.");
         }
 
         class Child
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             [SubCommand]
             public GrandChild MyChild { get; set; }
@@ -122,12 +122,12 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                 return next();
             }
 
-            public void Greet() => TestOutputs.Capture($"Hello, my name is {Name}. My parent is {ParentName}. My child is {MyChild?.Name ?? "null"}");
+            public void Greet() => TestCaptures.Capture($"Hello, my name is {Name}. My parent is {ParentName}. My child is {MyChild?.Name ?? "null"}");
         }
 
         class GrandChild
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public string GrandParentName { get; set; }
             public string ParentName { get; set; }
@@ -139,7 +139,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                 return next();
             }
             
-            public void Greet() => TestOutputs.Capture($"Hello, my name is {Name}. My parent is {ParentName ?? "null"}. My grandparent is {GrandParentName}.");
+            public void Greet() => TestCaptures.Capture($"Hello, my name is {Name}. My parent is {ParentName ?? "null"}. My grandparent is {GrandParentName}.");
         }
     }
 }

@@ -1,32 +1,33 @@
 using System;
 using System.Collections.Generic;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
-using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class Operands_DefinedAsArgModel_NoDefaults_Tests : TestBase
+    public class Operands_DefinedAsArgModel_NoDefaults_Tests
     {
+        private readonly ITestOutputHelper _output;
         private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
-        public Operands_DefinedAsArgModel_NoDefaults_Tests(ITestOutputHelper output) : base(output)
+        public Operands_DefinedAsArgModel_NoDefaults_Tests(ITestOutputHelper output)
         {
+            _output = output;
         }
 
         [Fact]
         public void SampleTypes_BasicHelp()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>(BasicHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "ArgsNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments]
 
 Arguments:
   BoolArg
@@ -35,7 +36,8 @@ Arguments:
   StructNArg
   EnumArg
   ObjectArg
-  StringListArg"
+  StringListArg
+"
                 }
             });
         }
@@ -43,13 +45,12 @@ Arguments:
         [Fact]
         public void SampleTypes_DetailedHelp()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>(DetailedHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "ArgsNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments]
 
 Arguments:
 
@@ -67,7 +68,8 @@ Arguments:
 
   ObjectArg                 <URI>
 
-  StringListArg (Multiple)  <TEXT>"
+  StringListArg (Multiple)  <TEXT>
+"
                 }
             });
         }
@@ -75,16 +77,16 @@ Arguments:
         [Fact]
         public void StructList_BasicHelp()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>(BasicHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "StructListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll StructListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll StructListNoDefault [arguments]
 
 Arguments:
-  StructListArg"
+  StructListArg
+"
                 }
             });
         }
@@ -92,17 +94,17 @@ Arguments:
         [Fact]
         public void StructList_DetailedHelp()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>(DetailedHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "StructListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll StructListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll StructListNoDefault [arguments]
 
 Arguments:
 
-  StructListArg (Multiple)  <NUMBER>"
+  StructListArg (Multiple)  <NUMBER>
+"
                 }
             });
         }
@@ -110,16 +112,16 @@ Arguments:
         [Fact]
         public void EnumList_BasicHelp()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>(BasicHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "EnumListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments]
 
 Arguments:
-  EnumListArg"
+  EnumListArg
+"
                 }
             });
         }
@@ -127,18 +129,18 @@ Arguments:
         [Fact]
         public void EnumList_DetailedHelp()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>(DetailedHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "EnumListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments]
 
 Arguments:
 
   EnumListArg (Multiple)  <DAYOFWEEK>
-  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
+  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+"
                 }
             });
         }
@@ -146,16 +148,16 @@ Arguments:
         [Fact]
         public void ObjectList_BasicHelp()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>(BasicHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = BasicHelp },
                 WhenArgs = "ObjectListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments]
 
 Arguments:
-  ObjectListArg"
+  ObjectListArg
+"
                 }
             });
         }
@@ -163,17 +165,17 @@ Arguments:
         [Fact]
         public void ObjectList_DetailedHelp()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>(DetailedHelp).Verify(_output, new Scenario
             {
-                Given = { AppSettings = DetailedHelp },
                 WhenArgs = "ObjectListNoDefault -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments]
 
 Arguments:
 
-  ObjectListArg (Multiple)  <URI>"
+  ObjectListArg (Multiple)  <URI>
+"
                 }
             });
         }
@@ -181,12 +183,12 @@ Arguments:
         [Fact]
         public void SampleTypes_Exec_Positional()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>().Verify(_output, new Scenario
             {
                 WhenArgs = "ArgsNoDefault true green 1 2 Monday http://google.com yellow orange",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new OperandsNoDefaultsSampleTypesModel
                         {
@@ -206,12 +208,12 @@ Arguments:
         [Fact]
         public void SampleTypes_Exec_OperandsNotRequired()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>().Verify(_output, new Scenario
             {
                 WhenArgs = "ArgsNoDefault",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new OperandsNoDefaultsSampleTypesModel
                         {
@@ -226,12 +228,12 @@ Arguments:
         [Fact]
         public void StructList_Exec_Positional()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>().Verify(_output, new Scenario
             {
                 WhenArgs = "StructListNoDefault 23 5 7",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new OperandsNoDefaultsStructListArgumentModel
                         {
@@ -245,12 +247,12 @@ Arguments:
         [Fact]
         public void EnumList_Exec_Positional()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>().Verify(_output, new Scenario
             {
                 WhenArgs = "EnumListNoDefault Friday Tuesday Thursday",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new OperandsNoDefaultsEnumListArgumentModel
                         {
@@ -264,12 +266,12 @@ Arguments:
         [Fact]
         public void ObjectList_Exec_Positional()
         {
-            Verify(new Scenario<OperandsNoDefaults>
+            new AppRunner<OperandsNoDefaults>().Verify(_output, new Scenario
             {
                 WhenArgs = "ObjectListNoDefault http://google.com http://apple.com http://github.com",
                 Then =
                 {
-                    Outputs =
+                    Captured =
                     {
                         new OperandsNoDefaultsObjectListArgumentModel
                         {
@@ -287,26 +289,26 @@ Arguments:
 
         private class OperandsNoDefaults
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void ArgsNoDefault(OperandsNoDefaultsSampleTypesModel model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
 
             public void StructListNoDefault(OperandsNoDefaultsStructListArgumentModel model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
 
             public void EnumListNoDefault(OperandsNoDefaultsEnumListArgumentModel model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
 
             public void ObjectListNoDefault(OperandsNoDefaultsObjectListArgumentModel model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
         }
     }

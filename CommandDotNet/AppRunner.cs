@@ -144,7 +144,6 @@ namespace CommandDotNet
                 case AppRunnerException appEx:
                     console.Error.WriteLine(appEx.Message);
                     appEx.PrintStackTrace(console);
-                    console.Error.WriteLine();
                     return 1;
                 case AggregateException aggEx:
                     ExceptionDispatchInfo.Capture(aggEx).Throw();
@@ -164,7 +163,7 @@ namespace CommandDotNet
         {
             return AppConfig == null
                 ? $"{indent}{nameof(AppRunner)}<{RootCommandType.Name}>"
-                : $"{indent}{nameof(AppRunner)}<{RootCommandType.Name}>:{Environment.NewLine}{indent.Increment()}{AppConfig.ToString(indent.IncrementBy(2))}";
+                : $"{indent}{nameof(AppRunner)}<{RootCommandType.Name}>:{Environment.NewLine}{indent.Increment()}{AppConfig.ToString(indent.Increment())}";
         }
     }
 }

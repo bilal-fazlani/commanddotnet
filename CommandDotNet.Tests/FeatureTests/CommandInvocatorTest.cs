@@ -11,11 +11,11 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class CommandInvokerTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public CommandInvokerTests(ITestOutputHelper testOutputHelper)
+        public CommandInvokerTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
@@ -39,8 +39,8 @@ namespace CommandDotNet.Tests.FeatureTests
             var result = RunInMem(1, "Jack", BeforeInvocation);
 
             result.ExitCode.Should().Be(5);
-            result.TestOutputs.Get<Car>().Number.Should().Be(2);
-            result.TestOutputs.Get<string>().Should().Be("Jill");
+            result.TestCaptures.Get<Car>().Number.Should().Be(2);
+            result.TestCaptures.Get<string>().Should().Be("Jill");
         }
 
         [Fact]
@@ -71,8 +71,8 @@ namespace CommandDotNet.Tests.FeatureTests
             var result = RunInMem(1, "Jack", preBindValues: BeforeSetValues);
 
             result.ExitCode.Should().Be(5);
-            result.TestOutputs.Get<Car>().Number.Should().Be(1);
-            result.TestOutputs.Get<string>().Should().Be("Jill");
+            result.TestCaptures.Get<Car>().Number.Should().Be(1);
+            result.TestCaptures.Get<string>().Should().Be("Jill");
         }
 
         [Fact]
@@ -99,12 +99,12 @@ namespace CommandDotNet.Tests.FeatureTests
                 instance.Should().NotBeNull();
                 var app = (App)instance;
 
-                app.TestOutputs.Capture(guid);
+                app.TestCaptures.Capture(guid);
                 return next(context);
             }
 
             var result = RunInMem(1, "Jack", BeforeInvocation);
-            result.TestOutputs.Get<Guid>().Should().Be(guid);
+            result.TestCaptures.Get<Guid>().Should().Be(guid);
         }
 
         private AppRunnerResult RunInMem(int carNumber, string ownerName, 
@@ -123,17 +123,17 @@ namespace CommandDotNet.Tests.FeatureTests
             }
 
             var args = $"NotifyOwner --Number {carNumber} --owner {ownerName}".SplitArgs();
-            return appRunner.RunInMem(args, _testOutputHelper);
+            return appRunner.RunInMem(args, _output);
         }
         
         public class App
         {
-            internal TestOutputs TestOutputs { get; set; }
+            internal TestCaptures TestCaptures { get; set; }
 
             public int NotifyOwner(Car car, [Option] string owner)
             {
-                TestOutputs.Capture(car);
-                TestOutputs.Capture(owner);
+                TestCaptures.Capture(car);
+                TestCaptures.Capture(owner);
                 return 5;
             }
         }

@@ -12,11 +12,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class Operands_PipedInput_Tests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public Operands_PipedInput_Tests(ITestOutputHelper testOutputHelper)
+        public Operands_PipedInput_Tests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
         
         [Fact]
@@ -24,14 +24,17 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .VerifyScenario(_testOutputHelper,
+                .Verify(_output,
                     new Scenario
                     {
-                        Given = {PipedInput = new[] {"aaa", "bbb"}},
-                        WhenArgs = $"{nameof(App.List)}",
+                        When =
+                        {
+                            Args = $"{nameof(App.List)}",
+                            PipedInput = new[] {"aaa", "bbb"}
+                        },
                         Then =
                         {
-                            Outputs = {new List<string> {"aaa", "bbb"}}
+                            Captured = {new List<string> {"aaa", "bbb"}}
                         }
                     });
         }
@@ -41,14 +44,17 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .VerifyScenario(_testOutputHelper,
+                .Verify(_output,
                     new Scenario
                     {
-                        Given = {PipedInput = new[] {"ccc", "ddd"}},
-                        WhenArgs = $"{nameof(App.List)} aaa bbb",
+                        When =
+                        {
+                            Args = $"{nameof(App.List)} aaa bbb",
+                            PipedInput = new[] {"ccc", "ddd"}
+                        },
                         Then =
                         {
-                            Outputs = {new List<string> {"aaa", "bbb", "ccc", "ddd"}}
+                            Captured = {new List<string> {"aaa", "bbb", "ccc", "ddd"}}
                         }
                     });
         }
@@ -58,14 +64,17 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .VerifyScenario(_testOutputHelper,
+                .Verify(_output,
                     new Scenario
                     {
-                        Given = {PipedInput = new[] {"aaa"}},
-                        WhenArgs = $"{nameof(App.Single)} single",
+                        When =
+                        {
+                            Args = $"{nameof(App.Single)} single",
+                            PipedInput = new[] {"aaa"}
+                        },
                         Then =
                         {
-                            Outputs = {"single"}
+                            Captured = {"single"}
                         }
                     });
         }
@@ -75,14 +84,17 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .VerifyScenario(_testOutputHelper,
+                .Verify(_output,
                     new Scenario
                     {
-                        Given = {PipedInput = new[] {"aaa", "bbb"}},
-                        WhenArgs = $"{nameof(App.SingleAndList)} single",
+                        When =
+                        {
+                            Args = $"{nameof(App.SingleAndList)} single",
+                            PipedInput = new[] {"aaa", "bbb"}
+                        },
                         Then =
                         {
-                            Outputs =
+                            Captured =
                             {
                                 "single",
                                 new List<string> {"aaa", "bbb"}
@@ -102,16 +114,19 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         {
                             stream.EnumerationIsPremature = false;
                             return next(context);
-                        }, 
+                        },
                         MiddlewareStages.Invoke, -1))
-                .VerifyScenario(_testOutputHelper,
+                .Verify(_output,
                     new Scenario
                     {
-                        Given = {PipedInput = stream},
-                        WhenArgs = $"{nameof(StreamingApp.Stream)}",
+                        When =
+                        {
+                            Args = $"{nameof(StreamingApp.Stream)}",
+                            PipedInput = stream
+                        },
                         Then =
                         {
-                            Outputs = {new List<string> {"aaa", "bbb"}}
+                            Captured = {new List<string> {"aaa", "bbb"}}
                         }
                     });
         }
@@ -147,32 +162,32 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         public class App
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Single([Operand] string singleArg)
             {
-                TestOutputs.CaptureIfNotNull(singleArg);
+                TestCaptures.CaptureIfNotNull(singleArg);
             }
 
             public void List([Operand] List<string> listArgs)
             {
-                TestOutputs.CaptureIfNotNull(listArgs);
+                TestCaptures.CaptureIfNotNull(listArgs);
             }
 
             public void SingleAndList([Operand] string singleArg, [Operand] List<string> listArgs)
             {
-                TestOutputs.CaptureIfNotNull(singleArg);
-                TestOutputs.CaptureIfNotNull(listArgs);
+                TestCaptures.CaptureIfNotNull(singleArg);
+                TestCaptures.CaptureIfNotNull(listArgs);
             }
         }
 
         public class StreamingApp
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Stream(IEnumerable<string> input)
             {
-                TestOutputs.Capture(input.ToList());
+                TestCaptures.Capture(input.ToList());
             }
         }
     }

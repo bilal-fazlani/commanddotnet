@@ -8,29 +8,30 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 {
     public class InterceptorExecutionTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public InterceptorExecutionTests(ITestOutputHelper testOutputHelper)
+        public InterceptorExecutionTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
         public void InterceptorMethod_WithNoOptions_Help4Parent_NoImpact()
         {
             new AppRunner<AppWithNoInterceptorOptions>()
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "-h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll [command]
+                        Output = @"Usage: dotnet testhost.dll [command]
 
 Commands:
 
   Do
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+"
                     }
                 });
         }
@@ -39,16 +40,17 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         public void InterceptorMethod_WithNoOptions_Help4Child_NoImpact()
         {
             new AppRunner<AppWithNoInterceptorOptions>()
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Do [arguments]
+                        Output = @"Usage: dotnet testhost.dll Do [arguments]
 
 Arguments:
 
-  arg1  <NUMBER>"
+  arg1  <NUMBER>
+"
                     }
                 });
         }
@@ -57,12 +59,12 @@ Arguments:
         public void InterceptorMethod_WithOptions_Help4Parent_ContainsInterceptorOptions()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "-h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll [command] [options]
+                        Output = @"Usage: dotnet testhost.dll [command] [options]
 
 Options:
 
@@ -76,7 +78,8 @@ Commands:
 
   Do
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+"
                     }
                 });
         }
@@ -85,16 +88,17 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         public void InterceptorMethod_WithOptions_Help4Child_NoImpact()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Do [arguments]
+                        Output = @"Usage: dotnet testhost.dll Do [arguments]
 
 Arguments:
 
-  arg1  <NUMBER>"
+  arg1  <NUMBER>
+"
                     }
                 });
         }
@@ -103,12 +107,12 @@ Arguments:
         public void InterceptorMethod_WithNoOptions_IsDetectedAndUsed()
         {
             new AppRunner<AppWithNoInterceptorOptions>()
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do 1",
                     Then =
                     {
-                        Outputs = { true, 1 }
+                        Captured = { true, 1 }
                     }
                 });
         }
@@ -117,12 +121,12 @@ Arguments:
         public void InterceptorMethod_WithOptions_IsDetectedAndUsed()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "--stringOpt lala Do 1",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new AppWithInteceptorOptions.InterceptOptions {stringOpt = "lala"},
                             1
@@ -135,13 +139,13 @@ Arguments:
         public void InterceptorMethod_CanBypassNextDelegate()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = " --skipCmd Do 1",
                     Then =
                     {
                         // does not contain output from Do method
-                        Outputs = { new AppWithInteceptorOptions.InterceptOptions{skipCmd = true} }
+                        Captured = { new AppWithInteceptorOptions.InterceptOptions{skipCmd = true} }
                     }
                 });
         }
@@ -150,13 +154,13 @@ Arguments:
         public void InterceptorMethod_CanChangeReturnCode()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = " --useReturnCode 5 Do 1",
                     Then =
                     {
                         ExitCode = 5,
-                        Outputs =
+                        Captured =
                         {
                             new AppWithInteceptorOptions.InterceptOptions {useReturnCode = 5},
                             1
@@ -167,28 +171,28 @@ Arguments:
 
         class AppWithNoInterceptorOptions
         {
-            public TestOutputs TestOutputs { get; set; }
+            public TestCaptures TestCaptures { get; set; }
 
             public Task<int> Intercept(InterceptorExecutionDelegate next)
             {
-                TestOutputs.Capture(true);
+                TestCaptures.Capture(true);
                 return next();
             }
 
             public void Do(int arg1)
             {
-                TestOutputs.Capture(arg1);
+                TestCaptures.Capture(arg1);
             }
         }
 
         class AppWithInteceptorOptions
         {
-            public TestOutputs TestOutputs { get; set; }
+            public TestCaptures TestCaptures { get; set; }
 
             public Task<int> Intercept(InterceptorExecutionDelegate next,
                 InterceptOptions interceptOptions)
             {
-                TestOutputs.Capture(interceptOptions);
+                TestCaptures.Capture(interceptOptions);
                 if (interceptOptions.skipCmd)
                 {
                     return Task.FromResult(0);
@@ -202,7 +206,7 @@ Arguments:
 
             public void Do(int arg1)
             {
-                TestOutputs.Capture(arg1);
+                TestCaptures.Capture(arg1);
             }
 
             public class InterceptOptions : IArgumentModel

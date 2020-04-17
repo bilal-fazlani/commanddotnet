@@ -19,12 +19,12 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         {
             new AppRunner<App>()
                 .UseParseDirective()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "[parse] Do",
                     Then =
                     {
-                        Result = @"command: Do
+                        Output = @"command: Do
 
 arguments:
 
@@ -45,7 +45,8 @@ options:
     inputs:
     default:
 
-Use [parse:t] to include token transformations."
+Use [parse:t] to include token transformations.
+"
                     }
                 });
         }

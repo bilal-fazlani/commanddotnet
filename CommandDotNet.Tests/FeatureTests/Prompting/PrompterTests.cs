@@ -1,4 +1,5 @@
-﻿using CommandDotNet.Prompts;
+﻿using System.Threading;
+using CommandDotNet.Prompts;
 using CommandDotNet.Rendering;
 using CommandDotNet.TestTools.Prompts;
 using CommandDotNet.TestTools.Scenarios;
@@ -9,11 +10,9 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
 {
     public class PrompterTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        public PrompterTests(ITestOutputHelper testOutputHelper)
+        public PrompterTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            Ambient.Output = output;
         }
 
         [Fact]
@@ -21,12 +20,19 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(new Scenario
                 {
-                    Given = { OnPrompt = Respond.With("who's there")},
-                    WhenArgs = "Do",
-                    Then = { Result = @"knock knock: who's there
-who's there"}
+                    When =
+                    {
+                        Args = "Do",
+                        OnPrompt = Respond.WithText("who's there")
+                    },
+                    Then =
+                    {
+                        Output = @"knock knock: who's there
+who's there
+"
+                    }
                 });
         }
 

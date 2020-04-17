@@ -1,32 +1,33 @@
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
-using CommandDotNet.Tests.ScenarioFramework;
+using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class DefaultArgumentModeTests : TestBase
+    public class DefaultArgumentModeTests
     {
+        private readonly ITestOutputHelper _output;
         private static readonly AppSettings OperandMode = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Operand);
         private static readonly AppSettings OptionMode = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Option);
         private static readonly AppSettings DeprecatedParameterMode = TestAppSettings.BasicHelp.Clone(a => a.MethodArgumentMode = ArgumentMode.Parameter);
 
-        public DefaultArgumentModeTests(ITestOutputHelper output) : base(output)
+        public DefaultArgumentModeTests(ITestOutputHelper output)
         {
+            _output = output;
         }
 
         [Fact]
         public void GivenOperandMode_InInterceptor_NonAttributedParamsDefaultTo_Operand()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(OperandMode).Verify(_output, new Scenario
             {
-                Given = { AppSettings = OperandMode },
                 WhenArgs = "-h",
                 Then =
                 {
-                    ResultsNotContainsTexts = { "Arguments" },
-                    ResultsContainsTexts =
+                    OutputNotContainsTexts = { "Arguments" },
+                    OutputContainsTexts =
                     {
                         @"Options:
   --ctorDefault
@@ -39,13 +40,12 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenOperandMode_InMethod_NonAttributedParamsDefaultTo_Operand()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(OperandMode).Verify(_output, new Scenario
             {
-                Given = { AppSettings = OperandMode },
                 WhenArgs = "Method -h",
                 Then =
                 {
-                    ResultsContainsTexts =
+                    OutputContainsTexts =
                     {
                         @"Arguments:
   default
@@ -61,13 +61,12 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenOperandMode_InModel_NonAttributedParamsDefaultTo_Operand()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(OperandMode).Verify(_output, new Scenario
             {
-                Given = { AppSettings = OperandMode },
                 WhenArgs = "Model -h",
                 Then =
                 {
-                    ResultsContainsTexts =
+                    OutputContainsTexts =
                     {
                         @"Arguments:
   Default
@@ -83,14 +82,13 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenOptionMode_InInterceptor_NonAttributedParamsDefaultTo_Option()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(OptionMode).Verify(_output, new Scenario
             {
-                Given = { AppSettings = OptionMode },
                 WhenArgs = "-h",
                 Then =
                 {
-                    ResultsNotContainsTexts = { "Arguments" },
-                    ResultsContainsTexts =
+                    OutputNotContainsTexts = { "Arguments" },
+                    OutputContainsTexts =
                     {
                         @"Options:
   --ctorDefault
@@ -103,13 +101,12 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenOptionMode_InMethod_NonAttributedParamsDefaultTo_Option()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(OptionMode).Verify(_output, new Scenario
             {
-                Given = { AppSettings = OptionMode },
                 WhenArgs = "Method -h",
                 Then =
                 {
-                    ResultsContainsTexts =
+                    OutputContainsTexts =
                     {
                         @"Arguments:
   operand
@@ -125,13 +122,12 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenOptionMode_InModel_NonAttributedParamsDefaultTo_Option()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(OptionMode).Verify(_output, new Scenario
             {
-                Given = {AppSettings = OptionMode},
                 WhenArgs = "Model -h",
                 Then =
                 {
-                    ResultsContainsTexts =
+                    OutputContainsTexts =
                     {
                         @"Arguments:
   Operand
@@ -147,14 +143,13 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenObsoleteParameterMode_InInterceptor_NonAttributedParamsDefaultTo_Operand()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(DeprecatedParameterMode).Verify(_output, new Scenario
             {
-                Given = { AppSettings = DeprecatedParameterMode },
                 WhenArgs = "-h",
                 Then =
                 {
-                    ResultsNotContainsTexts = { "Arguments" },
-                    ResultsContainsTexts =
+                    OutputNotContainsTexts = { "Arguments" },
+                    OutputContainsTexts =
                     {
                         @"Options:
   --ctorDefault
@@ -167,13 +162,12 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenObsoleteParameterMode_InMethod_NonAttributedParamsDefaultTo_Operand()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(DeprecatedParameterMode).Verify(_output, new Scenario
             {
-                Given = { AppSettings = DeprecatedParameterMode },
                 WhenArgs = "Method -h",
                 Then =
                 {
-                    ResultsContainsTexts =
+                    OutputContainsTexts =
                     {
                         @"Arguments:
   default
@@ -189,13 +183,12 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenObsoleteParameterMode_InModel_NonAttributedParamsDefaultTo_Operand()
         {
-            Verify(new Scenario<App>
+            new AppRunner<App>(DeprecatedParameterMode).Verify(_output, new Scenario
             {
-                Given = { AppSettings = DeprecatedParameterMode },
                 WhenArgs = "Model -h",
                 Then =
                 {
-                    ResultsContainsTexts =
+                    OutputContainsTexts =
                     {
                         @"Arguments:
   Default
@@ -208,7 +201,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             });
         }
 
-        public class App
+        private class App
         {
             public Task<int> Middleware(CommandContext context, ExecutionDelegate next, string ctorDefault, [Option] string ctorOption)
             {
@@ -224,7 +217,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             }
         }
 
-        public class Model : IArgumentModel
+        private class Model : IArgumentModel
         {
             public string Default { get; set; }
             [Operand]

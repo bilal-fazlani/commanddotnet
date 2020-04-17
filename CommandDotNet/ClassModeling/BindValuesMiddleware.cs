@@ -42,7 +42,7 @@ namespace CommandDotNet.ClassModeling
                 }
                 catch (ValueParsingException ex)
                 {
-                    console.Error.WriteLine($"Failure parsing value for {arg}.  values={values?.ToCsv()}");
+                    console.Error.WriteLine($"Failure parsing value for {argument.GetType().Name}: {arg.Name}.  value(s)={values?.ToCsv()}");
                     console.Error.WriteLine(ex.Message);
                     console.Error.WriteLine();
                     return false;

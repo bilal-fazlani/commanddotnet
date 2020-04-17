@@ -12,11 +12,11 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 {
     public class MicrosoftServiceProviderTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public MicrosoftServiceProviderTests(ITestOutputHelper testOutputHelper)
+        public MicrosoftServiceProviderTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
             new AppRunner<App>()
                 .UseMicrosoftDependencyInjection(serviceProvider)
-                .RunInMem("Do", _testOutputHelper);
+                .RunInMem("Do", _output);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
             new AppRunner<App>()
                 .UseMicrosoftDependencyInjection(serviceProvider, runInScope: ctx => serviceProvider.CreateScope())
-                .RunInMem("Do", _testOutputHelper);
+                .RunInMem("Do", _output);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
             Assert.Throws<InvalidOperationException>(() =>
                 new AppRunner<App>()
                     .UseMicrosoftDependencyInjection(serviceProvider)
-                    .RunInMem("Do", _testOutputHelper)
+                    .RunInMem("Do", _output)
             ).Message.Should().StartWith("No service for type 'CommandDotNet.Tests.CommandDotNet.IoC.MicrosoftServiceProviderTests+App'");
         }
 
@@ -66,7 +66,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         class App
         {
             private readonly ISomeService _someService;
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public App(ISomeService someService)
             {
@@ -75,7 +75,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
             public Task<int> Intercept(CommandContext context, ExecutionDelegate next)
             {
-                TestOutputs.Capture(new Services
+                TestCaptures.Capture(new Services
                 {
                     FromCtor = _someService,
                     FromInterceptor = (ISomeService)context.AppConfig.DependencyResolver.Resolve(typeof(ISomeService))

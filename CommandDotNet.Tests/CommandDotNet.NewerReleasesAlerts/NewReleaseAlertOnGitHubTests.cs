@@ -10,11 +10,11 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
 {
     public class NewReleaseAlertOnGitHubTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public NewReleaseAlertOnGitHubTests(ITestOutputHelper testOutputHelper)
+        public NewReleaseAlertOnGitHubTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
@@ -28,12 +28,12 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                 .Configure(c => c.Services.AddOrUpdate(new AppInfo("blah", version)))
                 .UseNewerReleaseAlertOnGitHub(organizationName, repositoryName,
                     overrideHttpRequestCallback: (client, uri) => Task.FromResult(BuildGitHubApiResponse("1.0.1")))
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do",
                     Then =
                     {
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             $"A newer release exists. Current:{version} Latest:",
                             $"Download from https://github.com/{organizationName}/{repositoryName}/releases/tag/"
@@ -53,12 +53,12 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                 .Configure(c => c.Services.AddOrUpdate(new AppInfo("blah", version)))
                 .UseNewerReleaseAlertOnGitHub(organizationName, repositoryName, 
                     overrideHttpRequestCallback: (client, uri) => Task.FromResult(BuildGitHubApiResponse("1.0.0")))
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do",
                     Then =
                     {
-                        ResultsNotContainsTexts =
+                        OutputNotContainsTexts =
                         {
                             $"A newer release exists. Current:{version} Latest:",
                             $"Download from https://github.com/{organizationName}/{repositoryName}/releases/tag/"
@@ -79,12 +79,12 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                 .UseNewerReleaseAlertOnGitHub(organizationName, repositoryName,
                     overrideHttpRequestCallback: (client, uri) => Task.FromResult(BuildGitHubApiResponse("1.0.1")),
                     skipCommand:command => true)
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do",
                     Then =
                     {
-                        ResultsNotContainsTexts =
+                        OutputNotContainsTexts =
                         {
                             $"A newer release exists. Current:{version} Latest:",
                             $"Download from https://github.com/{organizationName}/{repositoryName}/releases/tag/"
@@ -95,7 +95,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
 
         public class App
         {
-            public TestOutputs TestOutputs { get; set; }
+            public TestCaptures TestCaptures { get; set; }
 
             public void Do()
             {

@@ -10,11 +10,11 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class CancellationTokenTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public CancellationTokenTests(ITestOutputHelper testOutputHelper)
+        public CancellationTokenTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
@@ -29,8 +29,8 @@ namespace CommandDotNet.Tests.FeatureTests
                     c.UseMiddleware(Cancel, MiddlewareStages.PostTokenizePreParseInput);
                     c.UseMiddleware(Throw, MiddlewareStages.PostTokenizePreParseInput);
                 })
-                .RunInMem(new string[0], _testOutputHelper)
-                .ConsoleOutAndError.Should().BeEmpty();
+                .RunInMem(new string[0], _output)
+                .Console.AllText().Should().BeEmpty();
         }
 
         [Fact]
@@ -46,7 +46,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     c.UseMiddleware(Throw, MiddlewareStages.PostTokenizePreParseInput);
                 });
 
-            Assert.Throws<Exception>(() => appRunner.RunInMem(new string[0], _testOutputHelper))
+            Assert.Throws<Exception>(() => appRunner.RunInMem(new string[0], _output))
                 .Message.Should().Be("This middleware should not have been called");
         }
 

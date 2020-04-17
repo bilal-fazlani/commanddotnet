@@ -8,11 +8,11 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 {
     public class UseDefaultsFromConfigTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public UseDefaultsFromConfigTests(ITestOutputHelper testOutputHelper)
+        public UseDefaultsFromConfigTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
@@ -21,12 +21,12 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = new Scenario
             {
                 WhenArgs = "Do",
-                Then = {Outputs = { "red" }}
+                Then = {Captured = { "red" }}
             };
 
             new AppRunner<App>()
                 .UseDefaultsFromConfig(arg => Config("red"))
-                .VerifyScenario(_testOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -35,12 +35,12 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = new Scenario
             {
                 WhenArgs = "Default",
-                Then = { Outputs = { "red" } }
+                Then = { Captured = { "red" } }
             };
 
             new AppRunner<App>()
                 .UseDefaultsFromConfig(arg => Config("red"))
-                .VerifyScenario(_testOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -49,12 +49,12 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = new Scenario
             {
                 WhenArgs = "Do",
-                Then = { Outputs = { "red,blue,green" } }
+                Then = { Captured = { "red,blue,green" } }
             };
 
             new AppRunner<App>()
                 .UseDefaultsFromConfig(arg => Config("red,blue,green"))
-                .VerifyScenario(_testOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -65,12 +65,12 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = new Scenario
             {
                 WhenArgs = "Default",
-                Then = { Outputs = { "lala" } }
+                Then = { Captured = { "lala" } }
             };
 
             new AppRunner<App>()
                 .UseDefaultsFromConfig(new Func<IArgument, ArgumentDefault>(arg => null))
-                .VerifyScenario(_testOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -79,13 +79,13 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = new Scenario
             {
                 WhenArgs = "Multi",
-                Then = { Outputs = { new []{"one", "two"}} }
+                Then = { Captured = { new []{"one", "two"}} }
             };
 
             new AppRunner<App>()
                 .UseDefaultsFromConfig(arg => arg.Name == "first" ? new ArgumentDefault("1", "1", "one") : null)
                 .UseDefaultsFromConfig(arg => arg.Name == "second" ? new ArgumentDefault("2", "2", "two") : null)
-                .VerifyScenario(_testOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -94,14 +94,14 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = new Scenario
             {
                 WhenArgs = "Multi",
-                Then = { Outputs = { new[] { "right one", "two" } } }
+                Then = { Captured = { new[] { "right one", "two" } } }
             };
 
             new AppRunner<App>()
                 .UseDefaultsFromConfig(arg => arg.Name == "first" ? new ArgumentDefault("1", "1", "right one") : null)
                 .UseDefaultsFromConfig(arg => arg.Name == "first" ? new ArgumentDefault("1", "1", "wrong one") : null)
                 .UseDefaultsFromConfig(arg => arg.Name == "second" ? new ArgumentDefault("2", "2", "two") : null)
-                .VerifyScenario(_testOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         private static ArgumentDefault Config(string value)
@@ -111,26 +111,26 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
         public class App
         {
-            TestOutputs TestOutputs { get; set; }
+            TestCaptures TestCaptures { get; set; }
 
             public void Multi([Operand] string first, [Operand] string second)
             {
-                TestOutputs.Capture(new[] {first, second});
+                TestCaptures.Capture(new[] {first, second});
             }
 
             public void Do([Operand] string op1)
             {
-                TestOutputs.Capture(op1);
+                TestCaptures.Capture(op1);
             }
 
             public void List([Operand] string[] ops)
             {
-                TestOutputs.Capture(ops);
+                TestCaptures.Capture(ops);
             }
 
             public void Default([Operand] string op1 = "lala")
             {
-                TestOutputs.CaptureIfNotNull(op1);
+                TestCaptures.CaptureIfNotNull(op1);
             }
         }
     }

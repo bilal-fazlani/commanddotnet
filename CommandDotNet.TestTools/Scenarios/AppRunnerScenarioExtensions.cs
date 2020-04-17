@@ -11,83 +11,83 @@ namespace CommandDotNet.TestTools.Scenarios
     public static class AppRunnerScenarioExtensions
     {
         /// <summary>Run and verify the scenario expectations, output results to <see cref="Console"/></summary>
-        public static AppRunnerResult VerifyScenario(this AppRunner appRunner, IScenario scenario)
+        public static AppRunnerResult Verify(this AppRunner appRunner, IScenario scenario, 
+            Action<string> logLine = null, TestConfig config = null)
         {
-            return appRunner.VerifyScenario(new Logger(Console.WriteLine), scenario);
+            return appRunner.Verify(logLine, config, scenario);
         }
 
         /// <summary>Run and verify the scenario expectations using the given logger for output.</summary>
-        public static AppRunnerResult VerifyScenario(this AppRunner appRunner, ILogger logger, IScenario scenario)
+        public static AppRunnerResult Verify(this AppRunner appRunner, Action<string> logLine, TestConfig config, IScenario scenario)
         {
-            if (scenario.WhenArgs != null && scenario.WhenArgsArray != null)
+            if (scenario.When.Args != null && scenario.When.ArgsArray != null)
             {
-                throw new InvalidOperationException($"Both {nameof(scenario.WhenArgs)} and {nameof(scenario.WhenArgsArray)} were specified.  Only one can be specified.");
+                throw new InvalidOperationException($"Both {nameof(scenario.When)}.{nameof(scenario.When.Args)} and " +
+                                                    $"{nameof(scenario.When)}.{nameof(scenario.When.ArgsArray)} were specified. " +
+                                                    "Only one can be specified.");
             }
 
+            logLine = logLine ?? Console.WriteLine;
+            config = config ?? TestConfig.Default;
+
             AppRunnerResult results = null;
-            var args = scenario.WhenArgsArray ?? scenario.WhenArgs.SplitArgs();
+            var args = scenario.When.ArgsArray ?? scenario.When.Args.SplitArgs();
+
+            var origOnSuccess = config.OnSuccess;
+            if (!config.OnError.CaptureAndReturnResult)
+            {
+                config = config.Where(c =>
+                {
+                    // silence success in RunInMem so results are not printed
+                    // twice when asserts fail below.
+                    // success will be replaced and printed again.
+                    c.OnSuccess = TestConfig.Silent.OnSuccess;
+                    c.OnError.CaptureAndReturnResult = true;
+                });
+            }
+            results = appRunner.RunInMem(
+                args,
+                logLine,
+                scenario.When.OnReadLine,
+                scenario.When.PipedInput,
+                scenario.When.OnPrompt,
+                config);
+
+            config.OnSuccess = origOnSuccess;
+
             try
             {
-                results = appRunner.RunInMem(
-                    args,
-                    logger,
-                    scenario.Given.OnReadLine,
-                    scenario.Given.PipedInput,
-                    scenario.Given.OnPrompt,
-                    returnResultOnError: true);
-
                 AssertExitCodeAndErrorMessage(scenario, results);
 
-                if (scenario.Then.Result != null)
+                if (scenario.Then.Output != null)
                 {
-                    results.OutputShouldBe(scenario.Then.Result);
+                    results.OutputShouldBe(scenario.Then.Output);
                 }
 
-                if (scenario.Then.Outputs.Count > 0)
+                if (scenario.Then.Captured.Count > 0)
                 {
-                    AssertOutputItems(scenario, results);
+                    AssertCapturedItems(scenario, results);
                 }
 
-                return results;
+                results.LogResult(logLine);
             }
             catch (Exception e)
             {
-                logger.WriteLine(scenario.ToString());
-                logger.WriteLine("");
-                PrintContext(appRunner, logger);
-                if (results != null)
-                {
-                    logger.WriteLine("");
-                    logger.WriteLine("App Results:");
-                    logger.WriteLine(results.ConsoleOutAndError);
-                }
+                results.LogResult(logLine, onError: true);
                 throw;
             }
-        }
 
-        private static void PrintContext(AppRunner appRunner, ILogger logger)
-        {
-            logger.WriteLine("");
-            logger.WriteLine(appRunner.ToString());
+            return results;
         }
 
         private static void AssertExitCodeAndErrorMessage(IScenario scenario, AppRunnerResult result)
         {
             var sb = new StringBuilder();
-
             AssertExitCode(scenario, result, sb);
-
-            AssertMissingHelpTexts(scenario, result, sb);
-
-            AssertUnexpectedHelpTexts(scenario, result, sb);
-
+            AssertMissingOutputTexts(scenario, result, sb);
+            AssertUnexpectedOutputTexts(scenario, result, sb);
             if (sb.Length > 0)
             {
-                sb.AppendLine();
-                sb.AppendLine("Console output <begin> ------------------------------");
-                sb.AppendLine(String.IsNullOrWhiteSpace(result.ConsoleOutAndError) ? "<no output>" : result.ConsoleOutAndError);
-                sb.AppendLine("Console output <end>   ------------------------------");
-
                 throw new AssertionFailedException(sb.ToString());
             }
         }
@@ -101,9 +101,9 @@ namespace CommandDotNet.TestTools.Scenarios
             }
         }
 
-        private static void AssertMissingHelpTexts(IScenario scenario, AppRunnerResult result, StringBuilder sb)
+        private static void AssertMissingOutputTexts(IScenario scenario, AppRunnerResult result, StringBuilder sb)
         {
-            var missingHelpTexts = scenario.Then.ResultsContainsTexts
+            var missingHelpTexts = scenario.Then.OutputContainsTexts
                 .Where(t => !result.OutputContains(t))
                 .ToList();
             if (missingHelpTexts.Count > 0)
@@ -118,9 +118,9 @@ namespace CommandDotNet.TestTools.Scenarios
             }
         }
 
-        private static void AssertUnexpectedHelpTexts(IScenario scenario, AppRunnerResult result, StringBuilder sb)
+        private static void AssertUnexpectedOutputTexts(IScenario scenario, AppRunnerResult result, StringBuilder sb)
         {
-            var unexpectedHelpTexts = scenario.Then.ResultsNotContainsTexts
+            var unexpectedHelpTexts = scenario.Then.OutputNotContainsTexts
                 .Where(result.OutputContains)
                 .ToList();
             if (unexpectedHelpTexts.Count > 0)
@@ -135,25 +135,25 @@ namespace CommandDotNet.TestTools.Scenarios
             }
         }
 
-        private static void AssertOutputItems(IScenario scenario, AppRunnerResult results)
+        private static void AssertCapturedItems(IScenario scenario, AppRunnerResult results)
         {
-            foreach (var expectedOutput in scenario.Then.Outputs)
+            foreach (var expectedOutput in scenario.Then.Captured)
             {
-                var actualOutput = results.TestOutputs.Get(expectedOutput.GetType());
+                var actualOutput = results.TestCaptures.Get(expectedOutput.GetType());
                 actualOutput.Should()
-                    .NotBeNull(because: $"{expectedOutput.GetType().Name} should have been output in test run");
+                    .NotBeNull(because: $"{expectedOutput.GetType().Name} should have been captured in the test run but wasn't");
                 actualOutput.Should().BeEquivalentTo(expectedOutput);
             }
 
-            var actualOutputs = results.TestOutputs.Outputs;
-            if (!scenario.Then.AllowUnspecifiedOutputs && actualOutputs.Count > scenario.Then.Outputs.Count)
+            var actualOutputs = results.TestCaptures.Captured;
+            if (!scenario.Then.AllowUnspecifiedCaptures && actualOutputs.Count > scenario.Then.Captured.Count)
             {
-                var expectedOutputTypes = new HashSet<Type>(scenario.Then.Outputs.Select(o => o.GetType()));
+                var expectedOutputTypes = new HashSet<Type>(scenario.Then.Captured.Select(o => o.GetType()));
                 var unexpectedTypes = actualOutputs.Keys
                     .Where(t => !expectedOutputTypes.Contains(t))
                     .ToOrderedCsv();
 
-                throw new AssertionFailedException($"Unexpected output: {unexpectedTypes}");
+                throw new AssertionFailedException($"Unexpected captures: {unexpectedTypes}");
             }
         }
     }

@@ -35,12 +35,12 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                 .UseDefaultsFromEnvVar(envVars)
                 .UseDefaultsFromAppSetting(appSettings, includeNamingConventions: true)
                 .UseParseDirective()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "[parse] Do",
                     Then =
                     {
-                        Result = @"command: Do
+                        Output = @"command: Do
 
 arguments:
 
@@ -66,7 +66,8 @@ options:
     inputs:
     default: source=EnvVar key=optList: four, five, six
 
-Use [parse:t] to include token transformations."
+Use [parse:t] to include token transformations.
+"
                     }
                 });
         }
@@ -76,12 +77,12 @@ Use [parse:t] to include token transformations."
         {
             new AppRunner<App>()
                 .UseParseDirective()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "[parse] Do",
                     Then =
                     {
-                        Result = @"command: Do
+                        Output = @"command: Do
 
 arguments:
 
@@ -107,7 +108,8 @@ options:
     inputs:
     default: one, two, three
 
-Use [parse:t] to include token transformations."
+Use [parse:t] to include token transformations.
+"
                     }
                 });
         }

@@ -6,7 +6,7 @@ There are times where your command method needs access to a service in the `Comm
 say to write to the `IConsole` or perform a loop while checking the `CancellationToken`.
 
 !!! tip
-    Use `IConsole` in your methods instead of Console to simplify unit tests. [TestConsole](../test-tools.md#testconsole) captures output and can mimic  input.  
+    Use `IConsole` in your methods instead of Console to simplify unit tests. [TestConsole](../TestTools/overview.md#testconsole) captures output and can mimic  input.  
 
 One way to get these is to define an interceptor method with a `CommandContext` parameter and copy the properties to fields for use in other methods. 
 This quickly gets repetitive and cumbersome.

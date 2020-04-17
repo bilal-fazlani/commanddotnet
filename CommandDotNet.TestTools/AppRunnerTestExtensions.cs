@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using CommandDotNet.Diagnostics.Parse;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.TestTools.Prompts;
+using static System.Environment;
 
 namespace CommandDotNet.TestTools
 {
@@ -34,8 +36,8 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public static T GetFromContext<T>(this AppRunner runner,
             string[] args,
-            ILogger logger,
             Func<CommandContext, T> capture,
+            Action<string> logLine = null,
             MiddlewareStages middlewareStage = MiddlewareStages.PostBindValuesPreInvoke,
             int? orderWithinStage = null)
         {
@@ -45,20 +47,39 @@ namespace CommandDotNet.TestTools
                     exitAfterCapture: true,
                     middlewareStage: middlewareStage,
                     orderWithinStage: orderWithinStage)
-                .RunInMem(args, logger);
+                .RunInMem(args, logLine, config: TestConfig.Silent);
             return state;
         }
 
         /// <summary>Run the console in memory and get the results that would be output to the shell</summary>
         public static AppRunnerResult RunInMem(this AppRunner runner,
-            string[] args,
-            ILogger logger,
+            string args,
+            Action<string> logLine = null,
             Func<TestConsole, string> onReadLine = null,
             IEnumerable<string> pipedInput = null,
             IPromptResponder promptResponder = null,
-            bool returnResultOnError = false)
+            TestConfig config = null)
         {
-            using (TestToolsLogProvider.InitLogProvider(logger))
+            return runner.RunInMem(args.SplitArgs(), logLine, onReadLine, pipedInput, promptResponder, config);
+        }
+
+        /// <summary>Run the console in memory and get the results that would be output to the shell</summary>
+        public static AppRunnerResult RunInMem(this AppRunner runner,
+            string[] args,
+            Action<string> logLine = null,
+            Func<TestConsole, string> onReadLine = null,
+            IEnumerable<string> pipedInput = null,
+            IPromptResponder promptResponder = null,
+            TestConfig config = null)
+        {
+            logLine = logLine ?? Console.WriteLine;
+            config = config ?? TestConfig.Default;
+
+            IDisposable logProvider = config.PrintCommandDotNetLogs
+                ? TestToolsLogProvider.InitLogProvider(logLine)
+                : new DisposableAction(() => { });
+
+            using (logProvider)
             {
                 var testConsole = new TestConsole(
                     onReadLine,
@@ -66,68 +87,100 @@ namespace CommandDotNet.TestTools
                     promptResponder == null
                         ? (Func<TestConsole, ConsoleKeyInfo>) null
                         : promptResponder.OnReadKey);
+                runner.Configure(c => c.Console = testConsole);
 
                 CommandContext context = null;
                 runner.CaptureState(ctx => context = ctx, MiddlewareStages.PreTokenize);
-                runner.Configure(c => c.Console = testConsole);
-                var outputs = InjectTestOutputs(runner);
-
-                void LogResult()
-                {
-                    logger.WriteLine("\nconsole output:\n");
-                    logger.WriteLine(testConsole.Joined.ToString());
-                }
+                var captures = InjectTestCaptures(runner);
 
                 try
                 {
                     var exitCode = runner.Run(args);
-                    LogResult();
-                    return new AppRunnerResult(exitCode, testConsole, outputs, context);
+                    return new AppRunnerResult(exitCode, runner, context, testConsole, captures, config)
+                        .LogResult(logLine);
                 }
                 catch (Exception e)
                 {
-                    if (returnResultOnError)
+                    var result = new AppRunnerResult(1, runner, context, testConsole, captures, config, e);
+                    if (config.OnError.CaptureAndReturnResult)
                     {
                         testConsole.Error.WriteLine(e.Message);
-                        logger.WriteLine(e.Message);
-                        logger.WriteLine(e.StackTrace);
-                        LogResult();
-                        return new AppRunnerResult(1, testConsole, outputs, context);
+                        logLine(e.Message);
+                        logLine(e.StackTrace);
+                        return result.LogResult(logLine, onError: true);
                     }
 
-                    LogResult();
+                    result.LogResult(logLine, onError: true);
                     throw;
                 }
             }
         }
 
-        private static TestOutputs InjectTestOutputs(AppRunner runner)
+        internal static AppRunnerResult LogResult(this AppRunnerResult result, Action<string> logLine, bool onError = false)
         {
-            var outputs = new TestOutputs();
+            var print = onError || result.EscapedException != null 
+                ? result.Config.OnError.Print 
+                : result.Config.OnSuccess.Print;
+
+            if (print.ConsoleOutput)
+            {
+                var consoleAll = result.Console.AllText();
+                logLine($"{NewLine}Console output <begin> ------------------------------");
+                logLine(consoleAll.IsNullOrWhitespace() ? "<no output>" : consoleAll);
+                logLine($"Console output <end> ------------------------------{NewLine}");
+            }
+
+            var context = result.CommandContext;
+            if (print.CommandContext)
+            {
+                logLine("");
+                logLine(context?.ToString(new Indent(), includeOriginalArgs: true));
+            }
+
+            if (print.ParseReport && context?.ParseResult != null)
+            {
+                logLine("");
+                logLine($"{NewLine}Parse report <begin> ------------------------------");
+                ParseReporter.Report(context, logLine);
+                logLine($"Parse report <end> ------------------------------{NewLine}");
+            }
+
+            if (print.AppConfig)
+            {
+                logLine("");
+                logLine(result.Runner.ToString());
+            }
+
+            return result;
+        }
+
+        private static TestCaptures InjectTestCaptures(AppRunner runner)
+        {
+            var outputs = new TestCaptures();
             runner.Configure(c =>
             {
                 c.Services.Add(outputs);
-                c.UseMiddleware(InjectTestOutputs, MiddlewareStages.PostBindValuesPreInvoke);
+                c.UseMiddleware(InjectTestCaptures, MiddlewareStages.PostBindValuesPreInvoke);
             });
 
             return outputs;
         }
 
-        private static Task<int> InjectTestOutputs(CommandContext commandContext, ExecutionDelegate next)
+        private static Task<int> InjectTestCaptures(CommandContext commandContext, ExecutionDelegate next)
         {
-            var outputs = commandContext.AppConfig.Services.Get<TestOutputs>();
+            var outputs = commandContext.AppConfig.Services.Get<TestCaptures>();
             commandContext.InvocationPipeline.All
                 .Select(i => i.Instance)
                 .ForEach(instance =>
                 {
                     instance.GetType()
                         .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                        .Where(p => p.PropertyType == typeof(TestOutputs))
+                        .Where(p => p.PropertyType == typeof(TestCaptures))
                         .ForEach(p =>
                         {
                             // principal of least surprise
                             // if the test class sets the instance, then use that instance
-                            var value = (TestOutputs)p.GetValue(instance);
+                            var value = (TestCaptures)p.GetValue(instance);
                             if (value == null)
                             {
                                 p.SetValue(instance, outputs);

@@ -23,11 +23,11 @@ namespace CommandDotNet.Diagnostics.Parse
 
             if (command.Operands.Any())
             {
-                writeln(null);
+                writeln("");
                 writeln($"{indent}arguments:");
                 foreach (var operand in command.Operands)
                 {
-                    writeln(null);
+                    writeln("");
                     PrintArg(operand, indent.Increment(), writeln);
                 }
             }
@@ -35,11 +35,11 @@ namespace CommandDotNet.Diagnostics.Parse
             var options = command.AllOptions(includeInterceptorOptions: true, excludeHiddenOptions: true).ToList();
             if (options.Any())
             {
-                writeln(null);
+                writeln("");
                 writeln($"{indent}options:");
                 foreach (var option in options)
                 {
-                    writeln(null);
+                    writeln("");
                     PrintArg(option, indent.Increment(), writeln);
                 }
             }
@@ -51,15 +51,18 @@ namespace CommandDotNet.Diagnostics.Parse
             var indent2 = indent.Increment();
 
             writeln($"{indent}{argument.Name} <{argument.TypeInfo.DisplayName ?? (argument.Arity.AllowsNone() ? "Flag" : null)}>");
-            writeln($"{indent2}value: {argument.Value?.ValueToString(isObscured)}");
+            var valueString = argument.Value?.ValueToString(isObscured);
+            writeln(valueString == null ? $"{indent2}value:" : $"{indent2}value: {valueString}");
 
             if (argument.InputValues?.Any() ?? false)
             {
                 var pwd = isObscured ? Password.ValueReplacement : null;
                 var values = argument.InputValues
                     .Select(iv => iv.Source == Constants.InputValueSources.Argument && argument.InputValues.Count == 1
-                        ? $"{ValuesToString(iv, pwd)}" 
-                        : $"[{iv.Source}{(iv.IsStream ? " stream" : null)}] {ValuesToString(iv, pwd)}")
+                        ? $"{ValuesToString(iv, pwd)}"
+                        : iv.IsStream
+                            ? $"[{iv.Source} stream]"
+                            : $"[{iv.Source}] {ValuesToString(iv, pwd)}")
                     .ToList();
 
                 if (values.Count == 1)

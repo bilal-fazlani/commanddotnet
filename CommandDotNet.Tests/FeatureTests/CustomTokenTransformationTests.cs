@@ -29,12 +29,12 @@ namespace CommandDotNet.Tests.FeatureTests
                                 t.TokenType == TokenType.Value && t.Value == "like"
                                     ? Tokenizer.TokenizeValue("roses").ToEnumerable()
                                     : t.ToEnumerable())))
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do --opt1 smells like",
                     Then =
                     {
-                        Result = "smells roses"
+                        Output = "smells roses"
                     }
                 });
         }

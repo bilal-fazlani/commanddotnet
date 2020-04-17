@@ -9,26 +9,26 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 {
     public class ConstructorInjectionTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public ConstructorInjectionTests(ITestOutputHelper testOutputHelper)
+        public ConstructorInjectionTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
         public void ShouldInstantiateCommandClassUsingCtorWithMostInjectableServices()
         {
-            var result = new AppRunner<UseLargestCtorApp>().RunInMem("Do", _testOutputHelper);
+            var result = new AppRunner<UseLargestCtorApp>().RunInMem("Do", _output);
 
-            result.TestOutputs.Get<CommandContext>().Should().NotBeNull();
-            result.TestOutputs.Get<TestConsole>().Should().NotBeNull();
-            result.TestOutputs.Get<CancellationToken>().Should().NotBeNull();
+            result.TestCaptures.Get<CommandContext>().Should().NotBeNull();
+            result.TestCaptures.Get<TestConsole>().Should().NotBeNull();
+            result.TestCaptures.Get<CancellationToken>().Should().NotBeNull();
         }
 
         class UseLargestCtorApp
         {
-            public TestOutputs TestOutputs { get; set; }
+            public TestCaptures TestCaptures { get; set; }
 
             private readonly CommandContext _commandContext;
             private readonly IConsole _console;
@@ -58,9 +58,9 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 
             public void Do()
             {
-                TestOutputs.Capture(_cancellationToken);
-                TestOutputs.Capture(_console);
-                TestOutputs.Capture(_commandContext);
+                TestCaptures.Capture(_cancellationToken);
+                TestCaptures.Capture(_console);
+                TestCaptures.Capture(_commandContext);
             }
         }
     }

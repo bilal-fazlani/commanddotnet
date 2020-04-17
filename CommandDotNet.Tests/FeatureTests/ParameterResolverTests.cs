@@ -10,27 +10,31 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class ParameterResolverTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public ParameterResolverTests(ITestOutputHelper testOutputHelper)
+        public ParameterResolverTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
         
         [Fact]
         public void ParameterServices_AreNotIncludedInBasicHelp()
         {
             new AppRunner<App>(TestAppSettings.BasicHelp)
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do -h",
-                    Then = { Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                    Then =
+                    {
+                        Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
   intOperand
 
 Options:
-  --stringOption" }
+  --stringOption
+"
+                    }
                 });
         }
 
@@ -38,10 +42,12 @@ Options:
         public void ParameterServices_AreNotIncludedInDetailedHelp()
         {
             new AppRunner<App>(TestAppSettings.DetailedHelp)
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do -h",
-                    Then = { Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                    Then =
+                    {
+                        Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
 
@@ -49,7 +55,9 @@ Arguments:
 
 Options:
 
-  --stringOption  <TEXT>" }
+  --stringOption  <TEXT>
+"
+                    }
                 });
         }
 
@@ -58,13 +66,13 @@ Options:
         {
             new AppRunner<App>()
                 .Configure(c => c.CancellationToken = new CancellationTokenSource().Token)
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
             {
                 WhenArgs = "Do 7 --stringOption optValue",
                 Then =
                 {
-                    AllowUnspecifiedOutputs = true,
-                    Outputs =
+                    AllowUnspecifiedCaptures = true,
+                    Captured =
                     {
                         new DoResults
                         {
@@ -95,16 +103,16 @@ Options:
         public void ExternalParameterService_WhenNotRegistered_ResultContainsActionableErrorMessage()
         {
             new AppRunner<SomeServiceApp>()
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do",
                     Then =
                     {
                         ExitCode = 1,
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             "CommandDotNet.Tests.FeatureTests.ParameterResolverTests+SomeService is not supported.",
-                            "If it is a service and not an argument, register using AppRunner.Configure(b => b.UseParameterResolver(ctx => ...)); "
+                            "If it is a service and not an argument, register using AppRunner.Configure(b => b.UseParameterResolver(ctx => ...));"
                         }
                     }
                 });
@@ -116,12 +124,12 @@ Options:
             var someSvc = new SomeService();
             new AppRunner<SomeServiceApp>()
                 .Configure(b => b.UseParameterResolver(ctx => someSvc))
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do",
                     Then =
                     {
-                        Outputs =
+                        Captured =
                         {
                             new DoResults()
                             {
@@ -137,11 +145,11 @@ Options:
 
         public class SomeServiceApp
         {
-            TestOutputs TestOutputs { get; set; }
+            TestCaptures TestCaptures { get; set; }
 
             public void Do(SomeService someService, [Operand] int intOperand, [Option] string stringOption = null)
             {
-                TestOutputs.Capture(new DoResults
+                TestCaptures.Capture(new DoResults
                 {
                     IntOperand = intOperand,
                     StringOption = stringOption,
@@ -155,11 +163,11 @@ Options:
 
         public class App
         {
-            TestOutputs TestOutputs { get; set; }
+            TestCaptures TestCaptures { get; set; }
 
             public Task<int> Interceptor(InterceptorExecutionDelegate next, CommandContext commandContext, IConsole console, CancellationToken cancellationToken)
             {
-                TestOutputs.Capture(new InterceptorResults
+                TestCaptures.Capture(new InterceptorResults
                 {
                     ParameterServices =
                     {
@@ -173,7 +181,7 @@ Options:
 
             public void Do(CommandContext commandContext, IConsole console, CancellationToken cancellationToken, [Operand] int intOperand, [Option] string stringOption = null)
             {
-                TestOutputs.Capture(new DoResults
+                TestCaptures.Capture(new DoResults
                 {
                     IntOperand = intOperand,
                     StringOption = stringOption,

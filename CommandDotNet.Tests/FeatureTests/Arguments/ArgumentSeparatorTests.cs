@@ -29,13 +29,13 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void Given_PassThru_When_OperandValueWithDash_FailsWithUnrecognizedOption()
         {
             new AppRunner<Math>(_appSettingsPassThru)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Add -1 -3",
                     Then =
                     {
                         ExitCode = 1,
-                        ResultsContainsTexts = { "Unrecognized option '-1'" }
+                        OutputContainsTexts = { "Unrecognized option '-1'" }
                     }
                 });
         }
@@ -44,13 +44,13 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void Given_EndOfOptions_ByAppSetting_When_OperandValueWithDash_FailsWithUnrecognizedOption()
         {
             new AppRunner<Math>(_appSettingsEndOfOptions)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Add -1 -3",
                     Then =
                     {
                         ExitCode = 1,
-                        ResultsContainsTexts = { "Unrecognized option '-1'" }
+                        OutputContainsTexts = { "Unrecognized option '-1'" }
                     }
                 });
         }
@@ -59,13 +59,13 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void Given_EndOfOptions_ByCommand_When_OperandValueWithDash_FailsWithUnrecognizedOption()
         {
             new AppRunner<Math>(_appSettingsPassThru)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Add_EndOfOptions -1 -3",
                     Then =
                     {
                         ExitCode = 1,
-                        ResultsContainsTexts = { "Unrecognized option '-1'" }
+                        OutputContainsTexts = { "Unrecognized option '-1'" }
                     }
                 });
         }
@@ -74,10 +74,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void Given_PassThru_ByAppSetting_When_Separator_OperandValueWithDash_OperandsAreIgnored()
         {
             var result = new AppRunner<Math>(_appSettingsPassThru)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Add -- -1 -3",
-                    Then = { Result = "0" }
+                    Then = { Output = "0" }
                 });
 
             result.CommandContext.ParseResult.SeparatedArguments
@@ -88,10 +88,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void Given_PassThru_ByCommand_When_Separator_OperandValueWithDash_OperandsAreIgnored()
         {
             var result = new AppRunner<Math>(_appSettingsEndOfOptions)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Add_PassThru -- -1 -3",
-                    Then = { Result = "0" }
+                    Then = { Output = "0" }
                 });
 
             result.CommandContext.ParseResult.SeparatedArguments
@@ -102,10 +102,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void Given_EndOfOptions_ByAppSetting_When_Separator_OperandValueWithDash_OperandsAreParsed()
         {
             var result = new AppRunner<Math>(_appSettingsEndOfOptions)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Add -- -1 -3",
-                    Then = { Result = "-4" }
+                    Then = { Output = "-4" }
                 });
 
             result.CommandContext.ParseResult.SeparatedArguments
@@ -116,10 +116,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void Given_EndOfOptions_ByCommand_When_Separator_OperandValueWithDash_OperandsAreParsed()
         {
             var result = new AppRunner<Math>(_appSettingsPassThru)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Add_EndOfOptions -- -1 -3",
-                    Then = { Result = "-4" }
+                    Then = { Output = "-4" }
                 });
 
             result.CommandContext.ParseResult.SeparatedArguments
@@ -132,10 +132,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             var appSettings = _appSettingsEndOfOptions.Clone(s => s.IgnoreUnexpectedOperands = true);
 
             var result = new AppRunner<Math>(appSettings)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Add -- -1 -3 -5 -7",
-                    Then = { Result = "-4" }
+                    Then = { Output = "-4" }
                 });
 
             result.CommandContext.ParseResult.RemainingOperands
@@ -151,10 +151,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             var appSettings = _appSettingsPassThru.Clone(s => s.IgnoreUnexpectedOperands = true);
 
             var result = new AppRunner<Math>(appSettings)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Add_EndOfOptions -- -1 -3 -5 -7",
-                    Then = { Result = "-4" }
+                    Then = { Output = "-4" }
                 });
 
             result.CommandContext.ParseResult.RemainingOperands
@@ -172,10 +172,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             var appSettings = _appSettingsEndOfOptions.Clone(s => s.IgnoreUnexpectedOperands = true);
 
             var result = new AppRunner<Math>(appSettings)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Add -- -1 -3 -- -5 -7",
-                    Then = { Result = "-4" }
+                    Then = { Output = "-4" }
                 });
 
             result.CommandContext.ParseResult.RemainingOperands
@@ -193,10 +193,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             var appSettings = _appSettingsEndOfOptions.Clone(s => s.IgnoreUnexpectedOperands = true);
 
             var result = new AppRunner<Math>(appSettings)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Add -- -1 -3 __ -5 -7",
-                    Then = { Result = "-4" }
+                    Then = { Output = "-4" }
                 });
 
             result.CommandContext.ParseResult.RemainingOperands
@@ -210,19 +210,19 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             public void Add(IConsole console, int x, int y)
             {
-                console.WriteLine(x + y);
+                console.Write(x + y);
             }
 
             [Command(ArgumentSeparatorStrategy = ArgumentSeparatorStrategy.EndOfOptions)]
             public void Add_EndOfOptions(IConsole console, int x, int y)
             {
-                console.WriteLine(x + y);
+                console.Write(x + y);
             }
 
             [Command(ArgumentSeparatorStrategy = ArgumentSeparatorStrategy.PassThru)]
             public void Add_PassThru(IConsole console, int x, int y)
             {
-                console.WriteLine(x + y);
+                console.Write(x + y);
             }
         }
     }

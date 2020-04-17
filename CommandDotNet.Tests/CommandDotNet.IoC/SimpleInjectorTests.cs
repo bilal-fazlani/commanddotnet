@@ -13,11 +13,11 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 {
     public class SimpleInjectorTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public SimpleInjectorTests(ITestOutputHelper testOutputHelper)
+        public SimpleInjectorTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
         
         [Fact]
@@ -29,7 +29,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
             new AppRunner<App>()
                 .UseSimpleInjector(container)
-                .RunInMem("Do", _testOutputHelper);
+                .RunInMem("Do", _output);
         }
 
         [Fact]
@@ -48,8 +48,8 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
             var testOutputs = new AppRunner<App>()
                 .UseSimpleInjector(container, runInScope: ctx => AsyncScopedLifestyle.BeginScope(container))
-                .RunInMem("Do", _testOutputHelper)
-                .TestOutputs;
+                .RunInMem("Do", _output)
+                .TestCaptures;
 
             var services = testOutputs.Get<App.Services>();
 
@@ -66,14 +66,14 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
             Assert.Throws<ActivationException>(() =>
                 new AppRunner<App>()
                     .UseSimpleInjector(container)
-                    .RunInMem("Do", _testOutputHelper)
+                    .RunInMem("Do", _output)
             ).Message.Should().StartWith("No registration for type SimpleInjectorTests.App could be found and an implicit registration could not be made.");
         }
 
         class App
         {
             private readonly ISomeService _someService;
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public App(ISomeService someService)
             {
@@ -82,7 +82,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
             public Task<int> Intercept(CommandContext context, ExecutionDelegate next)
             {
-                TestOutputs.Capture(new Services
+                TestCaptures.Capture(new Services
                 {
                     FromCtor = _someService,
                     FromInterceptor = (ISomeService)context.AppConfig.DependencyResolver.Resolve(typeof(ISomeService))

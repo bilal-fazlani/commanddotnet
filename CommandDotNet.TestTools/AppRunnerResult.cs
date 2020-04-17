@@ -5,40 +5,41 @@ namespace CommandDotNet.TestTools
 {
     public class AppRunnerResult
     {
-        private readonly TestConsole _testConsole;
+        internal AppRunner Runner { get; }
+        internal TestConfig Config { get; }
 
         public int ExitCode { get; }
 
-        /// <summary>
-        /// The combination of <see cref="Console.Error"/> and <see cref="Console.Out"/>
-        /// in the order they were written from the app.<br/>
-        /// This is how the output would appear in the shell.
-        /// </summary>
-        public string ConsoleOutAndError => _testConsole.Joined.ToString();
-
-        /// <summary>The error output only</summary>
-        public string ConsoleError => _testConsole.Error.ToString();
-
-        /// <summary>The standard output only</summary>
-        public string ConsoleOut => _testConsole.Out.ToString();
+        public TestConsole Console { get; }
 
         /// <summary>
-        /// <see cref="TestOutputs"/> captured in the command class.
-        /// The command class must have a public <see cref="TestOutputs"/> property for this to work.<br/>
+        /// <see cref="TestCaptures"/> captured in the command class.
+        /// The command class must have a public <see cref="TestCaptures"/> property for this to work.<br/>
         /// This is a convenience for testing how inputs are mapped into the command method parameters.<br/>
         /// Useful for testing middleware components, not the business logic of your commands.
         /// </summary>
-        public TestOutputs TestOutputs { get; }
+        public TestCaptures TestCaptures { get; }
 
         /// <summary>The <see cref="CommandContext"/> used during the run</summary>
         public CommandContext CommandContext { get; }
 
-        public AppRunnerResult(int exitCode, TestConsole testConsole, TestOutputs testOutputs, CommandContext commandContext)
+        /// <summary>
+        /// The exception that escaped from <see cref="AppRunner.Run"/><br/>
+        /// Can only populated when <see cref="TestConfig.OnErrorConfig.CaptureAndReturnResult"/> is true.
+        /// </summary>
+        public Exception EscapedException { get; }
+
+        public AppRunnerResult(int exitCode, AppRunner runner,
+            CommandContext commandContext, TestConsole testConsole, TestCaptures testCaptures,
+            TestConfig config, Exception escapedException = null)
         {
-            _testConsole = testConsole;
             ExitCode = exitCode;
-            TestOutputs = testOutputs;
+            Runner = runner;
             CommandContext = commandContext;
+            Console = testConsole;
+            TestCaptures = testCaptures;
+            Config = config;
+            EscapedException = escapedException;
         }
 
         /// <summary>
@@ -48,8 +49,7 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public void OutputShouldBe(string expected)
         {
-            var actual = ConsoleOutAndError.NormalizeLineEndings();
-            expected = expected.NormalizeLineEndings();
+            var actual = Console.AllText();
             actual.Should().Be(expected);
         }
 
@@ -60,8 +60,7 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public bool OutputContains(string expected)
         {
-            var actual = ConsoleOutAndError.NormalizeLineEndings();
-            expected = expected.NormalizeLineEndings();
+            var actual = Console.AllText();
             return actual.Contains(expected);
         }
 
@@ -72,9 +71,7 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public bool OutputNotContains(string expected)
         {
-            var actual = ConsoleOutAndError.NormalizeLineEndings();
-            expected = expected.NormalizeLineEndings();
-            return !actual.Contains(expected);
+            return !OutputContains(expected);
         }
     }
 }

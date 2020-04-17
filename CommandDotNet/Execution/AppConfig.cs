@@ -8,6 +8,7 @@ using CommandDotNet.Help;
 using CommandDotNet.Parsing;
 using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
+using static System.Environment;
 
 namespace CommandDotNet.Execution
 {
@@ -89,29 +90,29 @@ namespace CommandDotNet.Execution
 
         public string ToString(Indent indent)
         {
-            var nl = Environment.NewLine;
+            indent = indent.Increment();
             var indent2 = indent.Increment();
 
             var tokenTransformations = TokenTransformations
                 .OrderBy(t => t.Order)
                 .Select(t => $"{indent2}{t.Name}({t.Order})")
-                .ToCsv(nl);
+                .ToCsv(NewLine);
 
             var middleware = MiddlewarePipeline
                 .Select(m => $"{indent2}{m.Method.FullName()}")
-                .ToCsv(nl);
+                .ToCsv(NewLine);
 
             var paramResolvers = ParameterResolversByType.Keys
                 .Select(k => $"{indent2}{k}")
-                .ToCsv(nl);
+                .ToCsv(NewLine);
 
-            return $"{nameof(AppConfig)}:{nl}" +
-                   $"{indent}{AppSettings.ToString(indent.Increment())}{nl}" +
-                   $"{indent}DependencyResolver: {DependencyResolver}{nl}" +
-                   $"{indent}HelpProvider: {HelpProvider}{nl}" +
-                   $"{indent}TokenTransformations:{nl}{tokenTransformations}{nl}" +
-                   $"{indent}MiddlewarePipeline:{nl}{middleware}{nl}" +
-                   $"{indent}ParameterResolvers:{nl}{paramResolvers}";
+            return $"{nameof(AppConfig)}:{NewLine}" +
+                   $"{indent}{AppSettings.ToString(indent.Increment())}{NewLine}" +
+                   $"{indent}DependencyResolver: {DependencyResolver}{NewLine}" +
+                   $"{indent}HelpProvider: {HelpProvider}{NewLine}" +
+                   $"{indent}TokenTransformations:{NewLine}{tokenTransformations}{NewLine}" +
+                   $"{indent}MiddlewarePipeline:{NewLine}{middleware}{NewLine}" +
+                   $"{indent}ParameterResolvers:{NewLine}{paramResolvers}";
         }
     }
 }

@@ -7,17 +7,17 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 {
     public class InvalidInterceptorSignatureTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public InvalidInterceptorSignatureTests(ITestOutputHelper testOutputHelper)
+        public InvalidInterceptorSignatureTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
         public void VoidInterceptorThrowsDescriptiveException()
         {
-            Action run = () => new AppRunner<VoidInterceptor>().RunInMem("Do", _testOutputHelper);
+            Action run = () => new AppRunner<VoidInterceptor>().RunInMem("Do", _output);
 
             Assert.Throws<InvalidConfigurationException>(run)
                 .Message.Should().Contain(

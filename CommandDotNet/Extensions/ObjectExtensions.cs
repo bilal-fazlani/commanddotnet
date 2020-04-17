@@ -50,7 +50,7 @@ namespace CommandDotNet.Extensions
 
             var props = item
                 .GetType()
-                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .GetProperties(BindingFlags.Instance|BindingFlags.Public|BindingFlags.DeclaredOnly)
                 .Where(p => !p.HasAttribute<ObsoleteAttribute>())
                 .OrderBy(p => p.Name)
                 .Select(p =>
@@ -64,6 +64,35 @@ namespace CommandDotNet.Extensions
                 .ToCsv(NewLine);
 
             return $"{item.GetType().Name}:{NewLine}{props}";
+        }
+
+        internal static object CloneWithPublicProperties(this object original)
+        {
+            if (original == null)
+            {
+                throw new ArgumentNullException(nameof(original));
+            }
+
+            var type = original.GetType();
+            object clone = Activator.CreateInstance(type);
+
+            type
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                .Where(p => p.CanRead && p.CanWrite)
+                .ForEach(p =>
+                {
+                    var value = p.GetValue(original);
+                    if (value != null)
+                    {
+                        if (p.PropertyType != typeof(string) && p.PropertyType.IsClass)
+                        {
+                            value = CloneWithPublicProperties(value);
+                        }
+                        p.SetValue(clone, value);
+                    }
+                });
+
+            return clone;
         }
     }
 }

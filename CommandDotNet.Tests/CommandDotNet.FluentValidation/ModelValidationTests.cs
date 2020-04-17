@@ -9,10 +9,13 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.CommandDotNet.FluentValidation
 {
-    public class ModelValidationTests : TestBase
+    public class ModelValidationTests
     {
-        public ModelValidationTests(ITestOutputHelper output) : base(output)
+        private readonly ITestOutputHelper _output;
+
+        public ModelValidationTests(ITestOutputHelper output)
         {
+            _output = output;
         }
 
         [Fact]
@@ -23,21 +26,22 @@ namespace CommandDotNet.Tests.CommandDotNet.FluentValidation
                 WhenArgs = "Save -h",
                 Then =
                 {
-                    Result = @"Usage: dotnet testhost.dll Save [arguments]
+                    Output = @"Usage: dotnet testhost.dll Save [arguments]
 
 Arguments:
 
-  Id     <NUMBER>      
+  Id     <NUMBER>
 
-  Name   <TEXT>        
+  Name   <TEXT>
 
-  Email  <TEXT>"
+  Email  <TEXT>
+"
                 }
             };
 
             new AppRunner<App>()
                 .UseFluentValidation()
-                .VerifyScenario(TestOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -49,16 +53,17 @@ Arguments:
                 Then =
                 {
                     ExitCode = 2,
-                    Result = @"'Person' is invalid
+                    Output = @"'Person' is invalid
   'Id' must be greater than '0'.
   'Name' should not be empty.
-  'Email' should not be empty."
+  'Email' should not be empty.
+"
                 }
             };
 
             new AppRunner<App>()
                 .UseFluentValidation()
-                .VerifyScenario(TestOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -70,10 +75,11 @@ Arguments:
                 Then =
                 {
                     ExitCode = 2,
-                    Result = @"'Person' is invalid
+                    Output = @"'Person' is invalid
   'Id' must be greater than '0'.
   'Name' should not be empty.
-  'Email' should not be empty."
+  'Email' should not be empty.
+"
                 }
             };
 
@@ -82,7 +88,7 @@ Arguments:
                 .UseDependencyResolver(
                     new TestDependencyResolver{new PersonValidator()}, 
                     commandClassResolveStrategy: ResolveStrategy.TryResolve)
-                .VerifyScenario(TestOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -91,7 +97,7 @@ Arguments:
             var scenario = new Scenario
             {
                 WhenArgs = "Save 1 john john@doe.com",
-                Then = {Outputs = {new Person {Id = 1, Name = "john", Email = "john@doe.com"}}}
+                Then = {Captured = {new Person {Id = 1, Name = "john", Email = "john@doe.com"}}}
             };
 
             new AppRunner<App>()
@@ -99,7 +105,7 @@ Arguments:
                 .UseDependencyResolver(
                     new TestDependencyResolver { new PersonValidator() },
                     commandClassResolveStrategy: ResolveStrategy.TryResolve)
-                .VerifyScenario(TestOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -111,13 +117,13 @@ Arguments:
                 Then =
                 {
                     ExitCode = 2,
-                    ResultsContainsTexts = {"'Person' is invalid"}
+                    OutputContainsTexts = {"'Person' is invalid"}
                 }
             };
 
             new AppRunner<App>()
                 .UseFluentValidation()
-                .VerifyScenario(TestOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -129,7 +135,7 @@ Arguments:
                 Then =
                 {
                     ExitCode = 2,
-                    ResultsContainsTexts = {"'Person' is invalid"}
+                    OutputContainsTexts = {"'Person' is invalid"}
                 }
             };
 
@@ -138,7 +144,7 @@ Arguments:
                 .UseDependencyResolver(
                     new TestDependencyResolver(),
                     commandClassResolveStrategy: ResolveStrategy.TryResolve)
-                .VerifyScenario(TestOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -150,10 +156,10 @@ Arguments:
                 Then =
                 {
                     ExitCode = 1,
-                    ResultsContainsTexts =
+                    OutputContainsTexts =
                     {
-                        @"CommandDotNet.FluentValidation.InvalidValidatorException: Could not create instance of InvalidPersonValidator. Please ensure it's injected via IoC or has a default constructor.
-This exception could also occur if default constructor threw an exception",
+                        "CommandDotNet.FluentValidation.InvalidValidatorException: Could not create instance of InvalidPersonValidator. Please ensure it's injected via IoC or has a default constructor.",
+                        "This exception could also occur if default constructor threw an exception",
                         " ---> System.MissingMethodException: No parameterless constructor defined for this object" // assert stack trace is printed
                     }
                 }
@@ -164,7 +170,7 @@ This exception could also occur if default constructor threw an exception",
                 .UseDependencyResolver(
                     new TestDependencyResolver(),
                     commandClassResolveStrategy: ResolveStrategy.TryResolve)
-                .VerifyScenario(TestOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -176,7 +182,7 @@ This exception could also occur if default constructor threw an exception",
                 Then =
                 {
                     ExitCode = 2,
-                    ResultsContainsTexts =
+                    OutputContainsTexts =
                     {
                         @"'Person' is invalid
   'Id' must be greater than '0'.
@@ -190,21 +196,21 @@ Usage: dotnet testhost.dll Save [arguments]"
 
             new AppRunner<App>()
                 .UseFluentValidation(showHelpOnError: true)
-                .VerifyScenario(TestOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         public class App
         {
-            public TestOutputs TestOutputs { get; set; }
+            public TestCaptures TestCaptures { get; set; }
 
             public void Save(Person person)
             {
-                TestOutputs.Capture(person);
+                TestCaptures.Capture(person);
             }
 
             public void InvalidSave(InvalidPerson person)
             {
-                TestOutputs.Capture(person);
+                TestCaptures.Capture(person);
             }
         }
 

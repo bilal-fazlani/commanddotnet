@@ -96,24 +96,25 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
 
             var result = appRunner
                 .UseParseDirective()
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = $"{parse} {args}",
                         Then =
                         {
                             ExitCode = throwBeforeBind ? 1 : 0,
-                            Result = expectedResult,
-                            ResultsContainsTexts = contains,
-                            ResultsNotContainsTexts = notContains
+                            Output = expectedResult,
+                            OutputContainsTexts = contains,
+                            OutputNotContainsTexts = notContains
                         }
                     });
 
             if (showsHelp && showsTokens)
             {
                 // help before token transformations
-                var helpIndex = result.ConsoleOut.IndexOf("Usage: dotnet testhost.dll ");
-                var tokensIndex = result.ConsoleOut.IndexOf("token transformations:");
+                var consoleOut = result.Console.OutText();
+                var helpIndex = consoleOut.IndexOf("Usage: dotnet testhost.dll ");
+                var tokensIndex = consoleOut.IndexOf("token transformations:");
                 tokensIndex.Should().BeLessThan(helpIndex);
             }
         }

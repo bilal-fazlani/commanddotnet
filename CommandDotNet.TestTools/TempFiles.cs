@@ -7,12 +7,12 @@ namespace CommandDotNet.TestTools
     /// <summary>A utility to create and track files so they can be disposed at the end of a test run.</summary>
     public class TempFiles : IDisposable
     {
-        private readonly ILogger _logger;
+        private readonly Action<string> _logLine;
         private readonly List<string> _files = new List<string>();
 
-        public TempFiles(ILogger logger)
+        public TempFiles(Action<string> logLine)
         {
-            _logger = logger;
+            _logLine = logLine;
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace CommandDotNet.TestTools
                 File.Create(filePath).Dispose();
             }
 
-            _logger.WriteLine($"created temp file: {filePath}");
+            _logLine($"created temp file: {filePath}");
             _files.Add(filePath);
             return filePath;
         }
@@ -91,7 +91,7 @@ namespace CommandDotNet.TestTools
                 }
                 catch (Exception e)
                 {
-                    _logger.WriteLine($"failed to delete temp file: {fileName}. {e.Message}");
+                    _logLine($"failed to delete temp file: {fileName}. {e.Message}");
                 }
             }
         }

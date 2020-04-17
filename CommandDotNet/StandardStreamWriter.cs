@@ -6,6 +6,7 @@
 using System;
 using System.IO;
 using CommandDotNet.Rendering;
+using static System.Environment;
 
 namespace CommandDotNet
 {
@@ -31,7 +32,7 @@ namespace CommandDotNet
                 throw new ArgumentNullException(nameof(writer));
             }
 
-            writer.Write(Environment.NewLine);
+            writer.Write(NewLine);
         }
 
         public static void WriteLine(this IStandardStreamWriter writer, object value)
@@ -41,13 +42,21 @@ namespace CommandDotNet
 
         public static void WriteLine(this IStandardStreamWriter writer, string value)
         {
+            writer.WriteLine(value, avoidExtraNewLine: false);
+        }
+
+        internal static void WriteLine(this IStandardStreamWriter writer, string value, bool avoidExtraNewLine)
+        {
             if (writer == null)
             {
                 throw new ArgumentNullException(nameof(writer));
             }
 
             writer.Write(value);
-            writer.Write(Environment.NewLine);
+            if (!avoidExtraNewLine || !value.EndsWith(NewLine))
+            {
+                writer.Write(NewLine);
+            }
         }
 
         public static void Write(this IStandardStreamWriter writer, object value)

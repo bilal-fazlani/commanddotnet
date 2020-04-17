@@ -6,31 +6,32 @@ namespace CommandDotNet.Tests.FeatureTests.Help
 {
     public class ArgumentAttributesHelpTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public ArgumentAttributesHelpTests(ITestOutputHelper testOutputHelper)
+        public ArgumentAttributesHelpTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
         public void BasicHelp_Includes_Description()
         {
             new AppRunner<App>(TestAppSettings.BasicHelp)
-                .VerifyScenario(_testOutputHelper,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "Do -h",
                         Then =
                         {
-                            Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                            Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
   operand   operand-descr
   argument  argument-descr
 
 Options:
-  --option  option-descr"
+  --option  option-descr
+"
                         }
                     });
         }
@@ -39,13 +40,13 @@ Options:
         public void DetailedHelp_Includes_Description()
         {
             new AppRunner<App>(TestAppSettings.DetailedHelp)
-                .VerifyScenario(_testOutputHelper,
+                .Verify(_output,
                     new Scenario
                     {
                         WhenArgs = "Do -h",
                         Then =
                         {
-                            Result = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                            Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
 
@@ -58,7 +59,8 @@ Arguments:
 Options:
 
   --option  <TEXT>
-  option-descr"
+  option-descr
+"
                         }
                     });
         }

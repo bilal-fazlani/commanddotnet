@@ -54,10 +54,10 @@ namespace CommandDotNet.TestTools
                 }
             }
 
-            var joined = new StandardStreamWriter();
-            Joined = joined;
-            Out = new StandardStreamWriter(joined);
-            Error = new StandardStreamWriter(joined);
+            var all = new StandardStreamWriter();
+            All = all;
+            Out = new StandardStreamWriter(all);
+            Error = new StandardStreamWriter(all);
             In = new StandardStreamReader(
                 () =>
                 {
@@ -67,16 +67,37 @@ namespace CommandDotNet.TestTools
                 });
         }
 
-        public IStandardStreamWriter Error { get; }
+        /// <summary>
+        /// This is the combined output for <see cref="Error"/> and <see cref="Out"/> in the order the lines were output.
+        /// </summary>
+        public IStandardStreamWriter All { get; }
 
         public IStandardStreamWriter Out { get; }
+
+        public IStandardStreamWriter Error { get; }
 
         public string OutLastLine => Out.ToString().SplitIntoLines().Last();
 
         /// <summary>
-        /// This is the combined output for <see cref="Error"/> and <see cref="Out"/> in the order the lines were output.
+        /// The combination of <see cref="Console.Error"/> and <see cref="Console.Out"/>
+        /// in the order they were written from the app.<br/>
+        /// This is how the output would appear in the shell.
         /// </summary>
-        public IStandardStreamWriter Joined { get; }
+        public string AllText() => All.ToString();
+
+        /// <summary>
+        /// The accumulated text of the <see cref="Console.Out"/> stream.
+        /// </summary>
+        public string OutText() => Out.ToString();
+
+        /// <summary>
+        /// The accumulated text of the <see cref="Console.Error"/> stream.
+        /// </summary>
+        /// <param name="normalizeLineEndings">
+        /// Trims white space from all lines to ensure consistent results for test assertions.<br/>
+        /// This is to deal with whitespace padding when some lines don't need all elements.
+        /// </param>
+        public string ErrorText() => Error.ToString();
 
         public bool IsOutputRedirected { get; } = false;
 

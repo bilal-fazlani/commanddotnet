@@ -8,10 +8,13 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 {
-    public class SubCommandTests : TestBase
+    public class SubCommandTests
     {
-        public SubCommandTests(ITestOutputHelper output) : base(output)
+        private readonly ITestOutputHelper _output;
+
+        public SubCommandTests(ITestOutputHelper output)
         {
+            _output = output;
         }
 
         [Fact]
@@ -36,7 +39,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         [MemberData(nameof(Scenarios))]
         public void Active(IScenarioForApp scenario)
         {
-            Verify(scenario);
+            new AppRunner(scenario.AppType).Verify(_output, scenario);
         }
 
         public static IEnumerable<object[]> Scenarios => 
@@ -52,14 +55,15 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                     WhenArgs = null,
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll [command]
+                        Output = @"Usage: dotnet testhost.dll [command]
 
 Commands:
 
   Do1
   Second
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+"
                     }
                 },
                 new Scenario<T>($"{name} - help includes 1st level commands and 2nd level app")
@@ -67,14 +71,15 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "-h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll [command]
+                        Output = @"Usage: dotnet testhost.dll [command]
 
 Commands:
 
   Do1
   Second
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+"
                     }
                 },
                 new Scenario<T>($"{name} - help for 2nd level app includes 2nd level commands and 3rd level app")
@@ -82,14 +87,15 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     WhenArgs = "Second -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Second [command]
+                        Output = @"Usage: dotnet testhost.dll Second [command]
 
 Commands:
 
   Do2
   Third
 
-Use ""dotnet testhost.dll Second [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll Second [command] --help"" for more information about a command.
+"
                     }
                 },
                 new Scenario<T>($"{name} - help for 3rd level app includes 3rd level commands")
@@ -97,102 +103,103 @@ Use ""dotnet testhost.dll Second [command] --help"" for more information about a
                     WhenArgs = "Second Third -h",
                     Then =
                     {
-                        Result = @"Usage: dotnet testhost.dll Second Third [command]
+                        Output = @"Usage: dotnet testhost.dll Second Third [command]
 
 Commands:
 
   Do3
 
-Use ""dotnet testhost.dll Second Third [command] --help"" for more information about a command."
+Use ""dotnet testhost.dll Second Third [command] --help"" for more information about a command.
+"
                     }
                 },
                 new Scenario<T>($"{name} - can execute 1st level local command")
                 {
                     WhenArgs = "Do1 --Opt1 1111 somearg",
-                    Then = {Outputs = {new ArgModel1 {Opt1 = "1111", Arg1 = "somearg"}}}
+                    Then = {Captured = {new ArgModel1 {Opt1 = "1111", Arg1 = "somearg"}}}
                 },
                 new Scenario<T>($"{name} - can execute 2nd level local command")
                 {
                     WhenArgs = "Second Do2 --Opt2 1111 somearg",
-                    Then = {Outputs = {new ArgModel2 {Opt2 = "1111", Arg2 = "somearg"}}}
+                    Then = {Captured = {new ArgModel2 {Opt2 = "1111", Arg2 = "somearg"}}}
                 },
                 new Scenario<T>($"{name} - can execute 3rd level local command")
                 {
                     WhenArgs = "Second Third Do3 --Opt3 1111 somearg",
-                    Then = {Outputs = {new ArgModel3 {Opt3 = "1111", Arg3 = "somearg"}}}
+                    Then = {Captured = {new ArgModel3 {Opt3 = "1111", Arg3 = "somearg"}}}
                 }
             };
 
-        public class ThreeLevelsApp
+        private class ThreeLevelsApp
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             [SubCommand]
             public Second Second { get; set; }
 
             public void Do1(ArgModel1 model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
         }
 
-        public class Second
+        private class Second
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             [SubCommand]
             public Third Third { get; set; }
 
             public void Do2(ArgModel2 model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
         }
 
-        public class Third
+        private class Third
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public void Do3(ArgModel3 model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
         }
 
-        public class NestedThreeLevelsApp
+        private class NestedThreeLevelsApp
         {
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
 
             public void Do1(ArgModel1 model)
             {
-                TestOutputs.Capture(model);
+                TestCaptures.Capture(model);
             }
 
             [SubCommand]
             public class Second
             {
-                private TestOutputs TestOutputs { get; set; }
+                private TestCaptures TestCaptures { get; set; }
 
                 public void Do2(ArgModel2 model)
                 {
-                    TestOutputs.Capture(model);
+                    TestCaptures.Capture(model);
                 }
 
                 [SubCommand]
                 public class Third
                 {
-                    private TestOutputs TestOutputs { get; set; }
+                    private TestCaptures TestCaptures { get; set; }
 
                     public void Do3(ArgModel3 model)
                     {
-                        TestOutputs.Capture(model);
+                        TestCaptures.Capture(model);
                     }
                 }
             }
         }
 
-        public class ArgModel1 : IArgumentModel
+        private class ArgModel1 : IArgumentModel
         {
             [Option]
             public string Opt1 { get; set; }
@@ -200,7 +207,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
             public string Arg1 { get; set; }
         }
 
-        public class ArgModel2 : IArgumentModel
+        private class ArgModel2 : IArgumentModel
         {
             [Option]
             public string Opt2 { get; set; }
@@ -208,7 +215,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
             public string Arg2 { get; set; }
         }
 
-        public class ArgModel3 : IArgumentModel
+        private class ArgModel3 : IArgumentModel
         {
             [Option]
             public string Opt3 { get; set; }

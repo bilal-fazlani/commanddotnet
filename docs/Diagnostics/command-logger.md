@@ -106,7 +106,7 @@ AppConfig:
     HelpMiddleware.DisplayHelp
     BindValuesMiddleware.BindValues
     ResolveCommandClassesMiddleware.ResolveCommandClassInstances
-    AppRunnerTestExtensions.InjectTestOutputs
+    AppRunnerTestExtensions.InjectTestCaptures
     CommandLoggerMiddleware.CommandLogger
     ClassModelingMiddleware.InvokeInvocationPipelineMiddleware
   ParameterResolvers:

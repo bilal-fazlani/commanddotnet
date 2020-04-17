@@ -195,7 +195,7 @@ namespace CommandDotNet.Help
         }
 
         /// <summary>Row with default indent of 2 spaces</summary>
-        protected virtual string Row(string cell, int indent = 2) => $"{new string(' ', indent)}{cell}";
+        protected virtual string Row(string cell, int indent = 2) => $"{new string(' ', indent)}{cell}".TrimEnd();
 
         /// <summary>Indents the row and aligns the cells</summary>
         protected virtual string Row(params (int maxLength, string value)[] cells) =>

@@ -12,9 +12,9 @@ namespace CommandDotNet.Tests.FeatureTests
     {
         private readonly IDisposable _cleanup;
 
-        public TypoSuggestions_GetSuggestions_Tests(ITestOutputHelper testOutputHelper)
+        public TypoSuggestions_GetSuggestions_Tests(ITestOutputHelper output)
         {
-            _cleanup = TestToolsLogProvider.InitLogProvider(testOutputHelper.AsLogger());
+            _cleanup = TestToolsLogProvider.InitLogProvider(output.WriteLine);
         }
 
         public void Dispose()

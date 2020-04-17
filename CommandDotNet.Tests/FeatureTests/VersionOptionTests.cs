@@ -4,10 +4,13 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests
 {
-    public class VersionOptionTests : TestBase
+    public class VersionOptionTests
     {
-        public VersionOptionTests(ITestOutputHelper output) : base(output)
+        private readonly ITestOutputHelper _output;
+
+        public VersionOptionTests(ITestOutputHelper output)
         {
+            _output = output;
         }
 
         [Fact]
@@ -16,12 +19,12 @@ namespace CommandDotNet.Tests.FeatureTests
             var scenario = new Scenario
             {
                 WhenArgs = "-h",
-                Then = {ResultsContainsTexts = {"-v | --version  Show version information"}}
+                Then = {OutputContainsTexts = {"-v | --version  Show version information"}}
             };
 
             new AppRunner<App>(TestAppSettings.BasicHelp)
                 .UseVersionMiddleware()
-                .VerifyScenario(TestOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -31,24 +34,24 @@ namespace CommandDotNet.Tests.FeatureTests
             {
                 WhenArgs = "-h",
                 Then = {
-                    ResultsContainsTexts = { @"  -v | --version          
+                    OutputContainsTexts = { @"  -v | --version
   Show version information" }
                 }
             };
 
             new AppRunner<App>(TestAppSettings.DetailedHelp)
                 .UseVersionMiddleware()
-                .VerifyScenario(TestOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
         public void WhenVersionDisabled_BasicHelp_DoesNotIncludeVersionOption()
         {
             new AppRunner<App>(TestAppSettings.BasicHelp)
-                .VerifyScenario(TestOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "-h",
-                    Then = { ResultsNotContainsTexts = { "-v | --version" } }
+                    Then = { OutputNotContainsTexts = { "-v | --version" } }
                 });
         }
 
@@ -56,10 +59,10 @@ namespace CommandDotNet.Tests.FeatureTests
         public void WhenVersionDisabled_DetailedHelp_DoesNotIncludeVersionOption()
         {
             new AppRunner<App>(TestAppSettings.DetailedHelp)
-                .VerifyScenario(TestOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "-h",
-                    Then = {ResultsNotContainsTexts = {"-v | --version"}}
+                    Then = {OutputNotContainsTexts = {"-v | --version"}}
                 });
         }
 
@@ -71,14 +74,15 @@ namespace CommandDotNet.Tests.FeatureTests
                 WhenArgs = "--version",
                 Then =
                 {
-                    Result = @"testhost.dll
-16.2.0"
+                    Output = @"testhost.dll
+16.2.0
+"
                 }
             };
 
             new AppRunner<App>()
                 .UseVersionMiddleware()
-                .VerifyScenario(TestOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
@@ -89,27 +93,28 @@ namespace CommandDotNet.Tests.FeatureTests
                 WhenArgs = "-v",
                 Then =
                 {
-                    Result = @"testhost.dll
-16.2.0"
+                    Output = @"testhost.dll
+16.2.0
+"
                 }
             };
             
             new AppRunner<App>()
                 .UseVersionMiddleware()
-                .VerifyScenario(TestOutputHelper, scenario);
+                .Verify(_output, scenario);
         }
 
         [Fact]
         public void WhenVersionDisabled_Version_LongName_NotRecognized()
         {
             new AppRunner<App>()
-                .VerifyScenario(TestOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "--version",
                     Then =
                     {
                         ExitCode = 1,
-                        ResultsContainsTexts = { "Unrecognized option '--version'" }
+                        OutputContainsTexts = { "Unrecognized option '--version'" }
                     }
                 });
         }
@@ -118,13 +123,13 @@ namespace CommandDotNet.Tests.FeatureTests
         public void WhenVersionDisabled_Version_ShortName_NotRecognized()
         {
             new AppRunner<App>()
-                .VerifyScenario(TestOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "-v",
                     Then =
                     {
                         ExitCode = 1,
-                        ResultsContainsTexts = {"Unrecognized option '-v'"}
+                        OutputContainsTexts = {"Unrecognized option '-v'"}
                     }
                 });
         }

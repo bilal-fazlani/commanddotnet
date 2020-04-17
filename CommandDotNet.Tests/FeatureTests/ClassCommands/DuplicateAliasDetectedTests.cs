@@ -8,11 +8,11 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 {
     public class DuplicateAliasDetectedTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public DuplicateAliasDetectedTests(ITestOutputHelper testOutputHelper)
+        public DuplicateAliasDetectedTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
@@ -20,7 +20,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         {
             Assert.Throws<InvalidConfigurationException>(() =>
                     new AppRunner<DuplicateCommandApp>()
-                        .RunInMem("-h", _testOutputHelper))
+                        .RunInMem("-h", _output))
                 .Message.Should().Be("Duplicate alias 'lala' added to command 'DuplicateCommandApp'. Duplicates: " +
                                      "'Command:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateCommandApp.Do2)' & " +
                                      "'Command:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateCommandApp.Do1)'");
@@ -31,7 +31,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         {
             Assert.Throws<InvalidConfigurationException>(() =>
                     new AppRunner<DuplicateArgumentApp>()
-                        .RunInMem("-h", _testOutputHelper))
+                        .RunInMem("-h", _output))
                 .Message.Should().Be("Duplicate alias 'lala' added to command 'Do'. Duplicates: " +
                                      "'Option:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateArgumentApp.Do.option)' & " +
                                      "'Operand:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateArgumentApp.Do.operand)'");
@@ -42,7 +42,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         {
             Assert.Throws<InvalidConfigurationException>(() =>
                     new AppRunner<DuplicateInterceptorOptionApp>()
-                        .RunInMem("-h", _testOutputHelper))
+                        .RunInMem("-h", _output))
                 .Message.Should().Be("Duplicate alias 'lala' added to command 'DuplicateInterceptorOptionApp'. Duplicates: " +
                                      "'Command:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateInterceptorOptionApp.Do)' & " +
                                      "'Option:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateInterceptorOptionApp.Intercept.lala)'");
@@ -53,7 +53,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         {
             Assert.Throws<InvalidConfigurationException>(() =>
                     new AppRunner<DuplicateInheritedOptionApp>()
-                        .RunInMem("SubApp SubDo -h", _testOutputHelper))
+                        .RunInMem("SubApp SubDo -h", _output))
                 .Message.Should().Be("Duplicate alias 'lala' added to command 'SubDo'. Duplicates: " +
                                      "'Option:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateInheritedOptionApp.Intercept.lala)' & " +
                                      "'Operand:lala(source:CommandDotNet.Tests.FeatureTests.ClassCommands.DuplicateAliasDetectedTests+DuplicateInheritedOptionApp+SubApp.SubDo.lala)'");
@@ -63,7 +63,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         public void InteceptorOptionsShouldNotCollideWithChildCommandOptions()
         {
             new AppRunner<NonDuplicateInheritedOptionApp>()
-                .RunInMem("SubApp SubDo -h", _testOutputHelper)
+                .RunInMem("SubApp SubDo -h", _output)
                 .ExitCode.Should().Be(0);
         }
 

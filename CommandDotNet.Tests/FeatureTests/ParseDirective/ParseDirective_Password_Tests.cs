@@ -16,7 +16,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         public ParseDirective_Password_Tests(ITestOutputHelper output)
         {
             _output = output;
-            _tempFiles = new TempFiles(_output.AsLogger());
+            _tempFiles = new TempFiles(_output.WriteLine);
         }
 
         public void Dispose()
@@ -29,13 +29,13 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         {
             new AppRunner<App>()
                 .UseParseDirective()
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
-                        WhenArgs = "[parse:t] Secure -u me -p super-secret",
+                        When = { Args = $"[parse:t] Secure -u me -p super-secret" },
                         Then =
                         {
-                            Result = @"command: Secure
+                            Output = @"command: Secure
 
 options:
 
@@ -59,7 +59,8 @@ token transformations:
   Option   : -p
   Value    : super-secret
 >>> after: expand-clubbed-flags (no changes)
->>> after: split-option-assignments (no changes)"
+>>> after: split-option-assignments (no changes)
+"
                         }
                     });
         }
@@ -71,13 +72,13 @@ token transformations:
             new AppRunner<App>()
                 .UseResponseFiles()
                 .UseParseDirective()
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
-                        WhenArgs = $"[parse:t] Secure @{tempFile}",
+                        When = {Args =  $"[parse:t] Secure @{tempFile}"},
                         Then =
                         {
-                            Result = $@"command: Secure
+                            Output = $@"command: Secure
 
 options:
 
@@ -105,7 +106,8 @@ token transformations:
   Option   : -p
   Value    : super-secret
 >>> after: expand-clubbed-flags (no changes)
->>> after: split-option-assignments (no changes)"
+>>> after: split-option-assignments (no changes)
+"
                         }
                     });
         }
@@ -116,14 +118,17 @@ token transformations:
             new AppRunner<App>()
                 .UsePrompting()
                 .UseParseDirective()
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
-                        Given = { OnPrompt = Respond.With("super-secret")},
-                        WhenArgs = "[parse:t] PromptSecure",
+                        When =
+                        {
+                            Args = "[parse:t] PromptSecure",
+                            OnPrompt = Respond.WithText("super-secret")
+                        },
                         Then =
                         {
-                            Result = @"password (Text):
+                            Output = @"password (Text): 
 command: PromptSecure
 
 arguments:
@@ -139,7 +144,8 @@ token transformations:
   Directive: [parse:t]
   Value    : PromptSecure
 >>> after: expand-clubbed-flags (no changes)
->>> after: split-option-assignments (no changes)"
+>>> after: split-option-assignments (no changes)
+"
                         }
                     });
         }
@@ -155,13 +161,13 @@ token transformations:
             new AppRunner<App>()
                 .UseDefaultsFromAppSetting(appSettings, includeNamingConventions: true)
                 .UseParseDirective()
-                .VerifyScenario(_output,
+                .Verify(_output,
                     new Scenario
                     {
-                        WhenArgs = "[parse:t] Secure -u me",
+                        When = {Args = "[parse:t] Secure -u me"},
                         Then =
                         {
-                            Result = @"command: Secure
+                            Output = @"command: Secure
 
 options:
 
@@ -183,7 +189,8 @@ token transformations:
   Option   : -u
   Value    : me
 >>> after: expand-clubbed-flags (no changes)
->>> after: split-option-assignments (no changes)"
+>>> after: split-option-assignments (no changes)
+"
                         }
                     });
         }

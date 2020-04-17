@@ -11,12 +11,12 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
     {
         private readonly Option[] _options;
 
-        public Options_Name_Legacy_Tests(ITestOutputHelper testOutputHelper)
+        public Options_Name_Legacy_Tests(ITestOutputHelper output)
         {
             Command cmd = null;
             new AppRunner<App>()
                 .CaptureState(ctx => cmd = ctx.ParseResult.TargetCommand, MiddlewareStages.PostParseInputPreBindValues, exitAfterCapture: true)
-                .RunInMem("Do", testOutputHelper);
+                .RunInMem("Do", output);
             _options = cmd.Options.ToArray();
         }
 

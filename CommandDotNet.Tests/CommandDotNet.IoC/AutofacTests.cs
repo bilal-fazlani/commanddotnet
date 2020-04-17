@@ -13,11 +13,9 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 {
     public class AutofacTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        public AutofacTests(ITestOutputHelper testOutputHelper)
+        public AutofacTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            Ambient.Output = output;
         }
 
         [Fact]
@@ -27,7 +25,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
             new AppRunner<App>()
                 .UseAutofac(container)
-                .RunInMem("Do", _testOutputHelper);
+                .RunInMem("Do");
         }
 
         [Fact]
@@ -37,7 +35,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
             new AppRunner<App>()
                 .UseAutofac(container, runInScope: ctx => container.BeginLifetimeScope())
-                .RunInMem("Do", _testOutputHelper);
+                .RunInMem("Do");
         }
 
         [Fact]
@@ -48,7 +46,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
             Assert.Throws<ComponentNotRegisteredException>(() =>
                 new AppRunner<App>()
                     .UseAutofac(container, runInScope: ctx => container.BeginLifetimeScope())
-                    .RunInMem("Do", _testOutputHelper)
+                    .RunInMem("Do")
             ).Message.Should().StartWith("The requested service 'CommandDotNet.Tests.CommandDotNet.IoC.AutofacTests+App'");
 
         }
@@ -68,7 +66,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         class App
         {
             private readonly ISomeService _someService;
-            private TestOutputs TestOutputs { get; set; }
+            private TestCaptures TestCaptures { get; set; }
 
             public App(ISomeService someService)
             {
@@ -77,7 +75,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
             public Task<int> Intercept(CommandContext context, ExecutionDelegate next)
             {
-                TestOutputs.Capture(new Services
+                TestCaptures.Capture(new Services
                 {
                     FromCtor = _someService,
                     FromInterceptor = (ISomeService)context.AppConfig.DependencyResolver.Resolve(typeof(ISomeService))

@@ -7,21 +7,21 @@ namespace CommandDotNet.Tests.FeatureTests.Help
 {
     public class ExpandArgumentsInUsageTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _output;
 
-        public ExpandArgumentsInUsageTests(ITestOutputHelper testOutputHelper)
+        public ExpandArgumentsInUsageTests(ITestOutputHelper output)
         {
-            _testOutputHelper = testOutputHelper;
+            _output = output;
         }
 
         [Fact]
         public void Given_ExpandArgumentsInUsage_Then_ArgumentsAreListedByName()
         {
             new AppRunner<App>(new AppSettings { Help = {ExpandArgumentsInUsage = true}})
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do -h",
-                    Then = { ResultsContainsTexts = { "Usage: dotnet testhost.dll Do <arg1> <arg2> [<optional>]" } }
+                    Then = { OutputContainsTexts = { "Usage: dotnet testhost.dll Do <arg1> <arg2> [<optional>]" } }
                 });
         }
 
@@ -29,10 +29,10 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         public void Given_ExpandArgumentsInUsage_Then_ArgumentsAreListedAfterOptions()
         {
             new AppRunner<App>(new AppSettings { Help = { ExpandArgumentsInUsage = true } })
-                .VerifyScenario(_testOutputHelper, new Scenario
+                .Verify(_output, new Scenario
                 {
                     WhenArgs = "Do2 -h",
-                    Then = { ResultsContainsTexts = { "Usage: dotnet testhost.dll Do2 [options] <arg1> <arg2> [<optional>]" } }
+                    Then = { OutputContainsTexts = { "Usage: dotnet testhost.dll Do2 [options] <arg1> <arg2> [<optional>]" } }
                 });
         }
 

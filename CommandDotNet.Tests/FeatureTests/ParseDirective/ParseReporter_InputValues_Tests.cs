@@ -18,7 +18,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         public ParseReporter_InputValues_Tests(ITestOutputHelper output)
         {
             _output = output;
-            _tempFiles = new TempFiles(_output.AsLogger());
+            _tempFiles = new TempFiles(_output.WriteLine);
         }
 
         public void Dispose()
@@ -32,18 +32,18 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             new AppRunner<App>()
                 .UseParseDirective()
                 .UsePrompting(promptForMissingArguments: true)
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
-                    Given =
+                    When =
                     {
+                        Args = "[parse] Do",
                         OnPrompt = Respond.With(
-                            new Answer("opd_stuff", s => s.Contains("opd (Text):")),
-                            new Answer(new[] {"one", "two", "three"}, s => !s.Contains("opd (Text):")))
+                            new TextAnswer("opd_stuff", s => s.Contains("opd (Text):")),
+                            new ListAnswer(new[] {"one", "two", "three"}, s => !s.Contains("opd (Text):")))
                     },
-                    WhenArgs = "[parse] Do",
                     Then =
                     {
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             @"opd <Text>
     value: opd_stuff
@@ -65,17 +65,20 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             new AppRunner<App>()
                 .UseParseDirective()
                 .AppendPipedInputToOperandList()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
-                    Given = {PipedInput = new[] {"one, two, three"}},
-                    WhenArgs = "[parse] Do opd_stuff",
+                    When =
+                    {
+                        Args = "[parse] Do opd_stuff",
+                        PipedInput = new[] {"one, two, three"}
+                    },
                     Then =
                     {
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             @"opdList <Text>
     value: one, two, three
-    inputs: [piped stream] 
+    inputs: [piped stream]
     default:"
                         }
                     }
@@ -88,19 +91,22 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             new AppRunner<App>()
                 .UseParseDirective()
                 .AppendPipedInputToOperandList()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
-                    Given = { PipedInput = new[] { "one, two, three" } },
-                    WhenArgs = "[parse] Do opd_stuff four five six",
+                    When =
+                    {
+                        Args = "[parse] Do opd_stuff four five six",
+                        PipedInput = new[] { "one, two, three" }
+                    },
                     Then =
                     {
-                        ResultsContainsTexts =
+                        OutputContainsTexts =
                         {
                             @" opdList <Text>
     value: four, five, six, one, two, three
     inputs:
       [argument] four, five, six
-      [piped stream] 
+      [piped stream]
     default:"
                         }
                     }
@@ -114,12 +120,12 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             new AppRunner<App>()
                 .UseResponseFiles()
                 .UseParseDirective()
-                .VerifyScenario(_output, new Scenario
+                .Verify(_output, new Scenario
                 {
-                    WhenArgs = $"[parse] Do @{file}",
+                    When = {Args = $"[parse] Do @{file}"},
                     Then =
                     {
-                        Result = $@"command: Do
+                        Output = $@"command: Do
 
 arguments:
 
@@ -155,7 +161,8 @@ options:
     inputs: red (from: @{file} -> -l red), blue (from: @{file} -> -l blue), green (from: @{file} -> -l green)
     default:
 
-Use [parse:t] to include token transformations."
+Use [parse:t] to include token transformations.
+"
                     }
                 });
 
