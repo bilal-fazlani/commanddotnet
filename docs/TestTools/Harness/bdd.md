@@ -7,7 +7,7 @@ The BDD style uses the `Verify` extension method which wraps [RunInMem](run-in-m
 [Test]
 public void Checkout_NewBranch_WithoutBranchFlag_Fails()
 {
-    var result = new AppRunner<Git>()
+    new AppRunner<Git>()
         .UseDefaultMiddleware()
         .Verify(new Scenario
         {
@@ -39,4 +39,55 @@ This approach works well with BDD frameworks like [SpecFlow](https://specflow.or
 
 Verify uses the Scenario to follow the Given-When-Then BDD syntax.
 
-The AppRunner is the context of the APP.
+### Given
+**Given** is the context, which is the AppRunner with configurations. If it helps, when you read `new AppRunner<Git>...`, replace `new` with `given` so it becomes `given AppRunner<git>...`
+
+### When
+**When** is the action, which is the user input. It always starts with Args, or an ArgsArray if you're testing a scenario the CommandLineStringSplitter doesn't split as expected.  In addtiion to args, users can provide piped input and answer prompts
+
+```c#
+When = 
+{
+    Args = $"Knock knock",
+    PipedInput = new[] {"orange", "orange you glad I didn't say banana?"},
+    OnPrompt = Respond.WithText("rose"),
+    OnReadLine = console => "blue"
+}
+```
+These are the option available. In practice, you'll only provide one of `PipedInput`, `OnPrompt` or `OnReadLine`. When `PipedInput` is available, System.Console does not allow Console.Read so you can either have piped input or prompt. `OnPrompt` registers a delegate for `OnReadLine` will overrule any `OnReadLine` delegate provided.
+
+See [Testing Piped Input](../Tools/testing-piped-input.md) and [Testing Propmts](../Tools/testing-prompts.md) for more on those topics.
+
+### Then
+**Then** is the assertion, which is generally the console output.
+
+```c#
+Then =
+{
+    ExitCode = 1,
+    Output = "exact match",
+    OutputContainsTexts = 
+    {
+        "this", "and this", "and also this"
+    },
+    OutputNotContainsTexts = 
+    {
+        "but not this", "or this", "and definitely not this"
+    },
+    Captured =
+    {
+        new SomeExpectedObject()
+    },
+    AllowUnspecifiedCaptures = true
+}
+```
+
+**ExitCode** is always checked. If a value is not provided, 0 is used.
+
+**Output** is the ordered merge of Standard Out and Error Out and expects an exact match. For some output, this can be brittle and `contains` check is a better choice.
+
+**OutputContainsTexts** and **OutputNotContainsTexts** will check for the presence of the strings in the output.
+
+**Captured** will check if [TestCaptures](test-captures.md) contains the given objects.
+
+**AllowUnspecifiedCaptures** when true, [TestCaptures](test-captures.md) can contain objects not specified in `Captured`. When false, if an object in [TestCaptures](test-captures.md) is not matched by an object in `Captured` an exception is thrown.

@@ -44,6 +44,10 @@ nav:
           - TestTools/Harness/run-in-mem.md
           - TestTools/Harness/bdd.md
           - TestTools/Harness/test-config.md
+          - TestTools/Harness/test-captures.md
+        - Tools:
+          - TestTools/Tools/testing-piped-input.md
+          - TestTools/Tools/testing-prompts.md
       - Other Features:
         - OtherFeatures/default-middleware.md
         - Ctrl+C and<br/>CancellationToken: OtherFeatures/cancellation.md

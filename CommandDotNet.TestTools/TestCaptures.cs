@@ -25,8 +25,19 @@ namespace CommandDotNet.TestTools
 
         public void Capture(object value)
         {
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value), $"Use {nameof(CaptureIfNotNull)} or {nameof(CaptureAs)}");
+            }
+
             // arguments should only be captured once.  don't allow overwrites.
             Captured.Add(value.GetType(), value);
+        }
+
+        public void CaptureAs<T>(T value)
+        {
+            // arguments should only be captured once.  don't allow overwrites.
+            Captured.Add(typeof(T), value);
         }
 
         public object Get(Type type)

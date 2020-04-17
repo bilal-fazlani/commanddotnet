@@ -6,7 +6,7 @@ This release focuses on usability, readability and discoverability.
 
 The tooling was initially designed for CommandDotNet with an aspiration for general use. The tooling did work for other projects but required those projects to write shims to make the tooling more useful.
 
-The primary test extensions: `RunInMem` and `Verify` are now easier to use, provide a more consistent experience and no longer duplicated output in some scenarios.
+The primary test extensions: `RunInMem` and `Verify` are now easier to use, provide a more consistent experience and no longer duplicate output in some scenarios.
 
 ### PromptResponder
 

@@ -22,7 +22,14 @@ namespace CommandDotNet.TestTools.Scenarios
         {
             if (scenario.When.Args != null && scenario.When.ArgsArray != null)
             {
-                throw new InvalidOperationException($"Both {nameof(scenario.When.Args)} and {nameof(scenario.When.ArgsArray)} were specified.  Only one can be specified.");
+                throw new InvalidOperationException($"Both {nameof(scenario.When)}.{nameof(scenario.When.Args)} and " +
+                                                    $"{nameof(scenario.When)}.{nameof(scenario.When.ArgsArray)} were specified. " +
+                                                    "Only one can be specified.");
+            }
+            if (scenario.When.Args == null && scenario.When.ArgsArray == null)
+            {
+                throw new InvalidOperationException($"{nameof(scenario.When)}.{nameof(scenario.When.Args)} or " +
+                                                    $"{nameof(scenario.When)}.{nameof(scenario.When.ArgsArray)} is required.");
             }
 
             logLine = logLine ?? Console.WriteLine;
