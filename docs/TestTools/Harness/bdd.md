@@ -74,6 +74,8 @@ Then =
     {
         "but not this", "or this", "and definitely not this"
     },
+    AssertOutput = output => output.Should()...,
+    AssertContext = context => context.Should()...,
     Captured =
     {
         new SomeExpectedObject()
@@ -87,6 +89,10 @@ Then =
 **Output** is the ordered merge of Standard Out and Error Out and expects an exact match. For some output, this can be brittle and `contains` check is a better choice.
 
 **OutputContainsTexts** and **OutputNotContainsTexts** will check for the presence of the strings in the output.
+
+**AssertOutput** is an `Action<string>` containing the console output. Use this for more complex assertions.
+
+**AssertContext** is an `Action<CommandContext>`. Use this to assert on items in the context.
 
 **Captured** will check if [TestCaptures](test-captures.md) contains the given objects.
 

@@ -59,6 +59,9 @@ namespace CommandDotNet.TestTools.Scenarios
             {
                 AssertExitCodeAndErrorMessage(scenario, results);
 
+                scenario.Then.AssertOutput?.Invoke(results.Console.AllText());
+                scenario.Then.AssertContext?.Invoke(results.CommandContext);
+
                 if (scenario.Then.Output != null)
                 {
                     results.OutputShouldBe(scenario.Then.Output);
