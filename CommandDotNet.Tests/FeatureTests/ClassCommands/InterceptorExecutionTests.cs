@@ -8,18 +8,16 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 {
     public class InterceptorExecutionTests
     {
-        private readonly ITestOutputHelper _output;
-
         public InterceptorExecutionTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
         public void InterceptorMethod_WithNoOptions_Help4Parent_NoImpact()
         {
             new AppRunner<AppWithNoInterceptorOptions>()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "-h",
                     Then =
@@ -40,7 +38,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         public void InterceptorMethod_WithNoOptions_Help4Child_NoImpact()
         {
             new AppRunner<AppWithNoInterceptorOptions>()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then =
@@ -59,7 +57,7 @@ Arguments:
         public void InterceptorMethod_WithOptions_Help4Parent_ContainsInterceptorOptions()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "-h",
                     Then =
@@ -88,7 +86,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         public void InterceptorMethod_WithOptions_Help4Child_NoImpact()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then =
@@ -107,7 +105,7 @@ Arguments:
         public void InterceptorMethod_WithNoOptions_IsDetectedAndUsed()
         {
             new AppRunner<AppWithNoInterceptorOptions>()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do 1",
                     Then =
@@ -121,7 +119,7 @@ Arguments:
         public void InterceptorMethod_WithOptions_IsDetectedAndUsed()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "--stringOpt lala Do 1",
                     Then =
@@ -139,7 +137,7 @@ Arguments:
         public void InterceptorMethod_CanBypassNextDelegate()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = " --skipCmd Do 1",
                     Then =
@@ -154,7 +152,7 @@ Arguments:
         public void InterceptorMethod_CanChangeReturnCode()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = " --useReturnCode 5 Do 1",
                     Then =

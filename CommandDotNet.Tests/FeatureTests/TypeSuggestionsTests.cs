@@ -8,11 +8,9 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class TypeSuggestionsTests
     {
-        private readonly ITestOutputHelper _output;
-
         public TypeSuggestionsTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
@@ -20,7 +18,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>()
                 .UseDefaultMiddleware()
-                .Verify(_output,
+                .Verify(
                     new Scenario
                     {
                         WhenArgs = "User --user",
@@ -42,7 +40,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>()
                 .UseTypoSuggestions()
-                .Verify(_output,
+                .Verify(
                     new Scenario
                     {
                         WhenArgs = "User --user",
@@ -66,14 +64,14 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Configure(c => 
                     c.BuildEvents.OnCommandCreated += a =>
                     {
-                        var option = new Option("usertype", null, a.CommandBuilder.Command, TypeInfo.Single<int>(), ArgumentArity.ExactlyOne)
+                        var option = new Option("usertype", null, TypeInfo.Single<int>(), ArgumentArity.ExactlyOne)
                         {
                             ShowInHelp = false
                         };
                         a.CommandBuilder.AddArgument(option);
                     })
                 .UseTypoSuggestions()
-                .Verify(_output,
+                .Verify(
                     new Scenario
                     {
                         WhenArgs = "User --user",
@@ -97,11 +95,11 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Configure(c =>
                     c.BuildEvents.OnCommandCreated += a =>
                     {
-                        var option = new Operand("usertype", a.CommandBuilder.Command, TypeInfo.Single<int>(), ArgumentArity.ExactlyOne);
+                        var option = new Operand("usertype", TypeInfo.Single<int>(), ArgumentArity.ExactlyOne);
                         a.CommandBuilder.AddArgument(option);
                     })
                 .UseTypoSuggestions()
-                .Verify(_output,
+                .Verify(
                     new Scenario
                     {
                         WhenArgs = "User --user",
@@ -123,7 +121,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>()
                 .UseTypoSuggestions()
-                .Verify(_output,
+                .Verify(
                     new Scenario
                     {
                         WhenArgs = "egister",
@@ -146,7 +144,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>()
                 .UseTypoSuggestions(3)
-                .Verify(_output,
+                .Verify(
                     new Scenario
                     {
                         WhenArgs = "Similars --opt",
@@ -170,7 +168,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>()
                 .UseTypoSuggestions()
-                .Verify(_output,
+                .Verify(
                     new Scenario
                     {
                         WhenArgs = "Similars --lala",
@@ -190,7 +188,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<InterceptorApp>()
                 .UseTypoSuggestions()
-                .Verify(_output,
+                .Verify(
                     new Scenario
                     {
                         WhenArgs = "--users",
@@ -212,7 +210,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<InterceptorApp>()
                 .UseTypoSuggestions()
-                .Verify(_output,
+                .Verify(
                     new Scenario
                     {
                         WhenArgs = "users",

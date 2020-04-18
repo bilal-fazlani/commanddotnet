@@ -8,11 +8,9 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class DebugDirectiveTests
     {
-        private readonly ITestOutputHelper _output;
-
         public DebugDirectiveTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
             // skip waiting for debugger to connect
             DebugDirective.InTestHarness = true;
         }
@@ -21,7 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public void Directives_CanBeDisabled()
         {
             new AppRunner<App>(new AppSettings {DisableDirectives = true})
-                .Verify(_output,
+                .Verify(
                     new Scenario
                     {
                         WhenArgs = "[debug] Do",
@@ -39,7 +37,7 @@ namespace CommandDotNet.Tests.FeatureTests
             var processId = Process.GetCurrentProcess().Id;
             new AppRunner<App>()
                 .UseDebugDirective()
-                .Verify(_output,
+                .Verify(
                     new Scenario
                     {
                         WhenArgs = "[debug] Do",

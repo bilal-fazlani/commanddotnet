@@ -8,20 +8,19 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class DefaultArgumentModeTests
     {
-        private readonly ITestOutputHelper _output;
         private static readonly AppSettings OperandMode = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Operand);
         private static readonly AppSettings OptionMode = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Option);
         private static readonly AppSettings DeprecatedParameterMode = TestAppSettings.BasicHelp.Clone(a => a.MethodArgumentMode = ArgumentMode.Parameter);
 
         public DefaultArgumentModeTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
         public void GivenOperandMode_InInterceptor_NonAttributedParamsDefaultTo_Operand()
         {
-            new AppRunner<App>(OperandMode).Verify(_output, new Scenario
+            new AppRunner<App>(OperandMode).Verify(new Scenario
             {
                 WhenArgs = "-h",
                 Then =
@@ -40,7 +39,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenOperandMode_InMethod_NonAttributedParamsDefaultTo_Operand()
         {
-            new AppRunner<App>(OperandMode).Verify(_output, new Scenario
+            new AppRunner<App>(OperandMode).Verify(new Scenario
             {
                 WhenArgs = "Method -h",
                 Then =
@@ -61,7 +60,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenOperandMode_InModel_NonAttributedParamsDefaultTo_Operand()
         {
-            new AppRunner<App>(OperandMode).Verify(_output, new Scenario
+            new AppRunner<App>(OperandMode).Verify(new Scenario
             {
                 WhenArgs = "Model -h",
                 Then =
@@ -82,7 +81,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenOptionMode_InInterceptor_NonAttributedParamsDefaultTo_Option()
         {
-            new AppRunner<App>(OptionMode).Verify(_output, new Scenario
+            new AppRunner<App>(OptionMode).Verify(new Scenario
             {
                 WhenArgs = "-h",
                 Then =
@@ -101,7 +100,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenOptionMode_InMethod_NonAttributedParamsDefaultTo_Option()
         {
-            new AppRunner<App>(OptionMode).Verify(_output, new Scenario
+            new AppRunner<App>(OptionMode).Verify(new Scenario
             {
                 WhenArgs = "Method -h",
                 Then =
@@ -122,7 +121,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenOptionMode_InModel_NonAttributedParamsDefaultTo_Option()
         {
-            new AppRunner<App>(OptionMode).Verify(_output, new Scenario
+            new AppRunner<App>(OptionMode).Verify(new Scenario
             {
                 WhenArgs = "Model -h",
                 Then =
@@ -143,7 +142,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenObsoleteParameterMode_InInterceptor_NonAttributedParamsDefaultTo_Operand()
         {
-            new AppRunner<App>(DeprecatedParameterMode).Verify(_output, new Scenario
+            new AppRunner<App>(DeprecatedParameterMode).Verify(new Scenario
             {
                 WhenArgs = "-h",
                 Then =
@@ -162,7 +161,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenObsoleteParameterMode_InMethod_NonAttributedParamsDefaultTo_Operand()
         {
-            new AppRunner<App>(DeprecatedParameterMode).Verify(_output, new Scenario
+            new AppRunner<App>(DeprecatedParameterMode).Verify(new Scenario
             {
                 WhenArgs = "Method -h",
                 Then =
@@ -183,7 +182,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void GivenObsoleteParameterMode_InModel_NonAttributedParamsDefaultTo_Operand()
         {
-            new AppRunner<App>(DeprecatedParameterMode).Verify(_output, new Scenario
+            new AppRunner<App>(DeprecatedParameterMode).Verify(new Scenario
             {
                 WhenArgs = "Model -h",
                 Then =

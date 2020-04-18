@@ -8,17 +8,15 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class BasicParseTests
     {
-        private readonly ITestOutputHelper _output;
-
         public BasicParseTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
         public void MethodIsCalledWithExpectedValues()
         {
-            new AppRunner<App>().Verify(_output, new Scenario
+            new AppRunner<App>().Verify(new Scenario
             {
                 When = {Args = "Add -o * 2 3"},
                 Then = {Captured = {new App.AddResults {X = 2, Y = 3, Op = "*"}}}
@@ -28,7 +26,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void OptionCanBeSpecifiedAfterPositionalArg()
         {
-            new AppRunner<App>().Verify(_output, new Scenario
+            new AppRunner<App>().Verify(new Scenario
             {
                 When = {Args = "Add 2 3 -o *"},
                 Then = {Captured = {new App.AddResults {X = 2, Y = 3, Op = "*"}}}
@@ -38,7 +36,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void OptionCanBeColonSeparated()
         {
-            new AppRunner<App>().Verify(_output, new Scenario
+            new AppRunner<App>().Verify(new Scenario
             {
                 When = {Args = "Add 2 3 -o:*"},
                 Then = {Captured = {new App.AddResults {X = 2, Y = 3, Op = "*"}}}
@@ -48,7 +46,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void OptionCanBeEqualsSeparated()
         {
-            new AppRunner<App>().Verify(_output, new Scenario
+            new AppRunner<App>().Verify(new Scenario
             {
                 When = {Args = "Add 2 3 -o=*"},
                 Then = {Captured = {new App.AddResults {X = 2, Y = 3, Op = "*"}}}
@@ -58,7 +56,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void DoesNotModifySpecialCharactersInArguments()
         {
-            new AppRunner<App>().Verify(_output, new Scenario
+            new AppRunner<App>().Verify(new Scenario
             {
                 When = {ArgsArray = new[] {"Do", "~!@#$%^&*()_= +[]\\{} |;':\",./<>?"}},
                 Then = {Captured = {"~!@#$%^&*()_= +[]\\{} |;':\",./<>?"}}
@@ -68,7 +66,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void BracketsShouldBeRetainedInText()
         {
-            new AppRunner<App>().Verify(_output, new Scenario
+            new AppRunner<App>().Verify(new Scenario
             {
                 When = {ArgsArray = new[] {"Do", "[some (parenthesis) {curly} and [bracketed] text]"}},
                 Then = {Captured = {"[some (parenthesis) {curly} and [bracketed] text]"}}
@@ -78,7 +76,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact(Skip = "Method params cannot be marked as required yet.  Requiredness is only possible via FluentValidator")]
         public void OperandsAreRequired()
         {
-            new AppRunner<App>().Verify(_output, new Scenario
+            new AppRunner<App>().Verify(new Scenario
             {
                 When = {Args = "Add 2"},
                 Then =
@@ -92,7 +90,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [Fact]
         public void ErrorWhenExtraValueProvidedForOption()
         {
-            new AppRunner<App>().Verify(_output, new Scenario
+            new AppRunner<App>().Verify(new Scenario
             {
                 When = {Args = "Add 2 3 -o * %"},
                 Then =
@@ -107,7 +105,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void Given_IgnoreExtraOperands_DisabledByAppSetting_Parse_ThrowsUnrecognized()
         {
             var results = new AppRunner<App>()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "Add 2 3 4"},
                     Then =
@@ -124,7 +122,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void Given_IgnoreExtraOperands_DisabledByCommand_Parse_ThrowsUnrecognized()
         {
             var results = new AppRunner<App>(new AppSettings {IgnoreUnexpectedOperands = true})
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "Add_DisabledIgnore 2 3 4"},
                     Then =
@@ -141,7 +139,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void Given_IgnoreExtraOperands_EnabledByAppSettings_CollectsRemaining()
         {
             var results = new AppRunner<App>(new AppSettings {IgnoreUnexpectedOperands = true})
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "Add 2 3 4"},
                     Then = {Captured = {new App.AddResults {X = 2, Y = 3, Op = "+"}}}
@@ -154,7 +152,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void Given_IgnoreExtraOperands_EnabledByCommand_CollectsRemaining()
         {
             var results = new AppRunner<App>()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "Add_EnabledIgnore 2 3 4"},
                     Then = {Captured = {new App.AddResults {X = 2, Y = 3}}}

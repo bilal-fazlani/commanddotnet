@@ -8,19 +8,18 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class DisposeMethodTests
     {
-        private readonly ITestOutputHelper _output;
         private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
         public DisposeMethodTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
         public void When_IDisposable_BasicHelp_DoesNotInclude_DisposeMethod()
         {
-            new AppRunner<DisposableApp>(BasicHelp).Verify(_output, new Scenario
+            new AppRunner<DisposableApp>(BasicHelp).Verify(new Scenario
             {
                 WhenArgs = "-h",
                 Then = {OutputNotContainsTexts = {"Dispose"}}
@@ -30,7 +29,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void When_IDisposable_DetailedHelp_DoesNotInclude_DisposeMethod()
         {
-            new AppRunner<DisposableApp>(DetailedHelp).Verify(_output, new Scenario
+            new AppRunner<DisposableApp>(DetailedHelp).Verify(new Scenario
             {
                 WhenArgs = "-h",
                 Then = {OutputNotContainsTexts = {"Dispose"}}
@@ -40,7 +39,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void When_NotIDisposable_BasicHelp_DoesNotInclude_DisposeMethod()
         {
-            new AppRunner<NotDisposableApp>(BasicHelp).Verify(_output, new Scenario
+            new AppRunner<NotDisposableApp>(BasicHelp).Verify(new Scenario
             {
                 WhenArgs = "-h",
                 Then = { OutputContainsTexts = { @"Commands:
@@ -51,7 +50,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void When_NotIDisposable_DetailedHelp_DoesNotInclude_DisposeMethod()
         {
-            new AppRunner<NotDisposableApp>(DetailedHelp).Verify(_output, new Scenario
+            new AppRunner<NotDisposableApp>(DetailedHelp).Verify(new Scenario
             {
                 WhenArgs = "-h",
                 Then = { OutputContainsTexts = { @"Commands:
@@ -63,7 +62,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void When_IDisposable_CallsDisposeMethod()
         {
-            new AppRunner<DisposableApp>().Verify(_output, new Scenario
+            new AppRunner<DisposableApp>().Verify(new Scenario
             {
                 WhenArgs = "Do",
                 Then = {Captured = {true}}
@@ -73,7 +72,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void When_NotIDisposable_CallsDisposeMethod()
         {
-            new AppRunner<NotDisposableApp>().Verify(_output, new Scenario
+            new AppRunner<NotDisposableApp>().Verify(new Scenario
             {
                 WhenArgs = "Dispose",
                 Then = { Captured = { true } }

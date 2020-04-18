@@ -9,11 +9,9 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
 {
     public class CaseTests
     {
-        private readonly ITestOutputHelper _output;
-
         public CaseTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Theory]
@@ -31,7 +29,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
         {
             var result = new AppRunner<App>()
                 .UseNameCasing(@case)
-                .RunInMem(new[] {commandName}, _output);
+                .RunInMem(new[] {commandName});
 
             result.ExitCode.Should().Be(10);
         }
@@ -48,7 +46,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
             var args = new[] { commandName, messageName, "m", senderName, "s", priorotyName, "3", cName, "4" };
             var result = new AppRunner<App>()
                 .UseNameCasing(@case)
-                .RunInMem(args, _output);
+                .RunInMem(args);
             
             result.ExitCode.Should().Be(10);
         }
@@ -63,7 +61,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
         {
             var result = new AppRunner<App>()
                 .UseNameCasing(@case)
-                .RunInMem(new[] { commandName, notificationCommandName }, _output);
+                .RunInMem(new[] { commandName, notificationCommandName });
             
             result.ExitCode.Should().Be(10);
         }
@@ -89,7 +87,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
 
             new AppRunner<App2>()
                 .UseNameCasing(@case, applyToNameOverrides)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "-h",
                     Then =

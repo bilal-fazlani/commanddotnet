@@ -11,11 +11,9 @@ namespace CommandDotNet.Tests.CommandDotNet.FluentValidation
 {
     public class ModelValidationTests
     {
-        private readonly ITestOutputHelper _output;
-
         public ModelValidationTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
@@ -41,7 +39,7 @@ Arguments:
 
             new AppRunner<App>()
                 .UseFluentValidation()
-                .Verify(_output, scenario);
+                .Verify(scenario);
         }
 
         [Fact]
@@ -63,7 +61,7 @@ Arguments:
 
             new AppRunner<App>()
                 .UseFluentValidation()
-                .Verify(_output, scenario);
+                .Verify(scenario);
         }
 
         [Fact]
@@ -88,7 +86,7 @@ Arguments:
                 .UseDependencyResolver(
                     new TestDependencyResolver{new PersonValidator()}, 
                     commandClassResolveStrategy: ResolveStrategy.TryResolve)
-                .Verify(_output, scenario);
+                .Verify(scenario);
         }
 
         [Fact]
@@ -105,7 +103,7 @@ Arguments:
                 .UseDependencyResolver(
                     new TestDependencyResolver { new PersonValidator() },
                     commandClassResolveStrategy: ResolveStrategy.TryResolve)
-                .Verify(_output, scenario);
+                .Verify(scenario);
         }
 
         [Fact]
@@ -123,7 +121,7 @@ Arguments:
 
             new AppRunner<App>()
                 .UseFluentValidation()
-                .Verify(_output, scenario);
+                .Verify(scenario);
         }
 
         [Fact]
@@ -144,7 +142,7 @@ Arguments:
                 .UseDependencyResolver(
                     new TestDependencyResolver(),
                     commandClassResolveStrategy: ResolveStrategy.TryResolve)
-                .Verify(_output, scenario);
+                .Verify(scenario);
         }
 
         [Fact]
@@ -170,7 +168,7 @@ Arguments:
                 .UseDependencyResolver(
                     new TestDependencyResolver(),
                     commandClassResolveStrategy: ResolveStrategy.TryResolve)
-                .Verify(_output, scenario);
+                .Verify(scenario);
         }
 
         [Fact]
@@ -196,7 +194,7 @@ Usage: dotnet testhost.dll Save [arguments]"
 
             new AppRunner<App>()
                 .UseFluentValidation(showHelpOnError: true)
-                .Verify(_output, scenario);
+                .Verify(scenario);
         }
 
         public class App

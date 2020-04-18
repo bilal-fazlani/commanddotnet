@@ -8,19 +8,18 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class MixedDefinedAs_MethodParamsAndArgModel_Tests
     {
-        private readonly ITestOutputHelper _output;
         private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
         public MixedDefinedAs_MethodParamsAndArgModel_Tests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
         public void BasicHelp_IncludesModelAndParamDefinedArgs()
         {
-            new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
+            new AppRunner<App>(BasicHelp).Verify(new Scenario
             {
                 WhenArgs = "Do -h",
                 Then =
@@ -45,7 +44,7 @@ Options:
         [Fact]
         public void DetailedHelp_IncludesModelAndParamDefinedArgs()
         {
-            new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
+            new AppRunner<App>(DetailedHelp).Verify(new Scenario
             {
                 WhenArgs = "Do -h",
                 Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -74,7 +73,7 @@ Options:
         [Fact]
         public void Exec_MapsToAllArgs()
         {
-            new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
+            new AppRunner<App>(BasicHelp).Verify(new Scenario
             {
                 WhenArgs = "Do --ModelOption moA --ModelOptionList moB --ModelOptionList moC " +
                            "--paramOption poA --paramOptionList poB --paramOptionList poC " +
@@ -104,7 +103,7 @@ Options:
         [Fact]
         public void Exec_OptionsCanBeIncludedAfterArguments()
         {
-            new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
+            new AppRunner<App>(BasicHelp).Verify(new Scenario
             {
                 WhenArgs = "Do --paramOptionList poB --paramOptionList poC " +
                            "red --paramOptionList poD green --paramOptionList poE " +
