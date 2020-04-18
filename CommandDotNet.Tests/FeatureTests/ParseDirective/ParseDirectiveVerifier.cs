@@ -69,7 +69,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             if (exitBeforeBind)
             {
                 appRunner.Configure(c => 
-                    c.UseMiddleware((ctx, next) => Task.FromResult(0), 
+                    c.UseMiddleware((ctx, next) => ExitCodes.Success, 
                         MiddlewareStages.PostParseInputPreBindValues));
             }
 

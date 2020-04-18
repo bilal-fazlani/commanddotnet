@@ -53,19 +53,19 @@ namespace CommandDotNet.Help
                 console.Error.WriteLine(parseResult.ParseError.Message);
                 console.Error.WriteLine();
                 ctx.ShowHelpOnExit = true;
-                return Task.FromResult(1);
+                return ExitCodes.Error;
             }
 
             if (parseResult.HelpWasRequested())
             {
                 ctx.ShowHelpOnExit = true;
-                return Task.FromResult(0);
+                return ExitCodes.Success;
             }
 
             if (!targetCommand.IsExecutable)
             {
                 ctx.ShowHelpOnExit = true;
-                return Task.FromResult(0);
+                return ExitCodes.Success;
             }
 
             return next(ctx);

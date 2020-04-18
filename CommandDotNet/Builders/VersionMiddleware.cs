@@ -46,7 +46,7 @@ namespace CommandDotNet.Builders
             if (commandContext.RootCommand.HasInputValues(VersionOptionName))
             {
                 Print(commandContext, commandContext.Console);
-                return Task.FromResult(0);
+                return ExitCodes.Success;
             }
 
             return next(commandContext);

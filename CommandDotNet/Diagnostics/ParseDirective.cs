@@ -81,7 +81,7 @@ namespace CommandDotNet.Diagnostics
                     commandContext, 
                     commandContext.Console.Out.WriteLine);
                 parseContext.Reported = true;
-                return Task.FromResult(0);
+                return ExitCodes.Success;
             }
 
             return next(commandContext);

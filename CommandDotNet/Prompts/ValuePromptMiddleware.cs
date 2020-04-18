@@ -90,7 +90,7 @@ namespace CommandDotNet.Prompts
 
             if (isCancellationRequested)
             {
-                return Task.FromResult(0);
+                return ExitCodes.Success;
             }
 
             return next(commandContext);

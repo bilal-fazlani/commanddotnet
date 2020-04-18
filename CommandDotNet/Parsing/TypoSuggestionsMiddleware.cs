@@ -49,7 +49,7 @@ namespace CommandDotNet.Parsing
                     || (tokenType == TokenType.Value &&
                         TrySuggest(ctx, cpe, command.Subcommands, "command", null)))
                 {
-                    return Task.FromResult(1);
+                    return ExitCodes.Error;
                 }
 
                 // TODO: suggest other directives? We'd need a list of names which we don't collect atm.
