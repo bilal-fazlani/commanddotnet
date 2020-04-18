@@ -1,5 +1,9 @@
 # CommandDotNet.FluentValidation
 
+## 2.0.3
+
+remove extra NewLine when help will not be shown
+
 ## 2.0.2
 
 Add `showHelpOnError` parameter to show help after validation errors
