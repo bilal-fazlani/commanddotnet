@@ -50,6 +50,14 @@ Rules:
 * Arguments can be specified on multiple lines.
 * Files can have any extension as long as the contents are text.
 
+## Escaping the @
+
+For cases where an option or operand require a value that begins with `@`. 
+
+**Options**: Use `=` or `:` for the value assignment.  `--who:@me`.
+
+**Operands**: Use the [argument separator](argument-separator.md). Any argument after the separator will not be evaluated as a response file.
+
 ## Recipes
 
 There are a number of ways to use response files to improve usability and testiblity of your app.

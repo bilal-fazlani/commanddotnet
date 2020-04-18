@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace CommandDotNet.TestTools.Scenarios
@@ -27,5 +28,16 @@ namespace CommandDotNet.TestTools.Scenarios
         /// And asserts no additional outputs were captured unless <see cref="AllowUnspecifiedCaptures"/> is true.
         /// </summary>
         public List<object> Captured { get; set; } = new List<object>();
+
+        /// <summary>
+        /// A delegate to perform assertions on the <seealso cref="TestConsole.AllText"/>
+        /// which includes the standard and error output streams.
+        /// </summary>
+        public Action<string> AssertOutput { get; set; }
+
+        /// <summary>
+        /// A delegate to perform assertions on the <see cref="CommandContext"/>
+        /// </summary>
+        public Action<CommandContext> AssertContext { get; set; }
     }
 }

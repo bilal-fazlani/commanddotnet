@@ -1,5 +1,9 @@
 # CommandDotNet.TestTools
 
+## 2.0.1
+
+More assert options for BDD Scenario `Then = { AssertOutput..., AssertContext... }`. See [BDD Verify > Then](../TestTools/Harness/bdd.md#then) for details.
+
 ## 2.0.0
 
 This release focuses on usability, readability and discoverability.

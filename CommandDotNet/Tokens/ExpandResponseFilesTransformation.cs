@@ -25,6 +25,12 @@ namespace CommandDotNet.Tokens
             }
             else
             {
+                var fullPath = Path.GetFullPath(filePath);
+                if (!File.Exists(fullPath))
+                {
+                    throw new FileNotFoundException($"File not found: {fullPath}");
+                }
+
                 var splitter = CommandLineStringSplitter.Instance;
                 var tokens = File
                     .ReadAllLines(filePath)

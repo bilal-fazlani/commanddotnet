@@ -1,5 +1,14 @@
 # CommandDotNet
 
+## 3.6.2
+
+* An informative error message will output when a [response file](../ArgumentValues/response-files.md) is not found.
+* TokenizerPipeline, on error, 
+    * no longer throws a TokenTransformationException
+    * now prints error messages to IConsole.Error, logs the exception and return ExitCodes.Error (1)
+    * this is best practice for console middleware.
+* added `ExitCodes` class with `Success`, `Error` & `ValidationError`. These can be used in the middleware pipeline.
+
 ## 3.6.1
 
 ### Remove extraneous NewLine
