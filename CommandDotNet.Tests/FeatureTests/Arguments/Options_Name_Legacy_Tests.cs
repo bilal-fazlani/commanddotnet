@@ -13,11 +13,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         public Options_Name_Legacy_Tests(ITestOutputHelper output)
         {
-            Command cmd = null;
-            new AppRunner<App>()
-                .CaptureState(ctx => cmd = ctx.ParseResult.TargetCommand, MiddlewareStages.PostParseInputPreBindValues, exitAfterCapture: true)
-                .RunInMem("Do", output);
-            _options = cmd.Options.ToArray();
+            Ambient.Output = output;
+            _options = new AppRunner<App>().GetFromContext("Do".SplitArgs(), 
+                ctx => ctx.ParseResult.TargetCommand.Options.ToArray(), 
+                middlewareStage: MiddlewareStages.PostParseInputPreBindValues);
         }
 
         [Fact]

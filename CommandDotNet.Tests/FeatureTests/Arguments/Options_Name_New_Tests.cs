@@ -13,12 +13,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         public Options_Name_New_Tests(ITestOutputHelper output)
         {
-            Command cmd = null;
-
-            new AppRunner<App>(new AppSettings { LongNameAlwaysDefaultsToSymbolName = true })
-                .CaptureState(ctx => cmd = ctx.ParseResult.TargetCommand, MiddlewareStages.PostParseInputPreBindValues, exitAfterCapture: true)
-                .RunInMem("Do", output);
-            _options = cmd.Options.ToArray();
+            Ambient.Output = output;
+            var appSettings = new AppSettings { LongNameAlwaysDefaultsToSymbolName = true };
+            _options = new AppRunner<App>(appSettings).GetFromContext("Do".SplitArgs(),
+                ctx => ctx.ParseResult.TargetCommand.Options.ToArray(),
+                middlewareStage: MiddlewareStages.PostParseInputPreBindValues);
         }
 
         [InlineData(0, "defaultName", null, "defaultName")]
@@ -37,7 +36,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         class App
         {
-            public int Do(
+            public void Do(
                 [Option] string defaultName,
                 [Option(LongName = "longName1")] string longNameOverride,
                 [Option(ShortName = "a")] string shortNameOverride,
@@ -45,7 +44,6 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 [Option(ShortName = "c", LongName = null)] string longNameNull,
                 [Option(ShortName = "d", LongName = "")] string longNameEmpty)
             {
-                return 1;
             }
         }
     }
