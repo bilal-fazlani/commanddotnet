@@ -16,6 +16,9 @@ namespace CommandDotNet.Execution
         public static MiddlewareStep ErrorHandler { get; } = 
             new MiddlewareStep(MiddlewareStages.PreTokenize, DebugDirective.OrderWithinStage + 1000);
 
+        public static MiddlewareStep OnRunCompleted { get; } =
+            new MiddlewareStep(MiddlewareStages.PreTokenize, ErrorHandler.OrderWithinStage + 1000);
+
         public static class DependencyResolver
         {
             public static MiddlewareStep BeginScope { get; } =

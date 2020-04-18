@@ -107,12 +107,9 @@ namespace CommandDotNet
 
             try
             {
-                var result = await commandContext.AppConfig.MiddlewarePipeline
-                    .InvokePipeline(commandContext).ConfigureAwait(false);
-
-                appConfig.OnRunCompleted?.Invoke(new OnRunCompletedEventArgs(commandContext));
-
-                return result;
+                return await commandContext.AppConfig.MiddlewarePipeline
+                    .InvokePipeline(commandContext)
+                    .ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -124,6 +121,7 @@ namespace CommandDotNet
         private void AddCoreMiddleware()
         {
             _appConfigBuilder
+                .UseMiddleware(OnRunCompleted, MiddlewareSteps.OnRunCompleted)
                 .UseMiddleware(TokenizerPipeline.TokenizeInputMiddleware, MiddlewareSteps.Tokenize)
                 .UseMiddleware(CommandParser.ParseInputMiddleware, MiddlewareSteps.ParseInput);
 
@@ -136,6 +134,13 @@ namespace CommandDotNet
             //            (when ctor options are moved to a middleware method, invocation context should be populated in Parse stage)
         }
 
+        private Task<int> OnRunCompleted(CommandContext context, ExecutionDelegate next)
+        {
+            var result = next(context);
+            context.AppConfig.OnRunCompleted?.Invoke(new OnRunCompletedEventArgs(context));
+            return result;
+        }
+
         private static int HandleException(Exception ex, IConsole console)
         {
             ex = ex.EscapeWrappers();
@@ -144,13 +149,10 @@ namespace CommandDotNet
                 case AppRunnerException appEx:
                     console.Error.WriteLine(appEx.Message);
                     appEx.PrintStackTrace(console);
-                    return 1;
-                case AggregateException aggEx:
-                    ExceptionDispatchInfo.Capture(aggEx).Throw();
-                    return 1; // this will only be called if there are no inner exceptions
+                    return ExitCodes.Error.Result;
                 default:
                     ExceptionDispatchInfo.Capture(ex).Throw();
-                    return 1; // this will only be called if there are no inner exceptions
+                    return ExitCodes.Error.Result; // this will only be called if there are no inner exceptions
             }
         }
 
