@@ -113,6 +113,14 @@ namespace CommandDotNet
         }
 
         /// <summary>
+        /// Adds the middleware to the pipeline in the specified <see cref="MiddlewareStep"/>
+        /// </summary>
+        public AppConfigBuilder UseMiddleware(ExecutionMiddleware middleware, MiddlewareStep step)
+        {
+            return UseMiddleware(middleware, step.Stage, step.OrderWithinStage);
+        }
+
+        /// <summary>
         /// Adds the middleware to the pipeline in the specified <see cref="MiddlewareStages"/>.
         /// Use <see cref="orderWithinStage"/> to specify order in relation
         /// to other middleware within the same stage.

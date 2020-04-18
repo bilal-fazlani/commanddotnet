@@ -124,8 +124,8 @@ namespace CommandDotNet
         private void AddCoreMiddleware()
         {
             _appConfigBuilder
-                .UseMiddleware(TokenizerPipeline.TokenizeInputMiddleware, MiddlewareSteps.Tokenize.Stage, MiddlewareSteps.Tokenize.Order)
-                .UseMiddleware(CommandParser.ParseInputMiddleware, MiddlewareSteps.ParseInput.Stage, MiddlewareSteps.ParseInput.Order);
+                .UseMiddleware(TokenizerPipeline.TokenizeInputMiddleware, MiddlewareSteps.Tokenize)
+                .UseMiddleware(CommandParser.ParseInputMiddleware, MiddlewareSteps.ParseInput);
 
             this.UseClassDefMiddleware(RootCommandType)
                 .UseHelpMiddleware();

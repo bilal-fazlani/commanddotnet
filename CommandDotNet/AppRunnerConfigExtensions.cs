@@ -114,8 +114,7 @@ namespace CommandDotNet
                                 return next(context);
                             }
                         }, 
-                        MiddlewareSteps.DependencyResolver.BeginScope.Stage, 
-                        MiddlewareSteps.DependencyResolver.BeginScope.Order);
+                        MiddlewareSteps.DependencyResolver.BeginScope);
                 });
             }
 

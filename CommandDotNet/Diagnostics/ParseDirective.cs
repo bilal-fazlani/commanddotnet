@@ -16,7 +16,7 @@ namespace CommandDotNet.Diagnostics
             return appRunner.Configure(c =>
             {
                 c.UseMiddleware(ConfigureParseReportByTokenTransform, MiddlewareStages.PreTokenize);
-                c.UseMiddleware(ParseReportByArg, MiddlewareStages.BindValues, MiddlewareSteps.BindValues.Order + 100);
+                c.UseMiddleware(ParseReportByArg, MiddlewareSteps.BindValues + 100);
             });
         }
 

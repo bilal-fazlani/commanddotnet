@@ -23,9 +23,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                     c.Services.Add(config);
 
                     // run before help so the default values can be displayed in the help text 
-                    c.UseMiddleware(SetDefaults,
-                        MiddlewareSteps.SetArgumentDefaults.Stage,
-                        MiddlewareSteps.SetArgumentDefaults.Order);
+                    c.UseMiddleware(SetDefaults, MiddlewareSteps.SetArgumentDefaults);
                 }
                 else
                 {

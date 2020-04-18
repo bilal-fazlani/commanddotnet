@@ -25,8 +25,7 @@ namespace CommandDotNet.Parsing
             return appRunner.Configure(c =>
             {
                 c.Services.Add(new Config {MaxSuggestionCount = maxSuggestionCount});   
-                c.UseMiddleware(TypoSuggest,
-                    MiddlewareSteps.TypoSuggest.Stage, MiddlewareSteps.TypoSuggest.Order);
+                c.UseMiddleware(TypoSuggest, MiddlewareSteps.TypoSuggest);
             });
         }
 

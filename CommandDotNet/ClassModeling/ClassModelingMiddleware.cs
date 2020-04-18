@@ -14,14 +14,10 @@ namespace CommandDotNet.ClassModeling
             return appRunner.Configure(c =>
             {
                 c.Services.Add(new Config{RootCommandType = rootCommandType});
-                c.UseMiddleware(CreateRootCommand, 
-                    MiddlewareSteps.CreateRootCommand.Stage, MiddlewareSteps.CreateRootCommand.Order);
-                c.UseMiddleware(AssembleInvocationPipelineMiddleware,
-                    MiddlewareSteps.AssembleInvocationPipeline.Stage, MiddlewareSteps.AssembleInvocationPipeline.Order);
-                c.UseMiddleware(BindValuesMiddleware.BindValues, 
-                    MiddlewareSteps.BindValues.Stage, MiddlewareSteps.BindValues.Order);
-                c.UseMiddleware(ResolveCommandClassesMiddleware.ResolveCommandClassInstances,
-                    MiddlewareSteps.ResolveCommandClasses.Stage, MiddlewareSteps.ResolveCommandClasses.Order);
+                c.UseMiddleware(CreateRootCommand, MiddlewareSteps.CreateRootCommand);
+                c.UseMiddleware(AssembleInvocationPipelineMiddleware, MiddlewareSteps.AssembleInvocationPipeline);
+                c.UseMiddleware(BindValuesMiddleware.BindValues, MiddlewareSteps.BindValues);
+                c.UseMiddleware(ResolveCommandClassesMiddleware.ResolveCommandClassInstances, MiddlewareSteps.ResolveCommandClasses);
                 c.UseMiddleware(InvokeInvocationPipelineMiddleware, MiddlewareStages.Invoke, int.MaxValue);
             });
         }
