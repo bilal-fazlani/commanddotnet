@@ -43,7 +43,7 @@ namespace CommandDotNet.Tests
             Func<TestConsole, string> onReadLine = null,
             IEnumerable<string> pipedInput = null)
         {
-            return runner.RunInMem(args, Ambient.Output.WriteLine, onReadLine, pipedInput);
+            return runner.RunInMem(args, Ambient.WriteLine, onReadLine, pipedInput);
         }
 
         public static AppRunnerResult RunInMem(
@@ -52,13 +52,13 @@ namespace CommandDotNet.Tests
             Func<TestConsole, string> onReadLine = null,
             IEnumerable<string> pipedInput = null)
         {
-            return runner.RunInMem(args, Ambient.Output.WriteLine, onReadLine, pipedInput);
+            return runner.RunInMem(args, Ambient.WriteLine, onReadLine, pipedInput);
         }
 
         public static AppRunnerResult Verify(this AppRunner appRunner, IScenario scenario)
         {
             // use Test.Default to force testing of TestConfig.GetDefaultFromSubClass()
-            return appRunner.Verify(Ambient.Output.WriteLine, TestConfig.Default, scenario);
+            return appRunner.Verify(Ambient.WriteLine, TestConfig.Default, scenario);
         }
     }
 }
