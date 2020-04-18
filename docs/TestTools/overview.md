@@ -23,8 +23,6 @@ One of the perks of using this framework is that commands are just methods and m
 
 These tools enable you to provide end-to-end testing as if running the app in a console.
 
-If you're using the [.UseDefaultMiddleware()](../OtherFeatures/default-middleware.md) method, testing as this layer will help identify bugs on upgrade due to new opt-in features.
-
 !!! Note
     These test tools are used to test all of the CommandDotNet features.<br/>They are well suited to testing middleware and other extensibility components. 
 
@@ -100,6 +98,9 @@ The tool provides two extension methods to execute an AppRunner in memory and co
 
 [Verify](Harness/bdd.md) wraps `RunInMem` with declarative BDD style setup and assertions.
 
+!!! Tip
+    If you're using the [.UseDefaultMiddleware()](../OtherFeatures/default-middleware.md) method, testing with either of these will help identify behavior changes on upgrade due to new opt-in features.
+
 ## Testing your application
 
 When testing an application, use the same method to generate and configure the AppRunner for the console and tests. In this example, the `GetAppRunner()` method is made public so tests can verify the exact config used in the application.
@@ -164,7 +165,7 @@ The framework includes the following tools that can be used independently of the
 
 * capture output for assertions
 * provide piped input
-* handle ReadLine and ReadToEnd
+* handle ReadLine and ReadKey
 
 ### [TempFiles](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/TempFiles.cs)
 
@@ -179,12 +180,6 @@ new AppRunner<App>()
     .UseDependencyResolver(new TestDependencyResolver { dbSvc, httpSvc })
     .VerifyScenario(scenario);
 ```
-
-### [TestCaptures](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/TestCaptures.cs)
-
-`TestCaptures` can be added as a property to a test app and will be automatically injected by the test framework.
-
-This is useful for testing middleware and other extensions that can populate or modify arguments, by allowing you to capture those arguments and assert them in tests.
 
 ### [CaptureState](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/AppRunnerTestExtensions.cs#L20)
 

@@ -46,7 +46,8 @@ This document assumes you're already familiar with the Dependency Injection (DI)
     Enable [SimpleInjector](https://simpleinjector.org/) with <br/> `appRunner.UseSimpleInjector(...)`
 
 === "Custom & 3rd Party"
-
+    `No package required`
+ 
     Enable the [custom resolver](#custom-resolvers) with <br/> `appRunner.UseDependencyResolver(myCustomContainer, ...)`
 
 ## Configuration options

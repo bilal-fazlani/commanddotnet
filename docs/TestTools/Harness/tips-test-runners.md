@@ -44,6 +44,20 @@ public static class Ambient
         get => TestOutputHelper.Value;
         set => TestOutputHelper.Value = value;
     }
+
+    public static Action<string> WriteLine
+    {
+        get
+        {
+            var output = Output;
+            if (output == null)
+            {
+                throw new InvalidOperationException($"{nameof(Ambient)}.{nameof(Output)} has not been set for the current test");
+            }
+
+            return output.WriteLine;
+        }
+    }
 }
 
 public static class AppRunnerScenarioExtensions
@@ -54,7 +68,7 @@ public static class AppRunnerScenarioExtensions
         Func<TestConsole, string> onReadLine = null,
         IEnumerable<string> pipedInput = null)
     {
-        return runner.RunInMem(args, Ambient.Output.WriteLine, onReadLine, pipedInput);
+        return runner.RunInMem(args, Ambient.WriteLine, onReadLine, pipedInput);
     }
 
     public static AppRunnerResult RunInMem(
@@ -63,13 +77,13 @@ public static class AppRunnerScenarioExtensions
         Func<TestConsole, string> onReadLine = null,
         IEnumerable<string> pipedInput = null)
     {
-        return runner.RunInMem(args, Ambient.Output.WriteLine, onReadLine, pipedInput);
+        return runner.RunInMem(args, Ambient.WriteLine, onReadLine, pipedInput);
     }
 
     public static AppRunnerResult Verify(this AppRunner appRunner, IScenario scenario)
     {
         // use Test.Default to force testing of TestConfig.GetDefaultFromSubClass()
-        return appRunner.Verify(Ambient.Output.WriteLine, TestConfig.Default, scenario);
+        return appRunner.Verify(Ambient.WriteLine, TestConfig.Default, scenario);
     }
 }
 ```
