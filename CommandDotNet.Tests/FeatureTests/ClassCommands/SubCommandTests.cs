@@ -1,7 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommandDotNet.Tests.ScenarioFramework;
 using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
@@ -10,15 +11,13 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 {
     public class SubCommandTests
     {
-        private readonly ITestOutputHelper _output;
-
         public SubCommandTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
-        public void CanDiscoverAllTests()
+        public void CanDiscoverAppsAtAllLevels()
         {
             var classNames = new AppRunner<ThreeLevelsApp>()
                 .GetCommandClassTypes()
@@ -34,25 +33,46 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             classNames.Count.Should().Be(3);
             classNames.Should().ContainEquivalentOf(nameof(NestedThreeLevelsApp), nameof(Second), nameof(Third));
         }
+        
+        public static IEnumerable<object[]> AppTypes => new[]
+        {
+            typeof(ThreeLevelsApp), 
+            typeof(NestedThreeLevelsApp)
+        }.ToObjectArrays();
 
         [Theory]
-        [MemberData(nameof(Scenarios))]
-        public void Active(IScenarioForApp scenario)
+        [MemberData(nameof(AppTypes))]
+        public void Help_NoArgs_Includes_1stLevelCommands_And_2ndLevelApp(Type type)
         {
-            new AppRunner(scenario.AppType).Verify(_output, scenario);
+            // implicit help
+
+            new AppRunner(type)
+                .Verify(new Scenario
+                {
+                    When = { Args = null },
+                    Then =
+                    {
+                        Output = @"Usage: dotnet testhost.dll [command]
+
+Commands:
+
+  Do1
+  Second
+
+Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+"
+                    }
+                });
         }
 
-        public static IEnumerable<object[]> Scenarios => 
-            BuildScenarios<ThreeLevelsApp>("via property")
-            .Union(BuildScenarios<NestedThreeLevelsApp>("via nested class"))
-            .ToObjectArrays();
-
-        public static Scenarios BuildScenarios<T>(string name) =>
-            new Scenarios
-            {
-                new Scenario<T>($"{name} - no args (implicit help) includes 1st level commands and 2nd level app")
+        [Theory]
+        [MemberData(nameof(AppTypes))]
+        public void Help_1stLevelApp_Includes_1stLevelCommands_And_2ndLevelApp(Type type)
+        {
+            new AppRunner(type)
+                .Verify(new Scenario
                 {
-                    WhenArgs = null,
+                    When = { Args = "-h" },
                     Then =
                     {
                         Output = @"Usage: dotnet testhost.dll [command]
@@ -65,26 +85,17 @@ Commands:
 Use ""dotnet testhost.dll [command] --help"" for more information about a command.
 "
                     }
-                },
-                new Scenario<T>($"{name} - help includes 1st level commands and 2nd level app")
+                });
+        }
+
+        [Theory]
+        [MemberData(nameof(AppTypes))]
+        public void Help_2rdLevelApp_Includes_2ndLevelCommands_And_3rdLevelApp(Type type)
+        {
+            new AppRunner(type)
+                .Verify(new Scenario
                 {
-                    WhenArgs = "-h",
-                    Then =
-                    {
-                        Output = @"Usage: dotnet testhost.dll [command]
-
-Commands:
-
-  Do1
-  Second
-
-Use ""dotnet testhost.dll [command] --help"" for more information about a command.
-"
-                    }
-                },
-                new Scenario<T>($"{name} - help for 2nd level app includes 2nd level commands and 3rd level app")
-                {
-                    WhenArgs = "Second -h",
+                    When = {Args = "Second -h"},
                     Then =
                     {
                         Output = @"Usage: dotnet testhost.dll Second [command]
@@ -97,10 +108,17 @@ Commands:
 Use ""dotnet testhost.dll Second [command] --help"" for more information about a command.
 "
                     }
-                },
-                new Scenario<T>($"{name} - help for 3rd level app includes 3rd level commands")
+                });
+        }
+
+        [Theory]
+        [MemberData(nameof(AppTypes))]
+        public void Help_3rdLevelApp_Includes_3rdLevelCommands(Type type)
+        {
+            new AppRunner(type)
+                .Verify(new Scenario
                 {
-                    WhenArgs = "Second Third -h",
+                    When = {Args = "Second Third -h"},
                     Then =
                     {
                         Output = @"Usage: dotnet testhost.dll Second Third [command]
@@ -112,23 +130,44 @@ Commands:
 Use ""dotnet testhost.dll Second Third [command] --help"" for more information about a command.
 "
                     }
-                },
-                new Scenario<T>($"{name} - can execute 1st level local command")
+                });
+        }
+
+        [Theory]
+        [MemberData(nameof(AppTypes))]
+        public void CanExecute_1stLevel_LocalCommand(Type type)
+        {
+            new AppRunner(type)
+                .Verify(new Scenario
                 {
-                    WhenArgs = "Do1 --Opt1 1111 somearg",
-                    Then = {Captured = {new ArgModel1 {Opt1 = "1111", Arg1 = "somearg"}}}
-                },
-                new Scenario<T>($"{name} - can execute 2nd level local command")
+                    When = { Args = "Do1 --Opt1 1111 somearg" },
+                    Then = { Captured = { new ArgModel1 { Opt1 = "1111", Arg1 = "somearg" } } }
+                });
+        }
+
+        [Theory]
+        [MemberData(nameof(AppTypes))]
+        public void CanExecute_2ndLevel_LocalCommand(Type type)
+        {
+            new AppRunner(type)
+                .Verify(new Scenario
                 {
-                    WhenArgs = "Second Do2 --Opt2 1111 somearg",
-                    Then = {Captured = {new ArgModel2 {Opt2 = "1111", Arg2 = "somearg"}}}
-                },
-                new Scenario<T>($"{name} - can execute 3rd level local command")
+                    When = { Args = "Second Do2 --Opt2 1111 somearg" },
+                    Then = { Captured = { new ArgModel2 { Opt2 = "1111", Arg2 = "somearg" } } }
+                });
+        }
+
+        [Theory]
+        [MemberData(nameof(AppTypes))]
+        public void CanExecute_3rdLevel_LocalCommand(Type type)
+        {
+            new AppRunner(type)
+                .Verify(new Scenario
                 {
-                    WhenArgs = "Second Third Do3 --Opt3 1111 somearg",
+                    When = {Args = "Second Third Do3 --Opt3 1111 somearg"},
                     Then = {Captured = {new ArgModel3 {Opt3 = "1111", Arg3 = "somearg"}}}
-                }
-            };
+                });
+        }
 
         private class ThreeLevelsApp
         {

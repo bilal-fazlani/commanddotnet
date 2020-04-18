@@ -11,11 +11,9 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
 {
     public class PromptForMissingArgumentTests
     {
-        private readonly ITestOutputHelper _output;
-
         public PromptForMissingArgumentTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
@@ -23,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -47,7 +45,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -72,7 +70,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -97,7 +95,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -129,7 +127,7 @@ opt1 (Text): simple
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -149,7 +147,7 @@ opt1 (Text): simple
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -173,7 +171,7 @@ simple
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -192,7 +190,7 @@ simple
         {
             new AppRunner<HierApp>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -211,7 +209,7 @@ simple
         {
             new AppRunner<HierApp>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -230,7 +228,7 @@ simple
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -256,7 +254,7 @@ password (Text):
 
             new AppRunner<App>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -280,7 +278,7 @@ password (Text):
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -297,7 +295,7 @@ password (Text):
 
             new AppRunner<App>(new AppSettings { BooleanMode = BooleanMode.Explicit })
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -316,7 +314,7 @@ password (Text):
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -337,7 +335,7 @@ password (Text):
         {
             new AppRunner<App>()
                 .UsePrompting(argumentPromptTextOverride: (ctx, arg) => "lala")
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -359,7 +357,7 @@ lala (Text): fishies
         {
             new AppRunner<App>()
                 .UsePrompting(argumentFilter: arg => arg.Name == "arg1")
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -382,7 +380,7 @@ lala (Text): fishies
             new AppRunner<App>()
                 .UsePrompting()
                 .AppendPipedInputToOperandList()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {

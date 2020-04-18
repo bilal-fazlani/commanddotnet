@@ -10,11 +10,9 @@ namespace CommandDotNet.Tests.CommandDotNet.CommandLogger
 {
     public class CommandLoggerTests
     {
-        private readonly ITestOutputHelper _output;
-
         public CommandLoggerTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
@@ -22,7 +20,7 @@ namespace CommandDotNet.Tests.CommandDotNet.CommandLogger
         {
             new AppRunner<App>()
                 .UseCommandLogger(excludeSystemInfo: true)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "[cmdlog] --password super-secret Do lala",
                     Then =
@@ -63,7 +61,7 @@ options:
         {
             new AppRunner<App>()
                 .UseCommandLogger()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "[cmdlog] Do",
                     Then =
@@ -165,7 +163,7 @@ AppConfig:
 
             new AppRunner<App>()
                 .UseCommandLogger(excludeSystemInfo: true, includeAppConfig: true)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "[cmdlog] Do",
                     Then =
@@ -189,7 +187,7 @@ AppConfig:
         {
             new AppRunner<App>()
                 .UseCommandLogger(excludeSystemInfo: true, additionalInfoCallback: ctx => null)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "[cmdlog] Do",
                     Then =
@@ -235,7 +233,7 @@ options:
                     ("header2", "value2" ),
 
                 })
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "[cmdlog] Do",
                     Then =
@@ -281,7 +279,7 @@ header2  = value2
 
             new AppRunner<App>()
                 .UseCommandLogger(excludeSystemInfo: true, writerFactory: context => null)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do",
                     Then =
@@ -298,7 +296,7 @@ header2  = value2
 
             new AppRunner<App>()
                 .UseCommandLogger(excludeSystemInfo: true, writerFactory: context => text => sb.AppendLine(text))
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do",
                     Then =
@@ -341,7 +339,7 @@ options:
         {
             new AppRunner<App>()
                 .UseCommandLogger()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "[cmdlog] Do",
                     Then = { OutputContainsTexts = { "Original input:" } }
@@ -353,7 +351,7 @@ options:
         {
             new AppRunner<App>()
                 .UseCommandLogger()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do",
                     Then = {Output = ""}

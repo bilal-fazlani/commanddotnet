@@ -11,19 +11,17 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         private static readonly AppSettings OptionModeWithOutGuarantee = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Option);
         private static readonly AppSettings OperandModeWithGuarantee = OperandModeWithOutGuarantee.Clone(a => a.GuaranteeOperandOrderInArgumentModels = true);
         private static readonly AppSettings OptionModeWithGuarantee = OptionModeWithOutGuarantee.Clone(a => a.GuaranteeOperandOrderInArgumentModels = true);
-
-        private readonly ITestOutputHelper _output;
-
+        
         public GuaranteeOperandOrderInArgModelTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
         public void GivenOptionMode_WithOutGuarantee_UnattributedArgModel_Should_BeOk()
         {
             new AppRunner<UArgModelApp>(OptionModeWithOutGuarantee)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then = { ExitCode = 0 }
@@ -34,7 +32,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void GivenOperandMode_WithOutGuarantee_UnattributedArgModel_Should_BeOk()
         {
             new AppRunner<UArgModelApp>(OperandModeWithOutGuarantee)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then = { ExitCode = 0 }
@@ -45,7 +43,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void GivenOptionMode_WithGuarantee_UnattributedArgModel_Should_BeOk()
         {
             new AppRunner<UArgModelApp>(OptionModeWithGuarantee)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then = { ExitCode = 0 }
@@ -56,7 +54,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void GivenOperandMode_WithGuarantee_UnattributedArgModel_Should_Detect_UnattributedOperand()
         {
             new AppRunner<UArgModelApp>(OperandModeWithGuarantee)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then =
@@ -74,7 +72,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void GivenOptionMode_WithGuarantee_AttributedArgModel_Should_BeOk()
         {
             new AppRunner<AArgModelApp>(OptionModeWithGuarantee)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then =
@@ -95,7 +93,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void GivenOperandMode_WithGuarantee_AttributedArgModel_Should_ListOperandsInCorrectOrder()
         {
             new AppRunner<AArgModelApp>(OperandModeWithGuarantee)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then =
@@ -115,7 +113,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void GivenOperandMode_WithGuarantee_AttributedNestedModel_With_AttributedArgModel_Should_BeOk()
         {
             new AppRunner<ANestedModelAArgModelApp>(OperandModeWithGuarantee)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then =
@@ -137,7 +135,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void GivenOperandMode_WithGuarantee_UnattributedNestedModel_With_UnattributedArgModel_Should_Detect_UnattributedOperand()
         {
             new AppRunner<UNestedModelUArgModelApp>(OperandModeWithGuarantee)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then =
@@ -155,7 +153,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void GivenOperandMode_WithGuarantee_UnattributedNestedModel_With_AttributedArgModel_Should_Detect_UnattributedArgModel()
         {
             new AppRunner<UNestedModelAArgModelApp>(OperandModeWithGuarantee)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then =
@@ -174,7 +172,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void GivenOperandMode_WithGuarantee_AttributedNestedModel_With_UnattributedArgModel_Should_Detect_UnattributedOperand()
         {
             new AppRunner<ANestedModelUArgModelApp>(OperandModeWithGuarantee)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then =
@@ -192,7 +190,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public void GivenOperandMode_WithGuarantee_DeepNestedUnattributedArgModel_Should_Detect_All_UnattributedArgModels()
         {
             new AppRunner<DeepNestedUArgModelsApp>(OperandModeWithGuarantee)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do -h",
                     Then =

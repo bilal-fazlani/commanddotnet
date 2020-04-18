@@ -8,19 +8,18 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class EnumerableArgTypesTests
     {
-        private readonly ITestOutputHelper _output;
         private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
         public EnumerableArgTypesTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
         public void EnumerableModel_BasicHelp_Includes_Arguments()
         {
-            new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
+            new AppRunner<App>(BasicHelp).Verify(new Scenario
             {
                 WhenArgs = "EnumerableModel -h",
                 Then = { Output = @"Usage: dotnet testhost.dll EnumerableModel [options] [arguments]
@@ -37,7 +36,7 @@ Options:
         [Fact]
         public void EnumerableModel_DetailedHelp_Includes_ArgumentsAsMultiple()
         {
-            new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
+            new AppRunner<App>(DetailedHelp).Verify(new Scenario
             {
                 WhenArgs = "EnumerableModel -h",
                 Then = { Output = @"Usage: dotnet testhost.dll EnumerableModel [options] [arguments]
@@ -56,7 +55,7 @@ Options:
         [Fact]
         public void EnumerableParams_BasicHelp_Includes_Arguments()
         {
-            new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
+            new AppRunner<App>(BasicHelp).Verify(new Scenario
             {
                 WhenArgs = "Enumerable -h",
                 Then = {Output = @"Usage: dotnet testhost.dll Enumerable [options] [arguments]
@@ -73,7 +72,7 @@ Options:
         [Fact]
         public void EnumerableParams_DetailedHelp_Includes_ArgumentsAsMultiple()
         {
-            new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
+            new AppRunner<App>(DetailedHelp).Verify(new Scenario
             {
                 WhenArgs = "Enumerable -h",
                 Then = {Output = @"Usage: dotnet testhost.dll Enumerable [options] [arguments]
@@ -92,7 +91,7 @@ Options:
         [Fact]
         public void EnumerableParams_Exec_MapsArguments()
         {
-            new AppRunner<App>().Verify(_output, new Scenario
+            new AppRunner<App>().Verify(new Scenario
             {
                 WhenArgs = "Enumerable --options aaa --options bbb ccc ddd",
                 Then =
@@ -112,7 +111,7 @@ Options:
         [Fact]
         public void EnumerableModel_Exec_MapsArguments()
         {
-            new AppRunner<App>().Verify(_output, new Scenario
+            new AppRunner<App>().Verify(new Scenario
             {
                 WhenArgs = "EnumerableModel --Options aaa --Options bbb ccc ddd",
                 Then =
@@ -132,7 +131,7 @@ Options:
         [Fact]
         public void CollectionParams_Exec_MapsArguments()
         {
-            new AppRunner<App>().Verify(_output, new Scenario
+            new AppRunner<App>().Verify(new Scenario
             {
                 WhenArgs = "Collection --options aaa --options bbb ccc ddd",
                 Then =
@@ -152,7 +151,7 @@ Options:
         [Fact]
         public void ArrayParams_Exec_MapsArguments()
         {
-            new AppRunner<App>().Verify(_output, new Scenario
+            new AppRunner<App>().Verify(new Scenario
             {
                 WhenArgs = "Array --options aaa --options bbb ccc ddd",
                 Then =

@@ -6,18 +6,16 @@ namespace CommandDotNet.Tests.FeatureTests.Help
 {
     public class ArgumentAttributesHelpTests
     {
-        private readonly ITestOutputHelper _output;
-
         public ArgumentAttributesHelpTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
         public void BasicHelp_Includes_Description()
         {
             new AppRunner<App>(TestAppSettings.BasicHelp)
-                .Verify(_output,
+                .Verify(
                     new Scenario
                     {
                         WhenArgs = "Do -h",
@@ -40,7 +38,7 @@ Options:
         public void DetailedHelp_Includes_Description()
         {
             new AppRunner<App>(TestAppSettings.DetailedHelp)
-                .Verify(_output,
+                .Verify(
                     new Scenario
                     {
                         WhenArgs = "Do -h",

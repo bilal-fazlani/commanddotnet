@@ -17,11 +17,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         private static readonly ArgumentArity ZeroToMany = new ArgumentArity(0, int.MaxValue);
         private static readonly ArgumentArity OneToMany = new ArgumentArity(1, int.MaxValue);
 
-        private readonly ITestOutputHelper _output;
-
         public DefaultArityTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
@@ -120,19 +118,14 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         private Operands GetOperands(string methodName, IDependencyResolver dependencyResolver = null)
         {
-            Operands operands = null;
             var appRunner = new AppRunner<App>();
             if (dependencyResolver != null)
             {
                 appRunner.UseDependencyResolver(dependencyResolver);
             }
-            appRunner
-                .CaptureState(
-                    ctx => operands = Operands.FromCommand(ctx.ParseResult.TargetCommand),
-                    MiddlewareStages.PostParseInputPreBindValues,
-                    exitAfterCapture: true)
-                .RunInMem($"{methodName}", _output);
-            return operands;
+            return appRunner.GetFromContext(methodName.SplitArgs(),
+                    ctx => Operands.FromCommand(ctx.ParseResult.TargetCommand),
+                    middlewareStage: MiddlewareStages.PostParseInputPreBindValues);
         }
 
         class App

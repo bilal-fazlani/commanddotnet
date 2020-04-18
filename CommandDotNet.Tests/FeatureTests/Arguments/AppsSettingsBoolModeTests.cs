@@ -7,7 +7,6 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class AppsSettingsBoolModeTests
     {
-        private readonly ITestOutputHelper _output;
         private static readonly AppSettings ImplicitBasicHelp = TestAppSettings.BasicHelp.Clone(a => a.BooleanMode = BooleanMode.Implicit);
         private static readonly AppSettings ImplicitDetailedHelp = TestAppSettings.DetailedHelp.Clone(a => a.BooleanMode = BooleanMode.Implicit);
 
@@ -16,13 +15,13 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         public AppsSettingsBoolModeTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
         public void WhenExplicit_BasicHelp_DoesNotIncludeAllowedValues()
         {
-            new AppRunner<App>(ExplicitBasicHelp).Verify(_output, new Scenario
+            new AppRunner<App>(ExplicitBasicHelp).Verify(new Scenario
             {
                 WhenArgs = "Do -h",
                 Then =
@@ -42,7 +41,7 @@ Options:
         [Fact]
         public void WhenExplicit_DetailedHelp_IncludesAllowedValues()
         {
-            new AppRunner<App>(ExplicitDetailedHelp).Verify(_output, new Scenario
+            new AppRunner<App>(ExplicitDetailedHelp).Verify(new Scenario
             {
                 WhenArgs = "Do -h",
                 Then =
@@ -66,7 +65,7 @@ Options:
         [Fact]
         public void WhenImplicit_BasicHelp_DoesNotIncludeAllowedValues()
         {
-            new AppRunner<App>(ImplicitBasicHelp).Verify(_output, new Scenario
+            new AppRunner<App>(ImplicitBasicHelp).Verify(new Scenario
             {
                 WhenArgs = "Do -h",
                 Then =
@@ -86,7 +85,7 @@ Options:
         [Fact]
         public void WhenImplicit_DetailedHelp_DoesNotIncludeAllowedValuesForOption()
         {
-            new AppRunner<App>(ImplicitDetailedHelp).Verify(_output, new Scenario
+            new AppRunner<App>(ImplicitDetailedHelp).Verify(new Scenario
             {
                 WhenArgs = "Do -h",
                 Then =
@@ -109,7 +108,7 @@ Options:
         [Fact]
         public void WhenImplicit_Exec_OptionsIsFalseIfNotSpecified()
         {
-            new AppRunner<App>(ImplicitBasicHelp).Verify(_output, new Scenario
+            new AppRunner<App>(ImplicitBasicHelp).Verify(new Scenario
             {
                 // bool value 'true' is operand
                 WhenArgs = "Do true",
@@ -120,7 +119,7 @@ Options:
         [Fact]
         public void WhenImplicit_Exec_OptionsIsTrueIfSpecified()
         {
-            new AppRunner<App>(ImplicitBasicHelp).Verify(_output, new Scenario
+            new AppRunner<App>(ImplicitBasicHelp).Verify(new Scenario
             {
                 // bool value 'false' is operand
                 WhenArgs = "Do --option false",
@@ -131,7 +130,7 @@ Options:
         [Fact]
         public void WhenExplicit_Exec_OptionValueMustFollowTheArgument()
         {
-            new AppRunner<App>(ExplicitBasicHelp).Verify(_output, new Scenario
+            new AppRunner<App>(ExplicitBasicHelp).Verify(new Scenario
             {
                 WhenArgs = "Do2 --option 2",
                 Then =
@@ -145,7 +144,7 @@ Options:
         [Fact]
         public void WhenExplicit_Exec_OptionValueIsRequired()
         {
-            new AppRunner<App>(ExplicitBasicHelp).Verify(_output, new Scenario
+            new AppRunner<App>(ExplicitBasicHelp).Verify(new Scenario
             {
                 WhenArgs = "Do --option",
                 Then =
@@ -159,7 +158,7 @@ Options:
         [Fact]
         public void WhenExplicit_Exec_SpecifiedOptionValueIsUsed()
         {
-            var result = new AppRunner<App>(ExplicitBasicHelp).Verify(_output, new Scenario
+            var result = new AppRunner<App>(ExplicitBasicHelp).Verify(new Scenario
             {
                 WhenArgs = "Do --option false true",
                 Then = {Captured = {new Result(false, true)}}

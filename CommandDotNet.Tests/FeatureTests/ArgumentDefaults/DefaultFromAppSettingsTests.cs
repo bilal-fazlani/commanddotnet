@@ -9,11 +9,9 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 {
     public class DefaultFromAppSettingsTests
     {
-        private readonly ITestOutputHelper _output;
-
         public DefaultFromAppSettingsTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Theory]
@@ -55,7 +53,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                 .UseDefaultsFromAppSetting(
                     new NameValueCollection {{key, "red"}},
                     includeNamingConventions: true)
-                .Verify(_output, scenario);
+                .Verify(scenario);
         }
 
         [Theory]
@@ -94,7 +92,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             new AppRunner<App>()
                 .UseDefaultsFromAppSetting(
                     new NameValueCollection { { key, "red" } })
-                .Verify(_output, scenario);
+                .Verify(scenario);
         }
 
         [Theory]
@@ -142,7 +140,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                 .UseDefaultsFromAppSetting(
                     new NameValueCollection { { key, "red" } },
                     includeNamingConventions: true)
-                .Verify(_output, scenario);
+                .Verify(scenario);
         }
 
         [Theory]
@@ -171,7 +169,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
             new AppRunner<App>()
                 .UseDefaultsFromAppSetting(nvc, includeNamingConventions: true)
-                .Verify(_output, scenario);
+                .Verify(scenario);
         }
 
         [Theory]
@@ -192,7 +190,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
             new AppRunner<App>()
                 .UseDefaultsFromAppSetting(nvc, includeNamingConventions: true)
-                .Verify(_output, scenario);
+                .Verify(scenario);
         }
 
         public class App

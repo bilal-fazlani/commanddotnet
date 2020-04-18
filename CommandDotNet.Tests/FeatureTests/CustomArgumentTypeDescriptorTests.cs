@@ -9,13 +9,12 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class CustomArgumentTypeDescriptorTests
     {
-        private readonly ITestOutputHelper _output;
         private static readonly AppSettings BasicHelpWithDescriptor = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelpWithDescriptor = TestAppSettings.DetailedHelp;
 
         public CustomArgumentTypeDescriptorTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
             var descriptor = new SquareTypeDescriptor();
             BasicHelpWithDescriptor.ArgumentTypeDescriptors.Add(descriptor);
             DetailedHelpWithDescriptor.ArgumentTypeDescriptors.Add(descriptor);
@@ -24,7 +23,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void BasicHelp_IncludesParam()
         {
-            new AppRunner<App>(BasicHelpWithDescriptor).Verify(_output, new Scenario
+            new AppRunner<App>(BasicHelpWithDescriptor).Verify(new Scenario
             {
                 WhenArgs = "Do -h",
                 Then =
@@ -41,7 +40,7 @@ Arguments:
         [Fact]
         public void DetailedHelp_IncludesParamAndDisplayNameFromDescriptor()
         {
-            new AppRunner<App>(DetailedHelpWithDescriptor).Verify(_output, new Scenario
+            new AppRunner<App>(DetailedHelpWithDescriptor).Verify(new Scenario
             {
                 WhenArgs = "Do -h",
                 Then =
@@ -59,7 +58,7 @@ Arguments:
         [Fact]
         public void Exec_ParseArgumentUsingDescriptor()
         {
-            new AppRunner<App>(BasicHelpWithDescriptor).Verify(_output, new Scenario
+            new AppRunner<App>(BasicHelpWithDescriptor).Verify(new Scenario
             {
                 WhenArgs = "Do 2x3",
                 Then = { Captured = { new Square { Length = 2, Width = 3 } } }
@@ -69,7 +68,7 @@ Arguments:
         [Fact]
         public void Exec_WhenDescriptorIsNotRegistered_FailsWithActionableMessage()
         {
-            new AppRunner<App>().Verify(_output, new Scenario
+            new AppRunner<App>().Verify(new Scenario
             {
                 WhenArgs = "Do ",
                 Then =

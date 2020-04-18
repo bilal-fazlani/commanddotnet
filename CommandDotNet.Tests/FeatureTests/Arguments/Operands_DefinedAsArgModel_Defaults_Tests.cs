@@ -10,19 +10,18 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class Operands_DefinedAsArgModel_Defaults_Tests
     {
-        private readonly ITestOutputHelper _output;
         private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
         public Operands_DefinedAsArgModel_Defaults_Tests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
         public void SampleTypes_BasicHelp_IncludesAll()
         {
-            new AppRunner<OperandsDefaults>(BasicHelp).Verify(_output, new Scenario
+            new AppRunner<OperandsDefaults>(BasicHelp).Verify(new Scenario
             {
                 WhenArgs = "ArgsDefaults -h",
                 Then = { Output = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
@@ -42,7 +41,7 @@ Arguments:
         [Fact]
         public void SampleTypes_DetailedHelp_IncludesAll()
         {
-            new AppRunner<OperandsDefaults>(DetailedHelp).Verify(_output, new Scenario
+            new AppRunner<OperandsDefaults>(DetailedHelp).Verify(new Scenario
             {
                 WhenArgs = "ArgsDefaults -h",
                 Then = { Output = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
@@ -71,7 +70,7 @@ Arguments:
         [Fact]
         public void StructList_BasicHelp_IncludesList()
         {
-            new AppRunner<OperandsDefaults>(BasicHelp).Verify(_output, new Scenario
+            new AppRunner<OperandsDefaults>(BasicHelp).Verify(new Scenario
             {
                 WhenArgs = "StructListDefaults -h",
                 Then = { Output = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
@@ -85,7 +84,7 @@ Arguments:
         [Fact]
         public void StructList_DetailedHelp_IncludesList()
         {
-            new AppRunner<OperandsDefaults>(DetailedHelp).Verify(_output, new Scenario
+            new AppRunner<OperandsDefaults>(DetailedHelp).Verify(new Scenario
             {
                 WhenArgs = "StructListDefaults -h",
                 Then = { Output = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
@@ -100,7 +99,7 @@ Arguments:
         [Fact]
         public void EnumList_BasicHelp_IncludesList()
         {
-            new AppRunner<OperandsDefaults>(BasicHelp).Verify(_output, new Scenario
+            new AppRunner<OperandsDefaults>(BasicHelp).Verify(new Scenario
             {
                 WhenArgs = "EnumListDefaults -h",
                 Then = { Output = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
@@ -114,7 +113,7 @@ Arguments:
         [Fact]
         public void EnumList_DetailedHelp_IncludesList()
         {
-            new AppRunner<OperandsDefaults>(DetailedHelp).Verify(_output, new Scenario
+            new AppRunner<OperandsDefaults>(DetailedHelp).Verify(new Scenario
             {
                 WhenArgs = "EnumListDefaults -h",
                 Then = { Output = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
@@ -130,7 +129,7 @@ Arguments:
         [Fact]
         public void ObjectList_BasicHelp_IncludesList()
         {
-            new AppRunner<OperandsDefaults>(BasicHelp).Verify(_output, new Scenario
+            new AppRunner<OperandsDefaults>(BasicHelp).Verify(new Scenario
             {
                 WhenArgs = "ObjectListDefaults -h",
                 Then = { Output = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
@@ -144,7 +143,7 @@ Arguments:
         [Fact]
         public void ObjectList_DetailedHelp_IncludesList()
         {
-            new AppRunner<OperandsDefaults>(DetailedHelp).Verify(_output, new Scenario
+            new AppRunner<OperandsDefaults>(DetailedHelp).Verify(new Scenario
             {
                 WhenArgs = "ObjectListDefaults -h",
                 Then = { Output = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
@@ -159,7 +158,7 @@ Arguments:
         [Fact]
         public void SampleTypes_Exec_OperandsAreAssignedByPosition()
         {
-            new AppRunner<OperandsDefaults>().Verify(_output, new Scenario
+            new AppRunner<OperandsDefaults>().Verify(new Scenario
             {
                 WhenArgs = "ArgsDefaults true green 1 2 Monday http://google.com yellow orange",
                 Then =
@@ -181,7 +180,7 @@ Arguments:
         [Fact]
         public void SampleType_Exec_OperandsAreNotRequired_UsesDefaults()
         {
-            new AppRunner<OperandsDefaults>().Verify(_output, new Scenario
+            new AppRunner<OperandsDefaults>().Verify(new Scenario
             {
                 WhenArgs = "ArgsDefaults",
                 Then =

@@ -9,11 +9,9 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class CustomTokenTransformationTests
     {
-        private readonly ITestOutputHelper _output;
-
         public CustomTokenTransformationTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
@@ -29,7 +27,7 @@ namespace CommandDotNet.Tests.FeatureTests
                                 t.TokenType == TokenType.Value && t.Value == "like"
                                     ? Tokenizer.TokenizeValue("roses").ToEnumerable()
                                     : t.ToEnumerable())))
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     WhenArgs = "Do --opt1 smells like",
                     Then =
