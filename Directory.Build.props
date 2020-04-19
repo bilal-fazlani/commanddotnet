@@ -16,7 +16,7 @@
  <PropertyGroup>
     <!-- prettify stack traces by replacing build machine path with CommandDotNet -->
     <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
-    <PathMap>$(AppOutputBase)=CommandDotNet/</PathMap>
+    <PathMap>$(AppOutputBase)=$(MSBuildProjectName)/</PathMap>
     <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
     <IncludeSymbols>false</IncludeSymbols>
     <!-- This is for future -->
