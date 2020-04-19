@@ -8,6 +8,7 @@
     * now prints error messages to IConsole.Error, logs the exception and return ExitCodes.Error (1)
     * this is best practice for console middleware.
 * added `ExitCodes` class with `Success`, `Error` & `ValidationError`. These can be used in the middleware pipeline.
+* added MiddlewareSteps.ErrorHandler step to be used to register error handlers
 
 ## 3.6.1
 

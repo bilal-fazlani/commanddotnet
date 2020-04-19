@@ -2,28 +2,71 @@
 
 CommandDotNet rethrows all exceptions raised by the application code. 
 
-Wrap the call to `appRunner.Run(args)` to handle global exceptions.
+There are two patterns for handling exceptions
 
-```c#
-var appRunner = new AppRunner<Calculator>();
-try
-{
-    return appRunner.Run(args);
-}
-catch(MyBusinessException ex)
-{
-    Console.WriteLine(ex.Message);
+=== "Wrap AppRunner.Run"
 
-#if DEBUG
-    // log appRunner config
-    Console.WriteLine(appRunner.ToString())
-#endif
-}
-```
+    Wrap the call to `appRunner.Run(args)` to handle global exceptions.
 
-CommandDotNet internal errors are generally captured and return error code 1.
+    ```c#
+    var appRunner = new AppRunner<Calculator>();
+    try
+    {
+        return appRunner.Run(args);
+    }
+    catch(MyBusinessException ex)
+    {
+        Console.WriteLine(ex.Message);
 
-Validation middleware will generally return error code 2.
+    #if DEBUG
+        // log appRunner config
+        Console.WriteLine(appRunner.ToString())
+    #endif
+    }
+    ```
+
+=== "ErrorHandler middleware"
+
+    Register an ErrorHandler middleware method using MiddlewareSteps.ErrorHandler
+    to ensure the middleware is one of the last in the pipeline to exit.
+
+    ```c#
+    
+    public static AppRunner GetRunner()
+    {
+        return new AppRunner<Calculator>()
+                    .Configure(c => c.UseMiddleware(
+                        ErrorHandler, MiddlewareSteps.ErrorHandler))
+                    .Run(args);
+    }
+
+    private Task<int> ErrorHandler(CommandContext context, ExecutionDelegate next)
+    {
+        try
+        {
+            return next(context);
+        }
+        catch (Exception e)
+        {
+            context.Console.WriteLine(e.Message);
+
+            #if DEBUG
+            // log appRunner config
+            Console.WriteLine(context.AppConfig)
+            #endif
+
+            return ExitCodes.Error;
+        }
+    }
+    ```
+
+!!! Tip
+    Use the ErrorHandler middleware if you plan to test your app using the [TestTools](../TestTools/overview.md) approach [mentioned here](../TestTools/overview.md#testing-your-application)
+
+
+CommandDotNet internal errors are generally captured and return error code 1, using `ExitCodes.Error`.
+
+Validation middleware will generally return error code 2, using `ExitCodes.ValidationError`.
 
 Middlware should print error messages and return an error code instead of raising exceptions.
 

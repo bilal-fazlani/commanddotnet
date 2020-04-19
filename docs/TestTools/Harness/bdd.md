@@ -78,7 +78,7 @@ Then =
     AssertContext = context => context.Should()...,
     Captured =
     {
-        new SomeExpectedObject()
+        new SomeExpectedObject{AnOperand="some-value"}
     },
     AllowUnspecifiedCaptures = true
 }
