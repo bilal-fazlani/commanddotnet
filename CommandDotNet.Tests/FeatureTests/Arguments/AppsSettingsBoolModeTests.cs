@@ -23,7 +23,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>(ExplicitBasicHelp).Verify(new Scenario
             {
-                WhenArgs = "Do -h",
+                When = {Args = "Do -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -43,7 +43,7 @@ Options:
         {
             new AppRunner<App>(ExplicitDetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "Do -h",
+                When = {Args = "Do -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -67,7 +67,7 @@ Options:
         {
             new AppRunner<App>(ImplicitBasicHelp).Verify(new Scenario
             {
-                WhenArgs = "Do -h",
+                When = {Args = "Do -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -87,7 +87,7 @@ Options:
         {
             new AppRunner<App>(ImplicitDetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "Do -h",
+                When = {Args = "Do -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -111,7 +111,7 @@ Options:
             new AppRunner<App>(ImplicitBasicHelp).Verify(new Scenario
             {
                 // bool value 'true' is operand
-                WhenArgs = "Do true",
+                When = {Args = "Do true"},
                 Then = { Captured = { new Result(false, true) } }
             });
         }
@@ -122,7 +122,7 @@ Options:
             new AppRunner<App>(ImplicitBasicHelp).Verify(new Scenario
             {
                 // bool value 'false' is operand
-                WhenArgs = "Do --option false",
+                When = {Args = "Do --option false"},
                 Then = { Captured = { new Result(true, false) } }
             });
         }
@@ -132,7 +132,7 @@ Options:
         {
             new AppRunner<App>(ExplicitBasicHelp).Verify(new Scenario
             {
-                WhenArgs = "Do2 --option 2",
+                When = {Args = "Do2 --option 2"},
                 Then =
                 {
                     ExitCode = 2,
@@ -146,7 +146,7 @@ Options:
         {
             new AppRunner<App>(ExplicitBasicHelp).Verify(new Scenario
             {
-                WhenArgs = "Do --option",
+                When = {Args = "Do --option"},
                 Then =
                 {
                     ExitCode = 1,
@@ -160,7 +160,7 @@ Options:
         {
             var result = new AppRunner<App>(ExplicitBasicHelp).Verify(new Scenario
             {
-                WhenArgs = "Do --option false true",
+                When = {Args = "Do --option false true"},
                 Then = {Captured = {new Result(false, true)}}
             });
         }

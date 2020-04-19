@@ -1,5 +1,9 @@
 # CommandDotNet
 
+## 3.6.3
+
+Remove .UserErrorHandler config method until the bug is fixed. Updated documentation with the approach.
+
 ## 3.6.2
 
 * An informative error message will output when a [response file](../ArgumentValues/response-files.md) is not found.

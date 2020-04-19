@@ -23,7 +23,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<UArgModelApp>(OptionModeWithOutGuarantee)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then = { ExitCode = 0 }
                 });
         }
@@ -34,7 +34,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<UArgModelApp>(OperandModeWithOutGuarantee)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then = { ExitCode = 0 }
                 });
         }
@@ -45,7 +45,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<UArgModelApp>(OptionModeWithGuarantee)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then = { ExitCode = 0 }
                 });
         }
@@ -56,7 +56,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<UArgModelApp>(OperandModeWithGuarantee)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then =
                     {
                         ExitCode = 1,
@@ -74,7 +74,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<AArgModelApp>(OptionModeWithGuarantee)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then =
                     {
                         ExitCode = 0,
@@ -95,7 +95,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<AArgModelApp>(OperandModeWithGuarantee)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then =
                     {
                         ExitCode = 0,
@@ -115,7 +115,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<ANestedModelAArgModelApp>(OperandModeWithGuarantee)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then =
                     {
                         ExitCode = 0,
@@ -137,7 +137,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<UNestedModelUArgModelApp>(OperandModeWithGuarantee)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then =
                     {
                         ExitCode = 1,
@@ -155,7 +155,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<UNestedModelAArgModelApp>(OperandModeWithGuarantee)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then =
                     {
                         ExitCode = 1,
@@ -174,7 +174,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<ANestedModelUArgModelApp>(OperandModeWithGuarantee)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then =
                     {
                         ExitCode = 1,
@@ -192,7 +192,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<DeepNestedUArgModelsApp>(OperandModeWithGuarantee)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then =
                     {
                         ExitCode = 1,

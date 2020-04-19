@@ -18,7 +18,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.GlobalTool } };
             new AppRunner<WithAppMetadataName>(appSettings).Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then = { OutputContainsTexts = { "Usage: AppName" } }
             });
         }
@@ -29,7 +29,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.DotNet } };
             new AppRunner<WithoutAppMetadatName>(appSettings).Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then = { OutputContainsTexts = { "Usage: dotnet testhost.dll" } }
             });
         }
@@ -40,7 +40,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.Executable } };
             new AppRunner<WithAppMetadataName>(appSettings).Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then = { OutputContainsTexts = { "Usage: testhost.dll" } }
             });
         }
@@ -51,7 +51,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.Adaptive } };
             new AppRunner<WithoutAppMetadatName>(appSettings).Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then = { OutputContainsTexts = { "Usage: dotnet testhost.dll" } }
             });
         }
@@ -62,7 +62,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.GlobalTool } };
             new AppRunner<WithoutAppMetadatName>(appSettings).Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then =
                 {
                     ExitCode = 1,
@@ -77,7 +77,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         {
             new AppRunner<UsageAppNameTemplate>().Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then = { OutputContainsTexts =
                 {
                     "descr dotnet testhost.dll",
@@ -93,7 +93,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             var appSettings = new AppSettings { Help = { UsageAppName = "WhatATool" } };
             new AppRunner<WithAppMetadataName>(appSettings).Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then = { OutputContainsTexts = { "Usage: WhatATool" } }
             });
         }

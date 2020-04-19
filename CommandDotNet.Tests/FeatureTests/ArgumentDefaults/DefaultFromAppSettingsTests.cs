@@ -1,4 +1,4 @@
-﻿using System.Collections.Specialized;
+using System.Collections.Specialized;
 using CommandDotNet.Extensions;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
@@ -40,12 +40,12 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = includes
                 ? new Scenario
                 {
-                    WhenArgs = "ByConvention -h",
+                    When = {Args = "ByConvention -h"},
                     Then = {OutputContainsTexts = {$"{nameToInclude}  <TEXT>  [red]"}}
                 }
                 : new Scenario
                 {
-                    WhenArgs = "ByConvention -h",
+                    When = {Args = "ByConvention -h"},
                     Then = {OutputNotContainsTexts = {$"{nameToInclude}  <TEXT>  [red]"}}
                 };
 
@@ -80,12 +80,12 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = includes
                 ? new Scenario
                 {
-                    WhenArgs = "ByAttribute -h",
+                    When = {Args = "ByAttribute -h"},
                     Then = { OutputContainsTexts = { $"{nameToInclude}  <TEXT>  [red]" } }
                 }
                 : new Scenario
                 {
-                    WhenArgs = "ByAttribute -h",
+                    When = {Args = "ByAttribute -h"},
                     Then = { OutputNotContainsTexts = { $"{nameToInclude}  <TEXT>  [red]" } }
                 };
 
@@ -127,12 +127,12 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = includes
                 ? new Scenario
                 {
-                    WhenArgs = "ByAttribute -h",
+                    When = {Args = "ByAttribute -h"},
                     Then = { OutputContainsTexts = { $"{nameToInclude}  <TEXT>  [red]" } }
                 }
                 : new Scenario
                 {
-                    WhenArgs = "ByAttribute -h",
+                    When = {Args = "ByAttribute -h"},
                     Then = { OutputNotContainsTexts = { $"{nameToInclude}  <TEXT>  [red]" } }
                 };
 
@@ -151,12 +151,12 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = includes
                 ? new Scenario
                 {
-                    WhenArgs = "ByAttribute -h",
+                    When = {Args = "ByAttribute -h"},
                     Then = { OutputContainsTexts = { $"{nameToInclude}  <TEXT>  [{color}]" } }
                 }
                 : new Scenario
                 {
-                    WhenArgs = "ByAttribute -h",
+                    When = {Args = "ByAttribute -h"},
                     Then = { OutputNotContainsTexts = { $"{nameToInclude}  <TEXT>  [{color}]" } }
                 };
 
@@ -184,7 +184,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
             var scenario = new Scenario
             {
-                WhenArgs = args,
+                When = {Args = args},
                 Then = { Captured = { value.Split(',') } }
             };
 

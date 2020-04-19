@@ -20,7 +20,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<FlagApp>().Verify(_output, new Scenario
             {
                 // because the value should not be provided
-                WhenArgs = "Do -h",
+                When = {Args = "Do -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll Do [options]
@@ -38,7 +38,7 @@ Options:
         {
             new AppRunner<FlagApp>().Verify(_output, new Scenario
             {
-                WhenArgs = "Do --flag",
+                When = {Args = "Do --flag"},
                 Then = { Captured = { true } }
             });
         }
@@ -48,7 +48,7 @@ Options:
         {
             new AppRunner<FlagApp>().Verify(_output, new Scenario
             {
-                WhenArgs = "Do",
+                When = {Args = "Do"},
                 Then = { Captured = { false } }
             });
         }
@@ -58,7 +58,7 @@ Options:
         {
             new AppRunner<FlagApp>().Verify(_output, new Scenario
             {
-                WhenArgs = "Club -ab",
+                When = {Args = "Club -ab"},
                 Then = { Captured = { new ClubResults { FlagA = true, FlagB = true } } }
             });
         }

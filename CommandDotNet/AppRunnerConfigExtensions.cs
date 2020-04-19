@@ -228,8 +228,10 @@ namespace CommandDotNet
                 additionalInfoCallback);
         }
 
+        /*
         public static AppRunner UseErrorHandler(this AppRunner appRunner, ExecutionMiddleware handlerDelegate)
             => appRunner.Configure(c => c.UseMiddleware(handlerDelegate, MiddlewareSteps.ErrorHandler));
+        */
 
         /// <summary>
         /// Returns the list of all possible types that could be instantiated to execute commands.<br/>

@@ -20,7 +20,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         {
             new AppRunner<WithoutDefaultArgsApp>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll [command]
@@ -39,7 +39,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         {
             new AppRunner<WithoutDefaultArgsApp>().Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll [command]
@@ -59,7 +59,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         {
             new AppRunner<WithDefaultArgsApp>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll [command] [arguments]
@@ -81,7 +81,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         {
             new AppRunner<WithDefaultArgsApp>().Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll [command] [arguments]
@@ -107,7 +107,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         {
             new AppRunner<WithDefaultArgsApp>(DetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "AnotherCommand -h",
+                When = {Args = "AnotherCommand -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll AnotherCommand
@@ -121,7 +121,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         {
             new AppRunner<WithoutDefaultArgsApp>().Verify(new Scenario
             {
-                WhenArgs = null,
+                When = {Args = null},
                 Then =
                 {
                     Captured = { WithoutDefaultArgsApp.DefaultMethodExecuted }
@@ -134,7 +134,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         {
             new AppRunner<WithDefaultArgsApp>().Verify(new Scenario
             {
-                WhenArgs = "abcde",
+                When = {Args = "abcde"},
                 Then =
                 {
                     Captured = { "abcde" }
@@ -147,7 +147,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         {
             new AppRunner<WithDefaultArgsApp>().Verify(new Scenario
             {
-                WhenArgs = "AnotherCommand",
+                When = {Args = "AnotherCommand"},
                 Then =
                 {
                     Captured = { false }
@@ -160,7 +160,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
         {
             new AppRunner<WithDefaultArgsApp>().Verify(new Scenario
             {
-                WhenArgs = "AnotherCommand abcde",
+                When = {Args = "AnotherCommand abcde"},
                 Then =
                 {
                     ExitCode = 1,

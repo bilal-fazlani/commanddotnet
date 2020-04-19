@@ -19,7 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             new AppRunner<App>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "-h",
+                    When = {Args = "-h"},
                     Then =
                     {
                         Output = @"Usage: dotnet testhost.dll [command] [options]
@@ -47,7 +47,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             new AppRunner<App>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "--interceptorOpt lala --inheritedOpt fishies Do --opt1 5 10",
+                    When = {Args = "--interceptorOpt lala --inheritedOpt fishies Do --opt1 5 10"},
                     Then =
                     {
                         ExitCode = 1,
@@ -62,7 +62,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             new AppRunner<App>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then =
                     {
                         Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -87,7 +87,7 @@ Options:
             new AppRunner<App>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "--interceptorOpt lala Do --inheritedOpt fishies --opt1 5 10",
+                    When = {Args = "--interceptorOpt lala Do --inheritedOpt fishies --opt1 5 10"},
                     Then =
                     {
                         Captured =
@@ -113,7 +113,7 @@ Options:
             new AppRunner<App>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "ChildApp Do -h",
+                    When = {Args = "ChildApp Do -h"},
                     Then =
                     {
                         Output = @"Usage: dotnet testhost.dll ChildApp Do [options]
@@ -132,7 +132,7 @@ Options:
             new AppRunner<App>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "--interceptorOpt lala ChildApp Do --inheritedOpt fishies",
+                    When = {Args = "--interceptorOpt lala ChildApp Do --inheritedOpt fishies"},
                     Then =
                     {
                         Captured =
@@ -157,7 +157,7 @@ Options:
             new AppRunner<App>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "ChildApp -h",
+                    When = {Args = "ChildApp -h"},
                     Then =
                     {
                         Output = @"Usage: dotnet testhost.dll ChildApp [command]
@@ -178,7 +178,7 @@ Use ""dotnet testhost.dll ChildApp [command] --help"" for more information about
             new AppRunner<App>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "--interceptorOpt lala ChildApp --inheritedOpt fishies",
+                    When = {Args = "--interceptorOpt lala ChildApp --inheritedOpt fishies"},
                     Then =
                     {
                         ExitCode = 1,

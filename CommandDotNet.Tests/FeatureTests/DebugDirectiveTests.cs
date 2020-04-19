@@ -22,7 +22,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Verify(
                     new Scenario
                     {
-                        WhenArgs = "[debug] Do",
+                        When = {Args = "[debug] Do"},
                         Then =
                         {
                             ExitCode = 1, // method should have been called
@@ -40,7 +40,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Verify(
                     new Scenario
                     {
-                        WhenArgs = "[debug] Do",
+                        When = {Args = "[debug] Do"},
                         Then =
                         {
                             ExitCode = 5, // method should have been called

@@ -99,7 +99,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                 .Verify(_output,
                     new Scenario
                     {
-                        WhenArgs = $"{parse} {args}",
+                        When = {Args = $"{parse} {args}"},
                         Then =
                         {
                             ExitCode = throwBeforeBind ? 1 : 0,

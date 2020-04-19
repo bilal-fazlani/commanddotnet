@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
@@ -18,7 +18,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
         {
             var scenario = new Scenario
             {
-                WhenArgs = "Do",
+                When = {Args = "Do"},
                 Then = {Captured = { "red" }}
             };
 
@@ -32,7 +32,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
         {
             var scenario = new Scenario
             {
-                WhenArgs = "Default",
+                When = {Args = "Default"},
                 Then = { Captured = { "red" } }
             };
 
@@ -46,7 +46,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
         {
             var scenario = new Scenario
             {
-                WhenArgs = "Do",
+                When = {Args = "Do"},
                 Then = { Captured = { "red,blue,green" } }
             };
 
@@ -62,7 +62,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
             var scenario = new Scenario
             {
-                WhenArgs = "Default",
+                When = {Args = "Default"},
                 Then = { Captured = { "lala" } }
             };
 
@@ -76,7 +76,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
         {
             var scenario = new Scenario
             {
-                WhenArgs = "Multi",
+                When = {Args = "Multi"},
                 Then = { Captured = { new []{"one", "two"}} }
             };
 
@@ -91,7 +91,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
         {
             var scenario = new Scenario
             {
-                WhenArgs = "Multi",
+                When = {Args = "Multi"},
                 Then = { Captured = { new[] { "right one", "two" } } }
             };
 

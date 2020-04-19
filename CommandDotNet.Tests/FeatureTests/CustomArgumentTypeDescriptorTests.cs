@@ -25,7 +25,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>(BasicHelpWithDescriptor).Verify(new Scenario
             {
-                WhenArgs = "Do -h",
+                When = {Args = "Do -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll Do [arguments]
@@ -42,7 +42,7 @@ Arguments:
         {
             new AppRunner<App>(DetailedHelpWithDescriptor).Verify(new Scenario
             {
-                WhenArgs = "Do -h",
+                When = {Args = "Do -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll Do [arguments]
@@ -60,7 +60,7 @@ Arguments:
         {
             new AppRunner<App>(BasicHelpWithDescriptor).Verify(new Scenario
             {
-                WhenArgs = "Do 2x3",
+                When = {Args = "Do 2x3"},
                 Then = { Captured = { new Square { Length = 2, Width = 3 } } }
             });
         }
@@ -70,7 +70,7 @@ Arguments:
         {
             new AppRunner<App>().Verify(new Scenario
             {
-                WhenArgs = "Do ",
+                When = {Args = "Do "},
                 Then =
                 {
                     ExitCode = 1,

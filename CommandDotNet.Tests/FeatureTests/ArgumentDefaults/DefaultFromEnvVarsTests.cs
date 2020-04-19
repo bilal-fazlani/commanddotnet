@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
@@ -40,12 +40,12 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             var scenario = includes
                 ? new Scenario
                 {
-                    WhenArgs = "ByAttribute -h",
+                    When = {Args = "ByAttribute -h"},
                     Then = { OutputContainsTexts = { $"{nameToInclude}  <TEXT>  [red]" } }
                 }
                 : new Scenario
                 {
-                    WhenArgs = "ByAttribute -h",
+                    When = {Args = "ByAttribute -h"},
                     Then = { OutputNotContainsTexts = { $"{nameToInclude}  <TEXT>  [red]" } }
                 };
 
@@ -67,7 +67,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
             var scenario = new Scenario
             {
-                WhenArgs = args,
+                When = {Args = args},
                 Then = { Captured = { value.Split(',') } }
             };
 

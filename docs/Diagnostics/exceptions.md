@@ -14,11 +14,11 @@ There are two patterns for handling exceptions
     public static AppRunner GetRunner()
     {
         return new AppRunner<Calculator>()
-                    .UseErrorHandler(ErrorHandler)
+                    .Configure(c => c.UseMiddleware(ErrorHandler, MiddlewareSteps.ErrorHandler));
                     .Run(args);
     }
 
-    private Task<int> ErrorHandler(CommandContext context, ExecutionDelegate next)
+    private static AppRunner ErrorHandler(CommandContext context, ExecutionDelegate next)
     {
         try
         {

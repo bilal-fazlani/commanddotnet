@@ -16,7 +16,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             var scenario = new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then = {OutputContainsTexts = {"-v | --version  Show version information"}}
             };
 
@@ -30,7 +30,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             var scenario = new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then = {
                     OutputContainsTexts = { @"  -v | --version
   Show version information" }
@@ -48,7 +48,7 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<App>(TestAppSettings.BasicHelp)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "-h",
+                    When = {Args = "-h"},
                     Then = { OutputNotContainsTexts = { "-v | --version" } }
                 });
         }
@@ -59,7 +59,7 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<App>(TestAppSettings.DetailedHelp)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "-h",
+                    When = {Args = "-h"},
                     Then = {OutputNotContainsTexts = {"-v | --version"}}
                 });
         }
@@ -69,7 +69,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             var scenario = new Scenario
             {
-                WhenArgs = "--version",
+                When = {Args = "--version"},
                 Then =
                 {
                     Output = @"testhost.dll
@@ -88,7 +88,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             var scenario = new Scenario
             {
-                WhenArgs = "-v",
+                When = {Args = "-v"},
                 Then =
                 {
                     Output = @"testhost.dll
@@ -108,7 +108,7 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<App>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "--version",
+                    When = {Args = "--version"},
                     Then =
                     {
                         ExitCode = 1,
@@ -123,7 +123,7 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<App>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "-v",
+                    When = {Args = "-v"},
                     Then =
                     {
                         ExitCode = 1,
