@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Directives;
 using CommandDotNet.Execution;
@@ -17,33 +16,13 @@ namespace CommandDotNet.Diagnostics
         {
             return appRunner.Configure(c =>
             {
-                c.Services.Add(new LogConfig(
+                c.Services.Add(new CommandLoggerConfig(
                     writerFactory,
                     includeSystemInfo,
                     includeAppConfig,
                     additionalInfoCallback));
                 c.UseMiddleware(CommandLogger, MiddlewareStages.Invoke);
             });
-        }
-
-        private class LogConfig
-        {
-            public Func<CommandContext, Action<string>> WriterFactory { get; }
-            public bool IncludeSystemInfo { get; }
-            public bool IncludeAppConfig { get; }
-            public Func<CommandContext, IEnumerable<(string key, string value)>> AdditionalHeadersCallback { get; }
-
-            public LogConfig(
-                Func<CommandContext, Action<string>> writerFactory,
-                bool includeSystemInfo,
-                bool includeAppConfig,
-                Func<CommandContext, IEnumerable<(string, string)>> additionalHeadersCallback)
-            {
-                WriterFactory = writerFactory;
-                IncludeSystemInfo = includeSystemInfo;
-                IncludeAppConfig = includeAppConfig;
-                AdditionalHeadersCallback = additionalHeadersCallback;
-            }
         }
 
         private static Action<string> DefaultWriterFactory(CommandContext ctx)
@@ -55,7 +34,7 @@ namespace CommandDotNet.Diagnostics
 
         private static Task<int> CommandLogger(CommandContext commandContext, ExecutionDelegate next)
         {
-            var config = commandContext.AppConfig.Services.Get<LogConfig>();
+            var config = commandContext.AppConfig.Services.Get<CommandLoggerConfig>();
             var writer = (config.WriterFactory ?? DefaultWriterFactory)(commandContext);
             if (writer != null)
             {
@@ -63,8 +42,7 @@ namespace CommandDotNet.Diagnostics
                     commandContext, 
                     writer, 
                     config.IncludeSystemInfo, 
-                    config.IncludeAppConfig, 
-                    config.AdditionalHeadersCallback?.Invoke(commandContext));
+                    config.IncludeAppConfig);
             }
 
             return next(commandContext);

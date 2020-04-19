@@ -44,7 +44,7 @@ namespace CommandDotNet.Prompts
                     c.UseMiddleware(
                         (ctx, next) => PromptForMissingArguments(ctx, next,
                             new ArgumentPrompter(prompterOverride(ctx), argumentPromptTextOverride), argumentFilter), 
-                        MiddlewareSteps.ValuePromptMissingArguments.Stage, MiddlewareSteps.ValuePromptMissingArguments.Order);
+                        MiddlewareSteps.ValuePromptMissingArguments);
                 }
             });
         }
@@ -90,7 +90,7 @@ namespace CommandDotNet.Prompts
 
             if (isCancellationRequested)
             {
-                return Task.FromResult(0);
+                return ExitCodes.Success;
             }
 
             return next(commandContext);

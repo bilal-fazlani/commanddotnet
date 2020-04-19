@@ -5,80 +5,64 @@ namespace CommandDotNet.Execution
     public static class MiddlewareSteps
     {
         /// <summary>Runs first in the <see cref="MiddlewareStages.PreTokenize"/> stage</summary>
-        public static class DebugDirective
-        {
-            public static readonly MiddlewareStages Stage = MiddlewareStages.PreTokenize;
-            public static readonly int Order = -1000;
-        }
+        public static MiddlewareStep DebugDirective { get; } = 
+            new MiddlewareStep(MiddlewareStages.PreTokenize, int.MinValue + 1000);
+
+        /// <summary>
+        /// Runs second after <see cref="DebugDirective"/>
+        /// in the <see cref="MiddlewareStages.PreTokenize"/> stage.
+        /// This will catch all exceptions in the pipeline stack.
+        /// </summary>
+        public static MiddlewareStep ErrorHandler { get; } = 
+            new MiddlewareStep(MiddlewareStages.PreTokenize, DebugDirective.OrderWithinStage + 1000);
+
+        public static MiddlewareStep OnRunCompleted { get; } =
+            new MiddlewareStep(MiddlewareStages.PreTokenize, ErrorHandler.OrderWithinStage + 1000);
 
         public static class DependencyResolver
         {
-            public static class BeginScope
-            {
-                public static readonly MiddlewareStages Stage = MiddlewareStages.PreTokenize;
-                public static readonly int Order = -900;
-            }
+            public static MiddlewareStep BeginScope { get; } =
+                new MiddlewareStep(MiddlewareStages.PreTokenize, -10000);
         }
 
-        public static class Tokenize
-        {
-            public static readonly MiddlewareStages Stage = MiddlewareStages.Tokenize;
-            public static readonly int Order = -1000;
-        }
+        public static MiddlewareStep Tokenize { get; } =
+            new MiddlewareStep(MiddlewareStages.Tokenize, -1000);
 
-        public static class CreateRootCommand
-        {
-            public static readonly MiddlewareStages Stage = MiddlewareStages.Tokenize;
-            public static readonly int Order = int.MaxValue - 1000;
-        }
+        public static MiddlewareStep CreateRootCommand { get; } =
+            new MiddlewareStep(MiddlewareStages.Tokenize, int.MaxValue - 1000);
 
-        public static class ParseInput
-        {
-            public static readonly MiddlewareStages Stage = MiddlewareStages.ParseInput;
-            public static readonly int Order = 0;
-        }
+        public static MiddlewareStep ParseInput { get; } =
+            new MiddlewareStep(MiddlewareStages.ParseInput, 0);
 
-        public static class TypoSuggest
-        {
-            public static readonly MiddlewareStages Stage = MiddlewareStages.ParseInput;
-            public static readonly int Order = ParseInput.Order + 100;
-        }
+        public static MiddlewareStep TypoSuggest { get; } =
+            new MiddlewareStep(MiddlewareStages.ParseInput, ParseInput.OrderWithinStage + 100);
 
-        public static class AssembleInvocationPipeline
-        {
-            public static readonly MiddlewareStages Stage = MiddlewareStages.ParseInput;
-            public static readonly int Order = ParseInput.Order + 1000;
-        }
+        public static MiddlewareStep AssembleInvocationPipeline { get; } =
+            new MiddlewareStep(MiddlewareStages.ParseInput, ParseInput.OrderWithinStage + 1000);
 
         /// <summary>Runs before <see cref="Help"/> to ensure default values are included in the help output</summary>
-        public static class Version
-        {
-            public static readonly MiddlewareStages Stage = Help.Stage;
-            public static readonly int Order = Help.Order - 2000;
-        }
+        public static MiddlewareStep Version { get; } =
+            new MiddlewareStep(Help.CheckIfShouldShowHelp.Stage, Help.CheckIfShouldShowHelp.OrderWithinStage - 2000);
 
         /// <summary>Runs before <see cref="Help"/> to ensure default values are included in the help output</summary>
-        public static class SetArgumentDefaults
-        {
-            public static readonly MiddlewareStages Stage = Help.Stage;
-            public static readonly int Order = Help.Order - 1000;
-        }
+        public static MiddlewareStep SetArgumentDefaults { get; } =
+            new MiddlewareStep(Help.CheckIfShouldShowHelp.Stage, Help.CheckIfShouldShowHelp.OrderWithinStage - 1000);
 
         /// <summary>Runs at the end of the <see cref="MiddlewareStages.ParseInput"/> stage</summary>
         public static class Help
         {
-            [Obsolete("use Help.CheckIfShouldShowHelp or Help.PrintHelp")]
+            public static MiddlewareStep CheckIfShouldShowHelp { get; } =
+                new MiddlewareStep(MiddlewareStages.ParseInput, int.MaxValue);
+            public static MiddlewareStep PrintHelpOnExit { get; } =
+                new MiddlewareStep(MiddlewareStages.PreTokenize, -10000);
+
+            [Obsolete("use Help.CheckIfShouldShowHelp or Help.PrintHelpOnExit")]
             public static readonly MiddlewareStages Stage = CheckIfShouldShowHelp.Stage;
 
-            [Obsolete("use Help.CheckIfShouldShowHelp or Help.PrintHelp")]
-            public static readonly int Order = CheckIfShouldShowHelp.Order;
+            [Obsolete("use Help.CheckIfShouldShowHelp or Help.PrintHelpOnExit")]
+            public static readonly int Order = CheckIfShouldShowHelp.OrderWithinStage.GetValueOrDefault();
 
-            public static class CheckIfShouldShowHelp
-            {
-                public static readonly MiddlewareStages Stage = MiddlewareStages.ParseInput;
-                public static readonly int Order = int.MaxValue;
-            }
-
+            [Obsolete("use Help.PrintHelpOnExit")]
             public static class PrintHelp
             {
                 public static readonly MiddlewareStages Stage = MiddlewareStages.PreTokenize;
@@ -86,32 +70,20 @@ namespace CommandDotNet.Execution
             }
         }
 
-        public static class PipedInput
-        {
-            public static readonly MiddlewareStages Stage = MiddlewareStages.PostParseInputPreBindValues;
-            public static readonly int Order = -1;
-        }
+        public static MiddlewareStep PipedInput { get; } =
+            new MiddlewareStep(MiddlewareStages.PostParseInputPreBindValues, -1);
 
         /// <summary>
         /// Runs late in the <see cref="MiddlewareStages.PostParseInputPreBindValues"/>
         /// stage to enable other middleware to populate arguments
         /// </summary>
-        public static class ValuePromptMissingArguments
-        {
-            public static readonly MiddlewareStages Stage = MiddlewareStages.PostParseInputPreBindValues;
-            public static readonly int Order = int.MaxValue - 100;
-        }
+        public static MiddlewareStep ValuePromptMissingArguments { get; } =
+            new MiddlewareStep(MiddlewareStages.PostParseInputPreBindValues, int.MaxValue - 100);
 
-        public static class BindValues
-        {
-            public static readonly MiddlewareStages Stage = MiddlewareStages.BindValues;
-            public static readonly int Order = 0;
-        }
+        public static MiddlewareStep BindValues { get; } =
+            new MiddlewareStep(MiddlewareStages.BindValues, 0);
 
-        public static class ResolveCommandClasses
-        {
-            public static readonly MiddlewareStages Stage = MiddlewareStages.BindValues;
-            public static readonly int Order = BindValues.Order + 100;
-        }
+        public static MiddlewareStep ResolveCommandClasses { get; } =
+            new MiddlewareStep(MiddlewareStages.BindValues, BindValues.OrderWithinStage + 100);
     }
 }

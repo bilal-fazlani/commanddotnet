@@ -8,6 +8,8 @@
     * now prints error messages to IConsole.Error, logs the exception and return ExitCodes.Error (1)
     * this is best practice for console middleware.
 * added `ExitCodes` class with `Success`, `Error` & `ValidationError`. These can be used in the middleware pipeline.
+* added MiddlewareSteps.ErrorHandler step to be used to register error handlers
+* added CommandLogger.HasLoggedFor and made CommandLogger.Log safe to use before ParseResult is populated. This will be useful for logging on error. See [Exceptions > Printing config information](../Diagnostics/exceptions.md#printing-config-information) for details
 
 ## 3.6.1
 

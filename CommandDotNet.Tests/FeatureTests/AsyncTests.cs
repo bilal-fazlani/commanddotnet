@@ -39,7 +39,7 @@ namespace CommandDotNet.Tests.FeatureTests
             public async Task<int> Get2Async()
             {
                 TestCaptures.Capture(true);
-                return await Task.FromResult(2);
+                return await ExitCodes.ValidationError;
             }
 
             [Command(Description = "Invokes an async method and exits with return code 0", Name = "get00")]

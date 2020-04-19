@@ -13,7 +13,7 @@ namespace CommandDotNet.Builders
             return appRunner.Configure(c =>
             {
                 c.BuildEvents.OnCommandCreated += AddVersionOption;
-                c.UseMiddleware(DisplayVersionIfSpecified, MiddlewareSteps.Version.Stage, MiddlewareSteps.Version.Order);
+                c.UseMiddleware(DisplayVersionIfSpecified, MiddlewareSteps.Version);
             });
         }
 
@@ -46,7 +46,7 @@ namespace CommandDotNet.Builders
             if (commandContext.RootCommand.HasInputValues(VersionOptionName))
             {
                 Print(commandContext, commandContext.Console);
-                return Task.FromResult(0);
+                return ExitCodes.Success;
             }
 
             return next(commandContext);

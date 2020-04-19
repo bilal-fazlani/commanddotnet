@@ -211,7 +211,7 @@ Options:
                 TestCaptures.Capture(interceptOptions);
                 if (interceptOptions.skipCmd)
                 {
-                    return Task.FromResult(0);
+                    return ExitCodes.Success;
                 }
 
                 var returnCode = next();

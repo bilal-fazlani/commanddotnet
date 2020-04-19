@@ -1,6 +1,8 @@
 using System;
 using System.Text;
 using System.Threading.Tasks;
+using CommandDotNet.Execution;
+using Diag=CommandDotNet.Diagnostics;
 using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;
 using Xunit;
@@ -22,7 +24,7 @@ namespace CommandDotNet.Tests.CommandDotNet.CommandLogger
                 .UseCommandLogger(excludeSystemInfo: true)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "[cmdlog] --password super-secret Do lala",
+                    When = {Args = "[cmdlog] --password super-secret Do lala"},
                     Then =
                     {
                         Output = $@"
@@ -63,7 +65,7 @@ options:
                 .UseCommandLogger()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "[cmdlog] Do",
+                    When = {Args = "[cmdlog] Do"},
                     Then =
                     {
                         Output = $@"
@@ -165,7 +167,7 @@ AppConfig:
                 .UseCommandLogger(excludeSystemInfo: true, includeAppConfig: true)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "[cmdlog] Do",
+                    When = {Args = "[cmdlog] Do"},
                     Then =
                     {
                         OutputContainsTexts =
@@ -189,7 +191,7 @@ AppConfig:
                 .UseCommandLogger(excludeSystemInfo: true, additionalInfoCallback: ctx => null)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "[cmdlog] Do",
+                    When = {Args = "[cmdlog] Do"},
                     Then =
                     {
                         Output = $@"
@@ -229,13 +231,12 @@ options:
             new AppRunner<App>()
                 .UseCommandLogger(excludeSystemInfo: true, additionalInfoCallback: ctx => new (string, string)[]
                 {
-                    ("header1", "value1" ),
-                    ("header2", "value2" ),
-
+                    ("header1", "value1"),
+                    ("header2", "value2")
                 })
                 .Verify(new Scenario
                 {
-                    WhenArgs = "[cmdlog] Do",
+                    When = {Args = "[cmdlog] Do"},
                     Then =
                     {
                         Output = $@"
@@ -281,7 +282,7 @@ header2  = value2
                 .UseCommandLogger(excludeSystemInfo: true, writerFactory: context => null)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do",
+                    When = {Args = "Do"},
                     Then =
                     {
                         Output = ""
@@ -298,7 +299,7 @@ header2  = value2
                 .UseCommandLogger(excludeSystemInfo: true, writerFactory: context => text => sb.AppendLine(text))
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do",
+                    When = {Args = "Do"},
                     Then =
                     {
                         Output = ""
@@ -341,8 +342,8 @@ options:
                 .UseCommandLogger()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "[cmdlog] Do",
-                    Then = { OutputContainsTexts = { "Original input:" } }
+                    When = {Args = "[cmdlog] Do"},
+                    Then = {OutputContainsTexts = {"Original input:"}}
                 });
         }
 
@@ -353,9 +354,36 @@ options:
                 .UseCommandLogger()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do",
+                    When = {Args = "Do"},
                     Then = {Output = ""}
                 });
+        }
+
+        [Fact]
+        public void CommandLogger_Log_CanBeCalled_BeforeParseResults()
+        {
+            // this supports printing the CommandLogger in error handling.
+
+            new AppRunner<App>()
+                .UseCommandLogger(excludeSystemInfo: true, additionalInfoCallback: ctx => new (string, string)[]
+                {
+                    ("header1", "value1"),
+                    ("header2", "value2")
+                })
+                .Configure(c => c.UseMiddleware((context, next) =>
+                {
+                    Diag.CommandLogger.Log(context, context.Console.Out.WriteLine);
+                    return ExitCodes.Success;
+                }, MiddlewareStages.PostTokenizePreParseInput))
+                .Verify(new Scenario
+                {
+                    When = {Args = "Do"},
+                    Then =
+                    {
+                        AssertOutput = o => { o.Should().ContainAll("header1", "value1", "header2", "value2"); }
+                    }
+                });
+
         }
 
         public class App

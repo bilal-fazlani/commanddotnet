@@ -16,7 +16,7 @@ namespace CommandDotNet.Diagnostics
             return appRunner.Configure(c =>
             {
                 c.UseMiddleware(ConfigureParseReportByTokenTransform, MiddlewareStages.PreTokenize);
-                c.UseMiddleware(ParseReportByArg, MiddlewareStages.BindValues, MiddlewareSteps.BindValues.Order + 100);
+                c.UseMiddleware(ParseReportByArg, MiddlewareSteps.BindValues + 100);
             });
         }
 
@@ -81,7 +81,7 @@ namespace CommandDotNet.Diagnostics
                     commandContext, 
                     commandContext.Console.Out.WriteLine);
                 parseContext.Reported = true;
-                return Task.FromResult(0);
+                return ExitCodes.Success;
             }
 
             return next(commandContext);

@@ -11,12 +11,8 @@ namespace CommandDotNet.Help
             return appRunner.Configure(c =>
             {
                 c.BuildEvents.OnCommandCreated += AddHelpOption;
-                c.UseMiddleware(CheckIfShouldShowHelp,
-                    MiddlewareSteps.Help.CheckIfShouldShowHelp.Stage,
-                    MiddlewareSteps.Help.CheckIfShouldShowHelp.Order);
-                c.UseMiddleware(PrintHelp,
-                    MiddlewareSteps.Help.PrintHelp.Stage,
-                    MiddlewareSteps.Help.PrintHelp.Order);
+                c.UseMiddleware(CheckIfShouldShowHelp, MiddlewareSteps.Help.CheckIfShouldShowHelp);
+                c.UseMiddleware(PrintHelp, MiddlewareSteps.Help.PrintHelpOnExit);
             });
         }
 
@@ -53,19 +49,19 @@ namespace CommandDotNet.Help
                 console.Error.WriteLine(parseResult.ParseError.Message);
                 console.Error.WriteLine();
                 ctx.ShowHelpOnExit = true;
-                return Task.FromResult(1);
+                return ExitCodes.Error;
             }
 
             if (parseResult.HelpWasRequested())
             {
                 ctx.ShowHelpOnExit = true;
-                return Task.FromResult(0);
+                return ExitCodes.Success;
             }
 
             if (!targetCommand.IsExecutable)
             {
                 ctx.ShowHelpOnExit = true;
-                return Task.FromResult(0);
+                return ExitCodes.Success;
             }
 
             return next(ctx);

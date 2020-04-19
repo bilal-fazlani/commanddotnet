@@ -23,7 +23,7 @@ namespace CommandDotNet.ClassModeling
 
             if (arguments.Any(a => !TryBindArgument(a, console, parserFactory)))
             {
-                return Task.FromResult(2);
+                return ExitCodes.ValidationError;
             }
 
             return next(commandContext);

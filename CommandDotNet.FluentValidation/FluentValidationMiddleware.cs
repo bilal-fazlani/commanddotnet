@@ -62,13 +62,13 @@ namespace CommandDotNet.FluentValidation
                         console.Error.WriteLine();
                     }
 
-                    return Task.FromResult(2);
+                    return ExitCodes.ValidationError;
                 }
             }
             catch (InvalidValidatorException e)
             {
                 ctx.Console.Error.WriteLine(e.ToString());
-                return Task.FromResult(1);
+                return ExitCodes.Error;
             }
 
             return next(ctx);
