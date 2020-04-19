@@ -23,7 +23,7 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<App>(TestAppSettings.BasicHelp)
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then =
                     {
                         Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -44,7 +44,7 @@ Options:
             new AppRunner<App>(TestAppSettings.DetailedHelp)
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then =
                     {
                         Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -68,7 +68,7 @@ Options:
                 .Configure(c => c.CancellationToken = new CancellationTokenSource().Token)
                 .Verify(_output, new Scenario
             {
-                WhenArgs = "Do 7 --stringOption optValue",
+                When = {Args = "Do 7 --stringOption optValue"},
                 Then =
                 {
                     AllowUnspecifiedCaptures = true,
@@ -105,7 +105,7 @@ Options:
             new AppRunner<SomeServiceApp>()
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "Do",
+                    When = {Args = "Do"},
                     Then =
                     {
                         ExitCode = 1,
@@ -126,7 +126,7 @@ Options:
                 .Configure(b => b.UseParameterResolver(ctx => someSvc))
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "Do",
+                    When = {Args = "Do"},
                     Then =
                     {
                         Captured =

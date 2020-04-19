@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "Do -h",
+                When = {Args = "Do -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -46,7 +46,7 @@ Options:
         {
             new AppRunner<App>(DetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "Do -h",
+                When = {Args = "Do -h"},
                 Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
@@ -75,9 +75,9 @@ Options:
         {
             new AppRunner<App>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "Do --ModelOption moA --ModelOptionList moB --ModelOptionList moC " +
+                When = {Args = "Do --ModelOption moA --ModelOptionList moB --ModelOptionList moC " +
                            "--paramOption poA --paramOptionList poB --paramOptionList poC " +
-                           "red green blue orange",
+                           "red green blue orange"},
                 Then =
                 {
                     Captured =
@@ -105,9 +105,9 @@ Options:
         {
             new AppRunner<App>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "Do --paramOptionList poB --paramOptionList poC " +
+                When = {Args = "Do --paramOptionList poB --paramOptionList poC " +
                            "red --paramOptionList poD green --paramOptionList poE " +
-                           "blue --paramOptionList poF orange --paramOptionList poG",
+                           "blue --paramOptionList poF orange --paramOptionList poG"},
                 Then =
                 {
                     Captured =

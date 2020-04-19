@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             new AppRunner<App>()
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "--name gramps Greet",
+                    When = {Args = "--name gramps Greet"},
                     Then =
                     {
                         Captured =
@@ -40,7 +40,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             new AppRunner<App>()
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "--name gramps Child --name2 pops GrandChild --name3 junior Greet",
+                    When = {Args = "--name gramps Child --name2 pops GrandChild --name3 junior Greet"},
                     Then =
                     {
                         Captured =
@@ -59,7 +59,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             new AppRunner<App>()
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "--name gramps GrandChild --name3 junior Greet",
+                    When = {Args = "--name gramps GrandChild --name3 junior Greet"},
                     Then =
                     {
                         Captured =

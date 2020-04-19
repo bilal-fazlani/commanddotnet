@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<OperandsNoDefaults>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "ArgsNoDefault -h",
+                When = {Args = "ArgsNoDefault -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments]
@@ -47,7 +47,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>(DetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "ArgsNoDefault -h",
+                When = {Args = "ArgsNoDefault -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments]
@@ -79,7 +79,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "StructListNoDefault -h",
+                When = {Args = "StructListNoDefault -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll StructListNoDefault [arguments]
@@ -96,7 +96,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>(DetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "StructListNoDefault -h",
+                When = {Args = "StructListNoDefault -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll StructListNoDefault [arguments]
@@ -114,7 +114,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "EnumListNoDefault -h",
+                When = {Args = "EnumListNoDefault -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments]
@@ -131,7 +131,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>(DetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "EnumListNoDefault -h",
+                When = {Args = "EnumListNoDefault -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments]
@@ -150,7 +150,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "ObjectListNoDefault -h",
+                When = {Args = "ObjectListNoDefault -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments]
@@ -167,7 +167,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>(DetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "ObjectListNoDefault -h",
+                When = {Args = "ObjectListNoDefault -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments]
@@ -185,7 +185,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>().Verify(new Scenario
             {
-                WhenArgs = "ArgsNoDefault true green 1 2 Monday http://google.com yellow orange",
+                When = {Args = "ArgsNoDefault true green 1 2 Monday http://google.com yellow orange"},
                 Then =
                 {
                     Captured =
@@ -210,7 +210,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>().Verify(new Scenario
             {
-                WhenArgs = "ArgsNoDefault",
+                When = {Args = "ArgsNoDefault"},
                 Then =
                 {
                     Captured =
@@ -230,7 +230,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>().Verify(new Scenario
             {
-                WhenArgs = "StructListNoDefault 23 5 7",
+                When = {Args = "StructListNoDefault 23 5 7"},
                 Then =
                 {
                     Captured =
@@ -249,7 +249,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>().Verify(new Scenario
             {
-                WhenArgs = "EnumListNoDefault Friday Tuesday Thursday",
+                When = {Args = "EnumListNoDefault Friday Tuesday Thursday"},
                 Then =
                 {
                     Captured =
@@ -268,7 +268,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>().Verify(new Scenario
             {
-                WhenArgs = "ObjectListNoDefault http://google.com http://apple.com http://github.com",
+                When = {Args = "ObjectListNoDefault http://google.com http://apple.com http://github.com"},
                 Then =
                 {
                     Captured =

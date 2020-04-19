@@ -143,11 +143,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             };
             new AppRunner<App>().Verify(new Scenario
             {
-                WhenArgs = "Do " +
+                When = {Args = "Do " +
                            "--mopt_01=1 --mopt_02=2 --mopt_03=3 --mopt_04=4 --mopt_05=5 --mopt_06=6 --mopt_07=7 --mopt_08=8 --mopt_09=9 --mopt_10=10 --mopt_11=11 --mopt_12=12 --mopt_13=13 --mopt_14=14 --mopt_15=15 --mopt_16=16 --mopt_17=17 --mopt_18=18 --mopt_19=19 --mopt_20=20 --mopt_21=21 --mopt_22=22 --mopt_23=23 --mopt_24=24 --mopt_25=25 --mopt_26=26 --mopt_27=27 --mopt_28=28 --mopt_29=29 --mopt_30=30 --mopt_31=31 --mopt_32=32 --mopt_33=33 --mopt_34=34 --mopt_35=35 --mopt_36=36 --mopt_37=37 --mopt_38=38 --mopt_39=39 --mopt_40=40 --mopt_41=41 --mopt_42=42 --mopt_43=43 --mopt_44=44 --mopt_45=45 --mopt_46=46 --mopt_47=47 --mopt_48=48 --mopt_49=49 --mopt_50=50 " +
                            "--popt_01=1 --popt_02=2 --popt_03=3 --popt_04=4 --popt_05=5 --popt_06=6 --popt_07=7 --popt_08=8 --popt_09=9 --popt_10=10 --popt_11=11 --popt_12=12 --popt_13=13 --popt_14=14 --popt_15=15 --popt_16=16 --popt_17=17 --popt_18=18 --popt_19=19 --popt_20=20 --popt_21=21 --popt_22=22 --popt_23=23 --popt_24=24 --popt_25=25 --popt_26=26 --popt_27=27 --popt_28=28 --popt_29=29 --popt_30=30 --popt_31=31 --popt_32=32 --popt_33=33 --popt_34=34 --popt_35=35 --popt_36=36 --popt_37=37 --popt_38=38 --popt_39=39 --popt_40=40 --popt_41=41 --popt_42=42 --popt_43=43 --popt_44=44 --popt_45=45 --popt_46=46 --popt_47=47 --popt_48=48 --popt_49=49 --popt_50=50 " +
                            "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 " +
-                           "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 ",
+                           "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 "},
                 Then = {Captured = {new Assignments {Model = expectedAssignment, Params = expectedAssignment}}}
             });
         }
@@ -503,7 +503,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 $"var expectedAssignment = new Model\n{{\n{assignExpectedOptionValues},\n{assignExpectedArgValues}\n}};");
             _output.WriteLine("Verify(new Given<App>\n{");
             _output.WriteLine(
-                $"WhenArgs = \"Do \" +\n\"{modelOptionsDo} \" +\n\"{paramOptionsDo} \" +\n\"{argsDo} \" +\n\"{argsDo} \",");
+                $"When = {{Args = \"Do \" +\n\"{modelOptionsDo} \" +\n\"{paramOptionsDo} \" +\n\"{argsDo} \" +\n\"{argsDo} \"}},");
             _output.WriteLine("Then = {Outputs = {new Assignments {Model = expectedAssignment, Params = expectedAssignment}}}");
             _output.WriteLine("});");
         }

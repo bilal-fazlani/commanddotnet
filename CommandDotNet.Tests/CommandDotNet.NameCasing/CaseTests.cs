@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using CommandDotNet.NameCasing;
 using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;
@@ -89,7 +89,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
                 .UseNameCasing(@case, applyToNameOverrides)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "-h",
+                    When = {Args = "-h"},
                     Then =
                     {
                         OutputContainsTexts = commandNames.ToList()

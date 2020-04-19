@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.CommandDotNet.FluentValidation
         {
             var scenario = new Scenario
             {
-                WhenArgs = "Save -h",
+                When = {Args = "Save -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll Save [arguments]
@@ -47,7 +47,7 @@ Arguments:
         {
             var scenario = new Scenario
             {
-                WhenArgs = "Save",
+                When = {Args = "Save"},
                 Then =
                 {
                     ExitCode = 2,
@@ -69,7 +69,7 @@ Arguments:
         {
             var scenario = new Scenario
             {
-                WhenArgs = "Save",
+                When = {Args = "Save"},
                 Then =
                 {
                     ExitCode = 2,
@@ -94,7 +94,7 @@ Arguments:
         {
             var scenario = new Scenario
             {
-                WhenArgs = "Save 1 john john@doe.com",
+                When = {Args = "Save 1 john john@doe.com"},
                 Then = {Captured = {new Person {Id = 1, Name = "john", Email = "john@doe.com"}}}
             };
 
@@ -111,7 +111,7 @@ Arguments:
         {
             var scenario = new Scenario
             {
-                WhenArgs = "Save",
+                When = {Args = "Save"},
                 Then =
                 {
                     ExitCode = 2,
@@ -129,7 +129,7 @@ Arguments:
         {
             var scenario = new Scenario
             {
-                WhenArgs = "Save",
+                When = {Args = "Save"},
                 Then =
                 {
                     ExitCode = 2,
@@ -150,7 +150,7 @@ Arguments:
         {
             var scenario = new Scenario
             {
-                WhenArgs = "InvalidSave",
+                When = {Args = "InvalidSave"},
                 Then =
                 {
                     ExitCode = 1,
@@ -176,7 +176,7 @@ Arguments:
         {
             var scenario = new Scenario
             {
-                WhenArgs = "Save",
+                When = {Args = "Save"},
                 Then =
                 {
                     ExitCode = 2,

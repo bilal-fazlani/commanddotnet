@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                 .UseParseDirective()
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "[parse] Do",
+                    When = {Args = "[parse] Do"},
                     Then =
                     {
                         Output = @"command: Do

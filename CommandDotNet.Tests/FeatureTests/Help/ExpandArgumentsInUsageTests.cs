@@ -20,7 +20,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             new AppRunner<App>(new AppSettings { Help = {ExpandArgumentsInUsage = true}})
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then = { OutputContainsTexts = { "Usage: dotnet testhost.dll Do <arg1> <arg2> [<optional>]" } }
                 });
         }
@@ -31,7 +31,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             new AppRunner<App>(new AppSettings { Help = { ExpandArgumentsInUsage = true } })
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "Do2 -h",
+                    When = {Args = "Do2 -h"},
                     Then = { OutputContainsTexts = { "Usage: dotnet testhost.dll Do2 [options] <arg1> <arg2> [<optional>]" } }
                 });
         }

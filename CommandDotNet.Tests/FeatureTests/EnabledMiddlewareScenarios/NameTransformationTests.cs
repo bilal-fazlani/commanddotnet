@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                     => $"prefix-{memberName}")
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "prefix-Do -h",
+                    When = {Args = "prefix-Do -h"},
                     Then =
                     {
                         OutputContainsTexts =
@@ -40,7 +40,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                     => commandNodeType.IsCommand ? $"prefix-{memberName}" : memberName)
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "prefix-Do -h",
+                    When = {Args = "prefix-Do -h"},
                     Then =
                     {
                         OutputContainsTexts =
@@ -63,7 +63,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                     => commandNodeType.IsOperand ? $"prefix-{memberName}" : memberName)
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then =
                     {
                         OutputContainsTexts =

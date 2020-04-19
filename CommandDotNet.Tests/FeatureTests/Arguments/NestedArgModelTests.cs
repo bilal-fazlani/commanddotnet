@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<NestedModelApp>(BasicHelp).Verify(_output, new Scenario
             {
-                WhenArgs = "Do -h",
+                When = {Args = "Do -h"},
                 Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
@@ -40,7 +40,7 @@ Options:
         {
             new AppRunner<NestedModelApp>(DetailedHelp).Verify(_output, new Scenario
             {
-                WhenArgs = "Do -h",
+                When = {Args = "Do -h"},
                 Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
@@ -63,7 +63,7 @@ Options:
         {
             new AppRunner<NestedModelApp>(BasicHelp).Verify(_output, new Scenario
             {
-                WhenArgs = "Do --Option1 aaa --Option2 bbb ccc ddd",
+                When = {Args = "Do --Option1 aaa --Option2 bbb ccc ddd"},
                 Then =
                 {
                     Captured =

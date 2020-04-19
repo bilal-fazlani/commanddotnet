@@ -20,7 +20,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                 .UseParseDirective()
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "[parse:t] Do",
+                    When = {Args = "[parse:t] Do"},
                     Then =
                     {
                         OutputContainsTexts = { @"token transformations:
@@ -41,7 +41,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                 .UseParseDirective()
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "[parse:t] Do -abc --one two --three:four --five=six seven",
+                    When = {Args = "[parse:t] Do -abc --one two --three:four --five=six seven"},
                     Then =
                     {
                         ExitCode = 1,

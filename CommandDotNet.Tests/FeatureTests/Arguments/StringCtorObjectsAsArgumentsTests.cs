@@ -22,7 +22,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
             {
-                WhenArgs = "Do -h",
+                When = {Args = "Do -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll Do [arguments]
@@ -39,7 +39,7 @@ Arguments:
         {
             new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
             {
-                WhenArgs = "DoList -h",
+                When = {Args = "DoList -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll DoList [arguments]
@@ -56,7 +56,7 @@ Arguments:
         {
             new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
             {
-                WhenArgs = "Do -h",
+                When = {Args = "Do -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll Do [arguments]
@@ -74,7 +74,7 @@ Arguments:
         {
             new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
             {
-                WhenArgs = "DoList -h",
+                When = {Args = "DoList -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll DoList [arguments]
@@ -92,7 +92,7 @@ Arguments:
         {
             new AppRunner<App>().Verify(_output, new Scenario
             {
-                WhenArgs = "DoList some-value another-value",
+                When = {Args = "DoList some-value another-value"},
                 Then =
                 {
                     Captured =
@@ -112,7 +112,7 @@ Arguments:
         {
             new AppRunner<App>().Verify(_output, new Scenario
             {
-                WhenArgs = "Do some-value",
+                When = {Args = "Do some-value"},
                 Then = { Captured = { new StringCtorObject("some-value") } }
             });
         }

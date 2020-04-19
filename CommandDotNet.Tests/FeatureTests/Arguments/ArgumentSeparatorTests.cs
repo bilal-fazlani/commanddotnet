@@ -29,7 +29,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<Math>(_appSettingsPassThru)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Add -1 -3",
+                    When = {Args = "Add -1 -3"},
                     Then =
                     {
                         ExitCode = 1,
@@ -44,7 +44,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<Math>(_appSettingsEndOfOptions)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Add -1 -3",
+                    When = {Args = "Add -1 -3"},
                     Then =
                     {
                         ExitCode = 1,
@@ -59,7 +59,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<Math>(_appSettingsPassThru)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Add_EndOfOptions -1 -3",
+                    When = {Args = "Add_EndOfOptions -1 -3"},
                     Then =
                     {
                         ExitCode = 1,
@@ -74,7 +74,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             var result = new AppRunner<Math>(_appSettingsPassThru)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Add -- -1 -3",
+                    When = {Args = "Add -- -1 -3"},
                     Then = { Output = "0" }
                 });
 
@@ -88,7 +88,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             var result = new AppRunner<Math>(_appSettingsEndOfOptions)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Add_PassThru -- -1 -3",
+                    When = {Args = "Add_PassThru -- -1 -3"},
                     Then = { Output = "0" }
                 });
 
@@ -102,7 +102,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             var result = new AppRunner<Math>(_appSettingsEndOfOptions)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Add -- -1 -3",
+                    When = {Args = "Add -- -1 -3"},
                     Then = { Output = "-4" }
                 });
 
@@ -116,7 +116,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             var result = new AppRunner<Math>(_appSettingsPassThru)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Add_EndOfOptions -- -1 -3",
+                    When = {Args = "Add_EndOfOptions -- -1 -3"},
                     Then = { Output = "-4" }
                 });
 
@@ -132,7 +132,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             var result = new AppRunner<Math>(appSettings)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Add -- -1 -3 -5 -7",
+                    When = {Args = "Add -- -1 -3 -5 -7"},
                     Then = { Output = "-4" }
                 });
 
@@ -151,7 +151,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             var result = new AppRunner<Math>(appSettings)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Add_EndOfOptions -- -1 -3 -5 -7",
+                    When = {Args = "Add_EndOfOptions -- -1 -3 -5 -7"},
                     Then = { Output = "-4" }
                 });
 
@@ -172,7 +172,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             var result = new AppRunner<Math>(appSettings)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Add -- -1 -3 -- -5 -7",
+                    When = {Args = "Add -- -1 -3 -- -5 -7"},
                     Then = { Output = "-4" }
                 });
 
@@ -193,7 +193,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             var result = new AppRunner<Math>(appSettings)
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Add -- -1 -3 __ -5 -7",
+                    When = {Args = "Add -- -1 -3 __ -5 -7"},
                     Then = { Output = "-4" }
                 });
 

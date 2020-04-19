@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using CommandDotNet.TestTools.Scenarios;
 using CommandDotNet.TypeDescriptors;
 using Xunit;
@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Verify(
                     new Scenario
                     {
-                        WhenArgs = "User --user",
+                        When = {Args = "User --user"},
                         Then =
                         {
                             ExitCode = 1,
@@ -43,7 +43,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Verify(
                     new Scenario
                     {
-                        WhenArgs = "User --user",
+                        When = {Args = "User --user"},
                         Then =
                         {
                             ExitCode = 1,
@@ -74,7 +74,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Verify(
                     new Scenario
                     {
-                        WhenArgs = "User --user",
+                        When = {Args = "User --user"},
                         Then =
                         {
                             ExitCode = 1,
@@ -102,7 +102,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Verify(
                     new Scenario
                     {
-                        WhenArgs = "User --user",
+                        When = {Args = "User --user"},
                         Then =
                         {
                             ExitCode = 1,
@@ -124,7 +124,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Verify(
                     new Scenario
                     {
-                        WhenArgs = "egister",
+                        When = {Args = "egister"},
                         Then =
                         {
                             ExitCode = 1,
@@ -147,7 +147,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Verify(
                     new Scenario
                     {
-                        WhenArgs = "Similars --opt",
+                        When = {Args = "Similars --opt"},
                         Then =
                         {
                             ExitCode = 1,
@@ -171,7 +171,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Verify(
                     new Scenario
                     {
-                        WhenArgs = "Similars --lala",
+                        When = {Args = "Similars --lala"},
                         Then =
                         {
                             ExitCode = 1,
@@ -191,7 +191,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Verify(
                     new Scenario
                     {
-                        WhenArgs = "--users",
+                        When = {Args = "--users"},
                         Then =
                         {
                             ExitCode = 1,
@@ -213,7 +213,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Verify(
                     new Scenario
                     {
-                        WhenArgs = "users",
+                        When = {Args = "users"},
                         Then =
                         {
                             ExitCode = 1,

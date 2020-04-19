@@ -1,4 +1,4 @@
-﻿using CommandDotNet.TestTools.Scenarios;
+using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -19,7 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then =
                 {
                     Output = @"app description
@@ -43,7 +43,7 @@ app extended help
         {
             new AppRunner<App>(DetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then =
                 {
                     Output = @"app description
@@ -68,7 +68,7 @@ app extended help
         {
             new AppRunner<App>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "SubApp -h",
+                When = {Args = "SubApp -h"},
                 Then =
                 {
                     Output = @"sub-app description
@@ -91,7 +91,7 @@ sub-app extended help
         {
             new AppRunner<App>(DetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "SubApp -h",
+                When = {Args = "SubApp -h"},
                 Then =
                 {
                     Output = @"sub-app description
@@ -115,7 +115,7 @@ sub-app extended help
         {
             new AppRunner<App>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "somecommand -h",
+                When = {Args = "somecommand -h"},
                 Then =
                 {
                     Output = @"cmd description
@@ -136,7 +136,7 @@ cmd extended help
         {
             new AppRunner<App>(DetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "somecommand -h",
+                When = {Args = "somecommand -h"},
                 Then =
                 {
                     Output = @"cmd description
@@ -158,7 +158,7 @@ cmd extended help
         {
             new AppRunner<App>().Verify(new Scenario
             {
-                WhenArgs = "somecommand 5",
+                When = {Args = "somecommand 5"},
                 Then = { ExitCode = 5 }
             });
         }
@@ -168,7 +168,7 @@ cmd extended help
         {
             new AppRunner<App>().Verify(new Scenario
             {
-                WhenArgs = "SubApp subdo 5",
+                When = {Args = "SubApp subdo 5"},
                 Then = { ExitCode = 5 }
             });
         }

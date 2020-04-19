@@ -1,4 +1,4 @@
-﻿using CommandDotNet.Extensions;
+using CommandDotNet.Extensions;
 using CommandDotNet.Rendering;
 using CommandDotNet.TestTools.Scenarios;
 using CommandDotNet.Tokens;
@@ -29,7 +29,7 @@ namespace CommandDotNet.Tests.FeatureTests
                                     : t.ToEnumerable())))
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do --opt1 smells like",
+                    When = {Args = "Do --opt1 smells like"},
                     Then =
                     {
                         Output = "smells roses"

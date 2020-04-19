@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<OptionsNoDefaults>(BasicHelp).Verify(_output, new Scenario
             {
-                WhenArgs = "ArgsDefaults -h",
+                When = {Args = "ArgsDefaults -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll ArgsDefaults [options]
@@ -50,7 +50,7 @@ Options:
         {
             new AppRunner<OptionsNoDefaults>(DetailedHelp).Verify(_output, new Scenario
             {
-                WhenArgs = "ArgsDefaults -h",
+                When = {Args = "ArgsDefaults -h"},
                 Then =
                 {
                     Output = @"Usage: dotnet testhost.dll ArgsDefaults [options]
@@ -88,12 +88,12 @@ Options:
         {
             new AppRunner<OptionsNoDefaults>().Verify(_output, new Scenario
             {
-                WhenArgs = "ArgsDefaults --StringArg green --StructArg 1 --StructNArg 2 " +
+                When = {Args = "ArgsDefaults --StringArg green --StructArg 1 --StructNArg 2 " +
                            "--EnumArg Monday --ObjectArg http://google.com " +
                            "--StringListArg yellow --StringListArg orange " +
                            "--StructListArg 23 --StructListArg 5 " +
                            "--EnumListArg Friday --EnumListArg Tuesday " +
-                           "--ObjectListArg http://apple.com --ObjectListArg http://github.com",
+                           "--ObjectListArg http://apple.com --ObjectListArg http://github.com"},
                 Then =
                 {
                     Captured = { new OptionsNoDefaultsSampleTypesModel
@@ -121,7 +121,7 @@ Options:
         {
             new AppRunner<OptionsNoDefaults>().Verify(_output, new Scenario
             {
-                WhenArgs = "ArgsDefaults",
+                When = {Args = "ArgsDefaults"},
                 Then =
                 {
                     Captured = { new OptionsNoDefaultsSampleTypesModel() }

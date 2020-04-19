@@ -19,7 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             new AppRunner<AppWithNoInterceptorOptions>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "-h",
+                    When = {Args = "-h"},
                     Then =
                     {
                         Output = @"Usage: dotnet testhost.dll [command]
@@ -40,7 +40,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             new AppRunner<AppWithNoInterceptorOptions>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then =
                     {
                         Output = @"Usage: dotnet testhost.dll Do [arguments]
@@ -59,7 +59,7 @@ Arguments:
             new AppRunner<AppWithInteceptorOptions>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "-h",
+                    When = {Args = "-h"},
                     Then =
                     {
                         Output = @"Usage: dotnet testhost.dll [command] [options]
@@ -88,7 +88,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             new AppRunner<AppWithInteceptorOptions>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then =
                     {
                         Output = @"Usage: dotnet testhost.dll Do [arguments]
@@ -107,7 +107,7 @@ Arguments:
             new AppRunner<AppWithNoInterceptorOptions>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do 1",
+                    When = {Args = "Do 1"},
                     Then =
                     {
                         Captured = { true, 1 }
@@ -121,7 +121,7 @@ Arguments:
             new AppRunner<AppWithInteceptorOptions>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "--stringOpt lala Do 1",
+                    When = {Args = "--stringOpt lala Do 1"},
                     Then =
                     {
                         Captured =
@@ -139,7 +139,7 @@ Arguments:
             new AppRunner<AppWithInteceptorOptions>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = " --skipCmd Do 1",
+                    When = {Args = " --skipCmd Do 1"},
                     Then =
                     {
                         // does not contain output from Do method
@@ -154,7 +154,7 @@ Arguments:
             new AppRunner<AppWithInteceptorOptions>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = " --useReturnCode 5 Do 1",
+                    When = {Args = " --useReturnCode 5 Do 1"},
                     Then =
                     {
                         ExitCode = 5,

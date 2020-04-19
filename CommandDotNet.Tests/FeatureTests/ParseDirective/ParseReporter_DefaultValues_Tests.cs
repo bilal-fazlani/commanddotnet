@@ -37,7 +37,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                 .UseParseDirective()
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "[parse] Do",
+                    When = {Args = "[parse] Do"},
                     Then =
                     {
                         Output = @"command: Do
@@ -79,7 +79,7 @@ Use [parse:t] to include token transformations.
                 .UseParseDirective()
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "[parse] Do",
+                    When = {Args = "[parse] Do"},
                     Then =
                     {
                         Output = @"command: Do

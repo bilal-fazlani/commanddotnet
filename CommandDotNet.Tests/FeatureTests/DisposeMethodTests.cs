@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<DisposableApp>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then = {OutputNotContainsTexts = {"Dispose"}}
             });
         }
@@ -31,7 +31,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<DisposableApp>(DetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then = {OutputNotContainsTexts = {"Dispose"}}
             });
         }
@@ -41,7 +41,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<NotDisposableApp>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then = { OutputContainsTexts = { @"Commands:
   Dispose" } }
             });
@@ -52,7 +52,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<NotDisposableApp>(DetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then = { OutputContainsTexts = { @"Commands:
 
   Dispose" } }
@@ -64,7 +64,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<DisposableApp>().Verify(new Scenario
             {
-                WhenArgs = "Do",
+                When = {Args = "Do"},
                 Then = {Captured = {true}}
             });
         }
@@ -74,7 +74,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<NotDisposableApp>().Verify(new Scenario
             {
-                WhenArgs = "Dispose",
+                When = {Args = "Dispose"},
                 Then = { Captured = { true } }
             });
         }

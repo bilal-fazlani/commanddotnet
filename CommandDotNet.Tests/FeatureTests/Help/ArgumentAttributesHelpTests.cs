@@ -18,7 +18,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
                 .Verify(
                     new Scenario
                     {
-                        WhenArgs = "Do -h",
+                        When = {Args = "Do -h"},
                         Then =
                         {
                             Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -41,7 +41,7 @@ Options:
                 .Verify(
                     new Scenario
                     {
-                        WhenArgs = "Do -h",
+                        When = {Args = "Do -h"},
                         Then =
                         {
                             Output = @"Usage: dotnet testhost.dll Do [options] [arguments]

@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "EnumerableModel -h",
+                When = {Args = "EnumerableModel -h"},
                 Then = { Output = @"Usage: dotnet testhost.dll EnumerableModel [options] [arguments]
 
 Arguments:
@@ -38,7 +38,7 @@ Options:
         {
             new AppRunner<App>(DetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "EnumerableModel -h",
+                When = {Args = "EnumerableModel -h"},
                 Then = { Output = @"Usage: dotnet testhost.dll EnumerableModel [options] [arguments]
 
 Arguments:
@@ -57,7 +57,7 @@ Options:
         {
             new AppRunner<App>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "Enumerable -h",
+                When = {Args = "Enumerable -h"},
                 Then = {Output = @"Usage: dotnet testhost.dll Enumerable [options] [arguments]
 
 Arguments:
@@ -74,7 +74,7 @@ Options:
         {
             new AppRunner<App>(DetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "Enumerable -h",
+                When = {Args = "Enumerable -h"},
                 Then = {Output = @"Usage: dotnet testhost.dll Enumerable [options] [arguments]
 
 Arguments:
@@ -93,7 +93,7 @@ Options:
         {
             new AppRunner<App>().Verify(new Scenario
             {
-                WhenArgs = "Enumerable --options aaa --options bbb ccc ddd",
+                When = {Args = "Enumerable --options aaa --options bbb ccc ddd"},
                 Then =
                 {
                     Captured =
@@ -113,7 +113,7 @@ Options:
         {
             new AppRunner<App>().Verify(new Scenario
             {
-                WhenArgs = "EnumerableModel --Options aaa --Options bbb ccc ddd",
+                When = {Args = "EnumerableModel --Options aaa --Options bbb ccc ddd"},
                 Then =
                 {
                     Captured =
@@ -133,7 +133,7 @@ Options:
         {
             new AppRunner<App>().Verify(new Scenario
             {
-                WhenArgs = "Collection --options aaa --options bbb ccc ddd",
+                When = {Args = "Collection --options aaa --options bbb ccc ddd"},
                 Then =
                 {
                     Captured =
@@ -153,7 +153,7 @@ Options:
         {
             new AppRunner<App>().Verify(new Scenario
             {
-                WhenArgs = "Array --options aaa --options bbb ccc ddd",
+                When = {Args = "Array --options aaa --options bbb ccc ddd"},
                 Then =
                 {
                     Captured =

@@ -22,7 +22,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>(OperandMode).Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then =
                 {
                     OutputNotContainsTexts = { "Arguments" },
@@ -41,7 +41,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>(OperandMode).Verify(new Scenario
             {
-                WhenArgs = "Method -h",
+                When = {Args = "Method -h"},
                 Then =
                 {
                     OutputContainsTexts =
@@ -62,7 +62,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>(OperandMode).Verify(new Scenario
             {
-                WhenArgs = "Model -h",
+                When = {Args = "Model -h"},
                 Then =
                 {
                     OutputContainsTexts =
@@ -83,7 +83,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>(OptionMode).Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then =
                 {
                     OutputNotContainsTexts = { "Arguments" },
@@ -102,7 +102,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>(OptionMode).Verify(new Scenario
             {
-                WhenArgs = "Method -h",
+                When = {Args = "Method -h"},
                 Then =
                 {
                     OutputContainsTexts =
@@ -123,7 +123,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>(OptionMode).Verify(new Scenario
             {
-                WhenArgs = "Model -h",
+                When = {Args = "Model -h"},
                 Then =
                 {
                     OutputContainsTexts =
@@ -144,7 +144,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>(DeprecatedParameterMode).Verify(new Scenario
             {
-                WhenArgs = "-h",
+                When = {Args = "-h"},
                 Then =
                 {
                     OutputNotContainsTexts = { "Arguments" },
@@ -163,7 +163,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>(DeprecatedParameterMode).Verify(new Scenario
             {
-                WhenArgs = "Method -h",
+                When = {Args = "Method -h"},
                 Then =
                 {
                     OutputContainsTexts =
@@ -184,7 +184,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>(DeprecatedParameterMode).Verify(new Scenario
             {
-                WhenArgs = "Model -h",
+                When = {Args = "Model -h"},
                 Then =
                 {
                     OutputContainsTexts =

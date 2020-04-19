@@ -23,7 +23,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<OperandsDefaults>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "ArgsDefaults -h",
+                When = {Args = "ArgsDefaults -h"},
                 Then = { Output = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
 
 Arguments:
@@ -43,7 +43,7 @@ Arguments:
         {
             new AppRunner<OperandsDefaults>(DetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "ArgsDefaults -h",
+                When = {Args = "ArgsDefaults -h"},
                 Then = { Output = @"Usage: dotnet testhost.dll ArgsDefaults [arguments]
 
 Arguments:
@@ -72,7 +72,7 @@ Arguments:
         {
             new AppRunner<OperandsDefaults>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "StructListDefaults -h",
+                When = {Args = "StructListDefaults -h"},
                 Then = { Output = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
 
 Arguments:
@@ -86,7 +86,7 @@ Arguments:
         {
             new AppRunner<OperandsDefaults>(DetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "StructListDefaults -h",
+                When = {Args = "StructListDefaults -h"},
                 Then = { Output = @"Usage: dotnet testhost.dll StructListDefaults [arguments]
 
 Arguments:
@@ -101,7 +101,7 @@ Arguments:
         {
             new AppRunner<OperandsDefaults>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "EnumListDefaults -h",
+                When = {Args = "EnumListDefaults -h"},
                 Then = { Output = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
 
 Arguments:
@@ -115,7 +115,7 @@ Arguments:
         {
             new AppRunner<OperandsDefaults>(DetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "EnumListDefaults -h",
+                When = {Args = "EnumListDefaults -h"},
                 Then = { Output = @"Usage: dotnet testhost.dll EnumListDefaults [arguments]
 
 Arguments:
@@ -131,7 +131,7 @@ Arguments:
         {
             new AppRunner<OperandsDefaults>(BasicHelp).Verify(new Scenario
             {
-                WhenArgs = "ObjectListDefaults -h",
+                When = {Args = "ObjectListDefaults -h"},
                 Then = { Output = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
 
 Arguments:
@@ -145,7 +145,7 @@ Arguments:
         {
             new AppRunner<OperandsDefaults>(DetailedHelp).Verify(new Scenario
             {
-                WhenArgs = "ObjectListDefaults -h",
+                When = {Args = "ObjectListDefaults -h"},
                 Then = { Output = @"Usage: dotnet testhost.dll ObjectListDefaults [arguments]
 
 Arguments:
@@ -160,7 +160,7 @@ Arguments:
         {
             new AppRunner<OperandsDefaults>().Verify(new Scenario
             {
-                WhenArgs = "ArgsDefaults true green 1 2 Monday http://google.com yellow orange",
+                When = {Args = "ArgsDefaults true green 1 2 Monday http://google.com yellow orange"},
                 Then =
                 {
                     Captured = { new OperandsDefaultsSampleTypesModel
@@ -182,7 +182,7 @@ Arguments:
         {
             new AppRunner<OperandsDefaults>().Verify(new Scenario
             {
-                WhenArgs = "ArgsDefaults",
+                When = {Args = "ArgsDefaults"},
                 Then =
                 {
                     Captured =

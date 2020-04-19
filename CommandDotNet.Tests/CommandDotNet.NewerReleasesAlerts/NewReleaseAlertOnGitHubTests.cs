@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using CommandDotNet.Builders;
 using CommandDotNet.NewerReleasesAlerts;
 using CommandDotNet.TestTools;
@@ -30,7 +30,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                     overrideHttpRequestCallback: (client, uri) => Task.FromResult(BuildGitHubApiResponse("1.0.1")))
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "Do",
+                    When = {Args = "Do"},
                     Then =
                     {
                         OutputContainsTexts =
@@ -55,7 +55,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                     overrideHttpRequestCallback: (client, uri) => Task.FromResult(BuildGitHubApiResponse("1.0.0")))
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "Do",
+                    When = {Args = "Do"},
                     Then =
                     {
                         OutputNotContainsTexts =
@@ -81,7 +81,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                     skipCommand:command => true)
                 .Verify(_output, new Scenario
                 {
-                    WhenArgs = "Do",
+                    When = {Args = "Do"},
                     Then =
                     {
                         OutputNotContainsTexts =

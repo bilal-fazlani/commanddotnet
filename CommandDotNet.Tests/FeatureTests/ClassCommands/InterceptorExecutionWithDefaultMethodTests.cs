@@ -19,7 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             new AppRunner<AppWithNoInterceptorOptions>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "-h",
+                    When = {Args = "-h"},
                     Then =
                     {
                         Output = @"Usage: dotnet testhost.dll [command] [arguments]
@@ -44,7 +44,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             new AppRunner<AppWithNoInterceptorOptions>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then =
                     {
                         Output = @"Usage: dotnet testhost.dll Do [arguments]
@@ -63,7 +63,7 @@ Arguments:
             new AppRunner<AppWithInteceptorOptions>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "-h",
+                    When = {Args = "-h"},
                     Then =
                     {
                         Output = @"Usage: dotnet testhost.dll [command] [options] [arguments]
@@ -98,7 +98,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             new AppRunner<AppWithInteceptorOptions>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do -h",
+                    When = {Args = "Do -h"},
                     Then =
                     {
                         Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -121,7 +121,7 @@ Options:
             new AppRunner<AppWithNoInterceptorOptions>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "Do 1",
+                    When = {Args = "Do 1"},
                     Then =
                     {
                         Captured = { true, 1 }
@@ -135,7 +135,7 @@ Options:
             new AppRunner<AppWithNoInterceptorOptions>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "1",
+                    When = {Args = "1"},
                     Then =
                     {
                         Captured = { true, 1 }
@@ -149,7 +149,7 @@ Options:
             new AppRunner<AppWithInteceptorOptions>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "--stringOpt lala Do 1",
+                    When = {Args = "--stringOpt lala Do 1"},
                     Then =
                     {
                         Captured =
@@ -167,7 +167,7 @@ Options:
             new AppRunner<AppWithInteceptorOptions>()
                 .Verify(new Scenario
                 {
-                    WhenArgs = "--stringOpt lala 1",
+                    When = {Args = "--stringOpt lala 1"},
                     Then =
                     {
                         Captured =

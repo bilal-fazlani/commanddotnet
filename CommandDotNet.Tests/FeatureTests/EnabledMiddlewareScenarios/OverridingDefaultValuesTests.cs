@@ -36,7 +36,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                 .Verify(_output,
                     new Scenario
                     {
-                        WhenArgs = "ArgsDefaults",
+                        When = {Args = "ArgsDefaults"},
                         Then =
                         {
                             Captured = { new ParametersSampleTypesResults
@@ -56,7 +56,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                 .Verify(_output,
                     new Scenario
                     {
-                        WhenArgs = "OperandsDefaultsModel",
+                        When = {Args = "OperandsDefaultsModel"},
                         Then =
                         {
                             Captured = { new OperandsDefaultsSampleTypesModel
@@ -92,7 +92,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                 .Verify(_output,
                 new Scenario
                 {
-                    WhenArgs = "ArgsDefaults",
+                    When = {Args = "ArgsDefaults"},
                     Then =
                     {
                         Captured =
@@ -115,7 +115,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                 .Verify(_output,
                 new Scenario
                 {
-                    WhenArgs = "EnumListDefaults",
+                    When = {Args = "EnumListDefaults"},
                     Then =
                     {
                         Captured =
@@ -129,7 +129,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                 .Verify(_output,
                     new Scenario
                     {
-                        WhenArgs = "ObjectListDefaults",
+                        When = {Args = "ObjectListDefaults"},
                         Then =
                         {
                             Captured =
@@ -157,7 +157,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                 .Verify(_output,
                     new Scenario
                     {
-                        WhenArgs = "OptionsDefaultsModel",
+                        When = {Args = "OptionsDefaultsModel"},
                         Then =
                         {
                             Captured = { new OptionsDefaultsSampleTypesModel
@@ -181,7 +181,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                 .Verify(_output,
                     new Scenario
                     {
-                        WhenArgs = "OptionsDefaultsModel",
+                        When = {Args = "OptionsDefaultsModel"},
                         Then =
                         {
                             ExitCode = 2,
