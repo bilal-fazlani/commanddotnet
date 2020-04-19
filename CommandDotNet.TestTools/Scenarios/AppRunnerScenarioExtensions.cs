@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CommandDotNet.Extensions;
-using FluentAssertions;
-using FluentAssertions.Execution;
 
 namespace CommandDotNet.TestTools.Scenarios
 {
@@ -64,7 +62,7 @@ namespace CommandDotNet.TestTools.Scenarios
 
                 if (scenario.Then.Output != null)
                 {
-                    results.OutputShouldBe(scenario.Then.Output);
+                    results.Console.AllText().ShouldBe(scenario.Then.Output, "output");
                 }
 
                 if (scenario.Then.Captured.Count > 0)
@@ -91,7 +89,7 @@ namespace CommandDotNet.TestTools.Scenarios
             AssertUnexpectedOutputTexts(scenario, result, sb);
             if (sb.Length > 0)
             {
-                throw new AssertionFailedException(sb.ToString());
+                throw new AssertFailedException(sb.ToString());
             }
         }
 
@@ -107,7 +105,7 @@ namespace CommandDotNet.TestTools.Scenarios
         private static void AssertMissingOutputTexts(IScenario scenario, AppRunnerResult result, StringBuilder sb)
         {
             var missingHelpTexts = scenario.Then.OutputContainsTexts
-                .Where(t => !result.OutputContains(t))
+                .Where(t => !result.Console.AllText().Contains(t))
                 .ToList();
             if (missingHelpTexts.Count > 0)
             {
@@ -124,7 +122,7 @@ namespace CommandDotNet.TestTools.Scenarios
         private static void AssertUnexpectedOutputTexts(IScenario scenario, AppRunnerResult result, StringBuilder sb)
         {
             var unexpectedHelpTexts = scenario.Then.OutputNotContainsTexts
-                .Where(result.OutputContains)
+                .Where(result.Console.AllText().Contains)
                 .ToList();
             if (unexpectedHelpTexts.Count > 0)
             {
@@ -142,10 +140,13 @@ namespace CommandDotNet.TestTools.Scenarios
         {
             foreach (var expectedOutput in scenario.Then.Captured)
             {
-                var actualOutput = results.TestCaptures.Get(expectedOutput.GetType());
-                actualOutput.Should()
-                    .NotBeNull(because: $"{expectedOutput.GetType().Name} should have been captured in the test run but wasn't");
-                actualOutput.Should().BeEquivalentTo(expectedOutput);
+                var expectedType = expectedOutput.GetType();
+                var actualOutput = results.TestCaptures.Get(expectedType);
+                if (actualOutput == null)
+                {
+                    throw new AssertFailedException($"{expectedType.Name} should have been captured in the test run but wasn't");
+                }
+                actualOutput.ShouldBeEquivalentTo(expectedOutput, $"Captured {expectedType.Name}");
             }
 
             var actualOutputs = results.TestCaptures.Captured;
@@ -156,7 +157,18 @@ namespace CommandDotNet.TestTools.Scenarios
                     .Where(t => !expectedOutputTypes.Contains(t))
                     .ToOrderedCsv();
 
-                throw new AssertionFailedException($"Unexpected captures: {unexpectedTypes}");
+                throw new AssertFailedException($"Unexpected captures: {unexpectedTypes}");
+            }
+        }
+
+        private static void ShouldBeEquivalent(object expected, object actual, string propertyPath)
+        {
+            if (expected == null)
+            {
+                if (actual == null)
+                {
+                    return;
+                }
             }
         }
     }

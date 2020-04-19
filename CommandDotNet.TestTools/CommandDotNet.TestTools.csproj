@@ -15,9 +15,6 @@
     <None Remove="output\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="5.10.2" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\CommandDotNet\CommandDotNet.csproj" />
   </ItemGroup>
 </Project>

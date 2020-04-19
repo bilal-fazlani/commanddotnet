@@ -1,5 +1,11 @@
 # CommandDotNet.TestTools
 
+## 2.1.0
+
+Remove FluentValidator requirement. Implemented simple ShouldBeEquivalentTo that handles IEnumerables, primitives and deep recursion of public properties of objects. This is only used with TestCaptures.
+
+Obsoleted the Output___ members of AppRunnerResult. They'll be remove in the next release.
+
 ## 2.0.1
 
 More assert options for BDD Scenario `Then = { AssertOutput..., AssertContext... }`. See [BDD Verify > Then](../TestTools/Harness/bdd.md#then) for details.

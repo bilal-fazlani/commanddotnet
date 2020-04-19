@@ -1,5 +1,4 @@
 using System;
-using FluentAssertions;
 
 namespace CommandDotNet.TestTools
 {
@@ -42,33 +41,20 @@ namespace CommandDotNet.TestTools
             EscapedException = escapedException;
         }
 
-        /// <summary>
-        /// Help generation leaves extra trailing spaces that are hard to account for in test verification.
-        /// This method removes trailing white space from each line and standardizes Environment.NewLine
-        /// for all line endings
-        /// </summary>
+        [Obsolete("Assert result.Console.AllText() instead")]
         public void OutputShouldBe(string expected)
         {
-            var actual = Console.AllText();
-            actual.Should().Be(expected);
+            Console.AllText().ShouldBe(expected, "output");
         }
 
-        /// <summary>
-        /// Help generation leaves extra trailing spaces that are hard to account for in test verification.
-        /// This method removes trailing white space from each line and standardizes Environment.NewLine
-        /// for all line endings
-        /// </summary>
+        [Obsolete("Assert result.Console.AllText() instead")]
         public bool OutputContains(string expected)
         {
             var actual = Console.AllText();
             return actual.Contains(expected);
         }
 
-        /// <summary>
-        /// Help generation leaves extra trailing spaces that are hard to account for in test verification.
-        /// This method removes trailing white space from each line and standardizes Environment.NewLine
-        /// for all line endings
-        /// </summary>
+        [Obsolete("Assert result.Console.AllText() instead")]
         public bool OutputNotContains(string expected)
         {
             return !OutputContains(expected);

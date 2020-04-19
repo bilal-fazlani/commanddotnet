@@ -19,7 +19,7 @@ namespace CommandDotNet.Example.Tests
                 .RunInMem("List aaa bbb", pipedInput: new[] { "ccc", "ddd" });
 
             result.ExitCode.Should().Be(0);
-            result.OutputShouldBe(@"aaa
+            result.Console.AllText().Should().Be(@"aaa
 bbb
 ccc
 ddd
