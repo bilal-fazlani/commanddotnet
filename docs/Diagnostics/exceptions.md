@@ -4,6 +4,34 @@ CommandDotNet rethrows all exceptions raised by the application code.
 
 There are two patterns for handling exceptions
 
+=== "ErrorHandler middleware"
+
+    Register an ErrorHandler middleware method using MiddlewareSteps.ErrorHandler
+    to ensure the middleware is one of the last in the pipeline to exit.
+
+    ```c#
+    
+    public static AppRunner GetRunner()
+    {
+        return new AppRunner<Calculator>()
+                    .UseErrorHandler(ErrorHandler)
+                    .Run(args);
+    }
+
+    private Task<int> ErrorHandler(CommandContext context, ExecutionDelegate next)
+    {
+        try
+        {
+            return next(context);
+        }
+        catch (Exception e)
+        {
+            context.Console.WriteLine(e.Message);
+            return ExitCodes.Error;
+        }
+    }
+    ```
+
 === "Wrap AppRunner.Run"
 
     Wrap the call to `appRunner.Run(args)` to handle global exceptions.
@@ -17,46 +45,6 @@ There are two patterns for handling exceptions
     catch(MyBusinessException ex)
     {
         Console.WriteLine(ex.Message);
-
-    #if DEBUG
-        // log appRunner config
-        Console.WriteLine(appRunner.ToString())
-    #endif
-    }
-    ```
-
-=== "ErrorHandler middleware"
-
-    Register an ErrorHandler middleware method using MiddlewareSteps.ErrorHandler
-    to ensure the middleware is one of the last in the pipeline to exit.
-
-    ```c#
-    
-    public static AppRunner GetRunner()
-    {
-        return new AppRunner<Calculator>()
-                    .Configure(c => c.UseMiddleware(
-                        ErrorHandler, MiddlewareSteps.ErrorHandler))
-                    .Run(args);
-    }
-
-    private Task<int> ErrorHandler(CommandContext context, ExecutionDelegate next)
-    {
-        try
-        {
-            return next(context);
-        }
-        catch (Exception e)
-        {
-            context.Console.WriteLine(e.Message);
-
-            #if DEBUG
-            // log appRunner config
-            Console.WriteLine(context.AppConfig)
-            #endif
-
-            return ExitCodes.Error;
-        }
     }
     ```
 
@@ -84,6 +72,8 @@ With the context, you can `.PrintHelp()` or `ParserReport.Report` to log details
 
 Configuration can be printed with `appRunner.ToString()`.  See the [Command Logger > AppConfig](command-logger.md#appconfig) section for an example.
 
+Alternatively, `CommandLogger.Log(ctx)` can be used to output CommandLogger for exception handling.
+
 ### Full example
 
 ```c#
@@ -96,18 +86,18 @@ catch(MyBusinessException ex)
 {
     Console.WriteLine(ex.Message);
 
-#if DEBUG
-
     var ctx = ex.GetCommandContext();
-
-    // log the parse arguments
-    Console.WriteLine(ParseReporter.Report(ctx));
+    // check if it has already been logged for this CommandContext
+    if(!CommandLogger.HasLoggedFor(ctx))
+    {
+        CommandLogger.Log(
+            ctx, 
+            includeSystemInfo: true,
+            includeAppConfig: true
+        )
+    }
 
     // print help for the target command
     Console.WriteLine(ctx.PrintHelp());
-
-    // log appRunner config
-    Console.WriteLine(appRunner.ToString())
-#endif
 }
 ```

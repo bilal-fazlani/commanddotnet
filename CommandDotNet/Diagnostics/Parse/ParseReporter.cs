@@ -13,6 +13,11 @@ namespace CommandDotNet.Diagnostics.Parse
         public static void Report(CommandContext commandContext, 
             Action<string> writeln = null, Indent indent = null)
         {
+            if (commandContext.ParseResult == null)
+            {
+                return;
+            }
+
             var command = commandContext.ParseResult.TargetCommand;
 
             indent = indent ?? new Indent();

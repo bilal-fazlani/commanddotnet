@@ -10,31 +10,44 @@ namespace CommandDotNet.Diagnostics
 {
     public static class CommandLogger
     {
+        public static bool HasLoggedFor(CommandContext context)
+        {
+            return context?.Services.Get<CommandLoggerHasLoggedMarker>() != null;
+        }
+
         public static void Log(
-            CommandContext commandContext,
+            CommandContext context,
             Action<string> writer = null,
             bool includeSystemInfo = true,
-            bool includeAppConfig = false,
-            IEnumerable<(string, string)> additionalHeaders = null)
+            bool includeAppConfig = false)
         {
-            if (commandContext == null)
+            var config = context.AppConfig.Services.Get<CommandLoggerConfig>();
+            if (config == null)
             {
-                throw new ArgumentNullException(nameof(commandContext));
+                throw new AppRunnerException($"{nameof(CommandLoggerMiddleware)} has not been registered. " +
+                                             $"Try `appRunner.{nameof(AppRunnerConfigExtensions.UseCommandLogger)}()`");
             }
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            context.Services.AddOrUpdate(new CommandLoggerHasLoggedMarker());
 
             var sb = new StringBuilder(Environment.NewLine);
 
             sb.AppendLine("***************************************");
 
-            var originalArgs = RemovePasswords(commandContext, commandContext.Original.Args.ToCsv(" "));
+            var originalArgs = RemovePasswords(context, context.Original.Args.ToCsv(" "));
             sb.AppendLine("Original input:");
             sb.AppendLine($"  {originalArgs}");
             sb.AppendLine();
 
             var indent = new Indent();
-            ParseReporter.Report(commandContext, s => sb.AppendLine(s), indent);
+            ParseReporter.Report(context, s => sb.AppendLine(s), indent);
 
-            var otherConfigEntries = GetOtherConfigInfo(commandContext, includeSystemInfo, additionalHeaders).ToList();
+            var additionalHeaders = config.AdditionalHeadersCallback?.Invoke(context);
+            var otherConfigEntries = GetOtherConfigInfo(context, includeSystemInfo, additionalHeaders).ToList();
             if (!otherConfigEntries.IsNullOrEmpty())
             {
                 sb.AppendLine();
@@ -49,17 +62,18 @@ namespace CommandDotNet.Diagnostics
             if (includeAppConfig)
             {
                 sb.AppendLine();
-                sb.AppendLine(commandContext.AppConfig.ToString(indent.Increment()));
+                sb.AppendLine(context.AppConfig.ToString(indent.Increment()));
             }
 
             sb.Append("***************************************");
-            writer = writer ?? commandContext.Console.Out.Write;
+            writer = writer ?? context.Console.Out.Write;
             writer(sb.ToString());
         }
 
         private static string RemovePasswords(CommandContext commandContext, string originalArgs)
         {
-            commandContext.ParseResult.TargetCommand.AllArguments(includeInterceptorOptions: true)
+            commandContext.ParseResult?.TargetCommand?
+                .AllArguments(includeInterceptorOptions: true)
                 .Where(a => a.IsObscured())
                 .ForEach(a => a.InputValues
                     .Where(iv => iv.Source == Constants.InputValueSources.Argument)
@@ -92,5 +106,7 @@ namespace CommandDotNet.Diagnostics
                 }
             }
         }
+
+        private class CommandLoggerHasLoggedMarker { }
     }
 }
