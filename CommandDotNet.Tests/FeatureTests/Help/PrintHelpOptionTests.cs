@@ -1,4 +1,5 @@
 using CommandDotNet.TestTools;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -6,20 +7,18 @@ namespace CommandDotNet.Tests.FeatureTests.Help
 {
     public class PrintHelpOptionTests
     {
-        private readonly ITestOutputHelper _output;
-
         public PrintHelpOptionTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
         public void BasicHelp_Includes_HelpOption()
         {
             var result = new AppRunner<App>(TestAppSettings.BasicHelp.Clone(s => s.Help.PrintHelpOption = true))
-                .RunInMem("Do -h".SplitArgs(), _output);
+                .RunInMem("Do -h".SplitArgs());
 
-            result.OutputShouldBe(@"Usage: dotnet testhost.dll Do [options]
+            result.Console.AllText().Should().Be(@"Usage: dotnet testhost.dll Do [options]
 
 Options:
   -h | --help  Show help information
@@ -30,9 +29,9 @@ Options:
         public void DetailedHelp_Includes_HelpOption()
         {
             var result = new AppRunner<App>(TestAppSettings.DetailedHelp.Clone(s => s.Help.PrintHelpOption = true))
-                .RunInMem("Do -h".SplitArgs(), _output);
+                .RunInMem("Do -h".SplitArgs());
 
-            result.OutputShouldBe(@"Usage: dotnet testhost.dll Do [options]
+            result.Console.AllText().Should().Be(@"Usage: dotnet testhost.dll Do [options]
 
 Options:
 
