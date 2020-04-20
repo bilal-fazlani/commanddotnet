@@ -190,6 +190,12 @@ namespace CommandDotNet
         /// </summary>
         public bool ShowInHelp { get; set; } = true;
 
+        /// <summary>
+        /// When true, the option is hidden and should not be shown
+        /// to the user in help or suggestions or anywhere else.
+        /// </summary>
+        public bool Hidden => !ShowInHelp;
+
         /// <summary>True when the option is a bool with an arity of exactly zero</summary>
         public bool IsFlag => ArgumentArity.Zero.Equals(Arity) && TypeInfo.UnderlyingType == typeof(bool);
 
