@@ -1,5 +1,5 @@
 ﻿using System;
-using CommandDotNet.Parsing;
+using CommandDotNet.Parsing.Typos;
 using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using FluentAssertions;
@@ -8,11 +8,11 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests
 {
-    public class TypoSuggestions_GetSuggestions_Tests: IDisposable
+    public class SuggestionRankingExtensionsTests: IDisposable
     {
         private readonly IDisposable _cleanup;
 
-        public TypoSuggestions_GetSuggestions_Tests(ITestOutputHelper output)
+        public SuggestionRankingExtensionsTests(ITestOutputHelper output)
         {
             _cleanup = TestToolsLogProvider.InitLogProvider(output.WriteLine);
         }
@@ -31,7 +31,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public void AtLeastOneLetterHasToBeInCommon(string typo, params string[] expectedSuggestions)
         {
             new[] {"one", "two"}
-                .GetSuggestions(typo, 3)
+                .RankAndTrimSuggestions(typo, 3)
                 .Should()
                 .BeEquivalentSequenceTo(expectedSuggestions);
         }
@@ -46,7 +46,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public void GivenMixedNames(string typo, params string[] expectedSuggestions)
         {
             new[] { "cancel-me", "git", "models", "pipes", "prompts", "send-after", "retry-count", "dryrun" }
-                .GetSuggestions(typo, 3)
+                .RankAndTrimSuggestions(typo, 3)
                 .Should()
                 .BeEquivalentSequenceTo(expectedSuggestions);
         }
@@ -59,7 +59,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public void GivenSimilarNames(string typo, params string[] expectedSuggestions)
         {
             new[] { "grain", "grapes", "drapes", "drain" }
-                .GetSuggestions(typo, 3)
+                .RankAndTrimSuggestions(typo, 3)
                 .Should()
                 .BeEquivalentSequenceTo(expectedSuggestions);
         }
@@ -71,7 +71,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public void LimitSuggestionCount(string typo, int count, params string[] expectedSuggestions)
         {
             new[] { "apple1", "apple2", "apple3", "apple4", "apple5" }
-                .GetSuggestions(typo, count)
+                .RankAndTrimSuggestions(typo, count)
                 .Should()
                 .BeEquivalentSequenceTo(expectedSuggestions);
         }
@@ -82,7 +82,7 @@ namespace CommandDotNet.Tests.FeatureTests
         public void GivenWordsInWrongOrder(string typo, string options, string expectedSuggestions)
         {
             options.Split(",")
-                .GetSuggestions(typo, 5)
+                .RankAndTrimSuggestions(typo, 5)
                 .Should()
                 .BeEquivalentSequenceTo(expectedSuggestions.Split(","));
         }

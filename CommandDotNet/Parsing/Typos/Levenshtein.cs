@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CommandDotNet.Parsing
+namespace CommandDotNet.Parsing.Typos
 {
     internal static class Levenshtein
     {

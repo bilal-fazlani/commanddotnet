@@ -9,6 +9,7 @@ using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Diagnostics;
 using CommandDotNet.Execution;
 using CommandDotNet.Parsing;
+using CommandDotNet.Parsing.Typos;
 using CommandDotNet.Prompts;
 using CommandDotNet.Tokens;
 

@@ -1,38 +1,64 @@
+using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.TestTools.Scenarios;
-using CommandDotNet.TypeDescriptors;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests
 {
-    public class TypeSuggestionsTests
+    public class TypoSuggestionsTests
     {
-        public TypeSuggestionsTests(ITestOutputHelper output)
+        public TypoSuggestionsTests(ITestOutputHelper output)
         {
             Ambient.Output = output;
         }
 
+        /* Test Matrix
+            Typos:          OptionType vs ValueTypo (Command or AllowedValues)
+            Option sources: Command method, Interceptors, Middleware (Hidden & Visible)
+            AllowedValue:   Options & Operands
+            Argument Arity: Flags, Single, List
+            Other:          Default Command method
+        */
+
+        // TODO: Tests
+        // - default method
+        // - option allowed values
+        // - argument allowed values
+        // - argument list allowed values
+
         [Fact]
-        public void TypoSuggestions_In_UseDefaultMiddleware()
+        public void TypoSuggestions_IsIncludedWith_UseDefaultMiddleware()
         {
             new AppRunner<App>()
                 .UseDefaultMiddleware()
-                .Verify(
-                    new Scenario
+                .Verify(new Scenario
+                {
+                    When = {Args = "User --user"},
+                    Then =
                     {
-                        When = {Args = "User --user"},
-                        Then =
-                        {
-                            ExitCode = 1,
-                            OutputContainsTexts =
-                            {
-                                "'user' is not a option.  See 'dotnet testhost.dll User --help'",
-                                @"Similar options are
-   --username"
-                            }
-                        }
-                    });
+                        ExitCode = 1,
+                        AssertContext = ctx => ctx.AppConfig.MiddlewarePipeline.Should()
+                            .Contain(p => p.Method.Name == "TypoSuggest")
+                    }
+                });
+        }
+
+        [Fact]
+        public void TypoSuggestions_NotIncludedWith_CoreMiddleware()
+        {
+            new AppRunner<App>()
+                .Verify(new Scenario
+                {
+                    When = {Args = "User --user"},
+                    Then =
+                    {
+                        ExitCode = 1,
+                        AssertContext = ctx => ctx.AppConfig.MiddlewarePipeline.Should()
+                            .NotContain(p => p.Method.Name == "TypoSuggest")
+                    }
+                });
         }
 
         [Fact]
@@ -40,21 +66,20 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             new AppRunner<App>()
                 .UseTypoSuggestions()
-                .Verify(
-                    new Scenario
+                .Verify(new Scenario
+                {
+                    When = {Args = "User --user"},
+                    Then =
                     {
-                        When = {Args = "User --user"},
-                        Then =
+                        ExitCode = 1,
+                        OutputContainsTexts =
                         {
-                            ExitCode = 1,
-                            OutputContainsTexts =
-                            {
-                                "'user' is not a option.  See 'dotnet testhost.dll User --help'",
-                                @"Similar options are
+                            "'user' is not a option.  See 'dotnet testhost.dll User --help'",
+                            @"Similar options are
    --username"
-                            }
                         }
-                    });
+                    }
+                });
         }
 
         [Fact]
@@ -117,7 +142,7 @@ namespace CommandDotNet.Tests.FeatureTests
         }
 
         [Fact]
-        public void Given_CommandTypo_ShowsSimilarCommands()
+        public void Given_ValueTypo_ShowsSimilarCommands()
         {
             new AppRunner<App>()
                 .UseTypoSuggestions()
@@ -140,7 +165,7 @@ namespace CommandDotNet.Tests.FeatureTests
         }
 
         [Fact]
-        public void Given_OptionType_AndManySimilarOptions_LimitResult()
+        public void Given_ValueType_AndManySimilarOptions_LimitResult()
         {
             new AppRunner<App>()
                 .UseTypoSuggestions(3)
@@ -164,7 +189,7 @@ namespace CommandDotNet.Tests.FeatureTests
         }
 
         [Fact]
-        public void Given_OptionType_NoSimilarOptions_ShowsHelp()
+        public void Given_ValueType_NoSimilarOptions_ShowsHelp()
         {
             new AppRunner<App>()
                 .UseTypoSuggestions()
@@ -206,7 +231,7 @@ namespace CommandDotNet.Tests.FeatureTests
         }
 
         [Fact]
-        public void Given_Interceptor_AndCommandTypo_ShowsSimilarCommands_NotOptions()
+        public void Given_Interceptor_AndValueTypo_ShowsSimilarCommands_NotOptions()
         {
             new AppRunner<InterceptorApp>()
                 .UseTypoSuggestions()
