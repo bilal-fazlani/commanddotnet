@@ -51,21 +51,6 @@ namespace CommandDotNet.Parsing
                 return separatorStrategy == ArgumentSeparatorStrategy.EndOfOptions;
             }
 
-            IEnumerable<Token> EndOfOptionsTokens()
-            {
-                if (!UsingEndOfOptions())
-                {
-                    yield break;
-                }
-                foreach (var token in commandContext.Tokens.Separated)
-                {
-                    yield return token;
-                }
-            }
-
-
-            //tokens = tokens.Concat(EndOfOptionsTokens());
-
             tokens = tokens.Concat(commandContext.Tokens.Separated.TakeWhile(t => UsingEndOfOptions()));
 
             foreach (var token in tokens)
@@ -73,7 +58,11 @@ namespace CommandDotNet.Parsing
                 switch (token.TokenType)
                 {
                     case TokenType.Option:
-                        ParseOption(token, currentCommand, out currentOption);
+                        if (currentOption != null)
+                        {
+                            throw new CommandParsingException(currentCommand, $"Missing value for option '{currentOption.Name}'");
+                        }
+                        currentOption = ParseOption(token, currentCommand);
                         if (currentOption != null)
                         {
                             currentOptionToken = token;
@@ -175,11 +164,11 @@ namespace CommandDotNet.Parsing
             return ParseOperandResult.Succeeded;
         }
 
-        private void ParseOption(Token token, Command command, out Option option)
+        private Option ParseOption(Token token, Command command)
         {
             var optionTokenType = token.OptionTokenType;
 
-            option = command.FindOption(optionTokenType.GetName());
+            var option = command.FindOption(optionTokenType.GetName());
             if (option == null)
             {
                 throw new CommandParsingException(command, $"Unrecognized option '{token.RawValue}'", unrecognizedArgument: token);
@@ -196,8 +185,11 @@ namespace CommandDotNet.Parsing
             if (option.Arity.AllowsNone())
             {
                 TryAddValue(option, null, token);
-                option = null;
+                return null;
             }
+
+            return option;
+
         }
 
         private static ICollection<ValueFromToken> GetArgumentParsedValues(IArgument argument)
