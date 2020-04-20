@@ -1,8 +1,12 @@
 # CommandDotNet
 
+## 3.6.4
+
+Fixed appRunner.UserErrorHandler method with a better approach and new signatture. Updated [documentation](../Diagnostics/exceptions.md) with the approach.
+
 ## 3.6.3
 
-Remove .UserErrorHandler config method until the bug is fixed. Updated documentation with the approach.
+Remove appRunner.UserErrorHandler config method until the bug is fixed. Updated documentation with the approach.
 
 ## 3.6.2
 

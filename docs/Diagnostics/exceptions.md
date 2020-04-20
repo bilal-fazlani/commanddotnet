@@ -4,31 +4,21 @@ CommandDotNet rethrows all exceptions raised by the application code.
 
 There are two patterns for handling exceptions
 
-=== "ErrorHandler middleware"
+=== "HandleErrorDeletage"
 
     Register an ErrorHandler middleware method using MiddlewareSteps.ErrorHandler
     to ensure the middleware is one of the last in the pipeline to exit.
 
     ```c#
-    
     public static AppRunner GetRunner()
     {
         return new AppRunner<Calculator>()
-                    .Configure(c => c.UseMiddleware(ErrorHandler, MiddlewareSteps.ErrorHandler));
+                    .UseErrorHandler((ctx, ex) =>
+                    {
+                        ctx.Console.Error.WriteLine(ex.Message);
+                        return 1;
+                    });
                     .Run(args);
-    }
-
-    private static AppRunner ErrorHandler(CommandContext context, ExecutionDelegate next)
-    {
-        try
-        {
-            return next(context);
-        }
-        catch (Exception e)
-        {
-            context.Console.WriteLine(e.Message);
-            return ExitCodes.Error;
-        }
     }
     ```
 
@@ -44,13 +34,12 @@ There are two patterns for handling exceptions
     }
     catch(MyBusinessException ex)
     {
-        Console.WriteLine(ex.Message);
+        Console.Error.WriteLine(ex.Message);
     }
     ```
 
 !!! Tip
-    Use the ErrorHandler middleware if you plan to test your app using the [TestTools](../TestTools/overview.md) approach [mentioned here](../TestTools/overview.md#testing-your-application)
-
+    Use the HandleErrorDeletage if you plan to test your app using the [TestTools](../TestTools/overview.md) approach [mentioned here](../TestTools/overview.md#testing-your-application)
 
 CommandDotNet internal errors are generally captured and return error code 1, using `ExitCodes.Error`.
 
@@ -84,10 +73,11 @@ try
 }
 catch(MyBusinessException ex)
 {
-    Console.WriteLine(ex.Message);
+    Console.Error.WriteLine(ex.Message);
 
     var ctx = ex.GetCommandContext();
-    // check if it has already been logged for this CommandContext
+
+    // use CommandLogger if it has not already logged for this CommandContext
     if(!CommandLogger.HasLoggedFor(ctx))
     {
         CommandLogger.Log(
@@ -98,6 +88,8 @@ catch(MyBusinessException ex)
     }
 
     // print help for the target command
-    Console.WriteLine(ctx.PrintHelp());
+    // will be empty if the exception occurred before
+    // a command could be parsed.
+    Console.Out.WriteLine(ctx.PrintHelp());
 }
 ```
