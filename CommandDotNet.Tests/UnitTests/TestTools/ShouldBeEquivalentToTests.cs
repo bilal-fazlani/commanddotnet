@@ -79,11 +79,26 @@ but was
 ""crisps""");
         }
 
+        [Fact]
+        public void Honors_Equals_Override()
+        {
+            var meal1 = new Meal { Drink = "water", Food = "celery", NextMeal = new Meal { Drink = "coke", Food = "crisps" } };
+            new EqualsAnything().ShouldBeEquivalentTo(meal1, nameof(Meal));
+        }
+
         public class Meal
         {
             public string Drink { get; set; }
             public string Food { get; set; }
             public Meal NextMeal { get; set; }
+        }
+
+        public class EqualsAnything
+        {
+            public override bool Equals(object obj)
+            {
+                return true;
+            }
         }
     }
 }
