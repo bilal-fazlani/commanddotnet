@@ -38,6 +38,7 @@ namespace CommandDotNet
     public class AppRunner : IIndentableToString
     {
         private readonly AppConfigBuilder _appConfigBuilder;
+        private HandleErrorDelegate _handleErrorDelegate;
 
         public AppSettings AppSettings { get; }
         public Type RootCommandType { get; }
@@ -70,13 +71,17 @@ namespace CommandDotNet
         /// it will return 0 in case of success and 1 in case of unhandled exception</returns>
         public int Run(params string[] args)
         {
+            CommandContext commandContext = null;
             try
             {
-                return Execute(args).Result;
+                commandContext = BuildCommandContext(args);
+                return commandContext.AppConfig.MiddlewarePipeline
+                    .InvokePipeline(commandContext)
+                    .Result;
             }
             catch (Exception e)
             {
-                return HandleException(e, _appConfigBuilder.Console);
+                return HandleException(e, _appConfigBuilder.Console, commandContext);
             }
         }
 
@@ -88,34 +93,32 @@ namespace CommandDotNet
         /// it will return 0 in case of success and 1 in case of unhandled exception</returns>
         public async Task<int> RunAsync(params string[] args)
         {
+            CommandContext commandContext = null;
             try
             {
-                return await Execute(args).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                return HandleException(e, _appConfigBuilder.Console);
-            }
-        }
-
-        private async Task<int> Execute(string[] args)
-        {
-            var tokens = args.Tokenize(includeDirectives: !AppSettings.DisableDirectives);
-
-            var appConfig = AppConfig ?? (AppConfig = _appConfigBuilder.Build());
-            var commandContext = new CommandContext(args, tokens, appConfig);
-
-            try
-            {
+                commandContext = BuildCommandContext(args);
                 return await commandContext.AppConfig.MiddlewarePipeline
                     .InvokePipeline(commandContext)
                     .ConfigureAwait(false);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                ex.SetCommandContext(commandContext);
-                throw;
+                return HandleException(e, _appConfigBuilder.Console, commandContext);
             }
+        }
+
+        public AppRunner UseErrorHandler(HandleErrorDelegate handleError)
+        {
+            _handleErrorDelegate = handleError;
+            return this;
+        }
+
+        private CommandContext BuildCommandContext(string[] args)
+        {
+            var tokens = args.Tokenize(includeDirectives: !AppSettings.DisableDirectives);
+            var appConfig = AppConfig ?? (AppConfig = _appConfigBuilder.Build());
+            var commandContext = new CommandContext(args, tokens, appConfig);
+            return commandContext;
         }
 
         private void AddCoreMiddleware()
@@ -141,9 +144,13 @@ namespace CommandDotNet
             return result;
         }
 
-        private static int HandleException(Exception ex, IConsole console)
+        private int HandleException(Exception ex, IConsole console, CommandContext commandContext)
         {
             ex = ex.EscapeWrappers();
+            if (commandContext != null)
+            {
+                ex.SetCommandContext(commandContext);
+            }
             switch (ex)
             {
                 case AppRunnerException appEx:
@@ -151,8 +158,16 @@ namespace CommandDotNet
                     appEx.PrintStackTrace(console);
                     return ExitCodes.Error.Result;
                 default:
+                    if (_handleErrorDelegate != null)
+                    {
+                        return _handleErrorDelegate(ex.GetCommandContext(), ex);
+                    }
+
                     ExceptionDispatchInfo.Capture(ex).Throw();
-                    return ExitCodes.Error.Result; // this will only be called if there are no inner exceptions
+
+                    // code not reached but required to compile
+                    // compiler does not realize previous line throws an exception
+                    return ExitCodes.Error.Result;
             }
         }
 

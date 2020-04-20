@@ -13,6 +13,7 @@ namespace CommandDotNet.Execution
         /// in the <see cref="MiddlewareStages.PreTokenize"/> stage.
         /// This will catch all exceptions in the pipeline stack.
         /// </summary>
+        [Obsolete("This step is no longer used for appRunner.UseErrorHandler.")]
         public static MiddlewareStep ErrorHandler { get; } = 
             new MiddlewareStep(MiddlewareStages.PreTokenize, DebugDirective.OrderWithinStage + 1000);
 
