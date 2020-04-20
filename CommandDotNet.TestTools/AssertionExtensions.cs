@@ -28,7 +28,7 @@ namespace CommandDotNet.TestTools
                 return;
             }
 
-            if (ReferenceEquals(actual, expected))
+            if (Equals(actual, expected))
             {
                 return;
             }

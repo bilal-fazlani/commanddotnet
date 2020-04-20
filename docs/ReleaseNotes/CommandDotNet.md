@@ -2,11 +2,13 @@
 
 ## 3.6.4
 
-Fixed appRunner.UserErrorHandler method with a better approach and new signatture. Updated [documentation](../Diagnostics/exceptions.md) with the approach.
+Reimplement UseErrorHandler(CommandContext, Exception). See updated [documentation](../Diagnostics/exceptions.md).
+
+Fix bug where parser did not fail when an option value was skipped when immediately followed by another option.
 
 ## 3.6.3
 
-Remove appRunner.UserErrorHandler config method until the bug is fixed. Updated documentation with the approach.
+Remove .UseErrorHandler config method until the bug is fixed. Updated documentation with the approach.
 
 ## 3.6.2
 

@@ -88,6 +88,20 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         }
 
         [Fact]
+        public void Given_OptionRequiresValue_When_NextTokenIsOption_ThrowsError()
+        {
+            new AppRunner<App>().Verify(new Scenario
+            {
+                When = { Args = "Options --opt1 --opt2 go" },
+                Then =
+                {
+                    ExitCode = 1,
+                    OutputContainsTexts = {"Missing value for option 'opt1'"}
+                }
+            });
+        }
+
+        [Fact]
         public void ErrorWhenExtraValueProvidedForOption()
         {
             new AppRunner<App>().Verify(new Scenario
@@ -189,6 +203,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             public void Do([Operand] string arg)
             {
                 TestCaptures.Capture(arg);
+            }
+
+            public void Options([Option] string opt1, [Option] string opt2)
+            {
+                TestCaptures.Capture(new[] {opt1, opt2});
             }
 
             public class AddResults
