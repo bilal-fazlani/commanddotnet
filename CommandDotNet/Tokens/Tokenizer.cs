@@ -6,7 +6,7 @@ namespace CommandDotNet.Tokens
 {
     public static class Tokenizer
     {
-        internal const string SeparatorString = "--";
+        internal static Token SeparatorToken { get; } = new Token("--", "--", TokenType.Separator);
 
         public static TokenCollection Tokenize(this IEnumerable<string> args, bool includeDirectives = false, string sourceName = "args")
         {
@@ -39,7 +39,7 @@ namespace CommandDotNet.Tokens
 
         public static bool TryTokenizeSeparator(string arg, out Token token)
         {
-            if (arg == SeparatorString)
+            if (arg == SeparatorToken.Value)
             {
                 token = new Token(arg, arg, TokenType.Separator);
                 return true;
