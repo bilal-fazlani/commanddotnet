@@ -9,9 +9,10 @@ Enable the feature with `appRunner.UseResponseFiles()` or `appRunner.UseDefaultM
 ## Example
 
 ``` c#
-public void Interceptor(string user, string pwd, string url)
+public void Interceptor(InterceptorExecutionDelegate next, string user, string pwd, string url)
 {
     _client.Connect(user, pwd, url);
+    return next();
 }
 
 public void Find(string filter, IConsole console)

@@ -9,6 +9,8 @@ namespace CommandDotNet.TestTools
     /// The command class must have a public <see cref="TestCaptures"/> property for this to work.<br/>
     /// Useful for testing middleware components, not the business logic of your commands.
     /// </summary>
+    [Obsolete("Use extension method commandContext.GetCommandInvocation().ParameterValues " +
+              "or commandContext.GetInterceptorInvocation<T>().ParameterValues")]
     public class TestCaptures
     {
         public Dictionary<Type, object> Captured { get; private set; } = new Dictionary<Type, object>();

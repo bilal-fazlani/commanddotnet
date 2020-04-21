@@ -47,6 +47,7 @@ nav:
           - TestTools/Harness/test-captures.md
           - TestTools/Harness/tips-test-runners.md
         - Tools:
+          - TestTools/Tools/testing-middleware.md
           - TestTools/Tools/testing-piped-input.md
           - TestTools/Tools/testing-prompts.md
       - Other Features:

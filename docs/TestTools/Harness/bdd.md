@@ -75,7 +75,11 @@ Then =
         "but not this", "or this", "and definitely not this"
     },
     AssertOutput = output => output.Should()...,
-    AssertContext = context => context.Should()...,
+    AssertContext = context => 
+    {
+        context.Should()...,
+        context.GetCommandInvocation().ParameterValues.Should()...
+    }
     Captured =
     {
         new SomeExpectedObject{AnOperand="some-value"}
@@ -97,3 +101,6 @@ Then =
 **Captured** will check if [TestCaptures](test-captures.md) contains the given objects.
 
 **AllowUnspecifiedCaptures** when true, [TestCaptures](test-captures.md) can contain objects not specified in `Captured`. When false, if an object in [TestCaptures](test-captures.md) is not matched by an object in `Captured` an exception is thrown.
+
+!!! Obsoleted
+    *Captured* and *AllowUnspecifiedCaptures* have been obsoleted in favor of *AssertContext => ctx.GetCommandInvocation().ParameterValues...* and using the Assert library of your choice to verify parameters are wat is expected.

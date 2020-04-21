@@ -42,7 +42,7 @@ Notice `Respond.WithText` in the examples below.
     {
         new AppRunner<App>()
             .UsePrompting()
-            .Verify(_output, new Scenario
+            .Verify(new Scenario
             {
                 When = 
                 {
