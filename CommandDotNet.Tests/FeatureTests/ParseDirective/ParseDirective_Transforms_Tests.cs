@@ -6,11 +6,9 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
 {
     public class ParseDirective_Transforms_Tests
     {
-        private readonly ITestOutputHelper _output;
-
         public ParseDirective_Transforms_Tests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
@@ -18,7 +16,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         {
             new AppRunner<App>()
                 .UseParseDirective()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "[parse:t] Do"},
                     Then =
@@ -39,7 +37,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         {
             new AppRunner<App>()
                 .UseParseDirective()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "[parse:t] Do -abc --one two --three:four --five=six seven"},
                     Then =

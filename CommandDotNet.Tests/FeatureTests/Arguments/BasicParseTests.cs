@@ -1,3 +1,4 @@
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;
@@ -19,7 +20,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<App>().Verify(new Scenario
             {
                 When = {Args = "Add -o * 2 3"},
-                Then = {Captured = {new App.AddResults {X = 2, Y = 3, Op = "*"}}}
+                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(2, 3, "*")}
             });
         }
 
@@ -29,7 +30,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<App>().Verify(new Scenario
             {
                 When = {Args = "Add 2 3 -o *"},
-                Then = {Captured = {new App.AddResults {X = 2, Y = 3, Op = "*"}}}
+                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(2, 3, "*")}
             });
         }
 
@@ -39,7 +40,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<App>().Verify(new Scenario
             {
                 When = {Args = "Add 2 3 -o:*"},
-                Then = {Captured = {new App.AddResults {X = 2, Y = 3, Op = "*"}}}
+                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(2, 3, "*")}
             });
         }
 
@@ -49,7 +50,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<App>().Verify(new Scenario
             {
                 When = {Args = "Add 2 3 -o=*"},
-                Then = {Captured = {new App.AddResults {X = 2, Y = 3, Op = "*"}}}
+                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(2, 3, "*")}
             });
         }
 
@@ -59,7 +60,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<App>().Verify(new Scenario
             {
                 When = {ArgsArray = new[] {"Do", "~!@#$%^&*()_= +[]\\{} |;':\",./<>?"}},
-                Then = {Captured = {"~!@#$%^&*()_= +[]\\{} |;':\",./<>?"}}
+                Then =
+                {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe("~!@#$%^&*()_= +[]\\{} |;':\",./<>?")
+                }
             });
         }
 
@@ -69,7 +73,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<App>().Verify(new Scenario
             {
                 When = {ArgsArray = new[] {"Do", "[some (parenthesis) {curly} and [bracketed] text]"}},
-                Then = {Captured = {"[some (parenthesis) {curly} and [bracketed] text]"}}
+                Then =
+                {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe("[some (parenthesis) {curly} and [bracketed] text]")
+                }
             });
         }
 
@@ -156,7 +163,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .Verify(new Scenario
                 {
                     When = {Args = "Add 2 3 4"},
-                    Then = {Captured = {new App.AddResults {X = 2, Y = 3, Op = "+"}}}
+                    Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(2, 3, "+")}
                 });
 
             results.CommandContext.ParseResult.RemainingOperands.Should().BeEquivalentTo("4");
@@ -169,7 +176,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .Verify(new Scenario
                 {
                     When = {Args = "Add_EnabledIgnore 2 3 4"},
-                    Then = {Captured = {new App.AddResults {X = 2, Y = 3}}}
+                    Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(2,3)}
                 });
 
             results.CommandContext.ParseResult.RemainingOperands.Should().BeEquivalentTo("4");
@@ -177,37 +184,30 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         private class App
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void Add(
                 [Operand(Description = "the first operand")] int x,
                 [Operand(Description = "the second operand")] int y,
                 [Option(ShortName = "o", LongName = "operator", Description = "the operation to apply")]
                 string operation = "+")
             {
-                TestCaptures.Capture(new AddResults { X = x, Y = y, Op = operation });
             }
 
             [Command(IgnoreUnexpectedOperands = true)]
             public void Add_EnabledIgnore(int x, int y)
             {
-                TestCaptures.Capture(new AddResults { X = x, Y = y });
             }
 
             [Command(IgnoreUnexpectedOperands = false)]
             public void Add_DisabledIgnore(int x, int y)
             {
-                TestCaptures.Capture(new AddResults { X = x, Y = y });
             }
 
             public void Do([Operand] string arg)
             {
-                TestCaptures.Capture(arg);
             }
 
             public void Options([Option] string opt1, [Option] string opt2)
             {
-                TestCaptures.Capture(new[] {opt1, opt2});
             }
 
             public class AddResults

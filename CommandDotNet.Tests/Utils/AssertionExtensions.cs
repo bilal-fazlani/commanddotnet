@@ -18,7 +18,15 @@ namespace CommandDotNet.Tests.Utils
             return assertions.BeEquivalentTo(expectedValues, c => c.WithStrictOrderingFor(s => s));
         }
 
-        /// <summary>For clarity in tests</summary>
+        /// <summary>Should be same order</summary>
+        public static AndConstraint<GenericCollectionAssertions<object>> BeEquivalentSequenceTo(
+            this GenericCollectionAssertions<object> assertions,
+            params object[] expectedValues)
+        {
+            return assertions.BeEquivalentTo(expectedValues, c => c.WithStrictOrderingFor(s => s));
+        }
+
+        /// <summary>Being explicit brings clarity in tests</summary>
         public static void ParamValuesShouldBeEmpty(this CommandContext ctx) => ctx.ParamValuesShouldBe();
 
         public static void ParamValuesShouldBe(this CommandContext ctx, params object[] values)
@@ -27,6 +35,7 @@ namespace CommandDotNet.Tests.Utils
             InvocationParamValuesShouldBe(ctx, values, invocation);
         }
 
+        /// <summary>Being explicit brings clarity in tests</summary>
         public static void ParamValuesShouldBeEmpty<TInterceptorClass>(this CommandContext ctx) 
             where TInterceptorClass : class => 
             ctx.ParamValuesShouldBe<TInterceptorClass>();
@@ -47,7 +56,7 @@ namespace CommandDotNet.Tests.Utils
             invocation.Parameters
                 .Where(p => IsArgumentParameter(p, ctx))
                 .Select(p => invocation.ParameterValues?[p.Position])
-                .Should().BeEquivalentTo(values);
+                .Should().BeEquivalentSequenceTo(values);
         }
 
         private static bool IsArgumentParameter(ParameterInfo info, CommandContext ctx) =>

@@ -6,11 +6,9 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
 {
     public class NameTransformationTests
     {
-        private readonly ITestOutputHelper _output;
-
         public NameTransformationTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
@@ -19,7 +17,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
             new AppRunner<App>()
                 .Configure(b => b.NameTransformation = (attributes, memberName, nameOverride, commandNodeType)
                     => $"prefix-{memberName}")
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "prefix-Do -h"},
                     Then =
@@ -38,7 +36,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
             new AppRunner<App>()
                 .Configure(b => b.NameTransformation = (attributes, memberName, nameOverride, commandNodeType)
                     => commandNodeType.IsCommand ? $"prefix-{memberName}" : memberName)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "prefix-Do -h"},
                     Then =
@@ -61,7 +59,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
             new AppRunner<App>()
                 .Configure(b => b.NameTransformation = (attributes, memberName, nameOverride, commandNodeType)
                     => commandNodeType.IsOperand ? $"prefix-{memberName}" : memberName)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "Do -h"},
                     Then =

@@ -7,18 +7,16 @@ namespace CommandDotNet.Tests.FeatureTests.Help
 {
     public class ExpandArgumentsInUsageTests
     {
-        private readonly ITestOutputHelper _output;
-
         public ExpandArgumentsInUsageTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
         public void Given_ExpandArgumentsInUsage_Then_ArgumentsAreListedByName()
         {
             new AppRunner<App>(new AppSettings { Help = {ExpandArgumentsInUsage = true}})
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "Do -h"},
                     Then = { OutputContainsTexts = { "Usage: dotnet testhost.dll Do <arg1> <arg2> [<optional>]" } }
@@ -29,7 +27,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         public void Given_ExpandArgumentsInUsage_Then_ArgumentsAreListedAfterOptions()
         {
             new AppRunner<App>(new AppSettings { Help = { ExpandArgumentsInUsage = true } })
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "Do2 -h"},
                     Then = { OutputContainsTexts = { "Usage: dotnet testhost.dll Do2 [options] <arg1> <arg2> [<optional>]" } }

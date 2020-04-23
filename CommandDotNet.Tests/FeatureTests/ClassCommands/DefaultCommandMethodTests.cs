@@ -1,5 +1,7 @@
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -122,10 +124,8 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             new AppRunner<WithoutDefaultArgsApp>().Verify(new Scenario
             {
                 When = {Args = null},
-                Then =
-                {
-                    Captured = { WithoutDefaultArgsApp.DefaultMethodExecuted }
-                }
+                Then = {AssertContext = ctx => ctx.GetCommandInvocation()
+                    .MethodInfo.Name.Should().Be(nameof(WithoutDefaultArgsApp.DefaultMethod))}
             });
         }
 
@@ -135,10 +135,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             new AppRunner<WithDefaultArgsApp>().Verify(new Scenario
             {
                 When = {Args = "abcde"},
-                Then =
-                {
-                    Captured = { "abcde" }
-                }
+                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe("abcde")}
             });
         }
 
@@ -148,10 +145,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             new AppRunner<WithDefaultArgsApp>().Verify(new Scenario
             {
                 When = {Args = "AnotherCommand"},
-                Then =
-                {
-                    Captured = { false }
-                }
+                Then = { AssertContext = ctx => ctx.ParamValuesShouldBeEmpty() }
             });
         }
 
@@ -171,37 +165,27 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
 
         private class WithoutDefaultArgsApp
         {
-            public const string DefaultMethodExecuted = "default executed";
-
-            private TestCaptures TestCaptures { get; set; }
-
             [DefaultMethod]
             public void DefaultMethod()
             {
-                TestCaptures.Capture(DefaultMethodExecuted);
             }
 
             public void AnotherCommand()
             {
-                TestCaptures.Capture(false);
             }
         }
 
         private class WithDefaultArgsApp
         {
-            private TestCaptures TestCaptures { get; set; }
-
             [DefaultMethod]
             public void DefaultMethod(
                 [Operand(Description = "some text")]
                 string text)
             {
-                TestCaptures.Capture(text);
             }
 
             public void AnotherCommand()
             {
-                TestCaptures.Capture(false);
             }
         }
     }

@@ -1,5 +1,5 @@
 using System;
-using CommandDotNet.TestTools;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
@@ -16,43 +16,37 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
         [Fact]
         public void GivenDefaultValue_Should_DefaultForArgument()
         {
-            var scenario = new Scenario
-            {
-                When = {Args = "Do"},
-                Then = {Captured = { "red" }}
-            };
-
             new AppRunner<App>()
                 .UseDefaultsFromConfig(arg => Config("red"))
-                .Verify(scenario);
+                .Verify(new Scenario
+                {
+                    When = {Args = "Do"},
+                    Then = {AssertContext = ctx => ctx.ParamValuesShouldBe("red")}
+                });
         }
 
         [Fact]
         public void GivenDefaultValue_Should_OverrideArgumentDefault()
         {
-            var scenario = new Scenario
-            {
-                When = {Args = "Default"},
-                Then = { Captured = { "red" } }
-            };
-
             new AppRunner<App>()
                 .UseDefaultsFromConfig(arg => Config("red"))
-                .Verify(scenario);
+                .Verify(new Scenario
+                {
+                    When = {Args = "Default"},
+                    Then = {AssertContext = ctx => ctx.ParamValuesShouldBe("red")}
+                });
         }
 
         [Fact]
         public void GivenCsvValue_Should_DefaultForArgument()
         {
-            var scenario = new Scenario
-            {
-                When = {Args = "Do"},
-                Then = { Captured = { "red,blue,green" } }
-            };
-
             new AppRunner<App>()
                 .UseDefaultsFromConfig(arg => Config("red,blue,green"))
-                .Verify(scenario);
+                .Verify(new Scenario
+                {
+                    When = {Args = "Do"},
+                    Then = {AssertContext = ctx => ctx.ParamValuesShouldBe("red,blue,green")}
+                });
         }
 
         [Fact]
@@ -60,46 +54,40 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
         {
             // null can indicate the key does not exist so default should not be overridden
 
-            var scenario = new Scenario
-            {
-                When = {Args = "Default"},
-                Then = { Captured = { "lala" } }
-            };
-
             new AppRunner<App>()
                 .UseDefaultsFromConfig(new Func<IArgument, ArgumentDefault>(arg => null))
-                .Verify(scenario);
+                .Verify(new Scenario
+                {
+                    When = {Args = "Default"},
+                    Then = {AssertContext = ctx => ctx.ParamValuesShouldBe("lala")}
+                });
         }
 
         [Fact]
         public void GivenMultipleSources_AllAreUsed()
         {
-            var scenario = new Scenario
-            {
-                When = {Args = "Multi"},
-                Then = { Captured = { new []{"one", "two"}} }
-            };
-
             new AppRunner<App>()
                 .UseDefaultsFromConfig(arg => arg.Name == "first" ? new ArgumentDefault("1", "1", "one") : null)
                 .UseDefaultsFromConfig(arg => arg.Name == "second" ? new ArgumentDefault("2", "2", "two") : null)
-                .Verify(scenario);
+                .Verify(new Scenario
+                {
+                    When = {Args = "Multi"},
+                    Then = {AssertContext = ctx => ctx.ParamValuesShouldBe("one", "two") }
+                });
         }
 
         [Fact]
         public void GivenMultipleSources_FirstRegisteredWins()
         {
-            var scenario = new Scenario
-            {
-                When = {Args = "Multi"},
-                Then = { Captured = { new[] { "right one", "two" } } }
-            };
-
             new AppRunner<App>()
                 .UseDefaultsFromConfig(arg => arg.Name == "first" ? new ArgumentDefault("1", "1", "right one") : null)
                 .UseDefaultsFromConfig(arg => arg.Name == "first" ? new ArgumentDefault("1", "1", "wrong one") : null)
                 .UseDefaultsFromConfig(arg => arg.Name == "second" ? new ArgumentDefault("2", "2", "two") : null)
-                .Verify(scenario);
+                .Verify(new Scenario
+                {
+                    When = {Args = "Multi"},
+                    Then = {AssertContext = ctx => ctx.ParamValuesShouldBe("right one", "two") }
+                });
         }
 
         private static ArgumentDefault Config(string value)
@@ -109,26 +97,20 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
         public class App
         {
-            TestCaptures TestCaptures { get; set; }
-
             public void Multi([Operand] string first, [Operand] string second)
             {
-                TestCaptures.Capture(new[] {first, second});
             }
 
             public void Do([Operand] string op1)
             {
-                TestCaptures.Capture(op1);
             }
 
             public void List([Operand] string[] ops)
             {
-                TestCaptures.Capture(ops);
             }
 
             public void Default([Operand] string op1 = "lala")
             {
-                TestCaptures.CaptureIfNotNull(op1);
             }
         }
     }

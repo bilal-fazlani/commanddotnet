@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using CommandDotNet.Execution;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -12,11 +14,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class Operands_PipedInput_Tests
     {
-        private readonly ITestOutputHelper _output;
-
         public Operands_PipedInput_Tests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
         
         [Fact]
@@ -24,19 +24,18 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .Verify(_output,
-                    new Scenario
+                .Verify(new Scenario
+                {
+                    When =
                     {
-                        When =
-                        {
-                            Args = $"{nameof(App.List)}",
-                            PipedInput = new[] {"aaa", "bbb"}
-                        },
-                        Then =
-                        {
-                            Captured = {new List<string> {"aaa", "bbb"}}
-                        }
-                    });
+                        Args = $"{nameof(App.List)}",
+                        PipedInput = new[] {"aaa", "bbb"}
+                    },
+                    Then =
+                    {
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(new List<string> {"aaa", "bbb"})
+                    }
+                });
         }
 
         [Fact]
@@ -44,19 +43,18 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .Verify(_output,
-                    new Scenario
+                .Verify(new Scenario
+                {
+                    When =
                     {
-                        When =
-                        {
-                            Args = $"{nameof(App.List)} aaa bbb",
-                            PipedInput = new[] {"ccc", "ddd"}
-                        },
-                        Then =
-                        {
-                            Captured = {new List<string> {"aaa", "bbb", "ccc", "ddd"}}
-                        }
-                    });
+                        Args = $"{nameof(App.List)} aaa bbb",
+                        PipedInput = new[] {"ccc", "ddd"}
+                    },
+                    Then =
+                    {
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(new List<string> {"aaa", "bbb", "ccc", "ddd"})
+                    }
+                });
         }
 
         [Fact]
@@ -64,19 +62,18 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .Verify(_output,
-                    new Scenario
+                .Verify(new Scenario
+                {
+                    When =
                     {
-                        When =
-                        {
-                            Args = $"{nameof(App.Single)} single",
-                            PipedInput = new[] {"aaa"}
-                        },
-                        Then =
-                        {
-                            Captured = {"single"}
-                        }
-                    });
+                        Args = $"{nameof(App.Single)} single",
+                        PipedInput = new[] {"aaa"}
+                    },
+                    Then =
+                    {
+                        AssertContext = ctx => ctx.ParamValuesShouldBe("single")
+                    }
+                });
         }
 
         [Fact]
@@ -84,23 +81,18 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<App>()
                 .AppendPipedInputToOperandList()
-                .Verify(_output,
-                    new Scenario
+                .Verify(new Scenario
+                {
+                    When =
                     {
-                        When =
-                        {
-                            Args = $"{nameof(App.SingleAndList)} single",
-                            PipedInput = new[] {"aaa", "bbb"}
-                        },
-                        Then =
-                        {
-                            Captured =
-                            {
-                                "single",
-                                new List<string> {"aaa", "bbb"}
-                            }
-                        }
-                    });
+                        Args = $"{nameof(App.SingleAndList)} single",
+                        PipedInput = new[] {"aaa", "bbb"}
+                    },
+                    Then =
+                    {
+                        AssertContext = ctx => ctx.ParamValuesShouldBe("single", new List<string> {"aaa", "bbb"})
+                    }
+                });
         }
 
         [Fact]
@@ -116,19 +108,20 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                             return next(context);
                         },
                         MiddlewareStages.Invoke, -1))
-                .Verify(_output,
-                    new Scenario
+                .Verify(new Scenario
+                {
+                    When =
                     {
-                        When =
-                        {
-                            Args = $"{nameof(StreamingApp.Stream)}",
-                            PipedInput = stream
-                        },
-                        Then =
-                        {
-                            Captured = {new List<string> {"aaa", "bbb"}}
-                        }
-                    });
+                        Args = $"{nameof(StreamingApp.Stream)}",
+                        PipedInput = stream
+                    },
+                    Then =
+                    {
+                        // stream is read-once so we can't evaluate it with a second time with ParamValuesShouldBe
+                        AssertContext = ctx => ctx.GetCommandInstance<StreamingApp>()
+                            .StreamedInput.Should().BeEquivalentTo(new List<string> {"aaa", "bbb"})
+                    }
+                });
         }
 
         private class PipedInputStream : IEnumerable<string>
@@ -162,32 +155,26 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         public class App
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void Single([Operand] string singleArg)
             {
-                TestCaptures.CaptureIfNotNull(singleArg);
             }
 
             public void List([Operand] List<string> listArgs)
             {
-                TestCaptures.CaptureIfNotNull(listArgs);
             }
 
             public void SingleAndList([Operand] string singleArg, [Operand] List<string> listArgs)
             {
-                TestCaptures.CaptureIfNotNull(singleArg);
-                TestCaptures.CaptureIfNotNull(listArgs);
             }
         }
 
         public class StreamingApp
         {
-            private TestCaptures TestCaptures { get; set; }
+            public List<string> StreamedInput { get; set; }
 
             public void Stream(IEnumerable<string> input)
             {
-                TestCaptures.Capture(input.ToList());
+                StreamedInput = input.ToList();
             }
         }
     }

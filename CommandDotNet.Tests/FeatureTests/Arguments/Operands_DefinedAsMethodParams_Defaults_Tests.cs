@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using CommandDotNet.Tests.FeatureTests.Arguments.Models;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsParams;
-using CommandDotNet.TestTools;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
@@ -188,16 +187,9 @@ Arguments:
                 When = {Args = "ArgsDefaults true green 1 2 Monday http://google.com yellow orange"},
                 Then =
                 {
-                    Captured = { new ParametersSampleTypesResults
-                    {
-                        BoolArg = true,
-                        StringArg = "green",
-                        StructArg = 1,
-                        StructNArg = 2,
-                        EnumArg = DayOfWeek.Monday,
-                        ObjectArg = new Uri("http://google.com"),
-                        StringListArg = new List<string>{"yellow", "orange"}
-                    } }
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
+                        true, "green", 1, 2, DayOfWeek.Monday,
+                        new Uri("http://google.com"), new List<string> {"yellow", "orange"})
                 }
             });
         }
@@ -210,25 +202,14 @@ Arguments:
                 When = {Args = "ArgsDefaults"},
                 Then =
                 {
-                    Captured =
-                    {
-                        new ParametersSampleTypesResults
-                        {
-                            BoolArg = true,
-                            StringArg = "lala",
-                            StructArg = 3,
-                            StructNArg = 4,
-                            EnumArg = DayOfWeek.Wednesday,
-                        }
-                    }
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
+                    true, "lala", 3, 4, DayOfWeek.Wednesday, null, null)
                 }
             });
         }
 
         private class OperandsDefaults : IArgsDefaultsSampleTypesMethod
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void ArgsDefaults(
                 [Operand] bool boolArg = true,
                 [Operand] string stringArg = "lala", 
@@ -238,26 +219,21 @@ Arguments:
                 [Operand] Uri objectArg = null,
                 [Operand] List<string> stringListArg = null)
             {
-                TestCaptures.Capture(new ParametersSampleTypesResults(
-                    boolArg, stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
             }
 
             public void StructListDefaults(
                 [Operand] List<int> structListArg = null)
             {
-                TestCaptures.Capture(new ParametersSampleTypesResults(structListArg));
             }
 
             public void EnumListDefaults(
                 [Operand] List<DayOfWeek> enumListArg = null)
             {
-                TestCaptures.Capture(new ParametersSampleTypesResults(enumListArg));
             }
 
             public void ObjectListDefaults(
                 [Operand] List<Uri> objectListArg = null)
             {
-                TestCaptures.Capture(new ParametersSampleTypesResults(objectListArg));
             }
         }
     }

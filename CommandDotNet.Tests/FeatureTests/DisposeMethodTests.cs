@@ -1,6 +1,7 @@
 using System;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -65,7 +66,7 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<DisposableApp>().Verify(new Scenario
             {
                 When = {Args = "Do"},
-                Then = {Captured = {true}}
+                Then = {AssertContext = ctx => ctx.GetCommandInstance<DisposableApp>().WasDisposed.Should().BeTrue()}
             });
         }
 
@@ -75,13 +76,21 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<NotDisposableApp>().Verify(new Scenario
             {
                 When = {Args = "Dispose"},
-                Then = { Captured = { true } }
+                Then = {AssertContext = ctx => ctx.GetCommandInstance<NotDisposableApp>().CalledDispose.Should().BeTrue()}
+            });
+
+            // sanity check that Dispose wasn't executed by some weird name-matching logic.
+            new AppRunner<NotDisposableApp>().Verify(new Scenario
+
+            {
+                When = { Args = "NotDispose" },
+                Then = { AssertContext = ctx => ctx.GetCommandInstance<NotDisposableApp>().CalledDispose.Should().BeFalse() }
             });
         }
 
         private class DisposableApp : IDisposable
         {
-            private TestCaptures TestCaptures { get; set; }
+            public bool WasDisposed;
 
             public void Do()
             {
@@ -89,19 +98,23 @@ namespace CommandDotNet.Tests.FeatureTests
 
             public void Dispose()
             {
-                TestCaptures.Capture(true);
+                WasDisposed = true;
             }
         }
 
         private class NotDisposableApp
         {
-            private TestCaptures TestCaptures { get; set; }
+            public bool CalledDispose;
 
             // use the name Dispose to prove it can be a command name
             // and that the Dispose name is filtered out only for IDisposable's
             public void Dispose()
             {
-                TestCaptures.Capture(true);
+                CalledDispose = true;
+            }
+
+            public void NotDispose()
+            {
             }
         }
 

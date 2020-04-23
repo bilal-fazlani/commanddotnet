@@ -5,7 +5,7 @@ using CommandDotNet.Parsing;
 
 namespace CommandDotNet.TestTools
 {
-    public static class CommandContextExtensions
+    public static class CommandContextTestExtensions
     {
         /// <summary>
         /// Returns the <see cref="InvocationStep"/> for the <see cref="ParseResult.TargetCommand"/>

@@ -1,5 +1,7 @@
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -112,7 +114,10 @@ Options:
             {
                 // bool value 'true' is operand
                 When = {Args = "Do true"},
-                Then = { Captured = { new Result(false, true) } }
+                Then =
+                {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(null, true)
+                }
             });
         }
 
@@ -123,7 +128,10 @@ Options:
             {
                 // bool value 'false' is operand
                 When = {Args = "Do --option false"},
-                Then = { Captured = { new Result(true, false) } }
+                Then =
+                {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(true, false)
+                }
             });
         }
 
@@ -161,45 +169,25 @@ Options:
             var result = new AppRunner<App>(ExplicitBasicHelp).Verify(new Scenario
             {
                 When = {Args = "Do --option false true"},
-                Then = {Captured = {new Result(false, true)}}
+                Then =
+                {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(false, true)
+                }
             });
         }
 
         private class App
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void Do(
                 [Option] bool option, 
                 [Operand] bool operand)
             {
-                TestCaptures.Capture(new Result(option, operand));
             }
 
             public void Do2(
                 [Option] bool option,
                 [Operand] int number)
             {
-                TestCaptures.Capture(new Result(option, number));
-            }
-        }
-
-        private class Result
-        {
-            public bool Option { get; set; }
-            public bool Operand { get; set; }
-            public int Number { get; set; }
-
-            public Result(bool option, bool operand)
-            {
-                Option = option;
-                Operand = operand;
-            }
-
-            public Result(bool option, int number)
-            {
-                Option = option;
-                Number = number;
             }
         }
     }

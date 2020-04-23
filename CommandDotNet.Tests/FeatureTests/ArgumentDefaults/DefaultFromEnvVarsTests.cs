@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
@@ -9,11 +10,9 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 {
     public class DefaultFromEnvVarsTests
     {
-        private readonly ITestOutputHelper _output;
-
         public DefaultFromEnvVarsTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
         
         [Theory]
@@ -52,7 +51,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             new AppRunner<App>()
                 .UseDefaultsFromEnvVar(
                     new Dictionary<string,string> { { key, "red" } })
-                .Verify(_output, scenario);
+                .Verify(scenario);
         }
 
         [Theory]
@@ -65,21 +64,18 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                 {key, value}
             };
 
-            var scenario = new Scenario
-            {
-                When = {Args = args},
-                Then = { Captured = { value.Split(',') } }
-            };
-
+            var expectedParamValues = value.Split(',');
             new AppRunner<App>()
                 .UseDefaultsFromAppSetting(nvc, includeNamingConventions: true)
-                .Verify(_output, scenario);
+                .Verify(new Scenario
+                {
+                    When = {Args = args},
+                    Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(new object[] {expectedParamValues})}
+                });
         }
 
         public class App
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void ByAttribute(
                 [EnvVar("opt1")] [Option(LongName = "option1", ShortName = "o")]
                 string option1,
@@ -94,7 +90,6 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
             public void List(string[] planets)
             {
-                TestCaptures.CaptureIfNotNull(planets);
             }
         }
     }

@@ -9,11 +9,9 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 {
     public class ResolveStrategyTests
     {
-        private readonly ITestOutputHelper _output;
-
         public ResolveStrategyTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
@@ -31,7 +29,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         {
             new AppRunner<App>()
                 .UseDependencyResolver(new TestDependencyResolver(), commandClassResolveStrategy: ResolveStrategy.TryResolve)
-                .RunInMem("Do", _output)
+                .RunInMem("Do")
                 .ExitCode.Should().Be(0);
         }
 
@@ -41,7 +39,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
             Assert.Throws<ResolverReturnedNullException>(() => new AppRunner<App>()
                 .UseDependencyResolver(new TestDependencyResolver {(App) null},
                     commandClassResolveStrategy: ResolveStrategy.ResolveOrThrow)
-                .RunInMem("Do", _output)
+                .RunInMem("Do")
             ).Message.Should().Contain("The resolver returned null for type 'CommandDotNet.Tests.CommandDotNet.IoC.ResolveStrategyTests+App'");
         }
 
@@ -50,7 +48,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         {
             new AppRunner<App>()
                 .UseDependencyResolver(new TestDependencyResolver {new App()})
-                .RunInMem("Do", _output)
+                .RunInMem("Do")
                 .ExitCode.Should().Be(0);
         }
 
@@ -75,10 +73,8 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
         class App
         {
-            private TestCaptures TestCaptures { get; set; }
             public void Do(ArgModel argModel)
             {
-                TestCaptures.Capture(argModel);
             }
         }
 

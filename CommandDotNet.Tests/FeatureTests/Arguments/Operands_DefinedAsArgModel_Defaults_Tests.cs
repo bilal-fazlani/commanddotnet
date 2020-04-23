@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
-using CommandDotNet.TestTools;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
@@ -163,16 +163,17 @@ Arguments:
                 When = {Args = "ArgsDefaults true green 1 2 Monday http://google.com yellow orange"},
                 Then =
                 {
-                    Captured = { new OperandsDefaultsSampleTypesModel
-                    {
-                        BoolArg = true,
-                        StringArg = "green",
-                        StructArg = 1,
-                        StructNArg = 2,
-                        EnumArg = DayOfWeek.Monday,
-                        ObjectArg = new Uri("http://google.com"),
-                        StringListArg = new List<string>{"yellow", "orange"}
-                    } }
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
+                        new OperandsDefaultsSampleTypesModel
+                        {
+                            BoolArg = true,
+                            StringArg = "green",
+                            StructArg = 1,
+                            StructNArg = 2,
+                            EnumArg = DayOfWeek.Monday,
+                            ObjectArg = new Uri("http://google.com"),
+                            StringListArg = new List<string> {"yellow", "orange"}
+                        })
                 }
             });
         }
@@ -185,42 +186,34 @@ Arguments:
                 When = {Args = "ArgsDefaults"},
                 Then =
                 {
-                    Captured =
-                    {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
                         new OperandsDefaultsSampleTypesModel
                         {
                             StringArg = "lala",
                             StructArg = 3,
                             StructNArg = 4,
                             EnumArg = DayOfWeek.Tuesday,
-                        }
-                    }
+                        })
                 }
             });
         }
 
         private class OperandsDefaults
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void ArgsDefaults(OperandsDefaultsSampleTypesModel model)
             {
-                TestCaptures.Capture(model);
             }
 
             public void StructListDefaults(OperandsDefaultsStructListArgumentModel model)
             {
-                TestCaptures.Capture(model);
             }
 
             public void EnumListDefaults(OperandsDefaultsEnumListArgumentModel model)
             {
-                TestCaptures.Capture(model);
             }
 
             public void ObjectListDefaults(OperandsDefaultsObjectListArgumentModel model)
             {
-                TestCaptures.Capture(model);
             }
         }
     }

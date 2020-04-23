@@ -1,8 +1,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CommandDotNet.Rendering;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -10,18 +12,16 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class ParameterResolverTests
     {
-        private readonly ITestOutputHelper _output;
-
         public ParameterResolverTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
         
         [Fact]
         public void ParameterServices_AreNotIncludedInBasicHelp()
         {
             new AppRunner<App>(TestAppSettings.BasicHelp)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "Do -h"},
                     Then =
@@ -42,7 +42,7 @@ Options:
         public void ParameterServices_AreNotIncludedInDetailedHelp()
         {
             new AppRunner<App>(TestAppSettings.DetailedHelp)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "Do -h"},
                     Then =
@@ -66,34 +66,26 @@ Options:
         {
             new AppRunner<App>()
                 .Configure(c => c.CancellationToken = new CancellationTokenSource().Token)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
             {
                 When = {Args = "Do 7 --stringOption optValue"},
                 Then =
                 {
-                    AllowUnspecifiedCaptures = true,
-                    Captured =
+                    AssertContext = ctx =>
                     {
-                        new DoResults
-                        {
-                            IntOperand = 7,
-                            StringOption = "optValue",
-                            ParameterServices =
-                            {
-                                CommandContextIsNull = false,
-                                ConsoleIsNull = false,
-                                CancellationTokenIsNone = false
-                            }
-                        },
-                        new InterceptorResults
-                        {
-                            ParameterServices =
-                            {
-                                CommandContextIsNull = false,
-                                ConsoleIsNull = false,
-                                CancellationTokenIsNone = false
-                            }
-                        }
+                        ctx.ParamValuesShouldBe(7, "optValue");
+                        ctx.ParamValuesShouldBeEmpty<App>();
+
+                        var invocation = ctx.GetCommandInvocation();
+                        invocation.ParameterValues[0].Should().BeOfType<CommandContext>().And.Should().NotBeNull();
+                        invocation.ParameterValues[1].Should().BeAssignableTo<IConsole>().And.Should().NotBeNull();
+                        invocation.ParameterValues[2].Should().BeOfType<CancellationToken>().And.Should().NotBeNull();
+
+                        invocation = ctx.GetInterceptorInvocation<App>();
+                        invocation.ParameterValues[0].Should().BeOfType<InterceptorExecutionDelegate>().And.Should().NotBeNull();
+                        invocation.ParameterValues[1].Should().BeOfType<CommandContext>().And.Should().NotBeNull();
+                        invocation.ParameterValues[2].Should().BeAssignableTo<IConsole>().And.Should().NotBeNull();
+                        invocation.ParameterValues[3].Should().BeOfType<CancellationToken>().And.Should().NotBeNull();
                     }
                 }
             });
@@ -103,7 +95,7 @@ Options:
         public void ExternalParameterService_WhenNotRegistered_ResultContainsActionableErrorMessage()
         {
             new AppRunner<SomeServiceApp>()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "Do"},
                     Then =
@@ -124,20 +116,15 @@ Options:
             var someSvc = new SomeService();
             new AppRunner<SomeServiceApp>()
                 .Configure(b => b.UseParameterResolver(ctx => someSvc))
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "Do"},
                     Then =
                     {
-                        Captured =
+                        AssertContext = ctx =>
                         {
-                            new DoResults()
-                            {
-                                ParameterServices =
-                                {
-                                    SomeService = someSvc
-                                }
-                            }
+                            var invocation = ctx.GetCommandInvocation();
+                            invocation.ParameterValues[0].Should().Be(someSvc);
                         }
                     }
                 });
@@ -145,79 +132,26 @@ Options:
 
         public class SomeServiceApp
         {
-            TestCaptures TestCaptures { get; set; }
-
             public void Do(SomeService someService, [Operand] int intOperand, [Option] string stringOption = null)
             {
-                TestCaptures.Capture(new DoResults
-                {
-                    IntOperand = intOperand,
-                    StringOption = stringOption,
-                    ParameterServices =
-                    {
-                        SomeService = someService
-                    }
-                });
             }
         }
 
         public class App
         {
-            TestCaptures TestCaptures { get; set; }
-
             public Task<int> Interceptor(InterceptorExecutionDelegate next, CommandContext commandContext, IConsole console, CancellationToken cancellationToken)
             {
-                TestCaptures.Capture(new InterceptorResults
-                {
-                    ParameterServices =
-                    {
-                        CommandContextIsNull = commandContext == null,
-                        ConsoleIsNull = console == null,
-                        CancellationTokenIsNone = cancellationToken == CancellationToken.None,
-                    }
-                });
                 return next();
             }
 
             public void Do(CommandContext commandContext, IConsole console, CancellationToken cancellationToken, [Operand] int intOperand, [Option] string stringOption = null)
             {
-                TestCaptures.Capture(new DoResults
-                {
-                    IntOperand = intOperand,
-                    StringOption = stringOption,
-                    ParameterServices =
-                    {
-                        CommandContextIsNull = commandContext == null,
-                        ConsoleIsNull = console == null,
-                        CancellationTokenIsNone = cancellationToken == CancellationToken.None,
-                    }
-                });
             }
         }
 
         public class SomeService
         {
 
-        }
-
-        public class ParameterServices
-        {
-            public bool CommandContextIsNull;
-            public bool ConsoleIsNull;
-            public bool CancellationTokenIsNone;
-            public SomeService SomeService;
-        }
-
-        public class DoResults
-        {
-            public int IntOperand;
-            public string StringOption;
-            public ParameterServices ParameterServices = new ParameterServices();
-        }
-
-        public class InterceptorResults
-        {
-            public ParameterServices ParameterServices = new ParameterServices();
         }
     }
 }

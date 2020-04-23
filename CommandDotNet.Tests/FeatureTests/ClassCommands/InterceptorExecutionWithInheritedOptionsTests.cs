@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -85,23 +87,18 @@ Options:
         public void ExecutableLocalSubcommands_InheritedOptions_AreAccepted()
         {
             new AppRunner<App>()
+                .InjectTrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = "--interceptorOpt lala Do --inheritedOpt fishies --opt1 5 10"},
                     Then =
                     {
-                        Captured =
+                        AssertContext = ctx =>
                         {
-                            new App.InterceptResult
-                            {
-                                InterceptorOpt = "lala",
-                                InheritedOpt = "fishies"
-                            },
-                            new App.DoResult
-                            {
-                                Arg1 = 10,
-                                Opt1 = 5
-                            }
+                            ctx.GetInterceptorTrackingInvocation<App>().WasInvoked.Should().BeTrue();
+                            ctx.ParamValuesShouldBe<App>("lala", "fishies");
+                            ctx.GetCommandTrackingInvocation().WasInvoked.Should().BeTrue();
+                            ctx.ParamValuesShouldBe(10,5);
                         }
                     }
                 });
@@ -130,22 +127,18 @@ Options:
         public void ExecutableNestedSubcommands_InheritedOptions_AreAccepted()
         {
             new AppRunner<App>()
+                .InjectTrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = "--interceptorOpt lala ChildApp Do --inheritedOpt fishies"},
                     Then =
                     {
-                        Captured =
+                        AssertContext = ctx =>
                         {
-                            new App.InterceptResult
-                            {
-                                InterceptorOpt = "lala",
-                                InheritedOpt = "fishies"
-                            },
-                            new ChildApp.DoResult
-                            {
-                                Executed = true
-                            }
+                            ctx.GetInterceptorTrackingInvocation<App>().WasInvoked.Should().BeTrue();
+                            ctx.ParamValuesShouldBe<App>("lala", "fishies");
+                            ctx.GetCommandTrackingInvocation().WasInvoked.Should().BeTrue();
+                            ctx.ParamValuesShouldBeEmpty();
                         }
                     }
                 });
@@ -189,8 +182,6 @@ Use ""dotnet testhost.dll ChildApp [command] --help"" for more information about
 
         class App
         {
-            public TestCaptures TestCaptures { get; set; }
-
             [SubCommand]
             public ChildApp ChildApp { get; set; }
 
@@ -198,13 +189,11 @@ Use ""dotnet testhost.dll ChildApp [command] --help"" for more information about
                 string interceptorOpt,
                 [Option(AssignToExecutableSubcommands = true)] string inheritedOpt)
             {
-                TestCaptures.Capture(new InterceptResult { InheritedOpt = inheritedOpt, InterceptorOpt = interceptorOpt });
                 return next();
             }
 
             public void Do(int arg1, [Option]int opt1)
             {
-                TestCaptures.Capture(new DoResult{Arg1 = arg1, Opt1 = opt1});
             }
 
             public class InterceptResult
@@ -222,11 +211,8 @@ Use ""dotnet testhost.dll ChildApp [command] --help"" for more information about
 
         class ChildApp
         {
-            public TestCaptures TestCaptures { get; set; }
-
             public void Do()
             {
-                TestCaptures.Capture(new DoResult{Executed = true});
             }
 
             public class DoResult

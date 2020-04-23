@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommandDotNet.TestTools;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;
 using Xunit;
@@ -140,8 +140,11 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
             new AppRunner(type)
                 .Verify(new Scenario
                 {
-                    When = { Args = "Do1 --Opt1 1111 somearg" },
-                    Then = { Captured = { new ArgModel1 { Opt1 = "1111", Arg1 = "somearg" } } }
+                    When = {Args = "Do1 --Opt1 1111 somearg"},
+                    Then =
+                    {
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(new ArgModel1 {Opt1 = "1111", Arg1 = "somearg"})
+                    }
                 });
         }
 
@@ -152,8 +155,11 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
             new AppRunner(type)
                 .Verify(new Scenario
                 {
-                    When = { Args = "Second Do2 --Opt2 1111 somearg" },
-                    Then = { Captured = { new ArgModel2 { Opt2 = "1111", Arg2 = "somearg" } } }
+                    When = {Args = "Second Do2 --Opt2 1111 somearg"},
+                    Then =
+                    {
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(new ArgModel2 {Opt2 = "1111", Arg2 = "somearg"})
+                    }
                 });
         }
 
@@ -165,74 +171,58 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
                 .Verify(new Scenario
                 {
                     When = {Args = "Second Third Do3 --Opt3 1111 somearg"},
-                    Then = {Captured = {new ArgModel3 {Opt3 = "1111", Arg3 = "somearg"}}}
+                    Then =
+                    {
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(new ArgModel3 {Opt3 = "1111", Arg3 = "somearg"})
+                    }
                 });
         }
 
         private class ThreeLevelsApp
         {
-            private TestCaptures TestCaptures { get; set; }
-
             [SubCommand]
             public Second Second { get; set; }
 
             public void Do1(ArgModel1 model)
             {
-                TestCaptures.Capture(model);
             }
         }
 
         private class Second
         {
-            private TestCaptures TestCaptures { get; set; }
-
             [SubCommand]
             public Third Third { get; set; }
 
             public void Do2(ArgModel2 model)
             {
-                TestCaptures.Capture(model);
             }
         }
 
         private class Third
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void Do3(ArgModel3 model)
             {
-                TestCaptures.Capture(model);
             }
         }
 
         private class NestedThreeLevelsApp
         {
-            private TestCaptures TestCaptures { get; set; }
-
-
             public void Do1(ArgModel1 model)
             {
-                TestCaptures.Capture(model);
             }
 
             [SubCommand]
             public class Second
             {
-                private TestCaptures TestCaptures { get; set; }
-
                 public void Do2(ArgModel2 model)
                 {
-                    TestCaptures.Capture(model);
                 }
 
                 [SubCommand]
                 public class Third
                 {
-                    private TestCaptures TestCaptures { get; set; }
-
                     public void Do3(ArgModel3 model)
                     {
-                        TestCaptures.Capture(model);
                     }
                 }
             }

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
-using CommandDotNet.TestTools;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
@@ -187,8 +187,7 @@ Arguments:
                 When = {Args = "ArgsNoDefault true green 1 2 Monday http://google.com yellow orange"},
                 Then =
                 {
-                    Captured =
-                    {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
                         new OperandsNoDefaultsSampleTypesModel
                         {
                             BoolArg = true,
@@ -198,8 +197,7 @@ Arguments:
                             EnumArg = DayOfWeek.Monday,
                             ObjectArg = new Uri("http://google.com"),
                             StringListArg = new List<string> {"yellow", "orange"}
-                        }
-                    }
+                        })
                 }
             });
         }
@@ -212,14 +210,12 @@ Arguments:
                 When = {Args = "ArgsNoDefault"},
                 Then =
                 {
-                    Captured =
-                    {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
                         new OperandsNoDefaultsSampleTypesModel
                         {
                             StructArg = default(int),
                             EnumArg = default(DayOfWeek),
-                        }
-                    }
+                        })
                 }
             });
         }
@@ -232,13 +228,11 @@ Arguments:
                 When = {Args = "StructListNoDefault 23 5 7"},
                 Then =
                 {
-                    Captured =
-                    {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
                         new OperandsNoDefaultsStructListArgumentModel
                         {
                             StructListArg = new List<int>{23,5,7}
-                        }
-                    }
+                        })
                 }
             });
         }
@@ -251,13 +245,11 @@ Arguments:
                 When = {Args = "EnumListNoDefault Friday Tuesday Thursday"},
                 Then =
                 {
-                    Captured =
-                    {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
                         new OperandsNoDefaultsEnumListArgumentModel
                         {
                             EnumListArg = new List<DayOfWeek>{DayOfWeek.Friday, DayOfWeek.Tuesday, DayOfWeek.Thursday}
-                        }
-                    }
+                        })
                 }
             });
         }
@@ -270,8 +262,7 @@ Arguments:
                 When = {Args = "ObjectListNoDefault http://google.com http://apple.com http://github.com"},
                 Then =
                 {
-                    Captured =
-                    {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
                         new OperandsNoDefaultsObjectListArgumentModel
                         {
                             ObjectListArg = new List<Uri>
@@ -280,34 +271,27 @@ Arguments:
                                 new Uri("http://apple.com"),
                                 new Uri("http://github.com"),
                             }
-                        }
-                    }
+                        })
                 }
             });
         }
 
         private class OperandsNoDefaults
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void ArgsNoDefault(OperandsNoDefaultsSampleTypesModel model)
             {
-                TestCaptures.Capture(model);
             }
 
             public void StructListNoDefault(OperandsNoDefaultsStructListArgumentModel model)
             {
-                TestCaptures.Capture(model);
             }
 
             public void EnumListNoDefault(OperandsNoDefaultsEnumListArgumentModel model)
             {
-                TestCaptures.Capture(model);
             }
 
             public void ObjectListNoDefault(OperandsNoDefaultsObjectListArgumentModel model)
             {
-                TestCaptures.Capture(model);
             }
         }
     }

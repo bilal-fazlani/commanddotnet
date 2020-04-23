@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using FluentAssertions;
 using Xunit;
@@ -11,11 +12,9 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class CommandInvokerTests
     {
-        private readonly ITestOutputHelper _output;
-
         public CommandInvokerTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
@@ -39,8 +38,7 @@ namespace CommandDotNet.Tests.FeatureTests
             var result = RunInMem(1, "Jack", BeforeInvocation);
 
             result.ExitCode.Should().Be(5);
-            result.TestCaptures.Get<Car>().Number.Should().Be(2);
-            result.TestCaptures.Get<string>().Should().Be("Jill");
+            result.CommandContext.ParamValuesShouldBe(new Car { Number = 2 }, "Jill");
         }
 
         [Fact]
@@ -71,8 +69,7 @@ namespace CommandDotNet.Tests.FeatureTests
             var result = RunInMem(1, "Jack", preBindValues: BeforeSetValues);
 
             result.ExitCode.Should().Be(5);
-            result.TestCaptures.Get<Car>().Number.Should().Be(1);
-            result.TestCaptures.Get<string>().Should().Be("Jill");
+            result.CommandContext.ParamValuesShouldBe(new Car{Number = 1}, "Jill");
         }
 
         [Fact]
@@ -99,12 +96,28 @@ namespace CommandDotNet.Tests.FeatureTests
                 instance.Should().NotBeNull();
                 var app = (App)instance;
 
-                app.TestCaptures.Capture(guid);
+                app.Guid = guid;
                 return next(context);
             }
 
             var result = RunInMem(1, "Jack", BeforeInvocation);
-            result.TestCaptures.Get<Guid>().Should().Be(guid);
+            var app2 = (App)result.CommandContext.GetCommandInvocationStep().Instance;
+            app2.Guid.Should().Be(guid);
+        }
+
+        [Fact]
+        public void CanReplaceInvocation()
+        {
+            TrackingInvocation targetCommandInvocation = null;
+            Task<int> BeforeInvocation(CommandContext context, ExecutionDelegate next)
+            {
+                targetCommandInvocation = new TrackingInvocation(context.InvocationPipeline.TargetCommand.Invocation);
+                context.InvocationPipeline.TargetCommand.Invocation = targetCommandInvocation;
+                return next(context);
+            }
+
+            var result = RunInMem(1, "Jack", BeforeInvocation);
+            targetCommandInvocation.WasInvoked.Should().BeTrue();
         }
 
         private AppRunnerResult RunInMem(int carNumber, string ownerName, 
@@ -123,17 +136,19 @@ namespace CommandDotNet.Tests.FeatureTests
             }
 
             var args = $"NotifyOwner --Number {carNumber} --owner {ownerName}".SplitArgs();
-            return appRunner.RunInMem(args, _output);
+            return appRunner.RunInMem(args);
         }
         
-        public class App
+        private class App
         {
-            internal TestCaptures TestCaptures { get; set; }
+            public Car Car;
+            public string Owner;
+            public Guid Guid;
 
             public int NotifyOwner(Car car, [Option] string owner)
             {
-                TestCaptures.Capture(car);
-                TestCaptures.Capture(owner);
+                Car = car;
+                Owner = owner;
                 return 5;
             }
         }

@@ -1,4 +1,4 @@
-using CommandDotNet.TestTools;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
@@ -7,19 +7,18 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class NestedArgModelTests
     {
-        private readonly ITestOutputHelper _output;
         private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
         public NestedArgModelTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
         public void NestedModel_BasicHelp_IncludesNestedOperandsAndOptions()
         {
-            new AppRunner<NestedModelApp>(BasicHelp).Verify(_output, new Scenario
+            new AppRunner<NestedModelApp>(BasicHelp).Verify(new Scenario
             {
                 When = {Args = "Do -h"},
                 Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -38,7 +37,7 @@ Options:
         [Fact]
         public void NestedModel_DetailedHelp_IncludesNestedOperandsAndOptions()
         {
-            new AppRunner<NestedModelApp>(DetailedHelp).Verify(_output, new Scenario
+            new AppRunner<NestedModelApp>(DetailedHelp).Verify(new Scenario
             {
                 When = {Args = "Do -h"},
                 Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
@@ -61,30 +60,25 @@ Options:
         [Fact]
         public void NestedModel_Exec_MapsNestedOperandsAndOptions()
         {
-            new AppRunner<NestedModelApp>(BasicHelp).Verify(_output, new Scenario
+            new AppRunner<NestedModelApp>(BasicHelp).Verify(new Scenario
             {
                 When = {Args = "Do --Option1 aaa --Option2 bbb ccc ddd"},
                 Then =
                 {
-                    Captured =
-                    {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
                         new ParentModel
                         {
                             Option1 = "aaa", Operand1 = "ccc",
                             NestedModel = new NestedModel {Option2 = "bbb", Operand2 = "ddd"}
-                        }
-                    }
+                        })
                 }
             });
         }
 
         private class NestedModelApp
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void Do(ParentModel parameterModel)
             {
-                TestCaptures.Capture(parameterModel);
             }
         }
 

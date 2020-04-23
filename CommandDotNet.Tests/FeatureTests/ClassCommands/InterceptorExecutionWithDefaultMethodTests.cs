@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -119,12 +121,21 @@ Options:
         public void InterceptorMethod_WithNoOptions_IsDetectedAndUsed()
         {
             new AppRunner<AppWithNoInterceptorOptions>()
+                .InjectTrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = "Do 1"},
                     Then =
                     {
-                        Captured = { true, 1 }
+                        AssertContext = ctx =>
+                        {
+                            ctx.GetInterceptorTrackingInvocation<AppWithNoInterceptorOptions>().WasInvoked.Should().BeTrue();
+                            ctx.ParamValuesShouldBeEmpty<AppWithNoInterceptorOptions>();
+                            var command = ctx.GetCommandTrackingInvocation();
+                            command.WasInvoked.Should().BeTrue();
+                            command.MethodInfo.Name.Should().Be(nameof(AppWithNoInterceptorOptions.Do));
+                            ctx.ParamValuesShouldBe(1);
+                        }
                     }
                 });
         }
@@ -133,12 +144,21 @@ Options:
         public void InterceptorMethod_WithNoOptions_AndDefaultMethod_IsDetectedAndUsed()
         {
             new AppRunner<AppWithNoInterceptorOptions>()
+                .InjectTrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = "1"},
                     Then =
                     {
-                        Captured = { true, 1 }
+                        AssertContext = ctx =>
+                        {
+                            ctx.GetInterceptorTrackingInvocation<AppWithNoInterceptorOptions>().WasInvoked.Should().BeTrue();
+                            ctx.ParamValuesShouldBeEmpty<AppWithNoInterceptorOptions>();
+                            var command = ctx.GetCommandTrackingInvocation();
+                            command.WasInvoked.Should().BeTrue();
+                            command.MethodInfo.Name.Should().Be(nameof(AppWithNoInterceptorOptions.Default));
+                            ctx.ParamValuesShouldBe(1);
+                        }
                     }
                 });
         }
@@ -147,15 +167,20 @@ Options:
         public void InterceptorMethod_WithOptions_IsDetectedAndUsed()
         {
             new AppRunner<AppWithInteceptorOptions>()
+                .InjectTrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = "--stringOpt lala Do 1"},
                     Then =
                     {
-                        Captured =
+                        AssertContext = ctx =>
                         {
-                            new AppWithInteceptorOptions.InterceptOptions {stringOpt = "lala"},
-                            1
+                            ctx.GetInterceptorTrackingInvocation<AppWithInteceptorOptions>().WasInvoked.Should().BeTrue();
+                            ctx.ParamValuesShouldBe<AppWithInteceptorOptions>(new InterceptOptions{stringOpt = "lala"});
+                            var command = ctx.GetCommandTrackingInvocation();
+                            command.WasInvoked.Should().BeTrue();
+                            command.MethodInfo.Name.Should().Be(nameof(AppWithInteceptorOptions.Do));
+                            ctx.ParamValuesShouldBe(1);
                         }
                     }
                 });
@@ -165,15 +190,20 @@ Options:
         public void InterceptorMethod_WithOptions_AndDefaultMethod_IsDetectedAndUsed()
         {
             new AppRunner<AppWithInteceptorOptions>()
+                .InjectTrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = "--stringOpt lala 1"},
                     Then =
                     {
-                        Captured =
+                        AssertContext = ctx =>
                         {
-                            new AppWithInteceptorOptions.InterceptOptions {stringOpt = "lala"},
-                            1
+                            ctx.GetInterceptorTrackingInvocation<AppWithInteceptorOptions>().WasInvoked.Should().BeTrue();
+                            ctx.ParamValuesShouldBe<AppWithInteceptorOptions>(new InterceptOptions{stringOpt = "lala"});
+                            var command = ctx.GetCommandTrackingInvocation();
+                            command.WasInvoked.Should().BeTrue();
+                            command.MethodInfo.Name.Should().Be(nameof(AppWithInteceptorOptions.Default));
+                            ctx.ParamValuesShouldBe(1);
                         }
                     }
                 });
@@ -181,34 +211,26 @@ Options:
 
         class AppWithNoInterceptorOptions
         {
-            public TestCaptures TestCaptures { get; set; }
-
             public Task<int> Intercept(InterceptorExecutionDelegate next)
             {
-                TestCaptures.Capture(true);
                 return next();
             }
 
             [DefaultMethod]
             public void Default(int defaultArg)
             {
-                TestCaptures.Capture(defaultArg);
             }
 
             public void Do(int arg1)
             {
-                TestCaptures.Capture(arg1);
             }
         }
 
         class AppWithInteceptorOptions
         {
-            public TestCaptures TestCaptures { get; set; }
-
             public Task<int> Intercept(InterceptorExecutionDelegate next,
                 InterceptOptions interceptOptions)
             {
-                TestCaptures.Capture(interceptOptions);
                 if (interceptOptions.skipCmd)
                 {
                     return ExitCodes.Success;
@@ -223,21 +245,19 @@ Options:
             [DefaultMethod]
             public void Default(int defaultArg)
             {
-                TestCaptures.Capture(defaultArg);
             }
 
             public void Do(int arg1)
             {
-                TestCaptures.Capture(arg1);
             }
+        }
 
-            public class InterceptOptions : IArgumentModel
-            {
-                [Option(AssignToExecutableSubcommands = true)]
-                public string stringOpt { get; set; }
-                public bool skipCmd { get; set; } = false;
-                public int? useReturnCode { get; set; }
-            }
+        public class InterceptOptions : IArgumentModel
+        {
+            [Option(AssignToExecutableSubcommands = true)]
+            public string stringOpt { get; set; }
+            public bool skipCmd { get; set; } = false;
+            public int? useReturnCode { get; set; }
         }
     }
 }

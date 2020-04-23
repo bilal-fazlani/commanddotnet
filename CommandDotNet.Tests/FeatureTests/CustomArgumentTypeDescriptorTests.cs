@@ -1,5 +1,5 @@
 using System;
-using CommandDotNet.TestTools;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Scenarios;
 using CommandDotNet.TypeDescriptors;
 using Xunit;
@@ -61,7 +61,7 @@ Arguments:
             new AppRunner<App>(BasicHelpWithDescriptor).Verify(new Scenario
             {
                 When = {Args = "Do 2x3"},
-                Then = { Captured = { new Square { Length = 2, Width = 3 } } }
+                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(new Square {Length = 2, Width = 3})}
             });
         }
 
@@ -86,11 +86,8 @@ Arguments:
 
         private class App
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void Do(Square square)
             {
-                TestCaptures.Capture(square);
             }
         }
 

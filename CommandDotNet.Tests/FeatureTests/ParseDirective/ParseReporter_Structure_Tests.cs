@@ -7,11 +7,9 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
 {
     public class ParseReporter_Structure_Tests 
     {
-        private readonly ITestOutputHelper _output;
-
         public ParseReporter_Structure_Tests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
@@ -19,7 +17,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         {
             new AppRunner<App>()
                 .UseParseDirective()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "[parse] Do"},
                     Then =
