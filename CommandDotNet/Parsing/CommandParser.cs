@@ -39,7 +39,7 @@ namespace CommandDotNet.Parsing
             Command currentCommand = commandContext.RootCommand;
             Option currentOption = null;
             Token currentOptionToken = null;
-            IEnumerator<Operand> operands = new OperandEnumerator(currentCommand.Operands);
+            var operands = new OperandEnumerator(currentCommand.Operands);
 
             void ParseNonOptionValue(Token token)
             {
@@ -136,9 +136,9 @@ namespace CommandDotNet.Parsing
                 $"Unexpected value '{token.RawValue}' for option '{currentOption.Name}'");
         }
 
-        private ParseOperandResult ParseArgumentValue(Token token, ref Command command, IEnumerator<Operand> operands)
+        private ParseOperandResult ParseArgumentValue(Token token, ref Command command, OperandEnumerator operands)
         {
-            if (command.FindArgumentNode(token.Value) is Command subcommand)
+            if (!operands.Any && command.FindArgumentNode(token.Value) is Command subcommand)
             {
                 command = subcommand;
                 return ParseOperandResult.NewSubCommand;
@@ -237,11 +237,14 @@ namespace CommandDotNet.Parsing
         private class OperandEnumerator : IEnumerator<Operand>
         {
             private readonly IEnumerator<Operand> _enumerator;
+            private int _count;
 
             public OperandEnumerator(IEnumerable<Operand> enumerable)
             {
                 _enumerator = enumerable.GetEnumerator();
             }
+
+            public bool Any => _count > 0;
 
             public Operand Current => _enumerator.Current;
 
@@ -254,6 +257,8 @@ namespace CommandDotNet.Parsing
 
             public bool MoveNext()
             {
+                _count++;
+
                 if (Current == null || !Current.Arity.AllowsMany())
                 {
                     return _enumerator.MoveNext();
