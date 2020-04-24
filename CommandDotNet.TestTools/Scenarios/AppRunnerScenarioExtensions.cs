@@ -160,16 +160,5 @@ namespace CommandDotNet.TestTools.Scenarios
                 throw new AssertFailedException($"Unexpected captures: {unexpectedTypes}");
             }
         }
-
-        private static void ShouldBeEquivalent(object expected, object actual, string propertyPath)
-        {
-            if (expected == null)
-            {
-                if (actual == null)
-                {
-                    return;
-                }
-            }
-        }
     }
 }
