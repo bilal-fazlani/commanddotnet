@@ -121,7 +121,7 @@ Options:
         public void InterceptorMethod_WithNoOptions_IsDetectedAndUsed()
         {
             new AppRunner<AppWithNoInterceptorOptions>()
-                .InjectTrackingInvocations()
+                .TrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = "Do 1"},
@@ -129,9 +129,9 @@ Options:
                     {
                         AssertContext = ctx =>
                         {
-                            ctx.GetInterceptorTrackingInvocation<AppWithNoInterceptorOptions>().WasInvoked.Should().BeTrue();
+                            ctx.GetInterceptorInvocationInfo<AppWithNoInterceptorOptions>().WasInvoked.Should().BeTrue();
                             ctx.ParamValuesShouldBeEmpty<AppWithNoInterceptorOptions>();
-                            var command = ctx.GetCommandTrackingInvocation();
+                            var command = ctx.GetCommandInvocationInfo();
                             command.WasInvoked.Should().BeTrue();
                             command.MethodInfo.Name.Should().Be(nameof(AppWithNoInterceptorOptions.Do));
                             ctx.ParamValuesShouldBe(1);
@@ -144,7 +144,7 @@ Options:
         public void InterceptorMethod_WithNoOptions_AndDefaultMethod_IsDetectedAndUsed()
         {
             new AppRunner<AppWithNoInterceptorOptions>()
-                .InjectTrackingInvocations()
+                .TrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = "1"},
@@ -152,9 +152,9 @@ Options:
                     {
                         AssertContext = ctx =>
                         {
-                            ctx.GetInterceptorTrackingInvocation<AppWithNoInterceptorOptions>().WasInvoked.Should().BeTrue();
+                            ctx.GetInterceptorInvocationInfo<AppWithNoInterceptorOptions>().WasInvoked.Should().BeTrue();
                             ctx.ParamValuesShouldBeEmpty<AppWithNoInterceptorOptions>();
-                            var command = ctx.GetCommandTrackingInvocation();
+                            var command = ctx.GetCommandInvocationInfo();
                             command.WasInvoked.Should().BeTrue();
                             command.MethodInfo.Name.Should().Be(nameof(AppWithNoInterceptorOptions.Default));
                             ctx.ParamValuesShouldBe(1);
@@ -167,7 +167,7 @@ Options:
         public void InterceptorMethod_WithOptions_IsDetectedAndUsed()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .InjectTrackingInvocations()
+                .TrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = "--stringOpt lala Do 1"},
@@ -175,9 +175,9 @@ Options:
                     {
                         AssertContext = ctx =>
                         {
-                            ctx.GetInterceptorTrackingInvocation<AppWithInteceptorOptions>().WasInvoked.Should().BeTrue();
+                            ctx.GetInterceptorInvocationInfo<AppWithInteceptorOptions>().WasInvoked.Should().BeTrue();
                             ctx.ParamValuesShouldBe<AppWithInteceptorOptions>(new InterceptOptions{stringOpt = "lala"});
-                            var command = ctx.GetCommandTrackingInvocation();
+                            var command = ctx.GetCommandInvocationInfo();
                             command.WasInvoked.Should().BeTrue();
                             command.MethodInfo.Name.Should().Be(nameof(AppWithInteceptorOptions.Do));
                             ctx.ParamValuesShouldBe(1);
@@ -190,7 +190,7 @@ Options:
         public void InterceptorMethod_WithOptions_AndDefaultMethod_IsDetectedAndUsed()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .InjectTrackingInvocations()
+                .TrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = "--stringOpt lala 1"},
@@ -198,9 +198,9 @@ Options:
                     {
                         AssertContext = ctx =>
                         {
-                            ctx.GetInterceptorTrackingInvocation<AppWithInteceptorOptions>().WasInvoked.Should().BeTrue();
+                            ctx.GetInterceptorInvocationInfo<AppWithInteceptorOptions>().WasInvoked.Should().BeTrue();
                             ctx.ParamValuesShouldBe<AppWithInteceptorOptions>(new InterceptOptions{stringOpt = "lala"});
-                            var command = ctx.GetCommandTrackingInvocation();
+                            var command = ctx.GetCommandInvocationInfo();
                             command.WasInvoked.Should().BeTrue();
                             command.MethodInfo.Name.Should().Be(nameof(AppWithInteceptorOptions.Default));
                             ctx.ParamValuesShouldBe(1);

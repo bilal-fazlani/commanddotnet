@@ -19,7 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         public void ShouldInstantiateCommandClassUsingCtorWithMostInjectableServices()
         {
             var result = new AppRunner<UseLargestCtorApp>().RunInMem("Do");
-            var app = result.CommandContext.GetCommandInstance<UseLargestCtorApp>();
+            var app = result.CommandContext.GetCommandInvocationInfo<UseLargestCtorApp>().Instance;
             app.CommandContext.Should().NotBeNull();
             app.Console.Should().NotBeNull();
             app.CancellationToken.Should().NotBeNull();

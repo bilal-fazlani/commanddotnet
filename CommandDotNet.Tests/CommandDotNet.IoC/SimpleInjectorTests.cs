@@ -42,11 +42,11 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
             }
 
             var result = new AppRunner<IoCApp>()
-                .InjectTrackingInvocations()
+                .TrackingInvocations()
                 .UseSimpleInjector(container, runInScope: ctx => AsyncScopedLifestyle.BeginScope(container))
                 .RunInMem("Do");
 
-            var app = result.CommandContext.GetCommandInstance<IoCApp>();
+            var app = result.CommandContext.GetCommandInvocationInfo<IoCApp>().Instance;
 
             app.FromCtor.Should().BeSameAs(app.FromInterceptor);
             app.FromCtor.Should().NotBeSameAs(svcBeforeRun);

@@ -5,7 +5,7 @@ using CommandDotNet.Execution;
 
 namespace CommandDotNet.TestTools
 {
-    public class TrackingInvocation : IInvocation
+    internal class TrackingInvocation : IInvocation
     {
         private readonly IInvocation _backingInvocation;
 

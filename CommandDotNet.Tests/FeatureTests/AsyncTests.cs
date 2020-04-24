@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using FluentAssertions;
 using Xunit;
@@ -22,13 +21,13 @@ namespace CommandDotNet.Tests.FeatureTests
         public void TestAsyncFunctionality(string commandName, int expectedCode)
         {
             var result = new AppRunner<App>()
-                .InjectTrackingInvocations()
+                .TrackingInvocations()
                 .RunInMem(new[] {commandName});
 
             result.ExitCode.Should().Be(expectedCode, $"command '{commandName}' is expected to return '{expectedCode}'" );
 
             // ensure the non-return methods were called
-            result.CommandContext.GetCommandInvocation<TrackingInvocation>().WasInvoked.Should().BeTrue();
+            result.CommandContext.GetCommandInvocationInfo().WasInvoked.Should().BeTrue();
         }
 
         public class App

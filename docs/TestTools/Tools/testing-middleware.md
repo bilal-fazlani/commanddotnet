@@ -38,30 +38,24 @@ Both `RunInMem` and `Verify` return a CommandContext to use for further assertio
 
 Verify also has the Scenario.Then.AssertContext callback for a more fluid syntax approach.
 
-## Accessing parameter values
+## Accessing invocation values
 
-When your middleware can modify the method parameters, you'll want to access the invocation metadata to verify. 
+When your middleware can modify the invocation, such as parameter values and class instances, you'll want to access the invocation metadata to verify. 
 
 There are a few [CommandContext extension methods](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/CommandContextTestExtensions.cs) to make this easier.
 
 To get the [InvocationStep](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Execution/InvocationStep.cs), which contains the Command, Invocation and Instance, use:
 
-* `GetCommandInvocationStep()` to get the invocation of the command.
-* `GetInterceptorInvocationStep<TInterceptorClass>()` to get the invocation of the interceptor in the specified class.
+* `GetCommandInvocationInfo()` to get the invocation of the command.
+* `GetCommandInvocationInfo<TCommandClass>()` to get the invocation of the command with the `.Instance` typed as `TCommandClass`.
+* `GetInterceptorInvocationInfo<TInterceptorClass>()` to get the invocation of the interceptor in the specified class with the `.Instance` typed as `TInterceptorClass`.
 
-To get the [Invocation](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Execution/IInvocation.cs), which contains the Arguments, Parameters, ParameterValues and MethodInfo, use:
+The `InvocationInfo` includes the properties for [InvocationStep](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Execution/InvocationStep.cs) and [Invocation](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Execution/IInvocation.cs). The xml comments in the linked source files indicate which stage each property is loaded.
 
-* `GetCommandInvocation()` to get the invocation of the command.
-* `GetInterceptorInvocation<TInterceptorClass>()` to get the invocation of the interceptor in the specified class.
 
-To get an invocation that will indicate if the method was invoked, use `GetCommandTrackingInvocation()` or `GetInterceptorTrackingInvocation<TInterceptorClass>()` and assert the `WasInvoked` property.  You will need to configure the AppRunner with `.InjectTrackingInvocations()` for this to work. A friendly error message will remind you if your forget.
+The `InvocationInfo` properties `ArgumentParameters` and `ArgumentParameterValues` include only those parameters that define arguments. They do not include parameters of type InterceptorExecutionDelegate, CommandContext, IConsole or  any other type configured as a parameter resolver. Those are available in via `NonArgumentParameters` and `NonArgumentParameterValues`
 
-To get the typed instance of class, use `GetCommandInstance<TCommandClass>` or `GetInterceptorInstance<TInterceptorClass>`.
-
-!!! Note
-    The interceptor versions of these methods will return null if the specified interceptor is not in the hieararchy of the executed command. 
-
-The xml comments for [InvocationStep](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Execution/InvocationStep.cs) and [Invocation](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Execution/IInvocation.cs) indicate which stage each property is loaded.
+The `InvocationInfo` includes a `WasInvoked` property. To use this, configure the AppRunner with `.TrackInvocations()`.  A friendly error message will remind you if your forget.
 
 ### Example
 
@@ -95,19 +89,19 @@ And then we can assert some values passed to the methods like this.
         public void SomeTest()
         {
             var result = new AppRunner<WebClient>()
-                .InjectTrackingInvocations()
+                .TrackInvocations()
                 .RunInMem("--user me --pwd shhhh Download http://all-the-internet.com");
 
             var context = result.CommandContext;
 
-            var invocation = context.GetCommandTrackingInvocation<WebClient>();
+            var invocation = context.GetCommandInvocationInfo<WebClient>();
             invocation.WasInvoked.Should().Be(true);
-            invocation.ParameterValues.First().Should()
+            invocation.ArgumentParameterValues.First().Should()
                 .Be("http://all-the-internet.com");
 
-            invocation = context.GetInterceptorTrackingInvocation<WebClient>()
+            invocation = context.GetInterceptorInvocationInfo<WebClient>()
             invocation.WasInvoked.Should().Be(true);
-            invocation.ParameterValues.Should()
+            invocation.ArgumentParameterValues.Should()
                 .Be(new []{"me", "shhhh"});
         }
     }
@@ -119,7 +113,7 @@ And then we can assert some values passed to the methods like this.
     public void SomeTest()
     {
         new AppRunner<WebClient>()
-            .InjectTrackingInvocations()
+            .TrackInvocations()
             .Verify(new Scenario
             {
                 When = {Args = "--user me --pwd shhhh Download http://all-the-internet.com"},
@@ -127,14 +121,14 @@ And then we can assert some values passed to the methods like this.
                 {
                     AssertContext = ctx => 
                     {
-                        var invocation = ctx.GetCommandTrackingInvocation<WebClient>();
+                        var invocation = ctx.GetCommandInvocationInfo<WebClient>();
                         invocation.WasInvoked.Should().Be(true);
-                        invocation.ParameterValues.First().Should()
+                        invocation.ArgumentParameterValues.First().Should()
                             .Be("http://all-the-internet.com");
 
-                        invocation = ctx.GetInterceptorTrackingInvocation<WebClient>()
+                        invocation = ctx.GetInterceptorInvocationInfo<WebClient>()
                         invocation.WasInvoked.Should().Be(true);
-                        invocation.ParameterValues.Should()
+                        invocation.ArgumentParameterValues.Should()
                             .Be(new []{"me", "shhhh"});
                     }
                 }

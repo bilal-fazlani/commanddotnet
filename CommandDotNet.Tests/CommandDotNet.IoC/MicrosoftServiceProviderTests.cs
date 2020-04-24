@@ -39,7 +39,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
                 .UseMicrosoftDependencyInjection(serviceProvider, runInScope: ctx => serviceProvider.CreateScope())
                 .RunInMem("Do");
 
-            var app = result.CommandContext.GetCommandInstance<IoCApp>();
+            var app = result.CommandContext.GetCommandInvocationInfo<IoCApp>().Instance;
 
             app.FromCtor.Should().BeSameAs(app.FromInterceptor);
 

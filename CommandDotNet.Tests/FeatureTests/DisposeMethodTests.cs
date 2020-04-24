@@ -66,7 +66,11 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<DisposableApp>().Verify(new Scenario
             {
                 When = {Args = "Do"},
-                Then = {AssertContext = ctx => ctx.GetCommandInstance<DisposableApp>().WasDisposed.Should().BeTrue()}
+                Then =
+                {
+                    AssertContext = ctx =>
+                        ctx.GetCommandInvocationInfo<DisposableApp>().Instance.WasDisposed.Should().BeTrue()
+                }
             });
         }
 
@@ -76,15 +80,23 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<NotDisposableApp>().Verify(new Scenario
             {
                 When = {Args = "Dispose"},
-                Then = {AssertContext = ctx => ctx.GetCommandInstance<NotDisposableApp>().CalledDispose.Should().BeTrue()}
+                Then =
+                {
+                    AssertContext = ctx =>
+                        ctx.GetCommandInvocationInfo<NotDisposableApp>().Instance.WasDispose.Should().BeTrue()
+                }
             });
 
             // sanity check that Dispose wasn't executed by some weird name-matching logic.
             new AppRunner<NotDisposableApp>().Verify(new Scenario
 
             {
-                When = { Args = "NotDispose" },
-                Then = { AssertContext = ctx => ctx.GetCommandInstance<NotDisposableApp>().CalledDispose.Should().BeFalse() }
+                When = {Args = "NotDispose"},
+                Then =
+                {
+                    AssertContext = ctx =>
+                        ctx.GetCommandInvocationInfo<NotDisposableApp>().Instance.WasDispose.Should().BeFalse()
+                }
             });
         }
 
@@ -104,13 +116,13 @@ namespace CommandDotNet.Tests.FeatureTests
 
         private class NotDisposableApp
         {
-            public bool CalledDispose;
+            public bool WasDispose;
 
             // use the name Dispose to prove it can be a command name
             // and that the Dispose name is filtered out only for IDisposable's
             public void Dispose()
             {
-                CalledDispose = true;
+                WasDispose = true;
             }
 
             public void NotDispose()

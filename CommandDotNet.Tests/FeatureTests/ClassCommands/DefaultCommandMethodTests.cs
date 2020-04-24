@@ -124,7 +124,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             new AppRunner<WithoutDefaultArgsApp>().Verify(new Scenario
             {
                 When = {Args = null},
-                Then = {AssertContext = ctx => ctx.GetCommandInvocation()
+                Then = {AssertContext = ctx => ctx.GetCommandInvocationInfo()
                     .MethodInfo.Name.Should().Be(nameof(WithoutDefaultArgsApp.DefaultMethod))}
             });
         }

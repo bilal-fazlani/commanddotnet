@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;
@@ -19,7 +18,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         public void WhenChildCommandsAreNotRequested_TheirInterceptorsAreNotExecuted()
         {
             new AppRunner<Level1>()
-                .InjectTrackingInvocations()
+                .TrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = "--name lala Do"},
@@ -27,9 +26,9 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                     {
                         AssertContext = ctx =>
                         {
-                            ctx.GetInterceptorInvocation<Level1, TrackingInvocation>().WasInvoked.Should().BeTrue();
-                            ctx.GetInterceptorInvocation<Level2, TrackingInvocation>().Should().BeNull();
-                            ctx.GetInterceptorInvocation<Level3, TrackingInvocation>().Should().BeNull();
+                            ctx.GetInterceptorInvocationInfo<Level1>().WasInvoked.Should().BeTrue();
+                            ctx.IsIntercepting<Level2>().Should().BeFalse();
+                            ctx.IsIntercepting<Level3>().Should().BeFalse();
                         }
                     }
                 });
@@ -41,7 +40,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             // this test also proves we can NOT use the same option name for each command because they will conflict.
             // TODO: allow same name. Requires update to how ArgumentValues are keyed.
             new AppRunner<Level1>()
-                .InjectTrackingInvocations()
+                .TrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = { Args = "--name lala Level2 --name2 lala Level3 --name3 fishies Do" },
@@ -49,9 +48,9 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                     {
                         AssertContext = ctx =>
                         {
-                            ctx.GetInterceptorInvocation<Level1, TrackingInvocation>().WasInvoked.Should().BeTrue();
-                            ctx.GetInterceptorInvocation<Level2, TrackingInvocation>().WasInvoked.Should().BeTrue();
-                            ctx.GetInterceptorInvocation<Level3, TrackingInvocation>().WasInvoked.Should().BeTrue();
+                            ctx.GetInterceptorInvocationInfo<Level1>().WasInvoked.Should().BeTrue();
+                            ctx.GetInterceptorInvocationInfo<Level2>().WasInvoked.Should().BeTrue();
+                            ctx.GetInterceptorInvocationInfo<Level3>().WasInvoked.Should().BeTrue();
                         }
                     }
                 });
@@ -63,7 +62,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
             // this test also proves we can NOT use the same option name for each command because they will conflict.
             // TODO: allow same name. Requires update to how ArgumentValues are keyed.
             new AppRunner<Level1>()
-                .InjectTrackingInvocations()
+                .TrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = "--name lala Level3 --name3 fishies Do"},
@@ -71,9 +70,9 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                     {
                         AssertContext = ctx =>
                         {
-                            ctx.GetInterceptorInvocation<Level1, TrackingInvocation>().WasInvoked.Should().BeTrue();
-                            ctx.GetInterceptorInvocation<Level2, TrackingInvocation>().Should().BeNull();
-                            ctx.GetInterceptorInvocation<Level3, TrackingInvocation>().WasInvoked.Should().BeTrue();
+                            ctx.GetInterceptorInvocationInfo<Level1>().WasInvoked.Should().BeTrue();
+                            ctx.IsIntercepting<Level2>().Should().BeFalse();
+                            ctx.GetInterceptorInvocationInfo<Level3>().WasInvoked.Should().BeTrue();
                         }
                     }
                 });

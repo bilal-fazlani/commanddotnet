@@ -87,7 +87,7 @@ Options:
         public void ExecutableLocalSubcommands_InheritedOptions_AreAccepted()
         {
             new AppRunner<App>()
-                .InjectTrackingInvocations()
+                .TrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = "--interceptorOpt lala Do --inheritedOpt fishies --opt1 5 10"},
@@ -95,9 +95,9 @@ Options:
                     {
                         AssertContext = ctx =>
                         {
-                            ctx.GetInterceptorTrackingInvocation<App>().WasInvoked.Should().BeTrue();
+                            ctx.GetInterceptorInvocationInfo<App>().WasInvoked.Should().BeTrue();
                             ctx.ParamValuesShouldBe<App>("lala", "fishies");
-                            ctx.GetCommandTrackingInvocation().WasInvoked.Should().BeTrue();
+                            ctx.GetCommandInvocationInfo().WasInvoked.Should().BeTrue();
                             ctx.ParamValuesShouldBe(10,5);
                         }
                     }
@@ -127,7 +127,7 @@ Options:
         public void ExecutableNestedSubcommands_InheritedOptions_AreAccepted()
         {
             new AppRunner<App>()
-                .InjectTrackingInvocations()
+                .TrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = "--interceptorOpt lala ChildApp Do --inheritedOpt fishies"},
@@ -135,9 +135,9 @@ Options:
                     {
                         AssertContext = ctx =>
                         {
-                            ctx.GetInterceptorTrackingInvocation<App>().WasInvoked.Should().BeTrue();
+                            ctx.GetInterceptorInvocationInfo<App>().WasInvoked.Should().BeTrue();
                             ctx.ParamValuesShouldBe<App>("lala", "fishies");
-                            ctx.GetCommandTrackingInvocation().WasInvoked.Should().BeTrue();
+                            ctx.GetCommandInvocationInfo().WasInvoked.Should().BeTrue();
                             ctx.ParamValuesShouldBeEmpty();
                         }
                     }

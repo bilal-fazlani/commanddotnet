@@ -101,7 +101,7 @@ namespace CommandDotNet.Tests.FeatureTests
             }
 
             var result = RunInMem(1, "Jack", BeforeInvocation);
-            var app2 = (App)result.CommandContext.GetCommandInvocationStep().Instance;
+            var app2 = (App)result.CommandContext.GetCommandInvocationInfo().Instance;
             app2.Guid.Should().Be(guid);
         }
 

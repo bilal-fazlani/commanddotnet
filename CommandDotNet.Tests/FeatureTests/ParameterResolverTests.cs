@@ -76,12 +76,12 @@ Options:
                         ctx.ParamValuesShouldBe(7, "optValue");
                         ctx.ParamValuesShouldBeEmpty<App>();
 
-                        var invocation = ctx.GetCommandInvocation();
+                        var invocation = ctx.GetCommandInvocationInfo();
                         invocation.ParameterValues[0].Should().BeOfType<CommandContext>().And.Should().NotBeNull();
                         invocation.ParameterValues[1].Should().BeAssignableTo<IConsole>().And.Should().NotBeNull();
                         invocation.ParameterValues[2].Should().BeOfType<CancellationToken>().And.Should().NotBeNull();
 
-                        invocation = ctx.GetInterceptorInvocation<App>();
+                        invocation = ctx.GetInterceptorInvocationInfo<App>();
                         invocation.ParameterValues[0].Should().BeOfType<InterceptorExecutionDelegate>().And.Should().NotBeNull();
                         invocation.ParameterValues[1].Should().BeOfType<CommandContext>().And.Should().NotBeNull();
                         invocation.ParameterValues[2].Should().BeAssignableTo<IConsole>().And.Should().NotBeNull();
@@ -123,7 +123,7 @@ Options:
                     {
                         AssertContext = ctx =>
                         {
-                            var invocation = ctx.GetCommandInvocation();
+                            var invocation = ctx.GetCommandInvocationInfo();
                             invocation.ParameterValues[0].Should().Be(someSvc);
                         }
                     }

@@ -42,7 +42,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
                 .UseAutofac(container, runInScope: ctx => container.BeginLifetimeScope(LifetimeScopeTag))
                 .RunInMem("Do");
 
-            var app = result.CommandContext.GetCommandInstance<IoCApp>();
+            var app = result.CommandContext.GetCommandInvocationInfo<IoCApp>().Instance;
 
             app.FromCtor.Should().BeSameAs(app.FromInterceptor);
 

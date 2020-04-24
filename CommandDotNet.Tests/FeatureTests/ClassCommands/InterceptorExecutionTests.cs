@@ -107,7 +107,7 @@ Arguments:
         public void InterceptorMethod_WithNoOptions_IsDetectedAndUsed()
         {
             new AppRunner<AppWithNoInterceptorOptions>()
-                .InjectTrackingInvocations()
+                .TrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = "Do 1"},
@@ -115,8 +115,8 @@ Arguments:
                     {
                         AssertContext = ctx =>
                         {
-                            ctx.GetInterceptorTrackingInvocation<AppWithNoInterceptorOptions>().WasInvoked.Should().BeTrue();
-                            ctx.GetCommandTrackingInvocation().WasInvoked.Should().BeTrue();
+                            ctx.GetInterceptorInvocationInfo<AppWithNoInterceptorOptions>().WasInvoked.Should().BeTrue();
+                            ctx.GetCommandInvocationInfo().WasInvoked.Should().BeTrue();
                             ctx.ParamValuesShouldBe(1);
                         }
                     }
@@ -127,7 +127,7 @@ Arguments:
         public void InterceptorMethod_WithOptions_IsDetectedAndUsed()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .InjectTrackingInvocations()
+                .TrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = "--stringOpt lala Do 1"},
@@ -135,9 +135,9 @@ Arguments:
                     {
                         AssertContext = ctx =>
                         {
-                            ctx.GetInterceptorTrackingInvocation<AppWithInteceptorOptions>().WasInvoked.Should().BeTrue();
+                            ctx.GetInterceptorInvocationInfo<AppWithInteceptorOptions>().WasInvoked.Should().BeTrue();
                             ctx.ParamValuesShouldBe<AppWithInteceptorOptions>(new InterceptOptions{stringOpt = "lala"});
-                            ctx.GetCommandTrackingInvocation().WasInvoked.Should().BeTrue();
+                            ctx.GetCommandInvocationInfo().WasInvoked.Should().BeTrue();
                             ctx.ParamValuesShouldBe(1);
                         }
                     }
@@ -148,7 +148,7 @@ Arguments:
         public void InterceptorMethod_CanBypassNextDelegate()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .InjectTrackingInvocations()
+                .TrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = " --skipCmd Do 1"},
@@ -156,9 +156,9 @@ Arguments:
                     {
                         AssertContext = ctx =>
                         {
-                            ctx.GetInterceptorTrackingInvocation<AppWithInteceptorOptions>().WasInvoked.Should().BeTrue();
+                            ctx.GetInterceptorInvocationInfo<AppWithInteceptorOptions>().WasInvoked.Should().BeTrue();
                             ctx.ParamValuesShouldBe<AppWithInteceptorOptions>(new InterceptOptions{skipCmd = true});
-                            ctx.GetCommandTrackingInvocation().WasInvoked.Should().BeFalse();
+                            ctx.GetCommandInvocationInfo().WasInvoked.Should().BeFalse();
                             ctx.ParamValuesShouldBe(1);
                         }
                     }
@@ -169,7 +169,7 @@ Arguments:
         public void InterceptorMethod_CanChangeReturnCode()
         {
             new AppRunner<AppWithInteceptorOptions>()
-                .InjectTrackingInvocations()
+                .TrackingInvocations()
                 .Verify(new Scenario
                 {
                     When = {Args = " --useReturnCode 5 Do 1"},
@@ -178,9 +178,9 @@ Arguments:
                         ExitCode = 5,
                         AssertContext = ctx =>
                         {
-                            ctx.GetInterceptorTrackingInvocation<AppWithInteceptorOptions>().WasInvoked.Should().BeTrue();
+                            ctx.GetInterceptorInvocationInfo<AppWithInteceptorOptions>().WasInvoked.Should().BeTrue();
                             ctx.ParamValuesShouldBe<AppWithInteceptorOptions>(new InterceptOptions{useReturnCode = 5});
-                            ctx.GetCommandTrackingInvocation().WasInvoked.Should().BeTrue();
+                            ctx.GetCommandInvocationInfo().WasInvoked.Should().BeTrue();
                             ctx.ParamValuesShouldBe(1);
                         }
                     }

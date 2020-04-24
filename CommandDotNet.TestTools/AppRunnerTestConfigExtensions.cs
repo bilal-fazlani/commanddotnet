@@ -6,7 +6,7 @@ namespace CommandDotNet.TestTools
 {
     public static class AppRunnerTestConfigExtensions
     {
-        public static AppRunner InjectTrackingInvocations(this AppRunner runner)
+        public static AppRunner TrackingInvocations(this AppRunner runner)
         {
             return runner.Configure(c => c.UseMiddleware(TrackingInvocationMiddleware, 
                 MiddlewareStages.PostBindValuesPreInvoke, 
