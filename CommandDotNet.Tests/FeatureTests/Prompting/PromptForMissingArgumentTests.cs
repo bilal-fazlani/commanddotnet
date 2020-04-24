@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Prompts;
 using CommandDotNet.TestTools.Scenarios;
@@ -30,11 +31,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     },
                     Then =
                     {
-                        Captured = {new App.DoResult
-                        {
-                            Arg1 = "something",
-                            Opt1 = "simple"
-                        }},
+                        AssertContext = ctx => ctx.ParamValuesShouldBe("simple", "something"),
                         Output = ""
                     }
                 });
@@ -54,11 +51,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     },
                     Then =
                     {
-                        Captured = {new App.DoResult
-                        {
-                            Arg1 = "something",
-                            Opt1 = "simple"
-                        }},
+                        AssertContext = ctx => ctx.ParamValuesShouldBe("simple", "something"),
                         Output = @"opt1 (Text): simple
 "
                     }
@@ -79,11 +72,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     },
                     Then =
                     {
-                        Captured = {new App.DoResult
-                        {
-                            Arg1 = "something",
-                            Opt1 = "simple"
-                        }},
+                        AssertContext = ctx => ctx.ParamValuesShouldBe("simple", "something"),
                         Output = @"arg1 (Text): something
 "
                     }
@@ -107,14 +96,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     },
                     Then =
                     {
-                        Captured =
-                        {
-                            new App.DoResult
-                            {
-                                Arg1 = "something",
-                                Opt1 = "simple"
-                            }
-                        },
+                        AssertContext = ctx => ctx.ParamValuesShouldBe("simple", "something"),
                         Output = @"arg1 (Text): something
 opt1 (Text): simple
 "
@@ -136,7 +118,7 @@ opt1 (Text): simple
                     },
                     Then =
                     {
-                        Captured = {new List<string>{"something", "simple"}},
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(new List<string>{"something", "simple"}),
                         Output = ""
                     }
                 });
@@ -156,7 +138,7 @@ opt1 (Text): simple
                     },
                     Then =
                     {
-                        Captured = {new List<string>{"something", "simple"}},
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(new List<string>{"something", "simple"}),
                         Output = @"args (Text) [<enter> once to begin new value. <enter> twice to finish]: 
 something
 simple
@@ -180,7 +162,8 @@ simple
                     },
                     Then =
                     {
-                        Captured = {new List<string>{"something", "simple", "'or not'", "\"so simple\""}}
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(
+                            new List<string>{"something", "simple", "'or not'", "\"so simple\""}),
                     }
                 });
         }
@@ -199,7 +182,7 @@ simple
                     },
                     Then =
                     {
-                        Captured = {new HierApp.InterceptResult {Intercept1 = 1, Inherited1 = 2}}
+                        AssertContext = ctx => ctx.ParamValuesShouldBe<HierApp>(1, 2)
                     }
                 });
         }
@@ -218,7 +201,7 @@ simple
                     },
                     Then =
                     {
-                        Captured = {new HierApp.InterceptResult {Intercept1 = 1, Inherited1 = 2}}
+                        AssertContext = ctx => ctx.ParamValuesShouldBe<HierApp>(1, 2)
                     }
                 });
         }
@@ -239,7 +222,7 @@ simple
                     },
                     Then =
                     {
-                        Captured = { new App.SecureResult{User = "lala", Password = new Password("fishies")}},
+                        AssertContext = ctx => ctx.ParamValuesShouldBe("lala", new Password("fishies")),
                         Output = @"user (Text): lala
 password (Text): 
 "
@@ -265,7 +248,7 @@ password (Text):
                     },
                     Then =
                     {
-                        Captured = { new App.SecureResult{User = "lala", Password = new Password("new")}},
+                        AssertContext = ctx => ctx.ParamValuesShouldBe("lala", new Password("new")),
                         Output = @"user (Text): lala
 password (Text): 
 "
@@ -293,7 +276,7 @@ password (Text):
         public void WhenExplicitBoolOptionMissing_Prompts()
         {
 
-            new AppRunner<App>(new AppSettings { BooleanMode = BooleanMode.Explicit })
+            new AppRunner<App>(new AppSettings {BooleanMode = BooleanMode.Explicit})
                 .UsePrompting()
                 .Verify(new Scenario
                 {
@@ -305,7 +288,7 @@ password (Text):
                             new TextAnswer("false", prompt => prompt.StartsWith("b "))
                         )
                     },
-                    Then = { Captured = { (flagA: true, flagB: false) } }
+                    Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(true, false)}
                 });
         }
 
@@ -323,7 +306,7 @@ password (Text):
                     },
                     Then =
                     {
-                        Captured = { true },
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(true),
                         Output = @"operand1 (Boolean): true
 "
                     }
@@ -344,7 +327,7 @@ password (Text):
                     },
                     Then =
                     {
-                        Captured = { new App.DoResult{Arg1 = "fishies", Opt1 = "fishies"}},
+                        AssertContext = ctx => ctx.ParamValuesShouldBe("fishies", "fishies"),
                         Output = @"lala (Text): fishies
 lala (Text): fishies
 "
@@ -366,7 +349,7 @@ lala (Text): fishies
                     },
                     Then =
                     {
-                        Captured = {new App.DoResult {Arg1 = "something"}},
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(null, "something"),
                         Output = @"arg1 (Text): something
 "
                     }
@@ -388,70 +371,46 @@ lala (Text): fishies
                         PipedInput = pipedInput,
                         OnPrompt = Respond.FailOnPrompt()
                     },
-                    Then = { Captured = { pipedInput.ToList() } }
+                    Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(pipedInput.ToList())}
                 });
         }
 
         class App
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void Do([Option] string opt1, string arg1)
             {
-                TestCaptures.Capture(new DoResult{Opt1 = opt1, Arg1 = arg1});
             }
 
             public void DoList(List<string> args)
             {
-                TestCaptures.CaptureIfNotNull(args);
             }
 
             public void Secure(string user, Password password)
             {
-                TestCaptures.Capture(new SecureResult{User = user, Password = password});
             }
 
             public void Flags(
                 [Option(ShortName = "a")] bool flagA,
                 [Option(ShortName = "b")] bool flagB)
             {
-                TestCaptures.Capture((flagA, flagB));
             }
 
             public void Bool(bool operand1)
             {
-                TestCaptures.Capture(operand1);
-            }
-
-            public class DoResult
-            {
-                public string Opt1; 
-                public string Arg1;
-            }
-
-            public class SecureResult
-            {
-                public string User;
-                public Password Password;
             }
         }
 
         class HierApp
         {
-            private TestCaptures TestCaptures { get; set; }
-
-            public Task<int> Intercept(InterceptorExecutionDelegate next, int intercept1, [Option(AssignToExecutableSubcommands = true)] int inherited1)
+            public Task<int> Intercept(InterceptorExecutionDelegate next, 
+                int intercept1, 
+                [Option(AssignToExecutableSubcommands = true)] int inherited1)
             {
-                TestCaptures.Capture(new InterceptResult { Intercept1 = intercept1, Inherited1 = inherited1 });
                 return next();
             }
 
-            public void Do() { }
-
-            public class InterceptResult
+            public void Do()
             {
-                public int Intercept1 { get; set; }
-                public int Inherited1 { get; set; }
             }
         }
     }

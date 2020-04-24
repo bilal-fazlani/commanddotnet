@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using CommandDotNet.TestTools;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
@@ -25,7 +25,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 Then = { Output = @"Usage: dotnet testhost.dll EnumerableModel [options] [arguments]
 
 Arguments:
-  Args
+  Operands
 
 Options:
   --Options
@@ -43,7 +43,7 @@ Options:
 
 Arguments:
 
-  Args (Multiple)  <TEXT>
+  Operands (Multiple)  <TEXT>
 
 Options:
 
@@ -61,7 +61,7 @@ Options:
                 Then = {Output = @"Usage: dotnet testhost.dll Enumerable [options] [arguments]
 
 Arguments:
-  args
+  operands
 
 Options:
   --options
@@ -79,7 +79,7 @@ Options:
 
 Arguments:
 
-  args (Multiple)  <TEXT>
+  operands (Multiple)  <TEXT>
 
 Options:
 
@@ -96,14 +96,7 @@ Options:
                 When = {Args = "Enumerable --options aaa --options bbb ccc ddd"},
                 Then =
                 {
-                    Captured =
-                    {
-                        new EnumerableModel
-                        {
-                            Options = new[] {"aaa", "bbb"},
-                            Args = new[] {"ccc", "ddd"}
-                        }
-                    }
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(new[] {"aaa", "bbb"}, new[] {"ccc", "ddd"})
                 }
             });
         }
@@ -116,14 +109,11 @@ Options:
                 When = {Args = "EnumerableModel --Options aaa --Options bbb ccc ddd"},
                 Then =
                 {
-                    Captured =
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(new EnumerableModel
                     {
-                        new EnumerableModel
-                        {
-                            Options = new[] {"aaa", "bbb"},
-                            Args = new[] {"ccc", "ddd"}
-                        }
-                    }
+                        Options = new[] {"aaa", "bbb"},
+                        Operands = new[] {"ccc", "ddd"}
+                    })
                 }
             });
         }
@@ -136,14 +126,7 @@ Options:
                 When = {Args = "Collection --options aaa --options bbb ccc ddd"},
                 Then =
                 {
-                    Captured =
-                    {
-                        new EnumerableModel
-                        {
-                            Options = new[] {"aaa", "bbb"},
-                            Args = new[] {"ccc", "ddd"}
-                        }
-                    }
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(new[] {"aaa", "bbb"}, new[] {"ccc", "ddd"})
                 }
             });
         }
@@ -156,43 +139,32 @@ Options:
                 When = {Args = "Array --options aaa --options bbb ccc ddd"},
                 Then =
                 {
-                    Captured =
-                    {
-                        new EnumerableModel
-                        {
-                            Options = new[] {"aaa", "bbb"},
-                            Args = new[] {"ccc", "ddd"}
-                        }
-                    }
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(new[] {"aaa", "bbb"}, new[] {"ccc", "ddd"})
                 }
             });
         }
 
         private class App
         {
-            private TestCaptures TestCaptures { get; set; }
-
-            public void List([Option]List<string> options, List<string> args)
+            public void List([Option]List<string> options, List<string> operands)
             {
-                TestCaptures.Capture(new EnumerableModel { Options = options, Args = args });
             }
 
-            public void Enumerable([Option]IEnumerable<string> options, IEnumerable<string> args)
+            public void Enumerable([Option]IEnumerable<string> options, IEnumerable<string> operands)
             {
-                TestCaptures.Capture(new EnumerableModel{Options = options, Args = args});
             }
 
             public void EnumerableModel(EnumerableModel model)
             {
-                TestCaptures.Capture(model);
             }
 
-            public void Collection([Option]ICollection<string> options, ICollection<string> args)
+            public void Collection([Option]ICollection<string> options, ICollection<string> operands)
             {
-                TestCaptures.Capture(new EnumerableModel { Options = options, Args = args });
             }
 
-            public void Array([Option]string[] options, string[] args) => TestCaptures.Capture(new EnumerableModel { Options = options, Args = args });
+            public void Array([Option] string[] options, string[] operands)
+            {
+            }
         }
 
         private class EnumerableModel : IArgumentModel
@@ -200,7 +172,7 @@ Options:
             [Option]
             public IEnumerable<string> Options { get; set; }
 
-            public IEnumerable<string> Args { get; set; }
+            public IEnumerable<string> Operands { get; set; }
         }
     }
 }

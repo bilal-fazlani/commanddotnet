@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using CommandDotNet.Tests.FeatureTests.Arguments.Models;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsParams;
-using CommandDotNet.TestTools;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
@@ -12,11 +11,9 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
 {
     public class OverridingDefaultValuesTests
     {
-        private readonly ITestOutputHelper _output;
-
         public OverridingDefaultValuesTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
@@ -33,33 +30,25 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
             };
             new AppRunner<App>()
                 .SetDefaults(overrides)
-                .Verify(_output,
-                    new Scenario
+                .Verify(new Scenario
+                {
+                    When = {Args = "ArgsDefaults"},
+                    Then =
                     {
-                        When = {Args = "ArgsDefaults"},
-                        Then =
-                        {
-                            Captured = { new ParametersSampleTypesResults
-                            {
-                                BoolArg = true,
-                                StringArg = "green",
-                                StructArg = 1,
-                                StructNArg = 2,
-                                EnumArg = DayOfWeek.Monday,
-                                ObjectArg = new Uri("http://google.com"),
-                                StringListArg = new List<string>{"yellow", "orange"}
-                            } }
-                        }
-                    });
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(
+                            true, "green", 1, 2, DayOfWeek.Monday, 
+                            new Uri("http://google.com"), new List<string> {"yellow", "orange"})
+                    }
+                });
             new AppRunner<App>()
                 .SetDefaults(overrides)
-                .Verify(_output,
-                    new Scenario
+                .Verify(new Scenario
+                {
+                    When = {Args = "OperandsDefaultsModel"},
+                    Then =
                     {
-                        When = {Args = "OperandsDefaultsModel"},
-                        Then =
-                        {
-                            Captured = { new OperandsDefaultsSampleTypesModel
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(
+                            new OperandsDefaultsSampleTypesModel
                             {
                                 BoolArg = true,
                                 StringArg = "green",
@@ -67,10 +56,10 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                                 StructNArg = 2,
                                 EnumArg = DayOfWeek.Monday,
                                 ObjectArg = new Uri("http://google.com"),
-                                StringListArg = new List<string>{"yellow", "orange"}
-                            } }
-                        }
-                    });
+                                StringListArg = new List<string> {"yellow", "orange"}
+                            })
+                    }
+                });
         }
 
         [Fact]
@@ -89,59 +78,43 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
             };
             new AppRunner<App>()
                 .SetDefaults(overrides)
-                .Verify(_output,
-                new Scenario
-                {
-                    When = {Args = "ArgsDefaults"},
-                    Then =
+                .Verify(
+                    new Scenario
                     {
-                        Captured =
+                        When = {Args = "ArgsDefaults"},
+                        Then =
                         {
-                            new ParametersSampleTypesResults
-                            {
-                                BoolArg = true,
-                                StringArg = "green",
-                                StructArg = 1,
-                                StructNArg = 2,
-                                EnumArg = DayOfWeek.Monday,
-                                ObjectArg = new Uri("http://google.com"),
-                                StringListArg = new List<string> {"yellow", "orange"}
-                            }
+                            AssertContext = ctx => ctx.ParamValuesShouldBe(
+                                true, "green", 1, 2, DayOfWeek.Monday,
+                                new Uri("http://google.com"), new List<string> {"yellow", "orange"})
                         }
-                    }
-                });
+                    });
             new AppRunner<App>()
                 .SetDefaults(overrides)
-                .Verify(_output,
-                new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "EnumListDefaults"},
                     Then =
                     {
-                        Captured =
-                        {
-                            new ParametersSampleTypesResults(new List<DayOfWeek> {DayOfWeek.Monday, DayOfWeek.Friday})
-                        }
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(
+                            new List<DayOfWeek> {DayOfWeek.Monday, DayOfWeek.Friday})
                     }
                 });
             new AppRunner<App>()
                 .SetDefaults(overrides)
-                .Verify(_output,
-                    new Scenario
+                .Verify(new Scenario
+                {
+                    When = {Args = "ObjectListDefaults"},
+                    Then =
                     {
-                        When = {Args = "ObjectListDefaults"},
-                        Then =
-                        {
-                            Captured =
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(
+                            new List<Uri>
                             {
-                                new ParametersSampleTypesResults(new List<Uri>
-                                {
-                                    new Uri("http://www.google.com"),
-                                    new Uri("http://www.apple.com")
-                                })
-                            }
-                        }
-                    });
+                                new Uri("http://www.google.com"),
+                                new Uri("http://www.apple.com")
+                            }),
+                    }
+                });
         }
 
         [Fact]
@@ -154,18 +127,14 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
             };
             new AppRunner<App>()
                 .SetDefaults(overrides)
-                .Verify(_output,
-                    new Scenario
+                .Verify(new Scenario
+                {
+                    When = {Args = "OptionsDefaultsModel"},
+                    Then =
                     {
-                        When = {Args = "OptionsDefaultsModel"},
-                        Then =
-                        {
-                            Captured = { new OptionsDefaultsSampleTypesModel
-                            {
-                                StructArg = 1,
-                            } }
-                        }
-                    });
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(new OptionsDefaultsSampleTypesModel{StructArg = 1})
+                    }
+                });
         }
 
         [Fact]
@@ -178,28 +147,24 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
             };
             new AppRunner<App>()
                 .SetDefaults(overrides)
-                .Verify(_output,
-                    new Scenario
+                .Verify(new Scenario
+                {
+                    When = {Args = "OptionsDefaultsModel"},
+                    Then =
                     {
-                        When = {Args = "OptionsDefaultsModel"},
-                        Then =
+                        ExitCode = 2,
+                        OutputContainsTexts =
                         {
-                            ExitCode = 2,
-                            OutputContainsTexts =
-                            {
-                                "Failure assigning value to Option: StructNArg",
-                                "CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels.OptionsDefaultsSampleTypesModel.StructNArg",
-                                "Invalid cast from 'System.Int64' to 'System.Nullable`1"
-                            }
+                            "Failure assigning value to Option: StructNArg",
+                            "CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels.OptionsDefaultsSampleTypesModel.StructNArg",
+                            "Invalid cast from 'System.Int64' to 'System.Nullable`1"
                         }
-                    });
-
+                    }
+                });
         }
 
         class App : IArgsDefaultsSampleTypesMethod
         {
-            public TestCaptures TestCaptures { get; set; }
-
             public void ArgsDefaults(
                 [Option] bool boolArg = true,
                 [Option] string stringArg = "lala",
@@ -209,36 +174,29 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                 [Option] Uri objectArg = null,
                 [Option] List<string> stringListArg = null)
             {
-                TestCaptures.Capture(new ParametersSampleTypesResults(
-                    boolArg, stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
             }
 
             public void StructListDefaults(
                 [Option] List<int> structListArg = null)
             {
-                TestCaptures.Capture(new ParametersSampleTypesResults(structListArg));
             }
 
             public void EnumListDefaults(
                 [Option] List<DayOfWeek> enumListArg = null)
             {
-                TestCaptures.Capture(new ParametersSampleTypesResults(enumListArg));
             }
 
             public void ObjectListDefaults(
                 [Option] List<Uri> objectListArg = null)
             {
-                TestCaptures.Capture(new ParametersSampleTypesResults(objectListArg));
             }
 
             public void OperandsDefaultsModel(OperandsDefaultsSampleTypesModel model)
             {
-                TestCaptures.Capture(model);
             }
 
             public void OptionsDefaultsModel(OptionsDefaultsSampleTypesModel model)
             {
-                TestCaptures.Capture(model);
             }
         }
     }

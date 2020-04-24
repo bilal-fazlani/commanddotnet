@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
-using CommandDotNet.TestTools;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
@@ -10,19 +10,18 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class Options_DefinedAsArgModel_NoDefaults_Tests
     {
-        private readonly ITestOutputHelper _output;
         private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
         public Options_DefinedAsArgModel_NoDefaults_Tests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
         public void SampleTypes_BasicHelp()
         {
-            new AppRunner<OptionsNoDefaults>(BasicHelp).Verify(_output, new Scenario
+            new AppRunner<OptionsNoDefaults>(BasicHelp).Verify(new Scenario
             {
                 When = {Args = "ArgsDefaults -h"},
                 Then =
@@ -48,7 +47,7 @@ Options:
         [Fact]
         public void SampleTypes_DetailedHelp()
         {
-            new AppRunner<OptionsNoDefaults>(DetailedHelp).Verify(_output, new Scenario
+            new AppRunner<OptionsNoDefaults>(DetailedHelp).Verify(new Scenario
             {
                 When = {Args = "ArgsDefaults -h"},
                 Then =
@@ -86,7 +85,7 @@ Options:
         [Fact]
         public void SampleTypes_Exec_Named()
         {
-            new AppRunner<OptionsNoDefaults>().Verify(_output, new Scenario
+            new AppRunner<OptionsNoDefaults>().Verify(new Scenario
             {
                 When = {Args = "ArgsDefaults --StringArg green --StructArg 1 --StructNArg 2 " +
                            "--EnumArg Monday --ObjectArg http://google.com " +
@@ -96,22 +95,23 @@ Options:
                            "--ObjectListArg http://apple.com --ObjectListArg http://github.com"},
                 Then =
                 {
-                    Captured = { new OptionsNoDefaultsSampleTypesModel
-                    {
-                        StringArg = "green",
-                        StructArg = 1,
-                        StructNArg = 2,
-                        EnumArg = DayOfWeek.Monday,
-                        ObjectArg = new Uri("http://google.com"),
-                        StringListArg = new List<string>{"yellow", "orange"},
-                        StructListArg = new List<int>{23,5},
-                        EnumListArg = new List<DayOfWeek>{DayOfWeek.Friday, DayOfWeek.Tuesday},
-                        ObjectListArg = new List<Uri>
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
+                        new OptionsNoDefaultsSampleTypesModel
                         {
-                            new Uri("http://apple.com"),
-                            new Uri("http://github.com"),
-                        }
-                    } }
+                            StringArg = "green",
+                            StructArg = 1,
+                            StructNArg = 2,
+                            EnumArg = DayOfWeek.Monday,
+                            ObjectArg = new Uri("http://google.com"),
+                            StringListArg = new List<string>{"yellow", "orange"},
+                            StructListArg = new List<int>{23,5},
+                            EnumListArg = new List<DayOfWeek>{DayOfWeek.Friday, DayOfWeek.Tuesday},
+                            ObjectListArg = new List<Uri>
+                            {
+                                new Uri("http://apple.com"),
+                                new Uri("http://github.com"),
+                            }
+                        })
                 }
             });
         }
@@ -119,23 +119,20 @@ Options:
         [Fact]
         public void SampleTypes_Exec_OptionsNotRequired()
         {
-            new AppRunner<OptionsNoDefaults>().Verify(_output, new Scenario
+            new AppRunner<OptionsNoDefaults>().Verify(new Scenario
             {
                 When = {Args = "ArgsDefaults"},
                 Then =
                 {
-                    Captured = { new OptionsNoDefaultsSampleTypesModel() }
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(new OptionsNoDefaultsSampleTypesModel())
                 }
             });
         }
 
         private class OptionsNoDefaults
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void ArgsDefaults(OptionsNoDefaultsSampleTypesModel model)
             {
-                TestCaptures.Capture(model);
             }
         }
     }

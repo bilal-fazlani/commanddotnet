@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using CommandDotNet.Tests.FeatureTests.Arguments.Models;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsParams;
-using CommandDotNet.TestTools;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
@@ -188,19 +187,9 @@ Options:
                            "--objectArg http://google.com --stringListArg yellow --stringListArg orange"},
                 Then =
                 {
-                    Captured =
-                    {
-                        new ParametersSampleTypesResults
-                        {
-                            BoolArg = true,
-                            StringArg = "green",
-                            StructArg = 1,
-                            StructNArg = 2,
-                            EnumArg = DayOfWeek.Monday,
-                            ObjectArg = new Uri("http://google.com"),
-                            StringListArg = new List<string> {"yellow", "orange"}
-                        }
-                    }
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
+                        true, "green", 1, 2, DayOfWeek.Monday,
+                        new Uri("http://google.com"), new List<string> {"yellow", "orange"})
                 }
             });
         }
@@ -213,17 +202,8 @@ Options:
                 When = {Args = "ArgsDefaults"},
                 Then =
                 {
-                    Captured =
-                    {
-                        new ParametersSampleTypesResults
-                        {
-                            BoolArg = true,
-                            StringArg = "lala",
-                            StructArg = 3,
-                            StructNArg = 4,
-                            EnumArg = DayOfWeek.Wednesday,
-                        }
-                    }
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
+                        true, "lala", 3, 4, DayOfWeek.Wednesday, null, null)
                 }
             });
         }
@@ -236,13 +216,7 @@ Options:
                 When = {Args = "StructListDefaults --structListArg 23 --structListArg 5 --structListArg 7"},
                 Then =
                 {
-                    Captured =
-                    {
-                        new ParametersSampleTypesResults
-                        {
-                            StructListArg = new List<int>{23,5,7}
-                        }
-                    }
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(new List<int>{23,5,7})
                 }
             });
         }
@@ -255,13 +229,8 @@ Options:
                 When = {Args = "EnumListDefaults --enumListArg Friday --enumListArg Tuesday --enumListArg Thursday"},
                 Then =
                 {
-                    Captured =
-                    {
-                        new ParametersSampleTypesResults
-                        {
-                            EnumListArg = new List<DayOfWeek>{DayOfWeek.Friday, DayOfWeek.Tuesday, DayOfWeek.Thursday}
-                        }
-                    }
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
+                        new List<DayOfWeek>{DayOfWeek.Friday, DayOfWeek.Tuesday, DayOfWeek.Thursday})
                 }
             });
         }
@@ -274,26 +243,19 @@ Options:
                 When = {Args = "ObjectListDefaults --objectListArg http://google.com --objectListArg http://apple.com --objectListArg http://github.com"},
                 Then =
                 {
-                    Captured =
-                    {
-                        new ParametersSampleTypesResults
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
+                        new List<Uri>
                         {
-                            ObjectListArg = new List<Uri>
-                            {
-                                new Uri("http://google.com"),
-                                new Uri("http://apple.com"),
-                                new Uri("http://github.com"),
-                            }
-                        }
-                    }
+                            new Uri("http://google.com"),
+                            new Uri("http://apple.com"),
+                            new Uri("http://github.com"),
+                        })
                 }
             });
         }
 
         private class OptionsDefaults : IArgsDefaultsSampleTypesMethod
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void ArgsDefaults(
                 [Option] bool boolArg = true,
                 [Option] string stringArg = "lala", 
@@ -303,26 +265,21 @@ Options:
                 [Option] Uri objectArg = null,
                 [Option] List<string> stringListArg = null)
             {
-                TestCaptures.Capture(new ParametersSampleTypesResults(
-                    boolArg, stringArg, structArg, structNArg, enumArg, objectArg, stringListArg));
             }
 
             public void StructListDefaults(
                 [Option] List<int> structListArg = null)
             {
-                TestCaptures.Capture(new ParametersSampleTypesResults(structListArg));
             }
 
             public void EnumListDefaults(
                 [Option] List<DayOfWeek> enumListArg = null)
             {
-                TestCaptures.Capture(new ParametersSampleTypesResults(enumListArg));
             }
 
             public void ObjectListDefaults(
                 [Option] List<Uri> objectListArg = null)
             {
-                TestCaptures.Capture(new ParametersSampleTypesResults(objectListArg));
             }
         }
     }

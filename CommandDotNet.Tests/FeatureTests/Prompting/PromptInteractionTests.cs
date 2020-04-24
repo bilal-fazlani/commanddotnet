@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Prompts;
 using CommandDotNet.TestTools.Scenarios;
@@ -9,11 +10,9 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
 {
     public class PromptInteractionTests
     {
-        private readonly ITestOutputHelper _output;
-
         public PromptInteractionTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
@@ -21,7 +20,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -43,7 +42,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
 
             new AppRunner<App>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -54,14 +53,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     },
                     Then =
                     {
-                        Captured =
-                        {
-                            new App.DoResult
-                            {
-                                Arg1 = "take2",
-                                Opt1 = "simple"
-                            }
-                        },
+                        AssertContext = ctx => ctx.ParamValuesShouldBe("simple", "take2"),
                         Output = @"arg1 (Text): take2
 opt1 (Text): simple
 "
@@ -74,7 +66,7 @@ opt1 (Text): simple
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When=
                     {
@@ -97,7 +89,7 @@ opt1 (Text):
         {
             new AppRunner<App>()
                 .UsePrompting()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -106,7 +98,7 @@ opt1 (Text):
                     },
                     Then =
                     {
-                        Captured = { new App.DoResult{Arg1 = "maybe", Opt1 = "maybe"}},
+                        AssertContext = ctx => ctx.ParamValuesShouldBe("maybe", "maybe"),
                         Output = @"arg1 (Text): maybe
 opt1 (Text): maybe
 "
@@ -116,17 +108,8 @@ opt1 (Text): maybe
 
         class App
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void Do([Option] string opt1, string arg1)
             {
-                TestCaptures.Capture(new DoResult { Opt1 = opt1, Arg1 = arg1 });
-            }
-
-            public class DoResult
-            {
-                public string Opt1;
-                public string Arg1;
             }
         }
     }

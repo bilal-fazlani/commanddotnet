@@ -10,11 +10,9 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
 {
     public class NewReleaseAlertOnGitHubTests
     {
-        private readonly ITestOutputHelper _output;
-
         public NewReleaseAlertOnGitHubTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
@@ -28,7 +26,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                 .Configure(c => c.Services.AddOrUpdate(new AppInfo("blah", version)))
                 .UseNewerReleaseAlertOnGitHub(organizationName, repositoryName,
                     overrideHttpRequestCallback: (client, uri) => Task.FromResult(BuildGitHubApiResponse("1.0.1")))
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "Do"},
                     Then =
@@ -53,7 +51,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                 .Configure(c => c.Services.AddOrUpdate(new AppInfo("blah", version)))
                 .UseNewerReleaseAlertOnGitHub(organizationName, repositoryName, 
                     overrideHttpRequestCallback: (client, uri) => Task.FromResult(BuildGitHubApiResponse("1.0.0")))
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "Do"},
                     Then =
@@ -79,7 +77,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                 .UseNewerReleaseAlertOnGitHub(organizationName, repositoryName,
                     overrideHttpRequestCallback: (client, uri) => Task.FromResult(BuildGitHubApiResponse("1.0.1")),
                     skipCommand:command => true)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = "Do"},
                     Then =
@@ -95,8 +93,6 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
 
         public class App
         {
-            public TestCaptures TestCaptures { get; set; }
-
             public void Do()
             {
             }

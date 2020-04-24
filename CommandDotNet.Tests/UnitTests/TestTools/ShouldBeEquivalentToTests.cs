@@ -99,6 +99,11 @@ but was
             {
                 return true;
             }
+
+            public override int GetHashCode()
+            {
+                throw new System.NotImplementedException();
+            }
         }
     }
 }

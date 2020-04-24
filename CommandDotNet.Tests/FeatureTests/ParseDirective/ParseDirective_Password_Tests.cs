@@ -10,13 +10,12 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
 {
     public class ParseDirective_Password_Tests : IDisposable
     {
-        private readonly ITestOutputHelper _output;
         private readonly TempFiles _tempFiles;
 
         public ParseDirective_Password_Tests(ITestOutputHelper output)
         {
-            _output = output;
-            _tempFiles = new TempFiles(_output.WriteLine);
+            Ambient.Output = output;
+            _tempFiles = new TempFiles(output.WriteLine);
         }
 
         public void Dispose()
@@ -29,13 +28,12 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         {
             new AppRunner<App>()
                 .UseParseDirective()
-                .Verify(_output,
-                    new Scenario
+                .Verify(new Scenario
+                {
+                    When = {Args = $"[parse:t] Secure -u me -p super-secret"},
+                    Then =
                     {
-                        When = { Args = $"[parse:t] Secure -u me -p super-secret" },
-                        Then =
-                        {
-                            Output = @"command: Secure
+                        Output = @"command: Secure
 
 options:
 
@@ -61,8 +59,8 @@ token transformations:
 >>> after: expand-clubbed-flags (no changes)
 >>> after: split-option-assignments (no changes)
 "
-                        }
-                    });
+                    }
+                });
         }
 
         [Fact]
@@ -72,13 +70,12 @@ token transformations:
             new AppRunner<App>()
                 .UseResponseFiles()
                 .UseParseDirective()
-                .Verify(_output,
-                    new Scenario
+                .Verify(new Scenario
+                {
+                    When = {Args = $"[parse:t] Secure @{tempFile}"},
+                    Then =
                     {
-                        When = {Args =  $"[parse:t] Secure @{tempFile}"},
-                        Then =
-                        {
-                            Output = $@"command: Secure
+                        Output = $@"command: Secure
 
 options:
 
@@ -108,8 +105,8 @@ token transformations:
 >>> after: expand-clubbed-flags (no changes)
 >>> after: split-option-assignments (no changes)
 "
-                        }
-                    });
+                    }
+                });
         }
 
         [Fact]
@@ -118,17 +115,16 @@ token transformations:
             new AppRunner<App>()
                 .UsePrompting()
                 .UseParseDirective()
-                .Verify(_output,
-                    new Scenario
+                .Verify(new Scenario
+                {
+                    When =
                     {
-                        When =
-                        {
-                            Args = "[parse:t] PromptSecure",
-                            OnPrompt = Respond.WithText("super-secret")
-                        },
-                        Then =
-                        {
-                            Output = @"password (Text): 
+                        Args = "[parse:t] PromptSecure",
+                        OnPrompt = Respond.WithText("super-secret")
+                    },
+                    Then =
+                    {
+                        Output = @"password (Text): 
 command: PromptSecure
 
 arguments:
@@ -146,8 +142,8 @@ token transformations:
 >>> after: expand-clubbed-flags (no changes)
 >>> after: split-option-assignments (no changes)
 "
-                        }
-                    });
+                    }
+                });
         }
 
         [Fact]
@@ -161,13 +157,12 @@ token transformations:
             new AppRunner<App>()
                 .UseDefaultsFromAppSetting(appSettings, includeNamingConventions: true)
                 .UseParseDirective()
-                .Verify(_output,
-                    new Scenario
+                .Verify(new Scenario
+                {
+                    When = {Args = "[parse:t] Secure -u me"},
+                    Then =
                     {
-                        When = {Args = "[parse:t] Secure -u me"},
-                        Then =
-                        {
-                            Output = @"command: Secure
+                        Output = @"command: Secure
 
 options:
 
@@ -191,8 +186,8 @@ token transformations:
 >>> after: expand-clubbed-flags (no changes)
 >>> after: split-option-assignments (no changes)
 "
-                        }
-                    });
+                    }
+                });
         }
 
 

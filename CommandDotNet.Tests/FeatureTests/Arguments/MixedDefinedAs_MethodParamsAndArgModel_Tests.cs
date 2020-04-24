@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
@@ -80,22 +81,17 @@ Options:
                            "red green blue orange"},
                 Then =
                 {
-                    Captured =
-                    {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
                         new Model
                         {
                             ModelOption = "moA",
                             ModelOptionList = new List<string>{"moB", "moC"},
                             ModelArg = "red"
                         },
-                        new Params
-                        {
-                            ParamOption = "poA",
-                            ParamOptionList = new List<string>{"poB", "poC"},
-                            ParamArg = "green",
-                            ParamArgList = new List<string>{"blue", "orange"}
-                        }
-                    }
+                        "green",
+                        "poA",
+                        new List<string>{"poB", "poC"},
+                        new List<string>{"blue", "orange"})
                 }
             });
         }
@@ -110,27 +106,18 @@ Options:
                            "blue --paramOptionList poF orange --paramOptionList poG"},
                 Then =
                 {
-                    Captured =
-                    {
-                        new Model
-                        {
-                            ModelArg = "red"
-                        },
-                        new Params
-                        {
-                            ParamOptionList = new List<string>{"poB", "poC", "poD", "poE", "poF", "poG"},
-                            ParamArg = "green",
-                            ParamArgList = new List<string>{"blue", "orange"}
-                        }
-                    }
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
+                        new Model {ModelArg = "red"},
+                        "green",
+                        null,
+                        new List<string>{"poB", "poC", "poD", "poE", "poF", "poG"},
+                        new List<string>{"blue", "orange"})
                 }
             });
         }
 
         private class App
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void Do(
                 Model model,
                 [Operand] string paramArg,
@@ -138,8 +125,6 @@ Options:
                 [Option] List<string> paramOptionList,
                 [Operand] List<string> paramArgList)
             {
-                TestCaptures.Capture(model);
-                TestCaptures.Capture(new Params(paramArg, paramOption, paramOptionList, paramArgList));
             }
         }
 
@@ -154,29 +139,5 @@ Options:
             [Option]
             public List<string> ModelOptionList { get; set; }
         }
-
-        private class Params
-        {
-            public string ParamArg { get; set; }
-
-            public string ParamOption { get; set; }
-
-            public List<string> ParamOptionList { get; set; }
-
-            public List<string> ParamArgList { get; set; }
-
-            public Params(string paramArg, string paramOption, List<string> paramOptionList, List<string> paramArgList)
-            {
-                ParamArg = paramArg;
-                ParamOption = paramOption;
-                ParamOptionList = paramOptionList;
-                ParamArgList = paramArgList;
-            }
-
-            public Params()
-            {
-            }
-        }
-
     }
 }

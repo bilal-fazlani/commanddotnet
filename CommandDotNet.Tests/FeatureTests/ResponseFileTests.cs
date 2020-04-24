@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;
@@ -31,13 +32,10 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<App>()
                 .Verify(new Scenario
                 {
-                    When = {Args = $"Do @{responseFile}" },
+                    When = {Args = $"Do @{responseFile}"},
                     Then =
                     {
-                        Captured =
-                        {
-                            new DoResult {arg1 = $"@{responseFile}"}
-                        }
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(null, $"@{responseFile}")
                     }
                 });
         }
@@ -54,14 +52,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     When = { Args = $"Do @{responseFile}" },
                     Then =
                     {
-                        Captured =
-                        {
-                            new DoResult
-                            {
-                                arg1 = "arg1value",
-                                opt1 = "opt1value"
-                            }
-                        }
+                        AssertContext = ctx => ctx.ParamValuesShouldBe("opt1value", "arg1value")
                     }
                 });
         }
@@ -78,14 +69,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     When = { Args = $"Do @{responseFile}" },
                     Then =
                     {
-                        Captured =
-                        {
-                            new DoResult
-                            {
-                                arg1 = "arg1value",
-                                opt1 = "opt1value"
-                            }
-                        }
+                        AssertContext = ctx => ctx.ParamValuesShouldBe("opt1value", "arg1value")
                     }
                 });
         }
@@ -102,14 +86,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     When = { Args = $"Do arg1value @{responseFile}" },
                     Then =
                     {
-                        Captured =
-                        {
-                            new DoResult
-                            {
-                                arg1 = "arg1value",
-                                opt1 = "opt1value"
-                            }
-                        }
+                        AssertContext = ctx => ctx.ParamValuesShouldBe("opt1value", "arg1value")
                     }
                 });
         }
@@ -125,9 +102,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     When = {Args = "Do -- @some-value"},
                     Then =
                     {
-                        Captured = {new DoResult {arg1 = "@some-value"}},
-                        AssertContext = c =>
-                            c.ParseResult.SeparatedArguments.Should().Contain("@some-value")
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(null, "@some-value")
                     }
                 });
         }
@@ -139,10 +114,10 @@ namespace CommandDotNet.Tests.FeatureTests
                 .UseResponseFiles()
                 .Verify(new Scenario
                 {
-                    When = { Args = "Do --opt1:@some-value" },
+                    When = {Args = "Do --opt1:@some-value"},
                     Then =
                     {
-                        Captured = {new DoResult {opt1 = "@some-value"}}
+                        AssertContext = ctx => ctx.ParamValuesShouldBe("@some-value", null)
                     }
                 });
         }
@@ -157,7 +132,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     When = { Args = "Do --opt1=@some-value" },
                     Then =
                     {
-                        Captured = {new DoResult {opt1 = "@some-value"}}
+                        AssertContext = ctx => ctx.ParamValuesShouldBe("@some-value", null)
                     }
                 });
         }
@@ -198,18 +173,9 @@ namespace CommandDotNet.Tests.FeatureTests
 
         private class App
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void Do([Option] string opt1, string arg1)
             {
-                TestCaptures.Capture(new DoResult { opt1 = opt1, arg1 = arg1 });
             }
-        }
-
-        public class DoResult
-        {
-            public string opt1;
-            public string arg1;
         }
     }
 }

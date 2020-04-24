@@ -1,5 +1,6 @@
 using CommandDotNet.Execution;
 using CommandDotNet.FluentValidation;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using FluentValidation;
@@ -95,7 +96,7 @@ Arguments:
             var scenario = new Scenario
             {
                 When = {Args = "Save 1 john john@doe.com"},
-                Then = {Captured = {new Person {Id = 1, Name = "john", Email = "john@doe.com"}}}
+                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(new Person { Id = 1, Name = "john", Email = "john@doe.com" }) }
             };
 
             new AppRunner<App>()
@@ -199,16 +200,12 @@ Usage: dotnet testhost.dll Save [arguments]"
 
         public class App
         {
-            public TestCaptures TestCaptures { get; set; }
-
             public void Save(Person person)
             {
-                TestCaptures.Capture(person);
             }
 
             public void InvalidSave(InvalidPerson person)
             {
-                TestCaptures.Capture(person);
             }
         }
 

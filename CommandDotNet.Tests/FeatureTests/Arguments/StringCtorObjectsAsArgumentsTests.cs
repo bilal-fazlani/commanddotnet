@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using CommandDotNet.TestTools;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
@@ -8,19 +8,18 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class StringCtorObjectsAsArgumentsTests
     {
-        private readonly ITestOutputHelper _output;
         private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
         private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
 
         public StringCtorObjectsAsArgumentsTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
         public void BasicHelp_Includes_StringCtorObjects()
         {
-            new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
+            new AppRunner<App>(BasicHelp).Verify(new Scenario
             {
                 When = {Args = "Do -h"},
                 Then =
@@ -37,7 +36,7 @@ Arguments:
         [Fact]
         public void BasicHelp_List_Includes_StringCtorObjects()
         {
-            new AppRunner<App>(BasicHelp).Verify(_output, new Scenario
+            new AppRunner<App>(BasicHelp).Verify(new Scenario
             {
                 When = {Args = "DoList -h"},
                 Then =
@@ -54,7 +53,7 @@ Arguments:
         [Fact]
         public void DetailedHelp_Includes_StringCtorObjects()
         {
-            new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
+            new AppRunner<App>(DetailedHelp).Verify(new Scenario
             {
                 When = {Args = "Do -h"},
                 Then =
@@ -72,7 +71,7 @@ Arguments:
         [Fact]
         public void DetailedHelp_List_Includes_StringCtorObjects()
         {
-            new AppRunner<App>(DetailedHelp).Verify(_output, new Scenario
+            new AppRunner<App>(DetailedHelp).Verify(new Scenario
             {
                 When = {Args = "DoList -h"},
                 Then =
@@ -90,19 +89,17 @@ Arguments:
         [Fact]
         public void Exec_ConvertsStringToObject()
         {
-            new AppRunner<App>().Verify(_output, new Scenario
+            new AppRunner<App>().Verify(new Scenario
             {
                 When = {Args = "DoList some-value another-value"},
                 Then =
                 {
-                    Captured =
-                    {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
                         new List<StringCtorObject>
                         {
                             new StringCtorObject("some-value"),
                             new StringCtorObject("another-value")
-                        }
-                    }
+                        })
                 }
             });
         }
@@ -110,25 +107,25 @@ Arguments:
         [Fact]
         public void Exec_List_ConvertsStringToObject()
         {
-            new AppRunner<App>().Verify(_output, new Scenario
+            new AppRunner<App>().Verify(new Scenario
             {
                 When = {Args = "Do some-value"},
-                Then = { Captured = { new StringCtorObject("some-value") } }
+                Then =
+                {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(
+                        new StringCtorObject("some-value"))
+                }
             });
         }
 
         private class App
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void Do(StringCtorObject arg)
             {
-                TestCaptures.Capture(arg);
             }
 
             public void DoList(List<StringCtorObject> args)
             {
-                TestCaptures.Capture(args);
             }
         }
 

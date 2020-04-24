@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using CommandDotNet.Rendering;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using FluentAssertions;
 using Xunit;
@@ -9,30 +10,26 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 {
     public class ConstructorInjectionTests
     {
-        private readonly ITestOutputHelper _output;
-
         public ConstructorInjectionTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
         public void ShouldInstantiateCommandClassUsingCtorWithMostInjectableServices()
         {
-            var result = new AppRunner<UseLargestCtorApp>().RunInMem("Do", _output);
-
-            result.TestCaptures.Get<CommandContext>().Should().NotBeNull();
-            result.TestCaptures.Get<TestConsole>().Should().NotBeNull();
-            result.TestCaptures.Get<CancellationToken>().Should().NotBeNull();
+            var result = new AppRunner<UseLargestCtorApp>().RunInMem("Do");
+            var app = result.CommandContext.GetCommandInvocationInfo<UseLargestCtorApp>().Instance;
+            app.CommandContext.Should().NotBeNull();
+            app.Console.Should().NotBeNull();
+            app.CancellationToken.Should().NotBeNull();
         }
 
         class UseLargestCtorApp
         {
-            public TestCaptures TestCaptures { get; set; }
-
-            private readonly CommandContext _commandContext;
-            private readonly IConsole _console;
-            private readonly CancellationToken _cancellationToken;
+            public CommandContext CommandContext;
+            public IConsole Console;
+            public CancellationToken CancellationToken;
 
             public UseLargestCtorApp()
             {
@@ -40,27 +37,24 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 
             public UseLargestCtorApp(CommandContext commandContext)
             {
-                _commandContext = commandContext;
+                CommandContext = commandContext;
             }
 
             public UseLargestCtorApp(CommandContext commandContext, IConsole console)
             {
-                _commandContext = commandContext;
-                _console = console;
+                CommandContext = commandContext;
+                Console = console;
             }
 
             public UseLargestCtorApp(CommandContext commandContext, IConsole console, CancellationToken cancellationToken)
             {
-                _commandContext = commandContext;
-                _console = console;
-                _cancellationToken = cancellationToken;
+                CommandContext = commandContext;
+                Console = console;
+                CancellationToken = cancellationToken;
             }
 
             public void Do()
             {
-                TestCaptures.Capture(_cancellationToken);
-                TestCaptures.Capture(_console);
-                TestCaptures.Capture(_commandContext);
             }
         }
     }

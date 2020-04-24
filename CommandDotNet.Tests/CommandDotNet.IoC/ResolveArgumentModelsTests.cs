@@ -1,4 +1,6 @@
+using System.Linq;
 using CommandDotNet.TestTools;
+using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
@@ -7,24 +9,26 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 {
     public class ResolveArgumentModelsTests
     {
-        private readonly ITestOutputHelper _output;
-
         public ResolveArgumentModelsTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Fact]
         public void ShouldUseModelFromDependencyResolver()
         {
             var argModel = new ArgModel {Text = "some default"};
-            var testOutputs = new AppRunner<App>()
+            var result = new AppRunner<App>()
                 .UseDependencyResolver(new TestDependencyResolver {new App(), argModel})
-                .RunInMem("Do lala", _output)
-                .TestCaptures;
-
-            var resolvedArgModel = testOutputs.Get<ArgModel>();
-            resolvedArgModel.Should().BeSameAs(argModel);
+                .Verify(new Scenario
+                {
+                    When = {Args = "Do lala"},
+                    Then =
+                    {
+                        AssertContext = ctx => 
+                            ctx.GetCommandInvocationInfo().ParameterValues.First().Should().BeSameAs(argModel)
+                    }
+                });
         }
 
         [Fact]
@@ -32,16 +36,17 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         {
             new AppRunner<App>()
                 .UseDependencyResolver(new TestDependencyResolver { new ArgModel { Text = "default from resolver" } })
-                .RunInMem("Do -h", _output).Console.OutText().Should().Contain("default from resolver");
+                .Verify(new Scenario
+                {
+                    When = { Args = "Do -h" },
+                    Then = { OutputContainsTexts = { "default from resolver" } }
+                });
         }
 
         class App
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void Do(ArgModel argModel)
             {
-                TestCaptures.Capture(argModel);
             }
         }
 

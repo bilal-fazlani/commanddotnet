@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;
@@ -10,11 +9,9 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
 {
     public class ParseDirectiveVerifier
     {
-        private readonly ITestOutputHelper _output;
-
         public ParseDirectiveVerifier(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         public void Verify<TApp>(
@@ -96,18 +93,17 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
 
             var result = appRunner
                 .UseParseDirective()
-                .Verify(_output,
-                    new Scenario
+                .Verify(new Scenario
+                {
+                    When = {Args = $"{parse} {args}"},
+                    Then =
                     {
-                        When = {Args = $"{parse} {args}"},
-                        Then =
-                        {
-                            ExitCode = throwBeforeBind ? 1 : 0,
-                            Output = expectedResult,
-                            OutputContainsTexts = contains,
-                            OutputNotContainsTexts = notContains
-                        }
-                    });
+                        ExitCode = throwBeforeBind ? 1 : 0,
+                        Output = expectedResult,
+                        OutputContainsTexts = contains,
+                        OutputNotContainsTexts = notContains
+                    }
+                });
 
             if (showsHelp && showsTokens)
             {

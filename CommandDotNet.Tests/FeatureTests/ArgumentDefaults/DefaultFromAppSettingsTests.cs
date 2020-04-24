@@ -1,5 +1,7 @@
 using System.Collections.Specialized;
+using System.Linq;
 using CommandDotNet.Extensions;
+using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
@@ -182,21 +184,18 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                 {key, value}
             };
 
-            var scenario = new Scenario
-            {
-                When = {Args = args},
-                Then = { Captured = { value.Split(',') } }
-            };
-
+            var expectedParamValues = value.Split(',');
             new AppRunner<App>()
                 .UseDefaultsFromAppSetting(nvc, includeNamingConventions: true)
-                .Verify(scenario);
+                .Verify(new Scenario
+                {
+                    When = {Args = args},
+                    Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(new object[]{expectedParamValues})}
+                });
         }
 
         public class App
         {
-            private TestCaptures TestCaptures { get; set; }
-
             public void ByConvention(
                 [Option(LongName = "option1", ShortName = "o")] string option1,
                 [Operand] string operand1,
@@ -220,7 +219,6 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
             public void List(string[] planets)
             {
-                TestCaptures.CaptureIfNotNull(planets);
             }
         }
     }

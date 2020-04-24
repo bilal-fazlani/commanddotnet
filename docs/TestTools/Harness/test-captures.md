@@ -1,5 +1,9 @@
 # TestCaptures
 
+!!! Warning
+    TestCaptures have been obsoleted. Use the CommandContext extension methods `GetCommandInvocation` and `GetInterceptorInvocation<TInterceptorClass>` to access the `IInvocation.ParameterValues`.
+    See [Testing Middleware](../Tools/testing-middleware.md) for details.
+
 [TestCaptures](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/TestCaptures.cs) are used to test middleware components. They should not be used to test your command methods since they require adding `TestCaptures` as a property to the class defining the commands to test.
 
 Let's start with an example

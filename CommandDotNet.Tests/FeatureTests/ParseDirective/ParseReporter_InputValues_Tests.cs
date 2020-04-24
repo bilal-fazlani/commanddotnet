@@ -12,13 +12,12 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
 {
     public class ParseReporter_InputValues_Tests : IDisposable
     {
-        private readonly ITestOutputHelper _output;
         private readonly TempFiles _tempFiles;
 
         public ParseReporter_InputValues_Tests(ITestOutputHelper output)
         {
-            _output = output;
-            _tempFiles = new TempFiles(_output.WriteLine);
+            Ambient.Output = output;
+            _tempFiles = new TempFiles(output.WriteLine);
         }
 
         public void Dispose()
@@ -32,7 +31,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             new AppRunner<App>()
                 .UseParseDirective()
                 .UsePrompting(promptForMissingArguments: true)
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -65,7 +64,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             new AppRunner<App>()
                 .UseParseDirective()
                 .AppendPipedInputToOperandList()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -91,7 +90,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             new AppRunner<App>()
                 .UseParseDirective()
                 .AppendPipedInputToOperandList()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When =
                     {
@@ -120,7 +119,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             new AppRunner<App>()
                 .UseResponseFiles()
                 .UseParseDirective()
-                .Verify(_output, new Scenario
+                .Verify(new Scenario
                 {
                     When = {Args = $"[parse] Do @{file}"},
                     Then =
