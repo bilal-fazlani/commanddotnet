@@ -90,7 +90,12 @@ namespace CommandDotNet.TestTools
                 runner.Configure(c => c.Console = testConsole);
 
                 CommandContext context = null;
-                runner.CaptureState(ctx => context = ctx, MiddlewareStages.PreTokenize);
+                Task<int> CaptureCommandContext(CommandContext commandContext, ExecutionDelegate next)
+                {
+                    context = commandContext;
+                    return next(commandContext);
+                }
+                runner.Configure(c => c.UseMiddleware(CaptureCommandContext, MiddlewareStages.PreTokenize));
                 var captures = InjectTestCaptures(runner);
 
                 try

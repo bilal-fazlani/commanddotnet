@@ -41,7 +41,7 @@ namespace CommandDotNet.TestTools
                 {
                     if (!expectedEnumerator.MoveNext())
                     {
-                        throw new AssertFailedException($"Unexpected actual value for {valueName} at index {index}. actual=\"{actualItem}\"");
+                        throw new AssertFailedException($"Unexpected actual value for {valueName} at index {index}. actual={Quoted(actualItem)}");
                     }
 
                     var expectedItem = expectedEnumerator.Current;
@@ -52,13 +52,13 @@ namespace CommandDotNet.TestTools
                 if (expectedEnumerator.MoveNext())
                 {
                     var expectedItem = expectedEnumerator.Current;
-                    throw new AssertFailedException($"Missing actual value for {valueName} at index {index}. expected=\"{expectedItem}\"");
+                    throw new AssertFailedException($"Missing actual value for {valueName} at index {index}. expected={Quoted(expectedItem)}");
                 }
 
                 return;
             }
 
-            var type = actual.GetType();
+            var type = actual?.GetType();
             if (type != expected.GetType())
             {
                 Fail(type, expected.GetType(), $"{valueName} Type");
@@ -104,7 +104,7 @@ namespace CommandDotNet.TestTools
         private static void Fail(object actual, object expected, string valueName)
         {
             throw new AssertFailedException(
-                $"expected value for {valueName} to be {Environment.NewLine}\"{expected}\"{Environment.NewLine}but was{Environment.NewLine}\"{actual}\"");
+                $"expected value for {valueName} to be {Environment.NewLine}{Quoted(expected)}{Environment.NewLine}but was{Environment.NewLine}{Quoted(actual)}");
         }
 
         private static bool BothAreNull(object actual, object expected, string valueName)
@@ -116,10 +116,12 @@ namespace CommandDotNet.TestTools
                     return true;
                 }
 
-                throw new AssertFailedException($"expected value for {valueName} to be null but was {Environment.NewLine}\"{actual}\"");
+                throw new AssertFailedException($"expected value for {valueName} to be null but was {Environment.NewLine}{Quoted(actual)}");
             }
 
             return false;
         }
+
+        private static string Quoted(object value) => value == null ? "<null>" : $"\"{value}\"";
     }
 }

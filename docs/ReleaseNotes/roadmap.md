@@ -44,3 +44,4 @@ will result in breaking changes to behavior or the API.
   * `TokenCollection` public ctor - Use `Tokenizer.Tokenize` extension method to generate tokens and `TokenCollection.Transform` to transform them. Ensures source tokens are correctly mapped.
   * `AnsiConsole` - no longer supported. Use a package like ColorConsole or Pastel.
   * `MiddlewareSteps.Help.Stage` & `MiddlewareSteps.Help.Order` - replaced by nested `MiddlewareSteps.Help` classes
+  * `ServicesExtensions.GetOrAdd<T>` - should use `ContextDataExtensions.GetOrAdd<T>` instead

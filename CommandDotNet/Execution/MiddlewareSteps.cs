@@ -8,46 +8,46 @@ namespace CommandDotNet.Execution
         public static MiddlewareStep DebugDirective { get; } = 
             new MiddlewareStep(MiddlewareStages.PreTokenize, int.MinValue + 1000);
 
-        /// <summary>
-        /// Runs second after <see cref="DebugDirective"/>
-        /// in the <see cref="MiddlewareStages.PreTokenize"/> stage.
-        /// This will catch all exceptions in the pipeline stack.
-        /// </summary>
         [Obsolete("This step is no longer used for appRunner.UseErrorHandler.")]
-        public static MiddlewareStep ErrorHandler { get; } = 
-            new MiddlewareStep(MiddlewareStages.PreTokenize, DebugDirective.OrderWithinStage + 1000);
+        public static MiddlewareStep ErrorHandler { get; } = DebugDirective + 100;
 
-        public static MiddlewareStep OnRunCompleted { get; } =
-            new MiddlewareStep(MiddlewareStages.PreTokenize, ErrorHandler.OrderWithinStage + 1000);
+        /// <summary>
+        /// Runs early in the <see cref="MiddlewareStages.PreTokenize"/> stage after <see cref="DebugDirective"/>
+        /// </summary>
+        public static MiddlewareStep OnRunCompleted { get; } = DebugDirective + 1000;
 
         public static class DependencyResolver
         {
-            public static MiddlewareStep BeginScope { get; } =
-                new MiddlewareStep(MiddlewareStages.PreTokenize, -10000);
+            /// <summary>
+            /// Runs early in the <see cref="MiddlewareStages.PreTokenize"/> stage after <see cref="OnRunCompleted"/>
+            /// </summary>
+            public static MiddlewareStep BeginScope { get; } = OnRunCompleted + 1000;
         }
 
         public static MiddlewareStep Tokenize { get; } =
-            new MiddlewareStep(MiddlewareStages.Tokenize, -1000);
+            new MiddlewareStep(MiddlewareStages.Tokenize, 0);
 
+        /// <summary>
+        /// Runs late in the <see cref="MiddlewareStages.Tokenize"/> stage
+        /// </summary>
         public static MiddlewareStep CreateRootCommand { get; } =
             new MiddlewareStep(MiddlewareStages.Tokenize, int.MaxValue - 1000);
 
         public static MiddlewareStep ParseInput { get; } =
             new MiddlewareStep(MiddlewareStages.ParseInput, 0);
 
-        public static MiddlewareStep TypoSuggest { get; } =
-            new MiddlewareStep(MiddlewareStages.ParseInput, ParseInput.OrderWithinStage + 100);
+        /// <summary>
+        /// Runs after <see cref="ParseInput"/> to respond to parse errors
+        /// </summary>
+        public static MiddlewareStep TypoSuggest { get; } = ParseInput + 1000;
 
-        public static MiddlewareStep AssembleInvocationPipeline { get; } =
-            new MiddlewareStep(MiddlewareStages.ParseInput, ParseInput.OrderWithinStage + 1000);
-
-        /// <summary>Runs before <see cref="Help"/> to ensure default values are included in the help output</summary>
-        public static MiddlewareStep Version { get; } =
-            new MiddlewareStep(Help.CheckIfShouldShowHelp.Stage, Help.CheckIfShouldShowHelp.OrderWithinStage - 2000);
+        public static MiddlewareStep AssembleInvocationPipeline { get; } = ParseInput + 2000;
 
         /// <summary>Runs before <see cref="Help"/> to ensure default values are included in the help output</summary>
-        public static MiddlewareStep SetArgumentDefaults { get; } =
-            new MiddlewareStep(Help.CheckIfShouldShowHelp.Stage, Help.CheckIfShouldShowHelp.OrderWithinStage - 1000);
+        public static MiddlewareStep Version { get; } = Help.CheckIfShouldShowHelp - 2000;
+
+        /// <summary>Runs before <see cref="Help"/> to ensure default values are included in the help output</summary>
+        public static MiddlewareStep SetArgumentDefaults { get; } = Help.CheckIfShouldShowHelp - 1000;
 
         /// <summary>Runs at the end of the <see cref="MiddlewareStages.ParseInput"/> stage</summary>
         public static class Help
@@ -72,19 +72,19 @@ namespace CommandDotNet.Execution
         }
 
         public static MiddlewareStep PipedInput { get; } =
-            new MiddlewareStep(MiddlewareStages.PostParseInputPreBindValues, -1);
+            new MiddlewareStep(MiddlewareStages.PostParseInputPreBindValues, 0);
 
         /// <summary>
         /// Runs late in the <see cref="MiddlewareStages.PostParseInputPreBindValues"/>
         /// stage to enable other middleware to populate arguments
         /// </summary>
         public static MiddlewareStep ValuePromptMissingArguments { get; } =
-            new MiddlewareStep(MiddlewareStages.PostParseInputPreBindValues, int.MaxValue - 100);
+            new MiddlewareStep(MiddlewareStages.PostParseInputPreBindValues, int.MaxValue - 1000);
 
         public static MiddlewareStep BindValues { get; } =
             new MiddlewareStep(MiddlewareStages.BindValues, 0);
 
-        public static MiddlewareStep ResolveCommandClasses { get; } =
-            new MiddlewareStep(MiddlewareStages.BindValues, BindValues.OrderWithinStage + 100);
+        /// <summary>Runs after the <see cref="BindValues"/> step</summary>
+        public static MiddlewareStep ResolveCommandClasses { get; } = BindValues + 1000;
     }
 }

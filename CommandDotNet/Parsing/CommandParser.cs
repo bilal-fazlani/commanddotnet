@@ -4,24 +4,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
+using CommandDotNet.Extensions;
 using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Parsing
 {
     internal class CommandParser
     {
+        private readonly CommandContext _commandContext;
         private readonly AppSettings _appSettings;
 
-        private CommandParser(AppSettings appSettings)
+        private CommandParser(CommandContext commandContext)
         {
-            _appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
+            _commandContext = commandContext;
+            _appSettings = commandContext.AppConfig.AppSettings;
         }
 
         internal static Task<int> ParseInputMiddleware(CommandContext commandContext, ExecutionDelegate next)
         {
             try
             {
-                new CommandParser(commandContext.AppConfig.AppSettings).ParseCommand(commandContext);
+                new CommandParser(commandContext).ParseCommand(commandContext);
             }
             catch (CommandParsingException ex)
             {
@@ -38,22 +41,29 @@ namespace CommandDotNet.Parsing
             Command currentCommand = commandContext.RootCommand;
             Option currentOption = null;
             Token currentOptionToken = null;
-            IEnumerator<Operand> operands = new OperandEnumerator(currentCommand.Operands);
+            var operands = new OperandEnumerator(currentCommand.Operands);
 
-            IEnumerable<Token> tokens = commandContext.Tokens.Arguments;
-
-            // using TakeWhile ensures we're evaluating ParseSeparatedArguments
-            // with the final command. We know this because separated arguments
-            // can only contain operands.
-            bool UsingEndOfOptions()
+            void ParseNonOptionValue(Token token)
             {
-                var separatorStrategy = currentCommand.GetArgumentSeparatorStrategy(_appSettings);
-                return separatorStrategy == ArgumentSeparatorStrategy.EndOfOptions;
+                var operandResult = this.ParseArgumentValue(token, ref currentCommand, operands);
+
+                switch (operandResult)
+                {
+                    case ParseOperandResult.Succeeded:
+                        break;
+                    case ParseOperandResult.UnexpectedArgument:
+                        ignoreRemainingArguments = true;
+                        remainingOperands.Add(token);
+                        break;
+                    case ParseOperandResult.NewSubCommand:
+                        operands = new OperandEnumerator(currentCommand.Operands);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(operandResult.ToString());
+                }
             }
 
-            tokens = tokens.Concat(commandContext.Tokens.Separated.TakeWhile(t => UsingEndOfOptions()));
-
-            foreach (var token in tokens)
+            foreach (var token in commandContext.Tokens.Arguments)
             {
                 switch (token.TokenType)
                 {
@@ -69,33 +79,23 @@ namespace CommandDotNet.Parsing
                         }
                         break;
                     case TokenType.Value:
-                        if (ignoreRemainingArguments && currentOption == null)
+                        if (currentOption != null)
+                        {
+                            ParseOptionValue(token, currentCommand, currentOption, currentOptionToken);
+                            currentOption = null;
+                            currentOptionToken = null;
+                        }
+                        else if (ignoreRemainingArguments)
                         {
                             remainingOperands.Add(token);
                         }
                         else
                         {
-                            var operandResult = ParseArgumentValue(
-                                token, ref currentCommand, ref currentOption, ref currentOptionToken, operands);
-
-                            switch (operandResult)
-                            {
-                                case ParseOperandResult.Succeeded:
-                                    break;
-                                case ParseOperandResult.UnexpectedArgument:
-                                    ignoreRemainingArguments = true;
-                                    remainingOperands.Add(token);
-                                    break;
-                                case ParseOperandResult.NewSubCommand:
-                                    operands = new OperandEnumerator(currentCommand.Operands);
-                                    break;
-                                default:
-                                    throw new ArgumentOutOfRangeException(operandResult.ToString());
-                            }
+                            ParseNonOptionValue(token);
                         }
                         break;
                     case TokenType.Separator:
-                        throw new ArgumentOutOfRangeException($"The argument list should have already had the separator removed: {token.RawValue}");
+                        throw new ArgumentOutOfRangeException($"The argument separator should have already been processed and removed: {token.RawValue}");
                     case TokenType.Directive:
                         throw new ArgumentOutOfRangeException($"Directives should have already been processed and removed: {token.RawValue}");
                     default:
@@ -106,6 +106,11 @@ namespace CommandDotNet.Parsing
             if (currentOption != null) // an option was left without a value
             {
                 throw new CommandParsingException(currentCommand, $"Missing value for option '{currentOption.Name}'");
+            }
+
+            if (commandContext.Tokens.Separated.Any() && UsingEndOfOptions(currentCommand))
+            {
+                commandContext.Tokens.Separated.ForEach(ParseNonOptionValue);
             }
 
             commandContext.ParseResult = new ParseResult(
@@ -121,33 +126,31 @@ namespace CommandDotNet.Parsing
             NewSubCommand
         }
 
-        private ParseOperandResult ParseArgumentValue(Token token,
-            ref Command command, ref Option currentOption, ref Token currentOptionToken,
-            IEnumerator<Operand> operands)
+        private void ParseOptionValue(Token token,
+            Command command, Option currentOption, Token currentOptionToken)
         {
-            if (currentOption != null)
+            ThrowIfValueNotAllowed(command, currentOption, token);
+            if (TryAddValue(currentOption, token, currentOptionToken))
             {
-                if (TryAddValue(currentOption, token, currentOptionToken))
-                {
-                    currentOption = null;
-                    currentOptionToken = null;
-                    return ParseOperandResult.Succeeded;
-                }
-
-                throw new CommandParsingException(command, $"Unexpected value '{token.RawValue}' for option '{currentOption.Name}'");
+                return;
             }
 
-            if (command.FindArgumentNode(token.Value) is Command subcommand)
+            throw new CommandParsingException(command,
+                $"Unexpected value '{token.RawValue}' for option '{currentOption.Name}'");
+        }
+
+        private ParseOperandResult ParseArgumentValue(Token token, ref Command command, OperandEnumerator operands)
+        {
+            if (!operands.Any && command.FindArgumentNode(token.Value) is Command subcommand)
             {
                 command = subcommand;
-                currentOption = null;
-                currentOptionToken = null;
                 return ParseOperandResult.NewSubCommand;
             }
 
             if (operands.MoveNext())
             {
                 var current = operands.Current;
+                ThrowIfValueNotAllowed(command, current, token);
                 GetArgumentParsedValues(current).Add(new ValueFromToken(token.Value, token, null));
             }
             else
@@ -158,7 +161,7 @@ namespace CommandDotNet.Parsing
                 }
 
                 // use the term "argument" for messages displayed to users
-                throw new CommandParsingException(command, $"Unrecognized command or argument '{token.RawValue}'", unrecognizedArgument: token);
+                throw new UnrecognizedArgumentCommandParsingException(command, token, $"Unrecognized command or argument '{token.RawValue}'");
             }
 
             return ParseOperandResult.Succeeded;
@@ -171,7 +174,7 @@ namespace CommandDotNet.Parsing
             var option = command.FindOption(optionTokenType.GetName());
             if (option == null)
             {
-                throw new CommandParsingException(command, $"Unrecognized option '{token.RawValue}'", unrecognizedArgument: token);
+                throw new UnrecognizedArgumentCommandParsingException(command, token, $"Unrecognized option '{token.RawValue}'");
             }
 
             if (optionTokenType.IsClubbed)
@@ -189,7 +192,6 @@ namespace CommandDotNet.Parsing
             }
 
             return option;
-
         }
 
         private static ICollection<ValueFromToken> GetArgumentParsedValues(IArgument argument)
@@ -206,7 +208,21 @@ namespace CommandDotNet.Parsing
             return (List<ValueFromToken>)parserValues.ValuesFromTokens;
         }
 
-        private static bool TryAddValue(Option option, Token valueToken, Token optionToken)
+        private void ThrowIfValueNotAllowed(Command command, IArgument argument, Token token)
+        {
+            if (argument.AllowedValues.IsNullOrEmpty() || argument.AllowedValues.Contains(token.Value))
+            {
+                return;
+            }
+
+            // help displays the AllowedValues
+            // TypoSuggestions can hide the help
+            _commandContext.ShowHelpOnExit = true;
+            throw new UnrecognizedValueCommandParsingException(
+                command, argument, token, $"Unrecognized value '{token.RawValue}' for {(argument is Option ? "option" : "argument")}: {argument.Name}");
+        }
+
+        private bool TryAddValue(Option option, Token valueToken, Token optionToken)
         {
             var values = GetArgumentParsedValues(option);
 
@@ -216,10 +232,11 @@ namespace CommandDotNet.Parsing
             }
             else if (option.Arity.AllowsNone())
             {
+                // only possible for flags which are boolean type
                 // Add a value to indicate that this option was specified
                 values.Add(new ValueFromToken("true", valueToken, optionToken));
             }
-            else if (!option.Arity.AllowsMany())
+            else
             {
                 if (values.Any())
                 {
@@ -230,14 +247,23 @@ namespace CommandDotNet.Parsing
             return true;
         }
 
+        bool UsingEndOfOptions(Command command)
+        {
+            var separatorStrategy = command.GetArgumentSeparatorStrategy(_appSettings);
+            return separatorStrategy == ArgumentSeparatorStrategy.EndOfOptions;
+        }
+
         private class OperandEnumerator : IEnumerator<Operand>
         {
             private readonly IEnumerator<Operand> _enumerator;
+            private int _count;
 
             public OperandEnumerator(IEnumerable<Operand> enumerable)
             {
                 _enumerator = enumerable.GetEnumerator();
             }
+
+            public bool Any => _count > 0;
 
             public Operand Current => _enumerator.Current;
 
@@ -250,6 +276,8 @@ namespace CommandDotNet.Parsing
 
             public bool MoveNext()
             {
+                _count++;
+
                 if (Current == null || !Current.Arity.AllowsMany())
                 {
                     return _enumerator.MoveNext();

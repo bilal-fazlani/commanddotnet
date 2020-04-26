@@ -12,7 +12,6 @@ With these extensions, tests for middleware can verify the values passed to the 
 
 TestCaptures and associated methods have been marked obsolete. They'll be removed in the next major version. This was added before v3 as a way to cpature the parameter values passed into methods.  With v3 complete, it's easy to access the parameter values via `CommandContext.InvocationPipeline`. Scenarios can now `AssertContext` which removes the need for TestCaptures. This also removes the need for the custom ShouldBeEquivalentTo.
 
-
 ## 2.1.0
 
 Remove FluentValidator requirement. Implemented simple ShouldBeEquivalentTo that handles IEnumerables, primitives and deep recursion of public properties of objects. This is only used with TestCaptures.

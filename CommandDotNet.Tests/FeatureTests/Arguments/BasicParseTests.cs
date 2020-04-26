@@ -182,6 +182,25 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             results.CommandContext.ParseResult.RemainingOperands.Should().BeEquivalentTo("4");
         }
 
+        [Fact]
+        public void Given_OperandValuesFollowedBySubcommands_ThrowsError()
+        {
+            var results = new AppRunner<DefaultApp>()
+                .Verify(new Scenario
+                {
+                    When = {Args = "1 Do"},
+                    Then =
+                    {
+                        AssertContext = ctx =>
+                        {
+                            var invocation = ctx.GetCommandInvocationInfo();
+                            invocation.MethodInfo.Name.Should().Be("Default");
+                            invocation.ParameterValues.Should().BeEquivalentTo(new object[] {"1", "Do", null, null});
+                        }
+                    }
+                });
+        }
+
         private class App
         {
             public void Add(
@@ -215,6 +234,18 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 public int X { get; set; }
                 public int Y { get; set; }
                 public string Op { get; set; }
+            }
+        }
+
+        private class DefaultApp
+        {
+            [DefaultMethod]
+            public void Default(string opd1, string opd2, [Option] string opt1, [Option] string opt2)
+            {
+            }
+
+            public void Do(string opd1, string opd2, [Option] string opt1, [Option] string opt2)
+            {
             }
         }
     }

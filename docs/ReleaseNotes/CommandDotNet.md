@@ -1,5 +1,15 @@
 # CommandDotNet
 
+## 3.6.5
+
+#### Typo suggestions for argument values
+
+Typo Suggestions middleware now also makes suggestions for [for argument values](../Help/typo-suggestions.md#suggestions-for-argument-values).
+
+#### Bug: Subcommands should not be parsed after first operand
+
+Subcommands were still being searched by the parser after the first operand was provided. This bug has been fixed.
+
 ## 3.6.4
 
 Reimplement UseErrorHandler(CommandContext, Exception). See updated [documentation](../Diagnostics/exceptions.md).
