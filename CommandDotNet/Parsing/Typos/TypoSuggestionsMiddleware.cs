@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CommandDotNet.Builders;
 using CommandDotNet.Execution;
+using CommandDotNet.Extensions;
 using CommandDotNet.Help;
 using CommandDotNet.Tokens;
 
@@ -32,43 +32,74 @@ namespace CommandDotNet.Parsing.Typos
 
         private static Task<int> TypoSuggest(CommandContext ctx, ExecutionDelegate next)
         {
-            if (ctx.ParseResult.ParseError != null 
-                && ctx.ParseResult.ParseError is CommandParsingException cpe 
-                && cpe.UnrecognizedArgument != null)
+            if (ctx.ParseResult.ParseError != null)
             {
-                var command = cpe.Command;
-                var tokenType = cpe.UnrecognizedArgument.TokenType;
-
-                IEnumerable<string> GetOptionNames()
+                switch (ctx.ParseResult.ParseError)
                 {
-                    // skip short names
-                    return command.Options
-                        .Where(o => !o.Hidden)
-                        .SelectMany(o => o.Aliases.Where(a => a.Length > 1));
-                }
-                IEnumerable<string> GetSubcommandNames()
-                {
-                    return command.Subcommands.SelectMany(o => o.Aliases);
-                }
+                    case UnrecognizedArgumentCommandParsingException unrecognizedArgument:
+                        if (TrySuggestArgumentNames(ctx, unrecognizedArgument.Command, unrecognizedArgument.Token))
+                        {
+                            // in case help was requested by CommandParser
+                            ctx.ShowHelpOnExit = false;
+                            return ExitCodes.Error;
+                        }
 
-                if ((tokenType == TokenType.Option &&
-                     TrySuggest(ctx, cpe, GetOptionNames().ToList(), "option", "--"))
-                    || (tokenType == TokenType.Value &&
-                        TrySuggest(ctx, cpe, GetSubcommandNames().ToList(), "command", null)))
-                {
-                    return ExitCodes.Error;
-                }
+                        // TODO: suggest other directives? We'd need a list of names which we don't collect atm.
+                        break;
+                    case UnrecognizedValueCommandParsingException unrecognizedValue:
+                        if (TrySuggestValues(ctx, unrecognizedValue))
+                        {
+                            // in case help was requested by CommandParser
+                            ctx.ShowHelpOnExit = false;
+                            return ExitCodes.Error;
+                        }
 
-                // TODO: suggest other directives? We'd need a list of names which we don't collect atm.
+                        break;
+                }
             }
 
             return next(ctx);
         }
 
-        private static bool TrySuggest(
-            CommandContext ctx, CommandParsingException cpe, 
-            ICollection<string> candidates, 
-            string argumentNodeType, string prefix)
+        private static bool TrySuggestValues(CommandContext ctx, UnrecognizedValueCommandParsingException unrecognizedValue)
+        {
+            return TrySuggest(ctx, unrecognizedValue.Command, unrecognizedValue.Token.Value,
+                unrecognizedValue.Argument.AllowedValues.ToCollection(),
+                $"is not a valid {unrecognizedValue.Argument.TypeInfo.DisplayName}", 
+                null);
+        }
+
+        private static bool TrySuggestArgumentNames(CommandContext ctx, Command command, Token token)
+        {
+            ICollection<string> GetOptionNames()
+            {
+                // skip short names
+                return command.Options
+                    .Where(o => !o.Hidden)
+                    .SelectMany(o => o.Aliases.Where(a => a.Length > 1))
+                    .ToList();
+            }
+
+            ICollection<string> GetSubcommandNames()
+            {
+                return command.Subcommands.SelectMany(o => o.Aliases).ToList();
+            }
+
+            switch (token.TokenType)
+            {
+                case TokenType.Option:
+                    return TrySuggest(ctx, command, token.Value, GetOptionNames(), "is not a valid option", "--");
+                case TokenType.Value:
+                    return TrySuggest(ctx, command, token.Value, GetSubcommandNames(), "is not a valid subcommand", null);
+                default:
+                    return false;
+            }
+        }
+
+        private static bool TrySuggest(CommandContext ctx,
+            Command command, string typo,
+            ICollection<string> candidates,
+            string message, string prefix)
         {
             if (!candidates.Any())
             {
@@ -76,8 +107,6 @@ namespace CommandDotNet.Parsing.Typos
             }
 
             var config = ctx.AppConfig.Services.Get<Config>();
-
-            var typo = cpe.UnrecognizedArgument.Value;
 
             // TODO: allowed values
             //   if the next value should be a value for an option, include allowed values for the option.
@@ -94,14 +123,15 @@ namespace CommandDotNet.Parsing.Typos
                 return false;
             }
 
-            var command = cpe.Command;
             var usage = command.GetAppName(ctx.AppConfig.AppSettings.Help) + " " + command.GetPath();
 
             var @out = ctx.Console.Out;
-            @out.WriteLine($"'{typo}' is not a {argumentNodeType}.  See '{usage} --help'");
+            @out.WriteLine($"'{typo}' {message}");
             @out.WriteLine();
-            @out.WriteLine($"Similar {argumentNodeType}s are");
+            @out.WriteLine("Did you mean ...");
             suggestions.ForEach(name => @out.WriteLine($"   {prefix}{name}"));
+            @out.WriteLine();
+            @out.WriteLine($"See '{usage} --help'");
 
             return true;
         }

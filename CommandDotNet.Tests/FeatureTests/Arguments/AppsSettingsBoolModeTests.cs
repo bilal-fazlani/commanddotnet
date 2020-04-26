@@ -143,8 +143,8 @@ Options:
                 When = {Args = "Do2 --option 2"},
                 Then =
                 {
-                    ExitCode = 2,
-                    OutputContainsTexts = { "'2' is not a valid Boolean" }
+                    ExitCode = 1,
+                    OutputContainsTexts = { "Unrecognized value '2' for option: option" }
                 }
             });
         }

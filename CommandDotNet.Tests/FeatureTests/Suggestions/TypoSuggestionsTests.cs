@@ -1,11 +1,10 @@
-using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests
+namespace CommandDotNet.Tests.FeatureTests.Suggestions
 {
     public class TypoSuggestionsTests
     {
@@ -74,9 +73,13 @@ namespace CommandDotNet.Tests.FeatureTests
                         ExitCode = 1,
                         OutputContainsTexts =
                         {
-                            "'user' is not a option.  See 'dotnet testhost.dll User --help'",
-                            @"Similar options are
-   --username"
+                            @"'user' is not a valid option
+
+Did you mean ...
+   --username
+
+See 'dotnet testhost.dll User --help'
+"
                         }
                     }
                 });
@@ -105,9 +108,13 @@ namespace CommandDotNet.Tests.FeatureTests
                             ExitCode = 1,
                             OutputContainsTexts =
                             {
-                                "'user' is not a option.  See 'dotnet testhost.dll User --help'",
-                                @"Similar options are
-   --username"
+                                @"'user' is not a valid option
+
+Did you mean ...
+   --username
+
+See 'dotnet testhost.dll User --help'
+"
                             }
                         }
                     });
@@ -133,9 +140,13 @@ namespace CommandDotNet.Tests.FeatureTests
                             ExitCode = 1,
                             OutputContainsTexts =
                             {
-                                "'user' is not a option.  See 'dotnet testhost.dll User --help'",
-                                @"Similar options are
-   --username"
+                                @"'user' is not a valid option
+
+Did you mean ...
+   --username
+
+See 'dotnet testhost.dll User --help'
+"
                             }
                         }
                     });
@@ -155,10 +166,15 @@ namespace CommandDotNet.Tests.FeatureTests
                             ExitCode = 1,
                             OutputContainsTexts =
                             {
-                                "'egister' is not a command.  See 'dotnet testhost.dll  --help'",
-                                @"Similar commands are
+                                @"'egister' is not a valid subcommand
+
+Did you mean ...
    Register
-   Unregister"
+   Unregister
+   User
+
+See 'dotnet testhost.dll  --help'
+"
                             }
                         }
                     });
@@ -178,11 +194,15 @@ namespace CommandDotNet.Tests.FeatureTests
                             ExitCode = 1,
                             OutputContainsTexts =
                             {
-                                "'opt' is not a option.  See 'dotnet testhost.dll Similars --help'",
-                                @"Similar options are
+                                @"'opt' is not a valid option
+
+Did you mean ...
    --opt1
    --opt2
-   --opt3"
+   --opt3
+
+See 'dotnet testhost.dll Similars --help'
+"
                             }
                         }
                     });
@@ -222,9 +242,13 @@ namespace CommandDotNet.Tests.FeatureTests
                             ExitCode = 1,
                             OutputContainsTexts =
                             {
-                                "'users' is not a option.  See 'dotnet testhost.dll  --help'",
-                                @"Similar options are
-   --username"
+                                @"'users' is not a valid option
+
+Did you mean ...
+   --username
+
+See 'dotnet testhost.dll  --help'
+"
                             }
                         }
                     });
@@ -244,9 +268,12 @@ namespace CommandDotNet.Tests.FeatureTests
                             ExitCode = 1,
                             OutputContainsTexts =
                             {
-                                "'users' is not a command.  See 'dotnet testhost.dll  --help'",
-                                @"Similar commands are
-   ListUsers"
+                                @"'users' is not a valid subcommand
+
+Did you mean ...
+   ListUsers
+
+See 'dotnet testhost.dll  --help'"
                             }
                         }
                     });

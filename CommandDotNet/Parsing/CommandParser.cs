@@ -11,18 +11,20 @@ namespace CommandDotNet.Parsing
 {
     internal class CommandParser
     {
+        private readonly CommandContext _commandContext;
         private readonly AppSettings _appSettings;
 
-        private CommandParser(AppSettings appSettings)
+        private CommandParser(CommandContext commandContext)
         {
-            _appSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
+            _commandContext = commandContext;
+            _appSettings = commandContext.AppConfig.AppSettings;
         }
 
         internal static Task<int> ParseInputMiddleware(CommandContext commandContext, ExecutionDelegate next)
         {
             try
             {
-                new CommandParser(commandContext.AppConfig.AppSettings).ParseCommand(commandContext);
+                new CommandParser(commandContext).ParseCommand(commandContext);
             }
             catch (CommandParsingException ex)
             {
@@ -127,6 +129,7 @@ namespace CommandDotNet.Parsing
         private void ParseOptionValue(Token token,
             Command command, Option currentOption, Token currentOptionToken)
         {
+            ThrowIfValueNotAllowed(command, currentOption, token);
             if (TryAddValue(currentOption, token, currentOptionToken))
             {
                 return;
@@ -147,6 +150,7 @@ namespace CommandDotNet.Parsing
             if (operands.MoveNext())
             {
                 var current = operands.Current;
+                ThrowIfValueNotAllowed(command, current, token);
                 GetArgumentParsedValues(current).Add(new ValueFromToken(token.Value, token, null));
             }
             else
@@ -157,7 +161,7 @@ namespace CommandDotNet.Parsing
                 }
 
                 // use the term "argument" for messages displayed to users
-                throw new CommandParsingException(command, $"Unrecognized command or argument '{token.RawValue}'", unrecognizedArgument: token);
+                throw new UnrecognizedArgumentCommandParsingException(command, token, $"Unrecognized command or argument '{token.RawValue}'");
             }
 
             return ParseOperandResult.Succeeded;
@@ -170,7 +174,7 @@ namespace CommandDotNet.Parsing
             var option = command.FindOption(optionTokenType.GetName());
             if (option == null)
             {
-                throw new CommandParsingException(command, $"Unrecognized option '{token.RawValue}'", unrecognizedArgument: token);
+                throw new UnrecognizedArgumentCommandParsingException(command, token, $"Unrecognized option '{token.RawValue}'");
             }
 
             if (optionTokenType.IsClubbed)
@@ -204,7 +208,21 @@ namespace CommandDotNet.Parsing
             return (List<ValueFromToken>)parserValues.ValuesFromTokens;
         }
 
-        private static bool TryAddValue(Option option, Token valueToken, Token optionToken)
+        private void ThrowIfValueNotAllowed(Command command, IArgument argument, Token token)
+        {
+            if (argument.AllowedValues.IsNullOrEmpty() || argument.AllowedValues.Contains(token.Value))
+            {
+                return;
+            }
+
+            // help displays the AllowedValues
+            // TypoSuggestions can hide the help
+            _commandContext.ShowHelpOnExit = true;
+            throw new UnrecognizedValueCommandParsingException(
+                command, argument, token, $"Unrecognized value '{token.RawValue}' for {(argument is Option ? "option" : "argument")}: {argument.Name}");
+        }
+
+        private bool TryAddValue(Option option, Token valueToken, Token optionToken)
         {
             var values = GetArgumentParsedValues(option);
 
@@ -214,10 +232,11 @@ namespace CommandDotNet.Parsing
             }
             else if (option.Arity.AllowsNone())
             {
+                // only possible for flags which are boolean type
                 // Add a value to indicate that this option was specified
                 values.Add(new ValueFromToken("true", valueToken, optionToken));
             }
-            else if (!option.Arity.AllowsMany())
+            else
             {
                 if (values.Any())
                 {
