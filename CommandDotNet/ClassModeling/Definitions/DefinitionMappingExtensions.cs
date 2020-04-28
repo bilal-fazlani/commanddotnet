@@ -106,9 +106,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 var assignOnlyToExecutableSubcommands = optionAttr?.AssignToExecutableSubcommands ?? false;
                 isInterceptorOption = isInterceptorOption && !assignOnlyToExecutableSubcommands;
 
-                var ignoreDefaultLongName = appConfig.AppSettings.LongNameAlwaysDefaultsToSymbolName
-                    ? (optionAttr?.IgnoreDefaultLongName ?? false)
-                    : optionAttr?.ShortName != null;
+                var ignoreDefaultLongName = optionAttr?.IgnoreDefaultLongName ?? false;
 
                 var longName = ignoreDefaultLongName 
                     ? optionAttr?.LongName 

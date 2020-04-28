@@ -137,7 +137,6 @@ AppConfig:
       UsageAppName:
       UsageAppNameStyle: Adaptive
     IgnoreUnexpectedOperands: False
-    LongNameAlwaysDefaultsToSymbolName: False
   DependencyResolver:
   HelpProvider: CommandDotNet.Help.HelpTextProvider
   TokenTransformations:

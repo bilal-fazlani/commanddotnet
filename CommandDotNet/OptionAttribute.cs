@@ -7,10 +7,6 @@ namespace CommandDotNet
     {
         /// <summary>
         /// The single character short name for the option.<br/>
-        /// This will change the default behavior of LongName (setting the default to Null) unless
-        /// <see cref="AppSettings.LongNameAlwaysDefaultsToSymbolName"/> is true.<br/>
-        /// When the setting is true, set <see cref="LongName"/> to null to remove
-        /// the default long name.
         /// </summary>
         public string ShortName { get; set; }
 
@@ -25,7 +21,11 @@ namespace CommandDotNet
             get => _longName;
             set
             {
-                IgnoreDefaultLongName = value.IsNullOrEmpty();
+                if (value == string.Empty)
+                {
+                    value = null;
+                }
+                IgnoreDefaultLongName = value == null;
                 _longName = value;
             }
         }

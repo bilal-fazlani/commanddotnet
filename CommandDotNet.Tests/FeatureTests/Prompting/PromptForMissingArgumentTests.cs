@@ -390,8 +390,8 @@ lala (Text): fishies
             }
 
             public void Flags(
-                [Option(ShortName = "a")] bool flagA,
-                [Option(ShortName = "b")] bool flagB)
+                [Option(ShortName = "a", LongName = null)] bool flagA,
+                [Option(ShortName = "b", LongName = null)] bool flagB)
             {
             }
 
