@@ -9,11 +9,9 @@ namespace CommandDotNet.Tests.FeatureTests
 {
     public class ExceptionHandlingTests
     {
-        private readonly ITestOutputHelper _output;
-
         public ExceptionHandlingTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         [Theory]

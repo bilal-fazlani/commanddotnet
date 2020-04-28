@@ -40,24 +40,5 @@ namespace CommandDotNet.TestTools
             Config = config;
             EscapedException = escapedException;
         }
-
-        [Obsolete("Assert result.Console.AllText() instead")]
-        public void OutputShouldBe(string expected)
-        {
-            Console.AllText().ShouldBe(expected, "output");
-        }
-
-        [Obsolete("Assert result.Console.AllText() instead")]
-        public bool OutputContains(string expected)
-        {
-            var actual = Console.AllText();
-            return actual.Contains(expected);
-        }
-
-        [Obsolete("Assert result.Console.AllText() instead")]
-        public bool OutputNotContains(string expected)
-        {
-            return !OutputContains(expected);
-        }
     }
 }

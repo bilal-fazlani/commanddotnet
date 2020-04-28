@@ -89,22 +89,8 @@ namespace CommandDotNet
             set => DefaultArgumentMode = value;
         }
 
-        [Obsolete("Use IgnoreUnexpectedArguments instead")]
-        public bool ThrowOnUnexpectedArgument
-        {
-            get => !IgnoreUnexpectedOperands;
-            set => IgnoreUnexpectedOperands = !value;
-        }
-
         [Obsolete("this is only used to display the arg separator in help. it does not make the separated arguments available for use.")]
         public bool AllowArgumentSeparator { get; set; }
-
-        [Obsolete("Use Help.TextStyle")]
-        public HelpTextStyle HelpTextStyle
-        {
-            get => Help.TextStyle;
-            set => Help.TextStyle = value;
-        }
 
         #endregion
 
