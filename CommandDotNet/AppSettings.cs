@@ -45,7 +45,7 @@ namespace CommandDotNet
         /// The default <see cref="ArgumentSeparatorStrategy"/>.
         /// This can be overridden for a <see cref="Command"/> using the <see cref="CommandAttribute"/>
         /// </summary>
-        public ArgumentSeparatorStrategy DefaultArgumentSeparatorStrategy { get; set; } = ArgumentSeparatorStrategy.PassThru;
+        public ArgumentSeparatorStrategy DefaultArgumentSeparatorStrategy { get; set; } = ArgumentSeparatorStrategy.EndOfOptions;
 
         /// <summary>
         /// When arguments are not decorated with [Operand] or [Option]
@@ -79,13 +79,6 @@ namespace CommandDotNet
         /// from the commandline to the parameter & property types for the command methods.
         /// </summary>
         public ArgumentTypeDescriptors ArgumentTypeDescriptors { get; internal set; } = new ArgumentTypeDescriptors();
-
-        #region Obsolete Members
-
-        [Obsolete("this is only used to display the arg separator in help. it does not make the separated arguments available for use.")]
-        public bool AllowArgumentSeparator { get; set; }
-
-        #endregion
 
         public override string ToString()
         {

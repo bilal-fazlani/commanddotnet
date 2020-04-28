@@ -9,13 +9,13 @@ namespace CommandDotNet
     public enum ArgumentSeparatorStrategy
     {
         /// <summary>
-        /// Arguments after the argument separator '--' are added to <see cref="ParseResult.SeparatedArguments"/>
-        /// </summary>
-        PassThru,
-        /// <summary>
         /// Arguments after the argument separator '--' are parsed as operands
         /// and also added to <see cref="ParseResult.SeparatedArguments"/>
         /// </summary>
-        EndOfOptions
+        EndOfOptions,
+        /// <summary>
+        /// Arguments after the argument separator '--' are added to <see cref="ParseResult.SeparatedArguments"/>
+        /// </summary>
+        PassThru
     }
 }
