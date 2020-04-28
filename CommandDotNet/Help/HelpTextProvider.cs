@@ -35,7 +35,7 @@ namespace CommandDotNet.Help
             var usage = PadFront(command.Usage)
                            ?? $"{PadFront(AppName(command))}{PadFront(CommandPath(command))}"
                            + $"{PadFront(UsageSubcommand(command))}{PadFront(UsageOption(command))}{PadFront(UsageOperand(command))}"
-                           + (_appSettings.AllowArgumentSeparator ? " [[--] <arg>...]" : null);
+                           + (command.GetArgumentSeparatorStrategy(_appSettings) == ArgumentSeparatorStrategy.PassThru ? " [[--] <arg>...]" : null);
             return usage?.Replace("%UsageAppName%", AppName(command));
         }
 
