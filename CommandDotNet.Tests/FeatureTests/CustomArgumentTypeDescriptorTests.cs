@@ -28,7 +28,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 When = {Args = "Do -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll Do [arguments]
+                    Output = @"Usage: dotnet testhost.dll Do <square>
 
 Arguments:
   square
@@ -45,7 +45,7 @@ Arguments:
                 When = {Args = "Do -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll Do [arguments]
+                    Output = @"Usage: dotnet testhost.dll Do <square>
 
 Arguments:
 

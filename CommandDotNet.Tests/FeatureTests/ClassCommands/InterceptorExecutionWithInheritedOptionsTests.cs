@@ -67,7 +67,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     When = {Args = "Do -h"},
                     Then =
                     {
-                        Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                        Output = @"Usage: dotnet testhost.dll Do [options] <arg1>
 
 Arguments:
 
