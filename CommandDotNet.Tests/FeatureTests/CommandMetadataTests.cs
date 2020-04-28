@@ -174,7 +174,7 @@ cmd extended help
         }
 
         // sanity check for ApplicationMetadata until it has been removed 
-        [ApplicationMetadata(
+        [Command(
             Description = "app description",
             Usage = "some usage examples",
             Name = "SomeApp",
