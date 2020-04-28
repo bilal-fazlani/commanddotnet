@@ -26,7 +26,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     When = {Args = "Do -h"},
                     Then =
                     {
-                        Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                        Output = @"Usage: dotnet testhost.dll Do [options] <intOperand>
 
 Arguments:
   intOperand
@@ -47,7 +47,7 @@ Options:
                     When = {Args = "Do -h"},
                     Then =
                     {
-                        Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                        Output = @"Usage: dotnet testhost.dll Do [options] <intOperand>
 
 Arguments:
 

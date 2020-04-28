@@ -22,7 +22,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<App>(BasicHelp).Verify(new Scenario
             {
                 When = {Args = "EnumerableModel -h"},
-                Then = { Output = @"Usage: dotnet testhost.dll EnumerableModel [options] [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll EnumerableModel [options] <Operands>
 
 Arguments:
   Operands
@@ -39,7 +39,7 @@ Options:
             new AppRunner<App>(DetailedHelp).Verify(new Scenario
             {
                 When = {Args = "EnumerableModel -h"},
-                Then = { Output = @"Usage: dotnet testhost.dll EnumerableModel [options] [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll EnumerableModel [options] <Operands>
 
 Arguments:
 
@@ -58,7 +58,7 @@ Options:
             new AppRunner<App>(BasicHelp).Verify(new Scenario
             {
                 When = {Args = "Enumerable -h"},
-                Then = {Output = @"Usage: dotnet testhost.dll Enumerable [options] [arguments]
+                Then = {Output = @"Usage: dotnet testhost.dll Enumerable [options] <operands>
 
 Arguments:
   operands
@@ -75,7 +75,7 @@ Options:
             new AppRunner<App>(DetailedHelp).Verify(new Scenario
             {
                 When = {Args = "Enumerable -h"},
-                Then = {Output = @"Usage: dotnet testhost.dll Enumerable [options] [arguments]
+                Then = {Output = @"Usage: dotnet testhost.dll Enumerable [options] <operands>
 
 Arguments:
 

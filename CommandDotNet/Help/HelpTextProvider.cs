@@ -46,12 +46,43 @@ namespace CommandDotNet.Help
         protected virtual string CommandPath(Command command) => command.GetPath();
 
         /// <summary>How operands are shown in the usage example</summary>
-        protected virtual string UsageOperand(Command command) =>
-            command.Operands.Any()
-                ? _appHelpSettings.ExpandArgumentsInUsage
-                    ? command.Operands.Select(o => o.Arity.Minimum == 0 ? $"[<{o.Name}>]" : $"<{o.Name}>").ToCsv(" ")
-                    : "[arguments]"
-                : null;
+        protected virtual string UsageOperand(Command command)
+        {
+            if (!command.Operands.Any())
+            {
+                return null;
+            }
+
+            if (!_appHelpSettings.ExpandArgumentsInUsage)
+            {
+                return "[arguments]";
+            }
+
+            if (command.Operands.Last().Arity.Minimum > 0)
+            {
+                return command.Operands.Select(o => $"<{o.Name}>").ToCsv(" ");
+            }
+
+            var sb = new StringBuilder("]");
+            bool inOptionalRegion = true;
+            foreach (var operand in command.Operands.Reverse())
+            {
+                if (inOptionalRegion && operand.Arity.Minimum > 0)
+                {
+                    // remove leading space
+                    sb.Remove(0, 1);
+                    sb.Insert(0, " [");
+                    inOptionalRegion = false;
+                }
+                sb.Insert(0, $" <{operand.Name}>");
+            }
+            sb.Remove(0, 1);
+            if (inOptionalRegion)
+            {
+                sb.Insert(0, "[");
+            }
+            return sb.ToString();
+        }
 
         /// <summary>How options are shown in the usage example</summary>
         protected virtual string UsageOption(Command command) =>

@@ -22,7 +22,7 @@ namespace CommandDotNet.Help
         /// <summary>
         /// When true, the usage section will expand arguments so the names of all arguments are shown.
         /// </summary>
-        public bool ExpandArgumentsInUsage { get; set; }
+        public bool ExpandArgumentsInUsage { get; set; } = true;
 
         public override string ToString()
         {

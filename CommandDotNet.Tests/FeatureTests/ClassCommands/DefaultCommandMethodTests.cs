@@ -64,7 +64,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 When = {Args = "-h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll [command] [arguments]
+                    Output = @"Usage: dotnet testhost.dll [command] <text>
 
 Arguments:
   text  some text
@@ -86,7 +86,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 When = {Args = "-h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll [command] [arguments]
+                    Output = @"Usage: dotnet testhost.dll [command] <text>
 
 Arguments:
 

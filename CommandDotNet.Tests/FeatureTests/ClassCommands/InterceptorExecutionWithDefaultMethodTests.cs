@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                     When = {Args = "-h"},
                     Then =
                     {
-                        Output = @"Usage: dotnet testhost.dll [command] [arguments]
+                        Output = @"Usage: dotnet testhost.dll [command] <defaultArg>
 
 Arguments:
 
@@ -49,7 +49,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     When = {Args = "Do -h"},
                     Then =
                     {
-                        Output = @"Usage: dotnet testhost.dll Do [arguments]
+                        Output = @"Usage: dotnet testhost.dll Do <arg1>
 
 Arguments:
 
@@ -68,7 +68,7 @@ Arguments:
                     When = {Args = "-h"},
                     Then =
                     {
-                        Output = @"Usage: dotnet testhost.dll [command] [options] [arguments]
+                        Output = @"Usage: dotnet testhost.dll [command] [options] <defaultArg>
 
 Arguments:
 
@@ -103,7 +103,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     When = {Args = "Do -h"},
                     Then =
                     {
-                        Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                        Output = @"Usage: dotnet testhost.dll Do [options] <arg1>
 
 Arguments:
 
