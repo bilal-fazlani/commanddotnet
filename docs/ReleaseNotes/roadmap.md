@@ -7,7 +7,7 @@ will result in breaking changes to behavior or the API.
 
 ### Features
 * default `AppSettings.ExpandArgumentsInUsage` to true.
-* default `AppSettings.LongNameAlwaysDefaultsToSymbolName` to true.
+* default `AppSettings.LongNameAlwaysDefaultsToSymbolName` to true and setting removed.
 * default `AppSettings.DefaultArgumentSeparatorStrategy` to `EndOfOptions`.
 
 ### API

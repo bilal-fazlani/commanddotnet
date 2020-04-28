@@ -28,14 +28,6 @@ namespace CommandDotNet
         }
 
         /// <summary>
-        /// Note: This setting will become the the default behavior in the next major release.<br/>
-        ///       Set to true now to reduce future upgrade churn.<br/>
-        /// When true, setting <see cref="OptionAttribute.ShortName"/> does not nullify the LongName defaulted from the parameter or property.<br/>
-        /// Setting <see cref="OptionAttribute.LongName"/> to null will ensure the option has only a short name.
-        /// </summary>
-        public bool LongNameAlwaysDefaultsToSymbolName { get; set; }
-
-        /// <summary>
         /// When false, unexpected operands will generate a parse failure.<br/>
         /// When true, unexpected arguments will be ignored and added to <see cref="ParseResult.RemainingOperands"/><br/>
         /// </summary>

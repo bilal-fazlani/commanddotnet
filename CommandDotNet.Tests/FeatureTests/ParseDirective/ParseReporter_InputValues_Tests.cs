@@ -155,7 +155,7 @@ options:
     inputs: fishies (from: @{file} -> --lala:fishies -> --lala fishies)
     default:
 
-  l <Text>
+  optList <Text>
     value: red, blue, green
     inputs: red (from: @{file} -> -l red), blue (from: @{file} -> -l blue), green (from: @{file} -> -l green)
     default:
@@ -173,8 +173,8 @@ Use [parse:t] to include token transformations.
                 IConsole console,
                 [Operand] string opd,
                 [Operand] List<string> opdList,
-                [Option(ShortName = "a")] bool optA = false,
-                [Option(ShortName = "b")] bool optB = false,
+                [Option(ShortName = "a", LongName = null)] bool optA = false,
+                [Option(ShortName = "b", LongName = null)] bool optB = false,
                 [Option] string lala = null,
                 [Option(ShortName = "l")] List<string> optList = null)
             {

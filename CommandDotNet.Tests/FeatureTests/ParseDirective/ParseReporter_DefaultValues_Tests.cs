@@ -59,7 +59,7 @@ options:
     inputs:
     default: source=AppSetting key=--opt: hoo
 
-  l <Text>
+  optList <Text>
     value: four, five, six
     inputs:
     default: source=EnvVar key=optList: four, five, six
@@ -101,7 +101,7 @@ options:
     inputs:
     default: fishies
 
-  l <Text>
+  optList <Text>
     value: one, two, three
     inputs:
     default: one, two, three

@@ -273,7 +273,6 @@ AppRunner<App>:
         UsageAppName: 
         UsageAppNameStyle: Adaptive
       IgnoreUnexpectedOperands: False
-      LongNameAlwaysDefaultsToSymbolName: False
     DependencyResolver: CommandDotNet.TestTools.TestDependencyResolver
     HelpProvider: CommandDotNet.Help.HelpTextProvider
     TokenTransformations:
