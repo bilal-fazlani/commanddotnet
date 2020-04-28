@@ -13,10 +13,6 @@ namespace CommandDotNet.Help
         /// <summary>"dotnet {fileName}"</summary>
         DotNet,
 
-        /// <summary>"{rootCommand.CommandAttribute.Name}"</summary>
-        [Obsolete("configure via AppSettings.Help.UsageAppName instead")]
-        GlobalTool,
-
         /// <summary>"{fileName}"</summary>
         Executable
     }

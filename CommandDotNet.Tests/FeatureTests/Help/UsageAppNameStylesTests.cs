@@ -11,18 +11,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         {
             Ambient.Output = output;
         }
-
-        [Fact]
-        public void GlobalToolStyleUsesGlobalToolStyle()
-        {
-            var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.GlobalTool } };
-            new AppRunner<WithAppMetadataName>(appSettings).Verify(new Scenario
-            {
-                When = {Args = "-h"},
-                Then = { OutputContainsTexts = { "Usage: AppName" } }
-            });
-        }
-
+        
         [Fact]
         public void DotNetStyleUsesDotNetStyle()
         {
@@ -53,22 +42,6 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             {
                 When = {Args = "-h"},
                 Then = { OutputContainsTexts = { "Usage: dotnet testhost.dll" } }
-            });
-        }
-
-        [Fact]
-        public void GlobalToolStyleThrowsConfigurationException()
-        {
-            var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.GlobalTool } };
-            new AppRunner<WithoutAppMetadatName>(appSettings).Verify(new Scenario
-            {
-                When = {Args = "-h"},
-                Then =
-                {
-                    ExitCode = 1,
-                    OutputContainsTexts = { $"Invalid configuration: {nameof(CommandAttribute)}.{nameof(CommandAttribute.Name)} is required " +
-                                             $"for the root command when {nameof(UsageAppNameStyle)}.{nameof(UsageAppNameStyle.GlobalTool)} is specified." }
-                }
             });
         }
 
