@@ -34,8 +34,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 case ArgumentMode.Operand:
                     return attributeProvider.HasAttribute<OptionAttribute>();
                 case ArgumentMode.Option:
-                    return !attributeProvider.HasAttribute<OperandAttribute>()
-                           && !attributeProvider.HasAttribute<ArgumentAttribute>();
+                    return !attributeProvider.HasAttribute<OperandAttribute>();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(argumentMode), argumentMode, null);
             }
