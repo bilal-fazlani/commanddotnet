@@ -24,8 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
                             Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
 
 Arguments:
-  operand   operand-descr
-  argument  argument-descr
+  operand  operand-descr
 
 Options:
   --option  option-descr
@@ -48,11 +47,8 @@ Options:
 
 Arguments:
 
-  operand   <TEXT>
+  operand  <TEXT>
   operand-descr
-
-  argument  <TEXT>
-  argument-descr
 
 Options:
 
@@ -67,8 +63,7 @@ Options:
         {
             public void Do(
                 [Option(Description = "option-descr")] string option,
-                [Operand(Description = "operand-descr")] string operand,
-                [Argument(Description = "argument-descr")] string argument) { }
+                [Operand(Description = "operand-descr")] string operand) { }
         }
     }
 }
