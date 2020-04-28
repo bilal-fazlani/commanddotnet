@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.Linq;
 using CommandDotNet.Diagnostics;
 using CommandDotNet.FluentValidation;

@@ -69,7 +69,7 @@ namespace CommandDotNet.TypeDescriptors
                        Environment.NewLine +
                        $"If it is an argument model, inherit from {nameof(IArgumentModel)}. " + 
                        Environment.NewLine +
-                       $"If it is a service and not an argument, register using " +
+                       "If it is a service and not an argument, register using " +
                        $"{nameof(AppRunner)}.{nameof(AppRunner.Configure)}(b => b.{nameof(AppConfigBuilder.UseParameterResolver)}(ctx => ...)); " +
                        Environment.NewLine +
                        "Otherwise, to support this type, " +

@@ -213,8 +213,8 @@ Arguments:
                     AssertContext = ctx => ctx.ParamValuesShouldBe(
                         new OperandsNoDefaultsSampleTypesModel
                         {
-                            StructArg = default(int),
-                            EnumArg = default(DayOfWeek),
+                            StructArg = default,
+                            EnumArg = default,
                         })
                 }
             });

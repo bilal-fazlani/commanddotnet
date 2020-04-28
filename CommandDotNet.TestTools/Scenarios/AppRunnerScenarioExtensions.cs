@@ -26,7 +26,6 @@ namespace CommandDotNet.TestTools.Scenarios
             logLine = logLine ?? Console.WriteLine;
             config = config ?? TestConfig.Default;
 
-            AppRunnerResult results = null;
             var args = scenario.When.ArgsArray ?? scenario.When.Args.SplitArgs();
 
             var origOnSuccess = config.OnSuccess;
@@ -41,7 +40,7 @@ namespace CommandDotNet.TestTools.Scenarios
                     c.OnError.CaptureAndReturnResult = true;
                 });
             }
-            results = appRunner.RunInMem(
+            var results = appRunner.RunInMem(
                 args,
                 logLine,
                 scenario.When.OnReadLine,
@@ -65,7 +64,7 @@ namespace CommandDotNet.TestTools.Scenarios
 
                 results.LogResult(logLine);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 results.LogResult(logLine, onError: true);
                 throw;
@@ -103,7 +102,7 @@ namespace CommandDotNet.TestTools.Scenarios
             if (missingHelpTexts.Count > 0)
             {
                 sb.AppendLine();
-                sb.AppendLine($"Missing text in output:");
+                sb.AppendLine("Missing text in output:");
                 foreach (var text in missingHelpTexts)
                 {
                     sb.AppendLine();
@@ -120,7 +119,7 @@ namespace CommandDotNet.TestTools.Scenarios
             if (unexpectedHelpTexts.Count > 0)
             {
                 sb.AppendLine();
-                sb.AppendLine($"Unexpected text in output:");
+                sb.AppendLine("Unexpected text in output:");
                 foreach (var text in unexpectedHelpTexts)
                 {
                     sb.AppendLine();

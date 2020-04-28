@@ -29,7 +29,8 @@ namespace CommandDotNet
             bool excludeResponseFiles = false,
             bool excludeVersionMiddleware = false,
             bool excludeAppendPipedInputToOperandList = false,
-            bool excludeTypoSuggestions = false)
+            bool excludeTypoSuggestions = false,
+            bool excludeCommandLoggerAsDirective = false)
         {
             if (!excludeCancellationHandlers) appRunner.UseCancellationHandlers();
             if (!excludeDebugDirective) appRunner.UseDebugDirective();
@@ -39,6 +40,7 @@ namespace CommandDotNet
             if (!excludeVersionMiddleware) appRunner.UseVersionMiddleware();
             if (!excludeAppendPipedInputToOperandList) appRunner.AppendPipedInputToOperandList();
             if (!excludeTypoSuggestions) appRunner.UseTypoSuggestions();
+            if (!excludeCommandLoggerAsDirective) appRunner.UseCommandLogger();
 
             return appRunner;
         }
@@ -88,10 +90,6 @@ namespace CommandDotNet
         /// the <see cref="ResolveStrategy"/> used to resolve <see cref="IArgumentModel"/>s.</param>
         /// <param name="commandClassResolveStrategy">
         /// the <see cref="ResolveStrategy"/> used to resolve command classes. </param>
-        /// <param name="useLegacyInjectDependenciesAttribute"> 
-        /// when true, resolve instances for properties marked with [InjectProperty].
-        /// This feature is deprecated and may be removed with next major release.
-        /// </param>
         public static AppRunner UseDependencyResolver(
             this AppRunner appRunner, 
             IDependencyResolver dependencyResolver,
@@ -203,6 +201,12 @@ namespace CommandDotNet
             params Func<IArgument, ArgumentDefault>[] getDefaultValueCallbacks)
             => SetArgumentDefaultsMiddleware.SetArgumentDefaultsFrom(appRunner, getDefaultValueCallbacks);
 
+        /// <summary></summary>
+        /// <param name="appRunner">The <see cref="AppRunner"/></param>
+        /// <param name="writerFactory">If null, `cmdlog` directive is enabled without Console.Out as the target</param>
+        /// <param name="excludeSystemInfo">Exclude machine name, username, OS, .net version and tool version</param>
+        /// <param name="includeAppConfig">Prints the entire app configuration</param>
+        /// <param name="additionalInfoCallback">Additional information to include.</param>
         public static AppRunner UseCommandLogger(this AppRunner appRunner,
             Func<CommandContext, Action<string>> writerFactory = null,
             bool excludeSystemInfo = false,
@@ -232,7 +236,7 @@ namespace CommandDotNet
         {
             if (appRunner.AppSettings.DisableDirectives)
             {
-                throw new AppRunnerException($"Directives are not enabled.  " +
+                throw new AppRunnerException("Directives are not enabled. " +
                                              $"{nameof(AppRunner)}.{nameof(AppRunner.AppSettings)}.{nameof(AppSettings.DisableDirectives)} " +
                                              "must not be set to true");
             }

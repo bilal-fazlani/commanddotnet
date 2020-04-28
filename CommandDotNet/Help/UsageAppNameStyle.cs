@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CommandDotNet.Help
+﻿namespace CommandDotNet.Help
 {
     public enum UsageAppNameStyle
     {

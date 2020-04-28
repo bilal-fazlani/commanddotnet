@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using CommandDotNet.Directives;
 using CommandDotNet.Execution;
 
 namespace CommandDotNet.Diagnostics

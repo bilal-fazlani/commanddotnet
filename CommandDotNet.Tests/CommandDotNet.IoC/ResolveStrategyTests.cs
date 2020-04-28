@@ -19,7 +19,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         {
             Assert.Throws<Exception>(() => new AppRunner<App>()
                     .UseDependencyResolver(new TestDependencyResolver())
-                    .Run(new[] {"Do"}))
+                    .Run("Do"))
                 .Message.Should().Contain(
                     "Dependency not registered: CommandDotNet.Tests.CommandDotNet.IoC.ResolveStrategyTests+App");
         }
@@ -67,7 +67,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         {
             Assert.Throws<ResolverReturnedNullException>(() => new AppRunner<App>()
                     .UseDependencyResolver(new TestDependencyResolver { new App(), (ArgModel)null }, argumentModelResolveStrategy: ResolveStrategy.ResolveOrThrow)
-                    .Run(new[] { "Do" })
+                    .Run("Do")
             ).Message.Should().Contain("The resolver returned null for type 'CommandDotNet.Tests.CommandDotNet.IoC.ResolveStrategyTests+ArgModel'");
         }
 

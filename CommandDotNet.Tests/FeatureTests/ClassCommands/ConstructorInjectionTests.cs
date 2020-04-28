@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using CommandDotNet.Rendering;
-using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using FluentAssertions;
 using Xunit;

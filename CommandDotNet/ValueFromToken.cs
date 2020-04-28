@@ -1,5 +1,4 @@
-﻿using System;
-using CommandDotNet.Tokens;
+﻿using CommandDotNet.Tokens;
 
 namespace CommandDotNet
 {

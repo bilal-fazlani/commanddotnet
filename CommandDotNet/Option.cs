@@ -186,7 +186,7 @@ namespace CommandDotNet
         private bool Equals(Option other)
         {
             return string.Equals(LongName, other.LongName) 
-                   && string.Equals(ShortName, other.ShortName);
+                   && Equals(ShortName, other.ShortName);
         }
 
         public override bool Equals(object obj)

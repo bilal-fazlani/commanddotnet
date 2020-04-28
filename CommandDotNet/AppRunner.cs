@@ -37,13 +37,12 @@ namespace CommandDotNet
     /// </summary>
     public class AppRunner : IIndentableToString
     {
+        private AppConfig _appConfig;
         private readonly AppConfigBuilder _appConfigBuilder;
         private HandleErrorDelegate _handleErrorDelegate;
 
         public AppSettings AppSettings { get; }
         public Type RootCommandType { get; }
-
-        internal AppConfig AppConfig { get; private set; }
 
         static AppRunner() => LogProvider.IsDisabled = true;
 
@@ -116,7 +115,7 @@ namespace CommandDotNet
         private CommandContext BuildCommandContext(string[] args)
         {
             var tokens = args.Tokenize(includeDirectives: !AppSettings.DisableDirectives);
-            var appConfig = AppConfig ?? (AppConfig = _appConfigBuilder.Build());
+            var appConfig = _appConfig ?? (_appConfig = _appConfigBuilder.Build());
             var commandContext = new CommandContext(args, tokens, appConfig);
             return commandContext;
         }
@@ -178,9 +177,9 @@ namespace CommandDotNet
 
         public string ToString(Indent indent)
         {
-            return AppConfig == null
+            return _appConfig == null
                 ? $"{indent}{nameof(AppRunner)}<{RootCommandType.Name}>"
-                : $"{indent}{nameof(AppRunner)}<{RootCommandType.Name}>:{Environment.NewLine}{indent.Increment()}{AppConfig.ToString(indent.Increment())}";
+                : $"{indent}{nameof(AppRunner)}<{RootCommandType.Name}>:{Environment.NewLine}{indent.Increment()}{_appConfig.ToString(indent.Increment())}";
         }
     }
 }

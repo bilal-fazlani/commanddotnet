@@ -15,6 +15,7 @@ namespace CommandDotNet
         /// <summary> Return all <see cref="Operand"/>s and <see cref="Option"/>s for the command</summary>
         /// <param name="command">The command</param>
         /// <param name="includeInterceptorOptions">When true, includes options from interceptors of all parent commands</param>
+        /// <param name="excludeHiddenOptions">When true, hidden options like Help are not included</param>
         public static IEnumerable<IArgument> AllArguments(this Command command, 
             bool includeInterceptorOptions = false, bool excludeHiddenOptions = false)
         {
