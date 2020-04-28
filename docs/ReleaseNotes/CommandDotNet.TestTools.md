@@ -1,6 +1,10 @@
 # CommandDotNet.TestTools
 
-## 2.1.0
+## 3.0.0
+
+Remove obsoleted TestCaptures class
+
+## 2.1.1
 
 ### Getting invocations in tests
 

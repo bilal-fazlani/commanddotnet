@@ -4,8 +4,11 @@ The argument separater `--` has been adopted by various tools to serve two diffe
 
 Use `AppSettings.DefaultArgumentSeparatorStrategy` to specify the which strategy to use.
 
-* v3 default is `PassThru` to prevent breaking behavior.
-* v4 default will be `EndOfOptions` so that by default users are enabled to enter any value as an operand.
+The default is `EndOfOptions` so that by default users have it as a fallback to enter any value as an operand.
+
+The strategy an be changed for a command using the `Command` attribute: `[Command(ArgumentSeparatorStrategy=ArgumentSeparatorStrategy.PassThru)]`.
+
+We recommend leaving the default as `EndOfOptions` and overriding on the `Command` as needed.
 
 ## End of Options Indicator
 
@@ -64,6 +67,8 @@ is equivalent to
 ```bash
 imageconv.exe --input sunrise.CR2 --output sunrise.JPG
 ```
+
+Help will append ` [[--] <arg>...]` to the usage example when `PassThru` is used.
 
 ## How to support both?
 
