@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using CommandDotNet.Builders;
 using CommandDotNet.Builders.ArgumentDefaults;
 using CommandDotNet.ClassModeling.Definitions;
@@ -98,11 +97,10 @@ namespace CommandDotNet
             IDependencyResolver dependencyResolver,
             Func<CommandContext, IDisposable> runInScope = null,
             ResolveStrategy argumentModelResolveStrategy = ResolveStrategy.TryResolve,
-            ResolveStrategy commandClassResolveStrategy = ResolveStrategy.Resolve,
-            bool useLegacyInjectDependenciesAttribute = false)
+            ResolveStrategy commandClassResolveStrategy = ResolveStrategy.Resolve)
         {
             DependencyResolverMiddleware.UseDependencyResolver(appRunner, dependencyResolver,
-                argumentModelResolveStrategy, commandClassResolveStrategy, useLegacyInjectDependenciesAttribute);
+                argumentModelResolveStrategy, commandClassResolveStrategy);
 
             if (runInScope != null)
             {

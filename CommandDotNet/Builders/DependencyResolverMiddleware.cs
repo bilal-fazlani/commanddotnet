@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using CommandDotNet.Execution;
-using CommandDotNet.Extensions;
+﻿using CommandDotNet.Execution;
 
 namespace CommandDotNet.Builders
 {
@@ -9,8 +6,7 @@ namespace CommandDotNet.Builders
     {
         internal static AppRunner UseDependencyResolver(AppRunner appRunner, IDependencyResolver dependencyResolver,
             ResolveStrategy argumentModelResolveStrategy,
-            ResolveStrategy commandClassResolveStrategy,
-            bool useLegacyInjectDependenciesAttribute)
+            ResolveStrategy commandClassResolveStrategy)
         {
             return appRunner.Configure(c =>
             {
@@ -20,36 +16,7 @@ namespace CommandDotNet.Builders
                     ArgumentModelResolveStrategy = argumentModelResolveStrategy,
                     CommandClassResolveStrategy = commandClassResolveStrategy
                 });
-                if (useLegacyInjectDependenciesAttribute)
-                {
-                    c.UseMiddleware(LegacyInjectPropertiesDependencies, MiddlewareStages.PostBindValuesPreInvoke);
-                }
             });
-        }
-
-        internal static Task<int> LegacyInjectPropertiesDependencies(CommandContext commandContext, ExecutionDelegate next)
-        {
-            var resolver = commandContext.AppConfig.DependencyResolver;
-            if (resolver != null)
-            {
-                commandContext.InvocationPipeline.All
-                    .Select(i => i.Instance)
-                    .ForEach(instance =>
-                    {
-                        //detect injection properties
-                        var properties = instance.GetType().GetDeclaredProperties<InjectPropertyAttribute>().ToList();
-
-                        if (properties.Any())
-                        {
-                            foreach (var propertyInfo in properties)
-                            {
-                                propertyInfo.SetValue(instance, resolver.Resolve(propertyInfo.PropertyType));
-                            }
-                        }
-                    });
-            }
-
-            return next(commandContext);
         }
     }
 }
