@@ -82,13 +82,6 @@ namespace CommandDotNet
 
         #region Obsolete Members
 
-        [Obsolete("Use DefaultArgumentMode instead")]
-        public ArgumentMode MethodArgumentMode
-        {
-            get => DefaultArgumentMode;
-            set => DefaultArgumentMode = value;
-        }
-
         [Obsolete("this is only used to display the arg separator in help. it does not make the separated arguments available for use.")]
         public bool AllowArgumentSeparator { get; set; }
 
