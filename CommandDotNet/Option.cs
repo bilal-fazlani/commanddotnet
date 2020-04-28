@@ -19,25 +19,6 @@ namespace CommandDotNet
 
         private readonly HashSet<string> _aliases;
 
-        [Obsolete("Use ctor without 'Command parent' parameter")]
-        public Option(
-            string longName,
-            char? shortName,
-            Command parent,
-            TypeInfo typeInfo,
-            IArgumentArity arity,
-            string definitionSource = null,
-            IEnumerable<string> aliases = null,
-            ICustomAttributeProvider customAttributes = null,
-            bool isInterceptorOption = false,
-            bool assignToExecutableSubcommands = false,
-            ValueProxy valueProxy = null)
-            : this(longName, shortName, typeInfo, arity, definitionSource, aliases, customAttributes,
-                isInterceptorOption, assignToExecutableSubcommands, valueProxy)
-        {
-            _parent = parent ?? throw new ArgumentNullException(nameof(parent));
-        }
-
         public Option(
             string longName,
             char? shortName,
@@ -116,15 +97,6 @@ namespace CommandDotNet
         /// <summary>The <see cref="IArgumentArity"/> for this argument, describing how many values are allowed.</summary>
         public IArgumentArity Arity { get; set; }
 
-        [Obsolete("Use Default instead. This enable middleware and custom help providers to report the source of a default value")]
-        public object DefaultValue
-        {
-            get => Default?.Value;
-            set => Default = value == null 
-                ? null 
-                : new ArgumentDefault($"{nameof(Option)}.{nameof(DefaultValue)}", "", value);
-        }
-
         /// <summary>The default value for this argument</summary>
         public ArgumentDefault Default { get; set; }
 
@@ -158,9 +130,6 @@ namespace CommandDotNet
                 }
             }
         }
-
-        [Obsolete("Use AssignToExecutableSubcommands instead")]
-        public bool Inherited => AssignToExecutableSubcommands;
 
         /// <summary>
         /// When true, this option is an Inherited option, defined by a command interceptor method

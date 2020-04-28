@@ -13,9 +13,6 @@ namespace CommandDotNet.Execution
 
         public int? OrderWithinStage { get; }
 
-        [Obsolete("Use OrderWithinStage instead")]
-        public int Order => OrderWithinStage.GetValueOrDefault();
-
         public MiddlewareStep(MiddlewareStages stage, int? orderWithinStage = null)
         {
             Stage = stage;

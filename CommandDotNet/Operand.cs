@@ -16,20 +16,6 @@ namespace CommandDotNet
         private object _value;
         private readonly ValueProxy _valueProxy;
 
-        [Obsolete("Use ctor without 'Command parent' parameter")]
-        public Operand(
-            string name,
-            Command parent,
-            TypeInfo typeInfo,
-            IArgumentArity arity,
-            string definitionSource = null,
-            ICustomAttributeProvider customAttributes = null,
-            ValueProxy valueProxy = null)
-            : this(name, typeInfo, arity, definitionSource, customAttributes, valueProxy)
-        {
-            _parent = parent ?? throw new ArgumentNullException(nameof(parent));
-        }
-
         public Operand(
             string name,
             TypeInfo typeInfo,
@@ -55,15 +41,6 @@ namespace CommandDotNet
 
         /// <summary>The <see cref="IArgumentArity"/> for this argument, describing how many values are allowed.</summary>
         public IArgumentArity Arity { get; set; }
-
-        [Obsolete("Use Default instead. This enable middleware and custom help providers to report the source of a default value")]
-        public object DefaultValue
-        {
-            get => Default?.Value; 
-            set => Default = value == null
-                ? null
-                : new ArgumentDefault($"{nameof(Operand)}.{nameof(DefaultValue)}", "", value);
-        }
 
         /// <summary>The default value for this argument</summary>
         public ArgumentDefault Default { get; set; }

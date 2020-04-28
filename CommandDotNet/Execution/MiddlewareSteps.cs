@@ -1,15 +1,10 @@
-﻿using System;
-
-namespace CommandDotNet.Execution
+﻿namespace CommandDotNet.Execution
 {
     public static class MiddlewareSteps
     {
         /// <summary>Runs first in the <see cref="MiddlewareStages.PreTokenize"/> stage</summary>
         public static MiddlewareStep DebugDirective { get; } = 
             new MiddlewareStep(MiddlewareStages.PreTokenize, int.MinValue + 1000);
-
-        [Obsolete("This step is no longer used for appRunner.UseErrorHandler.")]
-        public static MiddlewareStep ErrorHandler { get; } = DebugDirective + 100;
 
         /// <summary>
         /// Runs early in the <see cref="MiddlewareStages.PreTokenize"/> stage after <see cref="DebugDirective"/>
@@ -56,19 +51,6 @@ namespace CommandDotNet.Execution
                 new MiddlewareStep(MiddlewareStages.ParseInput, int.MaxValue);
             public static MiddlewareStep PrintHelpOnExit { get; } =
                 new MiddlewareStep(MiddlewareStages.PreTokenize, -10000);
-
-            [Obsolete("use Help.CheckIfShouldShowHelp or Help.PrintHelpOnExit")]
-            public static readonly MiddlewareStages Stage = CheckIfShouldShowHelp.Stage;
-
-            [Obsolete("use Help.CheckIfShouldShowHelp or Help.PrintHelpOnExit")]
-            public static readonly int Order = CheckIfShouldShowHelp.OrderWithinStage.GetValueOrDefault();
-
-            [Obsolete("use Help.PrintHelpOnExit")]
-            public static class PrintHelp
-            {
-                public static readonly MiddlewareStages Stage = MiddlewareStages.PreTokenize;
-                public static readonly int Order = -10000;
-            }
         }
 
         public static MiddlewareStep PipedInput { get; } =
