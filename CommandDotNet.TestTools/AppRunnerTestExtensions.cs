@@ -96,17 +96,16 @@ namespace CommandDotNet.TestTools
                     return next(commandContext);
                 }
                 runner.Configure(c => c.UseMiddleware(CaptureCommandContext, MiddlewareStages.PreTokenize));
-                var captures = InjectTestCaptures(runner);
 
                 try
                 {
                     var exitCode = runner.Run(args);
-                    return new AppRunnerResult(exitCode, runner, context, testConsole, captures, config)
+                    return new AppRunnerResult(exitCode, runner, context, testConsole, config)
                         .LogResult(logLine);
                 }
                 catch (Exception e)
                 {
-                    var result = new AppRunnerResult(1, runner, context, testConsole, captures, config, e);
+                    var result = new AppRunnerResult(1, runner, context, testConsole, config, e);
                     if (config.OnError.CaptureAndReturnResult)
                     {
                         testConsole.Error.WriteLine(e.Message);
@@ -157,46 +156,6 @@ namespace CommandDotNet.TestTools
             }
 
             return result;
-        }
-
-        private static TestCaptures InjectTestCaptures(AppRunner runner)
-        {
-            var outputs = new TestCaptures();
-            runner.Configure(c =>
-            {
-                c.Services.Add(outputs);
-                c.UseMiddleware(InjectTestCaptures, MiddlewareStages.PostBindValuesPreInvoke);
-            });
-
-            return outputs;
-        }
-
-        private static Task<int> InjectTestCaptures(CommandContext commandContext, ExecutionDelegate next)
-        {
-            var outputs = commandContext.AppConfig.Services.Get<TestCaptures>();
-            commandContext.InvocationPipeline.All
-                .Select(i => i.Instance)
-                .ForEach(instance =>
-                {
-                    instance.GetType()
-                        .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                        .Where(p => p.PropertyType == typeof(TestCaptures))
-                        .ForEach(p =>
-                        {
-                            // principal of least surprise
-                            // if the test class sets the instance, then use that instance
-                            var value = (TestCaptures)p.GetValue(instance);
-                            if (value == null)
-                            {
-                                p.SetValue(instance, outputs);
-                            }
-                            else
-                            {
-                                outputs.UseOutputsFromInstance(value);
-                            }
-                        });
-                });
-            return next(commandContext);
         }
     }
 }

@@ -18,22 +18,6 @@ namespace CommandDotNet.TestTools.Scenarios
         public List<string> OutputNotContainsTexts { get; set; } = new List<string>();
 
         /// <summary>
-        /// When true, then <see cref="Captured"/> does not need to contain
-        /// all of the outputs captured in the <see cref="TestCaptures"/>
-        /// </summary>
-        [Obsolete("Use AssertContext => ctx.GetCommandInvocation().ParameterValues " +
-                  "or ctx.GetInterceptorInvocation<T>().ParameterValues")]
-        public bool AllowUnspecifiedCaptures { get; set; }
-
-        /// <summary>
-        /// If specified, asserts all of the outputs are captured in the <see cref="TestCaptures"/>.
-        /// And asserts no additional outputs were captured unless <see cref="AllowUnspecifiedCaptures"/> is true.
-        /// </summary>
-        [Obsolete("Use AssertContext => ctx.GetCommandInvocation().ParameterValues " +
-                  "or ctx.GetInterceptorInvocation<T>().ParameterValues")]
-        public List<object> Captured { get; set; } = new List<object>();
-
-        /// <summary>
         /// A delegate to perform assertions on the <seealso cref="TestConsole.AllText"/>
         /// which includes the standard and error output streams.
         /// </summary>

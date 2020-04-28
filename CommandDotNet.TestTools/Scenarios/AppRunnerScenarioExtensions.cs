@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CommandDotNet.Extensions;
 
 namespace CommandDotNet.TestTools.Scenarios
 {
@@ -63,11 +61,6 @@ namespace CommandDotNet.TestTools.Scenarios
                 if (scenario.Then.Output != null)
                 {
                     results.Console.AllText().ShouldBe(scenario.Then.Output, "output");
-                }
-
-                if (scenario.Then.Captured.Count > 0)
-                {
-                    AssertCapturedItems(scenario, results);
                 }
 
                 results.LogResult(logLine);
@@ -133,31 +126,6 @@ namespace CommandDotNet.TestTools.Scenarios
                     sb.AppendLine();
                     sb.AppendLine($"  {text}");
                 }
-            }
-        }
-
-        private static void AssertCapturedItems(IScenario scenario, AppRunnerResult results)
-        {
-            foreach (var expectedOutput in scenario.Then.Captured)
-            {
-                var expectedType = expectedOutput.GetType();
-                var actualOutput = results.TestCaptures.Get(expectedType);
-                if (actualOutput == null)
-                {
-                    throw new AssertFailedException($"{expectedType.Name} should have been captured in the test run but wasn't");
-                }
-                actualOutput.ShouldBeEquivalentTo(expectedOutput, $"Captured {expectedType.Name}");
-            }
-
-            var actualOutputs = results.TestCaptures.Captured;
-            if (!scenario.Then.AllowUnspecifiedCaptures && actualOutputs.Count > scenario.Then.Captured.Count)
-            {
-                var expectedOutputTypes = new HashSet<Type>(scenario.Then.Captured.Select(o => o.GetType()));
-                var unexpectedTypes = actualOutputs.Keys
-                    .Where(t => !expectedOutputTypes.Contains(t))
-                    .ToOrderedCsv();
-
-                throw new AssertFailedException($"Unexpected captures: {unexpectedTypes}");
             }
         }
     }
