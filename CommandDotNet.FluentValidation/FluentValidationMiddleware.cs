@@ -14,7 +14,7 @@ namespace CommandDotNet.FluentValidation
             return appRunner.Configure(c =>
             {
                 c.Services.Add(new Config(showHelpOnError));
-                c.UseMiddleware(Middleware, MiddlewareStages.PostBindValuesPreInvoke);
+                c.UseMiddleware(Middleware, MiddlewareSteps.FluentValidation);
             });
         }
 

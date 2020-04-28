@@ -46,7 +46,7 @@ namespace CommandDotNet.NewerReleasesAlerts
                     OverrideHttpRequestCallback = overrideHttpRequestCallback,
                     SkipCommand = skipCommand
                 });
-                c.UseMiddleware(AlertOnNewVersion, MiddlewareStages.PostParseInputPreBindValues);
+                c.UseMiddleware(AlertOnNewVersion, MiddlewareSteps.NewerReleaseAlerts);
             });
         }
 

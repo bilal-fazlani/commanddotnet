@@ -128,11 +128,11 @@ namespace CommandDotNet.Tests.FeatureTests
 
             if (postBindValues != null)
             {
-                appRunner.Configure(c => c.UseMiddleware(postBindValues, MiddlewareStages.PostBindValuesPreInvoke, int.MaxValue));
+                appRunner.Configure(c => c.UseMiddleware(postBindValues, MiddlewareStages.PostBindValuesPreInvoke, short.MaxValue));
             }
             if (preBindValues != null)
             {
-                appRunner.Configure(c => c.UseMiddleware(preBindValues, MiddlewareStages.PostParseInputPreBindValues, int.MaxValue));
+                appRunner.Configure(c => c.UseMiddleware(preBindValues, MiddlewareStages.PostParseInputPreBindValues, short.MaxValue));
             }
 
             var args = $"NotifyOwner --Number {carNumber} --owner {ownerName}".SplitArgs();
