@@ -21,7 +21,7 @@ namespace CommandDotNet.Diagnostics
                     includeSystemInfo,
                     includeAppConfig,
                     additionalInfoCallback));
-                c.UseMiddleware(CommandLogger, MiddlewareStages.Invoke);
+                c.UseMiddleware(CommandLogger, MiddlewareSteps.CommandLogger);
             });
         }
 

@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using CommandDotNet.Diagnostics.Parse;
 using CommandDotNet.Execution;
@@ -20,7 +18,7 @@ namespace CommandDotNet.TestTools
         /// It is the responsibility of capture action to clone data to prevent mutation.
         /// </summary>
         public static AppRunner CaptureState(this AppRunner runner, Action<CommandContext> capture,
-            MiddlewareStages middlewareStage, int? orderWithinStage = null, bool exitAfterCapture = false)
+            MiddlewareStages middlewareStage, short? orderWithinStage = null, bool exitAfterCapture = false)
         {
             return runner.Configure(b => b.UseMiddleware((context, next) =>
             {
@@ -39,7 +37,7 @@ namespace CommandDotNet.TestTools
             Func<CommandContext, T> capture,
             Action<string> logLine = null,
             MiddlewareStages middlewareStage = MiddlewareStages.PostBindValuesPreInvoke,
-            int? orderWithinStage = null)
+            short? orderWithinStage = null)
         {
             T state = default;
             runner.CaptureState(
@@ -95,7 +93,7 @@ namespace CommandDotNet.TestTools
                     context = commandContext;
                     return next(commandContext);
                 }
-                runner.Configure(c => c.UseMiddleware(CaptureCommandContext, MiddlewareStages.PreTokenize));
+                runner.Configure(c => c.UseMiddleware(CaptureCommandContext, MiddlewareSteps.DebugDirective + 100));
 
                 try
                 {

@@ -14,8 +14,9 @@ namespace CommandDotNet
 {
     public class AppConfigBuilder
     {
-        private readonly SortedDictionary<MiddlewareStages, List<(ExecutionMiddleware middleware, int order)>> _middlewareByStage = 
-            new SortedDictionary<MiddlewareStages, List<(ExecutionMiddleware middleware, int order)>>();
+        private short _orderAdded = 0;
+        private readonly SortedDictionary<MiddlewareStages, List<(ExecutionMiddleware middleware, short order, short orderAdded)>> _middlewareByStage = 
+            new SortedDictionary<MiddlewareStages, List<(ExecutionMiddleware middleware, short order, short orderAdded)>>();
 
         private readonly Dictionary<string, TokenTransformation> _tokenTransformationsByName = 
             new Dictionary<string, TokenTransformation>();
@@ -125,12 +126,12 @@ namespace CommandDotNet
         /// Use <see cref="orderWithinStage"/> to specify order in relation
         /// to other middleware within the same stage.
         /// </summary>
-        public AppConfigBuilder UseMiddleware(ExecutionMiddleware middleware, MiddlewareStages stage, int? orderWithinStage = null)
+        public AppConfigBuilder UseMiddleware(ExecutionMiddleware middleware, MiddlewareStages stage, short? orderWithinStage = null)
         {
             var values = _middlewareByStage
-                .GetOrAdd(stage, s => new List<(ExecutionMiddleware middleware, int order)>());
+                .GetOrAdd(stage, s => new List<(ExecutionMiddleware, short, short)>());
             
-            values.Add((middleware, orderWithinStage ?? values.Count));
+            values.Add((middleware, orderWithinStage.GetValueOrDefault(), _orderAdded++));
 
             return this;
         }
@@ -145,9 +146,11 @@ namespace CommandDotNet
                 CancellationToken, _parameterResolversByType)
             {
                 MiddlewarePipeline = _middlewareByStage
-                    .SelectMany(kvp => kvp.Value.Select(v => new {stage = kvp.Key, v.order, v.middleware}) )
+                    .SelectMany(kvp => 
+                        kvp.Value.Select(v => new {stage = kvp.Key, v.order, v.orderAdded, v.middleware}) )
                     .OrderBy(m => m.stage)
                     .ThenBy(m => m.order)
+                    .ThenBy(m => m.orderAdded)
                     .Select(m => m.middleware).ToArray(),
                 TokenTransformations = _tokenTransformationsByName.Values.OrderBy(t => t.Order).ToArray()
             };

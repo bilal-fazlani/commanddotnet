@@ -83,13 +83,13 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                 appRunner.Configure(c =>
                     c.UseMiddleware((ctx, next) => 
                             throw new Exception("throwAtInvoke exception"),
-                        MiddlewareStages.Invoke, int.MinValue));
+                        MiddlewareStages.Invoke, short.MinValue));
             }
 
             appRunner.Configure(c => 
                 c.UseMiddleware((ctx, next) => 
                         throw new Exception("parse should exit before method invocation"),
-                MiddlewareStages.Invoke, int.MaxValue-1));
+                MiddlewareStages.Invoke, short.MaxValue-1));
 
             var result = appRunner
                 .UseParseDirective()
