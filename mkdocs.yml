@@ -71,6 +71,7 @@ nav:
       - ReleaseNotes/CommandDotNet.IoC.MicrosoftDependencyInjection.md
       - ReleaseNotes/CommandDotNet.IoC.SimpleInjector.md
       - ReleaseNotes/CommandDotNet.NameCasing.md
+      - ReleaseNotes/CommandDotNet.NewerReleaseAlerts.md
       - ReleaseNotes/CommandDotNet.TestTools.md
     - Roadmap: 
       - ReleaseNotes/roadmap.md

@@ -1,5 +1,9 @@
 # CommandDotNet.FluentValidation
 
+## 2.0.4
+
+add MiddlewareSteps.FluentValidation, declaring the stage and order within the stage the middleware is registered
+
 ## 2.0.3
 
 remove extra NewLine when help will not be shown
