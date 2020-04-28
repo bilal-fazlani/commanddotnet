@@ -9,6 +9,7 @@ using CommandDotNet.Builders;
 using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
+using CommandDotNet.Parsing;
 
 namespace CommandDotNet
 {

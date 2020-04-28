@@ -1,5 +1,6 @@
+using System;
 using System.Linq;
-using System.Runtime.InteropServices;
+using CommandDotNet.Execution;
 using CommandDotNet.Parsing;
 
 namespace CommandDotNet.TestTools
@@ -13,6 +14,7 @@ namespace CommandDotNet.TestTools
         public static InvocationInfo GetCommandInvocationInfo(this CommandContext ctx)
         {
             var step = ctx.InvocationPipeline?.TargetCommand;
+            AssertStepNotNull(step, nameof(InvocationPipeline.TargetCommand));
             return new InvocationInfo(ctx, step);
         }
 
@@ -23,9 +25,10 @@ namespace CommandDotNet.TestTools
         public static InvocationInfo<TCommandClass> GetCommandInvocationInfo<TCommandClass>(this CommandContext ctx)
         {
             var step = ctx.InvocationPipeline?.TargetCommand;
+            AssertStepNotNull(step, nameof(InvocationPipeline.TargetCommand));
             if (!(step.Instance is TCommandClass))
             {
-                throw new InvalidComObjectException(
+                throw new InvalidOperationException(
                     $"the {nameof(ctx.InvocationPipeline.TargetCommand)} is not hosted by " +
                     $"{step.Instance.GetType()} and cannot be cast to {typeof(TCommandClass)}");
             }
@@ -38,11 +41,12 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public static InvocationInfo<TInterceptorClass> GetInterceptorInvocationInfo<TInterceptorClass>(this CommandContext ctx) where TInterceptorClass : class
         {
-            var step = ctx.InvocationPipeline?.All?
+            var step = ctx.InvocationPipeline?.AncestorInterceptors?
                 .FirstOrDefault(i => i.Invocation.MethodInfo.DeclaringType == typeof(TInterceptorClass));
+            AssertStepNotNull(step, nameof(InvocationPipeline.AncestorInterceptors));
             if (step is null)
             {
-                throw new InvalidComObjectException(
+                throw new InvalidOperationException(
                     $"The interceptor for {typeof(TInterceptorClass)} is not in the hierarchy " +
                     $"of the executed command {ctx.InvocationPipeline?.TargetCommand.Command}");
             }
@@ -55,6 +59,16 @@ namespace CommandDotNet.TestTools
             var step = ctx.InvocationPipeline?.All?
                 .FirstOrDefault(i => i.Invocation.MethodInfo.DeclaringType == typeof(TInterceptorClass));
             return step != null;
+        }
+
+        private static void AssertStepNotNull(InvocationStep step, string propertyName)
+        {
+            if (step == null)
+            {
+                throw new InvalidOperationException(
+                    $"{nameof(CommandContext.InvocationPipeline)} or {propertyName} was null. " +
+                    "The middleware pipeline exited early.");
+            }
         }
     }
 }

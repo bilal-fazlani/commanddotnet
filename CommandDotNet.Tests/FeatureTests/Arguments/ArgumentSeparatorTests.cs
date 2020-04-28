@@ -79,7 +79,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 });
 
             result.CommandContext.ParseResult.SeparatedArguments
-                .Should().BeEquivalentTo(new[] { "-1", "-3" });
+                .Should().BeEquivalentTo("-1", "-3");
         }
 
         [Fact]
@@ -93,7 +93,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 });
 
             result.CommandContext.ParseResult.SeparatedArguments
-                .Should().BeEquivalentTo(new[] { "-1", "-3" });
+                .Should().BeEquivalentTo("-1", "-3");
         }
 
         [Fact]
@@ -107,7 +107,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 });
 
             result.CommandContext.ParseResult.SeparatedArguments
-                .Should().BeEquivalentTo(new[] { "-1", "-3" });
+                .Should().BeEquivalentTo("-1", "-3");
         }
 
         [Fact]
@@ -121,7 +121,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 });
 
             result.CommandContext.ParseResult.SeparatedArguments
-                .Should().BeEquivalentTo(new[] { "-1", "-3" });
+                .Should().BeEquivalentTo("-1", "-3");
         }
 
         [Fact]
@@ -137,10 +137,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 });
 
             result.CommandContext.ParseResult.RemainingOperands
-                .Should().BeEquivalentTo(new[] { "-5", "-7" });
+                .Should().BeEquivalentTo("-5", "-7");
 
             result.CommandContext.ParseResult.SeparatedArguments
-                .Should().BeEquivalentTo(new[] { "-1", "-3", "-5", "-7" });
+                .Should().BeEquivalentTo("-1", "-3", "-5", "-7");
         }
 
         [Fact]
@@ -156,10 +156,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 });
 
             result.CommandContext.ParseResult.RemainingOperands
-                .Should().BeEquivalentTo(new[] { "-5", "-7" });
+                .Should().BeEquivalentTo("-5", "-7");
 
             result.CommandContext.ParseResult.SeparatedArguments
-                .Should().BeEquivalentTo(new[] { "-1", "-3", "-5", "-7" });
+                .Should().BeEquivalentTo("-1", "-3", "-5", "-7");
         }
 
         [Fact]
@@ -177,10 +177,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 });
 
             result.CommandContext.ParseResult.RemainingOperands
-                .Should().BeEquivalentTo(new[] { "--", "-5", "-7" });
+                .Should().BeEquivalentTo("--", "-5", "-7");
 
             result.CommandContext.ParseResult.SeparatedArguments
-                .Should().BeEquivalentTo(new[] { "-1", "-3", "--", "-5", "-7" });
+                .Should().BeEquivalentTo("-1", "-3", "--", "-5", "-7");
         }
 
         [Fact]
@@ -198,10 +198,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 });
 
             result.CommandContext.ParseResult.RemainingOperands
-                .Should().BeEquivalentTo(new[] { "__", "-5", "-7" });
+                .Should().BeEquivalentTo("__", "-5", "-7");
 
             result.CommandContext.ParseResult.SeparatedArguments
-                .Should().BeEquivalentTo(new[] { "-1", "-3", "__", "-5", "-7" });
+                .Should().BeEquivalentTo("-1", "-3", "__", "-5", "-7");
         }
 
         public class Math

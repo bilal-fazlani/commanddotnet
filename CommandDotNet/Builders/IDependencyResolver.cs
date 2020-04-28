@@ -20,6 +20,6 @@ namespace CommandDotNet.Builders
         }
 
         public static T ResolveOrDefault<T>(this IDependencyResolver resolver) =>
-            resolver.TryResolve<T>(out T item) ? item : default;
+            resolver.TryResolve(out T item) ? item : default;
     }
 }

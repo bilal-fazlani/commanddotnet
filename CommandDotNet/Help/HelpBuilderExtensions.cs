@@ -1,6 +1,5 @@
 ﻿using System;
 using CommandDotNet.Builders;
-using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Help
 {

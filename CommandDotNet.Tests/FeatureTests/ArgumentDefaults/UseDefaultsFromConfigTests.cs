@@ -55,7 +55,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             // null can indicate the key does not exist so default should not be overridden
 
             new AppRunner<App>()
-                .UseDefaultsFromConfig(new Func<IArgument, ArgumentDefault>(arg => null))
+                .UseDefaultsFromConfig(arg => null)
                 .Verify(new Scenario
                 {
                     When = {Args = "Default"},

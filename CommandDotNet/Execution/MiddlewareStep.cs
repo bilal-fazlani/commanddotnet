@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CommandDotNet.Execution
+﻿namespace CommandDotNet.Execution
 {
     public class MiddlewareStep
     {

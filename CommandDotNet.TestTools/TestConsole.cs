@@ -93,10 +93,6 @@ namespace CommandDotNet.TestTools
         /// <summary>
         /// The accumulated text of the <see cref="Console.Error"/> stream.
         /// </summary>
-        /// <param name="normalizeLineEndings">
-        /// Trims white space from all lines to ensure consistent results for test assertions.<br/>
-        /// This is to deal with whitespace padding when some lines don't need all elements.
-        /// </param>
         public string ErrorText() => Error.ToString();
 
         public bool IsOutputRedirected { get; } = false;

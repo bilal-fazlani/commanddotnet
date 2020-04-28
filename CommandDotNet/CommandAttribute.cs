@@ -1,4 +1,5 @@
 ﻿using System;
+using CommandDotNet.Parsing;
 
 namespace CommandDotNet
 {

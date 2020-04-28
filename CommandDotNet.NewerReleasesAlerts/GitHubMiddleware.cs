@@ -39,8 +39,8 @@ namespace CommandDotNet.NewerReleasesAlerts
         private static string GetNameFromReleaseBody(string response)
         {
             JObject o = JObject.Parse(response);
-            var ver = o.SelectToken("$.name").Value<string>();
-            return ver.Replace("v", "");
+            var ver = o.SelectToken("$.name")?.Value<string>();
+            return ver?.Replace("v", "");
         }
         
         private static string BuildLatestReleaseUrl(string organizationName, string repoName) => $"https://api.github.com/repos/{organizationName}/{repoName}/releases/latest";

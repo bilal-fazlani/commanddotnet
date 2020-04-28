@@ -98,7 +98,7 @@ namespace CommandDotNet.Extensions
             {
                 using (IEnumerator<T> e = source.GetEnumerator())
                 {
-                    if (!e.MoveNext()) return default(T);
+                    if (!e.MoveNext()) return default;
                     T result = e.Current;
                     if (!e.MoveNext()) return result;
                 }

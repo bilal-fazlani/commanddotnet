@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using CommandDotNet.Extensions;
 using CommandDotNet.Tests.Utils;
-using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;

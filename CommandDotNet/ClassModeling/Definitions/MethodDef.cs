@@ -219,7 +219,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 {
                     if (!LineNumber.HasValue)
                     {
-                        throw new InvalidConfigurationException($"Operand property must be attributed with " +
+                        throw new InvalidConfigurationException("Operand property must be attributed with " +
                                                                 $"{nameof(OperandAttribute)} or {nameof(OrderByPositionInClassAttribute)} to guarantee consistent order. " +
                                                                 $"Property: {propertyInfo.DeclaringType?.FullName}.{propertyInfo.Name}");
                     }
@@ -231,7 +231,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                             .Select(p => p.PropertyInfo)
                             .Select(p => $"  {p.DeclaringType?.FullName}.{p.Name}")
                             .ToCsv(Environment.NewLine);
-                        throw new InvalidConfigurationException($"Operand property must be attributed with " +
+                        throw new InvalidConfigurationException("Operand property must be attributed with " +
                                                                 $"{nameof(OperandAttribute)} or {nameof(OrderByPositionInClassAttribute)} to guarantee consistent order. " +
                                                                 $"Properties:{Environment.NewLine}{props}");
                     }

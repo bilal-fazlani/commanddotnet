@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using CommandDotNet.Prompts;
+﻿using CommandDotNet.Prompts;
 using CommandDotNet.Rendering;
 using CommandDotNet.TestTools.Prompts;
 using CommandDotNet.TestTools.Scenarios;

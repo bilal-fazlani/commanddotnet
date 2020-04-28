@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Tests.Utils;
-using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Prompts;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
