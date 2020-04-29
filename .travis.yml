@@ -5,6 +5,7 @@ notifications:
   webhooks:
     urls:
       - https://discord-build-notifications.herokuapp.com/travis
+      - https://webhooks.gitter.im/e/272ef04cd179f5384ad8
     on_success: change # default: always
     on_failure: always # default: always
     on_start: never # default: never
