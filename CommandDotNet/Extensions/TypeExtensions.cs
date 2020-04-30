@@ -84,7 +84,7 @@ namespace CommandDotNet.Extensions
         internal static IEnumerable<PropertyInfo> GetDeclaredProperties(this Type type)
         {
             return type
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => !x.PropertyType.IsCompilerGenerated());
         }
 
