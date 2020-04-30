@@ -28,6 +28,7 @@ Version 4 is focused on removing obsolete members and changing default behaviors
 
 * `CommandDotNet.Directives.Parse.ParseReporter` - moved to `CommandDotNet.Diagnostics.Parse.ParseReporter`
 * `CommandDotNet.Directives.Debugger` - moved to `CommandDotNet.Diagnostics.Debugger`
+* `AppConfig.CancellationToken` - moved to `CommandDotNet.CancellationToken`. This enables running nested commands within an interactive session.  See [Ctrl+C and CancellationToken](../OtherFeatures/cancellation.md#interactive-sessions) for more details.
 
 #### Removed or Replaced
 

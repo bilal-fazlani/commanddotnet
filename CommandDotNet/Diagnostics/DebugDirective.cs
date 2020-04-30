@@ -25,7 +25,7 @@ namespace CommandDotNet.Diagnostics
             if (commandContext.Tokens.HasDebugDirective())
             {
                 Debugger.Attach(
-                    commandContext.AppConfig.CancellationToken,
+                    commandContext.CancellationToken,
                     commandContext.Console,
                     commandContext.AppConfig.Services.Get<DebugDirectiveContext>().WaitForDebuggerToAttach);
             }

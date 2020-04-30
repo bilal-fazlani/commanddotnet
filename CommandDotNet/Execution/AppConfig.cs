@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using CommandDotNet.Builders;
 using CommandDotNet.Extensions;
 using CommandDotNet.Help;
@@ -25,12 +24,6 @@ namespace CommandDotNet.Execution
         public IConsole Console { get; }
 
         /// <summary>
-        /// The application <see cref="CancellationToken"/>.
-        /// Set in <see cref="AppRunner.Configure"/>
-        /// </summary>
-        public CancellationToken CancellationToken { get; }
-
-        /// <summary>
         /// Services registered for the lifetime of the application.<br/>
         /// Use to store configurations for use by middleware.<br/>
         /// Add services in <see cref="AppRunner.Configure"/>
@@ -50,7 +43,7 @@ namespace CommandDotNet.Execution
         /// </summary>
         public IHelpProvider HelpProvider { get; }
 
-        internal Action<OnRunCompletedEventArgs> OnRunCompleted { get; }
+        internal Action<OnRunCompletedEventArgs> OnRunCompleted { get; set; }
         internal TokenizationEvents TokenizationEvents { get; }
         internal BuildEvents BuildEvents { get; }
         internal IReadOnlyCollection<ExecutionMiddleware> MiddlewarePipeline { get; set; }
@@ -63,7 +56,6 @@ namespace CommandDotNet.Execution
             IDependencyResolver dependencyResolver, IHelpProvider helpProvider, 
             NameTransformation nameTransformation, Action<OnRunCompletedEventArgs> onRunCompleted,
             TokenizationEvents tokenizationEvents, BuildEvents buildEvents, IServices services,
-            CancellationToken cancellationToken,
             Dictionary<Type, Func<CommandContext, object>> parameterResolversByType)
         {
             AppSettings = appSettings;
@@ -75,7 +67,6 @@ namespace CommandDotNet.Execution
             TokenizationEvents = tokenizationEvents;
             BuildEvents = buildEvents;
             Services = services;
-            CancellationToken = cancellationToken;
             ParameterResolversByType = parameterResolversByType;
 
             ResolverService = services.GetOrAdd(() => new ResolverService());
