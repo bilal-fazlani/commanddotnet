@@ -66,7 +66,7 @@ namespace CommandDotNet.Extensions
             return $"{item.GetType().Name}:{NewLine}{props}";
         }
 
-        internal static object CloneWithPublicProperties(this object original)
+        internal static object CloneWithPublicProperties(this object original, bool recurse = true)
         {
             if (original == null)
             {
@@ -84,7 +84,7 @@ namespace CommandDotNet.Extensions
                     var value = p.GetValue(original);
                     if (value != null)
                     {
-                        if (p.PropertyType != typeof(string) && p.PropertyType.IsClass)
+                        if (recurse && p.PropertyType != typeof(string) && p.PropertyType.IsClass)
                         {
                             value = CloneWithPublicProperties(value);
                         }
