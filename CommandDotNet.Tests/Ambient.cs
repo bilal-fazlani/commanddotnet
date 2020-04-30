@@ -24,7 +24,15 @@ namespace CommandDotNet.Tests
                     throw new InvalidOperationException($"{nameof(Ambient)}.{nameof(Output)} has not been set for the current test");
                 }
 
-                return output.WriteLine;
+                return msg =>
+                {
+                    // XUnit does not like null values
+                    if (msg == null)
+                    {
+                        msg = "";
+                    }
+                    Output.WriteLine(msg);
+                };
             }
         }
     }
