@@ -80,7 +80,7 @@ namespace CommandDotNet.Prompts
                 ))
                 .Where(a => argumentFilter == null || argumentFilter(a))
                 .Where(a => a.InputValues.IsEmpty() && (a.Default?.Value.IsNullValue() ?? true))
-                .TakeWhile(a => !commandContext.AppConfig.CancellationToken.IsCancellationRequested && !isCancellationRequested)
+                .TakeWhile(a => !commandContext.CancellationToken.IsCancellationRequested && !isCancellationRequested)
                 .ForEach(a =>
                 {
                     Log.Debug($"Prompting for {a.Name}");

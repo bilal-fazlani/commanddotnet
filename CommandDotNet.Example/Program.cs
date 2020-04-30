@@ -24,6 +24,7 @@ namespace CommandDotNet.Example
                 .UseLog2ConsoleDirective()
                 .UseNameCasing(Case.KebabCase)
                 .UseFluentValidation()
+                .UseInteractiveMode("Example")
                 .UseDefaultsFromAppSetting(appSettings, includeNamingConventions: true);
         }
     }

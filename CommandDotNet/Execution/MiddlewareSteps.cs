@@ -8,7 +8,12 @@
         /// <summary>
         /// Runs early in the <see cref="MiddlewareStages.PreTokenize"/> stage after <see cref="DebugDirective"/>
         /// </summary>
-        public static MiddlewareStep OnRunCompleted { get; } = DebugDirective + 1000;
+        public static MiddlewareStep CancellationHandler { get; } = DebugDirective + 1000;
+
+        /// <summary>
+        /// Runs early in the <see cref="MiddlewareStages.PreTokenize"/> stage after <see cref="CancellationHandler"/>
+        /// </summary>
+        public static MiddlewareStep OnRunCompleted { get; } = CancellationHandler + 1000;
 
         public static class DependencyResolver
         {

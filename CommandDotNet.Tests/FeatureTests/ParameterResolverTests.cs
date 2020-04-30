@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using CommandDotNet.Execution;
 using CommandDotNet.Rendering;
 using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
@@ -65,7 +66,6 @@ Options:
         public void ParameterServices_ArePassedToCommandAndInterceptorMethod()
         {
             new AppRunner<App>()
-                .Configure(c => c.CancellationToken = new CancellationTokenSource().Token)
                 .Verify(new Scenario
             {
                 When = {Args = "Do 7 --stringOption optValue"},

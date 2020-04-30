@@ -25,7 +25,7 @@ namespace CommandDotNet
         {
             [typeof(CommandContext)] = ctx => ctx,
             [typeof(IConsole)] = ctx => ctx.Console,
-            [typeof(CancellationToken)] = ctx => ctx.AppConfig.CancellationToken
+            [typeof(CancellationToken)] = ctx => ctx.CancellationToken
         };
 
         public AppConfigBuilder(AppSettings appSettings)
@@ -59,12 +59,6 @@ namespace CommandDotNet
 
         /// <summary>Replace the internal system console with provided console</summary>
         public IConsole Console { get; set; } = new SystemConsole();
-
-        /// <summary>
-        /// This CancellationToken will be shared via the <see cref="CommandContext"/>
-        /// Set it to ensure all middleware can subscribe to a cancellation.
-        /// </summary>
-        public CancellationToken CancellationToken { get; set; } = CancellationToken.None;
 
         /// <summary>
         /// <see cref="OnRunCompleted"/> is triggered when after the pipeline has completed execution.
@@ -143,7 +137,7 @@ namespace CommandDotNet
             return new AppConfig(
                 AppSettings, Console, DependencyResolver, helpProvider, NameTransformation,
                 OnRunCompleted, TokenizationEvents, BuildEvents, Services, 
-                CancellationToken, _parameterResolversByType)
+                _parameterResolversByType)
             {
                 MiddlewarePipeline = _middlewareByStage
                     .SelectMany(kvp => 

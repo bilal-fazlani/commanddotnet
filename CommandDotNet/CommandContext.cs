@@ -1,4 +1,5 @@
-﻿using CommandDotNet.Builders;
+﻿using System.Threading;
+using CommandDotNet.Builders;
 using CommandDotNet.Diagnostics.Parse;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
@@ -49,6 +50,13 @@ namespace CommandDotNet
 
         /// <summary>When true, help will be displayed as the app exits</summary>
         public bool ShowHelpOnExit { get; set; }
+
+        /// <summary>
+        /// The <see cref="CancellationToken"/>.<br/>
+        /// Be careful overwriting if it is not <see cref="CancellationToken"/>.None
+        /// in case other middleware already has a reference to it.
+        /// </summary>
+        public CancellationToken CancellationToken { get; set; } = CancellationToken.None;
 
         /// <summary>
         /// Services registered for the lifetime of the <see cref="CommandContext"/>.<br/>
