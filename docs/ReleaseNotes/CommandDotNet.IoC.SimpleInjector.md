@@ -1,6 +1,6 @@
 # CommandDotNet.IoC.SimpleInjector
 
-## 3.0.0
+## 3.0.0 - prerelease
 
 remove `useLegacyInjectDependenciesAttribute` option as it's no longer supported as of CommandDotNet 4.0.0
 

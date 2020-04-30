@@ -1,6 +1,6 @@
 # CommandDotNet.FluentValidation
 
-## 2.0.4
+## 2.0.4 - prerelease
 
 add MiddlewareSteps.FluentValidation, declaring the stage and order within the stage the middleware is registered
 

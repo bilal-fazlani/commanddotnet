@@ -1,6 +1,6 @@
 # CommandDotNet.TestTools
 
-## 3.0.0
+## 3.0.0 - prerelease
 
 Remove obsoleted TestCaptures class
 
