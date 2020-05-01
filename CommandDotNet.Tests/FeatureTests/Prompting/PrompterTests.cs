@@ -50,7 +50,7 @@ who's there
                     },
                     Then =
                     {
-                        OutputContainsTexts = new List<string> {"Hello world"}
+                        OutputContainsTexts = {"Hello world"}
                     }
                 });
         }
@@ -70,7 +70,7 @@ who's there
                     },
                     Then =
                     {
-                        OutputContainsTexts = new List<string> {"Hello some: [yaml, sample]"}
+                        OutputContainsTexts = {"Hello some: [yaml, sample]"}
                     }
                 });
         }
