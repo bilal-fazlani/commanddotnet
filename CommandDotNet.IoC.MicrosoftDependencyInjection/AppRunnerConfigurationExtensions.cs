@@ -18,7 +18,7 @@ namespace CommandDotNet.IoC.MicrosoftDependencyInjection
         public static AppRunner UseMicrosoftDependencyInjection(
             this AppRunner appRunner, 
             IServiceProvider serviceProvider, 
-            Func<CommandContext, IDisposable> runInScope = null,
+            Func<CommandContext, IDisposable>? runInScope = null,
             ResolveStrategy argumentModelResolveStrategy = ResolveStrategy.TryResolve,
             ResolveStrategy commandClassResolveStrategy = ResolveStrategy.Resolve)
         {
