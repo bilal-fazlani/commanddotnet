@@ -13,7 +13,7 @@ namespace CommandDotNet.TestTools.Prompts
     {
         public ICollection<ConsoleKeyInfo> ConsoleKeys { get; }
         public bool Reuse { get; }
-        public Predicate<string> PromptFilter { get; }
+        public Predicate<string>? PromptFilter { get; }
         public bool ShouldFail => false;
 
         /// <summary>Constructs a response for prompt of a list of values</summary>
@@ -22,7 +22,7 @@ namespace CommandDotNet.TestTools.Prompts
         /// <param name="reuse">When false, this answer is discarded after use.</param>
         public Answer(
             IEnumerable<ConsoleKeyInfo> consoleKeys, 
-            Predicate<string> promptFilter = null,
+            Predicate<string>? promptFilter = null,
             bool reuse = false)
         {
             ConsoleKeys = consoleKeys.ToCollection();

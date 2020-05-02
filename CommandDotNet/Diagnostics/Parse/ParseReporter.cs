@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using CommandDotNet.Extensions;
+using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Diagnostics.Parse
 {
@@ -109,31 +110,44 @@ namespace CommandDotNet.Diagnostics.Parse
         private static string VftToString(ValueFromToken vft, string? pwd)
         {
             // when the value is the original value, there's no need to show how we got it
-            var supplyChain = RecurseTokens(vft, pwd);
+            var supplyChain = RecurseTokens(new TokenValues(vft.ValueToken, vft.OptionToken), pwd);
             return vft.Value == supplyChain 
                 ? pwd ?? vft.Value 
                 : $"{pwd ?? vft.Value} (from: {supplyChain})";
         }
 
-        private static string RecurseTokens(ValueFromToken vft, string? pwd)
+        private static string RecurseTokens(TokenValues vft, string? pwd)
         {
             if ((vft.OptionToken?.SourceToken ?? vft.ValueToken?.SourceToken) == null)
             {
                 return PrettifyTokens(vft, pwd);
             }
 
-            return vft.TokensSourceToken == null
-                ? PrettifyTokens(vft, pwd)
-                : $"{RecurseTokens(new ValueFromToken(null, vft.ValueToken?.SourceToken, vft.OptionToken?.SourceToken), pwd)}" +
-                  $" -> {PrettifyTokens(vft, pwd)}";
+            return vft.HasSourceToken
+                ? $"{RecurseTokens(new TokenValues( vft.ValueToken?.SourceToken, vft.OptionToken?.SourceToken), pwd)}" +
+                  $" -> {PrettifyTokens(vft, pwd)}"
+                : PrettifyTokens(vft, pwd);
         }
 
-        private static string PrettifyTokens(ValueFromToken vft, string? pwd)
+        private static string PrettifyTokens(TokenValues vft, string? pwd)
         {
             return vft.OptionToken?.RawValue == vft.ValueToken?.RawValue 
             ? $"{vft.OptionToken?.RawValue}".Trim()
             : $"{vft.OptionToken?.RawValue} {pwd ?? vft.ValueToken?.RawValue}".Trim();
         }
 
+        private class TokenValues
+        {
+            public Token? ValueToken { get; }
+            public Token? OptionToken { get; }
+
+            public bool HasSourceToken => ValueToken?.SourceToken is { } || OptionToken?.SourceToken is { };
+
+            public TokenValues(Token? valueToken, Token? optionToken)
+            {
+                ValueToken = valueToken;
+                OptionToken = optionToken;
+            }
+        }
     }
 }

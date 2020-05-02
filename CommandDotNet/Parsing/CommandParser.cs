@@ -199,13 +199,15 @@ namespace CommandDotNet.Parsing
             // in most cases, this will be the first or only InputValues
             var source = Constants.InputValueSources.Argument;
             var parserValues = argument.InputValues.FirstOrDefault(iv => iv.Source == source);
-            if (parserValues == null)
+            
+            if (parserValues is null)
             {
                 parserValues = new InputValue(source, false, new List<ValueFromToken>());
                 argument.InputValues.Add(parserValues);
             }
+            parserValues.ValuesFromTokens ??= new List<ValueFromToken>();
 
-            return (List<ValueFromToken>)parserValues.ValuesFromTokens;
+            return (List<ValueFromToken>)parserValues.ValuesFromTokens!;
         }
 
         private void ThrowIfValueNotAllowed(Command command, IArgument argument, Token token)

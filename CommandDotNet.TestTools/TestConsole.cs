@@ -25,12 +25,12 @@ namespace CommandDotNet.TestTools
     {
         private static ILog Log = LogProvider.GetCurrentClassLogger();
 
-        private readonly Func<TestConsole, ConsoleKeyInfo> _onReadKey;
+        private readonly Func<TestConsole, ConsoleKeyInfo>? _onReadKey;
 
         public TestConsole(
-            Func<TestConsole, string> onReadLine = null,
-            IEnumerable<string> pipedInput = null,
-            Func<TestConsole, ConsoleKeyInfo> onReadKey = null)
+            Func<TestConsole, string?>? onReadLine = null,
+            IEnumerable<string>? pipedInput = null,
+            Func<TestConsole, ConsoleKeyInfo>? onReadKey = null)
         {
             _onReadKey = onReadKey;
             IsInputRedirected = pipedInput != null;
@@ -139,31 +139,31 @@ namespace CommandDotNet.TestTools
 
         private class StandardStreamReader : IStandardStreamReader
         {
-            private readonly Func<string> _onReadLine;
+            private readonly Func<string?>? _onReadLine;
 
-            public StandardStreamReader(Func<string> onReadLine)
+            public StandardStreamReader(Func<string?>? onReadLine)
             {
                 _onReadLine = onReadLine;
             }
 
-            public string ReadLine()
+            public string? ReadLine()
             {
                 return _onReadLine?.Invoke();
             }
 
-            public string ReadToEnd()
+            public string? ReadToEnd()
             {
-                return _onReadLine.EnumeratePipedInput().ToCsv(Environment.NewLine);
+                return _onReadLine?.EnumeratePipedInput().ToCsv(Environment.NewLine);
             }
         }
 
         private class StandardStreamWriter : TextWriter, IStandardStreamWriter
         {
-            private readonly StandardStreamWriter _inner;
+            private readonly StandardStreamWriter? _inner;
             private readonly StringBuilder _stringBuilder = new StringBuilder();
 
             public StandardStreamWriter(
-                StandardStreamWriter inner = null)
+                StandardStreamWriter? inner = null)
             {
                 _inner = inner;
             }
