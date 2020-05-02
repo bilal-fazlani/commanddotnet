@@ -17,7 +17,7 @@ namespace CommandDotNet.Diagnostics
 
         public static void Log(
             CommandContext context,
-            Action<string> writer = null,
+            Action<string>? writer = null,
             bool includeSystemInfo = true,
             bool includeAppConfig = false)
         {
@@ -85,7 +85,7 @@ namespace CommandDotNet.Diagnostics
         private static IEnumerable<(string name, string text)> GetOtherConfigInfo(
             CommandContext commandContext,
             bool includeSystemInfo,
-            IEnumerable<(string key, string value)> additionalHeaders)
+            IEnumerable<(string key, string value)>? additionalHeaders)
         {
             if (includeSystemInfo)
             {
@@ -98,7 +98,7 @@ namespace CommandDotNet.Diagnostics
                 yield return ("Username", $"{Environment.UserDomainName}\\{Environment.UserName}");
             }
 
-            if (additionalHeaders != null)
+            if (additionalHeaders is { })
             {
                 foreach (var header in additionalHeaders)
                 {

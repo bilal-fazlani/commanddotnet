@@ -11,7 +11,7 @@ namespace CommandDotNet.Diagnostics.Parse
         /// Reports the command and the source of values for all arguments 
         /// </summary>
         public static void Report(CommandContext commandContext, 
-            Action<string> writeln = null, Indent indent = null)
+            Action<string?>? writeln = null, Indent? indent = null)
         {
             if (commandContext.ParseResult == null)
             {
@@ -20,8 +20,8 @@ namespace CommandDotNet.Diagnostics.Parse
 
             var command = commandContext.ParseResult.TargetCommand;
 
-            indent = indent ?? new Indent();
-            writeln = writeln ?? commandContext.Console.Out.WriteLine;
+            indent ??= new Indent();
+            writeln ??= s => commandContext.Console.Out.WriteLine(s);
 
             var path = command.GetPath();
             writeln($"{indent}command: {(path.IsNullOrWhitespace() ? "(root)" : path)}");
@@ -59,7 +59,7 @@ namespace CommandDotNet.Diagnostics.Parse
             var valueString = argument.Value?.ValueToString(isObscured);
             writeln(valueString == null ? $"{indent2}value:" : $"{indent2}value: {valueString}");
 
-            if (argument.InputValues?.Any() ?? false)
+            if (!argument.InputValues.IsNullOrEmpty())
             {
                 var pwd = isObscured ? Password.ValueReplacement : null;
                 var values = argument.InputValues
@@ -99,14 +99,14 @@ namespace CommandDotNet.Diagnostics.Parse
             }
         }
 
-        private static string ValuesToString(InputValue iv, string pwd)
+        private static string? ValuesToString(InputValue iv, string? pwd)
         {
             return iv.ValuesFromTokens != null
                     ? iv.ValuesFromTokens?.Select(vft => VftToString(vft, pwd)).ToCsv(", ")
                     : iv.Values?.Select(v => pwd ?? v).ToCsv(", ");
         }
 
-        private static string VftToString(ValueFromToken vft, string pwd)
+        private static string VftToString(ValueFromToken vft, string? pwd)
         {
             // when the value is the original value, there's no need to show how we got it
             var supplyChain = RecurseTokens(vft, pwd);
@@ -115,7 +115,7 @@ namespace CommandDotNet.Diagnostics.Parse
                 : $"{pwd ?? vft.Value} (from: {supplyChain})";
         }
 
-        private static string RecurseTokens(ValueFromToken vft, string pwd)
+        private static string RecurseTokens(ValueFromToken vft, string? pwd)
         {
             if ((vft.OptionToken?.SourceToken ?? vft.ValueToken?.SourceToken) == null)
             {
@@ -128,7 +128,7 @@ namespace CommandDotNet.Diagnostics.Parse
                   $" -> {PrettifyTokens(vft, pwd)}";
         }
 
-        private static string PrettifyTokens(ValueFromToken vft, string pwd)
+        private static string PrettifyTokens(ValueFromToken vft, string? pwd)
         {
             return vft.OptionToken?.RawValue == vft.ValueToken?.RawValue 
             ? $"{vft.OptionToken?.RawValue}".Trim()

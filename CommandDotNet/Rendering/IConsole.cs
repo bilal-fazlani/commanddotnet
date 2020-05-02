@@ -54,7 +54,7 @@ namespace CommandDotNet.Rendering
 
     public interface IStandardStreamWriter : IStandardStream
     {
-        void Write(string value);
+        void Write(string? value);
     }
 
     public interface IStandardStreamReader : IStandardStream

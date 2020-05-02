@@ -23,12 +23,12 @@ namespace CommandDotNet.Diagnostics
         // adapted from https://github.com/dotnet/command-line-api directives
         private static Task<int> ConfigureParseReportByTokenTransform(CommandContext commandContext, ExecutionDelegate next)
         {
-            if (!commandContext.Tokens.TryGetDirective("parse", out string value))
+            if (!commandContext.Tokens.TryGetDirective("parse", out string? value))
             {
                 return next(commandContext);
             }
 
-            var parseContext = ParseContext.Parse(value);
+            var parseContext = ParseContext.Parse(value!);
             commandContext.Services.AddOrUpdate(parseContext);
             CaptureTransformations(commandContext, parseContext);
 
@@ -79,7 +79,7 @@ namespace CommandDotNet.Diagnostics
             {
                 ParseReporter.Report(
                     commandContext, 
-                    commandContext.Console.Out.WriteLine);
+                    s => commandContext.Console.Out.WriteLine(s));
                 parseContext.Reported = true;
                 return ExitCodes.Success;
             }
@@ -89,7 +89,7 @@ namespace CommandDotNet.Diagnostics
 
         private static void CaptureTransformations(CommandContext commandContext, ParseContext parseContext)
         {
-            void WriteLine(string ln) => parseContext.Transformations.AppendLine(ln);
+            void WriteLine(string? ln) => parseContext.Transformations.AppendLine(ln);
 
             WriteLine(null);
             WriteLine("token transformations:");
@@ -113,11 +113,11 @@ namespace CommandDotNet.Diagnostics
             };
         }
 
-        private static void CaptureTransformation(Action<string> writeLine, TokenCollection args, string description)
+        private static void CaptureTransformation(Action<string> writeLine, TokenCollection? args, string description)
         {
             writeLine(description);
 
-            if (args != null)
+            if (args is { })
             {
                 var maxTokenTypeNameLength = Enum.GetNames(typeof(TokenType)).Max(n => n.Length);
 
