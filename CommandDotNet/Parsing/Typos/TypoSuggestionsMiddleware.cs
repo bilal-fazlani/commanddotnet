@@ -99,7 +99,7 @@ namespace CommandDotNet.Parsing.Typos
         private static bool TrySuggest(CommandContext ctx,
             Command command, string typo,
             ICollection<string> candidates,
-            string message, string prefix)
+            string message, string? prefix)
         {
             if (!candidates.Any())
             {

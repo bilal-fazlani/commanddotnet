@@ -73,7 +73,7 @@ namespace CommandDotNet.Extensions
                 yield return line;
             }
         }
-
+        
         internal static T? SingleOrDefaultOrThrow<T>(this IEnumerable<T?> source, Action throwEx) where T: class
         {
             if (source == null)

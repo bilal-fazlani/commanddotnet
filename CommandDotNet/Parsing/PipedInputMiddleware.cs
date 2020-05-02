@@ -39,7 +39,7 @@ namespace CommandDotNet.Parsing
                 var operand = ctx.ParseResult.TargetCommand.Operands
                     .FirstOrDefault(o => o.Arity.AllowsMany());
 
-                if (operand == null)
+                if (operand is null)
                 {
                     Log.DebugFormat("No list operands found for {0}", ctx.ParseResult.TargetCommand.Name);
                 }

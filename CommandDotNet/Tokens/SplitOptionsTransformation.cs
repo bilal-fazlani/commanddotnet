@@ -16,7 +16,7 @@ namespace CommandDotNet.Tokens
             {
                 var prefix = token.OptionTokenType.GetPrefix();
                 var optionName = token.OptionTokenType.GetName();
-                var value = token.OptionTokenType.GetAssignedValue();
+                var value = token.OptionTokenType.GetAssignedValue()!;
 
                 yield return new Token(
                     $"{prefix}{optionName}", optionName, TokenType.Option,
