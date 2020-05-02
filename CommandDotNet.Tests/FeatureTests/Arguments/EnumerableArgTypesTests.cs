@@ -172,6 +172,7 @@ Options:
             [Option]
             public IEnumerable<string> Options { get; set; }
 
+            [Operand]
             public IEnumerable<string> Operands { get; set; }
         }
     }

@@ -13,7 +13,9 @@ Version 4 is focused on removing obsolete members and changing default behaviors
 * default `AppSettings.DefaultArgumentSeparatorStrategy` to `EndOfOptions`. See [Argument Separator](../ArgumentValues/argument-separator.md) for details.
     * Help will append ` [[--] <arg>...]` to the usage example when `DefaultArgumentSeparatorStrategy=PassThru`
 * make `AppSettings.LongNameAlwaysDefaultsToSymbolName` the only behavior and remove the setting. `LongName` can be removed with `[Option(LongName=null)]`.
-    * Look for anyplace in your apps where `[Option(ShortName="a")]` with setting a LongName. If you don't want a LongName then add `LongName=null` otherwise the long name will default from the parameter or property name.
+    * Look for places in your apps where `[Option(ShortName="a")]` with setting a LongName. If you don't want a LongName then add `LongName=null` otherwise the long name will default from the parameter or property name.
+* make `AppSettings.GuaranteeOperandOrderInArgumentModels` the only behavior and remove the setting.
+    * see this [Argument Models section](../Arguments/argument-models/#guaranteeing-the-order-of-arguments) for details
 * enable [CommandLogger](../Diagnostics/command-logger.md) in `.UseDefaultMiddleware()` as `cmdlog` directive. This can be useful for diagnostics.
 
 #### Added
@@ -229,11 +231,14 @@ Returns true if the type is `Password`
 
 * LogProvider.IsDisabled is set to true in AppRunner static ctor.
 
-#### [Guarantee Operand order in IArgumentModel](../Arguments/argument-models.md/#guaranteeing-the-order-of-operands)
+#### [Guarantee Operand order in IArgumentModel](../Arguments/argument-models.md/#guaranteeing-the-order-of-arguments)
 
 The order of operands defined in IArgumentModel classes were never deterministic because .Net does not guarantee the order properties are reflected.
 
 [CallerLineNumber] was used in the OperantAttribute ctor to ensure the order is always based on the order properties are defined in the class.
+
+!!! Warning
+    The issue wasn't correctly resolved until 4.0.0
 
 ## 3.1.0
 

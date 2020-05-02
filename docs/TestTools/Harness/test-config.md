@@ -265,7 +265,6 @@ AppRunner<App>:
       DefaultArgumentMode: Operand
       DefaultArgumentSeparatorStrategy: PassThru
       DisableDirectives: False
-      GuaranteeOperandOrderInArgumentModels: False
       Help: AppHelpSettings:
         ExpandArgumentsInUsage: False
         PrintHelpOption: False

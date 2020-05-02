@@ -207,7 +207,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             public int? LineNumber { get; }
             public int PropertyIndex { get; }
 
-            public PropertyData(bool guaranteeOrder, PropertyInfo propertyInfo, int propertyIndex, PropertyData parentProperty, CommandNodeType commandNode)
+            public PropertyData(PropertyInfo propertyInfo, int propertyIndex, PropertyData parentProperty, CommandNodeType commandNode)
             {
                 _parentProperty = parentProperty;
                 PropertyInfo = propertyInfo;
@@ -219,7 +219,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
                 var isOperand = !IsArgModel && commandNode == CommandNodeType.Operand;
 
-                if (isOperand && guaranteeOrder)
+                if (isOperand)
                 {
                     if (!LineNumber.HasValue)
                     {

@@ -212,8 +212,11 @@ Usage: dotnet testhost.dll Save <Id> <Name> <Email>"
         [Validator(typeof(PersonValidator))]
         public class Person : IArgumentModel
         {
+            [Operand]
             public int Id { get; set; }
+            [Operand]
             public string Name { get; set; }
+            [Operand]
             public string Email { get; set; }
         }
 
@@ -230,6 +233,7 @@ Usage: dotnet testhost.dll Save <Id> <Name> <Email>"
         [Validator(typeof(InvalidPersonValidator))]
         public class InvalidPerson : IArgumentModel
         {
+            [Operand]
             public int Id { get; set; }
         }
 

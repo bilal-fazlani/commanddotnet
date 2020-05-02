@@ -7,38 +7,14 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class GuaranteeOperandOrderInArgModelTests
     {
-        private static readonly AppSettings OperandModeWithOutGuarantee = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Operand);
-        private static readonly AppSettings OptionModeWithOutGuarantee = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Option);
-        private static readonly AppSettings OperandModeWithGuarantee = OperandModeWithOutGuarantee.Clone(a => a.GuaranteeOperandOrderInArgumentModels = true);
-        private static readonly AppSettings OptionModeWithGuarantee = OptionModeWithOutGuarantee.Clone(a => a.GuaranteeOperandOrderInArgumentModels = true);
+        private static readonly AppSettings OperandModeWithGuarantee = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Operand);
+        private static readonly AppSettings OptionModeWithGuarantee = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Option);
         
         public GuaranteeOperandOrderInArgModelTests(ITestOutputHelper output)
         {
             Ambient.Output = output;
         }
-
-        [Fact]
-        public void GivenOptionMode_WithOutGuarantee_UnattributedArgModel_Should_BeOk()
-        {
-            new AppRunner<UArgModelApp>(OptionModeWithOutGuarantee)
-                .Verify(new Scenario
-                {
-                    When = {Args = "Do -h"},
-                    Then = { ExitCode = 0 }
-                });
-        }
-
-        [Fact]
-        public void GivenOperandMode_WithOutGuarantee_UnattributedArgModel_Should_BeOk()
-        {
-            new AppRunner<UArgModelApp>(OperandModeWithOutGuarantee)
-                .Verify(new Scenario
-                {
-                    When = {Args = "Do -h"},
-                    Then = { ExitCode = 0 }
-                });
-        }
-
+        
         [Fact]
         public void GivenOptionMode_WithGuarantee_UnattributedArgModel_Should_BeOk()
         {
