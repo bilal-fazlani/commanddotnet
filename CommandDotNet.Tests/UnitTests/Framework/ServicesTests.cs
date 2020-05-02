@@ -103,16 +103,16 @@ namespace CommandDotNet.Tests.UnitTests.Framework
         [Fact]
         public void GivenServiceOfTypeExists_Add_UsingAnInterface_Should_AddService()
         {
-            var methodDef = (NullMethodDef) NullMethodDef.Instance;
+            var operand = new Operand("lala", TypeInfo.Flag, ArgumentArity.ZeroOrOne);
 
             var services = new Services();
-            services.Add(methodDef);
-            services.Add<IMethodDef>(methodDef);
+            services.Add(operand);
+            services.Add<IArgument>(operand);
 
             var svcs = services.GetAll();
             svcs.Count.Should().Be(2);
-            svcs.Should().Contain(kvp => kvp.Key == typeof(IMethodDef));
-            svcs.Should().Contain(kvp => kvp.Key == typeof(NullMethodDef));
+            svcs.Should().Contain(kvp => kvp.Key == typeof(IArgument));
+            svcs.Should().Contain(kvp => kvp.Key == typeof(Operand));
         }
     }
 }

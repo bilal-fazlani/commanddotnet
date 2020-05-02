@@ -17,7 +17,7 @@ namespace CommandDotNet.Extensions
         {
             if (argument == null) throw new ArgumentNullException(nameof(argument));
 
-            return argument.Name == Constants.VersionOptionName && argument.Parent.IsRootCommand();
+            return argument.Name == Constants.VersionOptionName && argument.Parent!.IsRootCommand();
         }
 
         public static bool IsObscured(this IArgument argument) =>

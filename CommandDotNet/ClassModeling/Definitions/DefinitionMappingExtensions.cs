@@ -77,7 +77,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             TypeInfo typeInfo,
             bool isInterceptorOption)
         {
-            var defaultValue = argumentDef.HasDefaultValue && !argumentDef.DefaultValue.IsNullValue()
+            var argumentDefault = argumentDef.HasDefaultValue && !argumentDef.DefaultValue.IsNullValue()
                 ? new ArgumentDefault($"app.{argumentDef.ArgumentDefType}", argumentDef.SourcePath, argumentDef.DefaultValue)
                 : null;
 
@@ -93,7 +93,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                     argumentDef.ValueProxy)
                 {
                     Description = operandAttr?.Description,
-                    Default = defaultValue
+                    Default = argumentDefault
                 };
             }
             
@@ -123,7 +123,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                     valueProxy: argumentDef.ValueProxy)
                 {
                     Description = optionAttr?.Description,
-                    Default = defaultValue
+                    Default = argumentDefault
                 };
             }
 
@@ -146,14 +146,14 @@ namespace CommandDotNet.ClassModeling.Definitions
         }
 
 
-        private static char? ParseShortName(IArgumentDef argumentDef, string shortNameAsString)
+        private static char? ParseShortName(IArgumentDef argumentDef, string? shortNameAsString)
         {
             if (shortNameAsString.IsNullOrWhitespace())
             {
                 return null;
             }
 
-            if (shortNameAsString.Length > 1)
+            if (shortNameAsString!.Length > 1)
             {
                 throw new ArgumentException($"Short name must be a single character: {shortNameAsString} {argumentDef}",
                     nameof(shortNameAsString));
@@ -163,7 +163,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         }
 
         private static BooleanMode GetOptionBooleanMode(
-            IArgumentDef argumentDef, BooleanMode appBooleanMode, OptionAttribute optionAttr)
+            IArgumentDef argumentDef, BooleanMode appBooleanMode, OptionAttribute? optionAttr)
         {
             if (optionAttr == null || optionAttr.BooleanMode == BooleanMode.Unknown)
                 return appBooleanMode;

@@ -46,23 +46,20 @@ namespace CommandDotNet.ClassModeling
             if (commandDef != null)
             {
                 var pipeline = commandContext.InvocationPipeline;
-                pipeline.TargetCommand = new InvocationStep
+                if (commandDef.IsExecutable)
                 {
-                    Command = command,
-                    Invocation = commandDef.InvokeMethodDef
-                };
-                command.GetParentCommands(includeCurrent:true)
-                    .Select(cmd => (cmd, def: cmd.GetCommandDef()))
-                    .Where(c => c.def != null && c.def.HasInterceptor) // in case command is defined by a different middleware
-                    .Reverse()
-                    .ForEach(c =>
-                    {
-                        pipeline.AncestorInterceptors.Add(new InvocationStep
+                    pipeline.TargetCommand = new InvocationStep(command, commandDef.InvokeMethodDef!);
+                    command.GetParentCommands(includeCurrent: true)
+                        .Select(cmd => (cmd, def: cmd.GetCommandDef()))
+                        .Where(c => c.def != null &&
+                                    c.def.HasInterceptor) // in case command is defined by a different middleware
+                        .Reverse()
+                        .ForEach(c =>
                         {
-                            Command = c.cmd,
-                            Invocation = c.def.InterceptorMethodDef
+                            pipeline.AncestorInterceptors.Add(
+                                new InvocationStep(c.cmd, c.def!.InterceptorMethodDef!));
                         });
-                    });
+                }
             }
 
             return next(commandContext);
@@ -72,7 +69,7 @@ namespace CommandDotNet.ClassModeling
         {
             Task<int> Invoke(InvocationStep step, CommandContext context, ExecutionDelegate next, bool isCommand)
             {
-                var result = step.Invocation.Invoke(context, step.Instance, next);
+                var result = step.Invocation.Invoke(context, step.Instance!, next);
                 return isCommand
                     ? result.GetResultCodeAsync()
                     : (Task<int>)result;
@@ -82,7 +79,7 @@ namespace CommandDotNet.ClassModeling
 
             return pipeline.AncestorInterceptors
                 .Select(i => new ExecutionMiddleware((ctx, next) => Invoke(i, ctx, next, false)))
-                .Concat(new ExecutionMiddleware((ctx, next) => Invoke(pipeline.TargetCommand, ctx, next, true)).ToEnumerable())
+                .Concat(new ExecutionMiddleware((ctx, next) => Invoke(pipeline.TargetCommand!, ctx, next, true)).ToEnumerable())
                 .InvokePipeline(commandContext);
         }
     }

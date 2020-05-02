@@ -12,7 +12,7 @@ namespace CommandDotNet.Execution
         internal ResolveStrategy CommandClassResolveStrategy { get; set; }
         internal IDependencyResolver? BackingResolver { private get; set; }
 
-        internal object? ResolveArgumentModel(Type modelType)
+        internal object ResolveArgumentModel(Type modelType)
         {
             // Default uses TryResolve for IArgumentModel because they're
             // expected to be POCOs and not require DI.
@@ -21,18 +21,18 @@ namespace CommandDotNet.Execution
             // via the container, perhaps from configuration
             // sources.
             return ConditionalTryResolve(modelType, out var item, ArgumentModelResolveStrategy)
-                ? item
+                ? item!
                 : Activator.CreateInstance(modelType);
         }
 
-        internal object? ResolveCommandClass(Type classType, CommandContext commandContext)
+        internal object ResolveCommandClass(Type classType, CommandContext commandContext)
         {
             // Default uses Resolve so the container can throw an exception if the class isn't registered.
             // if null is returned, then the container gives consent for other the class to
             // be created by this framework. 
             if (ConditionalTryResolve(classType, out var item, CommandClassResolveStrategy))
             {
-                return item;
+                return item!;
             }
 
             var parameterResolversByType = commandContext.AppConfig.ParameterResolversByType;

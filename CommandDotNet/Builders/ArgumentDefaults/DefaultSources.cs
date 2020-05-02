@@ -64,7 +64,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                 {
                     foreach (var key in keys)
                     {
-                        yield return $"{argument.Parent.Name} {key}";
+                        yield return $"{argument.Parent!.Name} {key}";
                         yield return key;
                     }
                 }

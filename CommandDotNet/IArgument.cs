@@ -14,7 +14,7 @@ namespace CommandDotNet
         IArgumentArity Arity { get; set; }
 
         /// <summary>The default value for this argument</summary>
-        ArgumentDefault Default { get; set; }
+        ArgumentDefault? Default { get; set; }
 
         /// <summary>
         /// The allowed values for this argument, as defined by an <see cref="IAllowedValuesTypeDescriptor"/> for this type.
@@ -30,6 +30,6 @@ namespace CommandDotNet
         ICollection<InputValue> InputValues { get; }
 
         /// <summary>The parsed and converted value for the argument to be passed to a method</summary>
-        object Value { get; set; }
+        object? Value { get; set; }
     }
 }

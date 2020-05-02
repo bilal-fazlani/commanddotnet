@@ -65,7 +65,7 @@ namespace CommandDotNet.TestTools
         public bool WasInvoked =>
             CastInvocation<TrackingInvocation>(Invocation, _commandContext).WasInvoked;
 
-        public InvocationInfo(CommandContext commandContext, InvocationStep invocationStep)
+        public InvocationInfo(CommandContext commandContext, InvocationStep invocationStep) : base(invocationStep.Command, invocationStep.Invocation)
         {
             _commandContext = commandContext;
             _invocationStep = invocationStep ?? throw new ArgumentNullException(nameof(invocationStep));
