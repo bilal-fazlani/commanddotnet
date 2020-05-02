@@ -12,7 +12,7 @@ namespace CommandDotNet.Tokens
 
         private static IEnumerable<Token> SplitOptionAssignment(Token token)
         {
-            if (token.TokenType == TokenType.Option && token.OptionTokenType.HasValue)
+            if (token.TokenType == TokenType.Option && token.OptionTokenType!.HasValue)
             {
                 var prefix = token.OptionTokenType.GetPrefix();
                 var optionName = token.OptionTokenType.GetName();
