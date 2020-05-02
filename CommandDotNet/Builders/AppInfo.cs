@@ -16,20 +16,20 @@ namespace CommandDotNet.Builders
     {
         private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
-        private static AppInfo s_appInfo;
+        private static AppInfo? sAppInfo;
 
-        internal static AppInfo Instance => s_appInfo ?? (s_appInfo = BuildAppInfo());
+        internal static AppInfo Instance => sAppInfo ??= BuildAppInfo();
 
-        private string _version;
+        private string? _version;
 
         /// <summary>The entry assembly. Could be an exe or dll.</summary>
-        private Assembly _entryAssembly;
+        private Assembly? _entryAssembly;
 
         /// <summary>
         /// The exe hosting the assembly.
         /// Could be dotnet.exe, single executable containing zipped dll or the entry assembly.
         /// </summary>
-        private ProcessModule _mainModule;
+        private ProcessModule? _mainModule;
 
         /// <summary>True the app is an executable, whether as a self-contained single executable or otherwise</summary>
         private bool _isExe;
@@ -46,7 +46,7 @@ namespace CommandDotNet.Builders
         /// <summary>The file name used to execute the app</summary>
         public string FileName { get; private set; }
 
-        public string Version => _version ?? (_version = GetVersion(_entryAssembly));
+        public string Version => _version ??= GetVersion(_entryAssembly);
 
         private AppInfo()
         {
@@ -60,11 +60,7 @@ namespace CommandDotNet.Builders
         public static AppInfo GetAppInfo(CommandContext commandContext)
         {
             var svcs = commandContext.AppConfig.Services;
-            var appInfo = svcs.Get<AppInfo>();
-            if (appInfo == null)
-            {
-                svcs.AddOrUpdate(appInfo = AppInfo.Instance);
-            }
+            var appInfo = svcs.GetOrAdd(() => Instance);
             return appInfo;
         }
 

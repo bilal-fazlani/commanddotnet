@@ -9,7 +9,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 {
     internal static class DefinitionMappingExtensions
     {
-        internal static ICommandBuilder ToCommand(this ICommandDef commandDef, Command parent, CommandContext commandContext)
+        internal static ICommandBuilder ToCommand(this ICommandDef commandDef, Command? parent, CommandContext commandContext)
         {
             var command = new Command(
                 commandDef.Name, 
@@ -31,11 +31,11 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             var commandBuilder = new CommandBuilder(command);
 
-            commandDef.InvokeMethodDef.ArgumentDefs
+            commandDef.InvokeMethodDef?.ArgumentDefs
                 .Select(a => a.ToArgument(command, commandContext.AppConfig, false))
                 .ForEach(commandBuilder.AddArgument);
 
-            commandDef.InterceptorMethodDef.ArgumentDefs
+            commandDef.InterceptorMethodDef?.ArgumentDefs
                 .Select(a => a.ToArgument(command, commandContext.AppConfig, true))
                 .ForEach(commandBuilder.AddArgument);
 
@@ -106,13 +106,13 @@ namespace CommandDotNet.ClassModeling.Definitions
                 var assignOnlyToExecutableSubcommands = optionAttr?.AssignToExecutableSubcommands ?? false;
                 isInterceptorOption = isInterceptorOption && !assignOnlyToExecutableSubcommands;
 
-                var ignoreDefaultLongName = optionAttr?.IgnoreDefaultLongName ?? false;
+                var ignoreDefaultLongName = optionAttr?.NoLongName ?? false;
 
                 var longName = ignoreDefaultLongName 
                     ? optionAttr?.LongName 
                     : (optionAttr?.LongName ?? argumentDef.Name);
                 return new Option(
-                    longName,
+                    ParseLongName(argumentDef, optionAttr),
                     ParseShortName(argumentDef, optionAttr?.ShortName),
                     typeInfo, 
                     argumentArity, 
@@ -129,6 +129,22 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             throw new ArgumentOutOfRangeException($"Unknown argument type: {argumentDef.CommandNodeType}");
         }
+
+        private static string? ParseLongName(IArgumentDef argumentDef, OptionAttribute? optionAttr)
+        {
+            if (optionAttr == null)
+            {
+                return argumentDef.Name;
+            }
+
+            if (optionAttr.LongName != null)
+            {
+                return optionAttr.LongName;
+            }
+
+            return optionAttr.NoLongName ? null : argumentDef.Name;
+        }
+
 
         private static char? ParseShortName(IArgumentDef argumentDef, string shortNameAsString)
         {

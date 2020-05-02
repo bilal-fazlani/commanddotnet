@@ -10,9 +10,9 @@ namespace CommandDotNet.Execution
     {
         internal ResolveStrategy ArgumentModelResolveStrategy { get; set; }
         internal ResolveStrategy CommandClassResolveStrategy { get; set; }
-        internal IDependencyResolver BackingResolver { private get; set; }
+        internal IDependencyResolver? BackingResolver { private get; set; }
 
-        internal object ResolveArgumentModel(Type modelType)
+        internal object? ResolveArgumentModel(Type modelType)
         {
             // Default uses TryResolve for IArgumentModel because they're
             // expected to be POCOs and not require DI.
@@ -25,7 +25,7 @@ namespace CommandDotNet.Execution
                 : Activator.CreateInstance(modelType);
         }
 
-        internal object ResolveCommandClass(Type classType, CommandContext commandContext)
+        internal object? ResolveCommandClass(Type classType, CommandContext commandContext)
         {
             // Default uses Resolve so the container can throw an exception if the class isn't registered.
             // if null is returned, then the container gives consent for other the class to
@@ -70,10 +70,10 @@ namespace CommandDotNet.Execution
         {
             // When we support a cli session, we'll need to capture exceptions here
             // and best effort dispose of all instances
-            commandContext.Services.Get<Disposables>()?.Items.ForEach(i => i.Dispose());
+            commandContext.Services.GetOrDefault<Disposables>()?.Items.ForEach(i => i.Dispose());
         }
 
-        private bool ConditionalTryResolve(Type type, out object item, ResolveStrategy resolveStrategy)
+        private bool ConditionalTryResolve(Type type, out object? item, ResolveStrategy resolveStrategy)
         {
             if (BackingResolver == null)
             {

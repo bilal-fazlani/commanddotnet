@@ -25,16 +25,16 @@ namespace CommandDotNet.Diagnostics
             });
         }
 
-        private static Action<string> DefaultIfDirectiveRequest(CommandContext ctx)
+        private static Action<string>? DefaultIfDirectiveRequest(CommandContext ctx)
         {
             return ctx.Tokens.TryGetDirective("cmdlog", out _) 
                 ? ctx.Console.Out.WriteLine 
-                : (Action<string>)null;
+                : (Action<string>?)null;
         }
 
         private static Task<int> CommandLogger(CommandContext commandContext, ExecutionDelegate next)
         {
-            var config = commandContext.AppConfig.Services.Get<CommandLoggerConfig>();
+            var config = commandContext.AppConfig.Services.GetOrThrow<CommandLoggerConfig>();
             var writer = (config.WriterFactory ?? DefaultIfDirectiveRequest)(commandContext);
             if (writer != null)
             {

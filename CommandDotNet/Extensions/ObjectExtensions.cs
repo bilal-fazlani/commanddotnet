@@ -14,7 +14,7 @@ namespace CommandDotNet.Extensions
         }
 
         /// <summary></summary>
-        internal static string ValueToString(this object value, bool isPassword = false)
+        internal static string? ValueToString(this object value, bool isPassword = false)
         {
             if (value.IsNullValue())
             {
@@ -39,14 +39,14 @@ namespace CommandDotNet.Extensions
             return value.ToString();
         }
 
-        internal static string ToStringFromPublicProperties(this object item, Indent indent = null)
+        internal static string ToStringFromPublicProperties(this object item, Indent? indent = null)
         {
             if (item == null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
 
-            indent = indent ?? new Indent();
+            indent ??= new Indent();
 
             var props = item
                 .GetType()

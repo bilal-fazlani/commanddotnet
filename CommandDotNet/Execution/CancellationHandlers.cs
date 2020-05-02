@@ -17,12 +17,17 @@ namespace CommandDotNet.Execution
 
         private class Handler
         {
-            public CancellationTokenSource Source;
-            public bool IgnoreCtrlC;
+            public CancellationTokenSource Source { get; }
+            public bool IgnoreCtrlC { get; set; }
+
+            public Handler(CancellationTokenSource source)
+            {
+                Source = source ?? throw new ArgumentNullException(nameof(source));
+            }
         }
 
-        private static Handler GetHandler(this CommandContext ctx) => ctx.Services.Get<Handler>();
-        private static void SetHandler(this CommandContext ctx, CancellationTokenSource src) => ctx.Services.Add(new Handler{Source = src});
+        private static Handler? GetHandler(this CommandContext ctx) => ctx.Services.GetOrDefault<Handler>();
+        private static void SetHandler(this CommandContext ctx, CancellationTokenSource src) => ctx.Services.Add(new Handler(src));
 
         static CancellationHandlers()
         {

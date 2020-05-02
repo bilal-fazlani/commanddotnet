@@ -24,9 +24,9 @@ namespace CommandDotNet.Extensions
                 throw new ArgumentNullException(nameof(dictionary));
             }
 
-            return !dictionary.TryGetValue(key, out var obj) 
-                ? defaultValue 
-                : obj;
+            return dictionary.TryGetValue(key, out var obj) 
+                ? obj 
+                : defaultValue;
         }
     }
 }

@@ -13,34 +13,27 @@ namespace CommandDotNet.Prompts
 
         internal static AppRunner UsePrompting(
             AppRunner appRunner,
-            Func<CommandContext, IPrompter> prompterOverride = null,
+            Func<CommandContext, IPrompter>? prompterOverride = null,
             bool promptForMissingArguments = true,
-            Func<CommandContext, IArgument, string> argumentPromptTextOverride = null,
-            Predicate<IArgument> argumentFilter = null)
+            Func<CommandContext, IArgument, string>? argumentPromptTextOverride = null,
+            Predicate<IArgument>? argumentFilter = null)
         {
             return appRunner.Configure(c =>
             {
 
-                prompterOverride = prompterOverride
-                                   ?? c.Services.Get<Func<CommandContext, IPrompter>>()
-                                   ?? (ctx =>
-                                   {
-                                       // create only one prompter per CommandContext
-                                       // in theory, an implementation could track prompts and values
-                                       var prompter = ctx.Services.Get<IPrompter>();
-                                       if(prompter == null)
-                                       {
-                                           prompter = new Prompter(ctx.Console);
-                                           ctx.Services.AddOrUpdate(prompter);
-                                       }
-                                       return prompter;
-                                   });
+                prompterOverride ??= c.Services.GetOrDefault<Func<CommandContext, IPrompter>>()
+                                     ?? (ctx =>
+                                     {
+                                         // create only one prompter per CommandContext
+                                         // in theory, an implementation could track prompts and values
+                                         return ctx.Services.GetOrAdd<IPrompter>(() => new Prompter(ctx.Console));
+                                     });
 
                 c.UseParameterResolver(ctx => prompterOverride(ctx));
 
                 if (promptForMissingArguments)
                 {
-                    argumentFilter = argumentFilter ?? (a => a.Arity.RequiresAtLeastOne()); 
+                    argumentFilter ??= (a => a.Arity.RequiresAtLeastOne()); 
                     c.UseMiddleware(
                         (ctx, next) => PromptForMissingArguments(ctx, next,
                             new ArgumentPrompter(prompterOverride(ctx), argumentPromptTextOverride), argumentFilter), 
@@ -74,7 +67,7 @@ namespace CommandDotNet.Prompts
 
             parseResult.TargetCommand
                 .AllArguments(includeInterceptorOptions: true)
-                .Where(a => a.SwitchFunc(
+                .Where(a => a.SwitchFuncStruct(
                     operand => true,
                     option => !option.Arity.AllowsNone() // exclude flag options: help, version, ...
                 ))

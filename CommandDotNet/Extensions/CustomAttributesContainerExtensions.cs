@@ -17,7 +17,7 @@ namespace CommandDotNet.Extensions
             return container.CustomAttributes?.HasAttribute<T>() ?? false;
         }
 
-        public static T GetCustomAttribute<T>(this ICustomAttributesContainer container) where T : Attribute
+        public static T? GetCustomAttribute<T>(this ICustomAttributesContainer container) where T : Attribute
         {
             return container
                 .GetCustomAttributes<T>()
@@ -32,7 +32,7 @@ namespace CommandDotNet.Extensions
                 throw new ArgumentNullException(nameof(container));
             }
 
-            return container.CustomAttributes?.GetCustomAttributes(typeof(T), false).Cast<T>();
+            return container.CustomAttributes.GetCustomAttributes(typeof(T), false).Cast<T>();
         }
     }
 }

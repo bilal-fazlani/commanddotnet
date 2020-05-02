@@ -55,7 +55,7 @@ namespace CommandDotNet.FluentValidation
                         }
                     });
 
-                    ctx.ShowHelpOnExit = ctx.AppConfig.Services.Get<Config>().ShowHelpOnError;
+                    ctx.ShowHelpOnExit = ctx.AppConfig.Services.GetOrThrow<Config>().ShowHelpOnError;
 
                     if (ctx.ShowHelpOnExit)
                     {

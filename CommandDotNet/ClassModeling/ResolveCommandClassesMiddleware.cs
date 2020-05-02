@@ -30,7 +30,7 @@ namespace CommandDotNet.ClassModeling
             return next(commandContext);
         }
 
-        private static object GetInstance(InvocationStep invocationStep,
+        private static object? GetInstance(InvocationStep invocationStep,
             InvocationStep parentStep,
             CommandContext commandContext)
         {

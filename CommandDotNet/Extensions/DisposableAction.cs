@@ -6,7 +6,7 @@ namespace CommandDotNet.Extensions
     {
         internal static DisposableAction Null { get; } = new DisposableAction();
 
-        private readonly Action _action;
+        private readonly Action? _action;
 
         private DisposableAction()
         {

@@ -40,7 +40,7 @@ namespace CommandDotNet
         }
 
         public string Name { get; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public string Usage { get; set; }
         public string ExtendedHelpText { get; set; }
 

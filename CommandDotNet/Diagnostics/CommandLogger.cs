@@ -12,7 +12,7 @@ namespace CommandDotNet.Diagnostics
     {
         public static bool HasLoggedFor(CommandContext context)
         {
-            return context?.Services.Get<CommandLoggerHasLoggedMarker>() != null;
+            return context?.Services.GetOrDefault<CommandLoggerHasLoggedMarker>() != null;
         }
 
         public static void Log(
@@ -21,7 +21,7 @@ namespace CommandDotNet.Diagnostics
             bool includeSystemInfo = true,
             bool includeAppConfig = false)
         {
-            var config = context.AppConfig.Services.Get<CommandLoggerConfig>();
+            var config = context.AppConfig.Services.GetOrDefault<CommandLoggerConfig>();
             if (config == null)
             {
                 throw new AppRunnerException($"{nameof(CommandLoggerMiddleware)} has not been registered. " +

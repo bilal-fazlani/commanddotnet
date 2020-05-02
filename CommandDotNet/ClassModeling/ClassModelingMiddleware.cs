@@ -13,7 +13,7 @@ namespace CommandDotNet.ClassModeling
         {
             return appRunner.Configure(c =>
             {
-                c.Services.Add(new Config{RootCommandType = rootCommandType});
+                c.Services.Add(new Config(rootCommandType));
                 c.UseMiddleware(CreateRootCommand, MiddlewareSteps.CreateRootCommand);
                 c.UseMiddleware(AssembleInvocationPipelineMiddleware, MiddlewareSteps.AssembleInvocationPipeline);
                 c.UseMiddleware(BindValuesMiddleware.BindValues, MiddlewareSteps.BindValues);
@@ -24,12 +24,17 @@ namespace CommandDotNet.ClassModeling
 
         private class Config
         {
-            public Type RootCommandType;
+            public Type RootCommandType { get; }
+
+            public Config(Type rootCommandType)
+            {
+                RootCommandType = rootCommandType;
+            }
         }
 
         private static Task<int> CreateRootCommand(CommandContext commandContext, ExecutionDelegate next)
         {
-            var config = commandContext.AppConfig.Services.Get<Config>();
+            var config = commandContext.AppConfig.Services.GetOrThrow<Config>();
             commandContext.RootCommand = ClassCommandDef.CreateRootCommand(config.RootCommandType, commandContext);
             return next(commandContext);
         }

@@ -13,13 +13,10 @@ namespace CommandDotNet.Builders.ArgumentDefaults
             // run before help command so help will display the updated defaults
             return appRunner.Configure(c =>
             {
-                var config = c.Services.Get<Config>();
+                var config = c.Services.GetOrDefault<Config>();
                 if (config == null)
                 {
-                    config = new Config
-                    {
-                        GetDefaultValueCallbacks = getDefaultValueCallbacks
-                    };
+                    config = new Config(getDefaultValueCallbacks);
                     c.Services.Add(config);
 
                     // run before help so the default values can be displayed in the help text 
@@ -40,7 +37,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                 return next(context);
             }
 
-            var config = context.AppConfig.Services.Get<Config>();
+            var config = context.AppConfig.Services.GetOrThrow<Config>();
             var command = context.ParseResult.TargetCommand;
             
             foreach (var argument in command.AllArguments(true))
@@ -60,6 +57,11 @@ namespace CommandDotNet.Builders.ArgumentDefaults
         private class Config
         {
             public Func<IArgument, ArgumentDefault>[] GetDefaultValueCallbacks { get; set; }
+            
+            public Config(Func<IArgument, ArgumentDefault>[] getDefaultValueCallbacks)
+            {
+                GetDefaultValueCallbacks = getDefaultValueCallbacks ?? throw new ArgumentNullException(nameof(getDefaultValueCallbacks));
+            }
         }
     }
 }

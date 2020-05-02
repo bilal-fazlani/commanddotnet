@@ -106,7 +106,7 @@ namespace CommandDotNet.Parsing.Typos
                 return false;
             }
 
-            var config = ctx.AppConfig.Services.Get<Config>();
+            var config = ctx.AppConfig.Services.GetOrThrow<Config>();
 
             // TODO: allowed values
             //   if the next value should be a value for an option, include allowed values for the option.

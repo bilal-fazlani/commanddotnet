@@ -20,7 +20,7 @@ namespace CommandDotNet
         private readonly HashSet<string> _aliases;
 
         public Option(
-            string longName,
+            string? longName,
             char? shortName,
             TypeInfo typeInfo,
             IArgumentArity arity,

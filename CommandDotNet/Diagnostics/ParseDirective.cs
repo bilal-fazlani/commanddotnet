@@ -74,7 +74,7 @@ namespace CommandDotNet.Diagnostics
 
         private static Task<int> ParseReportByArg(CommandContext commandContext, ExecutionDelegate next)
         {
-            var parseContext = commandContext.Services.Get<ParseContext>();
+            var parseContext = commandContext.Services.GetOrDefault<ParseContext>();
             if (parseContext != null)
             {
                 ParseReporter.Report(

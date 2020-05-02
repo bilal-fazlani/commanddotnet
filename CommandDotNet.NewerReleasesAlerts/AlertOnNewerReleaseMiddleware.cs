@@ -38,30 +38,42 @@ namespace CommandDotNet.NewerReleasesAlerts
         {
             return appRunner.Configure(c =>
             {
-                c.Services.Add(new NewerReleaseConfig
-                {
-                    LatestReleaseUrl = latestReleaseUrl,
-                    ParseSematicVersionFromResponseBodyCallback = parseSemanticVersionFromResponseBodyCallback,
-                    PostfixAlertMessageCallback = postfixAlertMessageCallback,
-                    OverrideHttpRequestCallback = overrideHttpRequestCallback,
-                    SkipCommand = skipCommand
-                });
+                c.Services.Add(new NewerReleaseConfig(
+                    latestReleaseUrl,
+                    parseSemanticVersionFromResponseBodyCallback,
+                    postfixAlertMessageCallback,
+                    overrideHttpRequestCallback,
+                    skipCommand
+                ));
                 c.UseMiddleware(AlertOnNewVersion, MiddlewareSteps.NewerReleaseAlerts);
             });
         }
 
         private class NewerReleaseConfig
         {
-            public string LatestReleaseUrl;
-            public ParseSemanticVersionFromResponseBodyDelegate ParseSematicVersionFromResponseBodyCallback;
-            public PostfixAlertMessageDelegate PostfixAlertMessageCallback;
-            public OverrideHttpRequestCallback OverrideHttpRequestCallback { get; set; }
-            public Predicate<Command> SkipCommand { get; set; }
+            public string LatestReleaseUrl { get; }
+            public ParseSemanticVersionFromResponseBodyDelegate ParseSemanticVersionFromResponseBodyCallback { get; }
+            public PostfixAlertMessageDelegate PostfixAlertMessageCallback { get; }
+            public OverrideHttpRequestCallback OverrideHttpRequestCallback { get; }
+            public Predicate<Command> SkipCommand { get; }
+
+            public NewerReleaseConfig(string latestReleaseUrl, 
+                ParseSemanticVersionFromResponseBodyDelegate semanticVersionFromResponseBodyCallback, 
+                PostfixAlertMessageDelegate postfixAlertMessageCallback, 
+                OverrideHttpRequestCallback overrideHttpRequestCallback, 
+                Predicate<Command> skipCommand)
+            {
+                LatestReleaseUrl = latestReleaseUrl;
+                ParseSemanticVersionFromResponseBodyCallback = semanticVersionFromResponseBodyCallback;
+                PostfixAlertMessageCallback = postfixAlertMessageCallback;
+                OverrideHttpRequestCallback = overrideHttpRequestCallback;
+                SkipCommand = skipCommand;
+            }
         }
 
         private static Task<int> AlertOnNewVersion(CommandContext context, ExecutionDelegate next)
         {
-            var config = context.AppConfig.Services.Get<NewerReleaseConfig>();
+            var config = context.AppConfig.Services.GetOrThrow<NewerReleaseConfig>();
 
             var skipCommand = config.SkipCommand?.Invoke(context.ParseResult.TargetCommand) ?? false;
             if (!skipCommand)
@@ -107,7 +119,7 @@ namespace CommandDotNet.NewerReleasesAlerts
                     var response = config.OverrideHttpRequestCallback?.Invoke(httpClient, requestUri).Result
                                    ?? httpClient.GetStringAsync(requestUri).Result;
 
-                    var version = config.ParseSematicVersionFromResponseBodyCallback(response);
+                    var version = config.ParseSemanticVersionFromResponseBodyCallback(response);
 
                     return SemVersion.TryParse(version, out semVersion);
                 }
