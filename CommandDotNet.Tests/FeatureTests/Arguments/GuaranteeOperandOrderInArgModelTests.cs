@@ -122,6 +122,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         OutputContainsTexts =
                         {
                             @"Arguments:
+  OperandDefinedFirstReflectedLast
   Arg1
   Operand1
   Arg2
@@ -274,6 +275,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
             [Operand]
             public string Operand2 { get; set; }
+
+            // mimic operand defined first but returned last when reflected
+            [Operand(1)] public string OperandDefinedFirstReflectedLast { get; set; }
         }
     }
 }

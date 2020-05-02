@@ -178,11 +178,12 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             return modelType
                 .GetDeclaredProperties()
-                .Select(p => new PropertyData(
-                    _appConfig.AppSettings.GuaranteeOperandOrderInArgumentModels,
-                    p,
+                .Select((p,i) => new PropertyData(
+                    p,i,
                     parentProperty,
                     GetArgumentType(p, _argumentMode)))
+                .OrderBy(pd => pd.LineNumber.GetValueOrDefault(int.MaxValue))
+                .ThenBy(pd => pd.PropertyIndex) //use reflected order for options since order can be inconsistent
                 .SelectMany(propertyInfo => GetArgsFromProperty(propertyInfo, instance));
         }
 
@@ -204,14 +205,17 @@ namespace CommandDotNet.ClassModeling.Definitions
             public PropertyInfo PropertyInfo { get; }
             public bool IsArgModel { get; }
             public int? LineNumber { get; }
+            public int PropertyIndex { get; }
 
-            public PropertyData(bool guaranteeOrder, PropertyInfo propertyInfo, PropertyData parentProperty, CommandNodeType commandNode)
+            public PropertyData(bool guaranteeOrder, PropertyInfo propertyInfo, int propertyIndex, PropertyData parentProperty, CommandNodeType commandNode)
             {
                 _parentProperty = parentProperty;
                 PropertyInfo = propertyInfo;
+                PropertyIndex = propertyIndex;
                 IsArgModel = propertyInfo.PropertyType.InheritsFrom<IArgumentModel>();
-                LineNumber = propertyInfo.GetCustomAttribute<OrderByPositionInClassAttribute>()?.CallerLineNumber
-                             ?? propertyInfo.GetCustomAttribute<OperandAttribute>()?.CallerLineNumber;
+                LineNumber = propertyInfo.GetCustomAttribute<OperandAttribute>()?.CallerLineNumber
+                             ?? propertyInfo.GetCustomAttribute<OptionAttribute>()?.CallerLineNumber
+                             ?? propertyInfo.GetCustomAttribute<OrderByPositionInClassAttribute>()?.CallerLineNumber;
 
                 var isOperand = !IsArgModel && commandNode == CommandNodeType.Operand;
 
