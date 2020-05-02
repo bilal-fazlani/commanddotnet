@@ -152,6 +152,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         private class Model : IArgumentModel
         {
+            // using OrderByPositionInClass allows this to be either option or operand based on default mode
+            // it's unlikely this will every be used like this since it doesn't seem to make sense to define an 
+            // argument as option or operand depending on the setting.
+            [OrderByPositionInClass]
             public string Default { get; set; }
             [Operand]
             public string Operand { get; set; }

@@ -68,10 +68,13 @@ namespace CommandDotNet.Example.Commands
         [Validator(typeof(NotificationValidator))]
         public class Notification : IArgumentModel
         {
+            [Operand]
             public string Email { get; set; }
 
+            [Operand]
             public List<string> Messages { get; set; }
 
+            [Operand]
             public NotificationOptions NotificationOptions { get; set; }
         }
 

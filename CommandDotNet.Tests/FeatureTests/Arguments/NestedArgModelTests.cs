@@ -90,6 +90,7 @@ Options:
             [Operand]
             public string Operand1 { get; set; }
 
+            [OrderByPositionInClass]
             public NestedModel NestedModel { get; set; }
         }
 

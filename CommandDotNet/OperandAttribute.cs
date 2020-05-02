@@ -12,7 +12,7 @@ namespace CommandDotNet
         public int CallerLineNumber { get; }
 
         /// <summary>
-        /// 
+        /// Constructs an <see cref="OperandAttribute"/>
         /// </summary>
         /// <param name="__callerLineNumber">
         /// DO NOT USE. Populated by <see cref="CallerLineNumberAttribute"/>.<br/>

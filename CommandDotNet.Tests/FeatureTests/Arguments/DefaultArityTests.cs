@@ -149,12 +149,19 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         class ArgModel : IArgumentModel
         {
+            [Operand]
             public bool Boolean { get; set; }
+            [Operand]
             public bool? NullableBoolean { get; set; }
+            [Operand]
             public int Number { get; set; }
+            [Operand]
             public int? NullableNumber { get; set; }
+            [Operand]
             public string Text { get; set; }
+            [Operand]
             public Uri Uri { get; set; }
+            [Operand]
             public IEnumerable<string> Texts { get; set; }
         }
 
