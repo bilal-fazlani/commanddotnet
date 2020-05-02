@@ -18,7 +18,7 @@ namespace CommandDotNet.Execution
         private class Handler
         {
             public CancellationTokenSource Source { get; }
-            public bool IgnoreCtrlC { get; set; }
+            public bool ShouldIgnoreCtrlC { get; set; }
 
             public Handler(CancellationTokenSource source)
             {
@@ -70,18 +70,21 @@ namespace CommandDotNet.Execution
                 return DisposableAction.Null;
             }
 
-            var handler = SourceStack.Peek().GetHandler();
-            handler.IgnoreCtrlC = true;
-            return new DisposableAction(() => handler.IgnoreCtrlC = false);
+            var handler = SourceStack.Peek().GetHandler()!;
+            handler.ShouldIgnoreCtrlC = true;
+            return new DisposableAction(() => handler.ShouldIgnoreCtrlC = false);
         }
 
         private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {
-            var context = SourceStack.Peek();
-            var handler = context.GetHandler();
-            if (!handler.IgnoreCtrlC)
+            var handler = SourceStack.Peek()?.GetHandler();
+            if (handler == null)
             {
-                StopRun(context);
+                return;
+            }
+            if (!handler.ShouldIgnoreCtrlC)
+            {
+                StopRun(handler);
                 e.Cancel = true;
             }
         }
@@ -99,9 +102,14 @@ namespace CommandDotNet.Execution
             }
         }
 
-        private static void StopRun(CommandContext ctx)
+        private static void StopRun(Handler? handler)
         {
-            var src = ctx.GetHandler().Source;
+            if (handler == null)
+            {
+                // this is an edge case race condition.
+                return;
+            }
+            var src = handler.Source;
             if (!src.IsCancellationRequested)
             {
                 src.Cancel();
@@ -110,7 +118,7 @@ namespace CommandDotNet.Execution
 
         private static void Shutdown()
         {
-            SourceStack.ForEach(StopRun);
+            SourceStack.ForEach(ctx => StopRun(ctx.GetHandler()));
         }
 
         internal static class TestAccess
@@ -118,22 +126,22 @@ namespace CommandDotNet.Execution
             internal static ConsoleCancelEventArgs Console_CancelKeyPress()
             {
                 var args = Activate<ConsoleCancelEventArgs>(ConsoleSpecialKey.ControlC);
-                CancellationHandlers.Console_CancelKeyPress(null, args);
+                CancellationHandlers.Console_CancelKeyPress(new object(), args);
                 return args;
             }
 
             internal static void CurrentDomain_ProcessExit() =>
-                CancellationHandlers.CurrentDomain_ProcessExit(null, EventArgs.Empty);
+                CancellationHandlers.CurrentDomain_ProcessExit(new object(), EventArgs.Empty);
 
             internal static UnhandledExceptionEventArgs CurrentDomain_UnhandledException(bool isTerminating)
             {
                 var ex = new Exception("some random exception");
                 var args = Activate<UnhandledExceptionEventArgs>(ex, isTerminating);
-                CancellationHandlers.CurrentDomain_UnhandledException(null, args);
+                CancellationHandlers.CurrentDomain_UnhandledException(new object(), args);
                 return args;
             }
 
-            internal static T Activate<T>(params object[] parameters)
+            private static T Activate<T>(params object[] parameters)
             {
                 var bindingFlags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.CreateInstance;
                 var parameterTypes = parameters.Select(p => p.GetType()).ToArray();

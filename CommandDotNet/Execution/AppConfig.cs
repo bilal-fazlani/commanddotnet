@@ -34,7 +34,7 @@ namespace CommandDotNet.Execution
         /// The application <see cref="IDependencyResolver"/>.
         /// Set in <see cref="AppRunner.Configure"/>
         /// </summary>
-        public IDependencyResolver DependencyResolver { get; }
+        public IDependencyResolver? DependencyResolver { get; }
 
         /// <summary>
         /// The application <see cref="IHelpProvider"/>.
@@ -43,7 +43,7 @@ namespace CommandDotNet.Execution
         /// </summary>
         public IHelpProvider HelpProvider { get; }
 
-        internal Action<OnRunCompletedEventArgs> OnRunCompleted { get; set; }
+        internal Action<OnRunCompletedEventArgs>? OnRunCompleted { get; set; }
         internal TokenizationEvents TokenizationEvents { get; }
         internal BuildEvents BuildEvents { get; }
         internal IReadOnlyCollection<ExecutionMiddleware> MiddlewarePipeline { get; set; }
@@ -53,10 +53,11 @@ namespace CommandDotNet.Execution
         internal ResolverService ResolverService { get; }
 
         public AppConfig(AppSettings appSettings, IConsole console,
-            IDependencyResolver dependencyResolver, IHelpProvider helpProvider, 
-            NameTransformation nameTransformation, Action<OnRunCompletedEventArgs> onRunCompleted,
+            IDependencyResolver? dependencyResolver, IHelpProvider helpProvider,
+            NameTransformation? nameTransformation, Action<OnRunCompletedEventArgs>? onRunCompleted,
             TokenizationEvents tokenizationEvents, BuildEvents buildEvents, IServices services,
-            Dictionary<Type, Func<CommandContext, object>> parameterResolversByType)
+            Dictionary<Type, Func<CommandContext, object>> parameterResolversByType,
+            ExecutionMiddleware[] middlewarePipeline, TokenTransformation[] tokenTransformations)
         {
             AppSettings = appSettings;
             Console = console;
@@ -68,6 +69,8 @@ namespace CommandDotNet.Execution
             BuildEvents = buildEvents;
             Services = services;
             ParameterResolversByType = parameterResolversByType;
+            MiddlewarePipeline = middlewarePipeline;
+            TokenTransformations = tokenTransformations;
 
             ResolverService = services.GetOrAdd(() => new ResolverService());
             ResolverService.BackingResolver = dependencyResolver;
