@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace CommandDotNet
 {
@@ -48,5 +49,21 @@ namespace CommandDotNet
         public bool AssignToExecutableSubcommands { get; set; }
 
         public string Description { get; set; }
+
+        public int CallerLineNumber { get; }
+
+        /// <summary>
+        /// Constructs an <see cref="OptionAttribute"/>
+        /// </summary>
+        /// <param name="__callerLineNumber">
+        /// DO NOT USE. Populated by <see cref="CallerLineNumberAttribute"/>.<br/>
+        /// This value is used to ensure options defined in an <see cref="IArgumentModel"/>
+        /// are positioned based on their property's order in the class definition.<br/>
+        /// This value is ignored for parameters.
+        /// </param>
+        public OptionAttribute([CallerLineNumber] int __callerLineNumber = 0)
+        {
+            CallerLineNumber = __callerLineNumber;
+        }
     }
 }
