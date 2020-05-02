@@ -5,16 +5,16 @@ namespace CommandDotNet.Diagnostics
 {
     internal class CommandLoggerConfig
     {
-        public Func<CommandContext, Action<string>?> WriterFactory { get; }
+        public Func<CommandContext, Action<string?>?>? WriterFactory { get; }
         public bool IncludeSystemInfo { get; }
         public bool IncludeAppConfig { get; }
-        public Func<CommandContext, IEnumerable<(string key, string value)>> AdditionalHeadersCallback { get; }
+        public Func<CommandContext, IEnumerable<(string key, string value)>>? AdditionalHeadersCallback { get; }
 
         public CommandLoggerConfig(
-            Func<CommandContext, Action<string>> writerFactory,
+            Func<CommandContext, Action<string?>?>? writerFactory,
             bool includeSystemInfo,
             bool includeAppConfig,
-            Func<CommandContext, IEnumerable<(string, string)>> additionalHeadersCallback)
+            Func<CommandContext, IEnumerable<(string, string)>>? additionalHeadersCallback)
         {
             WriterFactory = writerFactory;
             IncludeSystemInfo = includeSystemInfo;

@@ -17,7 +17,7 @@ namespace CommandDotNet.Diagnostics
 
         public static void Log(
             CommandContext context,
-            Action<string>? writer = null,
+            Action<string?>? writer = null,
             bool includeSystemInfo = true,
             bool includeAppConfig = false)
         {

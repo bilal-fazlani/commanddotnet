@@ -7,11 +7,9 @@
         /// else the target command if exists,
         /// else the root command.
         /// </summary>
-        public static void PrintHelp(this CommandContext commandContext, Command command = null)
+        public static void PrintHelp(this CommandContext commandContext, Command? command = null)
         {
-            command = command
-                      ?? commandContext.ParseResult?.TargetCommand
-                      ?? commandContext.RootCommand;
+            command ??= commandContext.ParseResult?.TargetCommand ?? commandContext.RootCommand!;
             var helpText = commandContext.AppConfig.HelpProvider.GetHelpText(command);
             commandContext.Console.Out.WriteLine(helpText);
         }

@@ -28,12 +28,12 @@ namespace CommandDotNet
         /// The root command for the type specified in <see cref="AppRunner{TRootCommandType}"/>.  
         /// This is populated in the <see cref="MiddlewareStages.Tokenize"/> stage.
         /// </summary>
-        public Command RootCommand { get; set; }
+        public Command? RootCommand { get; set; }
 
         /// <summary>
         /// The results of the <see cref="MiddlewareStages.ParseInput"/> stage.
         /// </summary>
-        public ParseResult ParseResult { get; set; }
+        public ParseResult? ParseResult { get; set; }
 
         /// <summary>
         /// The <see cref="InvocationStep"/>s within the pipeline are mostly populated in
@@ -72,7 +72,7 @@ namespace CommandDotNet
         /// Delegate from AppConfig. Included here for easier discovery
         /// and reduce confusion with <see cref="Services"/>
         /// </remarks>
-        public IDependencyResolver DependencyResolver => AppConfig.DependencyResolver;
+        public IDependencyResolver? DependencyResolver => AppConfig.DependencyResolver;
 
         public CommandContext(
             string[] originalArgs, 

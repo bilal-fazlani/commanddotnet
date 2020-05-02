@@ -163,7 +163,7 @@ namespace CommandDotNet
         {
             operand.Parent = this;
             var lastOperand = Operands.LastOrDefault();
-            if (lastOperand != null && lastOperand.Arity.AllowsMany())
+            if (lastOperand is { } && lastOperand.Arity.AllowsMany())
             {
                 var message =
                     $"The last operand '{lastOperand.Name}' accepts multiple values. No more operands can be added.";
@@ -272,7 +272,7 @@ namespace CommandDotNet
         {
             unchecked
             {
-                return ((Name != null ? Name.GetHashCode() : 0) * 397) ^ (Parent != null ? Parent.GetHashCode() : 0);
+                return ((Name != null ? Name.GetHashCode() : 0) * 397) ^ (Parent is { } ? Parent.GetHashCode() : 0);
             }
         }
     }

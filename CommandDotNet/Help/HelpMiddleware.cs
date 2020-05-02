@@ -40,7 +40,7 @@ namespace CommandDotNet.Help
 
         private static Task<int> CheckIfShouldShowHelp(CommandContext ctx, ExecutionDelegate next)
         {
-            var parseResult = ctx.ParseResult;
+            var parseResult = ctx.ParseResult!;
             var targetCommand = parseResult.TargetCommand;
 
             if (parseResult.ParseError != null)

@@ -32,7 +32,7 @@ namespace CommandDotNet.Parsing.Typos
 
         private static Task<int> TypoSuggest(CommandContext ctx, ExecutionDelegate next)
         {
-            if (ctx.ParseResult.ParseError != null)
+            if (ctx.ParseResult!.ParseError != null)
             {
                 switch (ctx.ParseResult.ParseError)
                 {

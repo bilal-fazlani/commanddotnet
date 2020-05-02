@@ -57,7 +57,7 @@ namespace CommandDotNet.Prompts
                 return next(commandContext);
             }
 
-            if (parseResult.HelpWasRequested())
+            if (parseResult!.HelpWasRequested())
             {
                 Log.Debug("Skipping prompts. Help was requested.");
                 return next(commandContext);

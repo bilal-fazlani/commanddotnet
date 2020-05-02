@@ -5,8 +5,8 @@
     /// </summary>
     public class Indent
     {
-        private readonly Indent _previousDepth;
-        private Indent _nextDepth;
+        private readonly Indent? _previousDepth;
+        private Indent? _nextDepth;
 
         /// <summary>The value of a single indent</summary>
         public string SingleIndent { get; }
@@ -19,7 +19,7 @@
         /// <see cref="PadLeft"/> is passed to other <see cref="Indent"/> during <see cref="Increment"/>
         /// but is included as part of <see cref="Value"/>.
         /// </summary>
-        public string PadLeft { get; }
+        public string? PadLeft { get; }
 
         /// <summary>The value of <see cref="PadLeft"/> plus <see cref="SingleIndent"/> repeated <see cref="Depth"/> times</summary>
         public string Value { get; }
@@ -52,7 +52,7 @@
         }
 
         /// <summary>Returns an Indent with <see cref="Depth"/>+1<br/></summary>
-        public Indent Increment() => _nextDepth ?? (_nextDepth = new Indent(this));
+        public Indent Increment() => _nextDepth ??= new Indent(this);
 
         /// <summary>Returns an Indent with <see cref="Depth"/>-1<br/></summary>
         public Indent Decrement() => _previousDepth ?? this;

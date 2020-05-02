@@ -38,7 +38,7 @@ namespace CommandDotNet.Parsing
             bool ignoreRemainingArguments = false;
             var remainingOperands = new List<Token>();
 
-            Command currentCommand = commandContext.RootCommand;
+            Command currentCommand = commandContext.RootCommand!;
             Option? currentOption = null;
             Token? currentOptionToken = null;
             var operands = new OperandEnumerator(currentCommand.Operands);

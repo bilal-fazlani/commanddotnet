@@ -41,7 +41,7 @@ namespace CommandDotNet.ClassModeling
 
         private static Task<int> AssembleInvocationPipelineMiddleware(CommandContext commandContext, ExecutionDelegate next)
         {
-            var command = commandContext.ParseResult.TargetCommand;
+            var command = commandContext.ParseResult!.TargetCommand;
             var commandDef = command.GetCommandDef();
             if (commandDef != null)
             {
