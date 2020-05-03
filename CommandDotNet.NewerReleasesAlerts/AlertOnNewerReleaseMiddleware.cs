@@ -9,7 +9,7 @@ namespace CommandDotNet.NewerReleasesAlerts
 {
     public static class AlertOnNewerReleaseMiddleware
     {
-        public delegate string ParseSemanticVersionFromResponseBodyDelegate(string responseBody);
+        public delegate string? ParseSemanticVersionFromResponseBodyDelegate(string? responseBody);
         public delegate string PostfixAlertMessageDelegate(string latestReleaseVersion);
 
         /// <summary>
@@ -32,9 +32,9 @@ namespace CommandDotNet.NewerReleasesAlerts
         public static AppRunner UseNewerReleaseAlert(this AppRunner appRunner, 
             string latestReleaseUrl,
             ParseSemanticVersionFromResponseBodyDelegate parseSemanticVersionFromResponseBodyCallback,
-            PostfixAlertMessageDelegate postfixAlertMessageCallback = null,
-            OverrideHttpRequestCallback overrideHttpRequestCallback = null,
-            Predicate<Command> skipCommand = null)
+            PostfixAlertMessageDelegate? postfixAlertMessageCallback = null,
+            OverrideHttpRequestCallback? overrideHttpRequestCallback = null,
+            Predicate<Command>? skipCommand = null)
         {
             return appRunner.Configure(c =>
             {
@@ -53,15 +53,15 @@ namespace CommandDotNet.NewerReleasesAlerts
         {
             public string LatestReleaseUrl { get; }
             public ParseSemanticVersionFromResponseBodyDelegate ParseSemanticVersionFromResponseBodyCallback { get; }
-            public PostfixAlertMessageDelegate PostfixAlertMessageCallback { get; }
-            public OverrideHttpRequestCallback OverrideHttpRequestCallback { get; }
-            public Predicate<Command> SkipCommand { get; }
+            public PostfixAlertMessageDelegate? PostfixAlertMessageCallback { get; }
+            public OverrideHttpRequestCallback? OverrideHttpRequestCallback { get; }
+            public Predicate<Command>? SkipCommand { get; }
 
             public NewerReleaseConfig(string latestReleaseUrl, 
                 ParseSemanticVersionFromResponseBodyDelegate semanticVersionFromResponseBodyCallback, 
-                PostfixAlertMessageDelegate postfixAlertMessageCallback, 
-                OverrideHttpRequestCallback overrideHttpRequestCallback, 
-                Predicate<Command> skipCommand)
+                PostfixAlertMessageDelegate? postfixAlertMessageCallback, 
+                OverrideHttpRequestCallback? overrideHttpRequestCallback, 
+                Predicate<Command>? skipCommand)
             {
                 LatestReleaseUrl = latestReleaseUrl;
                 ParseSemanticVersionFromResponseBodyCallback = semanticVersionFromResponseBodyCallback;
@@ -75,10 +75,10 @@ namespace CommandDotNet.NewerReleasesAlerts
         {
             var config = context.AppConfig.Services.GetOrThrow<NewerReleaseConfig>();
 
-            var skipCommand = config.SkipCommand?.Invoke(context.ParseResult.TargetCommand) ?? false;
+            var skipCommand = config.SkipCommand?.Invoke(context.ParseResult!.TargetCommand) ?? false;
             if (!skipCommand)
             {
-                SemVersion latestReleaseVersion = null;
+                SemVersion? latestReleaseVersion = null;
 
                 var shouldAlert = TryGetCurrentVersion(context, out var currentVersion)
                                   && TryGetLatestReleaseVersion(context, config, out latestReleaseVersion)
@@ -88,7 +88,7 @@ namespace CommandDotNet.NewerReleasesAlerts
                     var message = $"A newer release exists. Current:{currentVersion} Latest:{latestReleaseVersion}";
                     if (config.PostfixAlertMessageCallback != null)
                     {
-                        message += $" {config.PostfixAlertMessageCallback?.Invoke(latestReleaseVersion.ToString())}";
+                        message += $" {config.PostfixAlertMessageCallback?.Invoke(latestReleaseVersion!.ToString())}";
                     }
 
                     context.Console.Out.WriteLine(message);
@@ -106,23 +106,21 @@ namespace CommandDotNet.NewerReleasesAlerts
 
         }
 
-        private static bool TryGetLatestReleaseVersion(CommandContext context, NewerReleaseConfig config, out SemVersion semVersion)
+        private static bool TryGetLatestReleaseVersion(CommandContext context, NewerReleaseConfig config, out SemVersion? semVersion)
         {
             try
             {
-                using (var httpClient = new HttpClient())
-                {
-                    httpClient.DefaultRequestHeaders.Add("User-Agent", "Other");
+                using var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Add("User-Agent", "Other");
 
-                    var requestUri = new Uri(config.LatestReleaseUrl);
+                var requestUri = new Uri(config.LatestReleaseUrl);
 
-                    var response = config.OverrideHttpRequestCallback?.Invoke(httpClient, requestUri).Result
-                                   ?? httpClient.GetStringAsync(requestUri).Result;
+                var response = config.OverrideHttpRequestCallback?.Invoke(httpClient, requestUri).Result
+                               ?? httpClient.GetStringAsync(requestUri).Result;
 
-                    var version = config.ParseSemanticVersionFromResponseBodyCallback(response);
+                var version = config.ParseSemanticVersionFromResponseBodyCallback(response);
 
-                    return SemVersion.TryParse(version, out semVersion);
-                }
+                return SemVersion.TryParse(version, out semVersion);
             }
             catch(Exception e)
             {

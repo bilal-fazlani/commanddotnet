@@ -20,24 +20,29 @@ namespace CommandDotNet.NewerReleasesAlerts
         /// </param>
         public static AppRunner UseNewerReleaseAlertOnGitHub(this AppRunner appRunner,
             string organizationName, string repositoryName,
-            Func<string, string> getVersionFromReleaseName = null,
-            OverrideHttpRequestCallback overrideHttpRequestCallback = null,
-            Predicate<Command> skipCommand = null)
+            Func<string?, string?>? getVersionFromReleaseName = null,
+            OverrideHttpRequestCallback? overrideHttpRequestCallback = null,
+            Predicate<Command>? skipCommand = null)
         {
             if (getVersionFromReleaseName == null)
             {
                 getVersionFromReleaseName = name => name;
             }
 
+            var latestReleaseUrl = BuildLatestReleaseUrl(organizationName, repositoryName);
             return appRunner.UseNewerReleaseAlert(
-                BuildLatestReleaseUrl(organizationName, repositoryName), 
+                latestReleaseUrl, 
                 response => getVersionFromReleaseName(GetNameFromReleaseBody(response)),
                 version => $"Download from {BuildDownloadUrl(organizationName, repositoryName, version)}",
                 overrideHttpRequestCallback, skipCommand);
         }
 
-        private static string GetNameFromReleaseBody(string response)
+        private static string? GetNameFromReleaseBody(string? response)
         {
+            if (response is null)
+            {
+                return null;
+            }
             JObject o = JObject.Parse(response);
             var ver = o.SelectToken("$.name")?.Value<string>();
             return ver?.Replace("v", "");
