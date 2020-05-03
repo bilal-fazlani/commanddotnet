@@ -15,8 +15,7 @@ namespace CommandDotNet.Tokens
 
         public static Token Tokenize(string arg, bool includeDirectives = false, string sourceName = "args")
         {
-            Token? parsedToken;
-            Token token = (includeDirectives && TryTokenizeDirective(arg, out parsedToken))
+            Token token = (includeDirectives && TryTokenizeDirective(arg, out Token? parsedToken))
                                 || TryTokenizeSeparator(arg, out parsedToken)
                                 || TryTokenizeOption(arg, out parsedToken)
                 ? parsedToken!

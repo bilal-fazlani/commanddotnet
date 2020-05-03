@@ -66,7 +66,7 @@ namespace CommandDotNet.Diagnostics
             }
 
             sb.Append("***************************************");
-            writer = writer ?? context.Console.Out.Write;
+            writer ??= context.Console.Out.Write;
             writer(sb.ToString());
         }
 

@@ -53,7 +53,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
 
             public static IEnumerable<string> GetKeysFromConvention(IArgument argument)
             {
-                IEnumerable<string> GetOptionKeys(Option option)
+                static IEnumerable<string> GetOptionKeys(Option option)
                 {
                     if (!option.LongName.IsNullOrWhitespace()) yield return $"--{option.LongName}";
                     if (option.ShortName.HasValue) yield return $"-{option.ShortName}";

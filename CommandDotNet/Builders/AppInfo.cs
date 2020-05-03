@@ -22,6 +22,9 @@ namespace CommandDotNet.Builders
 
         private string? _version;
 
+        /// <summary>True if the application's filename ends with .exe</summary>
+        public bool IsExe { get; }
+
         /// <summary>True if published as a self-contained single executable</summary>
         public bool IsSelfContainedExe { get; }
 
@@ -45,6 +48,7 @@ namespace CommandDotNet.Builders
             string filePath, string fileName,
             string? version = null)
         {
+            IsExe = isExe;
             IsSelfContainedExe = isSelfContainedExe;
             IsRunViaDotNetExe = isRunViaDotNetExe;
             EntryAssembly = entryAssembly;
@@ -119,9 +123,8 @@ namespace CommandDotNet.Builders
             return new AppInfo(isExe, isSelfContainedExe, isRunViaDotNetExe, entryAssembly!, filePath!, fileName);
         }
 
-        internal static string GetVersion(Assembly hostAssembly)
+        private static string GetVersion(Assembly hostAssembly)
         {
-            var filename = Path.GetFileName(hostAssembly.Location);
             var fvi = FileVersionInfo.GetVersionInfo(hostAssembly.Location);
             return fvi.ProductVersion;
         }

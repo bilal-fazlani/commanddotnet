@@ -27,7 +27,7 @@
         private Indent(Indent previous)
         {
             SingleIndent = previous.SingleIndent;
-            Depth = Depth + 1;
+            Depth += 1;
             Value = previous.Value + SingleIndent;
             _previousDepth = previous;
         }

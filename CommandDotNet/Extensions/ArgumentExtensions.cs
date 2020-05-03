@@ -59,17 +59,13 @@ namespace CommandDotNet.Extensions
             Func<Option, TResult>? optionFunc = null)
             where TResult : class
         {
-            switch (argument)
+            return argument switch
             {
-                case null:
-                    throw new ArgumentNullException(nameof(argument));
-                case Operand operand:
-                    return operandFunc?.Invoke(operand);
-                case Option option:
-                    return optionFunc?.Invoke(option);
-                default:
-                    throw new ArgumentException(BuildExMessage(argument));
-            }
+                null => throw new ArgumentNullException(nameof(argument)),
+                Operand operand => operandFunc?.Invoke(operand),
+                Option option => optionFunc?.Invoke(option),
+                _ => throw new ArgumentException(BuildExMessage(argument))
+            };
         }
 
         /// <summary>
@@ -83,17 +79,13 @@ namespace CommandDotNet.Extensions
             Func<Option, TResult> optionFunc)
             where TResult : struct
         {
-            switch (argument)
+            return argument switch
             {
-                case null:
-                    throw new ArgumentNullException(nameof(argument));
-                case Operand operand:
-                    return operandFunc.Invoke(operand);
-                case Option option:
-                    return optionFunc.Invoke(option);
-                default:
-                    throw new ArgumentException(BuildExMessage(argument));
-            }
+                null => throw new ArgumentNullException(nameof(argument)),
+                Operand operand => operandFunc.Invoke(operand),
+                Option option => optionFunc.Invoke(option),
+                _ => throw new ArgumentException(BuildExMessage(argument))
+            };
         }
 
         private static string BuildExMessage(IArgument argument)

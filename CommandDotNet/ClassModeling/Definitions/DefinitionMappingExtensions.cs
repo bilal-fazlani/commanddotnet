@@ -32,11 +32,11 @@ namespace CommandDotNet.ClassModeling.Definitions
             var commandBuilder = new CommandBuilder(command);
 
             commandDef.InvokeMethodDef?.ArgumentDefs
-                .Select(a => a.ToArgument(command, commandContext.AppConfig, false))
+                .Select(a => a.ToArgument(commandContext.AppConfig, false))
                 .ForEach(commandBuilder.AddArgument);
 
             commandDef.InterceptorMethodDef?.ArgumentDefs
-                .Select(a => a.ToArgument(command, commandContext.AppConfig, true))
+                .Select(a => a.ToArgument(commandContext.AppConfig, true))
                 .ForEach(commandBuilder.AddArgument);
 
             commandDef.SubCommands
@@ -48,13 +48,12 @@ namespace CommandDotNet.ClassModeling.Definitions
             return commandBuilder;
         }
 
-        private static IArgument ToArgument(this IArgumentDef argumentDef, Command parent, AppConfig appConfig, bool isInterceptorOption)
+        private static IArgument ToArgument(this IArgumentDef argumentDef, AppConfig appConfig, bool isInterceptorOption)
         {
             var underlyingType = argumentDef.Type.GetUnderlyingType();
 
             var argument = BuildArgument(
-                argumentDef, 
-                parent,
+                argumentDef,
                 appConfig,
                 new TypeInfo(argumentDef.Type, underlyingType), 
                 isInterceptorOption);
@@ -72,7 +71,6 @@ namespace CommandDotNet.ClassModeling.Definitions
         }
 
         private static IArgument BuildArgument(IArgumentDef argumentDef,
-            Command parent,
             AppConfig appConfig,
             TypeInfo typeInfo,
             bool isInterceptorOption)
@@ -105,12 +103,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
                 var assignOnlyToExecutableSubcommands = optionAttr?.AssignToExecutableSubcommands ?? false;
                 isInterceptorOption = isInterceptorOption && !assignOnlyToExecutableSubcommands;
-
-                var ignoreDefaultLongName = optionAttr?.NoLongName ?? false;
-
-                var longName = ignoreDefaultLongName 
-                    ? optionAttr?.LongName 
-                    : (optionAttr?.LongName ?? argumentDef.Name);
+                
                 return new Option(
                     ParseLongName(argumentDef, optionAttr),
                     ParseShortName(argumentDef, optionAttr?.ShortName),

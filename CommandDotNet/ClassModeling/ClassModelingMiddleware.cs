@@ -67,7 +67,7 @@ namespace CommandDotNet.ClassModeling
 
         private static Task<int> InvokeInvocationPipelineMiddleware(CommandContext commandContext, ExecutionDelegate _)
         {
-            Task<int> Invoke(InvocationStep step, CommandContext context, ExecutionDelegate next, bool isCommand)
+            static Task<int> Invoke(InvocationStep step, CommandContext context, ExecutionDelegate next, bool isCommand)
             {
                 var result = step.Invocation.Invoke(context, step.Instance!, next);
                 return isCommand

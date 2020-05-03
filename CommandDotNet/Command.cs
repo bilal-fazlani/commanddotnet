@@ -211,7 +211,7 @@ namespace CommandDotNet
 
                 if (duplicateAlias != null && ReferenceEquals(parentOrThis, this))
                 {
-                    string GetArgNodeName(IArgumentNode arg) => $"{arg.GetType().Name}:{arg.Name}(source:{arg.DefinitionSource})";
+                    static string GetArgNodeName(IArgumentNode arg) => $"{arg.GetType().Name}:{arg.Name}(source:{arg.DefinitionSource})";
 
                     throw new InvalidConfigurationException(
                         $"Duplicate alias '{duplicateAlias}' added to command '{this.Name}'. " +
@@ -250,7 +250,7 @@ namespace CommandDotNet
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj))
+            if (obj is null)
             {
                 return false;
             }

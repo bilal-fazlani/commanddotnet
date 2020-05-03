@@ -85,15 +85,14 @@ namespace CommandDotNet.Parsing.Typos
                 return command.Subcommands.SelectMany(o => o.Aliases).ToList();
             }
 
-            switch (token.TokenType)
+            return token.TokenType switch
             {
-                case TokenType.Option:
-                    return TrySuggest(ctx, command, token.Value, GetOptionNames(), "is not a valid option", "--");
-                case TokenType.Value:
-                    return TrySuggest(ctx, command, token.Value, GetSubcommandNames(), "is not a valid subcommand", null);
-                default:
-                    return false;
-            }
+                TokenType.Option => TrySuggest(ctx, command, token.Value, 
+                    GetOptionNames(), "is not a valid option", "--"),
+                TokenType.Value => TrySuggest(ctx, command, token.Value, 
+                    GetSubcommandNames(), "is not a valid subcommand", null),
+                _ => false
+            };
         }
 
         private static bool TrySuggest(CommandContext ctx,
