@@ -21,11 +21,11 @@ namespace CommandDotNet.TestTools.Prompts
         /// <param name="promptFilter">Applied to the prompt text. Use this to ensure the answer is for the correct prompt.</param>
         /// <param name="reuse">When false, this answer is discarded after use.</param>
         public Answer(
-            IEnumerable<ConsoleKeyInfo> consoleKeys, 
+            IEnumerable<ConsoleKeyInfo>? consoleKeys, 
             Predicate<string>? promptFilter = null,
             bool reuse = false)
         {
-            ConsoleKeys = consoleKeys.ToCollection();
+            ConsoleKeys = consoleKeys?.ToCollection() ?? EmptyCollection<ConsoleKeyInfo>.Instance;
             Reuse = reuse;
             PromptFilter = promptFilter;
         }

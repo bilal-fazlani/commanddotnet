@@ -83,28 +83,28 @@ namespace CommandDotNet.TestTools
                 var testConsole = new TestConsole(
                     onReadLine,
                     pipedInput,
-                    promptResponder == null
-                        ? (Func<TestConsole, ConsoleKeyInfo>) null
+                    promptResponder is null
+                        ? (Func<TestConsole, ConsoleKeyInfo>?) null
                         : promptResponder.OnReadKey);
                 runner.Configure(c => c.Console = testConsole);
 
-                CommandContext context = null;
+                CommandContext? context = null;
                 Task<int> CaptureCommandContext(CommandContext commandContext, ExecutionDelegate next)
                 {
                     context = commandContext;
                     return next(commandContext);
                 }
-                runner.Configure(c => c.UseMiddleware(CaptureCommandContext, MiddlewareSteps.DebugDirective + 100));
+                runner.Configure(c => c.UseMiddleware(CaptureCommandContext, MiddlewareSteps.DebugDirective - 100));
 
                 try
                 {
                     var exitCode = runner.Run(args);
-                    return new AppRunnerResult(exitCode, runner, context, testConsole, config)
+                    return new AppRunnerResult(exitCode, runner, context!, testConsole, config)
                         .LogResult(logLine);
                 }
                 catch (Exception e)
                 {
-                    var result = new AppRunnerResult(1, runner, context, testConsole, config, e);
+                    var result = new AppRunnerResult(1, runner, context!, testConsole, config, e);
                     if (config.OnError.CaptureAndReturnResult)
                     {
                         testConsole.Error.WriteLine(e.Message);
@@ -119,7 +119,7 @@ namespace CommandDotNet.TestTools
             }
         }
 
-        internal static AppRunnerResult LogResult(this AppRunnerResult result, Action<string> logLine, bool onError = false)
+        internal static AppRunnerResult LogResult(this AppRunnerResult result, Action<string?> logLine, bool onError = false)
         {
             var print = onError || result.EscapedException != null 
                 ? result.Config.OnError.Print 

@@ -32,12 +32,12 @@ namespace CommandDotNet.TestTools
             _services.Add(service.GetType(), service);
         }
 
-        public void Add<T>(T service)
+        public void Add<T>(T service) where T: class
         {
             _services.Add(typeof(T), service);
         }
 
-        public void AddOrUpdate<T>(T service)
+        public void AddOrUpdate<T>(T service) where T : class
         {
             _services[typeof(T)] = service;
         }

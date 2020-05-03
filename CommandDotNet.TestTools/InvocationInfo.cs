@@ -7,9 +7,9 @@ using CommandDotNet.Rendering;
 
 namespace CommandDotNet.TestTools
 {
-    public class InvocationInfo<T> : InvocationInfo
+    public class InvocationInfo<T> : InvocationInfo where T: class
     {
-        public new T Instance => (T)base.Instance;
+        public new T? Instance => (T?)base.Instance;
 
         public InvocationInfo(CommandContext commandContext, InvocationStep invocationStep)
             : base(commandContext, invocationStep)
@@ -17,24 +17,22 @@ namespace CommandDotNet.TestTools
         }
     }
 
-    public class InvocationInfo : InvocationStep, IInvocation
+    public class InvocationInfo
     {
         private readonly CommandContext _commandContext;
         private readonly InvocationStep _invocationStep;
 
-        public new object Instance => _invocationStep?.Instance;
+        public object? Instance => _invocationStep?.Instance;
+        public Command? Command => _invocationStep?.Command;
+        public IInvocation? Invocation => _invocationStep?.Invocation;
 
-        public new Command Command => _invocationStep?.Command;
-
-        public new IInvocation Invocation => _invocationStep?.Invocation;
-
-        public IReadOnlyCollection<IArgument> Arguments => Invocation?.Arguments;
-        public IReadOnlyCollection<ParameterInfo> Parameters => Invocation?.Parameters;
-        public object[] ParameterValues => Invocation?.ParameterValues;
-        public MethodInfo MethodInfo => Invocation?.MethodInfo;
+        public IReadOnlyCollection<IArgument>? Arguments => Invocation?.Arguments;
+        public IReadOnlyCollection<ParameterInfo>? Parameters => Invocation?.Parameters;
+        public object?[]? ParameterValues => Invocation?.ParameterValues;
+        public MethodInfo? MethodInfo => Invocation?.MethodInfo;
 
         /// <summary>Returns the <see cref="ParameterInfo"/> for parameters that define arguments</summary>
-        public IEnumerable<ParameterInfo> ArgumentParameters =>
+        public IEnumerable<ParameterInfo>? ArgumentParameters =>
             Parameters?.Where(p => IsArgumentParameter(p, _commandContext));
 
         /// <summary>
@@ -42,11 +40,11 @@ namespace CommandDotNet.TestTools
         /// For example, <see cref="InterceptorExecutionDelegate"/>, <see cref="CommandContext"/>,
         /// <see cref="IConsole"/> and any other type configured as a parameter resolver.
         /// </summary>
-        public IEnumerable<ParameterInfo> NonArgumentParameters =>
+        public IEnumerable<ParameterInfo>? NonArgumentParameters =>
             Parameters?.Where(p => !IsArgumentParameter(p, _commandContext));
 
         /// <summary>Returns the <see cref="ParameterValues"/> for parameters that define arguments</summary>
-        public IEnumerable<object> ArgumentParameterValues =>
+        public IEnumerable<object?>? ArgumentParameterValues =>
             ArgumentParameters?.Select(p => ParameterValues?[p.Position]);
 
         /// <summary>
@@ -54,7 +52,7 @@ namespace CommandDotNet.TestTools
         /// For example, <see cref="InterceptorExecutionDelegate"/>, <see cref="CommandContext"/>,
         /// <see cref="IConsole"/> and any other type configured as a parameter resolver.
         /// </summary>
-        public IEnumerable<object> NonArgumentParameterValues =>
+        public IEnumerable<object?>? NonArgumentParameterValues =>
             NonArgumentParameters?.Select(p => ParameterValues?[p.Position]);
 
         /// <summary>
@@ -63,10 +61,11 @@ namespace CommandDotNet.TestTools
         /// must have been configured for the <see cref="AppRunner"/>.
         /// </summary>
         public bool WasInvoked =>
-            CastInvocation<TrackingInvocation>(Invocation, _commandContext).WasInvoked;
+            CastInvocation<TrackingInvocation>(Invocation, _commandContext)?.WasInvoked ?? false;
 
-        public InvocationInfo(CommandContext commandContext, InvocationStep invocationStep) : base(invocationStep.Command, invocationStep.Invocation)
+        public InvocationInfo(CommandContext commandContext, InvocationStep invocationStep)
         {
+
             _commandContext = commandContext;
             _invocationStep = invocationStep ?? throw new ArgumentNullException(nameof(invocationStep));
         }
@@ -83,11 +82,12 @@ namespace CommandDotNet.TestTools
                    && !ctx.AppConfig.ParameterResolversByType.ContainsKey(info.ParameterType);
         }
 
-        private static TInvocation CastInvocation<TInvocation>(IInvocation invocation, CommandContext ctx) where TInvocation : IInvocation
+        private static TInvocation? CastInvocation<TInvocation>(IInvocation? invocation, CommandContext ctx) 
+            where TInvocation : class, IInvocation
         {
             try
             {
-                return (TInvocation)invocation;
+                return (TInvocation?)invocation;
             }
             catch (InvalidCastException e)
             {

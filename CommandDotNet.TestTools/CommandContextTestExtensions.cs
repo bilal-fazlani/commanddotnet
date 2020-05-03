@@ -14,23 +14,33 @@ namespace CommandDotNet.TestTools
         public static InvocationInfo GetCommandInvocationInfo(this CommandContext ctx)
         {
             var step = ctx.InvocationPipeline?.TargetCommand;
-            AssertStepNotNull(step, nameof(InvocationPipeline.TargetCommand));
-            return new InvocationInfo(ctx, step);
+            if (step is null)
+            {
+                throw new InvalidOperationException(
+                    $"{nameof(CommandContext.InvocationPipeline)} or {nameof(InvocationPipeline.TargetCommand)} was null. " +
+                    "The middleware pipeline exited early.");
+            }
+            return new InvocationInfo(ctx, step!);
         }
 
         /// <summary>
         /// Returns a generic typed <see cref="InvocationInfo"/> for the <see cref="ParseResult.TargetCommand"/><br/>
         /// Throws an exception if the type does not host the <see cref="ParseResult.TargetCommand"/>.
         /// </summary>
-        public static InvocationInfo<TCommandClass> GetCommandInvocationInfo<TCommandClass>(this CommandContext ctx)
+        public static InvocationInfo<TCommandClass> GetCommandInvocationInfo<TCommandClass>(this CommandContext ctx) where TCommandClass: class
         {
             var step = ctx.InvocationPipeline?.TargetCommand;
-            AssertStepNotNull(step, nameof(InvocationPipeline.TargetCommand));
-            if (!(step.Instance is TCommandClass))
+            if (step is null)
+            {
+                throw new InvalidOperationException(
+                    $"{nameof(CommandContext.InvocationPipeline)} or {nameof(InvocationPipeline.TargetCommand)} was null. " +
+                    "The middleware pipeline exited early.");
+            }
+            if (!(step!.Instance is TCommandClass))
             {
                 throw new InvalidOperationException(
                     $"the {nameof(ctx.InvocationPipeline.TargetCommand)} is not hosted by " +
-                    $"{step.Instance.GetType()} and cannot be cast to {typeof(TCommandClass)}");
+                    $"{step.Instance!.GetType()} and cannot be cast to {typeof(TCommandClass)}");
             }
             return new InvocationInfo<TCommandClass>(ctx, step);
         }
@@ -43,12 +53,18 @@ namespace CommandDotNet.TestTools
         {
             var step = ctx.InvocationPipeline?.AncestorInterceptors?
                 .FirstOrDefault(i => i.Invocation.MethodInfo.DeclaringType == typeof(TInterceptorClass));
-            AssertStepNotNull(step, nameof(InvocationPipeline.AncestorInterceptors));
             if (step is null)
             {
+                if (ctx.InvocationPipeline?.AncestorInterceptors is null)
+                {
+                    throw new InvalidOperationException(
+                        $"{nameof(CommandContext.InvocationPipeline)} or {nameof(InvocationPipeline.AncestorInterceptors)} was null. " +
+                        "The middleware pipeline exited early");
+                }
+
                 throw new InvalidOperationException(
                     $"The interceptor for {typeof(TInterceptorClass)} is not in the hierarchy " +
-                    $"of the executed command {ctx.InvocationPipeline?.TargetCommand.Command}");
+                    $"of the executed command {ctx.InvocationPipeline.TargetCommand!.Command}");
             }
             return new InvocationInfo<TInterceptorClass>(ctx, step);
         }
@@ -59,16 +75,6 @@ namespace CommandDotNet.TestTools
             var step = ctx.InvocationPipeline?.All?
                 .FirstOrDefault(i => i.Invocation.MethodInfo.DeclaringType == typeof(TInterceptorClass));
             return step != null;
-        }
-
-        private static void AssertStepNotNull(InvocationStep step, string propertyName)
-        {
-            if (step == null)
-            {
-                throw new InvalidOperationException(
-                    $"{nameof(CommandContext.InvocationPipeline)} or {propertyName} was null. " +
-                    "The middleware pipeline exited early.");
-            }
         }
     }
 }

@@ -15,7 +15,7 @@ namespace CommandDotNet.TestTools
                 : CommandLineStringSplitter.Instance.Split(args).ToArray();
         }
 
-        public static IEnumerable<ConsoleKeyInfo> ToConsoleKeyInfos(this string text)
+        public static IEnumerable<ConsoleKeyInfo>? ToConsoleKeyInfos(this string? text)
         {
             // "\r\n" would result in two ConsoleKey.Enter
             return text?.Replace("\r\n", "\r").Select(ToConsoleKeyInfo);

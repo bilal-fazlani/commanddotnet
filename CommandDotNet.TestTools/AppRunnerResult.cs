@@ -18,11 +18,11 @@ namespace CommandDotNet.TestTools
         /// The exception that escaped from <see cref="AppRunner.Run"/><br/>
         /// Can only populated when <see cref="TestConfig.OnErrorConfig.CaptureAndReturnResult"/> is true.
         /// </summary>
-        public Exception EscapedException { get; }
+        public Exception? EscapedException { get; }
 
         public AppRunnerResult(int exitCode, AppRunner runner,
             CommandContext commandContext, TestConsole testConsole,
-            TestConfig config, Exception escapedException = null)
+            TestConfig config, Exception? escapedException = null)
         {
             ExitCode = exitCode;
             Runner = runner;
