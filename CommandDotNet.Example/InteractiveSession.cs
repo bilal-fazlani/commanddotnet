@@ -32,15 +32,15 @@ namespace CommandDotNet.Example
             PrintSessionInit();
 
             bool pendingNewLine = false;
-            void Write(string value = null)
+            void Write(string? value = null)
             {
-                console.Write(value);
+                console!.Write(value);
                 pendingNewLine = true;
             }
 
-            void WriteLine(string value = null)
+            void WriteLine(string? value = null)
             {
-                console.WriteLine(value);
+                console!.WriteLine(value);
                 pendingNewLine = false;
             }
 
@@ -92,20 +92,6 @@ namespace CommandDotNet.Example
                 _appRunner.Run(args);
             }
             EnsureNewLine();
-        }
-        private class DisposableAction : IDisposable
-        {
-            private readonly Action _action;
-
-            public DisposableAction(Action action)
-            {
-                _action = action ?? throw new ArgumentNullException(nameof(action));
-            }
-
-            public void Dispose()
-            {
-                _action();
-            }
         }
 
         private void PrintSessionInit()
