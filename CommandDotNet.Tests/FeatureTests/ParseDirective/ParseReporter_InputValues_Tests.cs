@@ -175,8 +175,8 @@ Use [parse:t] to include token transformations.
                 [Operand] List<string> opdList,
                 [Option(ShortName = "a", LongName = null)] bool optA = false,
                 [Option(ShortName = "b", LongName = null)] bool optB = false,
-                [Option] string lala = null,
-                [Option(ShortName = "l")] List<string> optList = null)
+                [Option] string? lala = null,
+                [Option(ShortName = "l")] List<string>? optList = null)
             {
                 console.Out.WriteLine(new
                 {

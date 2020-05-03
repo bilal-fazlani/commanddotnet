@@ -208,10 +208,10 @@ namespace CommandDotNet
         /// <param name="includeAppConfig">Prints the entire app configuration</param>
         /// <param name="additionalInfoCallback">Additional information to include.</param>
         public static AppRunner UseCommandLogger(this AppRunner appRunner,
-            Func<CommandContext, Action<string?>>? writerFactory = null,
+            Func<CommandContext, Action<string?>?>? writerFactory = null,
             bool excludeSystemInfo = false,
             bool includeAppConfig = false,
-            Func<CommandContext, IEnumerable<(string key, string value)>>? additionalInfoCallback = null)
+            Func<CommandContext, IEnumerable<(string key, string value)>?>? additionalInfoCallback = null)
         {
             return CommandLoggerMiddleware.UseCommandLogger(appRunner, 
                 writerFactory, 

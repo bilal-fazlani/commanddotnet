@@ -170,10 +170,10 @@ Options:
         private class EnumerableModel : IArgumentModel
         {
             [Option]
-            public IEnumerable<string> Options { get; set; }
+            public IEnumerable<string> Options { get; set; } = null!;
 
             [Operand]
-            public IEnumerable<string> Operands { get; set; }
+            public IEnumerable<string> Operands { get; set; } = null!;
         }
     }
 }

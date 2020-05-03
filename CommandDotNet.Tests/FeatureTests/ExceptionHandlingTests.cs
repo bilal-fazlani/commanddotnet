@@ -19,12 +19,12 @@ namespace CommandDotNet.Tests.FeatureTests
         [InlineData(nameof(ExceptionApp.ThrowException))]
         [InlineData(nameof(ExceptionApp.ThrowOneMoreException))]
         [InlineData(nameof(ExceptionApp.ThrowExceptionAsync))]
-        public void CanThrowExceptions(string commandName, string exceptionMessage = null)
+        public void CanThrowExceptions(string commandName, string? exceptionMessage = null)
         {
             var args = commandName == null ? new string[0] : new[] { commandName };
             var exception = Assert.Throws<Exception>(() => 
                 new AppRunner<ExceptionApp>().Run(args));
-            AssertException(exception, exceptionMessage ?? commandName, "ExceptionApp");
+            AssertException(exception, exceptionMessage ?? commandName!, "ExceptionApp");
         }
 
         [Fact]
@@ -40,11 +40,11 @@ namespace CommandDotNet.Tests.FeatureTests
         [InlineData(nameof(ExceptionApp.ThrowException))]
         [InlineData(nameof(ExceptionApp.ThrowOneMoreException))]
         [InlineData(nameof(ExceptionApp.ThrowExceptionAsync))]
-        public void CanHandleErrors(string commandName, string exceptionMessage = null)
+        public void CanHandleErrors(string commandName, string? exceptionMessage = null)
         {
             var args = commandName == null ? new string[0] : new[] { commandName };
-            CommandContext context = null;
-            Exception exception = null;
+            CommandContext? context = null;
+            Exception? exception = null;
             var exitCode = new AppRunner<ExceptionApp>()
                 .UseErrorHandler((ctx, ex) =>
                 {
@@ -54,15 +54,15 @@ namespace CommandDotNet.Tests.FeatureTests
                 })
                 .Run(args);
             exitCode.Should().Be(1);
-            AssertException(exception, exceptionMessage ?? commandName, "ExceptionApp");
+            AssertException(exception!, exceptionMessage ?? commandName!, "ExceptionApp");
             context.Should().NotBeNull();
         }
 
         [Fact]
         public void CanHandleErrorsFromConstructor()
         {
-            CommandContext context = null;
-            Exception exception = null;
+            CommandContext? context = null;
+            Exception? exception = null;
             var exitCode = new AppRunner<ExceptionConstructorApp>()
                 .UseErrorHandler((ctx, ex) =>
                 {
@@ -73,7 +73,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Run("Process");
 
             exitCode.Should().Be(1);
-            AssertException(exception, "Constructor is broken", "ExceptionConstructorApp");
+            AssertException(exception!, "Constructor is broken", "ExceptionConstructorApp");
             context.Should().NotBeNull();
         }
 

@@ -41,7 +41,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
             var app = result.CommandContext.GetCommandInvocationInfo<IoCApp>().Instance;
 
-            app.FromCtor.Should().BeSameAs(app.FromInterceptor);
+            app!.FromCtor.Should().BeSameAs(app.FromInterceptor);
 
             // TODO: why is this the same instance?
             //app.FromCtor.Should().NotBeSameAs(svcBeforeRun);

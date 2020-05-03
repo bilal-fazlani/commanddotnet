@@ -15,7 +15,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         }
 
         public void Verify<TApp>(
-            string args, 
+            string? args, 
             bool includeTransforms = false,
             bool showsHelp = false,
             bool showsTokens = false,
@@ -25,25 +25,25 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             bool throwBeforeBind = false,
             bool throwAtInvoke = false,
             bool exitBeforeBind = false,
-            string expectedParseResult = null,
-            string expectedResult = null) where TApp : class
+            string? expectedParseResult = null,
+            string? expectedResult = null) where TApp : class
         {
             var parse = includeTransforms ? "[parse:t]" : "[parse]";
 
             var contains = new List<string>();
             var notContains = new List<string>();
 
-            void containsIf(bool yes, string value)
+            void ContainsIf(bool yes, string value)
             {
-                (yes ? contains : notContains).Add(value);
+                (yes ? contains! : notContains!).Add(value);
             }
 
-            args = args ?? "";
+            args ??= "";
 
-            containsIf(showsHelp, "Usage: dotnet testhost.dll ");
-            containsIf(args == "-h" || args.Contains(" -h") || args.Contains("-h "),
+            ContainsIf(showsHelp, "Usage: dotnet testhost.dll ");
+            ContainsIf(args == "-h" || args.Contains(" -h") || args.Contains("-h "),
                 "Help requested. Only token transformations are available.");
-            containsIf(showsTokens, @"token transformations:
+            ContainsIf(showsTokens, @"token transformations:
 
 >>> from shell");
 
@@ -52,13 +52,13 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                 contains.Add(expectedParseResult);
             }
 
-            containsIf (showsUnableToMapTokensToArgsMsg,
+            ContainsIf (showsUnableToMapTokensToArgsMsg,
                 "Unable to map tokens to arguments. Falling back to token transformations.");
             
-            containsIf(showsHelpRequestOnlyTokensAvailableMsg,
+            ContainsIf(showsHelpRequestOnlyTokensAvailableMsg,
                 "Help requested. Only token transformations are available.");
 
-            containsIf(showsHintToUseParseT,
+            ContainsIf(showsHintToUseParseT,
                 "Use [parse:T] to include token transformations");
 
             var appRunner = new AppRunner<TApp>();

@@ -181,7 +181,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
         private class ThreeLevelsApp
         {
             [SubCommand]
-            public Second Second { get; set; }
+            public Second Second { get; set; } = null!;
 
             public void Do1(ArgModel1 model)
             {
@@ -191,7 +191,7 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
         private class Second
         {
             [SubCommand]
-            public Third Third { get; set; }
+            public Third Third { get; set; } = null!;
 
             public void Do2(ArgModel2 model)
             {
@@ -231,25 +231,25 @@ Use ""dotnet testhost.dll Second Third [command] --help"" for more information a
         private class ArgModel1 : IArgumentModel
         {
             [Option]
-            public string Opt1 { get; set; }
+            public string? Opt1 { get; set; }
             [Operand]
-            public string Arg1 { get; set; }
+            public string? Arg1 { get; set; }
         }
 
         private class ArgModel2 : IArgumentModel
         {
             [Option]
-            public string Opt2 { get; set; }
+            public string? Opt2 { get; set; }
             [Operand]
-            public string Arg2 { get; set; }
+            public string? Arg2 { get; set; }
         }
 
         private class ArgModel3 : IArgumentModel
         {
             [Option]
-            public string Opt3 { get; set; }
+            public string? Opt3 { get; set; }
             [Operand]
-            public string Arg3 { get; set; }
+            public string? Arg3 { get; set; }
         }
     }
 }

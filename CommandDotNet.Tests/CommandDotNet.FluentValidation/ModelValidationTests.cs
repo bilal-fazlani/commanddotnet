@@ -212,12 +212,9 @@ Usage: dotnet testhost.dll Save <Id> <Name> <Email>"
         [Validator(typeof(PersonValidator))]
         public class Person : IArgumentModel
         {
-            [Operand]
-            public int Id { get; set; }
-            [Operand]
-            public string Name { get; set; }
-            [Operand]
-            public string Email { get; set; }
+            [Operand] public int Id { get; set; }
+            [Operand] public string Name { get; set; } = null!;
+            [Operand] public string Email { get; set; } = null!;
         }
 
         public class PersonValidator : AbstractValidator<Person>

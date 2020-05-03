@@ -201,59 +201,59 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         // Invalid
         public class UnattributedArgModel : IArgumentModel
         {
-            public string Arg1 { get; set; }
+            public string Arg1 { get; set; } = null!;
         }
 
         // Valid & can verify order
         public class AttributedArgModel : IArgumentModel
         {
             [OrderByPositionInClass]
-            public string Arg1 { get; set; }
+            public string Arg1 { get; set; } = null!;
 
             [Operand]
-            public string Operand1 { get; set; }
+            public string Operand1 { get; set; } = null!;
         }
 
         // Invalid
         public class DeepNestedUnattributedArgModels : IArgumentModel
         {
             // operand must be attributed so we can get parent arg model alerts
-            public UnattributedNestedModelAttributedArgModel Model { get; set; }
+            public UnattributedNestedModelAttributedArgModel Model { get; set; } = null!;
         }
 
         // Invalid
         public class UnattributedNestedModelUnattributedArgModel : IArgumentModel
         {
-            public UnattributedArgModel Model { get; set; }
+            public UnattributedArgModel Model { get; set; } = null!;
         }
 
         // Invalid
         public class UnattributedNestedModelAttributedArgModel : IArgumentModel
         {
-            public AttributedArgModel Model { get; set; }
+            public AttributedArgModel Model { get; set; } = null!;
         }
 
         // Invalid
         public class AttributedNestedModelUnattributedArgModel : IArgumentModel
         {
             [OrderByPositionInClass]
-            public UnattributedArgModel Model { get; set; }
+            public UnattributedArgModel Model { get; set; } = null!;
         }
 
         // Valid & can verify order
         public class AttributedNestedModelAttributedArgModel : IArgumentModel
         {
             [OrderByPositionInClass]
-            public AttributedArgModel Model { get; set; }
+            public AttributedArgModel Model { get; set; } = null!;
 
             [OrderByPositionInClass]
-            public string Arg2 { get; set; }
+            public string Arg2 { get; set; } = null!;
 
             [Operand]
-            public string Operand2 { get; set; }
+            public string Operand2 { get; set; } = null!;
 
             // mimic operand defined first but returned last when reflected
-            [Operand(1)] public string OperandDefinedFirstReflectedLast { get; set; }
+            [Operand(1)] public string OperandDefinedFirstReflectedLast { get; set; } = null!;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace CommandDotNet.Diagnostics
             Func<CommandContext, Action<string?>?>? writerFactory,
             bool includeSystemInfo,
             bool includeAppConfig,
-            Func<CommandContext, IEnumerable<(string key, string value)>>? additionalInfoCallback)
+            Func<CommandContext, IEnumerable<(string key, string value)>?>? additionalInfoCallback)
         {
             return appRunner.Configure(c =>
             {

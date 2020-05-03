@@ -130,13 +130,13 @@ Options:
         private class Model : IArgumentModel
         {
             [Operand]
-            public string ModelArg { get; set; }
+            public string ModelArg { get; set; } = null!;
 
             [Option]
-            public string ModelOption { get; set; }
+            public string ModelOption { get; set; } = null!;
 
             [Option]
-            public List<string> ModelOptionList { get; set; }
+            public List<string> ModelOptionList { get; set; } = null!;
         }
     }
 }

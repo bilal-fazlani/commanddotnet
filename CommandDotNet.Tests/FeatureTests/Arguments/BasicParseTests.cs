@@ -136,7 +136,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     }
                 });
 
-            results.CommandContext.ParseResult.RemainingOperands.Should().BeEmpty();
+            results.CommandContext.ParseResult!.RemainingOperands.Should().BeEmpty();
         }
 
         [Fact]
@@ -153,7 +153,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     }
                 });
 
-            results.CommandContext.ParseResult.RemainingOperands.Should().BeEmpty();
+            results.CommandContext.ParseResult!.RemainingOperands.Should().BeEmpty();
         }
 
         [Fact]
@@ -166,7 +166,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(2, 3, "+")}
                 });
 
-            results.CommandContext.ParseResult.RemainingOperands.Should().BeEquivalentTo("4");
+            results.CommandContext.ParseResult!.RemainingOperands.Should().BeEquivalentTo("4");
         }
 
         [Fact]
@@ -179,7 +179,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(2,3)}
                 });
 
-            results.CommandContext.ParseResult.RemainingOperands.Should().BeEquivalentTo("4");
+            results.CommandContext.ParseResult!.RemainingOperands.Should().BeEquivalentTo("4");
         }
 
         [Fact]
@@ -194,8 +194,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         AssertContext = ctx =>
                         {
                             var invocation = ctx.GetCommandInvocationInfo();
-                            invocation.MethodInfo.Name.Should().Be("Default");
-                            invocation.ParameterValues.Should().BeEquivalentTo(new object[] {"1", "Do", null, null});
+                            invocation.MethodInfo!.Name.Should().Be("Default");
+                            invocation.ParameterValues.Should().BeEquivalentTo(new object?[] {"1", "Do", null, null});
                         }
                     }
                 });
@@ -233,7 +233,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             {
                 public int X { get; set; }
                 public int Y { get; set; }
-                public string Op { get; set; }
+                public string Op { get; set; } = null!;
             }
         }
 

@@ -18,9 +18,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
             _options = new AppRunner<App>()
                 .GetFromContext("Do".SplitArgs(),
-                    ctx => ctx.ParseResult.TargetCommand.Options,
+                    ctx => ctx.ParseResult!.TargetCommand.Options,
                     middlewareStage: MiddlewareStages.PostParseInputPreBindValues)
-                .ToDictionary(o => o.DefinitionSource.Split('.').Last());
+                .ToDictionary(o => o.DefinitionSource!.Split('.').Last());
         }
 
         [InlineData(DefaultName, DefaultName)]

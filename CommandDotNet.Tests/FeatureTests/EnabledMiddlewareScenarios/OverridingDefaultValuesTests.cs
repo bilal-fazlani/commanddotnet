@@ -171,23 +171,23 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                 [Option] int structArg = 3,
                 [Option] int? structNArg = 4,
                 [Option] DayOfWeek enumArg = DayOfWeek.Wednesday,
-                [Option] Uri objectArg = null,
-                [Option] List<string> stringListArg = null)
+                [Option] Uri? objectArg = null,
+                [Option] List<string>? stringListArg = null)
             {
             }
 
             public void StructListDefaults(
-                [Option] List<int> structListArg = null)
+                [Option] List<int>? structListArg = null)
             {
             }
 
             public void EnumListDefaults(
-                [Option] List<DayOfWeek> enumListArg = null)
+                [Option] List<DayOfWeek>? enumListArg = null)
             {
             }
 
             public void ObjectListDefaults(
-                [Option] List<Uri> objectListArg = null)
+                [Option] List<Uri>? objectListArg = null)
             {
             }
 

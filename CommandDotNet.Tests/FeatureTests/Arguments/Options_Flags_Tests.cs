@@ -47,7 +47,7 @@ Options:
             new AppRunner<FlagApp>().Verify(new Scenario
             {
                 When = {Args = "Do"},
-                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(new object[]{ null })}
+                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(new object?[]{ null })}
             });
         }
 

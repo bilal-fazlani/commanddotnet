@@ -8,13 +8,13 @@ namespace CommandDotNet.Tests
     {
         private static readonly AsyncLocal<ITestOutputHelper> TestOutputHelper = new AsyncLocal<ITestOutputHelper>();
 
-        public static ITestOutputHelper Output
+        public static ITestOutputHelper? Output
         {
             get => TestOutputHelper.Value;
-            set => TestOutputHelper.Value = value;
+            set => TestOutputHelper.Value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        public static Action<string> WriteLine
+        public static Action<string?>? WriteLine
         {
             get
             {
@@ -31,7 +31,7 @@ namespace CommandDotNet.Tests
                     {
                         msg = "";
                     }
-                    Output.WriteLine(msg);
+                    output.WriteLine(msg);
                 };
             }
         }

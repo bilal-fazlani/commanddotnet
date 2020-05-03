@@ -7,8 +7,14 @@ namespace CommandDotNet.Builders
     /// <see cref="Command"/>, <see cref="Operand"/> and <see cref="Option"/>.<br/>
     /// <see cref="Command"/>s are included as they are arguments of other commands.<br/>
     /// </summary>
-    public interface IArgumentNode : INameAndDescription, ICustomAttributesContainer, IServicesContainer
+    public interface IArgumentNode : ICustomAttributesContainer, IServicesContainer
     {
+        /// <summary>The name</summary>
+        string Name { get; }
+
+        /// <summary>The description</summary>
+        string? Description { get; }
+
         /// <summary>
         /// The <see cref="Command"/> that hosts this <see cref="IArgumentNode"/>.
         /// Is null for the root command. Some parent commands are not executable

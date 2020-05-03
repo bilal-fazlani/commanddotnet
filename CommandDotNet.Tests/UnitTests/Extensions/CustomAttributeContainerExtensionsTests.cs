@@ -36,7 +36,7 @@ namespace CommandDotNet.Tests.UnitTests.Extensions
             {
                 CustomAttributes = GetType()
                     .GetMethod(nameof(MyMethod), BindingFlags.NonPublic | BindingFlags.Instance)
-                    ?.GetParameters().Single();
+                    !.GetParameters().Single();
             }
 
             private void MyMethod([My] [My] string myParam)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommandDotNet.Extensions;
 using CommandDotNet.Tokens;
 
 namespace CommandDotNet.TestTools
@@ -15,10 +16,11 @@ namespace CommandDotNet.TestTools
                 : CommandLineStringSplitter.Instance.Split(args).ToArray();
         }
 
-        public static IEnumerable<ConsoleKeyInfo>? ToConsoleKeyInfos(this string? text)
+        public static IEnumerable<ConsoleKeyInfo> ToConsoleKeyInfos(this string? text)
         {
             // "\r\n" would result in two ConsoleKey.Enter
-            return text?.Replace("\r\n", "\r").Select(ToConsoleKeyInfo);
+            return text?.Replace("\r\n", "\r").Select(ToConsoleKeyInfo) 
+                   ?? EmptyCollection<ConsoleKeyInfo>.Instance;
         }
 
         public static ConsoleKeyInfo ToConsoleKeyInfo(this char c)

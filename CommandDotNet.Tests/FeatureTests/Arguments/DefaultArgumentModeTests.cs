@@ -156,11 +156,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             // it's unlikely this will every be used like this since it doesn't seem to make sense to define an 
             // argument as option or operand depending on the setting.
             [OrderByPositionInClass]
-            public string Default { get; set; }
+            public string Default { get; set; } = null!;
             [Operand]
-            public string Operand { get; set; }
+            public string Operand { get; set; } = null!;
             [Option]
-            public string Option { get; set; }
+            public string Option { get; set; } = null!;
         }
     }
 }

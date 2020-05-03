@@ -118,7 +118,7 @@ Use [parse:t] to include token transformations.
             public void Do(IConsole console,
                 [Operand] string opd = "lala",
                 [Option] string opt = "fishies",
-                ListsWithDefaults listsWithDefaults = null)
+                ListsWithDefaults? listsWithDefaults = null)
             {
 
             }
@@ -128,11 +128,11 @@ Use [parse:t] to include token transformations.
         {
             [EnvVar("opdList")]
             [Operand]
-            public List<string> opdList { get; set; } = new List<string> { "one", "two", "three" };
+            public List<string>? opdList { get; set; } = new List<string> { "one", "two", "three" };
 
             [EnvVar("optList")]
             [Option(ShortName = "l")]
-            public List<string> optList { get; set; } = new List<string> { "one", "two", "three" };
+            public List<string>? optList { get; set; } = new List<string> { "one", "two", "three" };
         }
     }
 }
