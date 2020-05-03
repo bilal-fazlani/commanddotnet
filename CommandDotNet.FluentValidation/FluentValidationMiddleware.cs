@@ -40,7 +40,7 @@ namespace CommandDotNet.FluentValidation
             {
                 var failureResults = paramValues
                     .Select(model => new { model, result = modelValidator.ValidateModel(model) })
-                    .Where(v => v.result != null && !v.result.IsValid)
+                    .Where(v => v.result is { } && !v.result.IsValid)
                     .ToList();
 
                 if (failureResults.Any())
@@ -49,7 +49,7 @@ namespace CommandDotNet.FluentValidation
                     failureResults.ForEach(f =>
                     {
                         console.Error.WriteLine($"'{f.model.GetType().Name}' is invalid");
-                        foreach (var error in f.result.Errors)
+                        foreach (var error in f.result!.Errors)
                         {
                             console.Error.WriteLine($"  {error.ErrorMessage}");
                         }
