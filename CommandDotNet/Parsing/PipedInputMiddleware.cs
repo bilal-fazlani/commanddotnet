@@ -36,7 +36,7 @@ namespace CommandDotNet.Parsing
                 // 4. piped values can be merged with args passed to the command.
                 //    this can become an option passed into appBuilder.EnablePipedInput(...)
                 //    if a need arises to throw instead of merge
-                var operand = ctx.ParseResult.TargetCommand.Operands
+                var operand = ctx.ParseResult!.TargetCommand.Operands
                     .FirstOrDefault(o => o.Arity.AllowsMany());
 
                 if (operand is null)

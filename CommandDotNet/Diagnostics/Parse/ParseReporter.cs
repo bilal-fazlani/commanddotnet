@@ -56,7 +56,10 @@ namespace CommandDotNet.Diagnostics.Parse
             bool isObscured = argument.IsObscured();
             var indent2 = indent.Increment();
 
-            writeln($"{indent}{argument.Name} <{argument.TypeInfo.DisplayName ?? (argument.Arity.AllowsNone() ? "Flag" : null)}>");
+            var displayName = argument.TypeInfo.DisplayName.IsNullOrEmpty() 
+                ? (argument.Arity.AllowsNone() ? "Flag" : null)
+                : argument.TypeInfo.DisplayName;
+            writeln($"{indent}{argument.Name} <{displayName}>");
             var valueString = argument.Value?.ValueToString(isObscured);
             writeln(valueString == null ? $"{indent2}value:" : $"{indent2}value: {valueString}");
 

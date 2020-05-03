@@ -43,7 +43,7 @@ namespace CommandDotNet.Diagnostics
                     // in case ParseReportByArg wasn't run due to parsing errors,
                     // output this the transformations as a temporary aid
                     writer.WriteLine(null);
-                    writer.WriteLine(commandContext.ParseResult.HelpWasRequested() 
+                    writer.WriteLine(commandContext.ParseResult!.HelpWasRequested() 
                         ? "Help requested. Only token transformations are available."
                         : "Unable to map tokens to arguments. Falling back to token transformations.");
                     writer.WriteLine(parseContext.Transformations.ToString(), avoidExtraNewLine: true);
