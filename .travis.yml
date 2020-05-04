@@ -30,16 +30,16 @@ jobs:
           name: test on osx
           os: osx
           dotnet: 2.1.300
-          install:
+          script:  
+            - dotnet --version
             - dotnet restore
-          script: 
             - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
         - name: test on linux
           os: linux
           dotnet: 2.1
-          install:
-            - dotnet restore
           script: 
+            - dotnet --version
+            - dotnet restore
             - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
         - name: test on windows
           os: windows
@@ -47,9 +47,9 @@ jobs:
           before_install:
             # explicitly install other targeted SDKs side by side
             - choco install dotnetcore-sdk
-          install:
-            - dotnet restore
           script: 
+            - dotnet --version
+            - dotnet restore
             - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
         #-----------------------------------
 
