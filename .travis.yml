@@ -44,7 +44,7 @@ jobs:
             - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
         - name: test on windows
           os: windows
-          dotnet: 3.1.200
+          dotnet: 2.2
           script:
             - choco install dotnetcore-sdk
             - dotnet --version
