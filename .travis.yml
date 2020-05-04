@@ -31,20 +31,19 @@ jobs:
           os: osx
           # https://travis-ci.community/t/c-build-with-netcore3-1-failed-on-mac-os-and-succed-on-linux/7860
           dotnet: 3.1.200
-          script:  
-            - dotnet --version
+          install:
             - dotnet restore
+          script:
             - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
         - name: test on linux
           os: linux
           dotnet: 3.1
-          script: 
-            - dotnet --version
+          install:
             - dotnet restore
+          script:
             - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
         - name: test on windows
           os: windows
-          dotnet: 2.1
           script:
             - choco install dotnetcore-sdk
             - dotnet --version
@@ -57,8 +56,6 @@ jobs:
           name: nuget & github release
           os: linux
           dotnet: 3.1
-          install:
-            - dotnet restore
           script: 
             - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
           script: 
