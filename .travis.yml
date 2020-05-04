@@ -29,7 +29,7 @@ jobs:
         - stage: test
           name: test on osx
           os: osx
-          dotnet: 3.1
+          dotnet: 3.1.200
           script:  
             - dotnet --version
             - dotnet restore
@@ -43,7 +43,7 @@ jobs:
             - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
         - name: test on windows
           os: windows
-          dotnet: 3.1
+          dotnet: 3.1.200
           before_install:
             # explicitly install other targeted SDKs side by side
             - choco install dotnetcore-sdk
