@@ -1,7 +1,10 @@
 <Project>
  <PropertyGroup>
-    <LangVersion>7.2</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Nullable>enable</Nullable>
+ </PropertyGroup>
+ <PropertyGroup>
     <Authors>Bilal Fazlani, Drew Burlingame</Authors>
     <PackageTags>dotnet core; console; argument parse;</PackageTags>
     <PackageProjectUrl>https://github.com/bilal-fazlani/CommandDotNet</PackageProjectUrl>
