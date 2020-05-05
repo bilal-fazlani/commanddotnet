@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
 using CommandDotNet.Tests.Utils;
+using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -16,6 +18,31 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         public Operands_DefinedAsArgModel_NoDefaults_Tests(ITestOutputHelper output)
         {
             Ambient.Output = output;
+        }
+
+        [Fact]
+        public void SampleTypes_Argument_Default_is_null()
+        {
+            new AppRunner<OperandsNoDefaults>().Verify(new Scenario
+            {
+                When = {Args = "ArgsNoDefault -h"},
+                Then =
+                {
+                    AssertContext = ctx =>
+                    {
+                        var cmd = ctx.GetCommandInvocationInfo().Command!;
+                        cmd!.FindArgument("BoolArg")!.Default.Should().BeNull();
+                        cmd.FindArgument("StringArg")!.Default.Should().BeNull();
+                        cmd.FindArgument("StructArg")!.Default.Should().BeNull();
+                        cmd.FindArgument("StructNArg")!.Default.Should().BeNull();
+                        cmd.FindArgument("EnumArg")!.Default.Should().BeNull();
+                        cmd.FindArgument("ObjectArg")!.Default.Should().BeNull();
+                        cmd.FindArgument("ObjectArg")!.Arity.Minimum.Should().Be(1);
+                        cmd.FindArgument("StringListArg")!.Default.Should().BeNull();
+                        cmd.FindArgument("StringListArg")!.Arity.Minimum.Should().Be(1);
+                    }
+                }
+            });
         }
 
         [Fact]
