@@ -97,7 +97,7 @@ namespace CommandDotNet
 
         /// <summary>Returns the input values for the argument with the given alias or null</summary>
         public static ICollection<InputValue>? FindInputValues(this Command command, string alias) => 
-            command.FindArgumentNode(alias) is IArgument argument ? argument.InputValues : null;
+            command.Find<IArgument>(alias)?.InputValues;
 
         /// <summary>
         /// Return the effective IgnoreUnexpectedOperands using the default
