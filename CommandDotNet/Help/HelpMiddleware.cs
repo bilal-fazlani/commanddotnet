@@ -32,7 +32,7 @@ namespace CommandDotNet.Help
             {
                 Description = "Show help information",
                 IsMiddlewareOption = true,
-                ShowInHelp = appSettingsHelp.PrintHelpOption
+                Hidden = !appSettingsHelp.PrintHelpOption
             };
 
             args.CommandBuilder.AddArgument(option);

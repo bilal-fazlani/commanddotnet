@@ -94,7 +94,7 @@ See 'dotnet testhost.dll User --help'
                     {
                         var option = new Option("usertype", null, TypeInfo.Single<int>(), ArgumentArity.ExactlyOne)
                         {
-                            ShowInHelp = false
+                            Hidden = true
                         };
                         a.CommandBuilder.AddArgument(option);
                     })
