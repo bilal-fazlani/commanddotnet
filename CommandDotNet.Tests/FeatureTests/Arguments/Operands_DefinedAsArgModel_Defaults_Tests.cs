@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using CommandDotNet.Extensions;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
 using CommandDotNet.Tests.Utils;
+using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -64,6 +67,31 @@ Arguments:
 
   StringListArg (Multiple)  <TEXT>       [red, blue]
 " }
+            });
+        }
+
+        [Fact]
+        public void SampleTypes_Argument_Default_is_populated()
+        {
+            new AppRunner<OperandsDefaults>().Verify(new Scenario
+            {
+                When = {Args = "ArgsDefaults -h"},
+                Then =
+                {
+                    AssertContext = ctx =>
+                    {
+                        var cmd = ctx.GetCommandInvocationInfo().Command!;
+                        cmd!.FindArgument("BoolArg")!.Default!.Value.Should().Be(true);
+                        cmd.FindArgument("StringArg")!.Default!.Value.Should().Be("lala");
+                        cmd.FindArgument("StructArg")!.Default!.Value.Should().Be(3);
+                        cmd.FindArgument("StructNArg")!.Default!.Value.Should().Be(4);
+                        cmd.FindArgument("EnumArg")!.Default!.Value.Should().Be(DayOfWeek.Tuesday);
+                        cmd.FindArgument("ObjectArg")!.Default!.Value.Should().Be(new Uri("http://google.com"));
+                        cmd.FindArgument("ObjectArg")!.Arity.Minimum.Should().Be(0);
+                        cmd.FindArgument("StringListArg")!.Default!.Value.Should().BeEquivalentTo(new List<string>{"red", "blue"});
+                        cmd.FindArgument("StringListArg")!.Arity.Minimum.Should().Be(0);
+                    }
+                }
             });
         }
 

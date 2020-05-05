@@ -43,26 +43,16 @@ namespace CommandDotNet.ClassModeling.Definitions
             _propertyInfo = propertyInfo ?? throw new ArgumentNullException(nameof(propertyInfo));
 
             CommandNodeType = commandNodeType;
-
             Name = propertyInfo.BuildName(commandNodeType, appConfig);
-
-            DefaultValue = propertyInfo.GetValue(modelInstance);
-
             ValueProxy = new ValueProxy(
                 () => _propertyInfo.GetValue(modelInstance),
 
                 value => _propertyInfo.SetValue(modelInstance, value)
             );
-
-            // Enhancement: AppSetting.StrictDefaults: show any default values that will be used.
-            //       If a value type doesn't have a default, it would be defined as a nullable type.
-            //       Keeping this behavior for legacy support.
-            if (DefaultValue.IsDefaultFor(propertyInfo.PropertyType))
-            {
-                DefaultValue = DBNull.Value;
-            }
-
-            HasDefaultValue = DefaultValue != DBNull.Value;
+            DefaultValue = propertyInfo.GetValue(modelInstance);
+            HasDefaultValue = propertyInfo.PropertyType.IsClass
+                ? !DefaultValue.IsNullValue()
+                : !DefaultValue.IsDefaultFor(propertyInfo.PropertyType);
         }
 
         public override string ToString()

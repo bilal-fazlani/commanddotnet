@@ -116,9 +116,18 @@ namespace CommandDotNet
         public IArgumentNode? FindArgumentNode(string alias) => 
             _argumentsByAlias.GetValueOrDefault(alias ?? throw new ArgumentNullException(nameof(alias)));
 
-        /// <summary>Returns the option for the given alias, if it exists.</summary>
-        public Option? FindOption(string alias) =>
-            FindArgumentNode(alias) is Option option ? option : null;
+        public TArgumentNode? FindArgumentNode<TArgumentNode>(string alias) where TArgumentNode: class => 
+            (TArgumentNode?)FindArgumentNode(alias);
+        
+        public IArgument? FindArgument(string alias) => 
+            FindArgumentNode<IArgument>(alias);
+        
+        public TArgument? FindArgument<TArgument>(string alias) where TArgument: class => 
+            FindArgumentNode<TArgument>(alias);
+
+        public Option? FindOption(string alias) => FindArgument<Option>(alias);
+        
+        public Operand? FindOperand(string alias) => FindArgument<Operand>(alias);
 
         internal void AddArgumentNode(IArgumentNode argumentNode)
         {
