@@ -87,7 +87,7 @@ namespace CommandDotNet.Tests.UnitTests
             {
                 var steps = nestedClass.type.GetProperties(BindingFlags.Public | BindingFlags.Static)
                     .Where(p => p.PropertyType == typeof(MiddlewareStep))
-                    .Select(p => new Step($"{nestedClass.name}.{p.Name}", (MiddlewareStep)p.GetValue(null)));
+                    .Select(p => new Step($"{nestedClass.name}.{p.Name}", (MiddlewareStep)p.GetValue(null)!));
 
                 foreach (var step in steps)
                 {

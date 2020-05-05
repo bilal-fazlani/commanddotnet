@@ -216,23 +216,23 @@ Arguments:
                 [Operand] int structArg = 3, 
                 [Operand] int? structNArg = 4,
                 [Operand] DayOfWeek enumArg = DayOfWeek.Wednesday, 
-                [Operand] Uri objectArg = null,
-                [Operand] List<string> stringListArg = null)
+                [Operand] Uri? objectArg = null,
+                [Operand] List<string>? stringListArg = null)
             {
             }
 
             public void StructListDefaults(
-                [Operand] List<int> structListArg = null)
+                [Operand] List<int>? structListArg = null)
             {
             }
 
             public void EnumListDefaults(
-                [Operand] List<DayOfWeek> enumListArg = null)
+                [Operand] List<DayOfWeek>? enumListArg = null)
             {
             }
 
             public void ObjectListDefaults(
-                [Operand] List<Uri> objectListArg = null)
+                [Operand] List<Uri>? objectListArg = null)
             {
             }
         }

@@ -37,7 +37,7 @@ namespace CommandDotNet.Example.Commands
                     return ExitCodes.Error;
                 }
 
-                console.Out.WriteLine($"authenticated as user:{username} with password:{password}  (actual password:{password.GetPassword()})");
+                console.Out.WriteLine($"authenticated as user:{username} with password:{password}  (actual password:{pwd})");
 
                 return next();
             }

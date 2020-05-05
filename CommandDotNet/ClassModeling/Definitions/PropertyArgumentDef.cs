@@ -23,7 +23,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public object DefaultValue { get; }
 
-        public IArgument Argument { get; set; }
+        public IArgument? Argument { get; set; }
 
         public ICustomAttributeProvider CustomAttributes => _propertyInfo;
 

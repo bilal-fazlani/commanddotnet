@@ -9,7 +9,7 @@ namespace CommandDotNet.TestTools.Prompts
     {
         private readonly List<IAnswer> _filteredAnswers = new List<IAnswer>();
         private readonly List<IAnswer> _unfilteredAnswers = new List<IAnswer>();
-        private Queue<ConsoleKeyInfo> _currentAnswer;
+        private Queue<ConsoleKeyInfo>? _currentAnswer;
 
         public PromptResponder(IEnumerable<IAnswer> answers)
         {
@@ -18,7 +18,7 @@ namespace CommandDotNet.TestTools.Prompts
 
         public ConsoleKeyInfo OnReadKey(TestConsole testConsole)
         {
-            if (_currentAnswer == null)
+            if (_currentAnswer is null)
             {
                 var answer = GetNextAnswer(testConsole);
                 _currentAnswer = new Queue<ConsoleKeyInfo>(answer.ConsoleKeys);
@@ -32,13 +32,13 @@ namespace CommandDotNet.TestTools.Prompts
             return _currentAnswer.Dequeue();
         }
 
-        private List<IAnswer> GetListFor(IAnswer a) => a.PromptFilter == null ? _unfilteredAnswers : _filteredAnswers;
+        private List<IAnswer> GetListFor(IAnswer a) => a.PromptFilter is null ? _unfilteredAnswers : _filteredAnswers;
 
         private IAnswer GetNextAnswer(TestConsole testConsole)
         {
             var promptLine = testConsole.OutLastLine;
-            var answer = _filteredAnswers.FirstOrDefault(a => a.PromptFilter(promptLine))
-                         ?? _unfilteredAnswers.FirstOrDefault(a => a.PromptFilter == null);
+            var answer = _filteredAnswers.FirstOrDefault(a => a.PromptFilter?.Invoke(promptLine) ?? false)
+                         ?? _unfilteredAnswers.FirstOrDefault(a => a.PromptFilter is null);
 
             if (answer == null)
             {

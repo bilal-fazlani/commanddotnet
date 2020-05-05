@@ -13,23 +13,23 @@ namespace CommandDotNet
 {
     public sealed class Option : IArgument
     {
-        private Command _parent;
-        private object _value;
+        private Command? _parent;
+        private object? _value;
         private readonly ValueProxy _valueProxy;
 
         private readonly HashSet<string> _aliases;
 
         public Option(
-            string longName,
+            string? longName,
             char? shortName,
             TypeInfo typeInfo,
             IArgumentArity arity,
-            string definitionSource = null,
-            IEnumerable<string> aliases = null,
-            ICustomAttributeProvider customAttributes = null,
+            string? definitionSource = null,
+            IEnumerable<string>? aliases = null,
+            ICustomAttributeProvider? customAttributes = null,
             bool isInterceptorOption = false,
             bool assignToExecutableSubcommands = false,
-            ValueProxy valueProxy = null)
+            ValueProxy? valueProxy = null)
         {
             if (longName.IsNullOrWhitespace() && shortName.IsNullOrWhitespace())
             {
@@ -42,7 +42,7 @@ namespace CommandDotNet
                                             $"They cannot both be true. source:{definitionSource}");
             }
 
-            _valueProxy = valueProxy;
+            _valueProxy = valueProxy ?? new ValueProxy(() => _value, o => _value = o);
 
             TypeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
             Arity = arity ?? throw new ArgumentNullException(nameof(arity));
@@ -56,7 +56,7 @@ namespace CommandDotNet
             _aliases = aliases == null
                 ? new HashSet<string>()
                 : new HashSet<string>(aliases);
-            if (!LongName.IsNullOrWhitespace()) _aliases.Add(LongName);
+            if (!LongName.IsNullOrWhitespace()) _aliases.Add(LongName!);
             if (!ShortName.IsNullOrWhitespace()) _aliases.Add(ShortName.ToString());
         }
 
@@ -66,19 +66,26 @@ namespace CommandDotNet
         public char? ShortName { get; }
 
         /// <summary>The long name that will be prefixed with a double hyphen.</summary>
-        public string LongName { get; }
+        public string? LongName { get; }
 
         /// <summary>The <see cref="Command"/> that hosts this <see cref="Option"/></summary>
-        public Command Parent
+        public Command? Parent
         {
             get => _parent;
             set
             {
-                if (_parent != null && _parent != value)
+                if (value is null)
+                {
+                    throw new ArgumentNullException($"{nameof(Parent)} cannot be assigned to null");
+                }
+                if (_parent is null)
+                {
+                    _parent = value;
+                }
+                else if (_parent != value)
                 {
                     throw new InvalidConfigurationException($"{nameof(Parent)} is already assigned for {this}.  Current={_parent} New={value}");
                 }
-                _parent = value;
             }
         }
 
@@ -86,10 +93,10 @@ namespace CommandDotNet
         public IReadOnlyCollection<string> Aliases => _aliases;
 
         /// <summary>The source that defined this argument</summary>
-        public string DefinitionSource { get; }
+        public string? DefinitionSource { get; }
 
         /// <summary>Describes the option</summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>The <see cref="ITypeInfo"/> for this argument</summary>
         public ITypeInfo TypeInfo { get; set; }
@@ -98,13 +105,13 @@ namespace CommandDotNet
         public IArgumentArity Arity { get; set; }
 
         /// <summary>The default value for this argument</summary>
-        public ArgumentDefault Default { get; set; }
+        public ArgumentDefault? Default { get; set; }
 
         /// <summary>
         /// The allowed values for this argument, as defined by an <see cref="IAllowedValuesTypeDescriptor"/> for this type.
         /// i.e. enum arguments will list all values in the enum.
         /// </summary>
-        public IReadOnlyCollection<string> AllowedValues { get; set; }
+        public IReadOnlyCollection<string> AllowedValues { get; set; } = EmptyCollection<string>.Instance;
 
         /// <summary>
         /// The text values provided as input.
@@ -115,20 +122,10 @@ namespace CommandDotNet
         public ICollection<InputValue> InputValues { get; } = new List<InputValue>();
 
         /// <summary>The parsed and converted value for the argument to be passed to a method</summary>
-        public object Value
+        public object? Value
         {
-            get => _valueProxy == null ? _value : _valueProxy.Getter();
-            set
-            {
-                if (_valueProxy == null)
-                {
-                    _value = value;
-                }
-                else
-                {
-                    _valueProxy.Setter(value);
-                }
-            }
+            get => _valueProxy.Getter();
+            set => _valueProxy.Setter(value);
         }
 
         /// <summary>
@@ -191,7 +188,7 @@ namespace CommandDotNet
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj))
+            if (obj is null)
             {
                 return false;
             }

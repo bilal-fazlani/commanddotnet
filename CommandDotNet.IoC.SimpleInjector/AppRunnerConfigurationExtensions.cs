@@ -19,7 +19,7 @@ namespace CommandDotNet.IoC.SimpleInjector
         public static AppRunner UseSimpleInjector(
             this AppRunner appRunner, 
             Container container, 
-            Func<CommandContext, IDisposable> runInScope = null,
+            Func<CommandContext, IDisposable>? runInScope = null,
             ResolveStrategy argumentModelResolveStrategy = ResolveStrategy.TryResolve,
             ResolveStrategy commandClassResolveStrategy = ResolveStrategy.Resolve)
         {

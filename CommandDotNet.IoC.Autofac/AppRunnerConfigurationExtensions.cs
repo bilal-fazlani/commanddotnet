@@ -19,7 +19,7 @@ namespace CommandDotNet.IoC.Autofac
         public static AppRunner UseAutofac(
             this AppRunner appRunner, 
             IContainer container, 
-            Func<CommandContext, IDisposable> runInScope = null,
+            Func<CommandContext, IDisposable>? runInScope = null,
             ResolveStrategy argumentModelResolveStrategy = ResolveStrategy.TryResolve,
             ResolveStrategy commandClassResolveStrategy = ResolveStrategy.Resolve)
         {

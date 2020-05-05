@@ -9,15 +9,15 @@ namespace CommandDotNet
         /// <summary>
         /// The single character short name for the option.<br/>
         /// </summary>
-        public string ShortName { get; set; }
+        public string? ShortName { get; set; }
 
-        private string _longName;
+        private string? _longName;
 
         /// <summary>
         /// The long name for the option. Defaults to the parameter or property name.<br/>
         /// Set to null to prevent the option from having a long name.
         /// </summary>
-        public string LongName
+        public string? LongName
         {
             get => _longName;
             set
@@ -26,14 +26,20 @@ namespace CommandDotNet
                 {
                     value = null;
                 }
-                IgnoreDefaultLongName = value == null;
+                NoLongName = value == null;
                 _longName = value;
             }
         }
 
-        public bool IgnoreDefaultLongName { get; private set; }
+        /// <summary>
+        /// True when <see cref="LongName"/> is explicitly set to null.<br/>
+        /// When true, the option will not have a long name and <see cref="ShortName"/> must be set.
+        /// </summary>
+        public bool NoLongName { get; private set; }
         
-        string INameAndDescription.Name => LongName;
+        string? INameAndDescription.Name => LongName;
+
+        public string? Description { get; set; }
 
         /// <summary>
         /// The <see cref="BooleanMode"/> to use for this option.
@@ -47,8 +53,6 @@ namespace CommandDotNet
         /// Note: The Parent will still be the defining command, not the target command.
         /// </summary>
         public bool AssignToExecutableSubcommands { get; set; }
-
-        public string Description { get; set; }
 
         public int CallerLineNumber { get; }
 

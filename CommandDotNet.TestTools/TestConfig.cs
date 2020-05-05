@@ -8,7 +8,7 @@ namespace CommandDotNet.TestTools
     {
         // TODO: look for CommandDotNet.TestTools.json file
 
-        private static TestConfig s_default;
+        private static TestConfig? defaultTestConfig;
 
         /// <summary>
         /// Default scans loaded assemblies for <see cref="IDefaultTestConfig"/>
@@ -16,8 +16,8 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public static TestConfig Default
         {
-            get => s_default ?? (s_default = TestConfigFactory.GetDefaultFromSubClass() ?? new TestConfig{Source = "TestConfig.Default"});
-            set => s_default = value;
+            get => defaultTestConfig ??= TestConfigFactory.GetDefaultFromSubClass() ?? new TestConfig{Source = "TestConfig.Default"};
+            set => defaultTestConfig = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         /// <summary>Nothing will be printed and errors will be captured</summary>
@@ -50,7 +50,7 @@ namespace CommandDotNet.TestTools
         /// To identify the <see cref="TestConfig"/> in case the expected config was not used.<br/>
         /// Will be auto-populated when created from <seealso cref="IDefaultTestConfig"/>
         /// </summary>
-        public string Source { get; set; }
+        public string? Source { get; set; }
 
         /// <summary>
         /// When multiple <see cref="IDefaultTestConfig"/>s are found,

@@ -6,13 +6,13 @@ namespace CommandDotNet
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class CommandAttribute : Attribute, INameAndDescription
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public string Usage { get; set; }
+        public string? Usage { get; set; }
 
-        public string ExtendedHelpText { get; set; }
+        public string? ExtendedHelpText { get; set; }
 
         /// <summary>
         /// Overrides <see cref="AppSettings.IgnoreUnexpectedOperands"/><br/>
@@ -38,6 +38,6 @@ namespace CommandDotNet
         }
 
         /// <summary>Returns a nullable version of <see cref="ArgumentSeparatorStrategy"/> that will be null if a value was not assigned</summary>
-        public ArgumentSeparatorStrategy? ArgumentSeparatorStrategyAsNullable { get; set; }
+        public ArgumentSeparatorStrategy? ArgumentSeparatorStrategyAsNullable { get; private set; }
     }
 }

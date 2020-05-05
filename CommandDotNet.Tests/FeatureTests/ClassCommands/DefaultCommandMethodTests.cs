@@ -125,7 +125,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
             {
                 When = {Args = null},
                 Then = {AssertContext = ctx => ctx.GetCommandInvocationInfo()
-                    .MethodInfo.Name.Should().Be(nameof(WithoutDefaultArgsApp.DefaultMethod))}
+                    .MethodInfo!.Name.Should().Be(nameof(WithoutDefaultArgsApp.DefaultMethod))}
             });
         }
 

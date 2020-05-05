@@ -2,6 +2,12 @@
 
 ## 3.0.0 - prerelease
 
+### Nullable Reference Types
+
+The library has been updated to support Nullable Reference Types
+
+### Obsoletes
+
 Remove obsoleted TestCaptures class
 
 ## 2.1.1

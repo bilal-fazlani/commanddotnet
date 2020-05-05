@@ -12,16 +12,16 @@ namespace CommandDotNet.Diagnostics
     {
         public static bool HasLoggedFor(CommandContext context)
         {
-            return context?.Services.Get<CommandLoggerHasLoggedMarker>() != null;
+            return context?.Services.GetOrDefault<CommandLoggerHasLoggedMarker>() != null;
         }
 
         public static void Log(
             CommandContext context,
-            Action<string> writer = null,
+            Action<string?>? writer = null,
             bool includeSystemInfo = true,
             bool includeAppConfig = false)
         {
-            var config = context.AppConfig.Services.Get<CommandLoggerConfig>();
+            var config = context.AppConfig.Services.GetOrDefault<CommandLoggerConfig>();
             if (config == null)
             {
                 throw new AppRunnerException($"{nameof(CommandLoggerMiddleware)} has not been registered. " +
@@ -66,7 +66,7 @@ namespace CommandDotNet.Diagnostics
             }
 
             sb.Append("***************************************");
-            writer = writer ?? context.Console.Out.Write;
+            writer ??= context.Console.Out.Write;
             writer(sb.ToString());
         }
 
@@ -85,7 +85,7 @@ namespace CommandDotNet.Diagnostics
         private static IEnumerable<(string name, string text)> GetOtherConfigInfo(
             CommandContext commandContext,
             bool includeSystemInfo,
-            IEnumerable<(string key, string value)> additionalHeaders)
+            IEnumerable<(string key, string value)>? additionalHeaders)
         {
             if (includeSystemInfo)
             {
@@ -98,7 +98,7 @@ namespace CommandDotNet.Diagnostics
                 yield return ("Username", $"{Environment.UserDomainName}\\{Environment.UserName}");
             }
 
-            if (additionalHeaders != null)
+            if (additionalHeaders is { })
             {
                 foreach (var header in additionalHeaders)
                 {

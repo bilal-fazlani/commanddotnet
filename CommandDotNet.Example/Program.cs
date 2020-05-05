@@ -16,9 +16,9 @@ namespace CommandDotNet.Example
             return GetAppRunner(appSettings).Run(args);
         }
 
-        public static AppRunner GetAppRunner(NameValueCollection appSettings = null)
+        public static AppRunner GetAppRunner(NameValueCollection? appSettings = null)
         {
-            appSettings = appSettings ?? new NameValueCollection();
+            appSettings ??= new NameValueCollection();
             return new AppRunner<Examples>()
                 .UseDefaultMiddleware()
                 .UseLog2ConsoleDirective()

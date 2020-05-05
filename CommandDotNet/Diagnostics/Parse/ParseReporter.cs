@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using CommandDotNet.Extensions;
+using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Diagnostics.Parse
 {
@@ -11,7 +12,7 @@ namespace CommandDotNet.Diagnostics.Parse
         /// Reports the command and the source of values for all arguments 
         /// </summary>
         public static void Report(CommandContext commandContext, 
-            Action<string> writeln = null, Indent indent = null)
+            Action<string?>? writeln = null, Indent? indent = null)
         {
             if (commandContext.ParseResult == null)
             {
@@ -20,8 +21,8 @@ namespace CommandDotNet.Diagnostics.Parse
 
             var command = commandContext.ParseResult.TargetCommand;
 
-            indent = indent ?? new Indent();
-            writeln = writeln ?? commandContext.Console.Out.WriteLine;
+            indent ??= new Indent();
+            writeln ??= s => commandContext.Console.Out.WriteLine(s);
 
             var path = command.GetPath();
             writeln($"{indent}command: {(path.IsNullOrWhitespace() ? "(root)" : path)}");
@@ -55,11 +56,14 @@ namespace CommandDotNet.Diagnostics.Parse
             bool isObscured = argument.IsObscured();
             var indent2 = indent.Increment();
 
-            writeln($"{indent}{argument.Name} <{argument.TypeInfo.DisplayName ?? (argument.Arity.AllowsNone() ? "Flag" : null)}>");
+            var displayName = argument.TypeInfo.DisplayName.IsNullOrEmpty() 
+                ? (argument.Arity.AllowsNone() ? "Flag" : null)
+                : argument.TypeInfo.DisplayName;
+            writeln($"{indent}{argument.Name} <{displayName}>");
             var valueString = argument.Value?.ValueToString(isObscured);
             writeln(valueString == null ? $"{indent2}value:" : $"{indent2}value: {valueString}");
 
-            if (argument.InputValues?.Any() ?? false)
+            if (!argument.InputValues.IsNullOrEmpty())
             {
                 var pwd = isObscured ? Password.ValueReplacement : null;
                 var values = argument.InputValues
@@ -99,41 +103,54 @@ namespace CommandDotNet.Diagnostics.Parse
             }
         }
 
-        private static string ValuesToString(InputValue iv, string pwd)
+        private static string? ValuesToString(InputValue iv, string? pwd)
         {
             return iv.ValuesFromTokens != null
                     ? iv.ValuesFromTokens?.Select(vft => VftToString(vft, pwd)).ToCsv(", ")
                     : iv.Values?.Select(v => pwd ?? v).ToCsv(", ");
         }
 
-        private static string VftToString(ValueFromToken vft, string pwd)
+        private static string VftToString(ValueFromToken vft, string? pwd)
         {
             // when the value is the original value, there's no need to show how we got it
-            var supplyChain = RecurseTokens(vft, pwd);
+            var supplyChain = RecurseTokens(new TokenValues(vft.ValueToken, vft.OptionToken), pwd);
             return vft.Value == supplyChain 
                 ? pwd ?? vft.Value 
                 : $"{pwd ?? vft.Value} (from: {supplyChain})";
         }
 
-        private static string RecurseTokens(ValueFromToken vft, string pwd)
+        private static string RecurseTokens(TokenValues vft, string? pwd)
         {
             if ((vft.OptionToken?.SourceToken ?? vft.ValueToken?.SourceToken) == null)
             {
                 return PrettifyTokens(vft, pwd);
             }
 
-            return vft.TokensSourceToken == null
-                ? PrettifyTokens(vft, pwd)
-                : $"{RecurseTokens(new ValueFromToken(null, vft.ValueToken?.SourceToken, vft.OptionToken?.SourceToken), pwd)}" +
-                  $" -> {PrettifyTokens(vft, pwd)}";
+            return vft.HasSourceToken
+                ? $"{RecurseTokens(new TokenValues( vft.ValueToken?.SourceToken, vft.OptionToken?.SourceToken), pwd)}" +
+                  $" -> {PrettifyTokens(vft, pwd)}"
+                : PrettifyTokens(vft, pwd);
         }
 
-        private static string PrettifyTokens(ValueFromToken vft, string pwd)
+        private static string PrettifyTokens(TokenValues vft, string? pwd)
         {
             return vft.OptionToken?.RawValue == vft.ValueToken?.RawValue 
             ? $"{vft.OptionToken?.RawValue}".Trim()
             : $"{vft.OptionToken?.RawValue} {pwd ?? vft.ValueToken?.RawValue}".Trim();
         }
 
+        private class TokenValues
+        {
+            public Token? ValueToken { get; }
+            public Token? OptionToken { get; }
+
+            public bool HasSourceToken => ValueToken?.SourceToken is { } || OptionToken?.SourceToken is { };
+
+            public TokenValues(Token? valueToken, Token? optionToken)
+            {
+                ValueToken = valueToken;
+                OptionToken = optionToken;
+            }
+        }
     }
 }

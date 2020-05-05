@@ -12,7 +12,7 @@ namespace CommandDotNet.TestTools.Scenarios
 
         public override string ToString()
         {
-            return $"{nameof(Scenario)}: args={When.Args ?? When.ArgsArray.ToCsv(" ")}";
+            return $"{nameof(Scenario)}: args={When.Args ?? When.ArgsArray?.ToCsv(" ")}";
         }
     }
 }

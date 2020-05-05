@@ -93,7 +93,7 @@ namespace CommandDotNet
         public static AppRunner UseDependencyResolver(
             this AppRunner appRunner, 
             IDependencyResolver dependencyResolver,
-            Func<CommandContext, IDisposable> runInScope = null,
+            Func<CommandContext, IDisposable>? runInScope = null,
             ResolveStrategy argumentModelResolveStrategy = ResolveStrategy.TryResolve,
             ResolveStrategy commandClassResolveStrategy = ResolveStrategy.Resolve)
         {
@@ -135,10 +135,10 @@ namespace CommandDotNet
         /// </param>
         public static AppRunner UsePrompting(
             this AppRunner appRunner,
-            Func<CommandContext, IPrompter> prompterOverride = null,
+            Func<CommandContext, IPrompter>? prompterOverride = null,
             bool promptForMissingArguments = true,
-            Func<CommandContext, IArgument, string> argumentPromptTextOverride = null,
-            Predicate<IArgument> argumentFilter = null)
+            Func<CommandContext, IArgument, string>? argumentPromptTextOverride = null,
+            Predicate<IArgument>? argumentFilter = null)
         {
             return ValuePromptMiddleware.UsePrompting(appRunner, prompterOverride, promptForMissingArguments, argumentPromptTextOverride, argumentFilter);
         }
@@ -155,7 +155,7 @@ namespace CommandDotNet
         }
 
         /// <summary>
-        /// Sets <see cref="AppConfig.CancellationToken"/> and cancels the token on
+        /// Sets <see cref="CommandContext.CancellationToken"/> and cancels the token on
         /// <see cref="Console.CancelKeyPress"/>, <see cref="AppDomain.ProcessExit"/> and
         /// <see cref="AppDomain.UnhandledException"/> if <see cref="UnhandledExceptionEventArgs.IsTerminating"/> is true.<br/>
         /// Once cancelled, the pipelines will not progress to the next step.
@@ -190,7 +190,7 @@ namespace CommandDotNet
         /// When <see cref="EnvVarAttribute"/> is present, looks for the key in the provided envVars config.<br/>
         /// If envVars is not provided the default <see cref="Environment.GetEnvironmentVariables()"/>
         /// </summary>
-        public static AppRunner UseDefaultsFromEnvVar(this AppRunner appRunner, IDictionary envVars = null)
+        public static AppRunner UseDefaultsFromEnvVar(this AppRunner appRunner, IDictionary? envVars = null)
         {
             return appRunner.UseDefaultsFromConfig(
                 DefaultSources.EnvVar.GetDefaultValue(envVars, DefaultSources.EnvVar.GetKeyFromAttribute));
@@ -198,7 +198,7 @@ namespace CommandDotNet
 
         /// <summary>Provide your own strategies for setting argument defaults from a configuration source</summary>
         public static AppRunner UseDefaultsFromConfig(this AppRunner appRunner,
-            params Func<IArgument, ArgumentDefault>[] getDefaultValueCallbacks)
+            params Func<IArgument, ArgumentDefault?>[] getDefaultValueCallbacks)
             => SetArgumentDefaultsMiddleware.SetArgumentDefaultsFrom(appRunner, getDefaultValueCallbacks);
 
         /// <summary></summary>
@@ -208,10 +208,10 @@ namespace CommandDotNet
         /// <param name="includeAppConfig">Prints the entire app configuration</param>
         /// <param name="additionalInfoCallback">Additional information to include.</param>
         public static AppRunner UseCommandLogger(this AppRunner appRunner,
-            Func<CommandContext, Action<string>> writerFactory = null,
+            Func<CommandContext, Action<string?>?>? writerFactory = null,
             bool excludeSystemInfo = false,
             bool includeAppConfig = false,
-            Func<CommandContext, IEnumerable<(string key, string value)>> additionalInfoCallback = null)
+            Func<CommandContext, IEnumerable<(string key, string value)>?>? additionalInfoCallback = null)
         {
             return CommandLoggerMiddleware.UseCommandLogger(appRunner, 
                 writerFactory, 

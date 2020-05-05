@@ -140,7 +140,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void WhenFileNotFound_Exit_Code1_And_InformativeErrorMessage_And_LogError()
         {
-            List<string> logs = new List<string>();
+            List<string?> logs = new List<string?>();
 
             new AppRunner<App>()
                 .UseResponseFiles()
@@ -160,7 +160,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 }, logLine: line =>
                 {
                     logs.Add(line);
-                    Ambient.Output.WriteLine(line);
+                    Ambient.Output!.WriteLine(line);
                 }, TestConfig.Default.Where(c => c.PrintCommandDotNetLogs = true));
 
             // the E indicates error level log

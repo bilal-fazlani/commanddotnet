@@ -27,7 +27,7 @@ namespace CommandDotNet
     /// <typeparam name="TRootCommandType">Type of the application</typeparam>
     public class AppRunner<TRootCommandType> : AppRunner where TRootCommandType : class
     {
-        public AppRunner(AppSettings settings = null) : base(typeof(TRootCommandType), settings) { }
+        public AppRunner(AppSettings? settings = null) : base(typeof(TRootCommandType), settings) { }
     }
 
     /// <summary>
@@ -37,16 +37,16 @@ namespace CommandDotNet
     /// </summary>
     public class AppRunner : IIndentableToString
     {
-        private AppConfig _appConfig;
         private readonly AppConfigBuilder _appConfigBuilder;
-        private HandleErrorDelegate _handleErrorDelegate;
+        private AppConfig? _appConfig;
+        private HandleErrorDelegate? _handleErrorDelegate;
 
         public AppSettings AppSettings { get; }
         public Type RootCommandType { get; }
 
         static AppRunner() => LogProvider.IsDisabled = true;
 
-        public AppRunner(Type rootCommandType, AppSettings settings = null)
+        public AppRunner(Type rootCommandType, AppSettings? settings = null)
         {
             LogProvider.IsDisabled = true;
 
@@ -70,7 +70,7 @@ namespace CommandDotNet
         /// it will return 0 in case of success and 1 in case of unhandled exception</returns>
         public int Run(params string[] args)
         {
-            CommandContext commandContext = null;
+            CommandContext? commandContext = null;
             try
             {
                 commandContext = BuildCommandContext(args);
@@ -92,7 +92,7 @@ namespace CommandDotNet
         /// it will return 0 in case of success and 1 in case of unhandled exception</returns>
         public async Task<int> RunAsync(params string[] args)
         {
-            CommandContext commandContext = null;
+            CommandContext? commandContext = null;
             try
             {
                 commandContext = BuildCommandContext(args);
@@ -143,10 +143,10 @@ namespace CommandDotNet
             return result;
         }
 
-        private int HandleException(Exception ex, IConsole console, CommandContext commandContext)
+        private int HandleException(Exception ex, IConsole console, CommandContext? commandContext)
         {
             ex = ex.EscapeWrappers();
-            if (commandContext != null)
+            if (commandContext is { })
             {
                 ex.SetCommandContext(commandContext);
             }

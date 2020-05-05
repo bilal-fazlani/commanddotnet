@@ -222,7 +222,7 @@ Arguments:
 
         public class InterceptOptions : IArgumentModel
         {
-            public string stringOpt { get; set; }
+            public string? stringOpt { get; set; }
             public bool skipCmd { get; set; } = false;
             public int? useReturnCode { get; set; }
         }

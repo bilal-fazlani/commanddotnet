@@ -34,23 +34,23 @@ namespace CommandDotNet.Example
                 context.ShowHelpOnExit = true;
             }
         }
+        
+        [SubCommand]
+        public Git Git { get; set; } = null!;
 
         [SubCommand]
-        public Git Git { get; set; }
+        public Math Math { get; set; } = null!;
 
         [SubCommand]
-        public Math Math { get; set; }
+        public Models Models { get; set; } = null!;
 
         [SubCommand]
-        public Models Models { get; set; }
+        public Pipes Pipes { get; set; } = null!;
 
         [SubCommand]
-        public Pipes Pipes { get; set; }
+        public CancelMe CancelMe { get; set; } = null!;
 
         [SubCommand]
-        public CancelMe CancelMe { get; set; }
-
-        [SubCommand]
-        public Commands.Prompts Prompts { get; set; }
+        public Commands.Prompts Prompts { get; set; } = null!;
     }
 }

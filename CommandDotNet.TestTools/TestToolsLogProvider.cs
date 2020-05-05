@@ -7,7 +7,7 @@ namespace CommandDotNet.TestTools
 {
     public class TestToolsLogProvider : ILogProvider
     {
-        private Action<string> _logLine;
+        private Action<string>? _logLine;
 
         public static IDisposable InitLogProvider(Action<string> logLine)
         {

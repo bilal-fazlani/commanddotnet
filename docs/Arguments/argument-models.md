@@ -26,16 +26,16 @@ or with an argument model as ...
 public class Email : IArgumentModel
 {
     [Option]
-    public string Subject {get;set;}
+    public string Subject { get; set; }
     
     [Option]
-    public string Body {get;set;}
+    public string Body { get; set; }
     
     [Operand]
-    public string From {get;set;}
+    public string From { get; set; }
     
     [Operand]
-    public string To {get;set;}
+    public string To { get; set; }
 }
 
 public void SendEmail(Email email)
@@ -52,14 +52,14 @@ An `IArgumentModel` can be composed from other `IArgumentModel`s allowing easy r
 public class DryRun : IArgumentModel
 {    
     [Option(LongName="dryrun")]
-    public bool IsDryRun {get;set;}
+    public bool IsDryRun { get; set; }
 }
 
 public class SendEmailArgs : IArgumentModel
 {    
-    public DryRun DryRun {get;set;}
+    public DryRun DryRun { get; set; }
     
-    public Email Email {get;set;}
+    public Email Email { get; set; }
 }
 
 public void SendEmail(SendEmailArgs args)
@@ -77,6 +77,9 @@ public void SendEmail(SendEmailArgs args)
 Take `DryRun` for example. Ask 5 different developers to add a dryrun option and you'll end up with 5 different casings for it. Add it to an IArgumentModel and everyone can use and the commands will have a consistent argument.  
 
 When you have the same model, you can add middleware that can check for the existing of that model and perform logic based on that.  Using the `DryRun` example, a UnitOfWork middleware could determine whether to commit or abort a transaction based on the value of the model.
+
+!!! Tip
+    See [Nullable Reference Types](../TipsFaqs/nullable-reference-types.md) for avoiding  "Non-nullable property is uninitialized" warnings in your argument models
 
 ## Guaranteeing the order of arguments
 
@@ -109,10 +112,10 @@ We can fix by attributing the `Email` property like so...
 ```c#
 public class SendEmailArgs : IArgumentModel
 {    
-    public DryRun DryRun {get;set;}
+    public DryRun DryRun { get; set; }
     
     [OrderByPositionInClass]
-    public Email Email {get;set;}
+    public Email Email { get; set; }
 }
 ```
  

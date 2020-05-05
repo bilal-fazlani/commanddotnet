@@ -32,14 +32,15 @@ namespace CommandDotNet.TestTools
         /// <summary>
         /// Convenience wrapper for <see cref="CaptureState"/> to capture state from the <see cref="CommandContext"/>
         /// </summary>
-        public static T GetFromContext<T>(this AppRunner runner,
+        public static T? GetFromContext<T>(this AppRunner runner,
             string[] args,
             Func<CommandContext, T> capture,
-            Action<string> logLine = null,
+            Action<string?>? logLine = null,
             MiddlewareStages middlewareStage = MiddlewareStages.PostBindValuesPreInvoke,
             short? orderWithinStage = null)
+            where T : class
         {
-            T state = default;
+            T? state = default;
             runner.CaptureState(
                     ctx => state = capture(ctx),
                     exitAfterCapture: true,
@@ -52,11 +53,11 @@ namespace CommandDotNet.TestTools
         /// <summary>Run the console in memory and get the results that would be output to the shell</summary>
         public static AppRunnerResult RunInMem(this AppRunner runner,
             string args,
-            Action<string> logLine = null,
-            Func<TestConsole, string> onReadLine = null,
-            IEnumerable<string> pipedInput = null,
-            IPromptResponder promptResponder = null,
-            TestConfig config = null)
+            Action<string?>? logLine = null,
+            Func<TestConsole, string>? onReadLine = null,
+            IEnumerable<string>? pipedInput = null,
+            IPromptResponder? promptResponder = null,
+            TestConfig? config = null)
         {
             return runner.RunInMem(args.SplitArgs(), logLine, onReadLine, pipedInput, promptResponder, config);
         }
@@ -64,14 +65,14 @@ namespace CommandDotNet.TestTools
         /// <summary>Run the console in memory and get the results that would be output to the shell</summary>
         public static AppRunnerResult RunInMem(this AppRunner runner,
             string[] args,
-            Action<string> logLine = null,
-            Func<TestConsole, string> onReadLine = null,
-            IEnumerable<string> pipedInput = null,
-            IPromptResponder promptResponder = null,
-            TestConfig config = null)
+            Action<string?>? logLine = null,
+            Func<TestConsole, string>? onReadLine = null,
+            IEnumerable<string>? pipedInput = null,
+            IPromptResponder? promptResponder = null,
+            TestConfig? config = null)
         {
-            logLine = logLine ?? Console.WriteLine;
-            config = config ?? TestConfig.Default;
+            logLine ??= Console.WriteLine;
+            config ??= TestConfig.Default;
 
             IDisposable logProvider = config.PrintCommandDotNetLogs
                 ? TestToolsLogProvider.InitLogProvider(logLine)
@@ -82,28 +83,28 @@ namespace CommandDotNet.TestTools
                 var testConsole = new TestConsole(
                     onReadLine,
                     pipedInput,
-                    promptResponder == null
-                        ? (Func<TestConsole, ConsoleKeyInfo>) null
+                    promptResponder is null
+                        ? (Func<TestConsole, ConsoleKeyInfo>?) null
                         : promptResponder.OnReadKey);
                 runner.Configure(c => c.Console = testConsole);
 
-                CommandContext context = null;
+                CommandContext? context = null;
                 Task<int> CaptureCommandContext(CommandContext commandContext, ExecutionDelegate next)
                 {
                     context = commandContext;
                     return next(commandContext);
                 }
-                runner.Configure(c => c.UseMiddleware(CaptureCommandContext, MiddlewareSteps.DebugDirective + 100));
+                runner.Configure(c => c.UseMiddleware(CaptureCommandContext, MiddlewareSteps.DebugDirective - 100));
 
                 try
                 {
                     var exitCode = runner.Run(args);
-                    return new AppRunnerResult(exitCode, runner, context, testConsole, config)
+                    return new AppRunnerResult(exitCode, runner, context!, testConsole, config)
                         .LogResult(logLine);
                 }
                 catch (Exception e)
                 {
-                    var result = new AppRunnerResult(1, runner, context, testConsole, config, e);
+                    var result = new AppRunnerResult(1, runner, context!, testConsole, config, e);
                     if (config.OnError.CaptureAndReturnResult)
                     {
                         testConsole.Error.WriteLine(e.Message);
@@ -118,7 +119,7 @@ namespace CommandDotNet.TestTools
             }
         }
 
-        internal static AppRunnerResult LogResult(this AppRunnerResult result, Action<string> logLine, bool onError = false)
+        internal static AppRunnerResult LogResult(this AppRunnerResult result, Action<string?> logLine, bool onError = false)
         {
             var print = onError || result.EscapedException != null 
                 ? result.Config.OnError.Print 

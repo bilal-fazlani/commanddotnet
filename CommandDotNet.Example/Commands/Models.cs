@@ -69,13 +69,13 @@ namespace CommandDotNet.Example.Commands
         public class Notification : IArgumentModel
         {
             [Operand]
-            public string Email { get; set; }
+            public string? Email { get; set; }
 
             [Operand]
-            public List<string> Messages { get; set; }
+            public List<string>? Messages { get; set; }
 
             [Operand]
-            public NotificationOptions NotificationOptions { get; set; }
+            public NotificationOptions? NotificationOptions { get; set; }
         }
 
         public class NotificationOptions : IArgumentModel

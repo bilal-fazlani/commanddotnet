@@ -6,7 +6,7 @@ namespace CommandDotNet.Example.Commands
     public class Git
     {
         [SubCommand]
-        public Submodule SubmoduleProperty { get; set; }
+        public Submodule? SubmoduleProperty { get; set; }
 
         [SubCommand]
         public class Remote

@@ -78,7 +78,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then = { Output = "0" }
                 });
 
-            result.CommandContext.ParseResult.SeparatedArguments
+            result.CommandContext.ParseResult!.SeparatedArguments
                 .Should().BeEquivalentTo("-1", "-3");
         }
 
@@ -92,7 +92,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then = { Output = "0" }
                 });
 
-            result.CommandContext.ParseResult.SeparatedArguments
+            result.CommandContext.ParseResult!.SeparatedArguments
                 .Should().BeEquivalentTo("-1", "-3");
         }
 
@@ -106,7 +106,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then = { Output = "-4" }
                 });
 
-            result.CommandContext.ParseResult.SeparatedArguments
+            result.CommandContext.ParseResult!.SeparatedArguments
                 .Should().BeEquivalentTo("-1", "-3");
         }
 
@@ -120,7 +120,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then = { Output = "-4" }
                 });
 
-            result.CommandContext.ParseResult.SeparatedArguments
+            result.CommandContext.ParseResult!.SeparatedArguments
                 .Should().BeEquivalentTo("-1", "-3");
         }
 
@@ -136,10 +136,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then = { Output = "-4" }
                 });
 
-            result.CommandContext.ParseResult.RemainingOperands
+            result.CommandContext.ParseResult!.RemainingOperands
                 .Should().BeEquivalentTo("-5", "-7");
 
-            result.CommandContext.ParseResult.SeparatedArguments
+            result.CommandContext.ParseResult!.SeparatedArguments
                 .Should().BeEquivalentTo("-1", "-3", "-5", "-7");
         }
 
@@ -155,10 +155,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then = { Output = "-4" }
                 });
 
-            result.CommandContext.ParseResult.RemainingOperands
+            result.CommandContext.ParseResult!.RemainingOperands
                 .Should().BeEquivalentTo("-5", "-7");
 
-            result.CommandContext.ParseResult.SeparatedArguments
+            result.CommandContext.ParseResult!.SeparatedArguments
                 .Should().BeEquivalentTo("-1", "-3", "-5", "-7");
         }
 
@@ -176,10 +176,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then = { Output = "-4" }
                 });
 
-            result.CommandContext.ParseResult.RemainingOperands
+            result.CommandContext.ParseResult!.RemainingOperands
                 .Should().BeEquivalentTo("--", "-5", "-7");
 
-            result.CommandContext.ParseResult.SeparatedArguments
+            result.CommandContext.ParseResult!.SeparatedArguments
                 .Should().BeEquivalentTo("-1", "-3", "--", "-5", "-7");
         }
 
@@ -197,10 +197,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then = { Output = "-4" }
                 });
 
-            result.CommandContext.ParseResult.RemainingOperands
+            result.CommandContext.ParseResult!.RemainingOperands
                 .Should().BeEquivalentTo("__", "-5", "-7");
 
-            result.CommandContext.ParseResult.SeparatedArguments
+            result.CommandContext.ParseResult!.SeparatedArguments
                 .Should().BeEquivalentTo("-1", "-3", "__", "-5", "-7");
         }
 

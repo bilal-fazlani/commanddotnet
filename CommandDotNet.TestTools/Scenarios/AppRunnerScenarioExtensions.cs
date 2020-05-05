@@ -8,13 +8,13 @@ namespace CommandDotNet.TestTools.Scenarios
     {
         /// <summary>Run and verify the scenario expectations, output results to <see cref="Console"/></summary>
         public static AppRunnerResult Verify(this AppRunner appRunner, IScenario scenario, 
-            Action<string> logLine = null, TestConfig config = null)
+            Action<string?>? logLine = null, TestConfig? config = null)
         {
             return appRunner.Verify(logLine, config, scenario);
         }
 
         /// <summary>Run and verify the scenario expectations using the given logger for output.</summary>
-        public static AppRunnerResult Verify(this AppRunner appRunner, Action<string> logLine, TestConfig config, IScenario scenario)
+        public static AppRunnerResult Verify(this AppRunner appRunner, Action<string?>? logLine, TestConfig? config, IScenario scenario)
         {
             if (scenario.When.Args != null && scenario.When.ArgsArray != null)
             {
@@ -23,10 +23,10 @@ namespace CommandDotNet.TestTools.Scenarios
                                                     "Only one can be specified.");
             }
 
-            logLine = logLine ?? Console.WriteLine;
-            config = config ?? TestConfig.Default;
+            logLine ??= Console.WriteLine;
+            config ??= TestConfig.Default;
 
-            var args = scenario.When.ArgsArray ?? scenario.When.Args.SplitArgs();
+            var args = scenario.When.ArgsArray ?? scenario.When.Args!.SplitArgs();
 
             var origOnSuccess = config.OnSuccess;
             if (!config.OnError.CaptureAndReturnResult)

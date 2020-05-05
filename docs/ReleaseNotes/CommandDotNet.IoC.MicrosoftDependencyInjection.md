@@ -2,6 +2,12 @@
 
 ## 3.0.0 - prerelease
 
+### Nullable Reference Types
+
+The library has been updated to support Nullable Reference Types
+
+### Obsoletes
+
 remove `useLegacyInjectDependenciesAttribute` option as it's no longer supported as of CommandDotNet 4.0.0
 
 ## 2.0.1

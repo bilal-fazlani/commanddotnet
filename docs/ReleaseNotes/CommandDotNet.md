@@ -2,9 +2,13 @@
 
 ## 4.0.0 - prerelease
 
-Version 4 is focused on removing obsolete members and changing default behaviors made possible since the v3 was introduced.
+### Nullable Reference Types
+
+The library has been updated to support Nullable Reference Types
 
 ### Default behavior changes
+
+Version 4 is removing obsolete members and changing default behaviors made possible since the v3 was introduced.
 
 * default `AppSettings.Help.ExpandArgumentsInUsage` to true.
     * arguments are expanded in the usage section of help.

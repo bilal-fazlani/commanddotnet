@@ -1,6 +1,12 @@
 # CommandDotNet.FluentValidation
 
-## 2.0.4 - prerelease
+## 3.0.0 - prerelease
+
+### Nullable Reference Types
+
+The library has been updated to support Nullable Reference Types
+
+### MiddlewareSteps
 
 add MiddlewareSteps.FluentValidation, declaring the stage and order within the stage the middleware is registered
 

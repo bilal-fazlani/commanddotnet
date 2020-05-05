@@ -7,7 +7,7 @@ namespace CommandDotNet.TestTools
 {
     internal static class TestConfigFactory
     {
-        internal static TestConfig GetDefaultFromSubClass()
+        internal static TestConfig? GetDefaultFromSubClass()
         {
             try
             {
@@ -26,8 +26,8 @@ namespace CommandDotNet.TestTools
                         }
                         return config;
                     })
-                    .Where(c => c != null)
-                    .OrderBy(c => c.Priority ?? int.MaxValue)
+                    .Where(c => c is { })
+                    .OrderBy(c => c!.Priority ?? int.MaxValue)
                     .ToList();
 
                 /*

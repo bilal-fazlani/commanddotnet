@@ -42,10 +42,10 @@ namespace CommandDotNet.TestTools
         /// If the fileName is not rooted, it will be created in the users temp dir<br/>
         /// If the file already exists, it will be overwritten with an empy file
         /// </summary>
-        public string CreateOrClearTempFile(string fileName = null)
+        public string CreateOrClearTempFile(string? fileName = null)
         {
             string filePath;
-            if (fileName == null)
+            if (fileName is null)
             {
                 // GetTempFileName creates the file
                 filePath = Path.GetTempFileName();

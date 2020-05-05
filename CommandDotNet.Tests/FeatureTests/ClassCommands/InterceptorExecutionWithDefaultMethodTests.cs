@@ -133,7 +133,7 @@ Options:
                             ctx.ParamValuesShouldBeEmpty<AppWithNoInterceptorOptions>();
                             var command = ctx.GetCommandInvocationInfo();
                             command.WasInvoked.Should().BeTrue();
-                            command.MethodInfo.Name.Should().Be(nameof(AppWithNoInterceptorOptions.Do));
+                            command.MethodInfo!.Name.Should().Be(nameof(AppWithNoInterceptorOptions.Do));
                             ctx.ParamValuesShouldBe(1);
                         }
                     }
@@ -156,7 +156,7 @@ Options:
                             ctx.ParamValuesShouldBeEmpty<AppWithNoInterceptorOptions>();
                             var command = ctx.GetCommandInvocationInfo();
                             command.WasInvoked.Should().BeTrue();
-                            command.MethodInfo.Name.Should().Be(nameof(AppWithNoInterceptorOptions.Default));
+                            command.MethodInfo!.Name.Should().Be(nameof(AppWithNoInterceptorOptions.Default));
                             ctx.ParamValuesShouldBe(1);
                         }
                     }
@@ -179,7 +179,7 @@ Options:
                             ctx.ParamValuesShouldBe<AppWithInteceptorOptions>(new InterceptOptions{stringOpt = "lala"});
                             var command = ctx.GetCommandInvocationInfo();
                             command.WasInvoked.Should().BeTrue();
-                            command.MethodInfo.Name.Should().Be(nameof(AppWithInteceptorOptions.Do));
+                            command.MethodInfo!.Name.Should().Be(nameof(AppWithInteceptorOptions.Do));
                             ctx.ParamValuesShouldBe(1);
                         }
                     }
@@ -202,7 +202,7 @@ Options:
                             ctx.ParamValuesShouldBe<AppWithInteceptorOptions>(new InterceptOptions{stringOpt = "lala"});
                             var command = ctx.GetCommandInvocationInfo();
                             command.WasInvoked.Should().BeTrue();
-                            command.MethodInfo.Name.Should().Be(nameof(AppWithInteceptorOptions.Default));
+                            command.MethodInfo!.Name.Should().Be(nameof(AppWithInteceptorOptions.Default));
                             ctx.ParamValuesShouldBe(1);
                         }
                     }
@@ -255,7 +255,7 @@ Options:
         public class InterceptOptions : IArgumentModel
         {
             [Option(AssignToExecutableSubcommands = true)]
-            public string stringOpt { get; set; }
+            public string? stringOpt { get; set; }
             public bool skipCmd { get; set; } = false;
             public int? useReturnCode { get; set; }
         }

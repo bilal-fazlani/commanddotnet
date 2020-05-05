@@ -9,7 +9,7 @@ namespace CommandDotNet.Help
         {
             if (!appHelpSettings.UsageAppName.IsNullOrEmpty())
             {
-                return appHelpSettings.UsageAppName;
+                return appHelpSettings.UsageAppName!;
             }
 
             switch (appHelpSettings.UsageAppNameStyle)

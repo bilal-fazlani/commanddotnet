@@ -85,22 +85,22 @@ Options:
         private class ParentModel: IArgumentModel
         {
             [Option]
-            public string Option1 { get; set; }
+            public string Option1 { get; set; } = null!;
 
             [Operand]
-            public string Operand1 { get; set; }
+            public string Operand1 { get; set; } = null!;
 
             [OrderByPositionInClass]
-            public NestedModel NestedModel { get; set; }
+            public NestedModel NestedModel { get; set; } = null!;
         }
 
         private class NestedModel : IArgumentModel
         {
             [Option]
-            public string Option2 { get; set; }
+            public string Option2 { get; set; } = null!;
 
             [Operand]
-            public string Operand2 { get; set; }
+            public string Operand2 { get; set; } = null!;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace CommandDotNet.Extensions
 
         public static IReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> items) => items as IReadOnlyCollection<T> ?? items.ToList().AsReadOnly();
 
-        public static string ToCsv(this IEnumerable<string> items, string separator = ",")
+        public static string ToCsv(this IEnumerable<string?> items, string separator = ",")
         {
             return string.Join(separator, items);
         }
@@ -36,7 +36,7 @@ namespace CommandDotNet.Extensions
         }
 
         /// <summary>Joins the string into a sorted delimited string. Useful for logging.</summary>
-        public static string ToOrderedCsv(this IEnumerable<string> items, string separator = ",")
+        public static string ToOrderedCsv(this IEnumerable<string?> items, string separator = ",")
         {
             return items.OrderBy(i => i).ToCsv(separator);
         }
@@ -60,7 +60,7 @@ namespace CommandDotNet.Extensions
             }
         }
 
-        internal static IEnumerable<string> EnumeratePipedInput(this Func<string> readLine)
+        internal static IEnumerable<string> EnumeratePipedInput(this Func<string?> readLine)
         {
             while (true)
             {
@@ -73,8 +73,8 @@ namespace CommandDotNet.Extensions
                 yield return line;
             }
         }
-
-        internal static T SingleOrDefaultOrThrow<T>(this IEnumerable<T> source, Action throwEx)
+        
+        internal static T? SingleOrDefaultOrThrow<T>(this IEnumerable<T?> source, Action throwEx) where T: class
         {
             if (source == null)
             {
@@ -96,12 +96,10 @@ namespace CommandDotNet.Extensions
             }
             else
             {
-                using (IEnumerator<T> e = source.GetEnumerator())
-                {
-                    if (!e.MoveNext()) return default;
-                    T result = e.Current;
-                    if (!e.MoveNext()) return result;
-                }
+                using var e = source.GetEnumerator();
+                if (!e.MoveNext()) return default;
+                var result = e.Current;
+                if (!e.MoveNext()) return result;
             }
 
             throwEx();

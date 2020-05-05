@@ -253,7 +253,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
         private static Task<int> UnignoreCtrlC(CommandContext context, ExecutionDelegate next)
         {
-            context.Services.Get<IDisposable>().Dispose();
+            context.Services.GetOrThrow<IDisposable>().Dispose();
             return next(context);
         }
 

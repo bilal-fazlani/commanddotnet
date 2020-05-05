@@ -38,14 +38,14 @@ namespace CommandDotNet.Parsing
             bool ignoreRemainingArguments = false;
             var remainingOperands = new List<Token>();
 
-            Command currentCommand = commandContext.RootCommand;
-            Option currentOption = null;
-            Token currentOptionToken = null;
+            Command currentCommand = commandContext.RootCommand!;
+            Option? currentOption = null;
+            Token? currentOptionToken = null;
             var operands = new OperandEnumerator(currentCommand.Operands);
 
             void ParseNonOptionValue(Token token)
             {
-                var operandResult = this.ParseArgumentValue(token, ref currentCommand, operands);
+                var operandResult = ParseArgumentValue(token, ref currentCommand, operands!);
 
                 switch (operandResult)
                 {
@@ -53,7 +53,7 @@ namespace CommandDotNet.Parsing
                         break;
                     case ParseOperandResult.UnexpectedArgument:
                         ignoreRemainingArguments = true;
-                        remainingOperands.Add(token);
+                        remainingOperands!.Add(token);
                         break;
                     case ParseOperandResult.NewSubCommand:
                         operands = new OperandEnumerator(currentCommand.Operands);
@@ -68,20 +68,20 @@ namespace CommandDotNet.Parsing
                 switch (token.TokenType)
                 {
                     case TokenType.Option:
-                        if (currentOption != null)
+                        if (currentOption is { })
                         {
                             throw new CommandParsingException(currentCommand, $"Missing value for option '{currentOption.Name}'");
                         }
                         currentOption = ParseOption(token, currentCommand);
-                        if (currentOption != null)
+                        if (currentOption is { })
                         {
                             currentOptionToken = token;
                         }
                         break;
                     case TokenType.Value:
-                        if (currentOption != null)
+                        if (currentOption is { })
                         {
-                            ParseOptionValue(token, currentCommand, currentOption, currentOptionToken);
+                            ParseOptionValue(token, currentCommand, currentOption, currentOptionToken!);
                             currentOption = null;
                             currentOptionToken = null;
                         }
@@ -103,7 +103,7 @@ namespace CommandDotNet.Parsing
                 }
             }
 
-            if (currentOption != null) // an option was left without a value
+            if (currentOption is { }) // an option was left without a value
             {
                 throw new CommandParsingException(currentCommand, $"Missing value for option '{currentOption.Name}'");
             }
@@ -167,12 +167,12 @@ namespace CommandDotNet.Parsing
             return ParseOperandResult.Succeeded;
         }
 
-        private Option ParseOption(Token token, Command command)
+        private Option? ParseOption(Token token, Command command)
         {
-            var optionTokenType = token.OptionTokenType;
+            var optionTokenType = token.OptionTokenType!;
 
             var option = command.FindOption(optionTokenType.GetName());
-            if (option == null)
+            if (option is null)
             {
                 throw new UnrecognizedArgumentCommandParsingException(command, token, $"Unrecognized option '{token.RawValue}'");
             }
@@ -199,13 +199,15 @@ namespace CommandDotNet.Parsing
             // in most cases, this will be the first or only InputValues
             var source = Constants.InputValueSources.Argument;
             var parserValues = argument.InputValues.FirstOrDefault(iv => iv.Source == source);
-            if (parserValues == null)
+            
+            if (parserValues is null)
             {
                 parserValues = new InputValue(source, false, new List<ValueFromToken>());
                 argument.InputValues.Add(parserValues);
             }
+            parserValues.ValuesFromTokens ??= new List<ValueFromToken>();
 
-            return (List<ValueFromToken>)parserValues.ValuesFromTokens;
+            return (List<ValueFromToken>)parserValues.ValuesFromTokens!;
         }
 
         private void ThrowIfValueNotAllowed(Command command, IArgument argument, Token token)
@@ -222,13 +224,13 @@ namespace CommandDotNet.Parsing
                 command, argument, token, $"Unrecognized value '{token.RawValue}' for {(argument is Option ? "option" : "argument")}: {argument.Name}");
         }
 
-        private bool TryAddValue(Option option, Token valueToken, Token optionToken)
+        private bool TryAddValue(Option option, Token? valueToken, Token optionToken)
         {
             var values = GetArgumentParsedValues(option);
 
             if (option.Arity.AllowsMany())
             {
-                values.Add(new ValueFromToken(valueToken.Value, valueToken, optionToken));
+                values.Add(new ValueFromToken(valueToken!.Value, valueToken, optionToken));
             }
             else if (option.Arity.AllowsNone())
             {
@@ -242,7 +244,7 @@ namespace CommandDotNet.Parsing
                 {
                     return false;
                 }
-                values.Add(new ValueFromToken(valueToken.Value, valueToken, optionToken));
+                values.Add(new ValueFromToken(valueToken!.Value, valueToken, optionToken));
             }
             return true;
         }
@@ -278,7 +280,7 @@ namespace CommandDotNet.Parsing
             {
                 _count++;
 
-                if (Current == null || !Current.Arity.AllowsMany())
+                if (Current is null || !Current.Arity.AllowsMany())
                 {
                     return _enumerator.MoveNext();
                 }

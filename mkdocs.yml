@@ -63,6 +63,8 @@ nav:
         - Extensibility/middleware.md
         - Extensibility/interceptors.md 
         - Extensibility/token-transformations.md
+      - Tips & FAQs:
+        - TipsFaqs/nullable-reference-types.md
     - Release Notes:
       - ReleaseNotes/whats-new-in-v3.md
       - ReleaseNotes/CommandDotNet.md
