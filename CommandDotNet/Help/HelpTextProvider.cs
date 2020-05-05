@@ -86,7 +86,7 @@ namespace CommandDotNet.Help
 
         /// <summary>How options are shown in the usage example</summary>
         protected virtual string? UsageOption(Command command) =>
-            command.Options.Any(o => o.ShowInHelp)
+            command.Options.Any(o => !o.Hidden)
                 ? "[options]"
                 : null;
 
@@ -102,7 +102,7 @@ namespace CommandDotNet.Help
         protected virtual string? SectionOptions(Command command, bool includeInterceptorOptionsForExecutableCommands)
         {
             var options = command.Options
-                .Where(o => o.ShowInHelp)
+                .Where(o => !o.Hidden)
                 .Where(o => includeInterceptorOptionsForExecutableCommands
                     ? (command.IsExecutable && o.IsInterceptorOption)
                     : !(command.IsExecutable && o.IsInterceptorOption))

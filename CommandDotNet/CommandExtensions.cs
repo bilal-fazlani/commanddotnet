@@ -39,7 +39,7 @@ namespace CommandDotNet
                 : command.Options;
             if (excludeHiddenOptions)
             {
-                options = options.Where(o => o.ShowInHelp);
+                options = options.Where(o => !o.Hidden);
             }
             return options;
         }

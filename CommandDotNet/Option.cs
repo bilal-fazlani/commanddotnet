@@ -154,13 +154,14 @@ namespace CommandDotNet
         /// When true, the option should be shown in help.<br/>
         /// Default: true
         /// </summary>
-        public bool ShowInHelp { get; set; } = true;
+        [Obsolete("Use Hidden instead. ShowInHelp == !Hidden")]
+        public bool ShowInHelp { get => !Hidden; set => Hidden = !value; }
 
         /// <summary>
         /// When true, the option is hidden and should not be shown
         /// to the user in help or suggestions or anywhere else.
         /// </summary>
-        public bool Hidden => !ShowInHelp;
+        public bool Hidden { get; set; }
 
         /// <summary>True when the option is a bool with an arity of exactly zero</summary>
         public bool IsFlag => ArgumentArity.Zero.Equals(Arity) && TypeInfo.UnderlyingType == typeof(bool);
