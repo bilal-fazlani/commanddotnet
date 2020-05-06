@@ -64,7 +64,9 @@ options:
     inputs:
     default: source=EnvVar key=optList: four, five, six
 
-Use [parse:t] to include token transformations.
+Parse usage: [parse:t:raw] to include token transformations.
+ 't' to include token transformations.
+ 'raw' to include command line as passed to this process.
 "
                     }
                 });
@@ -106,7 +108,9 @@ options:
     inputs:
     default: one, two, three
 
-Use [parse:t] to include token transformations.
+Parse usage: [parse:t:raw] to include token transformations.
+ 't' to include token transformations.
+ 'raw' to include command line as passed to this process.
 "
                     }
                 });

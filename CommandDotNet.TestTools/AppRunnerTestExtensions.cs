@@ -144,7 +144,7 @@ namespace CommandDotNet.TestTools
             {
                 logLine("");
                 logLine($"{NewLine}Parse report <begin> ------------------------------");
-                ParseReporter.Report(context, logLine);
+                ParseReporter.Report(context, writeln: logLine);
                 logLine($"Parse report <end> ------------------------------{NewLine}");
             }
 

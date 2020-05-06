@@ -44,7 +44,7 @@ namespace CommandDotNet.Diagnostics
             sb.AppendLine();
 
             var indent = new Indent();
-            ParseReporter.Report(context, s => sb.AppendLine(s), indent);
+            ParseReporter.Report(context, writeln: s => sb.AppendLine(s), indent: indent);
 
             var additionalHeaders = config.AdditionalHeadersCallback?.Invoke(context);
             var otherConfigEntries = GetOtherConfigInfo(context, includeSystemInfo, additionalHeaders).ToList();

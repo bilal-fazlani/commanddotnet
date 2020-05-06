@@ -48,15 +48,26 @@ namespace CommandDotNet.Diagnostics
                         : "Unable to map tokens to arguments. Falling back to token transformations.");
                     writer.WriteLine(parseContext.Transformations.ToString(), avoidExtraNewLine: true);
                 }
-                else if (parseContext.IncludeTokenization)
+                else if (parseContext.IncludeTokenization || parseContext.IncludeRawCommandLine)
                 {
-                    writer.WriteLine(parseContext.Transformations.ToString(), avoidExtraNewLine: true);
+                    if (parseContext.IncludeTokenization)
+                    {
+                        writer.WriteLine(parseContext.Transformations.ToString(), avoidExtraNewLine: true);
+                    }
+                    if (parseContext.IncludeRawCommandLine)
+                    {
+                        writer.WriteLine(Environment.CommandLine, avoidExtraNewLine: true);
+                    }
                 }
                 else
                 {
                     writer.WriteLine(null);
-                    writer.WriteLine($"Use [parse:{ParseContext.IncludeTransformationsArgName}]" +
+                    writer.WriteLine($"Parse usage: [parse:{ParseContext.IncludeTransformationsArgName}:{ParseContext.IncludeRawCommandLineArgName}]" +
+                                     " to include token transformations.");
+                    writer.WriteLine($" '{ParseContext.IncludeTransformationsArgName}'" +
                             " to include token transformations.");
+                    writer.WriteLine($" '{ParseContext.IncludeRawCommandLineArgName}'" +
+                                     " to include command line as passed to this process.");
                 }
 
                 return result;
@@ -79,7 +90,8 @@ namespace CommandDotNet.Diagnostics
             {
                 ParseReporter.Report(
                     commandContext, 
-                    s => commandContext.Console.Out.WriteLine(s));
+                    includeRawCommandLine: parseContext.IncludeRawCommandLine,
+                    writeln: s => commandContext.Console.Out.WriteLine(s));
                 parseContext.Reported = true;
                 return ExitCodes.Success;
             }
@@ -132,8 +144,10 @@ namespace CommandDotNet.Diagnostics
         private class ParseContext
         {
             internal const string IncludeTransformationsArgName = "t";
+            internal const string IncludeRawCommandLineArgName = "raw";
 
             internal bool IncludeTokenization;
+            internal bool IncludeRawCommandLine;
             internal bool Reported;
             internal readonly StringBuilder Transformations = new StringBuilder();
 
@@ -152,7 +166,8 @@ namespace CommandDotNet.Diagnostics
 
                 return new ParseContext
                 {
-                    IncludeTokenization = settings.ContainsKey(IncludeTransformationsArgName)
+                    IncludeTokenization = settings.ContainsKey(IncludeTransformationsArgName),
+                    IncludeRawCommandLine = settings.ContainsKey(IncludeRawCommandLineArgName)
                 };
             }
         }
