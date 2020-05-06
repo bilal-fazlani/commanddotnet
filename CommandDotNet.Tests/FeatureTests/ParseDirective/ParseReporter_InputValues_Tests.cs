@@ -160,7 +160,9 @@ options:
     inputs: red (from: @{file} -> -l red), blue (from: @{file} -> -l blue), green (from: @{file} -> -l green)
     default:
 
-Use [parse:t] to include token transformations.
+Parse usage: [parse:t:raw] to include token transformations.
+ 't' to include token transformations.
+ 'raw' to include command line as passed to this process.
 "
                     }
                 });

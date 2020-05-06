@@ -11,8 +11,11 @@ namespace CommandDotNet.Diagnostics.Parse
         /// <summary>
         /// Reports the command and the source of values for all arguments 
         /// </summary>
-        public static void Report(CommandContext commandContext, 
-            Action<string?>? writeln = null, Indent? indent = null)
+        public static void Report(
+            CommandContext commandContext,
+            bool includeRawCommandLine = false,
+            Action<string?>? writeln = null, 
+            Indent? indent = null)
         {
             if (commandContext.ParseResult == null)
             {
@@ -24,6 +27,11 @@ namespace CommandDotNet.Diagnostics.Parse
             indent ??= new Indent();
             writeln ??= s => commandContext.Console.Out.WriteLine(s);
 
+            if (includeRawCommandLine)
+            {
+                writeln($"raw command line:{Environment.CommandLine}");
+            }
+            
             var path = command.GetPath();
             writeln($"{indent}command: {(path.IsNullOrWhitespace() ? "(root)" : path)}");
 
