@@ -122,7 +122,7 @@ fixNupkgVersions () {
   
   zip $NUPKG_FILE $NUSPEC_FILE
   rm $NUSPEC_FILE
-  cd ../..
+  cd ..
   
   echo " "
   echo " <<< fixNupkgVersions"
