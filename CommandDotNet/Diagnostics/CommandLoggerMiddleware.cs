@@ -16,12 +16,12 @@ namespace CommandDotNet.Diagnostics
         {
             return appRunner.Configure(c =>
             {
+                c.UseMiddleware(CommandLogger, MiddlewareSteps.CommandLogger);
                 c.Services.Add(new CommandLoggerConfig(
                     writerFactory,
                     includeSystemInfo,
                     includeAppConfig,
                     additionalInfoCallback));
-                c.UseMiddleware(CommandLogger, MiddlewareSteps.CommandLogger);
             });
         }
 

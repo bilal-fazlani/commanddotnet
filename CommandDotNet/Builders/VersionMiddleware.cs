@@ -12,8 +12,8 @@ namespace CommandDotNet.Builders
         {
             return appRunner.Configure(c =>
             {
-                c.BuildEvents.OnCommandCreated += AddVersionOption;
                 c.UseMiddleware(DisplayVersionIfSpecified, MiddlewareSteps.Version);
+                c.BuildEvents.OnCommandCreated += AddVersionOption;
             });
         }
 

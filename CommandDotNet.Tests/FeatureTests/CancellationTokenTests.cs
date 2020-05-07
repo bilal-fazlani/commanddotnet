@@ -73,10 +73,10 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Configure(c =>
                 {
                     c.UseMiddleware(IgnoreCtrlC, MiddlewareStages.PostTokenizePreParseInput);
-                    c.UseMiddleware(MockCtrlC, MiddlewareStages.PostTokenizePreParseInput);
+                    c.UseMiddleware(MockCtrlC, MiddlewareStages.PostTokenizePreParseInput, allowMultipleRegistrations:true);
                     c.UseMiddleware(ShouldReachThisStep, MiddlewareStages.PostTokenizePreParseInput);
                     c.UseMiddleware(UnignoreCtrlC, MiddlewareStages.PostTokenizePreParseInput);
-                    c.UseMiddleware(MockCtrlC, MiddlewareStages.PostTokenizePreParseInput);
+                    c.UseMiddleware(MockCtrlC, MiddlewareStages.PostTokenizePreParseInput, allowMultipleRegistrations:true);
                     c.UseMiddleware(ShouldNotReachThisStep, MiddlewareStages.PostTokenizePreParseInput);
                 })
                 .Verify(new Scenario

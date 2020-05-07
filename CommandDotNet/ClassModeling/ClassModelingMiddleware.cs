@@ -13,12 +13,12 @@ namespace CommandDotNet.ClassModeling
         {
             return appRunner.Configure(c =>
             {
-                c.Services.Add(new Config(rootCommandType));
                 c.UseMiddleware(CreateRootCommand, MiddlewareSteps.CreateRootCommand);
                 c.UseMiddleware(AssembleInvocationPipelineMiddleware, MiddlewareSteps.AssembleInvocationPipeline);
                 c.UseMiddleware(BindValuesMiddleware.BindValues, MiddlewareSteps.BindValues);
                 c.UseMiddleware(ResolveCommandClassesMiddleware.ResolveCommandClassInstances, MiddlewareSteps.ResolveCommandClasses);
                 c.UseMiddleware(InvokeInvocationPipelineMiddleware, MiddlewareSteps.InvokeCommand);
+                c.Services.Add(new Config(rootCommandType));
             });
         }
 

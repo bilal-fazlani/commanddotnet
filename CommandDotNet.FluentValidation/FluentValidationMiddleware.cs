@@ -13,8 +13,8 @@ namespace CommandDotNet.FluentValidation
         {
             return appRunner.Configure(c =>
             {
+                c.UseMiddleware(ValidateModels, MiddlewareSteps.FluentValidation);
                 c.Services.Add(new Config(showHelpOnError));
-                c.UseMiddleware(Middleware, MiddlewareSteps.FluentValidation);
             });
         }
 
@@ -28,7 +28,7 @@ namespace CommandDotNet.FluentValidation
             }
         }
 
-        private static Task<int> Middleware(CommandContext ctx, ExecutionDelegate next)
+        private static Task<int> ValidateModels(CommandContext ctx, ExecutionDelegate next)
         {
             var modelValidator = new ModelValidator(ctx.AppConfig.DependencyResolver);
 

@@ -17,6 +17,9 @@ namespace CommandDotNet
     /// <summary>Extensions to enable and configure features</summary>
     public static class AppRunnerConfigExtensions
     {
+        internal static bool InUseDefaultMiddleware => !ExcludeParamName.IsNullOrWhitespace();
+        internal static string? ExcludeParamName { get; private set; }
+        
         /// <summary>
         /// Configures the <see cref="AppRunner"/> with the 'default' set of middleware.
         /// See the 'exclude...' parameters for the list of included middleware.
@@ -31,15 +34,46 @@ namespace CommandDotNet
             bool excludeAppendPipedInputToOperandList = false,
             bool excludeTypoSuggestions = false)
         {
-            if (!excludeCancellationHandlers) appRunner.UseCancellationHandlers();
-            if (!excludeDebugDirective) appRunner.UseDebugDirective();
-            if (!excludeParseDirective) appRunner.UseParseDirective();
-            if (!excludePrompting) appRunner.UsePrompting();
-            if (!excludeResponseFiles) appRunner.UseResponseFiles();
-            if (!excludeVersionMiddleware) appRunner.UseVersionMiddleware();
-            if (!excludeAppendPipedInputToOperandList) appRunner.AppendPipedInputToOperandList();
-            if (!excludeTypoSuggestions) appRunner.UseTypoSuggestions();
-
+            static void Register(bool exclude, string paramName, Action register)
+            {
+                if (exclude) return;
+                ExcludeParamName = paramName;
+                register();
+                ExcludeParamName = null;
+            }
+            
+            Register(
+                excludeCancellationHandlers, 
+                nameof(excludeCancellationHandlers),
+                ()=> appRunner.UseCancellationHandlers());
+            Register(
+                excludeDebugDirective, 
+                nameof(excludeDebugDirective),
+                ()=> appRunner.UseDebugDirective());
+            Register(
+                excludeParseDirective, 
+                nameof(excludeParseDirective),
+                ()=> appRunner.UseParseDirective());
+            Register(
+                excludePrompting, 
+                nameof(excludePrompting),
+                ()=> appRunner.UsePrompting());
+            Register(
+                excludeResponseFiles, 
+                nameof(excludeResponseFiles),
+                ()=> appRunner.UseResponseFiles());
+            Register(
+                excludeVersionMiddleware, 
+                nameof(excludeVersionMiddleware),
+                ()=> appRunner.UseVersionMiddleware());
+            Register(
+                excludeAppendPipedInputToOperandList, 
+                nameof(excludeAppendPipedInputToOperandList),
+                ()=> appRunner.AppendPipedInputToOperandList());
+            Register(
+                excludeTypoSuggestions, 
+                nameof(excludeTypoSuggestions),
+                ()=> appRunner.UseTypoSuggestions());
             return appRunner;
         }
 
@@ -95,25 +129,9 @@ namespace CommandDotNet
             ResolveStrategy argumentModelResolveStrategy = ResolveStrategy.TryResolve,
             ResolveStrategy commandClassResolveStrategy = ResolveStrategy.Resolve)
         {
-            DependencyResolverMiddleware.UseDependencyResolver(appRunner, dependencyResolver,
+            return DependencyResolverMiddleware.UseDependencyResolver(
+                appRunner, dependencyResolver, runInScope,
                 argumentModelResolveStrategy, commandClassResolveStrategy);
-
-            if (runInScope != null)
-            {
-                appRunner.Configure(b =>
-                {
-                    b.UseMiddleware((context, next) =>
-                        {
-                            using (runInScope(context))
-                            {
-                                return next(context);
-                            }
-                        }, 
-                        MiddlewareSteps.DependencyResolver.BeginScope);
-                });
-            }
-
-            return appRunner;
         }
 
         /// <summary>

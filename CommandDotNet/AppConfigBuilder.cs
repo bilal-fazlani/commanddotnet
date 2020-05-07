@@ -15,12 +15,21 @@ namespace CommandDotNet
     public class AppConfigBuilder
     {
         private short _orderAdded = 0;
+        
+        private readonly SingleRegistrationGuard<ExecutionMiddleware> _middlewareSingleRegistrationGuard = 
+            new SingleRegistrationGuard<ExecutionMiddleware>(
+                "middleware", 
+                middleware => middleware.Method.FullName(includeNamespace: true));
         private readonly SortedDictionary<MiddlewareStages, List<(ExecutionMiddleware middleware, short order, short orderAdded)>> _middlewareByStage = 
             new SortedDictionary<MiddlewareStages, List<(ExecutionMiddleware middleware, short order, short orderAdded)>>();
 
+        private readonly SingleRegistrationGuard<string> _tokenTransformationSingleRegistrationGuard = 
+            new SingleRegistrationGuard<string>("token transformation", name => name);
         private readonly Dictionary<string, TokenTransformation> _tokenTransformationsByName = 
             new Dictionary<string, TokenTransformation>();
 
+        private readonly SingleRegistrationGuard<Type> _parameterResolverSingleRegistrationGuard = 
+            new SingleRegistrationGuard<Type>("parameter resolver", type => type.FullName);
         private readonly Dictionary<Type, Func<CommandContext, object>> _parameterResolversByType = new Dictionary<Type, Func<CommandContext, object>>
         {
             [typeof(CommandContext)] = ctx => ctx,
@@ -83,6 +92,9 @@ namespace CommandDotNet
         /// </summary>
         public AppConfigBuilder UseParameterResolver<T>(Func<CommandContext,T> resolver) where T: class
         {
+            if (resolver == null) throw new ArgumentNullException(nameof(resolver));
+
+            _parameterResolverSingleRegistrationGuard.Register(typeof(T));
             _parameterResolversByType.Add(typeof(T), resolver);
             return this;
         }
@@ -95,13 +107,8 @@ namespace CommandDotNet
         {
             if (name == null) throw new ArgumentNullException(nameof(name));
             if (transformation == null) throw new ArgumentNullException(nameof(transformation));
-
-            if (_tokenTransformationsByName.ContainsKey(name))
-            {
-                throw new ArgumentException(
-                    $"a transformation named {name} already exists. " +
-                    $"transformations={_tokenTransformationsByName.Keys.ToOrderedCsv()}");
-            }
+            
+            _tokenTransformationSingleRegistrationGuard.Register(name);
             _tokenTransformationsByName.Add(name, new TokenTransformation(name, order, transformation));
 
             return this;
@@ -110,9 +117,20 @@ namespace CommandDotNet
         /// <summary>
         /// Adds the middleware to the pipeline in the specified <see cref="MiddlewareStep"/>
         /// </summary>
-        public AppConfigBuilder UseMiddleware(ExecutionMiddleware middleware, MiddlewareStep step)
+        public AppConfigBuilder UseMiddleware(ExecutionMiddleware middleware, MiddlewareStep step, 
+            bool allowMultipleRegistrations = false)
         {
-            return UseMiddleware(middleware, step.Stage, step.OrderWithinStage);
+            if (!allowMultipleRegistrations)
+            {
+                _middlewareSingleRegistrationGuard.Register(middleware);
+            }
+            
+            var values = _middlewareByStage
+                .GetOrAdd(step.Stage, s => new List<(ExecutionMiddleware, short, short)>());
+
+            values.Add((middleware, step.OrderWithinStage, _orderAdded++));
+
+            return this;
         }
 
         /// <summary>
@@ -120,14 +138,10 @@ namespace CommandDotNet
         /// Use <see cref="orderWithinStage"/> to specify order in relation
         /// to other middleware within the same stage.
         /// </summary>
-        public AppConfigBuilder UseMiddleware(ExecutionMiddleware middleware, MiddlewareStages stage, short? orderWithinStage = null)
+        public AppConfigBuilder UseMiddleware(ExecutionMiddleware middleware, MiddlewareStages stage, 
+            short? orderWithinStage = null, bool allowMultipleRegistrations = false)
         {
-            var values = _middlewareByStage
-                .GetOrAdd(stage, s => new List<(ExecutionMiddleware, short, short)>());
-            
-            values.Add((middleware, orderWithinStage.GetValueOrDefault(), _orderAdded++));
-
-            return this;
+            return UseMiddleware(middleware, new MiddlewareStep(stage, orderWithinStage), allowMultipleRegistrations);
         }
 
         internal AppConfig Build()
@@ -151,6 +165,50 @@ namespace CommandDotNet
                 AppSettings, Console, DependencyResolver, helpProvider, NameTransformation,
                 OnRunCompleted, TokenizationEvents, BuildEvents, Services,
                 _parameterResolversByType, middlewarePipeline, tokenTransformations);
+        }
+
+        private class SingleRegistrationGuard<T>
+        {
+            private readonly string _type;
+            private readonly Func<T, string> _getName;
+
+            private readonly Dictionary<T, SingleRegistrationInfo> _registrations = 
+                new Dictionary<T, SingleRegistrationInfo>();
+
+            public SingleRegistrationGuard(string type, Func<T, string> getName)
+            {
+                _type = type ?? throw new ArgumentNullException(nameof(type));
+                _getName = getName ?? throw new ArgumentNullException(nameof(getName));
+            }
+
+            internal void Register(T key)
+            {
+                if (_registrations.TryGetValue(key, out var info))
+                {
+                    var msg = $"{_type} '{_getName(key)}' has already been registered";
+                    if (AppRunnerConfigExtensions.InUseDefaultMiddleware
+                        || info.InUseDefaultMiddleware)
+                    {
+                        var paramName = info.ExcludeParamName 
+                                        ?? AppRunnerConfigExtensions.ExcludeParamName;
+                        msg += $" via 'UseDefaultMiddleware'. Try `.UseDefaultMiddleware({paramName}:true)`" +
+                               " to register with other extension methods.";
+                    }
+                    throw new InvalidConfigurationException(msg);
+                }
+                _registrations.Add(key, new SingleRegistrationInfo());
+            }
+
+            private class SingleRegistrationInfo
+            {
+                public string? ExcludeParamName;
+                public bool InUseDefaultMiddleware => !ExcludeParamName.IsNullOrWhitespace();
+
+                public SingleRegistrationInfo()
+                {
+                    ExcludeParamName = AppRunnerConfigExtensions.ExcludeParamName;
+                }
+            }
         }
     }
 }

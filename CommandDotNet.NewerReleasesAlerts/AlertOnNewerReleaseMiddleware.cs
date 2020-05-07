@@ -38,6 +38,7 @@ namespace CommandDotNet.NewerReleasesAlerts
         {
             return appRunner.Configure(c =>
             {
+                c.UseMiddleware(AlertOnNewVersion, MiddlewareSteps.NewerReleaseAlerts);
                 c.Services.Add(new NewerReleaseConfig(
                     latestReleaseUrl,
                     parseSemanticVersionFromResponseBodyCallback,
@@ -45,7 +46,6 @@ namespace CommandDotNet.NewerReleasesAlerts
                     overrideHttpRequestCallback,
                     skipCommand
                 ));
-                c.UseMiddleware(AlertOnNewVersion, MiddlewareSteps.NewerReleaseAlerts);
             });
         }
 
