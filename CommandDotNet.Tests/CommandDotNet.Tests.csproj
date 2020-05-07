@@ -36,7 +36,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UnitTests\TestTools\" />
-  </ItemGroup>
 </Project>

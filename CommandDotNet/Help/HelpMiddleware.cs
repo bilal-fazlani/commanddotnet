@@ -10,9 +10,9 @@ namespace CommandDotNet.Help
         {
             return appRunner.Configure(c =>
             {
-                c.BuildEvents.OnCommandCreated += AddHelpOption;
                 c.UseMiddleware(CheckIfShouldShowHelp, MiddlewareSteps.Help.CheckIfShouldShowHelp);
                 c.UseMiddleware(PrintHelp, MiddlewareSteps.Help.PrintHelpOnExit);
+                c.BuildEvents.OnCommandCreated += AddHelpOption;
             });
         }
 

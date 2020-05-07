@@ -19,9 +19,9 @@ namespace CommandDotNet.Parsing.Typos
             }
 
             return appRunner.Configure(c =>
-            {
-                c.Services.Add(new Config {MaxSuggestionCount = maxSuggestionCount});   
+            {  
                 c.UseMiddleware(TypoSuggest, MiddlewareSteps.TypoSuggest);
+                c.Services.Add(new Config {MaxSuggestionCount = maxSuggestionCount}); 
             });
         }
 

@@ -8,8 +8,8 @@ namespace CommandDotNet.Execution
         {
             return appRunner.Configure(c =>
             {
-                c.OnRunCompleted += _ => CancellationHandlers.EndRun();
                 c.UseMiddleware(AddCancellationTokens, MiddlewareSteps.CancellationHandler);
+                c.OnRunCompleted += _ => CancellationHandlers.EndRun();
             });
         }
 

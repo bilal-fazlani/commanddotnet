@@ -20,7 +20,6 @@ namespace CommandDotNet.Prompts
         {
             return appRunner.Configure(c =>
             {
-
                 prompterOverride ??= c.Services.GetOrDefault<Func<CommandContext, IPrompter>>()
                                      ?? (ctx =>
                                      {
@@ -33,7 +32,7 @@ namespace CommandDotNet.Prompts
 
                 if (promptForMissingArguments)
                 {
-                    argumentFilter ??= (a => a.Arity.RequiresAtLeastOne()); 
+                    argumentFilter ??= a => a.Arity.RequiresAtLeastOne(); 
                     c.UseMiddleware(
                         (ctx, next) => PromptForMissingArguments(ctx, next,
                             new ArgumentPrompter(prompterOverride(ctx), argumentPromptTextOverride), argumentFilter), 

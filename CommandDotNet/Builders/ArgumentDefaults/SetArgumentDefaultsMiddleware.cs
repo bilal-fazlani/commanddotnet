@@ -21,11 +21,9 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                 var config = c.Services.GetOrDefault<Config>();
                 if (config == null)
                 {
-                    config = new Config(getDefaultValueCallbacks);
-                    c.Services.Add(config);
-
                     // run before help so the default values can be displayed in the help text 
                     c.UseMiddleware(SetDefaults, MiddlewareSteps.SetArgumentDefaults);
+                    c.Services.Add(config = new Config(getDefaultValueCallbacks));
                 }
                 else
                 {
