@@ -29,8 +29,7 @@ namespace CommandDotNet
             bool excludeResponseFiles = false,
             bool excludeVersionMiddleware = false,
             bool excludeAppendPipedInputToOperandList = false,
-            bool excludeTypoSuggestions = false,
-            bool excludeCommandLoggerAsDirective = false)
+            bool excludeTypoSuggestions = false)
         {
             if (!excludeCancellationHandlers) appRunner.UseCancellationHandlers();
             if (!excludeDebugDirective) appRunner.UseDebugDirective();
@@ -40,7 +39,6 @@ namespace CommandDotNet
             if (!excludeVersionMiddleware) appRunner.UseVersionMiddleware();
             if (!excludeAppendPipedInputToOperandList) appRunner.AppendPipedInputToOperandList();
             if (!excludeTypoSuggestions) appRunner.UseTypoSuggestions();
-            if (!excludeCommandLoggerAsDirective) appRunner.UseCommandLogger();
 
             return appRunner;
         }
