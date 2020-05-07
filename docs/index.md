@@ -29,7 +29,7 @@ Special thanks to [Drew Burlingame](https://github.com/drewburlingame) for conti
 
 ## V4 (upcoming version preview)
 
-Version 4 links: [Documentation](https://v4-master.commanddotnet.bilal-fazlani.com/) and [GitHub](https://github.com/bilal-fazlani/commanddotnet/tree/v4-master) 
+Version 4 links: [Documentation](https://v4-master.commanddotnet.bilal-fazlani.com/) and [GitHub](https://github.com/bilal-fazlani/commanddotnet/tree/v4/master) 
 
 ## V2 (previous version)
 
