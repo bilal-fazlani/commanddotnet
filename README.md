@@ -19,11 +19,9 @@
 
 ## Documentation
 
-Version 3 (Current): https://commanddotnet.bilal-fazlani.com
+Version 4 (Current): https://commanddotnet.bilal-fazlani.com
 
-Version 4 (Upcoming version preview): https://v4-master.commanddotnet.bilal-fazlani.com
-
-Legacy:
+Version 3: https://v3.commanddotnet.bilal-fazlani.com
 
 Version 2: https://v2.commanddotnet.bilal-fazlani.com
 
