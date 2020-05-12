@@ -73,8 +73,6 @@ nav:
       - ReleaseNotes/CommandDotNet.IoC.SimpleInjector.md
       - ReleaseNotes/CommandDotNet.NameCasing.md
       - ReleaseNotes/CommandDotNet.TestTools.md
-    - Roadmap: 
-      - ReleaseNotes/roadmap.md
 theme:
   features:
     - tabs
