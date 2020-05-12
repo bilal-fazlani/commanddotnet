@@ -1,6 +1,6 @@
 ![logo](./img/logo.svg){: style="width:20em"}
 
-!!! Info
+!!! Caution
     This documentation is for version 2 which is an older version of commanddotnet. Documentation for current version can be found here: [https://commanddotnet.bilal-fazlani.com](https://commanddotnet.bilal-fazlani.com)
 
 # Introduction
