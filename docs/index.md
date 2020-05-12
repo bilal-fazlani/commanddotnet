@@ -1,6 +1,7 @@
 ![logo](./img/logo.svg){: style="width:20em"}
 
-!!! Info This documentation is for version 3 which is an older version of commanddotnet. Documentation for current version can be found here: https://commanddotnet.bilal-fazlani.com
+!!! Info 
+    This documentation is for version 3 which is an older version of commanddotnet. Documentation for current version can be found here: https://commanddotnet.bilal-fazlani.com
 
 # Introduction
 
