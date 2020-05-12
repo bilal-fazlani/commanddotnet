@@ -29,7 +29,7 @@ Special thanks to [Drew Burlingame](https://github.com/drewburlingame) for conti
 
 ## V3
 
-Version 3 links: [Documentation](https://commanddotnet.bilal-fazlani.com/) and [GitHub](https://github.com/bilal-fazlani/commanddotnet/) 
+Version 3 links: [Documentation](https://v3.commanddotnet.bilal-fazlani.com/) and [GitHub](https://github.com/bilal-fazlani/commanddotnet/) 
 
 ## V2
 
