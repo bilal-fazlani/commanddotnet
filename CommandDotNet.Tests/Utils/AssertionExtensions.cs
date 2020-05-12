@@ -16,9 +16,9 @@ namespace CommandDotNet.Tests.Utils
         }
 
         /// <summary>Should be same order</summary>
-        public static AndConstraint<GenericCollectionAssertions<object>> BeEquivalentSequenceTo(
-            this GenericCollectionAssertions<object> assertions,
-            params object[] expectedValues)
+        public static AndConstraint<GenericCollectionAssertions<object?>> BeEquivalentSequenceTo(
+            this GenericCollectionAssertions<object?> assertions,
+            params object?[] expectedValues)
         {
             return assertions.BeEquivalentTo(expectedValues, c => c.WithStrictOrderingFor(s => s));
         }
@@ -26,10 +26,10 @@ namespace CommandDotNet.Tests.Utils
         /// <summary>Being explicit brings clarity in tests</summary>
         public static void ParamValuesShouldBeEmpty(this CommandContext ctx) => ctx.ParamValuesShouldBe();
 
-        public static void ParamValuesShouldBe(this CommandContext ctx, params object[] values)
+        public static void ParamValuesShouldBe(this CommandContext ctx, params object?[] values)
         {
             var invocation = ctx.GetCommandInvocationInfo();
-            InvocationParamValuesShouldBe(ctx, values, invocation);
+            InvocationParamValuesShouldBe(values, invocation);
         }
 
         /// <summary>Being explicit brings clarity in tests</summary>
@@ -41,16 +41,16 @@ namespace CommandDotNet.Tests.Utils
             where TInterceptorClass : class
         {
             var invocation = ctx.GetInterceptorInvocationInfo<TInterceptorClass>();
-            InvocationParamValuesShouldBe(ctx, values, invocation);
+            InvocationParamValuesShouldBe(values, invocation);
         }
 
-        private static void InvocationParamValuesShouldBe(CommandContext ctx, object[] values, InvocationInfo invocation)
+        private static void InvocationParamValuesShouldBe(object?[] values, InvocationInfo invocation)
         {
             if (values == null)
             {
                 throw new ArgumentNullException(nameof(values));
             }
-            invocation.ArgumentParameterValues.Should().BeEquivalentSequenceTo(values);
+            invocation.ArgumentParameterValues?.Should().BeEquivalentSequenceTo(values);
         }
     }
 }

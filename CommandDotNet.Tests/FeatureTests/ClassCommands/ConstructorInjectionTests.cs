@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using CommandDotNet.Rendering;
-using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using FluentAssertions;
 using Xunit;
@@ -20,15 +19,15 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         {
             var result = new AppRunner<UseLargestCtorApp>().RunInMem("Do");
             var app = result.CommandContext.GetCommandInvocationInfo<UseLargestCtorApp>().Instance;
-            app.CommandContext.Should().NotBeNull();
+            app!.CommandContext.Should().NotBeNull();
             app.Console.Should().NotBeNull();
             app.CancellationToken.Should().NotBeNull();
         }
 
         class UseLargestCtorApp
         {
-            public CommandContext CommandContext;
-            public IConsole Console;
+            public CommandContext CommandContext = null!;
+            public IConsole Console = null!;
             public CancellationToken CancellationToken;
 
             public UseLargestCtorApp()

@@ -265,7 +265,6 @@ AppRunner<App>:
       DefaultArgumentMode: Operand
       DefaultArgumentSeparatorStrategy: PassThru
       DisableDirectives: False
-      GuaranteeOperandOrderInArgumentModels: False
       Help: AppHelpSettings:
         ExpandArgumentsInUsage: False
         PrintHelpOption: False
@@ -273,7 +272,6 @@ AppRunner<App>:
         UsageAppName: 
         UsageAppNameStyle: Adaptive
       IgnoreUnexpectedOperands: False
-      LongNameAlwaysDefaultsToSymbolName: False
     DependencyResolver: CommandDotNet.TestTools.TestDependencyResolver
     HelpProvider: CommandDotNet.Help.HelpTextProvider
     TokenTransformations:

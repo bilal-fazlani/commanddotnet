@@ -1,7 +1,5 @@
 using CommandDotNet.Tests.Utils;
-using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
-using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -28,7 +26,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 When = {Args = "Do -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                    Output = @"Usage: dotnet testhost.dll Do [options] <operand>
 
 Arguments:
   operand
@@ -48,7 +46,7 @@ Options:
                 When = {Args = "Do -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                    Output = @"Usage: dotnet testhost.dll Do [options] <operand>
 
 Arguments:
 
@@ -72,7 +70,7 @@ Options:
                 When = {Args = "Do -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                    Output = @"Usage: dotnet testhost.dll Do [options] <operand>
 
 Arguments:
   operand
@@ -92,7 +90,7 @@ Options:
                 When = {Args = "Do -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                    Output = @"Usage: dotnet testhost.dll Do [options] <operand>
 
 Arguments:
 

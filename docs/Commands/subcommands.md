@@ -93,6 +93,9 @@ $ git.exe stash pop
 stash popped
 ```
 
+!!! Tip
+    See [Nullable Reference Types](../TipsFaqs/nullable-reference-types.md) for avoiding  "Non-nullable property is uninitialized" warnings for subcommand properties
+
 ## Subcommand as a nested class
 
 The same git stash command could be modelled as a nested class.

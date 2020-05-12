@@ -1,5 +1,72 @@
 # CommandDotNet
 
+## 4.0.0
+
+### Nullable Reference Types
+
+The library has been updated to support Nullable Reference Types
+
+### Default behavior changes
+
+Version 4 is removing obsolete members and changing default behaviors made possible since the v3 was introduced.
+
+* default `AppSettings.Help.ExpandArgumentsInUsage` to true.
+    * arguments are expanded in the usage section of help.
+        * old: `add [options] [arguments]`
+        * new: `add [options] <x> <y>`
+* default `AppSettings.DefaultArgumentSeparatorStrategy` to `EndOfOptions`. See [Argument Separator](../ArgumentValues/argument-separator.md) for details.
+    * Help will append ` [[--] <arg>...]` to the usage example when `DefaultArgumentSeparatorStrategy=PassThru`
+* make `AppSettings.LongNameAlwaysDefaultsToSymbolName` the only behavior and remove the setting. `LongName` can be removed with `[Option(LongName=null)]`.
+    * Look for places in your apps where `[Option(ShortName="a")]` with setting a LongName. If you don't want a LongName then add `LongName=null` otherwise the long name will default from the parameter or property name.
+* make `AppSettings.GuaranteeOperandOrderInArgumentModels` the only behavior and remove the setting.
+    * see this [Argument Models section](../Arguments/argument-models/#guaranteeing-the-order-of-arguments) for details
+* enable [CommandLogger](../Diagnostics/command-logger.md) in `.UseDefaultMiddleware()` as `cmdlog` directive. This can be useful for diagnostics.
+* Command.FindOption will throw an exception if the alias is for an operand or subcommand instead of an option. Previously it would return null.
+
+#### Added
+
+* The type `MiddlewareSteps` declares most of the framework defined middleware to make it easier to inject your custom middleware in the desired order. 
+
+#### Changed
+
+* When registering middleware, the OrderInStage parameter has been changed from `int` to `short`.
+
+#### Moved
+
+* `CommandDotNet.Directives.Parse.ParseReporter` - moved to `CommandDotNet.Diagnostics.Parse.ParseReporter`
+* `CommandDotNet.Directives.Debugger` - moved to `CommandDotNet.Diagnostics.Debugger`
+* `AppConfig.CancellationToken` - moved to `CommandDotNet.CancellationToken`. This enables running nested commands within an interactive session.  See [Ctrl+C and CancellationToken](../OtherFeatures/cancellation.md#interactive-sessions) for more details.
+
+#### Removed or Replaced
+
+* `AppSettings`
+    * `MethodArgumentMode` - replaced by `DefaultArgumentMode`
+    * `ThrowOnUnexpectedArgument` - replaced by `IgnoreUnexpectedArguments`
+    * `AllowArgumentSeparator` - was never used for functionality, only to show `--` in help.
+    * `HelpTextStyle` - replaced by `Help.TextStyle`
+    * `Help`
+        * `GlobalTool` - replaced by `UsageAppName`
+* `VersionInfo` - replaced by `AppInfo`
+* `ApplicationMetadataAttribute` - replaced by `CommandAttribute`
+* `ArgumentAttribute` - replaced by `OperandAttribute`
+* `ArgumentMode.Parameter` - replaced by `Operand`
+* `InjectPropertyAttribute` - v3 made ctor injection possible and that should be used.
+* `Command`, `Option`, `Operand` ctor taking with `Command parent` parameter. `Parent` is now assigned by adding to a command.
+* `OptionAttribute`
+    * `Inherited` - replaced by `AssignToExecutableSubcommands`
+* `Option`
+    * `DefaultValue` - use `Option.Default`
+    * `Inherited` - replaced by `AssignToExecutableSubcommands`
+* `Operand`
+    * `DefaultValue` - use `Option.Default`
+* `IArgument`
+    * `DefaultValue` - use `Option.Default`
+* `appRunner.UseDefaultsFromConfig` extension method that returns string, in favor of method with same name returning `ArgumentDefault`
+* `TokenCollection` public ctor - Use `Tokenizer.Tokenize` extension method to generate tokens and `TokenCollection.Transform` to transform them. Ensures source tokens are correctly mapped.
+* `AnsiConsole` - no longer supported. Use a package like ColorConsole or Pastel.
+* `MiddlewareSteps.Help.Stage` & `MiddlewareSteps.Help.Order` - replaced by nested `MiddlewareSteps.Help` classes
+* `ServicesExtensions.GetOrAdd<T>` - use `ContextDataExtensions.GetOrAdd<T>`
+
 ## 3.6.5
 
 #### Typo suggestions for argument values
@@ -169,11 +236,14 @@ Returns true if the type is `Password`
 
 * LogProvider.IsDisabled is set to true in AppRunner static ctor.
 
-#### [Guarantee Operand order in IArgumentModel](../Arguments/argument-models.md/#guaranteeing-the-order-of-operands)
+#### [Guarantee Operand order in IArgumentModel](../Arguments/argument-models.md/#guaranteeing-the-order-of-arguments)
 
 The order of operands defined in IArgumentModel classes were never deterministic because .Net does not guarantee the order properties are reflected.
 
 [CallerLineNumber] was used in the OperantAttribute ctor to ensure the order is always based on the order properties are defined in the class.
+
+!!! Warning
+    The issue wasn't correctly resolved until 4.0.0
 
 ## 3.1.0
 

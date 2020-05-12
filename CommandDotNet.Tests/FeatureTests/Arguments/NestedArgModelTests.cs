@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             new AppRunner<NestedModelApp>(BasicHelp).Verify(new Scenario
             {
                 When = {Args = "Do -h"},
-                Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll Do [options] <Operand1> <Operand2>
 
 Arguments:
   Operand1
@@ -40,7 +40,7 @@ Options:
             new AppRunner<NestedModelApp>(DetailedHelp).Verify(new Scenario
             {
                 When = {Args = "Do -h"},
-                Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll Do [options] <Operand1> <Operand2>
 
 Arguments:
 
@@ -85,21 +85,22 @@ Options:
         private class ParentModel: IArgumentModel
         {
             [Option]
-            public string Option1 { get; set; }
+            public string Option1 { get; set; } = null!;
 
             [Operand]
-            public string Operand1 { get; set; }
+            public string Operand1 { get; set; } = null!;
 
-            public NestedModel NestedModel { get; set; }
+            [OrderByPositionInClass]
+            public NestedModel NestedModel { get; set; } = null!;
         }
 
         private class NestedModel : IArgumentModel
         {
             [Option]
-            public string Option2 { get; set; }
+            public string Option2 { get; set; } = null!;
 
             [Operand]
-            public string Operand2 { get; set; }
+            public string Operand2 { get; set; } = null!;
         }
     }
 }

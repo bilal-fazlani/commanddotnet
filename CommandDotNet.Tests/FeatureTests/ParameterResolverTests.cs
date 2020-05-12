@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using CommandDotNet.Execution;
 using CommandDotNet.Rendering;
 using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
@@ -26,7 +27,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     When = {Args = "Do -h"},
                     Then =
                     {
-                        Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                        Output = @"Usage: dotnet testhost.dll Do [options] <intOperand>
 
 Arguments:
   intOperand
@@ -47,7 +48,7 @@ Options:
                     When = {Args = "Do -h"},
                     Then =
                     {
-                        Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                        Output = @"Usage: dotnet testhost.dll Do [options] <intOperand>
 
 Arguments:
 
@@ -65,7 +66,6 @@ Options:
         public void ParameterServices_ArePassedToCommandAndInterceptorMethod()
         {
             new AppRunner<App>()
-                .Configure(c => c.CancellationToken = new CancellationTokenSource().Token)
                 .Verify(new Scenario
             {
                 When = {Args = "Do 7 --stringOption optValue"},
@@ -77,12 +77,12 @@ Options:
                         ctx.ParamValuesShouldBeEmpty<App>();
 
                         var invocation = ctx.GetCommandInvocationInfo();
-                        invocation.ParameterValues[0].Should().BeOfType<CommandContext>().And.Should().NotBeNull();
+                        invocation.ParameterValues![0].Should().BeOfType<CommandContext>().And.Should().NotBeNull();
                         invocation.ParameterValues[1].Should().BeAssignableTo<IConsole>().And.Should().NotBeNull();
                         invocation.ParameterValues[2].Should().BeOfType<CancellationToken>().And.Should().NotBeNull();
 
                         invocation = ctx.GetInterceptorInvocationInfo<App>();
-                        invocation.ParameterValues[0].Should().BeOfType<InterceptorExecutionDelegate>().And.Should().NotBeNull();
+                        invocation.ParameterValues![0].Should().BeOfType<InterceptorExecutionDelegate>().And.Should().NotBeNull();
                         invocation.ParameterValues[1].Should().BeOfType<CommandContext>().And.Should().NotBeNull();
                         invocation.ParameterValues[2].Should().BeAssignableTo<IConsole>().And.Should().NotBeNull();
                         invocation.ParameterValues[3].Should().BeOfType<CancellationToken>().And.Should().NotBeNull();
@@ -124,7 +124,7 @@ Options:
                         AssertContext = ctx =>
                         {
                             var invocation = ctx.GetCommandInvocationInfo();
-                            invocation.ParameterValues[0].Should().Be(someSvc);
+                            invocation.ParameterValues![0].Should().Be(someSvc);
                         }
                     }
                 });
@@ -132,7 +132,7 @@ Options:
 
         public class SomeServiceApp
         {
-            public void Do(SomeService someService, [Operand] int intOperand, [Option] string stringOption = null)
+            public void Do(SomeService someService, [Operand] int intOperand, [Option] string? stringOption = null)
             {
             }
         }
@@ -144,7 +144,7 @@ Options:
                 return next();
             }
 
-            public void Do(CommandContext commandContext, IConsole console, CancellationToken cancellationToken, [Operand] int intOperand, [Option] string stringOption = null)
+            public void Do(CommandContext commandContext, IConsole console, CancellationToken cancellationToken, [Operand] int intOperand, [Option] string? stringOption = null)
             {
             }
         }

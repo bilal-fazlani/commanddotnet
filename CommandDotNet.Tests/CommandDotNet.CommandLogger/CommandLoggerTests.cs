@@ -27,7 +27,7 @@ namespace CommandDotNet.Tests.CommandDotNet.CommandLogger
                     When = {Args = "[cmdlog] --password super-secret Do lala"},
                     Then =
                     {
-                        Output = $@"
+                        Output = @"
 ***************************************
 Original input:
   [cmdlog] --password ***** Do lala
@@ -137,7 +137,6 @@ AppConfig:
       UsageAppName:
       UsageAppNameStyle: Adaptive
     IgnoreUnexpectedOperands: False
-    LongNameAlwaysDefaultsToSymbolName: False
   DependencyResolver:
   HelpProvider: CommandDotNet.Help.HelpTextProvider
   TokenTransformations:
@@ -194,7 +193,7 @@ AppConfig:
                     When = {Args = "[cmdlog] Do"},
                     Then =
                     {
-                        Output = $@"
+                        Output = @"
 ***************************************
 Original input:
   [cmdlog] Do
@@ -229,7 +228,7 @@ options:
         public void AdditionalInfo_CanBe_Shown()
         {
             new AppRunner<App>()
-                .UseCommandLogger(excludeSystemInfo: true, additionalInfoCallback: ctx => new (string, string)[]
+                .UseCommandLogger(excludeSystemInfo: true, additionalInfoCallback: ctx => new[]
                 {
                     ("header1", "value1"),
                     ("header2", "value2")
@@ -239,7 +238,7 @@ options:
                     When = {Args = "[cmdlog] Do"},
                     Then =
                     {
-                        Output = $@"
+                        Output = @"
 ***************************************
 Original input:
   [cmdlog] Do
@@ -365,7 +364,7 @@ options:
             // this supports printing the CommandLogger in error handling.
 
             new AppRunner<App>()
-                .UseCommandLogger(excludeSystemInfo: true, additionalInfoCallback: ctx => new (string, string)[]
+                .UseCommandLogger(excludeSystemInfo: true, additionalInfoCallback: ctx => new[]
                 {
                     ("header1", "value1"),
                     ("header2", "value2")

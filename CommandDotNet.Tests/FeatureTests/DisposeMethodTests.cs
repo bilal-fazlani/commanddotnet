@@ -69,7 +69,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 Then =
                 {
                     AssertContext = ctx =>
-                        ctx.GetCommandInvocationInfo<DisposableApp>().Instance.WasDisposed.Should().BeTrue()
+                        ctx.GetCommandInvocationInfo<DisposableApp>().Instance!.WasDisposed.Should().BeTrue()
                 }
             });
         }
@@ -83,7 +83,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 Then =
                 {
                     AssertContext = ctx =>
-                        ctx.GetCommandInvocationInfo<NotDisposableApp>().Instance.WasDispose.Should().BeTrue()
+                        ctx.GetCommandInvocationInfo<NotDisposableApp>().Instance!.WasDispose.Should().BeTrue()
                 }
             });
 
@@ -95,7 +95,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 Then =
                 {
                     AssertContext = ctx =>
-                        ctx.GetCommandInvocationInfo<NotDisposableApp>().Instance.WasDispose.Should().BeFalse()
+                        ctx.GetCommandInvocationInfo<NotDisposableApp>().Instance!.WasDispose.Should().BeFalse()
                 }
             });
         }

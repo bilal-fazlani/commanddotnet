@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Tests.Utils;
-using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Prompts;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
@@ -390,8 +389,8 @@ lala (Text): fishies
             }
 
             public void Flags(
-                [Option(ShortName = "a")] bool flagA,
-                [Option(ShortName = "b")] bool flagB)
+                [Option(ShortName = "a", LongName = null)] bool flagA,
+                [Option(ShortName = "b", LongName = null)] bool flagB)
             {
             }
 

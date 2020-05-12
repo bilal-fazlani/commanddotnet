@@ -26,16 +26,16 @@ or with an argument model as ...
 public class Email : IArgumentModel
 {
     [Option]
-    public string Subject {get;set;}
+    public string Subject { get; set; }
     
     [Option]
-    public string Body {get;set;}
+    public string Body { get; set; }
     
     [Operand]
-    public string From {get;set;}
+    public string From { get; set; }
     
     [Operand]
-    public string To {get;set;}
+    public string To { get; set; }
 }
 
 public void SendEmail(Email email)
@@ -52,14 +52,14 @@ An `IArgumentModel` can be composed from other `IArgumentModel`s allowing easy r
 public class DryRun : IArgumentModel
 {    
     [Option(LongName="dryrun")]
-    public bool IsDryRun {get;set;}
+    public bool IsDryRun { get; set; }
 }
 
 public class SendEmailArgs : IArgumentModel
 {    
-    public DryRun DryRun {get;set;}
+    public DryRun DryRun { get; set; }
     
-    public Email Email {get;set;}
+    public Email Email { get; set; }
 }
 
 public void SendEmail(SendEmailArgs args)
@@ -78,24 +78,26 @@ Take `DryRun` for example. Ask 5 different developers to add a dryrun option and
 
 When you have the same model, you can add middleware that can check for the existing of that model and perform logic based on that.  Using the `DryRun` example, a UnitOfWork middleware could determine whether to commit or abort a transaction based on the value of the model.
 
-## Guaranteeing the order of operands
+!!! Tip
+    See [Nullable Reference Types](../TipsFaqs/nullable-reference-types.md) for avoiding  "Non-nullable property is uninitialized" warnings in your argument models
 
-Prior to version 3.2.0, operand position is not guaranteed to be consistent because the .Net Framework does not guarantee the order properties are reflected.
+## Guaranteeing the order of arguments
+
+Prior to version 4, argument position is not guaranteed to be consistent because the .Net Framework does not guarantee the order properties are reflected.
 
 > The [GetProperties](https://docs.microsoft.com/en-us/dotnet/api/system.type.getproperties) method does not return properties in a particular order, such as alphabetical or declaration order. Order can differ on each machine the app is deployed to. Your code must not depend on the order in which properties are returned because that order is no guaranteed.
 
-This is not an issue with `Option` because options are named, not positional.
+For `Operands`, which are positional arguments, this can result in commands with operands in a non-deterministic order.
 
-As of version 3.2.0, CommandDotNet can guarantee operands will maintain their position as defined within a class.
+This is less of an issue with `Option` because options are named, not positional. Only the order options appear in help is affected.
+
+As of version 4, CommandDotNet can guarantee all arguments will maintain their position as defined within a class as long as the properties are decorated with `OperandAttribute`, `OptionAtribute` or `OrderByPositionInClassAttribute`.
 
 ### How to use
 
-The `OperandAttribute` now defines an optional constructor parameter called `__callerLineNumber`. This uses the [CallerLineNumberAttribute](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.callerlinenumberattribute?view=netframework-4.8) to auto-assign the line number in the class. **Do Not** provide a value for this parameter.
+The `OperandAttribute` and `OptionAtribute` define an optional constructor parameter called `__callerLineNumber`. This uses the [CallerLineNumberAttribute](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.callerlinenumberattribute?view=netframework-4.8) to auto-assign the line number in the class. **Do Not** provide a value for this parameter.
 
-Set `AppSettings.GuaranteeOperandOrderInArgumentModels = true` to have CommandDotNet raise an exception when the order cannot be determined.
-
-!!! Warning
-    This will default to true in the next major release. If your app defines operands in argument models, set this to true now to avoid breaking changes.
+CommandDotNet will raise an exception when the order cannot be determined.
 
 Order cannot be determined when
 
@@ -110,10 +112,10 @@ We can fix by attributing the `Email` property like so...
 ```c#
 public class SendEmailArgs : IArgumentModel
 {    
-    public DryRun DryRun {get;set;}
+    public DryRun DryRun { get; set; }
     
     [OrderByPositionInClass]
-    public Email Email {get;set;}
+    public Email Email { get; set; }
 }
 ```
  

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using CommandDotNet.Tests.Utils;
-using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;

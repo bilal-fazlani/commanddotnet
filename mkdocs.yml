@@ -63,15 +63,18 @@ nav:
         - Extensibility/middleware.md
         - Extensibility/interceptors.md 
         - Extensibility/token-transformations.md
+      - Tips & FAQs:
+        - TipsFaqs/nullable-reference-types.md
     - Release Notes:
-      - ReleaseNotes/whats-new-in-v3.md
       - ReleaseNotes/CommandDotNet.md
       - ReleaseNotes/CommandDotNet.FluentValidation.md
       - ReleaseNotes/CommandDotNet.IoC.Autofac.md
       - ReleaseNotes/CommandDotNet.IoC.MicrosoftDependencyInjection.md
       - ReleaseNotes/CommandDotNet.IoC.SimpleInjector.md
       - ReleaseNotes/CommandDotNet.NameCasing.md
+      - ReleaseNotes/CommandDotNet.NewerReleasesAlerts.md
       - ReleaseNotes/CommandDotNet.TestTools.md
+      - ReleaseNotes/whats-new-in-v3.md
     - Roadmap: 
       - ReleaseNotes/roadmap.md
 theme:

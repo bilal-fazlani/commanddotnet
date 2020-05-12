@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CommandDotNet.Extensions;
 
 namespace CommandDotNet.TestTools.Scenarios
 {
@@ -10,13 +8,13 @@ namespace CommandDotNet.TestTools.Scenarios
     {
         /// <summary>Run and verify the scenario expectations, output results to <see cref="Console"/></summary>
         public static AppRunnerResult Verify(this AppRunner appRunner, IScenario scenario, 
-            Action<string> logLine = null, TestConfig config = null)
+            Action<string?>? logLine = null, TestConfig? config = null)
         {
             return appRunner.Verify(logLine, config, scenario);
         }
 
         /// <summary>Run and verify the scenario expectations using the given logger for output.</summary>
-        public static AppRunnerResult Verify(this AppRunner appRunner, Action<string> logLine, TestConfig config, IScenario scenario)
+        public static AppRunnerResult Verify(this AppRunner appRunner, Action<string?>? logLine, TestConfig? config, IScenario scenario)
         {
             if (scenario.When.Args != null && scenario.When.ArgsArray != null)
             {
@@ -25,11 +23,10 @@ namespace CommandDotNet.TestTools.Scenarios
                                                     "Only one can be specified.");
             }
 
-            logLine = logLine ?? Console.WriteLine;
-            config = config ?? TestConfig.Default;
+            logLine ??= Console.WriteLine;
+            config ??= TestConfig.Default;
 
-            AppRunnerResult results = null;
-            var args = scenario.When.ArgsArray ?? scenario.When.Args.SplitArgs();
+            var args = scenario.When.ArgsArray ?? scenario.When.Args!.SplitArgs();
 
             var origOnSuccess = config.OnSuccess;
             if (!config.OnError.CaptureAndReturnResult)
@@ -43,7 +40,7 @@ namespace CommandDotNet.TestTools.Scenarios
                     c.OnError.CaptureAndReturnResult = true;
                 });
             }
-            results = appRunner.RunInMem(
+            var results = appRunner.RunInMem(
                 args,
                 logLine,
                 scenario.When.OnReadLine,
@@ -65,14 +62,9 @@ namespace CommandDotNet.TestTools.Scenarios
                     results.Console.AllText().ShouldBe(scenario.Then.Output, "output");
                 }
 
-                if (scenario.Then.Captured.Count > 0)
-                {
-                    AssertCapturedItems(scenario, results);
-                }
-
                 results.LogResult(logLine);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 results.LogResult(logLine, onError: true);
                 throw;
@@ -110,7 +102,7 @@ namespace CommandDotNet.TestTools.Scenarios
             if (missingHelpTexts.Count > 0)
             {
                 sb.AppendLine();
-                sb.AppendLine($"Missing text in output:");
+                sb.AppendLine("Missing text in output:");
                 foreach (var text in missingHelpTexts)
                 {
                     sb.AppendLine();
@@ -127,37 +119,12 @@ namespace CommandDotNet.TestTools.Scenarios
             if (unexpectedHelpTexts.Count > 0)
             {
                 sb.AppendLine();
-                sb.AppendLine($"Unexpected text in output:");
+                sb.AppendLine("Unexpected text in output:");
                 foreach (var text in unexpectedHelpTexts)
                 {
                     sb.AppendLine();
                     sb.AppendLine($"  {text}");
                 }
-            }
-        }
-
-        private static void AssertCapturedItems(IScenario scenario, AppRunnerResult results)
-        {
-            foreach (var expectedOutput in scenario.Then.Captured)
-            {
-                var expectedType = expectedOutput.GetType();
-                var actualOutput = results.TestCaptures.Get(expectedType);
-                if (actualOutput == null)
-                {
-                    throw new AssertFailedException($"{expectedType.Name} should have been captured in the test run but wasn't");
-                }
-                actualOutput.ShouldBeEquivalentTo(expectedOutput, $"Captured {expectedType.Name}");
-            }
-
-            var actualOutputs = results.TestCaptures.Captured;
-            if (!scenario.Then.AllowUnspecifiedCaptures && actualOutputs.Count > scenario.Then.Captured.Count)
-            {
-                var expectedOutputTypes = new HashSet<Type>(scenario.Then.Captured.Select(o => o.GetType()));
-                var unexpectedTypes = actualOutputs.Keys
-                    .Where(t => !expectedOutputTypes.Contains(t))
-                    .ToOrderedCsv();
-
-                throw new AssertFailedException($"Unexpected captures: {unexpectedTypes}");
             }
         }
     }

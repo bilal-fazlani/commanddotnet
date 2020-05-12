@@ -81,11 +81,11 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         class Level1
         {
             [SubCommand]
-            public Level2 Level2 { get; set; }
+            public Level2 Level2 { get; set; } = null!;
             [SubCommand]
-            public Level3 Level3 { get; set; }
+            public Level3 Level3 { get; set; } = null!;
 
-            public string Name { get; private set; }
+            public string Name { get; private set; } = null!;
 
             public Task<int> Intercept(InterceptorExecutionDelegate next, string name)
             {
@@ -109,10 +109,10 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         class Level2
         {
             [SubCommand]
-            public Level3 MyChild { get; set; }
+            public Level3 MyChild { get; set; } = null!;
 
-            public string ParentName { get; set; }
-            public string Name { get; private set; }
+            public string? ParentName { get; set; }
+            public string? Name { get; private set; }
 
             public Task<int> Intercept(InterceptorExecutionDelegate next, string name2)
             {
@@ -131,9 +131,9 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 
         class Level3
         {
-            public string GrandParentName { get; set; }
-            public string ParentName { get; set; }
-            public string Name { get; private set; }
+            public string? GrandParentName { get; set; }
+            public string? ParentName { get; set; }
+            public string? Name { get; private set; }
 
             public Task<int> Intercept(InterceptorExecutionDelegate next, string name3)
             {

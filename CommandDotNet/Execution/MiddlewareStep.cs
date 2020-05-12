@@ -1,36 +1,31 @@
-﻿using System;
-
-namespace CommandDotNet.Execution
+﻿namespace CommandDotNet.Execution
 {
     public class MiddlewareStep
     {
-        public static MiddlewareStep operator +(MiddlewareStep step, int increment) => 
-            new MiddlewareStep(step.Stage, step.OrderWithinStage + increment);
-        public static MiddlewareStep operator -(MiddlewareStep step, int decrement) =>
-            new MiddlewareStep(step.Stage, step.OrderWithinStage - decrement);
+        public static MiddlewareStep operator +(MiddlewareStep step, short increment) => 
+            new MiddlewareStep(step.Stage, (short)(step.OrderWithinStage + increment));
+        public static MiddlewareStep operator -(MiddlewareStep step, short decrement) =>
+            new MiddlewareStep(step.Stage, (short)(step.OrderWithinStage - decrement));
 
         public MiddlewareStages Stage { get; }
 
-        public int? OrderWithinStage { get; }
+        public short OrderWithinStage { get; }
 
-        [Obsolete("Use OrderWithinStage instead")]
-        public int Order => OrderWithinStage.GetValueOrDefault();
-
-        public MiddlewareStep(MiddlewareStages stage, int? orderWithinStage = null)
+        public MiddlewareStep(MiddlewareStages stage, short? orderWithinStage = null)
         {
             Stage = stage;
-            OrderWithinStage = orderWithinStage;
+            OrderWithinStage = orderWithinStage.GetValueOrDefault();
         }
 
         public override string ToString()
         {
-            return $"{nameof(MiddlewareStep)}:{Stage} {OrderWithinStage.GetValueOrDefault()}";
+            return $"{nameof(MiddlewareStep)}:{Stage} {OrderWithinStage}";
         }
 
         protected bool Equals(MiddlewareStep other)
         {
             return Stage == other.Stage
-                   && OrderWithinStage.GetValueOrDefault() == other.OrderWithinStage.GetValueOrDefault();
+                   && OrderWithinStage == other.OrderWithinStage;
         }
 
         public override bool Equals(object obj)
@@ -57,7 +52,7 @@ namespace CommandDotNet.Execution
         {
             unchecked
             {
-                return ((int)Stage * 397) ^ OrderWithinStage.GetValueOrDefault().GetHashCode();
+                return ((int)Stage * 397) ^ OrderWithinStage.GetHashCode();
             }
         }
 

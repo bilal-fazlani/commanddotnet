@@ -67,7 +67,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     When = {Args = "Do -h"},
                     Then =
                     {
-                        Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                        Output = @"Usage: dotnet testhost.dll Do [options] <arg1>
 
 Arguments:
 
@@ -183,7 +183,7 @@ Use ""dotnet testhost.dll ChildApp [command] --help"" for more information about
         class App
         {
             [SubCommand]
-            public ChildApp ChildApp { get; set; }
+            public ChildApp ChildApp { get; set; } = null!;
 
             public Task<int> Intercept(InterceptorExecutionDelegate next,
                 string interceptorOpt,
@@ -198,8 +198,8 @@ Use ""dotnet testhost.dll ChildApp [command] --help"" for more information about
 
             public class InterceptResult
             {
-                public string InterceptorOpt { get; set; }
-                public string InheritedOpt { get; set; }
+                public string? InterceptorOpt { get; set; }
+                public string? InheritedOpt { get; set; }
             }
 
             public class DoResult

@@ -7,7 +7,7 @@ namespace CommandDotNet
 {
     public static class CommandExtensions
     {
-        public static bool IsRootCommand(this Command command) => command.Parent == null;
+        public static bool IsRootCommand(this Command command) => command.Parent is null;
 
         /// <summary>Get the root command</summary>
         public static Command GetRootCommand(this Command command) => command.GetParentCommands(true).Last();
@@ -15,6 +15,7 @@ namespace CommandDotNet
         /// <summary> Return all <see cref="Operand"/>s and <see cref="Option"/>s for the command</summary>
         /// <param name="command">The command</param>
         /// <param name="includeInterceptorOptions">When true, includes options from interceptors of all parent commands</param>
+        /// <param name="excludeHiddenOptions">When true, hidden options like Help are not included</param>
         public static IEnumerable<IArgument> AllArguments(this Command command, 
             bool includeInterceptorOptions = false, bool excludeHiddenOptions = false)
         {
@@ -25,6 +26,7 @@ namespace CommandDotNet
         /// <summary>Return all <see cref="Option"/>s for the command.</summary>
         /// <param name="command">The command</param>
         /// <param name="includeInterceptorOptions">When true, includes options from interceptors of all parent commands</param>
+        /// <param name="excludeHiddenOptions">when true, excludes hidden options</param>
         public static IEnumerable<Option> AllOptions(this Command command, 
             bool includeInterceptorOptions = false, bool excludeHiddenOptions = false)
         {
@@ -37,7 +39,7 @@ namespace CommandDotNet
                 : command.Options;
             if (excludeHiddenOptions)
             {
-                options = options.Where(o => o.ShowInHelp);
+                options = options.Where(o => !o.Hidden);
             }
             return options;
         }
@@ -46,7 +48,7 @@ namespace CommandDotNet
         public static IEnumerable<Command> GetParentCommands(this Command command, bool includeCurrent = false)
         {
             var startingCommand = includeCurrent ? command : command.Parent;
-            for (var c = startingCommand; c != null; c = c.Parent)
+            for (var c = startingCommand; c is { }; c = c.Parent)
             {
                 yield return c;
             }
@@ -94,8 +96,8 @@ namespace CommandDotNet
             command.FindInputValues(alias)?.Any() ?? false;
 
         /// <summary>Returns the input values for the argument with the given alias or null</summary>
-        public static ICollection<InputValue> FindInputValues(this Command command, string alias) => 
-            command.FindArgumentNode(alias) is IArgument argument ? argument.InputValues : null;
+        public static ICollection<InputValue>? FindInputValues(this Command command, string alias) => 
+            command.Find<IArgument>(alias)?.InputValues;
 
         /// <summary>
         /// Return the effective IgnoreUnexpectedOperands using the default

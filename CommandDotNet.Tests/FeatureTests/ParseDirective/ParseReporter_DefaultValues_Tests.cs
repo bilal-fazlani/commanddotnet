@@ -59,12 +59,14 @@ options:
     inputs:
     default: source=AppSetting key=--opt: hoo
 
-  l <Text>
+  optList <Text>
     value: four, five, six
     inputs:
     default: source=EnvVar key=optList: four, five, six
 
-Use [parse:t] to include token transformations.
+Parse usage: [parse:t:raw] to include token transformations.
+ 't' to include token transformations.
+ 'raw' to include command line as passed to this process.
 "
                     }
                 });
@@ -101,12 +103,14 @@ options:
     inputs:
     default: fishies
 
-  l <Text>
+  optList <Text>
     value: one, two, three
     inputs:
     default: one, two, three
 
-Use [parse:t] to include token transformations.
+Parse usage: [parse:t:raw] to include token transformations.
+ 't' to include token transformations.
+ 'raw' to include command line as passed to this process.
 "
                     }
                 });
@@ -118,7 +122,7 @@ Use [parse:t] to include token transformations.
             public void Do(IConsole console,
                 [Operand] string opd = "lala",
                 [Option] string opt = "fishies",
-                ListsWithDefaults listsWithDefaults = null)
+                ListsWithDefaults? listsWithDefaults = null)
             {
 
             }
@@ -128,11 +132,11 @@ Use [parse:t] to include token transformations.
         {
             [EnvVar("opdList")]
             [Operand]
-            public List<string> opdList { get; set; } = new List<string> { "one", "two", "three" };
+            public List<string>? opdList { get; set; } = new List<string> { "one", "two", "three" };
 
             [EnvVar("optList")]
             [Option(ShortName = "l")]
-            public List<string> optList { get; set; } = new List<string> { "one", "two", "three" };
+            public List<string>? optList { get; set; } = new List<string> { "one", "two", "three" };
         }
     }
 }

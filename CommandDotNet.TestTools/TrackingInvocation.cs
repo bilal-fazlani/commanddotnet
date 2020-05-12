@@ -11,7 +11,7 @@ namespace CommandDotNet.TestTools
 
         public bool WasInvoked { get; private set; }
         public bool Errored => InvocationError != null;
-        public Exception InvocationError { get; private set; }
+        public Exception? InvocationError { get; private set; }
 
         public IReadOnlyCollection<IArgument> Arguments => _backingInvocation.Arguments;
         public IReadOnlyCollection<ParameterInfo> Parameters => _backingInvocation.Parameters;
@@ -20,7 +20,7 @@ namespace CommandDotNet.TestTools
 
         public TrackingInvocation(IInvocation backingInvocation)
         {
-            _backingInvocation = backingInvocation;
+            _backingInvocation = backingInvocation ?? throw new ArgumentNullException(nameof(backingInvocation));
         }
 
         public object Invoke(CommandContext commandContext, object instance, ExecutionDelegate next)

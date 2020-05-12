@@ -120,7 +120,7 @@ sub-app extended help
                 {
                     Output = @"cmd description
 
-Usage: dotnet testhost.dll somecommand [arguments]
+Usage: dotnet testhost.dll somecommand <value>
 
 Arguments:
   value
@@ -141,7 +141,7 @@ cmd extended help
                 {
                     Output = @"cmd description
 
-Usage: dotnet testhost.dll somecommand [arguments]
+Usage: dotnet testhost.dll somecommand <value>
 
 Arguments:
 
@@ -174,7 +174,7 @@ cmd extended help
         }
 
         // sanity check for ApplicationMetadata until it has been removed 
-        [ApplicationMetadata(
+        [Command(
             Description = "app description",
             Usage = "some usage examples",
             Name = "SomeApp",

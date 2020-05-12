@@ -16,7 +16,7 @@ namespace CommandDotNet.Execution
                     (ctx, next) =>
                         first(ctx, c =>
                         {
-                            if (c.AppConfig.CancellationToken.IsCancellationRequested)
+                            if (c.CancellationToken.IsCancellationRequested)
                             {
                                 Log.Info("Cancellation requested. Aborting execution pipeline");
                                 return ExitCodes.Success;

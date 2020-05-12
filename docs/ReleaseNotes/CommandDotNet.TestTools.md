@@ -1,6 +1,16 @@
 # CommandDotNet.TestTools
 
-## 2.1.0
+## 3.0.0
+
+### Nullable Reference Types
+
+The library has been updated to support Nullable Reference Types
+
+### Obsoletes
+
+Remove obsoleted TestCaptures class
+
+## 2.1.1
 
 ### Getting invocations in tests
 

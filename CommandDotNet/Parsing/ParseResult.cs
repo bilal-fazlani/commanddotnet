@@ -28,7 +28,7 @@ namespace CommandDotNet.Parsing
         /// An exception encountered while parsing the commands.
         /// Help should be printed for the <see cref="TargetCommand"/>
         /// </summary>
-        public Exception ParseError { get; }
+        public Exception? ParseError { get; }
 
         /// <summary>
         /// Returns true if the help option was specified

@@ -10,9 +10,9 @@ namespace CommandDotNet.Help
         {
             return appRunner.Configure(c =>
             {
-                c.BuildEvents.OnCommandCreated += AddHelpOption;
                 c.UseMiddleware(CheckIfShouldShowHelp, MiddlewareSteps.Help.CheckIfShouldShowHelp);
                 c.UseMiddleware(PrintHelp, MiddlewareSteps.Help.PrintHelpOnExit);
+                c.BuildEvents.OnCommandCreated += AddHelpOption;
             });
         }
 
@@ -32,7 +32,7 @@ namespace CommandDotNet.Help
             {
                 Description = "Show help information",
                 IsMiddlewareOption = true,
-                ShowInHelp = appSettingsHelp.PrintHelpOption
+                Hidden = !appSettingsHelp.PrintHelpOption
             };
 
             args.CommandBuilder.AddArgument(option);
@@ -40,7 +40,7 @@ namespace CommandDotNet.Help
 
         private static Task<int> CheckIfShouldShowHelp(CommandContext ctx, ExecutionDelegate next)
         {
-            var parseResult = ctx.ParseResult;
+            var parseResult = ctx.ParseResult!;
             var targetCommand = parseResult.TargetCommand;
 
             if (parseResult.ParseError != null)

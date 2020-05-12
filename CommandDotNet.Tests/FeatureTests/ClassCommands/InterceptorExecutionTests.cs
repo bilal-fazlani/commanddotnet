@@ -45,7 +45,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     When = {Args = "Do -h"},
                     Then =
                     {
-                        Output = @"Usage: dotnet testhost.dll Do [arguments]
+                        Output = @"Usage: dotnet testhost.dll Do <arg1>
 
 Arguments:
 
@@ -93,7 +93,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     When = {Args = "Do -h"},
                     Then =
                     {
-                        Output = @"Usage: dotnet testhost.dll Do [arguments]
+                        Output = @"Usage: dotnet testhost.dll Do <arg1>
 
 Arguments:
 
@@ -222,7 +222,7 @@ Arguments:
 
         public class InterceptOptions : IArgumentModel
         {
-            public string stringOpt { get; set; }
+            public string? stringOpt { get; set; }
             public bool skipCmd { get; set; } = false;
             public int? useReturnCode { get; set; }
         }

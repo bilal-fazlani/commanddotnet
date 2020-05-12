@@ -22,7 +22,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             Task<int> BeforeInvocation(CommandContext context, ExecutionDelegate next)
             {
-                var values = context.InvocationPipeline.TargetCommand.Invocation.ParameterValues;
+                var values = context.InvocationPipeline.TargetCommand!.Invocation.ParameterValues;
                 values.Length.Should().Be(2);
                 var invokedCar = (Car) values[0];
                 var invokedOwner = (string)values[1];
@@ -48,7 +48,7 @@ namespace CommandDotNet.Tests.FeatureTests
             {
                 var targetCommand = context.InvocationPipeline.TargetCommand;
 
-                var args = targetCommand.Invocation.Arguments;
+                var args = targetCommand!.Invocation.Arguments;
                 args.Count.Should().Be(2);
                 var carNumber = args.First();
                 var ownerName = args.Last();
@@ -77,7 +77,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             Task<int> BeforeInvocation(CommandContext context, ExecutionDelegate next)
             {
-                context.ParseResult.TargetCommand.Should().NotBeNull();
+                context.ParseResult!.TargetCommand.Should().NotBeNull();
                 context.ParseResult.TargetCommand.Name.Should().Be(nameof(App.NotifyOwner));
                 return next(context);
             }
@@ -92,47 +92,47 @@ namespace CommandDotNet.Tests.FeatureTests
 
             Task<int> BeforeInvocation(CommandContext context, ExecutionDelegate next)
             {
-                var instance = context.InvocationPipeline.TargetCommand.Instance;
+                var instance = context.InvocationPipeline.TargetCommand!.Instance;
                 instance.Should().NotBeNull();
-                var app = (App)instance;
+                var app = (App)instance!;
 
                 app.Guid = guid;
                 return next(context);
             }
 
             var result = RunInMem(1, "Jack", BeforeInvocation);
-            var app2 = (App)result.CommandContext.GetCommandInvocationInfo().Instance;
+            var app2 = (App)result.CommandContext.GetCommandInvocationInfo().Instance!;
             app2.Guid.Should().Be(guid);
         }
 
         [Fact]
         public void CanReplaceInvocation()
         {
-            TrackingInvocation targetCommandInvocation = null;
+            TrackingInvocation? targetCommandInvocation = null;
             Task<int> BeforeInvocation(CommandContext context, ExecutionDelegate next)
             {
-                targetCommandInvocation = new TrackingInvocation(context.InvocationPipeline.TargetCommand.Invocation);
+                targetCommandInvocation = new TrackingInvocation(context.InvocationPipeline.TargetCommand!.Invocation);
                 context.InvocationPipeline.TargetCommand.Invocation = targetCommandInvocation;
                 return next(context);
             }
 
             var result = RunInMem(1, "Jack", BeforeInvocation);
-            targetCommandInvocation.WasInvoked.Should().BeTrue();
+            targetCommandInvocation!.WasInvoked.Should().BeTrue();
         }
 
         private AppRunnerResult RunInMem(int carNumber, string ownerName, 
-            ExecutionMiddleware postBindValues = null, 
-            ExecutionMiddleware preBindValues = null)
+            ExecutionMiddleware? postBindValues = null, 
+            ExecutionMiddleware? preBindValues = null)
         {
             var appRunner = new AppRunner<App>();
 
             if (postBindValues != null)
             {
-                appRunner.Configure(c => c.UseMiddleware(postBindValues, MiddlewareStages.PostBindValuesPreInvoke, int.MaxValue));
+                appRunner.Configure(c => c.UseMiddleware(postBindValues, MiddlewareStages.PostBindValuesPreInvoke, short.MaxValue));
             }
             if (preBindValues != null)
             {
-                appRunner.Configure(c => c.UseMiddleware(preBindValues, MiddlewareStages.PostParseInputPreBindValues, int.MaxValue));
+                appRunner.Configure(c => c.UseMiddleware(preBindValues, MiddlewareStages.PostParseInputPreBindValues, short.MaxValue));
             }
 
             var args = $"NotifyOwner --Number {carNumber} --owner {ownerName}".SplitArgs();
@@ -141,14 +141,10 @@ namespace CommandDotNet.Tests.FeatureTests
         
         private class App
         {
-            public Car Car;
-            public string Owner;
             public Guid Guid;
 
             public int NotifyOwner(Car car, [Option] string owner)
             {
-                Car = car;
-                Owner = owner;
                 return 5;
             }
         }

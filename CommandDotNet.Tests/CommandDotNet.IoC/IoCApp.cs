@@ -11,7 +11,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
     internal class IoCApp
     {
         public readonly ISomeIoCService FromCtor;
-        public ISomeIoCService FromInterceptor;
+        public ISomeIoCService? FromInterceptor;
 
         public IoCApp(ISomeIoCService fromCtor)
         {
@@ -20,7 +20,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
         public Task<int> Intercept(CommandContext context, ExecutionDelegate next)
         {
-            FromInterceptor = (ISomeIoCService) context.AppConfig.DependencyResolver.Resolve(typeof(ISomeIoCService));
+            FromInterceptor = (ISomeIoCService?) context.AppConfig.DependencyResolver?.Resolve(typeof(ISomeIoCService));
             return next(context);
         }
 

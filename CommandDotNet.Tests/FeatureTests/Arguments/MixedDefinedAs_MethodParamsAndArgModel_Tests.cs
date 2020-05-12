@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using CommandDotNet.Tests.Utils;
-using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
@@ -25,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 When = {Args = "Do -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                    Output = @"Usage: dotnet testhost.dll Do [options] <ModelArg> <paramArg> <paramArgList>
 
 Arguments:
   ModelArg
@@ -48,7 +47,7 @@ Options:
             new AppRunner<App>(DetailedHelp).Verify(new Scenario
             {
                 When = {Args = "Do -h"},
-                Then = { Output = @"Usage: dotnet testhost.dll Do [options] [arguments]
+                Then = { Output = @"Usage: dotnet testhost.dll Do [options] <ModelArg> <paramArg> <paramArgList>
 
 Arguments:
 
@@ -131,13 +130,13 @@ Options:
         private class Model : IArgumentModel
         {
             [Operand]
-            public string ModelArg { get; set; }
+            public string ModelArg { get; set; } = null!;
 
             [Option]
-            public string ModelOption { get; set; }
+            public string ModelOption { get; set; } = null!;
 
             [Option]
-            public List<string> ModelOptionList { get; set; }
+            public List<string> ModelOptionList { get; set; } = null!;
         }
     }
 }

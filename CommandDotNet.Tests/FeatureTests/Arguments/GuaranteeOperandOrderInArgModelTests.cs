@@ -7,38 +7,14 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class GuaranteeOperandOrderInArgModelTests
     {
-        private static readonly AppSettings OperandModeWithOutGuarantee = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Operand);
-        private static readonly AppSettings OptionModeWithOutGuarantee = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Option);
-        private static readonly AppSettings OperandModeWithGuarantee = OperandModeWithOutGuarantee.Clone(a => a.GuaranteeOperandOrderInArgumentModels = true);
-        private static readonly AppSettings OptionModeWithGuarantee = OptionModeWithOutGuarantee.Clone(a => a.GuaranteeOperandOrderInArgumentModels = true);
+        private static readonly AppSettings OperandModeWithGuarantee = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Operand);
+        private static readonly AppSettings OptionModeWithGuarantee = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Option);
         
         public GuaranteeOperandOrderInArgModelTests(ITestOutputHelper output)
         {
             Ambient.Output = output;
         }
-
-        [Fact]
-        public void GivenOptionMode_WithOutGuarantee_UnattributedArgModel_Should_BeOk()
-        {
-            new AppRunner<UArgModelApp>(OptionModeWithOutGuarantee)
-                .Verify(new Scenario
-                {
-                    When = {Args = "Do -h"},
-                    Then = { ExitCode = 0 }
-                });
-        }
-
-        [Fact]
-        public void GivenOperandMode_WithOutGuarantee_UnattributedArgModel_Should_BeOk()
-        {
-            new AppRunner<UArgModelApp>(OperandModeWithOutGuarantee)
-                .Verify(new Scenario
-                {
-                    When = {Args = "Do -h"},
-                    Then = { ExitCode = 0 }
-                });
-        }
-
+        
         [Fact]
         public void GivenOptionMode_WithGuarantee_UnattributedArgModel_Should_BeOk()
         {
@@ -122,6 +98,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         OutputContainsTexts =
                         {
                             @"Arguments:
+  OperandDefinedFirstReflectedLast
   Arg1
   Operand1
   Arg2
@@ -224,56 +201,59 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         // Invalid
         public class UnattributedArgModel : IArgumentModel
         {
-            public string Arg1 { get; set; }
+            public string Arg1 { get; set; } = null!;
         }
 
         // Valid & can verify order
         public class AttributedArgModel : IArgumentModel
         {
             [OrderByPositionInClass]
-            public string Arg1 { get; set; }
+            public string Arg1 { get; set; } = null!;
 
             [Operand]
-            public string Operand1 { get; set; }
+            public string Operand1 { get; set; } = null!;
         }
 
         // Invalid
         public class DeepNestedUnattributedArgModels : IArgumentModel
         {
             // operand must be attributed so we can get parent arg model alerts
-            public UnattributedNestedModelAttributedArgModel Model { get; set; }
+            public UnattributedNestedModelAttributedArgModel Model { get; set; } = null!;
         }
 
         // Invalid
         public class UnattributedNestedModelUnattributedArgModel : IArgumentModel
         {
-            public UnattributedArgModel Model { get; set; }
+            public UnattributedArgModel Model { get; set; } = null!;
         }
 
         // Invalid
         public class UnattributedNestedModelAttributedArgModel : IArgumentModel
         {
-            public AttributedArgModel Model { get; set; }
+            public AttributedArgModel Model { get; set; } = null!;
         }
 
         // Invalid
         public class AttributedNestedModelUnattributedArgModel : IArgumentModel
         {
             [OrderByPositionInClass]
-            public UnattributedArgModel Model { get; set; }
+            public UnattributedArgModel Model { get; set; } = null!;
         }
 
         // Valid & can verify order
         public class AttributedNestedModelAttributedArgModel : IArgumentModel
         {
             [OrderByPositionInClass]
-            public AttributedArgModel Model { get; set; }
+            public AttributedArgModel Model { get; set; } = null!;
 
             [OrderByPositionInClass]
-            public string Arg2 { get; set; }
+            public string Arg2 { get; set; } = null!;
 
             [Operand]
-            public string Operand2 { get; set; }
+            public string Operand2 { get; set; } = null!;
+
+            // mimic operand defined first but returned last when reflected
+            [Operand(1)] public string OperandDefinedFirstReflectedLast { get; set; } = null!;
         }
     }
 }

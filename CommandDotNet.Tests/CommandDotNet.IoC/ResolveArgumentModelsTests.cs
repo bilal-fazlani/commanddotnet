@@ -52,7 +52,8 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
 
         class ArgModel : IArgumentModel
         {
-            public string Text { get; set; }
+            [Operand]
+            public string Text { get; set; } = null!;
         }
     }
 }

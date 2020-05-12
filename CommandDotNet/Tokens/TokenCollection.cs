@@ -48,8 +48,7 @@ namespace CommandDotNet.Tokens
             }
         }
 
-        [Obsolete("Use Tokenizer.Tokenize extension method to generate tokens and TokenCollection.Transform to transform them. Ensures source tokens are correctly mapped.")]
-        public TokenCollection(IEnumerable<Token> tokens)
+        internal TokenCollection(IEnumerable<Token> tokens)
         {
             _directives = new List<Token>();
             _arguments = new List<Token>();

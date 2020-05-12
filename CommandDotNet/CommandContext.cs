@@ -1,4 +1,5 @@
-﻿using CommandDotNet.Builders;
+﻿using System.Threading;
+using CommandDotNet.Builders;
 using CommandDotNet.Diagnostics.Parse;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
@@ -27,12 +28,12 @@ namespace CommandDotNet
         /// The root command for the type specified in <see cref="AppRunner{TRootCommandType}"/>.  
         /// This is populated in the <see cref="MiddlewareStages.Tokenize"/> stage.
         /// </summary>
-        public Command RootCommand { get; set; }
+        public Command? RootCommand { get; set; }
 
         /// <summary>
         /// The results of the <see cref="MiddlewareStages.ParseInput"/> stage.
         /// </summary>
-        public ParseResult ParseResult { get; set; }
+        public ParseResult? ParseResult { get; set; }
 
         /// <summary>
         /// The <see cref="InvocationStep"/>s within the pipeline are mostly populated in
@@ -51,6 +52,13 @@ namespace CommandDotNet
         public bool ShowHelpOnExit { get; set; }
 
         /// <summary>
+        /// The <see cref="CancellationToken"/>.<br/>
+        /// Be careful overwriting if it is not <see cref="CancellationToken"/>.None
+        /// in case other middleware already has a reference to it.
+        /// </summary>
+        public CancellationToken CancellationToken { get; set; } = CancellationToken.None;
+
+        /// <summary>
         /// Services registered for the lifetime of the <see cref="CommandContext"/>.<br/>
         /// Can be used to store state for coordination between middleware and across middleware stages.
         /// </summary>
@@ -64,7 +72,7 @@ namespace CommandDotNet
         /// Delegate from AppConfig. Included here for easier discovery
         /// and reduce confusion with <see cref="Services"/>
         /// </remarks>
-        public IDependencyResolver DependencyResolver => AppConfig.DependencyResolver;
+        public IDependencyResolver? DependencyResolver => AppConfig.DependencyResolver;
 
         public CommandContext(
             string[] originalArgs, 

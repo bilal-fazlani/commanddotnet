@@ -90,7 +90,6 @@ AppConfig:
     BooleanMode: Implicit
     DefaultArgumentMode: Operand
     DisableDirectives: False
-    GuaranteeOperandOrderInArgumentModels: False
     Help: CommandDotNet.Help.AppHelpSettings
     IgnoreUnexpectedOperands: False
   DependencyResolver:

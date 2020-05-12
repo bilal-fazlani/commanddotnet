@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using CommandDotNet.Directives;
 using CommandDotNet.Execution;
 
 namespace CommandDotNet.Diagnostics
@@ -15,8 +14,8 @@ namespace CommandDotNet.Diagnostics
         {
             return appRunner.Configure(c =>
             {
-                c.Services.Add(new DebugDirectiveContext(waitForDebuggerToAttach ?? !InTestHarness));
                 c.UseMiddleware(AttachDebugger, MiddlewareSteps.DebugDirective);
+                c.Services.Add(new DebugDirectiveContext(waitForDebuggerToAttach ?? !InTestHarness));
             });
         }
 
@@ -26,9 +25,9 @@ namespace CommandDotNet.Diagnostics
             if (commandContext.Tokens.HasDebugDirective())
             {
                 Debugger.Attach(
-                    commandContext.AppConfig.CancellationToken,
+                    commandContext.CancellationToken,
                     commandContext.Console,
-                    commandContext.AppConfig.Services.Get<DebugDirectiveContext>().WaitForDebuggerToAttach);
+                    commandContext.AppConfig.Services.GetOrThrow<DebugDirectiveContext>().WaitForDebuggerToAttach);
             }
 
             return next(commandContext);

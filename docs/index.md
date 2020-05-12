@@ -27,10 +27,8 @@ Modify and extend the functionality of the framework through configuration and m
 
 Special thanks to [Drew Burlingame](https://github.com/drewburlingame) for continuous support and contributions
 
-## V4 (upcoming version preview)
+## Legacy versions
 
-Version 4 links: [Documentation](https://v4-master.commanddotnet.bilal-fazlani.com/) and [GitHub](https://github.com/bilal-fazlani/commanddotnet/tree/v4/master) 
-
-## V2 (previous version)
+Version 3 links: [Documentation](https://v3.commanddotnet.bilal-fazlani.com/) and [GitHub](https://github.com/bilal-fazlani/commanddotnet/tree/v3) 
 
 Version 2 links: [Documentation](https://v2.commanddotnet.bilal-fazlani.com/) and [GitHub](https://github.com/bilal-fazlani/commanddotnet/tree/v2) 

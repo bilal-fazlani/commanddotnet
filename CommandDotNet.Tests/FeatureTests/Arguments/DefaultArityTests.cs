@@ -27,7 +27,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             var operands = GetOperands(nameof(App.Params));
 
-            operands.Boolean.Arity.Should().Be(OneToOne);
+            operands!.Boolean.Arity.Should().Be(OneToOne);
             operands.NullableBoolean.Arity.Should().Be(ZeroToOne);
             operands.Number.Arity.Should().Be(OneToOne);
             operands.NullableNumber.Arity.Should().Be(ZeroToOne);
@@ -41,7 +41,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             var operands = GetOperands(nameof(App.DefaultParams));
 
-            operands.Boolean.Arity.Should().Be(ZeroToOne);
+            operands!.Boolean.Arity.Should().Be(ZeroToOne);
             operands.NullableBoolean.Arity.Should().Be(ZeroToOne);
             operands.Number.Arity.Should().Be(ZeroToOne);
             operands.NullableNumber.Arity.Should().Be(ZeroToOne);
@@ -55,7 +55,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             var operands = GetOperands(nameof(App.Model));
 
-            operands.Boolean.Arity.Should().Be(OneToOne);
+            operands!.Boolean.Arity.Should().Be(OneToOne);
             operands.NullableBoolean.Arity.Should().Be(ZeroToOne);
             operands.Number.Arity.Should().Be(OneToOne);
             operands.NullableNumber.Arity.Should().Be(ZeroToOne);
@@ -81,7 +81,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 }
             });
 
-            operands.Boolean.Arity.Should().Be(ZeroToOne);
+            operands!.Boolean.Arity.Should().Be(ZeroToOne);
             operands.NullableBoolean.Arity.Should().Be(ZeroToOne);
             operands.Number.Arity.Should().Be(ZeroToOne);
             operands.NullableNumber.Arity.Should().Be(ZeroToOne);
@@ -107,7 +107,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 }
             });
 
-            operands.Boolean.Arity.Should().Be(OneToOne);
+            operands!.Boolean.Arity.Should().Be(OneToOne);
             operands.NullableBoolean.Arity.Should().Be(ZeroToOne);
             operands.Number.Arity.Should().Be(OneToOne);
             operands.NullableNumber.Arity.Should().Be(ZeroToOne);
@@ -116,7 +116,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             operands.Texts.Arity.Should().Be(OneToMany);
         }
 
-        private Operands GetOperands(string methodName, IDependencyResolver dependencyResolver = null)
+        private Operands? GetOperands(string methodName, IDependencyResolver? dependencyResolver = null)
         {
             var appRunner = new AppRunner<App>();
             if (dependencyResolver != null)
@@ -124,7 +124,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 appRunner.UseDependencyResolver(dependencyResolver);
             }
             return appRunner.GetFromContext(methodName.SplitArgs(),
-                    ctx => Operands.FromCommand(ctx.ParseResult.TargetCommand),
+                    ctx => Operands.FromCommand(ctx.ParseResult!.TargetCommand),
                     middlewareStage: MiddlewareStages.PostParseInputPreBindValues);
         }
 
@@ -140,8 +140,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             public void DefaultParams(
                 bool boolean = true, bool? nullableBoolean = null,
                 int number = 1, int? nullableNumber = null,
-                string text = null, Uri uri = null,
-                IEnumerable<string> texts = null)
+                string? text = null, Uri? uri = null,
+                IEnumerable<string>? texts = null)
             { }
 
             public void Model(ArgModel model) { }
@@ -149,13 +149,20 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         class ArgModel : IArgumentModel
         {
+            [Operand]
             public bool Boolean { get; set; }
+            [Operand]
             public bool? NullableBoolean { get; set; }
+            [Operand]
             public int Number { get; set; }
+            [Operand]
             public int? NullableNumber { get; set; }
-            public string Text { get; set; }
-            public Uri Uri { get; set; }
-            public IEnumerable<string> Texts { get; set; }
+            [Operand]
+            public string? Text { get; set; }
+            [Operand]
+            public Uri? Uri { get; set; }
+            [Operand]
+            public IEnumerable<string>? Texts { get; set; }
         }
 
         class Operands

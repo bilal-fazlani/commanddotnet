@@ -18,7 +18,7 @@ Traditionally, this is solved with a following steps:
 
 When enabled, the framework will:
 
-* set the `CommandContext.AppConfig.CancellationToken` with a new token.
+* set the `CommandContext.CancellationToken` with a new token.
 * register a [parameter resolver](../Extensibility/parameter-resolvers.md) for `CancellationToken`
 * cancel the token on
     * `Console.CancelKepPress`
@@ -44,3 +44,15 @@ public void MigrateRecords(CancellationToken cancellationToken, List<int> ids)
 
 !!! tip
     Remember to pass the CancellationToken to all database, web and service requests that take one.
+
+## Interactive sessions
+
+If you code a command to use an AppRunner to run another command, `Console.CancelKepPress` will cancel the token for the newest CommandContext.
+This enables cancelling long-running commands within an interactive session without cancelling the token for the command hosting the interactive session.
+
+See [the examples app](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/Examples.cs) 
+with [InteractiveSession.cs](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/InteractiveSession.cs)) 
+and [InteractiveMiddleware.cs](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/InteractiveMiddleware.cs)) 
+for an example of how to create an interactive session.
+
+In the future, we hope to have a CommandDotNet.ReadLine package offering an interactive session with all the goodness that comes with [ReadLine](https://github.com/tonerdo/readline) like autocomplete and history.

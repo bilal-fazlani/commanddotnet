@@ -19,9 +19,9 @@ namespace CommandDotNet.Parsing.Typos
             }
 
             return appRunner.Configure(c =>
-            {
-                c.Services.Add(new Config {MaxSuggestionCount = maxSuggestionCount});   
+            {  
                 c.UseMiddleware(TypoSuggest, MiddlewareSteps.TypoSuggest);
+                c.Services.Add(new Config {MaxSuggestionCount = maxSuggestionCount}); 
             });
         }
 
@@ -32,7 +32,7 @@ namespace CommandDotNet.Parsing.Typos
 
         private static Task<int> TypoSuggest(CommandContext ctx, ExecutionDelegate next)
         {
-            if (ctx.ParseResult.ParseError != null)
+            if (ctx.ParseResult!.ParseError != null)
             {
                 switch (ctx.ParseResult.ParseError)
                 {
@@ -85,28 +85,27 @@ namespace CommandDotNet.Parsing.Typos
                 return command.Subcommands.SelectMany(o => o.Aliases).ToList();
             }
 
-            switch (token.TokenType)
+            return token.TokenType switch
             {
-                case TokenType.Option:
-                    return TrySuggest(ctx, command, token.Value, GetOptionNames(), "is not a valid option", "--");
-                case TokenType.Value:
-                    return TrySuggest(ctx, command, token.Value, GetSubcommandNames(), "is not a valid subcommand", null);
-                default:
-                    return false;
-            }
+                TokenType.Option => TrySuggest(ctx, command, token.Value, 
+                    GetOptionNames(), "is not a valid option", "--"),
+                TokenType.Value => TrySuggest(ctx, command, token.Value, 
+                    GetSubcommandNames(), "is not a valid subcommand", null),
+                _ => false
+            };
         }
 
         private static bool TrySuggest(CommandContext ctx,
             Command command, string typo,
             ICollection<string> candidates,
-            string message, string prefix)
+            string message, string? prefix)
         {
             if (!candidates.Any())
             {
                 return false;
             }
 
-            var config = ctx.AppConfig.Services.Get<Config>();
+            var config = ctx.AppConfig.Services.GetOrThrow<Config>();
 
             // TODO: allowed values
             //   if the next value should be a value for an option, include allowed values for the option.

@@ -9,8 +9,7 @@ namespace CommandDotNet.TestTools
         public static AppRunner TrackingInvocations(this AppRunner runner)
         {
             return runner.Configure(c => c.UseMiddleware(TrackingInvocationMiddleware, 
-                MiddlewareStages.PostBindValuesPreInvoke, 
-                int.MaxValue));
+                new MiddlewareStep(MiddlewareStages.PostBindValuesPreInvoke, short.MaxValue)));
         }
 
         internal static Task<int> TrackingInvocationMiddleware(CommandContext context, ExecutionDelegate next)

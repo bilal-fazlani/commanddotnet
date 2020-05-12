@@ -1,20 +1,19 @@
-﻿using System;
-
-namespace CommandDotNet.Execution
+﻿namespace CommandDotNet.Execution
 {
     public static class MiddlewareSteps
     {
         /// <summary>Runs first in the <see cref="MiddlewareStages.PreTokenize"/> stage</summary>
-        public static MiddlewareStep DebugDirective { get; } = 
-            new MiddlewareStep(MiddlewareStages.PreTokenize, int.MinValue + 1000);
-
-        [Obsolete("This step is no longer used for appRunner.UseErrorHandler.")]
-        public static MiddlewareStep ErrorHandler { get; } = DebugDirective + 100;
+        public static MiddlewareStep DebugDirective { get; } = new MiddlewareStep(MiddlewareStages.PreTokenize);
 
         /// <summary>
         /// Runs early in the <see cref="MiddlewareStages.PreTokenize"/> stage after <see cref="DebugDirective"/>
         /// </summary>
-        public static MiddlewareStep OnRunCompleted { get; } = DebugDirective + 1000;
+        public static MiddlewareStep CancellationHandler { get; } = DebugDirective + 1000;
+
+        /// <summary>
+        /// Runs early in the <see cref="MiddlewareStages.PreTokenize"/> stage after <see cref="CancellationHandler"/>
+        /// </summary>
+        public static MiddlewareStep OnRunCompleted { get; } = CancellationHandler + 1000;
 
         public static class DependencyResolver
         {
@@ -24,6 +23,8 @@ namespace CommandDotNet.Execution
             public static MiddlewareStep BeginScope { get; } = OnRunCompleted + 1000;
         }
 
+        public static MiddlewareStep ParseDirective { get; } = Help.PrintHelpOnExit + 1000;
+
         public static MiddlewareStep Tokenize { get; } =
             new MiddlewareStep(MiddlewareStages.Tokenize, 0);
 
@@ -31,7 +32,7 @@ namespace CommandDotNet.Execution
         /// Runs late in the <see cref="MiddlewareStages.Tokenize"/> stage
         /// </summary>
         public static MiddlewareStep CreateRootCommand { get; } =
-            new MiddlewareStep(MiddlewareStages.Tokenize, int.MaxValue - 1000);
+            new MiddlewareStep(MiddlewareStages.Tokenize, short.MaxValue - 1000);
 
         public static MiddlewareStep ParseInput { get; } =
             new MiddlewareStep(MiddlewareStages.ParseInput, 0);
@@ -53,22 +54,8 @@ namespace CommandDotNet.Execution
         public static class Help
         {
             public static MiddlewareStep CheckIfShouldShowHelp { get; } =
-                new MiddlewareStep(MiddlewareStages.ParseInput, int.MaxValue);
-            public static MiddlewareStep PrintHelpOnExit { get; } =
-                new MiddlewareStep(MiddlewareStages.PreTokenize, -10000);
-
-            [Obsolete("use Help.CheckIfShouldShowHelp or Help.PrintHelpOnExit")]
-            public static readonly MiddlewareStages Stage = CheckIfShouldShowHelp.Stage;
-
-            [Obsolete("use Help.CheckIfShouldShowHelp or Help.PrintHelpOnExit")]
-            public static readonly int Order = CheckIfShouldShowHelp.OrderWithinStage.GetValueOrDefault();
-
-            [Obsolete("use Help.PrintHelpOnExit")]
-            public static class PrintHelp
-            {
-                public static readonly MiddlewareStages Stage = MiddlewareStages.PreTokenize;
-                public static readonly int Order = -10000;
-            }
+                new MiddlewareStep(MiddlewareStages.ParseInput, short.MaxValue);
+            public static MiddlewareStep PrintHelpOnExit { get; } = DependencyResolver.BeginScope + 1000;
         }
 
         public static MiddlewareStep PipedInput { get; } =
@@ -79,12 +66,17 @@ namespace CommandDotNet.Execution
         /// stage to enable other middleware to populate arguments
         /// </summary>
         public static MiddlewareStep ValuePromptMissingArguments { get; } =
-            new MiddlewareStep(MiddlewareStages.PostParseInputPreBindValues, int.MaxValue - 1000);
+            new MiddlewareStep(MiddlewareStages.PostParseInputPreBindValues, short.MaxValue - 1000);
 
         public static MiddlewareStep BindValues { get; } =
             new MiddlewareStep(MiddlewareStages.BindValues, 0);
 
         /// <summary>Runs after the <see cref="BindValues"/> step</summary>
         public static MiddlewareStep ResolveCommandClasses { get; } = BindValues + 1000;
+
+        public static MiddlewareStep CommandLogger { get; } = new MiddlewareStep(MiddlewareStages.Invoke, 0);
+
+        /// <summary>Runs last in the <see cref="MiddlewareStages.Invoke"/> stage</summary>
+        public static MiddlewareStep InvokeCommand { get; } = new MiddlewareStep(MiddlewareStages.Invoke, short.MaxValue);
     }
 }

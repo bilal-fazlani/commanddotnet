@@ -13,8 +13,8 @@ namespace CommandDotNet.FluentValidation
         {
             return appRunner.Configure(c =>
             {
+                c.UseMiddleware(ValidateModels, MiddlewareSteps.FluentValidation);
                 c.Services.Add(new Config(showHelpOnError));
-                c.UseMiddleware(Middleware, MiddlewareStages.PostBindValuesPreInvoke);
             });
         }
 
@@ -28,7 +28,7 @@ namespace CommandDotNet.FluentValidation
             }
         }
 
-        private static Task<int> Middleware(CommandContext ctx, ExecutionDelegate next)
+        private static Task<int> ValidateModels(CommandContext ctx, ExecutionDelegate next)
         {
             var modelValidator = new ModelValidator(ctx.AppConfig.DependencyResolver);
 
@@ -40,7 +40,7 @@ namespace CommandDotNet.FluentValidation
             {
                 var failureResults = paramValues
                     .Select(model => new { model, result = modelValidator.ValidateModel(model) })
-                    .Where(v => v.result != null && !v.result.IsValid)
+                    .Where(v => v.result is { } && !v.result.IsValid)
                     .ToList();
 
                 if (failureResults.Any())
@@ -49,13 +49,13 @@ namespace CommandDotNet.FluentValidation
                     failureResults.ForEach(f =>
                     {
                         console.Error.WriteLine($"'{f.model.GetType().Name}' is invalid");
-                        foreach (var error in f.result.Errors)
+                        foreach (var error in f.result!.Errors)
                         {
                             console.Error.WriteLine($"  {error.ErrorMessage}");
                         }
                     });
 
-                    ctx.ShowHelpOnExit = ctx.AppConfig.Services.Get<Config>().ShowHelpOnError;
+                    ctx.ShowHelpOnExit = ctx.AppConfig.Services.GetOrThrow<Config>().ShowHelpOnError;
 
                     if (ctx.ShowHelpOnExit)
                     {

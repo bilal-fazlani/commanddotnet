@@ -119,7 +119,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     {
                         // stream is read-once so we can't evaluate it with a second time with ParamValuesShouldBe
                         AssertContext = ctx => ctx.GetCommandInvocationInfo<StreamingApp>()
-                            .Instance.StreamedInput.Should().BeEquivalentTo(new List<string> {"aaa", "bbb"})
+                            .Instance!.StreamedInput.Should().BeEquivalentTo(new List<string> {"aaa", "bbb"})
                     }
                 });
         }
@@ -170,7 +170,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         public class StreamingApp
         {
-            public List<string> StreamedInput { get; set; }
+            public List<string> StreamedInput { get; set; } = null!;
 
             public void Stream(IEnumerable<string> input)
             {

@@ -30,7 +30,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                 .UseParseDirective()
                 .Verify(new Scenario
                 {
-                    When = {Args = $"[parse:t] Secure -u me -p super-secret"},
+                    When = {Args = "[parse:t] Secure -u me -p super-secret"},
                     Then =
                     {
                         Output = @"command: Secure
@@ -205,7 +205,7 @@ token transformations:
         class Args : IArgumentModel
         {
             [Option(ShortName = "u", LongName = "username")]
-            public string Username { get; set; }
+            public string? Username { get; set; }
 
             [Option(ShortName = "p", LongName = "password")]
             public Password Password { get; set; } = new Password("default-secret");

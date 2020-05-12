@@ -14,7 +14,7 @@ namespace CommandDotNet.Diagnostics
             ex.Data[typeof(CommandContext)] = ctx;
         }
 
-        public static CommandContext GetCommandContext(this Exception ex)
+        public static CommandContext? GetCommandContext(this Exception ex)
         {
             return ex.Data.Contains(typeof(CommandContext))
                 ? (CommandContext)ex.Data[typeof(CommandContext)]

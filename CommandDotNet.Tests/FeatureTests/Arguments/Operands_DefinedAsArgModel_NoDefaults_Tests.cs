@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
 using CommandDotNet.Tests.Utils;
+using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -19,6 +21,31 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         }
 
         [Fact]
+        public void SampleTypes_Argument_Default_is_null()
+        {
+            new AppRunner<OperandsNoDefaults>().Verify(new Scenario
+            {
+                When = {Args = "ArgsNoDefault -h"},
+                Then =
+                {
+                    AssertContext = ctx =>
+                    {
+                        var cmd = ctx.GetCommandInvocationInfo().Command!;
+                        cmd!.Find<IArgument>("BoolArg").Default.Should().BeNull();
+                        cmd.Find<IArgument>("StringArg").Default.Should().BeNull();
+                        cmd.Find<IArgument>("StructArg").Default.Should().BeNull();
+                        cmd.Find<IArgument>("StructNArg").Default.Should().BeNull();
+                        cmd.Find<IArgument>("EnumArg").Default.Should().BeNull();
+                        cmd.Find<IArgument>("ObjectArg").Default.Should().BeNull();
+                        cmd.Find<IArgument>("ObjectArg").Arity.Minimum.Should().Be(1);
+                        cmd.Find<IArgument>("StringListArg").Default.Should().BeNull();
+                        cmd.Find<IArgument>("StringListArg").Arity.Minimum.Should().Be(1);
+                    }
+                }
+            });
+        }
+
+        [Fact]
         public void SampleTypes_BasicHelp()
         {
             new AppRunner<OperandsNoDefaults>(BasicHelp).Verify(new Scenario
@@ -26,7 +53,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 When = {Args = "ArgsNoDefault -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll ArgsNoDefault <BoolArg> <StringArg> <StructArg> <StructNArg> <EnumArg> <ObjectArg> <StringListArg>
 
 Arguments:
   BoolArg
@@ -49,7 +76,7 @@ Arguments:
                 When = {Args = "ArgsNoDefault -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll ArgsNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll ArgsNoDefault <BoolArg> <StringArg> <StructArg> <StructNArg> <EnumArg> <ObjectArg> <StringListArg>
 
 Arguments:
 
@@ -81,7 +108,7 @@ Arguments:
                 When = {Args = "StructListNoDefault -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll StructListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll StructListNoDefault <StructListArg>
 
 Arguments:
   StructListArg
@@ -98,7 +125,7 @@ Arguments:
                 When = {Args = "StructListNoDefault -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll StructListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll StructListNoDefault <StructListArg>
 
 Arguments:
 
@@ -116,7 +143,7 @@ Arguments:
                 When = {Args = "EnumListNoDefault -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll EnumListNoDefault <EnumListArg>
 
 Arguments:
   EnumListArg
@@ -133,7 +160,7 @@ Arguments:
                 When = {Args = "EnumListNoDefault -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll EnumListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll EnumListNoDefault <EnumListArg>
 
 Arguments:
 
@@ -152,7 +179,7 @@ Arguments:
                 When = {Args = "ObjectListNoDefault -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll ObjectListNoDefault <ObjectListArg>
 
 Arguments:
   ObjectListArg
@@ -169,7 +196,7 @@ Arguments:
                 When = {Args = "ObjectListNoDefault -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll ObjectListNoDefault [arguments]
+                    Output = @"Usage: dotnet testhost.dll ObjectListNoDefault <ObjectListArg>
 
 Arguments:
 
@@ -213,8 +240,8 @@ Arguments:
                     AssertContext = ctx => ctx.ParamValuesShouldBe(
                         new OperandsNoDefaultsSampleTypesModel
                         {
-                            StructArg = default(int),
-                            EnumArg = default(DayOfWeek),
+                            StructArg = default,
+                            EnumArg = default,
                         })
                 }
             });

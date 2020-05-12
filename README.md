@@ -17,21 +17,13 @@
 
 ---
 
-## Documentation
-
-Version 3 (Current): https://commanddotnet.bilal-fazlani.com
-
-Version 4 (Upcoming version preview): https://v4-master.commanddotnet.bilal-fazlani.com
-
-Legacy:
-
-Version 2: https://v2.commanddotnet.bilal-fazlani.com
+Documentation: https://commanddotnet.bilal-fazlani.com
 
 ***Model your command line application interface in a class***
 
 The purpose of this **framework** is to let developers focus on the core logic of command line application by defining commands with methods and arguments with parameters. 
 
-*Out-of-the-box* support for help documentation, subcommmands, dependency injection, validation, piping, prompting, passwords, response files and more. 
+*Out-of-the-box* support for help documentation, subcommmands, dependency injection, validation, piping, prompting, passwords, response files and more.  See the [features page](https://commanddotnet.bilal-fazlani.com/features). 
 
 Includes [test tools](https://commanddotnet.bilal-fazlani.com/test-tools) used by the framework to test all features of the framework.
 

@@ -20,12 +20,14 @@ namespace CommandDotNet.Tests.CommandDotNet.FluentValidation
         [Fact]
         public void Help_DoesNotIncludeValidation()
         {
-            var scenario = new Scenario
-            {
-                When = {Args = "Save -h"},
-                Then =
+            new AppRunner<App>()
+                .UseFluentValidation()
+                .Verify(new Scenario
                 {
-                    Output = @"Usage: dotnet testhost.dll Save [arguments]
+                    When = {Args = "Save -h"},
+                    Then =
+                    {
+                        Output = @"Usage: dotnet testhost.dll Save <Id> <Name> <Email>
 
 Arguments:
 
@@ -35,167 +37,153 @@ Arguments:
 
   Email  <TEXT>
 "
-                }
-            };
-
-            new AppRunner<App>()
-                .UseFluentValidation()
-                .Verify(scenario);
+                    }
+                });
         }
 
         [Fact]
         public void Exec_WithInvalidData_PrintsValidationError()
         {
-            var scenario = new Scenario
-            {
-                When = {Args = "Save"},
-                Then =
+            new AppRunner<App>()
+                .UseFluentValidation()
+                .Verify(new Scenario
                 {
-                    ExitCode = 2,
-                    Output = @"'Person' is invalid
+                    When = {Args = "Save"},
+                    Then =
+                    {
+                        ExitCode = 2,
+                        Output = @"'Person' is invalid
   'Id' must be greater than '0'.
   'Name' should not be empty.
   'Email' should not be empty.
 "
-                }
-            };
-
-            new AppRunner<App>()
-                .UseFluentValidation()
-                .Verify(scenario);
+                    }
+                });
         }
 
         [Fact]
         public void Exec_WithInvalidData_PrintsValidationError_UsingValidatorFromDI()
         {
-            var scenario = new Scenario
-            {
-                When = {Args = "Save"},
-                Then =
-                {
-                    ExitCode = 2,
-                    Output = @"'Person' is invalid
-  'Id' must be greater than '0'.
-  'Name' should not be empty.
-  'Email' should not be empty.
-"
-                }
-            };
-
             new AppRunner<App>()
                 .UseFluentValidation()
                 .UseDependencyResolver(
                     new TestDependencyResolver{new PersonValidator()}, 
                     commandClassResolveStrategy: ResolveStrategy.TryResolve)
-                .Verify(scenario);
+                .Verify(new Scenario
+                {
+                    When = {Args = "Save"},
+                    Then =
+                    {
+                        ExitCode = 2,
+                        Output = @"'Person' is invalid
+  'Id' must be greater than '0'.
+  'Name' should not be empty.
+  'Email' should not be empty.
+"
+                    }
+                });
         }
 
         [Fact]
         public void Exec_WithValidData_Succeeds()
         {
-            var scenario = new Scenario
-            {
-                When = {Args = "Save 1 john john@doe.com"},
-                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(new Person { Id = 1, Name = "john", Email = "john@doe.com" }) }
-            };
-
             new AppRunner<App>()
                 .UseFluentValidation()
                 .UseDependencyResolver(
                     new TestDependencyResolver { new PersonValidator() },
                     commandClassResolveStrategy: ResolveStrategy.TryResolve)
-                .Verify(scenario);
+                .Verify(new Scenario
+                {
+                    When = {Args = "Save 1 john john@doe.com"},
+                    Then = {AssertContext = ctx => 
+                            ctx.ParamValuesShouldBe(new Person { Id = 1, Name = "john", Email = "john@doe.com" }) }
+                });
         }
 
         [Fact]
         public void Exec_WhenNoDependencyResolver_ValidatorIsCreated()
         {
-            var scenario = new Scenario
-            {
-                When = {Args = "Save"},
-                Then =
-                {
-                    ExitCode = 2,
-                    OutputContainsTexts = {"'Person' is invalid"}
-                }
-            };
-
             new AppRunner<App>()
                 .UseFluentValidation()
-                .Verify(scenario);
+                .Verify(new Scenario
+                {
+                    When = {Args = "Save"},
+                    Then =
+                    {
+                        ExitCode = 2,
+                        OutputContainsTexts = {"'Person' is invalid"}
+                    }
+                });
         }
 
         [Fact]
         public void Exec_WhenValidatorNotRegistered_ValidatorIsCreated()
         {
-            var scenario = new Scenario
-            {
-                When = {Args = "Save"},
-                Then =
-                {
-                    ExitCode = 2,
-                    OutputContainsTexts = {"'Person' is invalid"}
-                }
-            };
-
             new AppRunner<App>()
                 .UseFluentValidation()
                 .UseDependencyResolver(
                     new TestDependencyResolver(),
                     commandClassResolveStrategy: ResolveStrategy.TryResolve)
-                .Verify(scenario);
+                .Verify(new Scenario
+                {
+                    When = {Args = "Save"},
+                    Then =
+                    {
+                        ExitCode = 2,
+                        OutputContainsTexts = {"'Person' is invalid"}
+                    }
+                });
         }
 
         [Fact]
         public void Exec_WhenInvalidValidator_PrintsError()
         {
-            var scenario = new Scenario
-            {
-                When = {Args = "InvalidSave"},
-                Then =
-                {
-                    ExitCode = 1,
-                    OutputContainsTexts =
-                    {
-                        "CommandDotNet.FluentValidation.InvalidValidatorException: Could not create instance of InvalidPersonValidator. Please ensure it's injected via IoC or has a default constructor.",
-                        "This exception could also occur if default constructor threw an exception",
-                        " ---> System.MissingMethodException: No parameterless constructor defined for this object" // assert stack trace is printed
-                    }
-                }
-            };
-
             new AppRunner<App>()
                 .UseFluentValidation()
                 .UseDependencyResolver(
                     new TestDependencyResolver(),
                     commandClassResolveStrategy: ResolveStrategy.TryResolve)
-                .Verify(scenario);
+                .Verify(new Scenario
+                {
+                    When = {Args = "InvalidSave"},
+                    Then =
+                    {
+                        ExitCode = 1,
+                        OutputContainsTexts =
+                        {
+                            "CommandDotNet.FluentValidation.InvalidValidatorException: Could not create instance of InvalidPersonValidator. " +
+                            "Please ensure it's injected via IoC or has a default constructor.",
+                            "This exception could also occur if default constructor threw an exception",
+                            // assert stack trace is printed
+                            " ---> System.MissingMethodException: No parameterless constructor defined for type " +
+                            "'CommandDotNet.Tests.CommandDotNet.FluentValidation.ModelValidationTests+InvalidPersonValidator'"
+                        }
+                    }
+                });
         }
 
         [Fact]
         public void Exec_IfShowHelpOnError_ShowsHelpAfterValidationMessage()
         {
-            var scenario = new Scenario
-            {
-                When = {Args = "Save"},
-                Then =
+            new AppRunner<App>()
+                .UseFluentValidation(showHelpOnError: true)
+                .Verify(new Scenario
                 {
-                    ExitCode = 2,
-                    OutputContainsTexts =
+                    When = {Args = "Save"},
+                    Then =
                     {
-                        @"'Person' is invalid
+                        ExitCode = 2,
+                        OutputContainsTexts =
+                        {
+                            @"'Person' is invalid
   'Id' must be greater than '0'.
   'Name' should not be empty.
   'Email' should not be empty.
 
-Usage: dotnet testhost.dll Save [arguments]"
+Usage: dotnet testhost.dll Save <Id> <Name> <Email>"
+                        }
                     }
-                }
-            };
-
-            new AppRunner<App>()
-                .UseFluentValidation(showHelpOnError: true)
-                .Verify(scenario);
+                });
         }
 
         public class App
@@ -212,9 +200,9 @@ Usage: dotnet testhost.dll Save [arguments]"
         [Validator(typeof(PersonValidator))]
         public class Person : IArgumentModel
         {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public string Email { get; set; }
+            [Operand] public int Id { get; set; }
+            [Operand] public string Name { get; set; } = null!;
+            [Operand] public string Email { get; set; } = null!;
         }
 
         public class PersonValidator : AbstractValidator<Person>
@@ -230,6 +218,7 @@ Usage: dotnet testhost.dll Save [arguments]"
         [Validator(typeof(InvalidPersonValidator))]
         public class InvalidPerson : IArgumentModel
         {
+            [Operand]
             public int Id { get; set; }
         }
 

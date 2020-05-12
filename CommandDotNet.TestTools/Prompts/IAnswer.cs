@@ -23,10 +23,10 @@ namespace CommandDotNet.TestTools.Prompts
         /// <summary>
         /// Applied to the prompt text. Use this to ensure the answer is for the correct prompt.
         /// </summary>
-        Predicate<string> PromptFilter { get; }
+        Predicate<string>? PromptFilter { get; }
         
         /// <summary>
-        /// If true, an UnexpectedPromp
+        /// If true, an UnexpectedPrompt
         /// </summary>
         bool ShouldFail { get; }
     }
