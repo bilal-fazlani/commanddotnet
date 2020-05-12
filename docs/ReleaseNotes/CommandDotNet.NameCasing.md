@@ -1,10 +1,6 @@
 # CommandDotNet.NameCasing
 
-## 2.0.0 - prerelease
-
-### Nullable Reference Types
-
-The library has been updated to support Nullable Reference Types
+## 2.0.0
 
 ## 1.0.1
 

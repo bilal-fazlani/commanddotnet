@@ -1,6 +1,6 @@
 # CommandDotNet.NewerReleasesAlerts
 
-## 2.0.0 - prerelease
+## 2.0.0
 
 ### Nullable Reference Types
 

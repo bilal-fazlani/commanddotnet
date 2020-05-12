@@ -1,6 +1,6 @@
 # CommandDotNet.FluentValidation
 
-## 3.0.0 - prerelease
+## 3.0.0
 
 ### Nullable Reference Types
 

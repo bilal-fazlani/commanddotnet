@@ -1,6 +1,6 @@
 # CommandDotNet
 
-## 4.0.0 - prerelease
+## 4.0.0
 
 ### Nullable Reference Types
 
