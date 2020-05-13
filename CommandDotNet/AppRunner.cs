@@ -12,7 +12,6 @@ using CommandDotNet.Parsing;
 using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
 
-[assembly: InternalsVisibleTo("CommandDotNet.CommandLogger")]
 [assembly: InternalsVisibleTo("CommandDotNet.Tests")]
 [assembly: InternalsVisibleTo("CommandDotNet.TestTools")]
 
