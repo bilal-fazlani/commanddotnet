@@ -23,6 +23,7 @@ nav:
         - Arguments/argument-arity.md
         - Arguments/option-or-operand.md
         - Arguments/fluent-validation-for-argument-models.md
+        - Arguments/data-annotations-validation.md
       - Argument Values:
         - ArgumentValues/argument-separator.md
         - ArgumentValues/piped-arguments.md
