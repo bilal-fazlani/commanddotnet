@@ -40,7 +40,7 @@
 | \ \ \ Default from AppSetting | [docs](ArgumentValues/default-values-from-config.md) ✔️ |
 |   **Validation** |  |
 | \ \ \ [FluentValidation](https://github.com/JeremySkinner/FluentValidation) for [argument models](Arguments/argument-models.md) | [docs](Arguments/fluent-validation-for-argument-models.md) ✔️ |
-| \ \ \ [Data Annotations](https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations) | [#253](https://github.com/bilal-fazlani/commanddotnet/issues/253) ❌ |
+| \ \ \ [DataAnnotations](https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations) | [docs](Arguments/data-annotations-validation.md) ✔️ |
 |   **Help** |  |
 | \ \ \ Autocomplete | [#48](https://github.com/bilal-fazlani/commanddotnet/issues/48) ❌ |
 | \ \ \ Typo suggestions | [docs](Help/typo-suggestions.md) ✔️ |
