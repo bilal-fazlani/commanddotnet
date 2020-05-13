@@ -50,7 +50,7 @@ namespace CommandDotNet.Extensions
 
             var props = item
                 .GetType()
-                .GetProperties(BindingFlags.Instance|BindingFlags.Public|BindingFlags.DeclaredOnly)
+                .GetDeclaredProperties()
                 .Where(p => !p.HasAttribute<ObsoleteAttribute>())
                 .OrderBy(p => p.Name)
                 .Select(p =>

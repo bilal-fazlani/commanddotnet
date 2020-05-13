@@ -68,9 +68,9 @@ namespace CommandDotNet.ClassModeling.Definitions
             private ParameterInfo? _nextParameterInfo;
             private readonly List<Action<CommandContext>> _resolvers = new List<Action<CommandContext>>();
 
-            internal IReadOnlyCollection<IArgumentDef> ArgumentDefs;
-            internal ParameterInfo[] Parameters;
-            internal object[] Values;
+            internal readonly IReadOnlyCollection<IArgumentDef> ArgumentDefs;
+            internal readonly ParameterInfo[] Parameters;
+            internal readonly object[] Values;
 
             public Result(MethodInfo methodInfo, AppConfig appConfig)
             {
