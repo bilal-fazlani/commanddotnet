@@ -8,6 +8,7 @@ namespace CommandDotNet.ClassModeling.Definitions
     internal class PropertyArgumentDef : IArgumentDef
     {
         private readonly PropertyInfo _propertyInfo;
+        private IArgument? _argument;
 
         public string ArgumentDefType => "Property";
         
@@ -23,7 +24,15 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public object DefaultValue { get; }
 
-        public IArgument? Argument { get; set; }
+        public IArgument? Argument
+        {
+            get => _argument;
+            set
+            {
+                _argument = value;
+                value?.Services.AddOrUpdate(_propertyInfo);
+            }
+        }
 
         public ICustomAttributeProvider CustomAttributes => _propertyInfo;
 
