@@ -8,6 +8,7 @@ namespace CommandDotNet.ClassModeling.Definitions
     internal class ParameterArgumentDef : IArgumentDef
     {
         private readonly ParameterInfo _parameterInfo;
+        private IArgument? _argument;
 
         public string ArgumentDefType => "Parameter";
 
@@ -23,7 +24,15 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public object DefaultValue => _parameterInfo.DefaultValue;
 
-        public IArgument? Argument { get; set; }
+        public IArgument? Argument
+        {
+            get => _argument;
+            set
+            {
+                _argument = value;
+                value?.Services.AddOrUpdate(_parameterInfo);
+            }
+        }
 
         public ICustomAttributeProvider CustomAttributes => _parameterInfo;
 

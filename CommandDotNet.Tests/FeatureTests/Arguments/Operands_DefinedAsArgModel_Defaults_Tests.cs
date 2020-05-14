@@ -81,15 +81,15 @@ Arguments:
                     AssertContext = ctx =>
                     {
                         var cmd = ctx.GetCommandInvocationInfo().Command!;
-                        cmd!.Find<IArgument>("BoolArg").Default!.Value.Should().Be(true);
-                        cmd.Find<IArgument>("StringArg").Default!.Value.Should().Be("lala");
-                        cmd.Find<IArgument>("StructArg").Default!.Value.Should().Be(3);
-                        cmd.Find<IArgument>("StructNArg").Default!.Value.Should().Be(4);
-                        cmd.Find<IArgument>("EnumArg").Default!.Value.Should().Be(DayOfWeek.Tuesday);
-                        cmd.Find<IArgument>("ObjectArg").Default!.Value.Should().Be(new Uri("http://google.com"));
-                        cmd.Find<IArgument>("ObjectArg").Arity.Minimum.Should().Be(0);
-                        cmd.Find<IArgument>("StringListArg").Default!.Value.Should().BeEquivalentTo(new List<string>{"red", "blue"});
-                        cmd.Find<IArgument>("StringListArg").Arity.Minimum.Should().Be(0);
+                        cmd!.Find<IArgument>("BoolArg")!.Default!.Value.Should().Be(true);
+                        cmd.Find<IArgument>("StringArg")!.Default!.Value.Should().Be("lala");
+                        cmd.Find<IArgument>("StructArg")!.Default!.Value.Should().Be(3);
+                        cmd.Find<IArgument>("StructNArg")!.Default!.Value.Should().Be(4);
+                        cmd.Find<IArgument>("EnumArg")!.Default!.Value.Should().Be(DayOfWeek.Tuesday);
+                        cmd.Find<IArgument>("ObjectArg")!.Default!.Value.Should().Be(new Uri("http://google.com"));
+                        cmd.Find<IArgument>("ObjectArg")!.Arity.Minimum.Should().Be(0);
+                        cmd.Find<IArgument>("StringListArg")!.Default!.Value.Should().BeEquivalentTo(new List<string>{"red", "blue"});
+                        cmd.Find<IArgument>("StringListArg")!.Arity.Minimum.Should().Be(0);
                     }
                 }
             });

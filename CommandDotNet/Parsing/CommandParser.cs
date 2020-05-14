@@ -171,7 +171,7 @@ namespace CommandDotNet.Parsing
         {
             var optionTokenType = token.OptionTokenType!;
 
-            var option = command.FindOption(optionTokenType.GetName());
+            var option = command.Find<Option>(optionTokenType.GetName());
             if (option is null)
             {
                 throw new UnrecognizedArgumentCommandParsingException(command, token, $"Unrecognized option '{token.RawValue}'");

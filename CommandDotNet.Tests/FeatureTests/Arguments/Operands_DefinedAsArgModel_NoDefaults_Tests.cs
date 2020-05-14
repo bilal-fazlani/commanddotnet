@@ -31,15 +31,15 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     AssertContext = ctx =>
                     {
                         var cmd = ctx.GetCommandInvocationInfo().Command!;
-                        cmd!.Find<IArgument>("BoolArg").Default.Should().BeNull();
-                        cmd.Find<IArgument>("StringArg").Default.Should().BeNull();
-                        cmd.Find<IArgument>("StructArg").Default.Should().BeNull();
-                        cmd.Find<IArgument>("StructNArg").Default.Should().BeNull();
-                        cmd.Find<IArgument>("EnumArg").Default.Should().BeNull();
-                        cmd.Find<IArgument>("ObjectArg").Default.Should().BeNull();
-                        cmd.Find<IArgument>("ObjectArg").Arity.Minimum.Should().Be(1);
-                        cmd.Find<IArgument>("StringListArg").Default.Should().BeNull();
-                        cmd.Find<IArgument>("StringListArg").Arity.Minimum.Should().Be(1);
+                        cmd!.Find<IArgument>("BoolArg")!.Default.Should().BeNull();
+                        cmd.Find<IArgument>("StringArg")!.Default.Should().BeNull();
+                        cmd.Find<IArgument>("StructArg")!.Default.Should().BeNull();
+                        cmd.Find<IArgument>("StructNArg")!.Default.Should().BeNull();
+                        cmd.Find<IArgument>("EnumArg")!.Default.Should().BeNull();
+                        cmd.Find<IArgument>("ObjectArg")!.Default.Should().BeNull();
+                        cmd.Find<IArgument>("ObjectArg")!.Arity.Minimum.Should().Be(1);
+                        cmd.Find<IArgument>("StringListArg")!.Default.Should().BeNull();
+                        cmd.Find<IArgument>("StringListArg")!.Arity.Minimum.Should().Be(1);
                     }
                 }
             });
