@@ -1,5 +1,10 @@
 # CommandDotNet.FluentValidation
 
+## 3.0.1
+
+Changed name of middleware method from ValidateModels to FluentValidationForModels. 
+This will only be relevant when reviewing the stacktrace or printing the AppConfig.
+
 ## 3.0.0
 
 ### Nullable Reference Types

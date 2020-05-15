@@ -68,6 +68,7 @@ nav:
         - TipsFaqs/nullable-reference-types.md
     - Release Notes:
       - ReleaseNotes/CommandDotNet.md
+      - ReleaseNotes/CommandDotNet.DataAnnotations.md
       - ReleaseNotes/CommandDotNet.FluentValidation.md
       - ReleaseNotes/CommandDotNet.IoC.Autofac.md
       - ReleaseNotes/CommandDotNet.IoC.MicrosoftDependencyInjection.md
