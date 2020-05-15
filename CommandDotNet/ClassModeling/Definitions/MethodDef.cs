@@ -32,6 +32,8 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public object[] ParameterValues => GetResult().Values;
 
+        public IReadOnlyCollection<IArgumentModel> FlattenedArgumentModels => GetResult().ArgumentModels;
+
         public MethodDef(MethodInfo method, AppConfig appConfig)
         {
             MethodInfo = method ?? throw new ArgumentNullException(nameof(method));
@@ -71,6 +73,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             internal readonly IReadOnlyCollection<IArgumentDef> ArgumentDefs;
             internal readonly ParameterInfo[] Parameters;
             internal readonly object[] Values;
+            internal readonly HashSet<IArgumentModel> ArgumentModels = new HashSet<IArgumentModel>();
 
             public Result(MethodInfo methodInfo, AppConfig appConfig)
             {
@@ -183,6 +186,10 @@ namespace CommandDotNet.ClassModeling.Definitions
                 {
                     instanceCreated?.Invoke(instance);
                 }
+
+                // sum we have to add these every time because the existingDefault could have been instantiated in the model
+                // which would appear as already created.
+                ArgumentModels.Add((IArgumentModel)instance);
 
                 return modelType
                     .GetDeclaredProperties()

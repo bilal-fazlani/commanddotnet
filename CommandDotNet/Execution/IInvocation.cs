@@ -34,6 +34,13 @@ namespace CommandDotNet.Execution
         /// </remarks>
         MethodInfo MethodInfo { get; }
 
+        /// <summary>
+        /// All <see cref="IArgumentModel"/>s for the invocation,
+        /// flattened so you do not need to reflect properties to
+        /// get all the models.
+        /// </summary>
+        IReadOnlyCollection<IArgumentModel> FlattenedArgumentModels { get; }
+
         /// <summary>Invokes the instance</summary>
         object Invoke(CommandContext commandContext, object instance, ExecutionDelegate next);
     }
