@@ -10,6 +10,11 @@ namespace CommandDotNet.Tests.CommandDotNet.DataAnnotations
 {
     public class DataAnnotationsValidationTests
     {
+        /* Tests:
+            - DisplayAttribute name replaced with argument name 
+            - RequiredAttribute handled first
+        */
+
         public DataAnnotationsValidationTests(ITestOutputHelper output)
         {
             Ambient.Output = output;
@@ -35,9 +40,11 @@ Arguments:
 
 Options:
 
-  --email  <TEXT>
+  --nick-name  <TEXT>
 
-  --role   <TEXT>
+  --email      <TEXT>
+
+  --role       <TEXT>
 "
                     }
                 });
@@ -55,10 +62,10 @@ Options:
                     Then =
                     {
                         ExitCode = 2,
-                        Output = @"'Id' is required.
+                        Output = @"'role' must be a string or array type with a maximum length of '5'.
+'Id' is required.
 'Name' is required.
 'email' is not a valid e-mail address.
-'role' must be a string or array type with a maximum length of '5'.
 "
                     }
                 });
@@ -91,16 +98,19 @@ Options:
                 .Verify(new Scenario
                 {
                     When = {Args = "Save 1 john --email john@doe.com --role star"},
-                    Then = {AssertContext = ctx => 
+                    Then =
+                    {
+                        AssertContext = ctx =>
                             ctx.ParamValuesShouldBe(new Person
                             {
-                                Id = 1, 
-                                Name = "john", 
+                                Id = 1,
+                                Name = "john",
                                 ContactInfo =
                                 {
                                     Email = "john@doe.com"
                                 }
-                            }, "star")}
+                            }, "star")
+                    }
                 });
         }
 
@@ -122,6 +132,23 @@ Options:
 
 Usage: dotnet testhost.dll Save [options] <Id> <Name>"
                         }
+                    }
+                });
+        }
+
+        [Fact]
+        public void Exec_CanReplace_DisplayAttributeName_WithArgumentName()
+        {
+            new AppRunner<App>()
+                .UseDataAnnotationValidations()
+                .Verify(new Scenario
+                {
+                    When = { Args = "Save 1 john --nick-name bigbadjohn" },
+                    Then =
+                    {
+                        ExitCode = 2,
+                        Output = @"'nick-name' must be a string or array type with a maximum length of '5'.
+"
                     }
                 });
         }
@@ -155,7 +182,10 @@ Usage: dotnet testhost.dll Save [options] <Id> <Name>"
             
             [Operand, Required, MaxLength(5)] 
             public string Name { get; set; } = null!;
-            
+
+            [Option(LongName = "nick-name"), MaxLength(5), Display(Name="MyFriendsCallMe")]
+            public string NickName { get; set; } = null!;
+
             [OrderByPositionInClass]
             public ContactInfo ContactInfo { get; set; } = new ContactInfo();
         }
