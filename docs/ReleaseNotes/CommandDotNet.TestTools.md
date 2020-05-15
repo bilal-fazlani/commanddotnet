@@ -1,5 +1,9 @@
 # CommandDotNet.TestTools
 
+## 3.0.1
+
+Making FlattenedArgumentModels available via TrackingInvocation
+
 ## 3.0.0
 
 ### Nullable Reference Types

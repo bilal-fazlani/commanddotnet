@@ -1,5 +1,15 @@
 # CommandDotNet
 
+## 4.0.2
+
+Make FlattenedArgumentModels via the IInvocation. 
+This makes it easier to access all argument models for an invocation, including those defined as properties of other models.
+It also prevents additional reflection calls to walk a hierarchy. The work was already done and now it's shared.
+
+## 4.0.1
+
+Add PropertyInfo or ParameterInfo to IArgument.Services. This makes it possible for middleware to access them from a command and to determine if an argument is from a parameter or property.
+
 ## 4.0.0
 
 ### Nullable Reference Types
