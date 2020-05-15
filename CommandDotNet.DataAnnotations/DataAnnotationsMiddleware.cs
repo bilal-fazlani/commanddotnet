@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
+using CommandDotNet.Extensions;
 
 namespace CommandDotNet.DataAnnotations
 {
@@ -29,19 +31,16 @@ namespace CommandDotNet.DataAnnotations
 
         private static Task<int> DataAnnotationsValidation(CommandContext ctx, ExecutionDelegate next)
         {
-            var failureResults = ctx.InvocationPipeline.All
+            var errors = ctx.InvocationPipeline.All
                 .SelectMany(ValidateStep)
                 .ToList();
 
-            if (failureResults.Any())
+            if (errors.Any())
             {
                 var console = ctx.Console;
-                failureResults.ForEach(f =>
+                errors.ForEach(error =>
                 {
-                    foreach (var error in f.Errors)
-                    {
-                        console.Error.WriteLine(error);
-                    }
+                    console.Error.WriteLine(error);
                 });
 
                 ctx.ShowHelpOnExit = ctx.AppConfig.Services.GetOrThrow<Config>().ShowHelpOnError;
@@ -57,50 +56,109 @@ namespace CommandDotNet.DataAnnotations
             return next(ctx);
         }
 
-
-        private static IEnumerable<ArgumentErrors> ValidateStep(InvocationStep step)
+        private static IEnumerable<string> ValidateStep(InvocationStep step)
         {
-            return step.Invocation.Arguments
-                .Select(GetArgumentErrors)
-                .Where(a => a != null);
+            var propertyArgumentErrors = step.Invocation.Arguments
+                .Select(GetParameterArgumentErrors);
+
+            var argumentModelErrors = step.Invocation.FlattenedArgumentModels
+                .Select(m => GetArgumentModelErrors(m, step.Invocation.Arguments));
+
+            return propertyArgumentErrors
+                .Concat(argumentModelErrors)
+                .SelectMany(e => e);
         }
 
-        private static ArgumentErrors GetArgumentErrors(IArgument argument)
+        private static IEnumerable<string> GetArgumentModelErrors(IArgumentModel model, IReadOnlyCollection<IArgument> arguments)
         {
-            List<string> errors = null;
+            var validationContext = new ValidationContext(model);
+            var results = new List<ValidationResult>();
+            if (Validator.TryValidateObject(model, validationContext, results, validateAllProperties: true))
+            {
+                return Enumerable.Empty<string>();
+            }
+
+            IArgument? GetArgument(string propertyName)
+            {
+                return arguments.FirstOrDefault(a =>
+                {
+                    var info = a.Services.GetOrDefault<PropertyInfo>();
+                    return info != null
+                           && info.DeclaringType.IsInstanceOfType(model)
+                           && propertyName.Equals(info.Name);
+                });
+            }
+
+            string SanitizedErrorMessage(ValidationResult validationResult)
+            {
+                var errorMessage = validationResult.ErrorMessage;
+                foreach (var memberName in validationResult.MemberNames)
+                {
+                    var argument = GetArgument(memberName);
+                    if (argument is { })
+                    {
+                        errorMessage = errorMessage.RemoveFieldTerminology(memberName, argument);
+                    }
+                }
+
+                return errorMessage;
+            }
+
+            return results.Select(SanitizedErrorMessage);
+        }
+
+        private static IEnumerable<string> GetParameterArgumentErrors(IArgument argument)
+        {
+            var parameterInfo = argument.Services.GetOrDefault<ParameterInfo>();
+            if (parameterInfo is null)
+            {
+                return Enumerable.Empty<string>();
+            }
             
             var validationAttributes = argument.CustomAttributes
                 .GetCustomAttributes(true)
                 .OfType<ValidationAttribute>()
+                .OrderBy(a => a is RequiredAttribute ? 0 : 1)
                 .ToList();
             
+            List<string>? errors = null;
+
             foreach (var validationAttribute in validationAttributes)
             {
-                var isValid = validationAttribute.IsValid(argument.Value);
-                if (!isValid)
+                if (!validationAttribute.IsValid(argument.Value))
                 {
                     // the user expects the name to map to an argument, not a field.
                     // update the terminology. This is naive and will need to change
-                    // when we handle localizaton
-                    var message = validationAttribute.FormatErrorMessage($"'{argument.Name}'")
-                        .Replace($"The '{argument.Name}' field", $"'{argument.Name}'")
-                        .Replace($"The field '{argument.Name}'", $"'{argument.Name}'");
+                    // when we handle localization
+                    var message = validationAttribute
+                        .FormatErrorMessage(argument.Name)
+                        .RemoveFieldTerminology(parameterInfo.Name, argument);
                     (errors ??= new List<string>()).Add(message);
+
+                    if (validationAttribute is RequiredAttribute)
+                    {
+                        // If the value is not provided and it is required, no other validation needs to be performed.
+                        // this is why the RequiredAttribute is first.
+                        break;
+                    }
                 }
             }
             
-            return errors == null
-                ? null
-                : new ArgumentErrors(errors);
+            return errors ?? Enumerable.Empty<string>();
         }
 
-        private class ArgumentErrors
+        /// <summary>the user expects the name to map to an argument, not a field.</summary>
+        /// <remarks>
+        /// This is naive and will need to change when we handle localization
+        /// </remarks>
+        private static string RemoveFieldTerminology(this string error, string memberName, IArgument argument)
         {
-            public readonly ICollection<string> Errors;
-            public ArgumentErrors(ICollection<string> errors)
-            {
-                Errors = errors;
-            }
+            memberName = argument.GetCustomAttribute<DisplayAttribute>()?.Name ?? memberName;
+            return error
+                .Replace($"The {memberName} field", $"'{argument.Name}'")
+                .Replace($"The field {memberName}", $"'{argument.Name}'")
+                .Replace($"The {memberName} property", $"'{argument.Name}'")
+                .Replace($"The property {memberName}", $"'{argument.Name}'");
         }
     }
 }
