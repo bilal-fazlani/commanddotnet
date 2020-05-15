@@ -81,6 +81,13 @@ more details and examples
 
 Use `IgnoreUnexpectedOperands` & `ArgumentSeparatorStrategy` to override argument parsing behavior for the command. See [Argument Separator](../ArgumentValues/argument-separator.md) for more details.
 
+Use `Description` & `ExtendedHelpText` to include those values in help output for the command.
+
+Use `Usage` to override the auto-generated usage section in the help output for the command.
+
+!!! Note
+    If you're looking to change the app name, set `AppSettings.Help.UsageAppName` and use the `%AppName%` template variable mentioned below.
+
 ### Template variables
 
 Two template variables are available for use in Usage, Description and ExtendedHelpText: `%AppName%` and `%CmdPath%`
