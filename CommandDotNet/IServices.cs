@@ -23,5 +23,7 @@ namespace CommandDotNet
         T GetOrThrow<T>() where T : class;
         object GetOrThrow(Type type);
         ICollection<KeyValuePair<Type, object>> GetAll();
+        bool Contains<T>() where T : class;
+        bool Contains(Type type);
     }
 }

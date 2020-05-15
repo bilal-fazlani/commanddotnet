@@ -106,5 +106,15 @@ namespace CommandDotNet.Execution
         {
             return _servicesByType.ToCollection();
         }
+
+        public bool Contains<T>() where T : class
+        {
+            return Contains(typeof(T));
+        }
+
+        public bool Contains(Type type)
+        {
+            return _servicesByType.ContainsKey(type);
+        }
     }
 }
