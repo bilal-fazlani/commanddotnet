@@ -16,10 +16,10 @@ When...
   * _maximum_ == int.MaxValue, an unlimited number of values can be provided
 
 !!! note
-    There is currently no validation for arity and no way to set the arity via attributes. 
+    There is currently no default validation for arity and no way to set the arity via attributes
     but is [on the roadmap](https://github.com/bilal-fazlani/commanddotnet/issues/195). 
     
-    Until then, arity validation is left to developers to define custom middleware.
+    Until then, use [DataAnnotations](./data-annotations-validation.md) with `[Required]` and for collection, use `[MinLength()]` and `[MaxLength()]` for the count.
 
 `ArgumentArity` contains the following members to encapsulate the common use cases. 
 
