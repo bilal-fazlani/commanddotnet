@@ -11,7 +11,7 @@ namespace CommandDotNet.Example
                            "\n" +
                            "directives must be specified before any commands and arguments.\n" +
                            "\n" +
-                           "Example: %UsageAppName% [debug] [parse] [log:info] cancel-me")]
+                           "Example: %AppName% [debug] [parse] [log:info] cancel-me")]
     internal class Examples
     {
         private static bool _inSession;

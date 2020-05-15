@@ -36,7 +36,7 @@ namespace CommandDotNet.Help
                            ?? $"{PadFront(AppName(command))}{PadFront(CommandPath(command))}"
                            + $"{PadFront(UsageSubcommand(command))}{PadFront(UsageOption(command))}{PadFront(UsageOperand(command))}"
                            + (command.GetArgumentSeparatorStrategy(_appSettings) == ArgumentSeparatorStrategy.PassThru ? " [[--] <arg>...]" : null);
-            return usage.Replace("%UsageAppName%", AppName(command));
+            return CommandReplacements(command, usage);
         }
 
         protected virtual string AppName(Command command) =>
@@ -96,7 +96,8 @@ namespace CommandDotNet.Help
                 ? "[command]"
                 : null;
 
-        protected virtual string? ExtendedHelpText(Command command) => command.ExtendedHelpText?.Replace("%UsageAppName%", AppName(command));
+        protected virtual string? ExtendedHelpText(Command command) => 
+            CommandReplacements(command, command.ExtendedHelpText);
 
         /// <summary>returns the body of the options section</summary> 
         protected virtual string? SectionOptions(Command command, bool includeInterceptorOptionsForExecutableCommands)
@@ -191,8 +192,8 @@ namespace CommandDotNet.Help
 
         protected virtual string CommandName(Command command) => command.Name;
 
-        protected virtual string? CommandDescription(Command command) => 
-            command.Description.UnlessNullOrWhitespace()?.Replace("%UsageAppName%", AppName(command));
+        protected virtual string? CommandDescription(Command command) =>
+            CommandReplacements(command, command.Description.UnlessNullOrWhitespace());
 
         protected virtual string? ArgumentName<T>(T argument) where T : IArgument =>
             argument.SwitchFunc(
@@ -262,6 +263,11 @@ namespace CommandDotNet.Help
 
         private ICollection<CommandHelpValues> BuildCommandHelpValues(IEnumerable<Command> commands) =>
             commands.Select(c => new CommandHelpValues(CommandName(c), CommandDescription(c))).ToCollection();
+
+        private string? CommandReplacements(Command command, string? text) => text?
+            .Replace("%UsageAppName%", AppName(command))
+            .Replace("%AppName%", AppName(command))
+            .Replace("%CmdPath%", command.GetPath());
 
         private class ArgumentHelpValues
         {

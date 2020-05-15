@@ -99,11 +99,11 @@ When `Adaptive`, if the file name ends with ".exe", then uses `Executable` else 
 
 When specified, this value will be used and `UsageAppNameStyle` will be ignored.
 
-### %UsageAppName% Tempate
+### Template variables
 
-When you want to show usage examples in a command description, extended help or overridden usage section, use `%UsageAppName%`. This text will be replaced usage app name from one of the options above.  
+The CommandAttribute supports the use of template variables to be used in help.
 
-See this line `"Example: %UsageAppName% [debug] [parse] [log:info] cancel-me"` in the [Example app](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/Examples.cs#L14).
+See docs for [Commands > Template variables](../Commands/commands.md#template-variables) for details.
 
 ## Custom Help Provider
 

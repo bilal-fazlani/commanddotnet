@@ -62,9 +62,9 @@ public class Calculator
 
 ```bash
 ~
-$ dotnet add.dll Add --help
+$ dotnet calculator.dll sum --help
 
-dotnet example.dll sum -h
+dotnet calculator.dll sum -h
 sums two numbers
 
 Usage: sum <int> <int>
@@ -80,6 +80,32 @@ more details and examples
 ```
 
 Use `IgnoreUnexpectedOperands` & `ArgumentSeparatorStrategy` to override argument parsing behavior for the command. See [Argument Separator](../ArgumentValues/argument-separator.md) for more details.
+
+### Template variables
+
+Two template variables are available for use in Usage, Description and ExtendedHelpText: `%AppName%` and `%CmdPath%`
+
+#### AppName
+
+Use `%AppName%` to include the name as calculated by CommandDotNet. This will use `AppSettings.Help.UsageAppName` if it's set.
+
+```c#
+[Command(Usage ="%AppName% sum <int> <int>")]
+public class Calculator{ ... }
+```
+results in help with `Usage: dotnet calculator.dll sum <int> <int>`
+
+See this line `"Example: %AppName% [debug] [parse] [log:info] cancel-me"` in the [Example app](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/Examples.cs#L14).
+
+#### CmdPath
+
+Use `%CmdPath%` to include the full path of commands. This is helpful when working with subcommands.
+
+```c#
+[Command(Usage ="%CmdPath% <int> <int>")]
+public class Calculator{ ... }
+```
+results in help with `Usage: sum <int> <int>`
 
 ## Default Method
 
