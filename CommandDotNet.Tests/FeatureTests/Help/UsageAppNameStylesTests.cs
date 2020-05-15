@@ -46,21 +46,6 @@ namespace CommandDotNet.Tests.FeatureTests.Help
         }
 
         [Fact]
-        public void UsageAppNameTemplate_Should_ReplaceTemplateIn_Description_ExtendedHelp_UsageOverride()
-        {
-            new AppRunner<UsageAppNameTemplate>().Verify(new Scenario
-            {
-                When = {Args = "-h"},
-                Then = { OutputContainsTexts =
-                {
-                    "descr dotnet testhost.dll",
-                    "use dotnet testhost.dll",
-                    "ext dotnet testhost.dll"
-                } }
-            });
-        }
-
-        [Fact]
         public void UsageAppNameSettingUsedWhenProvided()
         {
             var appSettings = new AppSettings { Help = { UsageAppName = "WhatATool" } };
@@ -82,10 +67,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
 
         }
 
-        [Command(
-            Description = "descr %UsageAppName%",
-            Usage = "use %UsageAppName%",
-            ExtendedHelpText = "ext %UsageAppName%")]
+        [Command(Usage = "use %AppName%")]
         private class UsageAppNameTemplate
         {
 
