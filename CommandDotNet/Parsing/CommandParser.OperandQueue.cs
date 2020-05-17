@@ -15,8 +15,6 @@ namespace CommandDotNet.Parsing
                 _operands = new Queue<Operand>(operands);
             }
 
-            public bool HasSuppliedOperands { get; private set; }
-
             public bool TryDequeue(out Operand? operand)
             {
                 operand = Dequeue();
@@ -34,7 +32,6 @@ namespace CommandDotNet.Parsing
                 if (_operands.Any())
                 {
                     var operand = _operands.Dequeue();
-                    HasSuppliedOperands = true;
                     if (operand.Arity.AllowsMany())
                     {
                         _listOperand = operand;

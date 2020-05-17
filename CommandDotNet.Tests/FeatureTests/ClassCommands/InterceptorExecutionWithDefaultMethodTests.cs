@@ -170,7 +170,7 @@ Options:
                 .TrackingInvocations()
                 .Verify(new Scenario
                 {
-                    When = {Args = "--stringOpt lala Do 1"},
+                    When = {Args = "Do 1 --stringOpt lala" },
                     Then =
                     {
                         AssertContext = ctx =>

@@ -30,6 +30,9 @@ namespace CommandDotNet.Parsing
                 }
             }
 
+
+            public bool SubcommandsAreAllowed { get; private set; } = true;
+
             public Option? Option { get; private set; }
             public Token? OptionToken { get; private set; }
             public OperandQueue Operands { get; private set; }
@@ -58,6 +61,8 @@ namespace CommandDotNet.Parsing
                 Option = null;
                 OptionToken = null;
             }
+
+            public void CommandArgumentParsed() => SubcommandsAreAllowed = false;
         }
     }
 }
