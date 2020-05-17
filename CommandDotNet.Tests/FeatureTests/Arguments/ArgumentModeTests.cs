@@ -6,12 +6,14 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public class DefaultArgumentModeTests
+    public class ArgumentModeTests
     {
-        private static readonly AppSettings OperandMode = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Operand);
-        private static readonly AppSettings OptionMode = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Option);
+        private static readonly AppSettings OperandMode = TestAppSettings.BasicHelp.Clone(a => 
+            a.CommandDefaults.ArgumentMode = ArgumentMode.Operand);
+        private static readonly AppSettings OptionMode = TestAppSettings.BasicHelp.Clone(a => 
+            a.CommandDefaults.ArgumentMode = ArgumentMode.Option);
 
-        public DefaultArgumentModeTests(ITestOutputHelper output)
+        public ArgumentModeTests(ITestOutputHelper output)
         {
             Ambient.Output = output;
         }

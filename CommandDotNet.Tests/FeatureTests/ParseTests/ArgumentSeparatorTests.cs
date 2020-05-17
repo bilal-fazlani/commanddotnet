@@ -1,3 +1,4 @@
+using CommandDotNet.Execution;
 using CommandDotNet.Rendering;
 using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;
@@ -8,14 +9,14 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
 {
     public class ArgumentSeparatorTests
     {
-        private readonly AppSettings _appSettingsEndOfOptions = new AppSettings
+        private readonly AppSettings _endOfOptionsSettings = new AppSettings
         {
-            DefaultArgumentSeparatorStrategy = ArgumentSeparatorStrategy.EndOfOptions
+            CommandDefaults = { ArgumentSeparatorStrategy = ArgumentSeparatorStrategy.EndOfOptions }
         };
 
-        private readonly AppSettings _appSettingsPassThru = new AppSettings
+        private readonly AppSettings _passThruSettings = new AppSettings
         {
-            DefaultArgumentSeparatorStrategy = ArgumentSeparatorStrategy.PassThru
+            CommandDefaults = { ArgumentSeparatorStrategy = ArgumentSeparatorStrategy.PassThru }
         };
 
         public ArgumentSeparatorTests(ITestOutputHelper output)
@@ -23,10 +24,27 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             Ambient.Output = output;
         }
 
+        [InlineData(ArgumentSeparatorStrategy.EndOfOptions, "UseAppSettings", ArgumentSeparatorStrategy.EndOfOptions)]
+        [InlineData(ArgumentSeparatorStrategy.EndOfOptions, "EndOfOptions", ArgumentSeparatorStrategy.EndOfOptions)]
+        [InlineData(ArgumentSeparatorStrategy.EndOfOptions, "PassThru", ArgumentSeparatorStrategy.PassThru)]
+        [InlineData(ArgumentSeparatorStrategy.PassThru, "UseAppSettings", ArgumentSeparatorStrategy.PassThru)]
+        [InlineData(ArgumentSeparatorStrategy.PassThru, "EndOfOptions", ArgumentSeparatorStrategy.EndOfOptions)]
+        [InlineData(ArgumentSeparatorStrategy.PassThru, "PassThru", ArgumentSeparatorStrategy.PassThru)]
+        [Theory]
+        public void ArgumentSeparatorStrategy_UseCommandAttribute_DefaultFromAppSettings(
+            ArgumentSeparatorStrategy appSettingsStrategy, string command, ArgumentSeparatorStrategy expectedStrategy)
+        {
+            var appSettings = new AppSettings {CommandDefaults = {ArgumentSeparatorStrategy = appSettingsStrategy}};
+            new AppRunner<SettingsApp>(appSettings)
+                .StopAfter(MiddlewareStages.ParseInput)
+                .RunInMem(command)
+                .CommandContext.ParseResult!.TargetCommand.ArgumentSeparatorStrategy!.Should().Be(expectedStrategy);
+        }
+        
         [Fact]
         public void Given_PassThru_When_OperandValueWithDash_FailsWithUnrecognizedOption()
         {
-            new AppRunner<Math>(_appSettingsPassThru)
+            new AppRunner<Math>(_passThruSettings)
                 .Verify(new Scenario
                 {
                     When = {Args = "Add -1 -3"},
@@ -39,9 +57,9 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
         }
 
         [Fact]
-        public void Given_EndOfOptions_ByAppSetting_When_OperandValueWithDash_FailsWithUnrecognizedOption()
+        public void Given_EndOfOptions_When_OperandValueWithDash_FailsWithUnrecognizedOption()
         {
-            new AppRunner<Math>(_appSettingsEndOfOptions)
+            new AppRunner<Math>(_endOfOptionsSettings)
                 .Verify(new Scenario
                 {
                     When = {Args = "Add -1 -3"},
@@ -52,26 +70,11 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
                     }
                 });
         }
-
+        
         [Fact]
-        public void Given_EndOfOptions_ByCommand_When_OperandValueWithDash_FailsWithUnrecognizedOption()
+        public void Given_PassThru_When_Separator_OperandValueWithDash_OperandsAreIgnored()
         {
-            new AppRunner<Math>(_appSettingsPassThru)
-                .Verify(new Scenario
-                {
-                    When = {Args = "Add_EndOfOptions -1 -3"},
-                    Then =
-                    {
-                        ExitCode = 1,
-                        OutputContainsTexts = { "Unrecognized option '-1'" }
-                    }
-                });
-        }
-
-        [Fact]
-        public void Given_PassThru_ByAppSetting_When_Separator_OperandValueWithDash_OperandsAreIgnored()
-        {
-            var result = new AppRunner<Math>(_appSettingsPassThru)
+            var result = new AppRunner<Math>(_passThruSettings)
                 .Verify(new Scenario
                 {
                     When = {Args = "Add -- -1 -3"},
@@ -83,23 +86,9 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
         }
 
         [Fact]
-        public void Given_PassThru_ByCommand_When_Separator_OperandValueWithDash_OperandsAreIgnored()
+        public void Given_EndOfOptions_When_Separator_OperandValueWithDash_OperandsAreParsed()
         {
-            var result = new AppRunner<Math>(_appSettingsEndOfOptions)
-                .Verify(new Scenario
-                {
-                    When = {Args = "Add_PassThru -- -1 -3"},
-                    Then = { Output = "0" }
-                });
-
-            result.CommandContext.ParseResult!.SeparatedArguments
-                .Should().BeEquivalentTo("-1", "-3");
-        }
-
-        [Fact]
-        public void Given_EndOfOptions_ByAppSetting_When_Separator_OperandValueWithDash_OperandsAreParsed()
-        {
-            var result = new AppRunner<Math>(_appSettingsEndOfOptions)
+            var result = new AppRunner<Math>(_endOfOptionsSettings)
                 .Verify(new Scenario
                 {
                     When = {Args = "Add -- -1 -3"},
@@ -111,23 +100,9 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
         }
 
         [Fact]
-        public void Given_EndOfOptions_ByCommand_When_Separator_OperandValueWithDash_OperandsAreParsed()
+        public void Given_EndOfOptions_And_IgnoreUnexpected_Enabled_When_Separator_OperandValueWithDash_OperandsAreParsed_And_ExtraArgsAreIgnoredAndCaptured()
         {
-            var result = new AppRunner<Math>(_appSettingsPassThru)
-                .Verify(new Scenario
-                {
-                    When = {Args = "Add_EndOfOptions -- -1 -3"},
-                    Then = { Output = "-4" }
-                });
-
-            result.CommandContext.ParseResult!.SeparatedArguments
-                .Should().BeEquivalentTo("-1", "-3");
-        }
-
-        [Fact]
-        public void Given_EndOfOptions_ByAppSetting_And_IgnoreUnexpected_Enabled_When_Separator_OperandValueWithDash_OperandsAreParsed_And_ExtraArgsAreIgnoredAndCaptured()
-        {
-            var appSettings = _appSettingsEndOfOptions.Clone(s => s.IgnoreUnexpectedOperands = true);
+            var appSettings = _endOfOptionsSettings.Clone(s => s.CommandDefaults.IgnoreUnexpectedOperands = true);
 
             var result = new AppRunner<Math>(appSettings)
                 .Verify(new Scenario
@@ -144,30 +119,11 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
         }
 
         [Fact]
-        public void Given_EndOfOptions_ByCommand_And_IgnoreUnexpected_Enabled_When_Separator_OperandValueWithDash_OperandsAreParsed_And_ExtraArgsAreIgnoredAndCaptured()
-        {
-            var appSettings = _appSettingsPassThru.Clone(s => s.IgnoreUnexpectedOperands = true);
-
-            var result = new AppRunner<Math>(appSettings)
-                .Verify(new Scenario
-                {
-                    When = {Args = "Add_EndOfOptions -- -1 -3 -5 -7"},
-                    Then = { Output = "-4" }
-                });
-
-            result.CommandContext.ParseResult!.RemainingOperands
-                .Should().BeEquivalentTo("-5", "-7");
-
-            result.CommandContext.ParseResult!.SeparatedArguments
-                .Should().BeEquivalentTo("-1", "-3", "-5", "-7");
-        }
-
-        [Fact]
-        public void Help_Alternative2_IsValid()
+        public void CmdDotNet_Examples_Alternative2_IsValid()
         {
             // test examples in the help documentation
 
-            var appSettings = _appSettingsEndOfOptions.Clone(s => s.IgnoreUnexpectedOperands = true);
+            var appSettings = _endOfOptionsSettings.Clone(s => s.CommandDefaults.IgnoreUnexpectedOperands = true);
 
             var result = new AppRunner<Math>(appSettings)
                 .Verify(new Scenario
@@ -184,11 +140,11 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
         }
 
         [Fact]
-        public void Help_Alternative3_IsValid()
+        public void CmdDotNet_Examples_Alternative3_IsValid()
         {
             // test examples in the help documentation
 
-            var appSettings = _appSettingsEndOfOptions.Clone(s => s.IgnoreUnexpectedOperands = true);
+            var appSettings = _endOfOptionsSettings.Clone(s => s.CommandDefaults.IgnoreUnexpectedOperands = true);
 
             var result = new AppRunner<Math>(appSettings)
                 .Verify(new Scenario
@@ -210,17 +166,22 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             {
                 console.Write(x + y);
             }
+        }
+
+        public class SettingsApp
+        {
+            public void UseAppSettings()
+            {
+            }
 
             [Command(ArgumentSeparatorStrategy = ArgumentSeparatorStrategy.EndOfOptions)]
-            public void Add_EndOfOptions(IConsole console, int x, int y)
+            public void EndOfOptions()
             {
-                console.Write(x + y);
             }
 
             [Command(ArgumentSeparatorStrategy = ArgumentSeparatorStrategy.PassThru)]
-            public void Add_PassThru(IConsole console, int x, int y)
+            public void PassThru()
             {
-                console.Write(x + y);
             }
         }
     }

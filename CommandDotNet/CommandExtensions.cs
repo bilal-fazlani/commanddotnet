@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommandDotNet.Builders;
 using CommandDotNet.Extensions;
 
 namespace CommandDotNet
@@ -60,6 +61,17 @@ namespace CommandDotNet
                 .Reverse().Skip(1).Select(c => c.Name)
                 .ToCsv(separator);
 
+        public static TArgumentNode FindOrThrow<TArgumentNode>(this Command command, string alias)
+            where TArgumentNode : class, IArgumentNode
+        {
+            var node = command.Find<TArgumentNode>(alias);
+            if (node is null)
+            {
+                throw new ArgumentOutOfRangeException($"no {nameof(TArgumentNode)} found with alias '{alias}' in command '{command.Name}'");
+            }
+            return node;
+        }
+
         /// <summary>Returns all subcommands for the given command.</summary>
         public static IEnumerable<Command> GetDescendentCommands(this Command command, bool includeCurrent = false, int? depth = null)
         {
@@ -99,11 +111,7 @@ namespace CommandDotNet
         public static ICollection<InputValue>? FindInputValues(this Command command, string alias) => 
             command.Find<IArgument>(alias)?.InputValues;
 
-        /// <summary>
-        /// Return the effective IgnoreUnexpectedOperands using the default
-        /// from <see cref="AppSettings.IgnoreUnexpectedOperands"/>
-        /// when <see cref="Command.IgnoreUnexpectedOperands"/> is not set.
-        /// </summary>
+        [Obsolete("Use command.IgnoreUnexpectedOperands. It now defaults from AppSettings.CommandDefaults.")]
         public static bool GetIgnoreUnexpectedOperands(this Command command, AppSettings appSettings)
         {
             if (appSettings == null)
@@ -111,14 +119,10 @@ namespace CommandDotNet
                 throw new ArgumentNullException(nameof(appSettings));
             }
 
-            return command?.IgnoreUnexpectedOperands ?? appSettings.IgnoreUnexpectedOperands;
+            return command.IgnoreUnexpectedOperands;
         }
 
-        /// <summary>
-        /// Return the effective <see cref="ArgumentSeparatorStrategy"/> using the default
-        /// from <see cref="AppSettings.DefaultArgumentSeparatorStrategy"/>
-        /// when <see cref="Command.ArgumentSeparatorStrategy"/> is not set.
-        /// </summary>
+        [Obsolete("Use command.ArgumentSeparatorStrategy. It now defaults from AppSettings.CommandDefaults.")]
         public static ArgumentSeparatorStrategy GetArgumentSeparatorStrategy(this Command command, AppSettings appSettings)
         {
             if (appSettings == null)
@@ -126,7 +130,7 @@ namespace CommandDotNet
                 throw new ArgumentNullException(nameof(appSettings));
             }
 
-            return command?.ArgumentSeparatorStrategy ?? appSettings.DefaultArgumentSeparatorStrategy;
+            return command.ArgumentSeparatorStrategy;
         }
     }
 }

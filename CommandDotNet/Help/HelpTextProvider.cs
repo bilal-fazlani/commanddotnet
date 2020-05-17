@@ -8,13 +8,11 @@ namespace CommandDotNet.Help
 {
     public class HelpTextProvider : IHelpProvider
     {
-        private readonly AppSettings _appSettings;
         private readonly AppHelpSettings _appHelpSettings;
         private string? _appName;
 
         public HelpTextProvider(AppSettings appSettings, string? appName = null)
         {
-            _appSettings = appSettings;
             _appName = appName;
             _appHelpSettings = appSettings.Help;
         }
@@ -35,7 +33,7 @@ namespace CommandDotNet.Help
             var usage = PadFront(command.Usage)
                            ?? $"{PadFront(AppName(command))}{PadFront(CommandPath(command))}"
                            + $"{PadFront(UsageSubcommand(command))}{PadFront(UsageOption(command))}{PadFront(UsageOperand(command))}"
-                           + (command.GetArgumentSeparatorStrategy(_appSettings) == ArgumentSeparatorStrategy.PassThru ? " [[--] <arg>...]" : null);
+                           + (command.ArgumentSeparatorStrategy == ArgumentSeparatorStrategy.PassThru ? " [[--] <arg>...]" : null);
             return CommandReplacements(command, usage);
         }
 

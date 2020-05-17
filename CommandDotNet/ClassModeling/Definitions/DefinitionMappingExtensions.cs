@@ -25,9 +25,11 @@ namespace CommandDotNet.ClassModeling.Definitions
                 command.Description = commandAttribute.Description;
                 command.Usage = commandAttribute.Usage;
                 command.ExtendedHelpText = commandAttribute.ExtendedHelpText;
-                command.IgnoreUnexpectedOperands = commandAttribute.IgnoreUnexpectedOperandsAsNullable;
-                command.ArgumentSeparatorStrategy = commandAttribute.ArgumentSeparatorStrategyAsNullable;
             }
+
+            var commandDefaults = commandContext.AppConfig.AppSettings.CommandDefaults;
+            command.IgnoreUnexpectedOperands = commandAttribute?.IgnoreUnexpectedOperandsAsNullable ?? commandDefaults.IgnoreUnexpectedOperands;
+            command.ArgumentSeparatorStrategy = commandAttribute?.ArgumentSeparatorStrategyAsNullable ?? commandDefaults.ArgumentSeparatorStrategy;
 
             var commandBuilder = new CommandBuilder(command);
 
@@ -98,7 +100,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             if (argumentDef.CommandNodeType == CommandNodeType.Option)
             {
                 var optionAttr = argumentDef.GetCustomAttribute<OptionAttribute>();
-                var booleanMode = GetOptionBooleanMode(argumentDef, appConfig.AppSettings.BooleanMode, optionAttr);
+                var booleanMode = GetOptionBooleanMode(argumentDef, appConfig.AppSettings.CommandDefaults.BooleanMode, optionAttr);
                 var argumentArity = ArgumentArity.Default(argumentDef.Type, argumentDef.HasDefaultValue, booleanMode);
 
                 var assignOnlyToExecutableSubcommands = optionAttr?.AssignToExecutableSubcommands ?? false;
@@ -156,10 +158,10 @@ namespace CommandDotNet.ClassModeling.Definitions
         }
 
         private static BooleanMode GetOptionBooleanMode(
-            IArgumentDef argumentDef, BooleanMode appBooleanMode, OptionAttribute? optionAttr)
+            IArgumentDef argumentDef, BooleanMode defaultBooleanMode, OptionAttribute? optionAttr)
         {
-            if (optionAttr == null || optionAttr.BooleanMode == BooleanMode.Unknown)
-                return appBooleanMode;
+            if (optionAttr?.BooleanModeAsNullable == null)
+                return defaultBooleanMode;
 
             return argumentDef.Type.GetUnderlyingType() == typeof(bool)
                 ? optionAttr.BooleanMode

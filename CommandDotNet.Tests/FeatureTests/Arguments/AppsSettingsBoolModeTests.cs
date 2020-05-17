@@ -7,11 +7,15 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class AppsSettingsBoolModeTests
     {
-        private static readonly AppSettings ImplicitBasicHelp = TestAppSettings.BasicHelp.Clone(a => a.BooleanMode = BooleanMode.Implicit);
-        private static readonly AppSettings ImplicitDetailedHelp = TestAppSettings.DetailedHelp.Clone(a => a.BooleanMode = BooleanMode.Implicit);
+        private static readonly AppSettings ImplicitBasicHelp = TestAppSettings.BasicHelp.Clone(a => 
+            a.CommandDefaults.BooleanMode = BooleanMode.Implicit);
+        private static readonly AppSettings ImplicitDetailedHelp = TestAppSettings.DetailedHelp.Clone(a => 
+            a.CommandDefaults.BooleanMode = BooleanMode.Implicit);
 
-        private static readonly AppSettings ExplicitBasicHelp = TestAppSettings.BasicHelp.Clone(a => a.BooleanMode = BooleanMode.Explicit);
-        private static readonly AppSettings ExplicitDetailedHelp = TestAppSettings.DetailedHelp.Clone(a => a.BooleanMode = BooleanMode.Explicit);
+        private static readonly AppSettings ExplicitBasicHelp = TestAppSettings.BasicHelp.Clone(a => 
+            a.CommandDefaults.BooleanMode = BooleanMode.Explicit);
+        private static readonly AppSettings ExplicitDetailedHelp = TestAppSettings.DetailedHelp.Clone(a => 
+            a.CommandDefaults.BooleanMode = BooleanMode.Explicit);
 
         public AppsSettingsBoolModeTests(ITestOutputHelper output)
         {

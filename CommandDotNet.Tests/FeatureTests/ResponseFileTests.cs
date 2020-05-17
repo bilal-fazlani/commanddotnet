@@ -94,7 +94,8 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void Operand_ValueBeginningWithAmpersand_CanBeEscapedWith_EndOfOptions_ArgumentSeparator()
         {
-            var endOfOptions = new AppSettings{DefaultArgumentSeparatorStrategy = ArgumentSeparatorStrategy.EndOfOptions};
+            var endOfOptions = new AppSettings
+                {CommandDefaults = {ArgumentSeparatorStrategy = ArgumentSeparatorStrategy.EndOfOptions}};
             new AppRunner<App>(endOfOptions)
                 .UseResponseFiles()
                 .Verify(new Scenario

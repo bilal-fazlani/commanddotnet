@@ -13,7 +13,7 @@ using CommandDotNet.Parsing;
 
 namespace CommandDotNet
 {
-    public sealed class Command : IArgumentNode
+    public sealed class Command : IArgumentNode, ICommandSettings
     {
         private Command? _parent;
         private readonly List<Option> _options = new List<Option>();
@@ -93,13 +93,13 @@ namespace CommandDotNet
         /// When false, unexpected operands will generate a parse failure.<br/>
         /// When true, unexpected arguments will be ignored and added to <see cref="ParseResult.RemainingOperands"/><br/>
         /// </summary>
-        public bool? IgnoreUnexpectedOperands { get; set; }
+        public bool IgnoreUnexpectedOperands { get; set; }
 
         /// <summary>
         /// The <see cref="ArgumentSeparatorStrategy"/>.
         /// This can be set in the <see cref="CommandAttribute"/>
         /// </summary>
-        public ArgumentSeparatorStrategy? ArgumentSeparatorStrategy { get; set; }
+        public ArgumentSeparatorStrategy ArgumentSeparatorStrategy { get; set; }
 
         /// <summary>The source that defined this command</summary>
         public string? DefinitionSource { get; }
