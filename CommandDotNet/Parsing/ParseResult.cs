@@ -28,7 +28,7 @@ namespace CommandDotNet.Parsing
         /// An exception encountered while parsing the commands.
         /// Help should be printed for the <see cref="TargetCommand"/>
         /// </summary>
-        public Exception? ParseError { get; }
+        public IParseError? ParseError { get; }
 
         /// <summary>
         /// Returns true if the help option was specified
@@ -46,10 +46,10 @@ namespace CommandDotNet.Parsing
             SeparatedArguments = separatedArguments?.ToArgsArray() ?? new string[0];
         }
 
-        public ParseResult(Command command, Exception exception)
+        public ParseResult(IParseError error)
         {
-            TargetCommand = command ?? throw new ArgumentNullException(nameof(command));
-            ParseError = exception ?? throw new ArgumentNullException(nameof(exception));
+            ParseError = error ?? throw new ArgumentNullException(nameof(error));
+            TargetCommand = error.Command;
             RemainingOperands = new string[0];
             SeparatedArguments = new string[0];
         }

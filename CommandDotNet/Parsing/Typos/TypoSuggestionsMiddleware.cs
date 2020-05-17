@@ -36,7 +36,7 @@ namespace CommandDotNet.Parsing.Typos
             {
                 switch (ctx.ParseResult.ParseError)
                 {
-                    case UnrecognizedArgumentCommandParsingException unrecognizedArgument:
+                    case UnrecognizedArgumentParseError unrecognizedArgument:
                         if (TrySuggestArgumentNames(ctx, unrecognizedArgument.Command, unrecognizedArgument.Token))
                         {
                             // in case help was requested by CommandParser
@@ -46,8 +46,8 @@ namespace CommandDotNet.Parsing.Typos
 
                         // TODO: suggest other directives? We'd need a list of names which we don't collect atm.
                         break;
-                    case UnrecognizedValueCommandParsingException unrecognizedValue:
-                        if (TrySuggestValues(ctx, unrecognizedValue))
+                    case NotAllowedValueParseError notAlloweValue:
+                        if (TrySuggestValues(ctx, notAlloweValue))
                         {
                             // in case help was requested by CommandParser
                             ctx.ShowHelpOnExit = false;
@@ -61,11 +61,11 @@ namespace CommandDotNet.Parsing.Typos
             return next(ctx);
         }
 
-        private static bool TrySuggestValues(CommandContext ctx, UnrecognizedValueCommandParsingException unrecognizedValue)
+        private static bool TrySuggestValues(CommandContext ctx, NotAllowedValueParseError notAlloweValue)
         {
-            return TrySuggest(ctx, unrecognizedValue.Command, unrecognizedValue.Token.Value,
-                unrecognizedValue.Argument.AllowedValues.ToCollection(),
-                $"is not a valid {unrecognizedValue.Argument.TypeInfo.DisplayName}", 
+            return TrySuggest(ctx, notAlloweValue.Command, notAlloweValue.Token.Value,
+                notAlloweValue.Argument.AllowedValues.ToCollection(),
+                $"is not a valid {notAlloweValue.Argument.TypeInfo.DisplayName}", 
                 null);
         }
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,89 +8,41 @@ using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Parsing
 {
-    internal class CommandParser
+    internal static partial class CommandParser
     {
-        private readonly CommandContext _commandContext;
-        private readonly AppSettings _appSettings;
-
-        private CommandParser(CommandContext commandContext)
-        {
-            _commandContext = commandContext;
-            _appSettings = commandContext.AppConfig.AppSettings;
-        }
-
         internal static Task<int> ParseInputMiddleware(CommandContext commandContext, ExecutionDelegate next)
         {
-            try
+            var parseContext = new ParseContext(commandContext, new Queue<Token>(commandContext.Tokens.Arguments));
+            CommandParser.ParseCommand(commandContext, parseContext);
+            if (parseContext.ParserError is { })
             {
-                new CommandParser(commandContext).ParseCommand(commandContext);
-            }
-            catch (CommandParsingException ex)
-            {
-                commandContext.ParseResult = new ParseResult(ex.Command, ex);
+                commandContext.ParseResult = new ParseResult(parseContext.ParserError);
             }
             return next(commandContext);
         }
 
-        private void ParseCommand(CommandContext commandContext)
+        private static void ParseCommand(CommandContext commandContext, ParseContext parseContext)
         {
-            bool ignoreRemainingArguments = false;
-            var remainingOperands = new List<Token>();
-
-            Command currentCommand = commandContext.RootCommand!;
-            Option? currentOption = null;
-            Token? currentOptionToken = null;
-            var operands = new OperandEnumerator(currentCommand.Operands);
-
-            void ParseNonOptionValue(Token token)
-            {
-                var operandResult = ParseArgumentValue(token, ref currentCommand, operands!);
-
-                switch (operandResult)
-                {
-                    case ParseOperandResult.Succeeded:
-                        break;
-                    case ParseOperandResult.UnexpectedArgument:
-                        ignoreRemainingArguments = true;
-                        remainingOperands!.Add(token);
-                        break;
-                    case ParseOperandResult.NewSubCommand:
-                        operands = new OperandEnumerator(currentCommand.Operands);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(operandResult.ToString());
-                }
-            }
-
-            foreach (var token in commandContext.Tokens.Arguments)
+            foreach (var token in commandContext.Tokens.Arguments.TakeWhile(t => parseContext.ParserError is null))
             {
                 switch (token.TokenType)
                 {
                     case TokenType.Option:
-                        if (currentOption is { })
+                        if (parseContext.Option is { })
                         {
-                            throw new CommandParsingException(currentCommand, $"Missing value for option '{currentOption.Name}'");
+                            parseContext.ParserError = new MissingOptionValueParseError(parseContext.Command, parseContext.Option);
+                            return;
                         }
-                        currentOption = ParseOption(token, currentCommand);
-                        if (currentOption is { })
-                        {
-                            currentOptionToken = token;
-                        }
+                        ParseOption(parseContext, token);
                         break;
                     case TokenType.Value:
-                        if (currentOption is { })
+                        if (parseContext.Option is { })
                         {
-                            ParseOptionValue(token, currentCommand, currentOption, currentOptionToken!);
-                            currentOption = null;
-                            currentOptionToken = null;
-                        }
-                        else if (ignoreRemainingArguments)
-                        {
-                            remainingOperands.Add(token);
+                            ParseOptionValue(parseContext, token);
                         }
                         else
                         {
-                            ParseNonOptionValue(token);
+                            ParseNonOptionValue(parseContext, token);
                         }
                         break;
                     case TokenType.Separator:
@@ -103,103 +54,162 @@ namespace CommandDotNet.Parsing
                 }
             }
 
-            if (currentOption is { }) // an option was left without a value
-            {
-                throw new CommandParsingException(currentCommand, $"Missing value for option '{currentOption.Name}'");
-            }
-
-            if (commandContext.Tokens.Separated.Any() && UsingEndOfOptions(currentCommand))
-            {
-                commandContext.Tokens.Separated.ForEach(ParseNonOptionValue);
-            }
-
-            commandContext.ParseResult = new ParseResult(
-                currentCommand,
-                remainingOperands,
-                commandContext.Tokens.Separated);
-        }
-
-        private enum ParseOperandResult
-        {
-            Succeeded,
-            UnexpectedArgument,
-            NewSubCommand
-        }
-
-        private void ParseOptionValue(Token token,
-            Command command, Option currentOption, Token currentOptionToken)
-        {
-            ThrowIfValueNotAllowed(command, currentOption, token);
-            if (TryAddValue(currentOption, token, currentOptionToken))
+            if (parseContext.ParserError is { })
             {
                 return;
             }
 
-            throw new CommandParsingException(command,
-                $"Unexpected value '{token.RawValue}' for option '{currentOption.Name}'");
+            if (parseContext.Option is { }) // an option was left without a value
+            {
+                parseContext.ParserError = new MissingOptionValueParseError(parseContext.Command, parseContext.Option);
+                return;
+            }
+
+            if (commandContext.Tokens.Separated.Any() && parseContext.UsingEndOfOptions())
+            {
+                commandContext.Tokens.Separated
+                    .TakeWhile(t => parseContext.ParserError is null)
+                    .ForEach(t => ParseNonOptionValue(parseContext, t));
+
+                // TEST: too many operands after EndOfOptions when IgnoreUnexpectedOperands is false
+                // if (parseContext.ParserError is { })
+                // {
+                //     return;
+                // }
+            }
+
+            commandContext.ParseResult = new ParseResult(
+                parseContext.Command,
+                parseContext.RemainingOperands.ToReadOnlyCollection(),
+                commandContext.Tokens.Separated);
         }
 
-        private ParseOperandResult ParseArgumentValue(Token token, ref Command command, OperandEnumerator operands)
-        {
-            if (!operands.Any && command.FindArgumentNode(token.Value) is Command subcommand)
-            {
-                command = subcommand;
-                return ParseOperandResult.NewSubCommand;
-            }
-
-            if (operands.MoveNext())
-            {
-                var current = operands.Current;
-                ThrowIfValueNotAllowed(command, current, token);
-                GetArgumentParsedValues(current).Add(new ValueFromToken(token.Value, token, null));
-            }
-            else
-            {
-                if (command.GetIgnoreUnexpectedOperands(_appSettings))
-                {
-                    return ParseOperandResult.UnexpectedArgument;
-                }
-
-                // use the term "argument" for messages displayed to users
-                throw new UnrecognizedArgumentCommandParsingException(command, token, $"Unrecognized command or argument '{token.RawValue}'");
-            }
-
-            return ParseOperandResult.Succeeded;
-        }
-
-        private Option? ParseOption(Token token, Command command)
+        private static void ParseOption(ParseContext parseContext, Token token)
         {
             var optionTokenType = token.OptionTokenType!;
 
-            var option = command.Find<Option>(optionTokenType.GetName());
+            var option = parseContext.Command.Find<Option>(optionTokenType.GetName());
             if (option is null)
             {
-                throw new UnrecognizedArgumentCommandParsingException(command, token, $"Unrecognized option '{token.RawValue}'");
+                parseContext.ParserError = new UnrecognizedArgumentParseError(parseContext.Command, token, $"Unrecognized option '{token.RawValue}'");
+                return;
             }
 
             if (optionTokenType.IsClubbed)
             {
-                throw new AppRunnerException($"ExpandClubbedOptions transformation should have expanded all clubbed tokens: {token}");
+                throw new AppRunnerException($"Bug: ExpandClubbedOptions transformation should have expanded all clubbed tokens: {token}");
             }
             if (optionTokenType.HasValue)
             {
-                throw new AppRunnerException($"SplitOptionAssignments transformation should have split values from all option tokens: {token}");
+                throw new AppRunnerException($"Bug: SplitOptionAssignments transformation should have split values from all option tokens: {token}");
             }
+
             if (option.Arity.AllowsNone())
             {
-                TryAddValue(option, null, token);
-                return null;
+                var values = option.GetAlreadyParsedValues();
+                // only possible for flags which are boolean type
+                // Add a value to indicate that this option was specified
+                AddOptionValue(parseContext, option, values, token, null, "true");
             }
-
-            return option;
+            else
+            {
+                parseContext.ExpectOption(option, token);
+            }
         }
 
-        private static ICollection<ValueFromToken> GetArgumentParsedValues(IArgument argument)
+        private static void ParseOptionValue(ParseContext parseContext, Token token)
+        {
+            var option = parseContext.Option!;
+            if (ValueIsAllowed(parseContext, option, token))
+            {
+                var optionToken = parseContext.OptionToken!;
+                var values = option.GetAlreadyParsedValues();
+
+                if (option.Arity.AllowsMany())
+                {
+                    AddOptionValue(parseContext, option, values, optionToken, token, token.Value);
+                }
+                else if (option.Arity.AllowsNone())
+                {
+                    throw new AppRunnerException($"Bug: flag '{option.Name}' should have finished processing in {nameof(ParseOption)}");
+                }
+                else if (values.Any())
+                {
+                    parseContext.ParserError = new UnexpectedOptionValueParseError(parseContext.Command, option, optionToken);
+                }
+                else
+                {
+                    AddOptionValue(parseContext, option, values, optionToken, token, token.Value);
+                }
+
+            }
+        }
+
+        private static void AddOptionValue(ParseContext parseContext, Option option, ICollection<ValueFromToken> values,
+            Token optionToken, Token? valueToken, string value)
+        {
+            values.Add(new ValueFromToken(value, valueToken, optionToken));
+            parseContext.ClearOption();
+            if (!option.IsInterceptorOption || option.AssignToExecutableSubcommands)
+            {
+                parseContext.CommandArgumentParsed();
+            }
+        }
+
+        private static void ParseNonOptionValue(ParseContext parseContext, Token token)
+        {
+            if (parseContext.IgnoreRemainingArguments)
+            {
+                parseContext.RemainingOperands.Add(token);
+            }
+            else if (parseContext.SubcommandsAreAllowed
+                     && parseContext.Command.FindArgumentNode(token.Value) is Command subcommand)
+            {
+                parseContext.Command = subcommand;
+            }
+            else if (parseContext.Operands.TryDequeue(out var operand))
+            {
+                var currentOperand = operand!;
+                if (ValueIsAllowed(parseContext, currentOperand, token))
+                {
+                    currentOperand
+                        .GetAlreadyParsedValues()
+                        .Add(new ValueFromToken(token.Value, token, null));
+                    parseContext.CommandArgumentParsed();
+                }
+            }
+            else if (parseContext.Command.GetIgnoreUnexpectedOperands(parseContext.AppSettings))
+            {
+                parseContext.IgnoreRemainingArguments = true;
+                parseContext.RemainingOperands.Add(token);
+            }
+            else
+            {
+                // use the term "argument" for messages displayed to users
+                parseContext.ParserError = new UnrecognizedArgumentParseError(parseContext.Command, token, $"Unrecognized command or argument '{token.RawValue}'");
+            }
+        }
+
+        private static bool ValueIsAllowed(ParseContext parseContext, IArgument argument, Token token)
+        {
+            if (argument.AllowedValues.IsNullOrEmpty() || argument.AllowedValues.Contains(token.Value))
+            {
+                return true;
+            }
+
+            // help displays the AllowedValues
+            // TypoSuggestions can hide the help
+            parseContext.CommandContext.ShowHelpOnExit = true;
+            parseContext.ParserError = new NotAllowedValueParseError(parseContext.Command, argument, token);
+            return false;
+        }
+
+        private static ICollection<ValueFromToken> GetAlreadyParsedValues(this IArgument argument)
         {
             // in most cases, this will be the first or only InputValues
             var source = Constants.InputValueSources.Argument;
             var parserValues = argument.InputValues.FirstOrDefault(iv => iv.Source == source);
-            
+
             if (parserValues is null)
             {
                 parserValues = new InputValue(source, false, new List<ValueFromToken>());
@@ -210,90 +220,10 @@ namespace CommandDotNet.Parsing
             return (List<ValueFromToken>)parserValues.ValuesFromTokens!;
         }
 
-        private void ThrowIfValueNotAllowed(Command command, IArgument argument, Token token)
+        private static bool UsingEndOfOptions(this ParseContext parseContext)
         {
-            if (argument.AllowedValues.IsNullOrEmpty() || argument.AllowedValues.Contains(token.Value))
-            {
-                return;
-            }
-
-            // help displays the AllowedValues
-            // TypoSuggestions can hide the help
-            _commandContext.ShowHelpOnExit = true;
-            throw new UnrecognizedValueCommandParsingException(
-                command, argument, token, $"Unrecognized value '{token.RawValue}' for {(argument is Option ? "option" : "argument")}: {argument.Name}");
-        }
-
-        private bool TryAddValue(Option option, Token? valueToken, Token optionToken)
-        {
-            var values = GetArgumentParsedValues(option);
-
-            if (option.Arity.AllowsMany())
-            {
-                values.Add(new ValueFromToken(valueToken!.Value, valueToken, optionToken));
-            }
-            else if (option.Arity.AllowsNone())
-            {
-                // only possible for flags which are boolean type
-                // Add a value to indicate that this option was specified
-                values.Add(new ValueFromToken("true", valueToken, optionToken));
-            }
-            else
-            {
-                if (values.Any())
-                {
-                    return false;
-                }
-                values.Add(new ValueFromToken(valueToken!.Value, valueToken, optionToken));
-            }
-            return true;
-        }
-
-        bool UsingEndOfOptions(Command command)
-        {
-            var separatorStrategy = command.GetArgumentSeparatorStrategy(_appSettings);
+            var separatorStrategy = parseContext.Command.GetArgumentSeparatorStrategy(parseContext.AppSettings);
             return separatorStrategy == ArgumentSeparatorStrategy.EndOfOptions;
-        }
-
-        private class OperandEnumerator : IEnumerator<Operand>
-        {
-            private readonly IEnumerator<Operand> _enumerator;
-            private int _count;
-
-            public OperandEnumerator(IEnumerable<Operand> enumerable)
-            {
-                _enumerator = enumerable.GetEnumerator();
-            }
-
-            public bool Any => _count > 0;
-
-            public Operand Current => _enumerator.Current;
-
-            object IEnumerator.Current => Current;
-
-            public void Dispose()
-            {
-                _enumerator.Dispose();
-            }
-
-            public bool MoveNext()
-            {
-                _count++;
-
-                if (Current is null || !Current.Arity.AllowsMany())
-                {
-                    return _enumerator.MoveNext();
-                }
-
-                // If current operand allows multiple values, we don't move forward and
-                // all later values will be added to current IOperand.Values
-                return true;
-            }
-
-            public void Reset()
-            {
-                _enumerator.Reset();
-            }
         }
     }
 }
