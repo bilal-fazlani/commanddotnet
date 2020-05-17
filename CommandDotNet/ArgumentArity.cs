@@ -43,10 +43,7 @@ namespace CommandDotNet
 
         public static IArgumentArity OneOrMore => new ArgumentArity(1, Unlimited);
 
-        /// <summary>
-        /// Calculates a default IArgumentArity for the given argument.<br/>
-        /// Does NOT use the existing <see cref="IArgument.Arity"/>.
-        /// </summary>
+        [Obsolete("Use other Default method instead. This method is not reliable for bool values")]
         public static IArgumentArity Default(IArgument argument)
         {
             var type = argument.TypeInfo.Type;
