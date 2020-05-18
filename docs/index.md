@@ -1,8 +1,5 @@
 ![logo](./img/logo.svg){: style="width:20em"}
 
-!!! Caution 
-    This documentation is for version 3 which is an older version of commanddotnet. Documentation for current version can be found here: https://commanddotnet.bilal-fazlani.com
-
 # Introduction
 
 ***Model your command line application interface in a class***
