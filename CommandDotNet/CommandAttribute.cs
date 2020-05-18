@@ -1,10 +1,11 @@
 ﻿using System;
+using CommandDotNet.Builders;
 using CommandDotNet.Parsing;
 
 namespace CommandDotNet
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class CommandAttribute : Attribute, INameAndDescription
+    public class CommandAttribute : Attribute, INameAndDescription, ICommandSettings
     {
         public string? Name { get; set; }
         
@@ -25,8 +26,7 @@ namespace CommandDotNet
             set => IgnoreUnexpectedOperandsAsNullable = value;
         }
 
-        /// <summary>Returns a nullable version of <see cref="IgnoreUnexpectedOperands"/> that will be null if a value was not assigned</summary>
-        public bool? IgnoreUnexpectedOperandsAsNullable { get; private set; }
+        internal bool? IgnoreUnexpectedOperandsAsNullable { get; private set; }
 
         /// <summary>
         /// The <see cref="ArgumentSeparatorStrategy"/> for the <see cref="Command"/>
@@ -37,7 +37,6 @@ namespace CommandDotNet
             set => ArgumentSeparatorStrategyAsNullable = value;
         }
 
-        /// <summary>Returns a nullable version of <see cref="ArgumentSeparatorStrategy"/> that will be null if a value was not assigned</summary>
-        public ArgumentSeparatorStrategy? ArgumentSeparatorStrategyAsNullable { get; private set; }
-    }
+        internal ArgumentSeparatorStrategy? ArgumentSeparatorStrategyAsNullable { get; private set; }
+}
 }

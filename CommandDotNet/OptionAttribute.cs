@@ -42,10 +42,18 @@ namespace CommandDotNet
         public string? Description { get; set; }
 
         /// <summary>
-        /// The <see cref="BooleanMode"/> to use for this option.
+        /// When Explicit, boolean options require a 'true' or 'false' value be specified.<br/>
+        /// When Implicit, boolean options are treated as Flags, considered false unless it's specified
+        /// and the next argument will be considered a new argument.<br/>
         /// If not specified, the default from <see cref="AppSettings"/> will be used.
         /// </summary>
-        public BooleanMode BooleanMode { get; set; }
+        public BooleanMode BooleanMode
+        {
+            get => BooleanModeAsNullable.GetValueOrDefault();
+            set => BooleanModeAsNullable = value;
+        }
+
+        internal BooleanMode? BooleanModeAsNullable { get; private set; }
 
         /// <summary>
         /// When true, this option is an Inherited option, defined by a command interceptor method

@@ -1,6 +1,6 @@
-﻿using CommandDotNet.Extensions;
+﻿using System;
+using CommandDotNet.Extensions;
 using CommandDotNet.Help;
-using CommandDotNet.Parsing;
 using CommandDotNet.Tokens;
 using CommandDotNet.TypeDescriptors;
 
@@ -8,42 +8,35 @@ namespace CommandDotNet
 {
     public class AppSettings : IIndentableToString
     {
-        private BooleanMode _booleanMode = BooleanMode.Implicit;
-
-        /// <summary>
-        /// When Explicit, boolean options require a 'true' or 'false' value be specified.<br/>
-        /// When Implicit, boolean options are treated as Flags, considered false unless it's specified
-        /// and the next argument will be considered a new argument.
-        /// </summary>
+        [Obsolete("Use CommandDefaults.BooleanMode instead")]
         public BooleanMode BooleanMode
         {
-            get => _booleanMode;
-            set
-            {
-                if(value == BooleanMode.Unknown)
-                    throw new AppRunnerException("BooleanMode can not be set to BooleanMode.Unknown explicitly");
-                _booleanMode = value;
-            }
+            get => CommandDefaults.BooleanMode;
+            set => CommandDefaults.BooleanMode = value;
         }
 
-        /// <summary>
-        /// When false, unexpected operands will generate a parse failure.<br/>
-        /// When true, unexpected arguments will be ignored and added to <see cref="ParseResult.RemainingOperands"/><br/>
-        /// </summary>
-        public bool IgnoreUnexpectedOperands { get; set; }
+        [Obsolete("Use CommandDefaults.IgnoreUnexpectedOperands instead")]
+        public bool IgnoreUnexpectedOperands
+        {
+            get => CommandDefaults.IgnoreUnexpectedOperands;
+            set => CommandDefaults.IgnoreUnexpectedOperands = value;
+        }
 
-        /// <summary>
-        /// The default <see cref="ArgumentSeparatorStrategy"/>.
-        /// This can be overridden for a <see cref="Command"/> using the <see cref="CommandAttribute"/>
-        /// </summary>
-        public ArgumentSeparatorStrategy DefaultArgumentSeparatorStrategy { get; set; } = ArgumentSeparatorStrategy.EndOfOptions;
+        [Obsolete("Use CommandDefaults.ArgumentSeparatorStrategy instead")]
+        public ArgumentSeparatorStrategy DefaultArgumentSeparatorStrategy
+        {
+            get => CommandDefaults.ArgumentSeparatorStrategy;
+            set => CommandDefaults.ArgumentSeparatorStrategy = value;
+        }
 
-        /// <summary>
-        /// When arguments are not decorated with [Operand] or [Option]
-        /// DefaultArgumentMode is used to determine which mode to use.
-        /// Operand is the default.
-        /// </summary>
-        public ArgumentMode DefaultArgumentMode { get; set; } = ArgumentMode.Operand;
+        [Obsolete("Use CommandDefaults.ArgumentMode instead")]
+        public ArgumentMode DefaultArgumentMode
+        {
+            get => CommandDefaults.ArgumentMode;
+            set => CommandDefaults.ArgumentMode = value;
+        }
+
+        public CommandSettings CommandDefaults { get; set; } = new CommandSettings();
 
         /// <summary>
         /// Set to true to prevent tokenizing arguments as <see cref="TokenType.Directive"/>,

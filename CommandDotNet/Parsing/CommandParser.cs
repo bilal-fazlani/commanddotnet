@@ -65,7 +65,8 @@ namespace CommandDotNet.Parsing
                 return;
             }
 
-            if (commandContext.Tokens.Separated.Any() && parseContext.UsingEndOfOptions())
+            if (commandContext.Tokens.Separated.Any() 
+                && parseContext.Command.ArgumentSeparatorStrategy == ArgumentSeparatorStrategy.EndOfOptions)
             {
                 commandContext.Tokens.Separated
                     .TakeWhile(t => parseContext.ParserError is null)
@@ -178,7 +179,7 @@ namespace CommandDotNet.Parsing
                     parseContext.CommandArgumentParsed();
                 }
             }
-            else if (parseContext.Command.GetIgnoreUnexpectedOperands(parseContext.AppSettings))
+            else if (parseContext.Command.IgnoreUnexpectedOperands)
             {
                 parseContext.IgnoreRemainingArguments = true;
                 parseContext.RemainingOperands.Add(token);
@@ -218,12 +219,6 @@ namespace CommandDotNet.Parsing
             parserValues.ValuesFromTokens ??= new List<ValueFromToken>();
 
             return (List<ValueFromToken>)parserValues.ValuesFromTokens!;
-        }
-
-        private static bool UsingEndOfOptions(this ParseContext parseContext)
-        {
-            var separatorStrategy = parseContext.Command.GetArgumentSeparatorStrategy(parseContext.AppSettings);
-            return separatorStrategy == ArgumentSeparatorStrategy.EndOfOptions;
         }
     }
 }
