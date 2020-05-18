@@ -78,6 +78,7 @@ theme:
     - tabs
     - instant
   name: 'material'
+  # custom_dir: overrides
   icon:
     repo: fontawesome/brands/github
   favicon: 'img/favicon.ico'
@@ -123,6 +124,7 @@ plugins:
 
 # Customization
 extra:
+  version: '4'
   social:
     - icon: fontawesome/brands/github
       link: 'https://github.com/bilal-fazlani'
