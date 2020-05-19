@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
         public void IgnoreUnexpectedOperands_UseCommandAttribute_DefaultFromAppSettings(
             bool appSettingsEnabled, string command, bool expectedEnabled)
         {
-            var appSettings = new AppSettings { CommandDefaults = { IgnoreUnexpectedOperands = appSettingsEnabled } };
+            var appSettings = new AppSettings { IgnoreUnexpectedOperands = appSettingsEnabled };
             new AppRunner<SettingsApp>(appSettings)
                 .StopAfter(MiddlewareStages.ParseInput)
                 .RunInMem(command)
@@ -50,7 +50,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
         [Fact]
         public void Given_IgnoreExtraOperands_CollectsRemaining()
         {
-            var results = new AppRunner<App>(new AppSettings { CommandDefaults = { IgnoreUnexpectedOperands = true } })
+            var results = new AppRunner<App>(new AppSettings { IgnoreUnexpectedOperands = true })
                 .Verify(new Scenario
                 {
                     When = { Args = "Add 2 3 4" },

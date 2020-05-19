@@ -9,9 +9,6 @@ namespace CommandDotNet.FluentValidation
 {
     internal class ModelValidator
     {
-        // TODO: move FluentValidation into a separate repo & nuget package?
-        //       there are other ways to do validation that could also
-        //       be applied to parameters
         private readonly IDependencyResolver? _dependencyResolver;
 
         internal ModelValidator(IDependencyResolver? dependencyResolver)

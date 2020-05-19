@@ -72,7 +72,6 @@ namespace CommandDotNet.Parsing
                     .TakeWhile(t => parseContext.ParserError is null)
                     .ForEach(t => ParseNonOptionValue(parseContext, t));
 
-                // TEST: too many operands after EndOfOptions when IgnoreUnexpectedOperands is false
                 // if (parseContext.ParserError is { })
                 // {
                 //     return;

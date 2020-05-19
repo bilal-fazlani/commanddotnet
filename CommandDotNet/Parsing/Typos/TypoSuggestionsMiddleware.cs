@@ -46,8 +46,8 @@ namespace CommandDotNet.Parsing.Typos
 
                         // TODO: suggest other directives? We'd need a list of names which we don't collect atm.
                         break;
-                    case NotAllowedValueParseError notAlloweValue:
-                        if (TrySuggestValues(ctx, notAlloweValue))
+                    case NotAllowedValueParseError notAllowedValue:
+                        if (TrySuggestValues(ctx, notAllowedValue))
                         {
                             // in case help was requested by CommandParser
                             ctx.ShowHelpOnExit = false;
@@ -61,11 +61,11 @@ namespace CommandDotNet.Parsing.Typos
             return next(ctx);
         }
 
-        private static bool TrySuggestValues(CommandContext ctx, NotAllowedValueParseError notAlloweValue)
+        private static bool TrySuggestValues(CommandContext ctx, NotAllowedValueParseError notAllowedValue)
         {
-            return TrySuggest(ctx, notAlloweValue.Command, notAlloweValue.Token.Value,
-                notAlloweValue.Argument.AllowedValues.ToCollection(),
-                $"is not a valid {notAlloweValue.Argument.TypeInfo.DisplayName}", 
+            return TrySuggest(ctx, notAllowedValue.Command, notAllowedValue.Token.Value,
+                notAllowedValue.Argument.AllowedValues.ToCollection(),
+                $"is not a valid {notAllowedValue.Argument.TypeInfo.DisplayName}", 
                 null);
         }
 

@@ -1,11 +1,10 @@
 ﻿using System;
-using CommandDotNet.Builders;
 using CommandDotNet.Parsing;
 
 namespace CommandDotNet
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class CommandAttribute : Attribute, INameAndDescription, ICommandSettings
+    public class CommandAttribute : Attribute, INameAndDescription
     {
         public string? Name { get; set; }
         

@@ -27,9 +27,9 @@ namespace CommandDotNet.ClassModeling.Definitions
                 command.ExtendedHelpText = commandAttribute.ExtendedHelpText;
             }
 
-            var commandDefaults = commandContext.AppConfig.AppSettings.CommandDefaults;
-            command.IgnoreUnexpectedOperands = commandAttribute?.IgnoreUnexpectedOperandsAsNullable ?? commandDefaults.IgnoreUnexpectedOperands;
-            command.ArgumentSeparatorStrategy = commandAttribute?.ArgumentSeparatorStrategyAsNullable ?? commandDefaults.ArgumentSeparatorStrategy;
+            var appSettings = commandContext.AppConfig.AppSettings;
+            command.IgnoreUnexpectedOperands = commandAttribute?.IgnoreUnexpectedOperandsAsNullable ?? appSettings.IgnoreUnexpectedOperands;
+            command.ArgumentSeparatorStrategy = commandAttribute?.ArgumentSeparatorStrategyAsNullable ?? appSettings.DefaultArgumentSeparatorStrategy;
 
             var commandBuilder = new CommandBuilder(command);
 
@@ -100,7 +100,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             if (argumentDef.CommandNodeType == CommandNodeType.Option)
             {
                 var optionAttr = argumentDef.GetCustomAttribute<OptionAttribute>();
-                var booleanMode = GetOptionBooleanMode(argumentDef, appConfig.AppSettings.CommandDefaults.BooleanMode, optionAttr);
+                var booleanMode = GetOptionBooleanMode(argumentDef, appConfig.AppSettings.BooleanMode, optionAttr);
                 var argumentArity = ArgumentArity.Default(argumentDef.Type, argumentDef.HasDefaultValue, booleanMode);
 
                 var assignOnlyToExecutableSubcommands = optionAttr?.AssignToExecutableSubcommands ?? false;
