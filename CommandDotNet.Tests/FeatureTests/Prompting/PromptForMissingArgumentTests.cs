@@ -275,7 +275,7 @@ password (Text):
         public void WhenExplicitBoolOptionMissing_Prompts()
         {
 
-            new AppRunner<App>(new AppSettings {CommandDefaults = { BooleanMode = BooleanMode.Explicit } })
+            new AppRunner<App>(new AppSettings { BooleanMode = BooleanMode.Explicit })
                 .UsePrompting()
                 .Verify(new Scenario
                 {

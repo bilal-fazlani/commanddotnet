@@ -13,7 +13,7 @@ using CommandDotNet.Parsing;
 
 namespace CommandDotNet
 {
-    public sealed class Command : IArgumentNode, ICommandSettings
+    public sealed class Command : IArgumentNode
     {
         private Command? _parent;
         private readonly List<Option> _options = new List<Option>();

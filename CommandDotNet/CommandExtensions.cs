@@ -111,7 +111,7 @@ namespace CommandDotNet
         public static ICollection<InputValue>? FindInputValues(this Command command, string alias) => 
             command.Find<IArgument>(alias)?.InputValues;
 
-        [Obsolete("Use command.IgnoreUnexpectedOperands. It now defaults from AppSettings.CommandDefaults.")]
+        [Obsolete("Use command.IgnoreUnexpectedOperands. It now defaults from AppSettings.")]
         public static bool GetIgnoreUnexpectedOperands(this Command command, AppSettings appSettings)
         {
             if (appSettings == null)
@@ -122,7 +122,7 @@ namespace CommandDotNet
             return command.IgnoreUnexpectedOperands;
         }
 
-        [Obsolete("Use command.ArgumentSeparatorStrategy. It now defaults from AppSettings.CommandDefaults.")]
+        [Obsolete("Use command.ArgumentSeparatorStrategy. It now defaults from AppSettings.")]
         public static ArgumentSeparatorStrategy GetArgumentSeparatorStrategy(this Command command, AppSettings appSettings)
         {
             if (appSettings == null)

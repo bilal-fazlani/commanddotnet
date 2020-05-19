@@ -11,12 +11,12 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
     {
         private readonly AppSettings _endOfOptionsSettings = new AppSettings
         {
-            CommandDefaults = { ArgumentSeparatorStrategy = ArgumentSeparatorStrategy.EndOfOptions }
+            DefaultArgumentSeparatorStrategy = ArgumentSeparatorStrategy.EndOfOptions
         };
 
         private readonly AppSettings _passThruSettings = new AppSettings
         {
-            CommandDefaults = { ArgumentSeparatorStrategy = ArgumentSeparatorStrategy.PassThru }
+            DefaultArgumentSeparatorStrategy = ArgumentSeparatorStrategy.PassThru
         };
 
         public ArgumentSeparatorTests(ITestOutputHelper output)
@@ -34,7 +34,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
         public void ArgumentSeparatorStrategy_UseCommandAttribute_DefaultFromAppSettings(
             ArgumentSeparatorStrategy appSettingsStrategy, string command, ArgumentSeparatorStrategy expectedStrategy)
         {
-            var appSettings = new AppSettings {CommandDefaults = {ArgumentSeparatorStrategy = appSettingsStrategy}};
+            var appSettings = new AppSettings {DefaultArgumentSeparatorStrategy = appSettingsStrategy};
             new AppRunner<SettingsApp>(appSettings)
                 .StopAfter(MiddlewareStages.ParseInput)
                 .RunInMem(command)
@@ -102,7 +102,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
         [Fact]
         public void Given_EndOfOptions_And_IgnoreUnexpected_Enabled_When_Separator_OperandValueWithDash_OperandsAreParsed_And_ExtraArgsAreIgnoredAndCaptured()
         {
-            var appSettings = _endOfOptionsSettings.Clone(s => s.CommandDefaults.IgnoreUnexpectedOperands = true);
+            var appSettings = _endOfOptionsSettings.Clone(s => s.IgnoreUnexpectedOperands = true);
 
             var result = new AppRunner<Math>(appSettings)
                 .Verify(new Scenario
@@ -123,7 +123,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
         {
             // test examples in the help documentation
 
-            var appSettings = _endOfOptionsSettings.Clone(s => s.CommandDefaults.IgnoreUnexpectedOperands = true);
+            var appSettings = _endOfOptionsSettings.Clone(s => s.IgnoreUnexpectedOperands = true);
 
             var result = new AppRunner<Math>(appSettings)
                 .Verify(new Scenario
@@ -144,7 +144,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
         {
             // test examples in the help documentation
 
-            var appSettings = _endOfOptionsSettings.Clone(s => s.CommandDefaults.IgnoreUnexpectedOperands = true);
+            var appSettings = _endOfOptionsSettings.Clone(s => s.IgnoreUnexpectedOperands = true);
 
             var result = new AppRunner<Math>(appSettings)
                 .Verify(new Scenario
