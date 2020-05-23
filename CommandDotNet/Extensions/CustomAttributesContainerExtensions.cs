@@ -22,7 +22,7 @@ namespace CommandDotNet.Extensions
             return container
                 .GetCustomAttributes<T>()
                 .SingleOrDefaultOrThrow(
-                () => throw new AppRunnerException($"attempted to get a single {typeof(T).Name} from {container} but multiple exist"));
+                () => throw new InvalidConfigurationException($"attempted to get a single {typeof(T).Name} from {container} but multiple exist"));
         }
 
         public static IEnumerable<T> GetCustomAttributes<T>(this ICustomAttributesContainer container) where T : Attribute

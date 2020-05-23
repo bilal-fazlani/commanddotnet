@@ -108,7 +108,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 {
                     if (next == null)
                     {
-                        throw new AppRunnerException(
+                        throw new InvalidConfigurationException(
                             $"Invalid operation. {nameof(ExecutionDelegate)} {_nextParameterInfo.Name} parameter not provided for method: {_nextParameterInfo.Member.FullName()}. " +
                             $"Check middleware to ensure it hasn't misconfigured the {nameof(CommandContext.InvocationPipeline)}");
                     }

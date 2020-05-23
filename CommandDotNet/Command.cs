@@ -170,7 +170,7 @@ namespace CommandDotNet
             {
                 var message =
                     $"The last operand '{lastOperand.Name}' accepts multiple values. No more operands can be added.";
-                throw new AppRunnerException(message);
+                throw new InvalidConfigurationException(message);
             }
             _operands.Add(operand);
             RegisterArgumentByAliases(operand);

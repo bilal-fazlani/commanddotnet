@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Linq;
 using System.Reflection;
+using CommandDotNet.Diagnostics;
 using static System.Environment;
 
 namespace CommandDotNet.Extensions
@@ -55,15 +56,26 @@ namespace CommandDotNet.Extensions
                 .OrderBy(p => p.Name)
                 .Select(p =>
                 {
-                    var value = p.GetValue(item);
-                    var stringValue = value is IIndentableToString logToString
-                        ? logToString.ToString(indent.Increment())
-                        : value;
-                    return $"{indent}{p.Name}: {stringValue}";
+                    var value = p.GetValue(item); 
+                    return $"{indent}{p.Name}: {value.ToIndentedString(indent)}";
                 })
                 .ToCsv(NewLine);
 
-            return $"{item.GetType().Name}:{NewLine}{props}";
+            return $"{indent}{item.GetType().Name}:{NewLine}{props}";
+        } 
+ 
+        /// <summary>
+        /// <see cref="Indent"/> is only used if the object is <see cref="IIndentableToString"/>
+        /// </summary>
+        internal static string? ToIndentedString(this object? value, Indent indent)
+        {
+            return value is IIndentableToString logToString
+                ? logToString.ToString(indent.Increment())
+                : value is Exception exception
+                    ? exception.Print(indent.Increment(), 
+                        includeProperties: true, 
+                        includeData: true)
+                    : value?.ToString();
         }
 
         internal static object CloneWithPublicProperties(this object original, bool recurse = true)

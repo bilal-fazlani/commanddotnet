@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.UnitTests.Extensions
         [Fact]
         public void GetCustomAttribute_ShouldFail_WhenMoreThanOne_WithActionalError()
         {
-            Assert.Throws<AppRunnerException>(
+            Assert.Throws<InvalidConfigurationException>(
                     () => new AttrProvider().GetCustomAttribute<MyAttribute>())
                 .Message.Should().Be("attempted to get a single MyAttribute from " +
                                      "CommandDotNet.Tests.UnitTests.Extensions.CustomAttributeContainerExtensionsTests" +

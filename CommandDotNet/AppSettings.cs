@@ -20,7 +20,7 @@ namespace CommandDotNet
             set
             {
                 if (value == BooleanMode.Unknown)
-                    throw new AppRunnerException("BooleanMode can not be set to BooleanMode.Unknown explicitly");
+                    throw new InvalidConfigurationException("BooleanMode can not be set to BooleanMode.Unknown explicitly");
                 _booleanMode = value;
             }
         }

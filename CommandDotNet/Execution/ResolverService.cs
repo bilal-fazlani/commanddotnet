@@ -50,7 +50,7 @@ namespace CommandDotNet.Execution
 
             if (ctor == null)
             {
-                throw new AppRunnerException(
+                throw new InvalidConfigurationException(
                     $"No viable constructors found for {classType}. " +
                     $"Constructor can only contain parameters of type: {parameterResolversByType.Keys.ToOrderedCsv()}");
             }

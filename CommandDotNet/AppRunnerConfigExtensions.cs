@@ -247,9 +247,9 @@ namespace CommandDotNet
         {
             if (appRunner.AppSettings.DisableDirectives)
             {
-                throw new AppRunnerException("Directives are not enabled. " +
-                                             $"{nameof(AppRunner)}.{nameof(AppRunner.AppSettings)}.{nameof(AppSettings.DisableDirectives)} " +
-                                             "must not be set to true");
+                throw new InvalidConfigurationException("Directives are not enabled. " +
+                                                        $"{nameof(AppRunner)}.{nameof(AppRunner.AppSettings)}.{nameof(AppSettings.DisableDirectives)} " +
+                                                        "must not be set to true");
             }
         }
     }
