@@ -44,9 +44,9 @@ namespace CommandDotNet.Execution
         public string ToString(Indent indent)
         {
             return $"{nameof(InvocationStep)}:{NewLine}" +
-                   $"{indent}{nameof(Command)}={Command?.Name}{NewLine}" +
-                   $"{indent}{nameof(Invocation)}={Invocation?.MethodInfo?.FullName(true)}{NewLine}" +
-                   $"{indent}{nameof(Instance)}={Instance}";
+                   $"{indent}{nameof(Command)}:{Command?.Name}{NewLine}" +
+                   $"{indent}{nameof(Invocation)}:{Invocation?.ToIndentedString(indent.Increment())}{NewLine}" +
+                   $"{indent}{nameof(Instance)}:{Instance}";
         }
     }
 }

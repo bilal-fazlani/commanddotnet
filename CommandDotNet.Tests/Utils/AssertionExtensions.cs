@@ -37,7 +37,7 @@ namespace CommandDotNet.Tests.Utils
             where TInterceptorClass : class => 
             ctx.ParamValuesShouldBe<TInterceptorClass>();
 
-        public static void ParamValuesShouldBe<TInterceptorClass>(this CommandContext ctx, params object[] values)
+        public static void ParamValuesShouldBe<TInterceptorClass>(this CommandContext ctx, params object?[] values)
             where TInterceptorClass : class
         {
             var invocation = ctx.GetInterceptorInvocationInfo<TInterceptorClass>();

@@ -206,7 +206,7 @@ namespace CommandDotNet.Parsing
 
         private static ICollection<ValueFromToken> GetAlreadyParsedValues(this IArgument argument)
         {
-            // in most cases, this will be the first or only InputValues
+            // in most cases, this will be the first and only InputValues
             var source = Constants.InputValueSources.Argument;
             var parserValues = argument.InputValues.FirstOrDefault(iv => iv.Source == source);
 
