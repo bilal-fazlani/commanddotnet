@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using CommandDotNet.Logging;
@@ -34,7 +35,7 @@ namespace CommandDotNet.Builders
         /// <summary>The entry assembly. Could be an exe or dll.</summary>
         public Assembly EntryAssembly { get; }
 
-        /// <summary>The file name used to execute the app</summary>
+        /// <summary>The full path to the file used to execute the app</summary>
         public string FilePath { get; }
 
         /// <summary>The file name used to execute the app</summary>
@@ -57,6 +58,12 @@ namespace CommandDotNet.Builders
             _version = version;
         }
 
+        public static AppInfo GetAppInfo()
+        {
+            return Instance;
+        }
+
+        [Obsolete("Use GetAppInfo() without parameters. This method is will be made internal for tests only.")]
         public static AppInfo GetAppInfo(CommandContext commandContext)
         {
             var svcs = commandContext.AppConfig.Services;
