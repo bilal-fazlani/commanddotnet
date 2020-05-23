@@ -24,12 +24,6 @@ namespace CommandDotNet.Diagnostics
                 : ex.InnerException?.GetCommandContext();
         }
 
-        [Conditional("DEBUG")]
-        internal static void PrintStackTrace(this Exception ex, IConsole console)
-        {
-            console.Error.WriteLine(ex.StackTrace);
-        }
-
         public static string Print(this Exception ex, Indent? indent = null,
             bool includeProperties = false, bool includeData = false, bool includeStackTrace = false)
         {

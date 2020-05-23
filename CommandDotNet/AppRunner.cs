@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
@@ -149,24 +150,16 @@ namespace CommandDotNet
             {
                 ex.SetCommandContext(commandContext);
             }
-            switch (ex)
+            if (_handleErrorDelegate != null)
             {
-                case AppRunnerException appEx:
-                    console.Error.WriteLine(appEx.Message);
-                    appEx.PrintStackTrace(console);
-                    return ExitCodes.Error.Result;
-                default:
-                    if (_handleErrorDelegate != null)
-                    {
-                        return _handleErrorDelegate(ex.GetCommandContext(), ex);
-                    }
-
-                    ExceptionDispatchInfo.Capture(ex).Throw();
-
-                    // code not reached but required to compile
-                    // compiler does not realize previous line throws an exception
-                    return ExitCodes.Error.Result;
+                return _handleErrorDelegate(ex.GetCommandContext(), ex);
             }
+            
+            ExceptionDispatchInfo.Capture(ex).Throw();
+
+            // code not reached but required to compile
+            // compiler does not realize previous line throws an exception
+            return ExitCodes.Error.Result;
         }
 
         public override string ToString()

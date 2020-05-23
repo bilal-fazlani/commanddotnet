@@ -24,8 +24,8 @@ namespace CommandDotNet.Diagnostics
             var config = context.AppConfig.Services.GetOrDefault<CommandLoggerConfig>();
             if (config == null)
             {
-                throw new AppRunnerException($"{nameof(CommandLoggerMiddleware)} has not been registered. " +
-                                             $"Try `appRunner.{nameof(AppRunnerConfigExtensions.UseCommandLogger)}()`");
+                throw new InvalidConfigurationException($"{nameof(CommandLoggerMiddleware)} has not been registered. " +
+                                                        $"Try `appRunner.{nameof(AppRunnerConfigExtensions.UseCommandLogger)}()`");
             }
             if (context == null)
             {

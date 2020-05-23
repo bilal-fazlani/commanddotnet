@@ -97,11 +97,11 @@ namespace CommandDotNet.Parsing
 
             if (optionTokenType.IsClubbed)
             {
-                throw new AppRunnerException($"Bug: ExpandClubbedOptions transformation should have expanded all clubbed tokens: {token}");
+                throw new InvalidOperationException($"Bug: ExpandClubbedOptions transformation should have expanded all clubbed tokens: {token}");
             }
             if (optionTokenType.HasValue)
             {
-                throw new AppRunnerException($"Bug: SplitOptionAssignments transformation should have split values from all option tokens: {token}");
+                throw new InvalidOperationException($"Bug: SplitOptionAssignments transformation should have split values from all option tokens: {token}");
             }
 
             if (option.Arity.AllowsNone())
@@ -131,7 +131,7 @@ namespace CommandDotNet.Parsing
                 }
                 else if (option.Arity.AllowsNone())
                 {
-                    throw new AppRunnerException($"Bug: flag '{option.Name}' should have finished processing in {nameof(ParseOption)}");
+                    throw new InvalidOperationException($"Bug: flag '{option.Name}' should have finished processing in {nameof(ParseOption)}");
                 }
                 else if (values.Any())
                 {

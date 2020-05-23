@@ -165,7 +165,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             return argumentDef.Type.GetUnderlyingType() == typeof(bool)
                 ? optionAttr.BooleanMode
-                : throw new AppRunnerException(
+                : throw new InvalidConfigurationException(
                     $"BooleanMode is set to `{optionAttr.BooleanMode}` for a non boolean type. {argumentDef}");
         }
     }
