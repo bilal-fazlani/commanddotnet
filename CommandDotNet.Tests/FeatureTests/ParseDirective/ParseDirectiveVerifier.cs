@@ -40,9 +40,10 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
 
             args ??= "";
 
+            var helpRequested = args == "-h" || args.Contains(" -h") || args.Contains("-h ");
+            
             ContainsIf(showsHelp, "Usage: dotnet testhost.dll ");
-            ContainsIf(args == "-h" || args.Contains(" -h") || args.Contains("-h "),
-                "Help requested. Only token transformations are available.");
+            ContainsIf(helpRequested, "Help requested. Only token transformations are available.");
             ContainsIf(showsTokens, @"token transformations:
 
 >>> from shell");
@@ -98,7 +99,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                     When = {Args = $"{parse} {args}"},
                     Then =
                     {
-                        ExitCode = throwBeforeBind ? 1 : 0,
+                        ExitCode = throwBeforeBind || (showsHelp && !helpRequested) ? 1 : 0,
                         Output = expectedResult,
                         OutputContainsTexts = contains,
                         OutputNotContainsTexts = notContains

@@ -52,6 +52,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                     When = { Args = null },
                     Then =
                     {
+                        ExitCode = ExitCodes.Error.Result,
                         Output = @"Usage: dotnet testhost.dll [command]
 
 Commands:
