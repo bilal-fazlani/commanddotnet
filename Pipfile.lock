@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ad39d1c78911f9afae794ec2508ccfe57679a280e7544fa4e65c380dae15a7dd"
+            "sha256": "40ea52ecc4ea48e51fc9385c4f3eeb1ddf9f5333877dc05184f3d646b9c854c3"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -73,6 +73,7 @@
                 "sha256:1fafe3f1ecabfb514a5285fca634a53c1b32a81cb0feb154264d55bf2ff22c17",
                 "sha256:c467cd6233885534bf0fe96e62e3cf46cfc1605112356c4f9981512b8174de59"
             ],
+            "index": "pypi",
             "version": "==3.2.2"
         },
         "markupsafe": {
@@ -118,7 +119,16 @@
                 "sha256:096f52ff52c02c7e90332d2e53da862fde5c062086e1b5356a6e392d5d60f5e9",
                 "sha256:f0b61e5402b99d7789efa032c7a74c90a20220a9c81749da06dbfbcbd52ffb39"
             ],
+            "index": "pypi",
             "version": "==1.1.2"
+        },
+        "mkdocs-autolinks-plugin": {
+            "hashes": [
+                "sha256:7e3e03f6f80034b6b3773a2a08bfb27f526329f7247caadea688bf763d31b764",
+                "sha256:d3d797dd4a7bf71bc67901c6ce89e82625c6cff9af1f76525a6597fa2c533c7f"
+            ],
+            "index": "pypi",
+            "version": "==0.2.0"
         },
         "mkdocs-material": {
             "hashes": [
@@ -146,6 +156,7 @@
                 "sha256:647344a061c249a3b74e230c739f434d7ea4d8b1d5f3721bc0f3558049b38f44",
                 "sha256:ff7a40b4860b727ab48fad6360eb351cc1b33cbf9b15a0f689ca5353e9463324"
             ],
+            "index": "pypi",
             "version": "==2.6.1"
         },
         "pymdown-extensions": {
@@ -153,6 +164,7 @@
                 "sha256:5bf93d1ccd8281948cd7c559eb363e59b179b5373478e8a7195cf4b78e3c11b6",
                 "sha256:8f415b21ee86d80bb2c3676f4478b274d0a8ccb13af672a4c86b9ffd22bd005c"
             ],
+            "index": "pypi",
             "version": "==7.1"
         },
         "pyyaml": {
