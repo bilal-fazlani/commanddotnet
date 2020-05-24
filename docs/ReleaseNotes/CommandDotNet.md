@@ -1,5 +1,27 @@
 # CommandDotNet
 
+## 4.1.0
+
+## unrequested help returns 1 instead of 0
+
+When help is shown because a given command is not executable, an error code of 1 is returned to indicate a command was not successfully run.
+
+## new types supported for arguments
+
+In addition to types with a TypeConverter or Ctor with a single string parameter. any type with a public static Parse method with a single string parameter are now eligible as types for arguments.
+
+## API
+
+* AppRunnerException will not be passed to the error handler. Previously they were always printed to the console.
+
+### Obsoleted
+
+* `ArgumentArity.Default(IArgument)` for the other ArgumentArity.Default method. It was inadequate in some cases and could lead to bugs.
+* `BooleanMode.Unknown` in favor of `BooleanMode?`.
+* `AppInfo.GetAppinfo(CommandContext)` in favor of `AppInfo.GetAppInfo()`. The former exists to support CommandDotNet tests.
+* `Command.GetIgnoreUnexpectedOperands(AppSettings)` & `Command.GetArgumentSeparatorStrategy(AppSettings)` in favor of the properties on the command which reflect AppSettings defaults.
+
+
 ## 4.0.2
 
 Make FlattenedArgumentModels via the IInvocation. 
