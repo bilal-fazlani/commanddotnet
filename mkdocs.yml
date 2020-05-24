@@ -84,7 +84,7 @@ theme:
     - tabs
     - instant
   name: 'material'
-  custom_dir: docs/overrides
+  # custom_dir: overrides
   icon:
     repo: fontawesome/brands/github
   favicon: 'img/favicon.ico'
@@ -127,11 +127,11 @@ markdown_extensions:
 
 plugins:
   - search
+  # - git-revision-date-localized
 
 # Customization
 extra:
   version: '4'
-  legacy: false
   social:
     - icon: fontawesome/brands/github
       link: 'https://github.com/bilal-fazlani'
