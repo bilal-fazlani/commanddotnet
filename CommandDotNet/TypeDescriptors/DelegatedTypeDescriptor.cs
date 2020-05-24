@@ -9,8 +9,8 @@ namespace CommandDotNet.TypeDescriptors
 
         public DelegatedTypeDescriptor(string displayName, Func<string, object> parseValueDelegate)
         {
-            _displayName = displayName;
-            _parseValueDelegate = parseValueDelegate;
+            _displayName = displayName ?? throw new ArgumentNullException(nameof(displayName));
+            _parseValueDelegate = parseValueDelegate ?? throw new ArgumentNullException(nameof(parseValueDelegate));
         }
 
         public bool CanSupport(Type type)
