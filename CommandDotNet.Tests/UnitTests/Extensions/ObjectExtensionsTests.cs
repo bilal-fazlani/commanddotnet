@@ -62,12 +62,12 @@ Text: ");
 
         private class TestObject
         {
-            public string Text { get; }
+            public string? Text { get; }
             // an IIndentable
-            public AppHelpSettings Settings { get; }
-            public Exception Error { get; }
+            public AppHelpSettings? Settings { get; }
+            public Exception? Error { get; }
 
-            public TestObject(string text = null, AppHelpSettings settings = null, Exception error = null)
+            public TestObject(string? text = null, AppHelpSettings? settings = null, Exception? error = null)
             {
                 Text = text;
                 Settings = settings;
