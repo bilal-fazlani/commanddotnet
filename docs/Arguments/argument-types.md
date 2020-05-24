@@ -5,6 +5,7 @@ Arguments can be defined with any type that...
 * is a primitive type: 
 * contains a string constructor
 * has a TypeConverter
+* has a `public static Parse(string)` method
 
 Includes, but not limited to:
 
