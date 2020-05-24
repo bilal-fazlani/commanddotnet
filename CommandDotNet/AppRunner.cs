@@ -154,6 +154,12 @@ namespace CommandDotNet
             {
                 return _handleErrorDelegate(ex.GetCommandContext(), ex);
             }
+
+            if (ex.GetType().Namespace.StartsWith(nameof(CommandDotNet)))
+            {
+                console.Error.WriteLine(ex.Print(includeProperties: true));
+                return ExitCodes.Error.Result;
+            }
             
             ExceptionDispatchInfo.Capture(ex).Throw();
 
