@@ -1,0 +1,17 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+mkdocs = "==1.1.2"
+mkdocs-material = "==5.2.1"
+pymdown-extensions = "==7.1"
+mkdocs-autolinks-plugin = "==0.2.0"
+Pygments = "==2.6.1"
+Markdown = "==3.2.2"
+
+[requires]
+python_version = "3.7"

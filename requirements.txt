@@ -1,7 +1,0 @@
-# Direct dependencies
-mkdocs==1.1
-mkdocs-material==5.1.1
-Pygments==2.6.1
-markdown==3.2.1
-pymdown-extensions==7.0
-mkdocs-autolinks-plugin==0.2.0
