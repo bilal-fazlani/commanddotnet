@@ -61,7 +61,7 @@ namespace CommandDotNet.Help
             if (!targetCommand.IsExecutable)
             {
                 ctx.ShowHelpOnExit = true;
-                return ExitCodes.Success;
+                return ExitCodes.Error;
             }
 
             return next(ctx);
