@@ -3,7 +3,7 @@ site_description: Model your command line application interface in a class
 repo_name: 'bilal-fazlani/commanddotnet'
 repo_url: 'https://github.com/bilal-fazlani/commanddotnet'
 
-strict: false
+strict: true
 
 nav:
     - Documentation:
