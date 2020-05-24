@@ -24,10 +24,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 When = {Args = "Do -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll Do <arg>
+                    Output = @"Usage: dotnet testhost.dll Do <ctorArg> <parseArg>
 
 Arguments:
-  arg
+  ctorArg
+  parseArg
 "
                 }
             });
@@ -41,10 +42,11 @@ Arguments:
                 When = {Args = "DoList -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll DoList <args>
+                    Output = @"Usage: dotnet testhost.dll DoList [options]
 
-Arguments:
-  args
+Options:
+  -c | --ctorArgs
+  -p | --parseArgs
 "
                 }
             });
@@ -58,11 +60,13 @@ Arguments:
                 When = {Args = "Do -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll Do <arg>
+                    Output = @"Usage: dotnet testhost.dll Do <ctorArg> <parseArg>
 
 Arguments:
 
-  arg  <FILENAME>
+  ctorArg   <FILENAME>
+
+  parseArg  <DIRNAME>
 "
                 }
             });
@@ -76,11 +80,13 @@ Arguments:
                 When = {Args = "DoList -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll DoList <args>
+                    Output = @"Usage: dotnet testhost.dll DoList [options]
 
-Arguments:
+Options:
 
-  args (Multiple)  <FILENAME>
+  -c | --ctorArgs (Multiple)   <FILENAME>
+
+  -p | --parseArgs (Multiple)  <DIRNAME>
 "
                 }
             });
@@ -91,14 +97,19 @@ Arguments:
         {
             new AppRunner<App>().Verify(new Scenario
             {
-                When = {Args = "DoList some-value another-value"},
+                When = {Args = "DoList -c file1 -c file2 -p dir1 -p dir2"},
                 Then =
                 {
                     AssertContext = ctx => ctx.ParamValuesShouldBe(
                         new List<StringCtorObject>
                         {
-                            new StringCtorObject("some-value"),
-                            new StringCtorObject("another-value")
+                            new StringCtorObject("file1"),
+                            new StringCtorObject("file2")
+                        },
+                        new List<StaticParseObject>
+                        {
+                            StaticParseObject.Parse("dir1"),
+                            StaticParseObject.Parse("dir2")
                         })
                 }
             });
@@ -109,22 +120,24 @@ Arguments:
         {
             new AppRunner<App>().Verify(new Scenario
             {
-                When = {Args = "Do some-value"},
+                When = {Args = "Do file1 dir1"},
                 Then =
                 {
                     AssertContext = ctx => ctx.ParamValuesShouldBe(
-                        new StringCtorObject("some-value"))
+                        new StringCtorObject("file1"), StaticParseObject.Parse("dir1"))
                 }
             });
         }
 
         private class App
         {
-            public void Do(StringCtorObject arg)
+            public void Do(StringCtorObject ctorArg, StaticParseObject parseArg)
             {
             }
 
-            public void DoList(List<StringCtorObject> args)
+            public void DoList(
+                [Option(ShortName = "c")] List<StringCtorObject> ctorArgs,
+                [Option(ShortName = "p")] List<StaticParseObject> parseArgs)
             {
             }
         }
@@ -136,6 +149,16 @@ Arguments:
             public StringCtorObject(string filename)
             {
                 Filename = filename;
+            }
+        }
+
+        private class StaticParseObject
+        {
+            public string Dirname { get; private set; }
+
+            public static StaticParseObject Parse(string dirname)
+            {
+                return new StaticParseObject{Dirname = dirname};
             }
         }
     }

@@ -96,7 +96,7 @@ Arguments:
             public int Length { get; set; }
             public int Width { get; set; }
 
-            public static Square Parse(string value)
+            public static Square ParseSquare(string value)
             {
                 var parts = value.Split('x');
                 var length = int.Parse(parts[0]);
@@ -119,7 +119,7 @@ Arguments:
 
             public object ParseString(IArgument argument, string value)
             {
-                return Square.Parse(value);
+                return Square.ParseSquare(value);
             }
         }
     }
