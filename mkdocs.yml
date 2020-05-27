@@ -1,5 +1,5 @@
 site_name: CommandDotNet
-site_description: Model your command line application interface in a class
+site_description: A modern framework for building modern CLI apps
 repo_name: 'bilal-fazlani/commanddotnet'
 repo_url: 'https://github.com/bilal-fazlani/commanddotnet'
 
