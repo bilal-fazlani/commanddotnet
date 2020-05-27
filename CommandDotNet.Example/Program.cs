@@ -2,6 +2,7 @@
 using CommandDotNet.Diagnostics;
 using CommandDotNet.FluentValidation;
 using CommandDotNet.NameCasing;
+using CommandDotNet.ReadLineRepl;
 
 namespace CommandDotNet.Example
 {
@@ -24,7 +25,7 @@ namespace CommandDotNet.Example
                 .UseLog2ConsoleDirective()
                 .UseNameCasing(Case.KebabCase)
                 .UseFluentValidation()
-                .UseInteractiveMode("Example")
+                .UseRepl(replConfig: new ReplConfig {AppName = "Example", ReplOption = {LongName = "interactive", ShortName = 'i'}})
                 .UseDefaultsFromAppSetting(appSettings, includeNamingConventions: true);
         }
     }

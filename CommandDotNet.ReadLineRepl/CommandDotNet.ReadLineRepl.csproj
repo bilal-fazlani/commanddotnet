@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <AssemblyTitle>CommandDotNet.ReadLineRepl</AssemblyTitle>
+        <Description>Provides an interactive session using the GNU style readline package</Description>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Remove="output\**" />
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Remove="output\**" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Remove="output\**" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="ReadLine" Version="2.0.1" />
+        <PackageReference Include="Nullable" Version="1.2.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\CommandDotNet\CommandDotNet.csproj" />
+    </ItemGroup>
+
+</Project>
