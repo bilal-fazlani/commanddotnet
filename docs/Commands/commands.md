@@ -38,7 +38,7 @@ Command methods must:
 
 Command methods may be async.
 
-When the return type is `int` the value is used as the exit code.
+When the return type is `int` or `Task<int>` the value is used as the exit code.
 
 ## Command Attribute
 
@@ -78,6 +78,9 @@ Arguments:
 more details and examples
 
 ```
+
+!!! Note
+    Use of `[Command]` attribute is optional and only required when you want to add any customizations. 
 
 Use `IgnoreUnexpectedOperands` & `ArgumentSeparatorStrategy` to override argument parsing behavior for the command. See [Argument Separator](../ArgumentValues/argument-separator.md) for more details.
 
@@ -134,7 +137,7 @@ Now executed as
 dotnet add.dll Add 1 2
 ```
 
-Notice the redundant `Add` command. Fix this with the `[DefaultMethod]` attribute.
+If the root command has only one command, you may want to exectute it by default without specifying any commands names. We can do this with the `[DefaultMethod]` attribute.
 
 ```c#
 public class Calculator
