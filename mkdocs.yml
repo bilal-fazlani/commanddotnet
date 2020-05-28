@@ -94,7 +94,7 @@ theme:
   palette:
     scheme: light
     primary: 'black'
-    accent: 'red'  
+    accent: 'teal'  
   logo: 'img/small-logo.svg'
 
 google_analytics:
