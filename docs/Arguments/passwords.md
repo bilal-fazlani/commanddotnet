@@ -19,10 +19,18 @@ public class Api
 
 ```
 
-
-!!!Warning
-    The best practice is not to require a password. This is *only slightly* more secure than using a string. For example, if the user provides a password as one of input arguments, it may be logged via [parse token transformations](../Diagnostics/parse-directive.md#token-transformations)
-
 ## Prompting
 
 When using `Password` with the built-in [prompting features](../ArgumentValues/prompting.md), password prompts will hide all characters.
+
+
+## Caution
+
+Best practice is to avoid passwords. Using `Password` is *only slightly* more secure than using a string. 
+If the user provides a password as one of the input arguments, it may be logged via [parse token transformations](../Diagnostics/parse-directive.md#token-transformations) in some cases.
+The raw values can still be accessed via `Environment.CommandLine` and `CommandContext.OriginalInput` and accidentally exposed in logging.
+
+## Safer alternatives
+
+* Use application tokens where possible, accessed via config files or environment variables.
+* If a password is required, [prompt the user within the command](../ArgumentValues/prompting.md/#prompting-from-within-the-command-method). Use the 'isPassword' parameter to hide the input.
