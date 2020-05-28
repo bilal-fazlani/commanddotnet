@@ -43,7 +43,7 @@ namespace CommandDotNet.Help
             var parseResult = ctx.ParseResult!;
             var targetCommand = parseResult.TargetCommand;
 
-            if (parseResult.ParseError != null)
+            if (parseResult.ParseError is { })
             {
                 var console = ctx.Console;
                 console.Error.WriteLine(parseResult.ParseError.Message);

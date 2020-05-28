@@ -78,8 +78,6 @@ nav:
       - ReleaseNotes/CommandDotNet.NewerReleasesAlerts.md
       - ReleaseNotes/CommandDotNet.TestTools.md
       - ReleaseNotes/whats-new-in-v3.md
-    - Roadmap: 
-      - ReleaseNotes/roadmap.md
     - Legacy Versions:
       - legacy-versions.md
 theme:
