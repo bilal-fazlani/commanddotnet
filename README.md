@@ -17,17 +17,15 @@
 
 ---
 
-Documentation: https://commanddotnet.bilal-fazlani.com
+### A modern framework for building modern CLI apps
 
-***Model your command line application interface in a class***
-
-The purpose of this **framework** is to let developers focus on the core logic of command line application by defining commands with methods and arguments with parameters. 
-
-*Out-of-the-box* support for help documentation, subcommmands, dependency injection, validation, piping, prompting, passwords, response files and more.  See the [features page](https://commanddotnet.bilal-fazlani.com/features). 
+Out of the box support for commands, sub-commands, validations, dependency injection, piping and streaming, enums & custom types, typo suggestions, prompting, passwords, response files and more. See the [features page](https://commanddotnet.bilal-fazlani.com/features). 
 
 Includes [test tools](https://commanddotnet.bilal-fazlani.com/test-tools) used by the framework to test all features of the framework.
 
 Modify and extend the functionality of the framework through configuration and middleware.
+
+### Documentation 👉 https://commanddotnet.bilal-fazlani.com
 
 ### Example
 
