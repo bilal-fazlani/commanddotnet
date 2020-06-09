@@ -3,6 +3,7 @@ using CommandDotNet.Diagnostics;
 using CommandDotNet.FluentValidation;
 using CommandDotNet.NameCasing;
 using CommandDotNet.Spectre;
+using CommandDotNet.Repl;
 
 namespace CommandDotNet.Example
 {
@@ -30,7 +31,8 @@ namespace CommandDotNet.Example
                 .UseLocalizeDirective()
                 .UseLog2ConsoleDirective()
                 .UseFluentValidation()
-                .UseInteractiveMode("Example")
+                //.UseRepl()
+                .UseRepl(replOptionInfoForRootCommand: ReplOptionInfo.Default)
                 .UseDefaultsFromAppSetting(appConfigSettings, includeNamingConventions: true);
         }
     }

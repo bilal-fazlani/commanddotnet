@@ -1,27 +1,54 @@
 ﻿using System;
 using System.Linq;
-using CommandDotNet.Builders;
 using CommandDotNet.Tokens;
 
-namespace CommandDotNet.Example
+namespace CommandDotNet.Repl
 {
-    public class InteractiveSession
+    public class ReplSession
     {
-        private readonly AppRunner _appRunner;
-        private readonly string _appName;
-        private readonly CommandContext _context;
+        /* Test:
+         * SessionContext contains parent
+         * - options provided during session creation are available
+         *
+         * - CtrlC
+         *   - if command running in session
+         *     - cancels command
+         *     - else closes session
+         * - prints session init message
+         * - exit & quit closes session
+         * - help shows session help
+         * - -h & --help show command help
+         * - can run commands and return to session
+         *
+         * - to support nested sessions
+         *   - ReplSession via parameter resolver
+         *   - ReplConfig can be changed and doesn't change the parent. i.e. different prompt text
+         *
+         * - ReplSession.Start works when called within an async method
+         */
 
-        public InteractiveSession(AppRunner appRunner, string appName, CommandContext context)
+        private readonly AppRunner _appRunner;
+        private ReplConfig _replConfig;
+
+        public ReplConfig ReplConfig
         {
-            _appRunner = appRunner;
-            _appName = appName;
-            _context = context;
+            get => _replConfig;
+            set => _replConfig = value ?? throw new ArgumentNullException(nameof(value));
+        }
+
+        public CommandContext SessionContext { get; }
+
+        public ReplSession(AppRunner appRunner, ReplConfig replConfig, CommandContext sessionContext)
+        {
+            _appRunner = appRunner ?? throw new ArgumentNullException(nameof(appRunner));
+            _replConfig = replConfig ?? throw new ArgumentNullException(nameof(replConfig));
+            SessionContext = sessionContext ?? throw new ArgumentNullException(nameof(sessionContext));
         }
 
         public void Start()
         {
-            var console = _context.Console;
-            var cancellationToken = _context.CancellationToken;
+            var console = SessionContext.Console;
+            var cancellationToken = SessionContext.CancellationToken;
 
             bool pressedCtrlC = false;
             Console.CancelKeyPress += (sender, args) =>
@@ -29,7 +56,10 @@ namespace CommandDotNet.Example
                 pressedCtrlC = true;
             };
 
-            PrintSessionInit();
+            var sessionInitMessage = ReplConfig.SessionInitMessageCallback(SessionContext);
+            var sessionHelpMessage = ReplConfig.SessionHelpMessageCallback(SessionContext);
+
+            console.WriteLine(sessionInitMessage);
 
             bool pendingNewLine = false;
             void Write(string? value = null)
@@ -55,8 +85,8 @@ namespace CommandDotNet.Example
             while (!cancellationToken.IsCancellationRequested)
             {
                 EnsureNewLine();
-                Write(">>>");
-                var input = console.In.ReadLine();
+                Write(ReplConfig.PromptTextCallback(SessionContext));
+                var input = ReplConfig.ReadLine!(SessionContext);
                 if (input is null || pressedCtrlC)
                 {
                     pressedCtrlC = false;
@@ -79,7 +109,7 @@ namespace CommandDotNet.Example
                         case "quit":
                             return;
                         case "help":
-                            PrintSessionHelp();
+                            console.WriteLine(sessionHelpMessage);
                             continue;
                     }
                     if (singleArg == Environment.NewLine)
@@ -92,23 +122,6 @@ namespace CommandDotNet.Example
                 _appRunner.Run(args);
             }
             EnsureNewLine();
-        }
-
-        private void PrintSessionInit()
-        {
-            var appInfo = AppInfo.Instance;
-            var console = _context.Console;
-            console.WriteLine($"{_appName} {appInfo.Version}");
-            console.WriteLine("Type 'help' to see interactive options");
-            console.WriteLine("Type '-h' or '--help' to options for commands");
-            console.WriteLine("Type 'exit', 'quit' or 'Ctrl+C' to exit.");
-        }
-
-        private void PrintSessionHelp()
-        {
-            var console = _context.Console;
-            console.WriteLine("Type '-h' or '--help' to options for commands");
-            console.WriteLine("Type 'exit', 'quit' or 'Ctrl+C' to exit.");
         }
     }
 }

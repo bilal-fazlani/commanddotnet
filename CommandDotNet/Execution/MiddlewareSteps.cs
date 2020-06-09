@@ -58,6 +58,8 @@
             public static MiddlewareStep PrintHelpOnExit { get; } = DependencyResolver.BeginScope + 1000;
         }
 
+        public static MiddlewareStep ReplSession { get; } = Help.CheckIfShouldShowHelp - 3000;
+
         public static MiddlewareStep PipedInput { get; } =
             new(MiddlewareStages.PostParseInputPreBindValues, 0);
 
