@@ -77,6 +77,12 @@ namespace CommandDotNet.Extensions
                     : value?.ToString();
         }
 
+        internal static T CloneWithPublicProperties<T>(this T original, bool recurse = true)
+            where T: class
+        {
+            return (T) ((object)original).CloneWithPublicProperties(recurse);
+        }
+
         internal static object CloneWithPublicProperties(this object original, bool recurse = true)
         {
             if (original == null)

@@ -14,7 +14,7 @@ namespace CommandDotNet.Example.Tests
             Program.GetAppRunner()
                 .Verify(new Scenario
                 {
-                    When = {Args = null},
+                    When = {Args = "-h"},
                     Then =
                     {
                         OutputContainsTexts =
@@ -41,7 +41,7 @@ Example: example_app [debug] [parse] [log:info] math".Replace("\r\n", "\n")
             Program.GetAppRunner()
                 .Verify(new Scenario
                 {
-                    When = { Args = null },
+                    When = {Args = "-h"},
                     Then =
                     {
                         OutputContainsTexts =
