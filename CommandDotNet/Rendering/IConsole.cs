@@ -3,6 +3,11 @@
 
 // copied from System.CommandLine 
 
+using System;
+using System.Collections.Generic;
+using CommandDotNet.Execution;
+using CommandDotNet.Prompting;
+
 namespace CommandDotNet.Rendering
 {
     public interface IConsole :
