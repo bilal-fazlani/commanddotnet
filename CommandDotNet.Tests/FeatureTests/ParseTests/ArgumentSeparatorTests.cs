@@ -47,11 +47,11 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             new AppRunner<Math>(_passThruSettings)
                 .Verify(new Scenario
                 {
-                    When = {Args = "Add -1 -3"},
+                    When = {Args = "Concat -a -b"},
                     Then =
                     {
                         ExitCode = 1,
-                        OutputContainsTexts = { "Unrecognized option '-1'" }
+                        OutputContainsTexts = { "Unrecognized option '-a'" }
                     }
                 });
         }
@@ -62,11 +62,11 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             new AppRunner<Math>(_endOfOptionsSettings)
                 .Verify(new Scenario
                 {
-                    When = {Args = "Add -1 -3"},
+                    When = {Args = "Concat -a -b"},
                     Then =
                     {
                         ExitCode = 1,
-                        OutputContainsTexts = { "Unrecognized option '-1'" }
+                        OutputContainsTexts = { "Unrecognized option '-a'" }
                     }
                 });
         }
@@ -77,12 +77,12 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             var result = new AppRunner<Math>(_passThruSettings)
                 .Verify(new Scenario
                 {
-                    When = {Args = "Add -- -1 -3"},
-                    Then = { Output = "0" }
+                    When = {Args = "Concat -- -a -b"},
+                    Then = { Output = "" }
                 });
 
             result.CommandContext.ParseResult!.SeparatedArguments
-                .Should().BeEquivalentTo("-1", "-3");
+                .Should().BeEquivalentTo("-a", "-b");
         }
 
         [Fact]
@@ -91,12 +91,12 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             var result = new AppRunner<Math>(_endOfOptionsSettings)
                 .Verify(new Scenario
                 {
-                    When = {Args = "Add -- -1 -3"},
-                    Then = { Output = "-4" }
+                    When = {Args = "Concat -- -a -b"},
+                    Then = { Output = "-a-b" }
                 });
 
             result.CommandContext.ParseResult!.SeparatedArguments
-                .Should().BeEquivalentTo("-1", "-3");
+                .Should().BeEquivalentTo("-a", "-b");
         }
 
         [Fact]
@@ -107,15 +107,15 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             var result = new AppRunner<Math>(appSettings)
                 .Verify(new Scenario
                 {
-                    When = {Args = "Add -- -1 -3 -5 -7"},
-                    Then = { Output = "-4" }
+                    When = {Args = "Concat -- -a -b -c -d"},
+                    Then = { Output = "-a-b" }
                 });
 
             result.CommandContext.ParseResult!.RemainingOperands
-                .Should().BeEquivalentTo("-5", "-7");
+                .Should().BeEquivalentTo("-c", "-d");
 
             result.CommandContext.ParseResult!.SeparatedArguments
-                .Should().BeEquivalentTo("-1", "-3", "-5", "-7");
+                .Should().BeEquivalentTo("-a", "-b", "-c", "-d");
         }
 
         [Fact]
@@ -128,15 +128,15 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             var result = new AppRunner<Math>(appSettings)
                 .Verify(new Scenario
                 {
-                    When = {Args = "Add -- -1 -3 -- -5 -7"},
-                    Then = { Output = "-4" }
+                    When = {Args = "Concat -- -a -b -- -c -d"},
+                    Then = { Output = "-a-b" }
                 });
 
             result.CommandContext.ParseResult!.RemainingOperands
-                .Should().BeEquivalentTo("--", "-5", "-7");
+                .Should().BeEquivalentTo("--", "-c", "-d");
 
             result.CommandContext.ParseResult!.SeparatedArguments
-                .Should().BeEquivalentTo("-1", "-3", "--", "-5", "-7");
+                .Should().BeEquivalentTo("-a", "-b", "--", "-c", "-d");
         }
 
         [Fact]
@@ -149,20 +149,20 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             var result = new AppRunner<Math>(appSettings)
                 .Verify(new Scenario
                 {
-                    When = {Args = "Add -- -1 -3 __ -5 -7"},
-                    Then = { Output = "-4" }
+                    When = {Args = "Concat -- -a -b __ -c -d" },
+                    Then = { Output = "-a-b" }
                 });
 
             result.CommandContext.ParseResult!.RemainingOperands
-                .Should().BeEquivalentTo("__", "-5", "-7");
+                .Should().BeEquivalentTo("__", "-c", "-d");
 
             result.CommandContext.ParseResult!.SeparatedArguments
-                .Should().BeEquivalentTo("-1", "-3", "__", "-5", "-7");
+                .Should().BeEquivalentTo("-a", "-b", "__", "-c", "-d");
         }
 
         public class Math
         {
-            public void Add(IConsole console, int x, int y)
+            public void Concat(IConsole console, string x, string y)
             {
                 console.Write(x + y);
             }

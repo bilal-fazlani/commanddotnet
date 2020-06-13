@@ -115,7 +115,7 @@ namespace CommandDotNet
         private CommandContext BuildCommandContext(string[] args)
         {
             var tokens = args.Tokenize(includeDirectives: !AppSettings.DisableDirectives);
-            var appConfig = _appConfig ?? (_appConfig = _appConfigBuilder.Build());
+            var appConfig = _appConfig ??= _appConfigBuilder.Build();
             var commandContext = new CommandContext(args, tokens, appConfig);
             return commandContext;
         }
