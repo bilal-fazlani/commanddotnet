@@ -46,9 +46,9 @@ namespace CommandDotNet.Parsing
                         }
                         break;
                     case TokenType.Separator:
-                        throw new ArgumentOutOfRangeException($"The argument separator should have already been processed and removed: {token.RawValue}");
+                        throw new ArgumentOutOfRangeException($"Bug: The argument separator should have already been processed and removed: {token.RawValue}");
                     case TokenType.Directive:
-                        throw new ArgumentOutOfRangeException($"Directives should have already been processed and removed: {token.RawValue}");
+                        throw new ArgumentOutOfRangeException($"Bug: Directives should have already been processed and removed: {token.RawValue}");
                     default:
                         throw new ArgumentOutOfRangeException($"Unknown {nameof(TokenType)}: {token.TokenType}");
                 }

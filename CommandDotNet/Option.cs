@@ -31,15 +31,20 @@ namespace CommandDotNet
             bool assignToExecutableSubcommands = false,
             ValueProxy? valueProxy = null)
         {
-            if (longName.IsNullOrWhitespace() && shortName.IsNullOrWhitespace())
+            if (!shortName.HasValue && longName.IsNullOrWhitespace())
             {
-                throw new ArgumentException($"a long or short name is required. source:{definitionSource}");
+                throw new InvalidConfigurationException($"a long or short name is required. source:{definitionSource}");
+            }
+
+            if (shortName.HasValue && !char.IsLetter(shortName.Value))
+            {
+                throw new InvalidConfigurationException($"short name must be a letter but was '{shortName.Value}'. source:{definitionSource}");
             }
 
             if (isInterceptorOption && assignToExecutableSubcommands)
             {
-                throw new ArgumentException($"{nameof(isInterceptorOption)} and {nameof(assignToExecutableSubcommands)} are mutually exclusive. " +
-                                            $"They cannot both be true. source:{definitionSource}");
+                throw new InvalidConfigurationException($"{nameof(isInterceptorOption)} and {nameof(assignToExecutableSubcommands)} are mutually exclusive. " +
+                                                        $"They cannot both be true. source:{definitionSource}");
             }
 
             _valueProxy = valueProxy ?? new ValueProxy(() => _value, o => _value = o);
@@ -57,7 +62,7 @@ namespace CommandDotNet
                 ? new HashSet<string>()
                 : new HashSet<string>(aliases);
             if (!LongName.IsNullOrWhitespace()) _aliases.Add(LongName!);
-            if (!ShortName.IsNullOrWhitespace()) _aliases.Add(ShortName.ToString());
+            if (ShortName.HasValue) _aliases.Add(ShortName.ToString());
         }
 
         public string Name => LongName ?? ShortName.ToString();

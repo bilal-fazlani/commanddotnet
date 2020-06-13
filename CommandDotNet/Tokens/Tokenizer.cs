@@ -50,14 +50,30 @@ namespace CommandDotNet.Tokens
 
         public static bool TryTokenizeOption(string arg, out Token? token)
         {
-            if (arg.Length <= 1 || arg[0] != '-' || arg.StartsWith("---"))
+            bool IsShortOption(string arg)
+            {
+                return arg.Length > 1
+                       && arg[0] == '-'
+                       && arg[1] != '-'
+                       && char.IsLetter(arg[1]);
+            }
+
+            bool IsLongOption(string arg)
+            {
+                return arg.Length > 2
+                       && arg[0] == '-'
+                       && arg[1] == '-'
+                       && arg[2] != '-';
+            }
+
+            bool isShortOption = IsShortOption(arg);
+            bool isLongOption = !isShortOption && IsLongOption(arg);
+
+            if (!isShortOption && !isLongOption)
             {
                 token = null;
                 return false;
             }
-
-            bool isLongOption = arg[1] == '-';
-            bool isShortOption = !isLongOption;
 
             var value = arg.Substring(isShortOption ? 1 : 2);
             var assignmentIndex = value.IndexOfAny(new[] { ':', '=' });

@@ -18,7 +18,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             var result = new AppRunner<App>().Verify(new Scenario
             {
                 When = {Args = "Add -o * 2 3"},
-                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(2, 3, "*")}
+                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(2, 3, "*", 10) }
             });
         }
 
@@ -28,7 +28,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             new AppRunner<App>().Verify(new Scenario
             {
                 When = {Args = "Add 2 3 -o *"},
-                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(2, 3, "*")}
+                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(2, 3, "*", 10) }
             });
         }
 
@@ -38,7 +38,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             new AppRunner<App>().Verify(new Scenario
             {
                 When = { Args = "Add 2 -o * 3" },
-                Then = { AssertContext = ctx => ctx.ParamValuesShouldBe(2, 3, "*") }
+                Then = { AssertContext = ctx => ctx.ParamValuesShouldBe(2, 3, "*", 10) }
             });
         }
 
@@ -48,7 +48,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             new AppRunner<App>().Verify(new Scenario
             {
                 When = {Args = "Add 2 3 -o:*"},
-                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(2, 3, "*")}
+                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(2, 3, "*", 10)}
             });
         }
 
@@ -58,7 +58,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             new AppRunner<App>().Verify(new Scenario
             {
                 When = {Args = "Add 2 3 -o=*"},
-                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(2, 3, "*")}
+                Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(2, 3, "*", 10) }
             });
         }
 
@@ -102,9 +102,24 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             });
         }
 
+        [Fact]
+        public void NegativeNumbersCanBeUsedForArgumentValues()
+        {
+            new AppRunner<App>().Verify(new Scenario
+            {
+                When = { Args = "Add -b -10 -2 -3" },
+                Then =
+                {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(-2,-3,"+",-10)
+                }
+            });
+        }
+
         private class App
         {
-            public void Add(int x, int y, [Option(ShortName = "o")] string @operator = "+")
+            public void Add(int x, int y, 
+                [Option(ShortName = "o")] string @operator = "+",
+                [Option(ShortName = "b")] int @base = 10)
             {
             }
 
