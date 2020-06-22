@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Parsing;
@@ -18,8 +17,7 @@ namespace CommandDotNet.ClassModeling
             var parserFactory = new ParserFactory(commandContext.AppConfig.AppSettings);
 
             var arguments = commandContext.InvocationPipeline.All
-                .SelectMany(ic => ic.Command.Options.Cast<IArgument>().Union(ic.Command.Operands))
-                .Where(a => a.GetArgumentDef() != null);
+                .SelectMany(ic => ic.Command.Options.Cast<IArgument>().Union(ic.Command.Operands));
 
             if (arguments.Any(a => !TryBindArgument(a, console, parserFactory)))
             {

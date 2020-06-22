@@ -17,7 +17,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
         public void GivenDefaultValue_Should_DefaultForArgument()
         {
             new AppRunner<App>()
-                .UseDefaultsFromConfig(arg => Config("red"))
+                .UseDefaultsFromConfig(arg => Config(arg, "red"))
                 .Verify(new Scenario
                 {
                     When = {Args = "Do"},
@@ -29,7 +29,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
         public void GivenDefaultValue_Should_OverrideArgumentDefault()
         {
             new AppRunner<App>()
-                .UseDefaultsFromConfig(arg => Config("red"))
+                .UseDefaultsFromConfig(arg => Config(arg, "red"))
                 .Verify(new Scenario
                 {
                     When = {Args = "Default"},
@@ -41,7 +41,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
         public void GivenCsvValue_Should_DefaultForArgument()
         {
             new AppRunner<App>()
-                .UseDefaultsFromConfig(arg => Config("red,blue,green"))
+                .UseDefaultsFromConfig(arg => Config(arg, "red,blue,green"))
                 .Verify(new Scenario
                 {
                     When = {Args = "Do"},
@@ -90,9 +90,11 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                 });
         }
 
-        private static ArgumentDefault Config(string value)
+        private static ArgumentDefault? Config(IArgument argument, string value)
         {
-            return new ArgumentDefault("test", "key", value);
+            return argument.TypeInfo == TypeInfo.Flag
+                ? null
+                : new ArgumentDefault("test", "key", value);
         }
 
         public class App
