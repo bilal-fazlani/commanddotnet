@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Linq;
-using CommandDotNet.Builders;
 using CommandDotNet.Tokens;
 
-namespace CommandDotNet.Example
+namespace CommandDotNet.ReadLineRepl
 {
-    public class InteractiveSession
+    public class ReplSession
     {
         private readonly AppRunner _appRunner;
-        private readonly string _appName;
+        private readonly ReplConfig _replConfig;
         private readonly CommandContext _context;
 
-        public InteractiveSession(AppRunner appRunner, string appName, CommandContext context)
+        public ReplSession(AppRunner appRunner, ReplConfig replConfig, CommandContext context)
         {
             _appRunner = appRunner;
-            _appName = appName;
+            _replConfig = replConfig;
             _context = context;
         }
 
@@ -29,7 +28,10 @@ namespace CommandDotNet.Example
                 pressedCtrlC = true;
             };
 
-            PrintSessionInit();
+            var sessionInitMessage = _replConfig.GetSessionInitMessage(_context);
+            var sessionHelpMessage = _replConfig.GetSessionHelpMessage(_context);
+
+            console.WriteLine(sessionInitMessage);
 
             bool pendingNewLine = false;
             void Write(string? value = null)
@@ -56,7 +58,7 @@ namespace CommandDotNet.Example
             {
                 EnsureNewLine();
                 Write(">>>");
-                var input = console.In.ReadLine();
+                var input = ReadLine.Read();
                 if (input is null || pressedCtrlC)
                 {
                     pressedCtrlC = false;
@@ -79,7 +81,7 @@ namespace CommandDotNet.Example
                         case "quit":
                             return;
                         case "help":
-                            PrintSessionHelp();
+                            console.WriteLine(sessionHelpMessage);
                             continue;
                     }
                     if (singleArg == Environment.NewLine)
@@ -92,23 +94,6 @@ namespace CommandDotNet.Example
                 _appRunner.Run(args);
             }
             EnsureNewLine();
-        }
-
-        private void PrintSessionInit()
-        {
-            var appInfo = AppInfo.GetAppInfo(_context);
-            var console = _context.Console;
-            console.WriteLine($"{_appName} {appInfo.Version}");
-            console.WriteLine("Type 'help' to see interactive options");
-            console.WriteLine("Type '-h' or '--help' to options for commands");
-            console.WriteLine("Type 'exit', 'quit' or 'Ctrl+C' to exit.");
-        }
-
-        private void PrintSessionHelp()
-        {
-            var console = _context.Console;
-            console.WriteLine("Type '-h' or '--help' to options for commands");
-            console.WriteLine("Type 'exit', 'quit' or 'Ctrl+C' to exit.");
         }
     }
 }
