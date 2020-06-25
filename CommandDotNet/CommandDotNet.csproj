@@ -2,7 +2,15 @@
   <PropertyGroup>
     <AssemblyTitle>CommandDotNet</AssemblyTitle>
     <Description>Model your command line application interface in a class</Description>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="LibLog" Version="5.0.8">
       <PrivateAssets>all</PrivateAssets>
