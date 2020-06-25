@@ -4,7 +4,15 @@
     <AssemblyTitle>CommandDotNet.IoC.Autofac</AssemblyTitle>
     <Description>Configures Autofac for dependency injection</Description>
     <PackageTags>dotnet core; console; argument parse; autofac;</PackageTags>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Remove="output\**" />
   </ItemGroup>
