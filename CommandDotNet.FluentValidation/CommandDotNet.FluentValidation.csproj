@@ -3,7 +3,15 @@
     <AssemblyTitle>CommandDotNet.FluentValidation</AssemblyTitle>
     <Description>Uses FluentValidation validators to validate arguments defined using an IArgumentModel</Description>
       <PackageTags>dotnet core; console; argument parse; FluentValidation; validation;</PackageTags>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Remove="output\**" />
   </ItemGroup>
