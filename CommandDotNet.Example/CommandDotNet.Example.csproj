@@ -3,7 +3,15 @@
     <TargetFrameworks>netstandard2.0;netcoreapp2.0;netcoreapp3.1</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\CommandDotNet.FluentValidation\CommandDotNet.FluentValidation.csproj" />
     <ProjectReference Include="..\CommandDotNet.NewerReleasesAlerts\CommandDotNet.NewerReleasesAlerts.csproj" />
