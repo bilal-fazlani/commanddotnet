@@ -36,6 +36,27 @@ See 'dotnet testhost.dll Eat --help'"
         }
 
         [Fact]
+        public void Given_OperandValueTypo_OfEmptyString_DoesNotSuggest_AndHelpIsShown()
+        {
+            new AppRunner<CafeApp>()
+                .UseTypoSuggestions()
+                .Verify(new Scenario
+                {
+                    When = { Args = "Eat \"\"" },
+                    Then =
+                    {
+                        ExitCode = 1,
+                        OutputContainsTexts =
+                        {
+                            @"Unrecognized value '' for argument: meal
+
+Usage: dotnet testhost.dll Eat [options] <meal>"
+                        }
+                    }
+                });
+        }
+
+        [Fact]
         public void Given_OptionValueTypo_SuggestAllowedValues()
         {
             new AppRunner<CafeApp>()
@@ -54,6 +75,27 @@ Did you mean ...
    Cherry
 
 See 'dotnet testhost.dll Eat --help'"
+                        }
+                    }
+                });
+        }
+
+        [Fact]
+        public void Given_OptionValueTypo_OfEmptyString_DoesNotSuggest_AndHelpIsShown()
+        {
+            new AppRunner<CafeApp>()
+                .UseTypoSuggestions()
+                .Verify(new Scenario
+                {
+                    When = { Args = "Eat Dinner --fruit \"\"" },
+                    Then =
+                    {
+                        ExitCode = 1,
+                        OutputContainsTexts =
+                        {
+                            @"Unrecognized value '' for option: fruit
+
+Usage: dotnet testhost.dll Eat [options] <meal>"
                         }
                     }
                 });

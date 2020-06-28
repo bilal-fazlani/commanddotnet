@@ -63,6 +63,15 @@ namespace CommandDotNet.Parsing.Typos
 
         private static bool TrySuggestValues(CommandContext ctx, NotAllowedValueParseError notAllowedValue)
         {
+            if (notAllowedValue.Token.Value == "")
+            {
+                return false;
+            }
+
+            // TODO: how to handle list values?
+            //       duplicate values may be allowed in some cases but probably not the norm
+            //       should this excluded values that could result in duplicates?
+            //       add an option to allow/prevent duplicates for list arguments?
             return TrySuggest(ctx, notAllowedValue.Command, notAllowedValue.Token.Value,
                 notAllowedValue.Argument.AllowedValues.ToCollection(),
                 $"is not a valid {notAllowedValue.Argument.TypeInfo.DisplayName}", 
@@ -71,6 +80,11 @@ namespace CommandDotNet.Parsing.Typos
 
         private static bool TrySuggestArgumentNames(CommandContext ctx, Command command, Token token)
         {
+            if (token.Value == "")
+            {
+                return false;
+            }
+
             ICollection<string> GetOptionNames()
             {
                 // skip short names
@@ -106,12 +120,6 @@ namespace CommandDotNet.Parsing.Typos
             }
 
             var config = ctx.AppConfig.Services.GetOrThrow<Config>();
-
-            // TODO: allowed values
-            //   if the next value should be a value for an option, include allowed values for the option.
-            //   else include allowed values of the next expected operand
-            //      fyi: the next expected operand could be a list operand that already has values.
-            //           logic should remain the same, just be sure to include this test case
 
             var suggestions = candidates
                 .RankAndTrimSuggestions(typo, config.MaxSuggestionCount)

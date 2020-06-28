@@ -17,14 +17,9 @@ namespace CommandDotNet.Parsing.Typos
                 .Where(n => !n.IsNullOrWhitespace())
                 .Select(name =>
                 {
-                    var rearranged = GetRearranged(typo).ToList();
-
                     var distance = -Levenshtein.ComputeDistance(typo, name);
                     var startsWith = GetStartsWithLength(typo, name);
-                    var sameness = rearranged.Max(n => GetSamenessLength(n, name));
-                    sameness = sameness == typo.Length 
-                        ? sameness * 2 //found possible match of compound words out-of-order
-                        : Math.Max(sameness, GetContainsLength(typo, name));
+                    var sameness = GetMaxSamenessLength(typo, name);
                     return (name, distance, startsWith, sameness, score: distance + startsWith + sameness);
                 })
                 .OrderByDescending(v => v.score)
@@ -63,6 +58,15 @@ namespace CommandDotNet.Parsing.Typos
             return first.Length;
         }
 
+        private static int GetMaxSamenessLength(string typo, string name)
+        {
+            var rearrangedSameness = GetRearrangedSameness(typo, name);
+
+            return rearrangedSameness == typo.Length
+                ? rearrangedSameness * 2 //found possible match of compound words out-of-order
+                : Math.Max(rearrangedSameness, GetContainsLength(typo, name));
+        }
+
         private static int GetSamenessLength(string first, string second)
         {
             int same = 0;
@@ -81,23 +85,29 @@ namespace CommandDotNet.Parsing.Typos
             return large.ToLower().Contains(small.ToLower()) ? small.Length : 0;
         }
 
-        private static IEnumerable<string> GetRearranged(string typo)
+        private static int GetRearrangedSameness(string typo, string name)
         {
+            // checks cases where typo could be out-of-order spelling
+            // eg: nameuser -> username
+            int maxSameness = 0;
+
             for (int i = 0; i < typo.Length; i++)
             {
-                string name = "";
+                string rearrangedName = "";
 
                 if (i < typo.Length - 1)
                 {
-                    name += typo.Substring(i);
+                    rearrangedName += typo.Substring(i);
                 }
                 if (i > 0)
                 {
-                    name += typo.Substring(0, i);
+                    rearrangedName += typo.Substring(0, i);
                 }
 
-                yield return name;
+                maxSameness = Math.Max(maxSameness, GetSamenessLength(rearrangedName, name));
             }
+
+            return maxSameness;
         }
     }
 }
