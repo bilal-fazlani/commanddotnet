@@ -1,16 +1,30 @@
 # CommandDotNet
 
+## 4.1.3
+
+Fixes a bug where the TypoSuggest middleware threw an exception when an argument value was an empty string.
+
+## 4.1.2
+
+Fixes a bug where values were not assigned to options added via the builder.
+
+## 4.1.1
+
+Fixes a bug where a negative number can treated as a short name. eg. `add -5 10` would have resulted in -5 being parsed as an option. 
+
+Add restriction that short names can only be letters. If an arg can be parsed as a negative number, it will not be confused with a short name.
+
 ## 4.1.0
 
-## unrequested help returns 1 instead of 0
+### unrequested help returns 1 instead of 0
 
 When help is shown because a given command is not executable, an error code of 1 is returned to indicate a command was not successfully run.
 
-## new types supported for arguments
+### new types supported for arguments
 
 In addition to types with a TypeConverter or Ctor with a single string parameter. any type with a public static Parse method with a single string parameter are now eligible as types for arguments.
 
-## API
+### API
 
 * AppRunnerException will not be passed to the error handler. Previously they were always printed to the console.
 
