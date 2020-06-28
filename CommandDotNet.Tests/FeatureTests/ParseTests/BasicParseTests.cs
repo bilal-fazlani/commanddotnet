@@ -115,6 +115,32 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             });
         }
 
+        [Fact]
+        public void EmptyStringCanBeUsedForOptionValues()
+        {
+            new AppRunner<App>().Verify(new Scenario
+            {
+                When = { Args = "Add -o \"\" 0 0" },
+                Then =
+                {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(0,0,"",10)
+                }
+            });
+        }
+
+        [Fact]
+        public void EmptyStringCanBeUsedForOperandValues()
+        {
+            new AppRunner<App>().Verify(new Scenario
+            {
+                When = { Args = "Do \"\"" },
+                Then =
+                {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe("")
+                }
+            });
+        }
+
         private class App
         {
             public void Add(int x, int y, 

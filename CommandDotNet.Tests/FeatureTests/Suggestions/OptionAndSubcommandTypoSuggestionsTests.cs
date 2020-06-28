@@ -6,9 +6,9 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Suggestions
 {
-    public class TypoSuggestionsTests
+    public class OptionAndSubcommandTypoSuggestionsTests
     {
-        public TypoSuggestionsTests(ITestOutputHelper output)
+        public OptionAndSubcommandTypoSuggestionsTests(ITestOutputHelper output)
         {
             Ambient.Output = output;
         }
@@ -153,35 +153,7 @@ See 'dotnet testhost.dll User --help'
         }
 
         [Fact]
-        public void Given_ValueTypo_ShowsSimilarCommands()
-        {
-            new AppRunner<App>()
-                .UseTypoSuggestions()
-                .Verify(
-                    new Scenario
-                    {
-                        When = {Args = "egister"},
-                        Then =
-                        {
-                            ExitCode = 1,
-                            OutputContainsTexts =
-                            {
-                                @"'egister' is not a valid subcommand
-
-Did you mean ...
-   Register
-   Unregister
-   User
-
-See 'dotnet testhost.dll  --help'
-"
-                            }
-                        }
-                    });
-        }
-
-        [Fact]
-        public void Given_ValueType_AndManySimilarOptions_LimitResult()
+        public void Given_OptionTypo_AndManySimilarOptions_LimitResult()
         {
             new AppRunner<App>()
                 .UseTypoSuggestions(3)
@@ -209,7 +181,7 @@ See 'dotnet testhost.dll Similars --help'
         }
 
         [Fact]
-        public void Given_ValueType_NoSimilarOptions_ShowsHelp()
+        public void Given_OptionTypo_NoSimilarOptions_ShowsHelp()
         {
             new AppRunner<App>()
                 .UseTypoSuggestions()
@@ -217,6 +189,77 @@ See 'dotnet testhost.dll Similars --help'
                     new Scenario
                     {
                         When = {Args = "Similars --lala"},
+                        Then =
+                        {
+                            ExitCode = 1,
+                            OutputContainsTexts =
+                            {
+                                "Unrecognized option '--lala'"
+                            }
+                        }
+                    });
+        }
+
+        [Fact]
+        public void Given_ValueTypo_ShowsSimilarCommands()
+        {
+            new AppRunner<App>()
+                .UseTypoSuggestions()
+                .Verify(
+                    new Scenario
+                    {
+                        When = { Args = "egister" },
+                        Then =
+                        {
+                            ExitCode = 1,
+                            OutputContainsTexts =
+                            {
+                                @"'egister' is not a valid subcommand
+
+Did you mean ...
+   Register
+   Unregister
+   User
+
+See 'dotnet testhost.dll  --help'
+"
+                            }
+                        }
+                    });
+        }
+
+        [Fact]
+        public void Given_ValueTypo_OfEmptyString_DoesNotSuggest_AndHelpIsShown()
+        {
+            new AppRunner<App>()
+                .UseTypoSuggestions()
+                .Verify(
+                    new Scenario
+                    {
+                        When = { Args = "\"\"" },
+                        Then =
+                        {
+                            ExitCode = 1,
+                            OutputContainsTexts =
+                            {
+                                @"Unrecognized command or argument ''
+
+Usage: dotnet testhost.dll [command]
+"
+                            }
+                        }
+                    });
+        }
+
+        [Fact]
+        public void Given_ValueTypo_OfEmptyString_ShowsHelp()
+        {
+            new AppRunner<App>()
+                .UseTypoSuggestions()
+                .Verify(
+                    new Scenario
+                    {
+                        When = { Args = "Similars --lala" },
                         Then =
                         {
                             ExitCode = 1,

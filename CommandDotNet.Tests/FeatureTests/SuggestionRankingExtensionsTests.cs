@@ -86,5 +86,17 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Should()
                 .BeEquivalentSequenceTo(expectedSuggestions.Split(","));
         }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        [InlineData("/t")]
+        public void GivenWhitespace(string typo)
+        {
+            "one,two".Split(",")
+                .RankAndTrimSuggestions(typo, 5)
+                .Should()
+                .BeEmpty();
+        }
     }
 }
