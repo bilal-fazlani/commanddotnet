@@ -218,7 +218,7 @@ namespace CommandDotNet.Help
 
             return defaultValue.IsNullValue() 
                 ? null 
-                : $"[{defaultValue!.ValueToString()}]";
+                : $"[{defaultValue!.ValueToString( argument.TypeInfo.Type == typeof(Password) )}]";
         }
 
         /// <summary>Row with default indent of 2 spaces</summary>
