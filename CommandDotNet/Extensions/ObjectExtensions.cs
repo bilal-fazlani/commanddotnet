@@ -14,15 +14,14 @@ namespace CommandDotNet.Extensions
             return obj == null || obj == DBNull.Value;
         }
 
-        /// <summary></summary>
-        internal static string? ValueToString(this object value, bool isPassword = false)
+        internal static string? ValueToString(this object value, IArgument forArgument)
         {
             if (value.IsNullValue())
             {
                 return null;
             }
 
-            if (isPassword)
+            if (forArgument.IsObscured())
             {
                 return Password.ValueReplacement;
             }

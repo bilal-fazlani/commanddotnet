@@ -73,6 +73,22 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                 });
         }
 
+        [Fact]
+        public void Passwords_are_obscured()
+        {
+            var result = new AppRunner<App>()
+                .UseDefaultsFromEnvVar(new Dictionary<string, string> { { "pwd", "secret" } })
+                .Verify(new Scenario
+                {
+                    When = {Args = "Secure -h"},
+                    Then =
+                    {
+                        OutputContainsTexts = {"pwd  <TEXT>  [*****]"},
+                        OutputNotContainsTexts = {"secret"}
+                    }
+                });
+        }
+
         public class App
         {
             public void ByAttribute(
@@ -88,6 +104,9 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
             }
 
             public void List(string[] planets)
+            {
+            }
+            public void Secure([EnvVar("pwd")][Operand] Password pwd)
             {
             }
         }
