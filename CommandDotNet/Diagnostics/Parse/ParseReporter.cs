@@ -68,7 +68,7 @@ namespace CommandDotNet.Diagnostics.Parse
                 ? (argument.Arity.AllowsNone() ? "Flag" : null)
                 : argument.TypeInfo.DisplayName;
             writeln($"{indent}{argument.Name} <{displayName}>");
-            var valueString = argument.Value?.ValueToString(isObscured);
+            var valueString = argument.Value?.ValueToString(argument);
             writeln(valueString == null ? $"{indent2}value:" : $"{indent2}value: {valueString}");
 
             if (!argument.InputValues.IsNullOrEmpty())
@@ -102,8 +102,8 @@ namespace CommandDotNet.Diagnostics.Parse
                 // don't include source when the default is defined as a parameter or property.
                 // only show externally defined sources
                 writeln(argument.Default.Source.StartsWith("app.")
-                    ? $"{indent2}default: {argument.Default.Value.ValueToString(isObscured)}"
-                    : $"{indent2}default: source={argument.Default.Source} key={argument.Default.Key}: {argument.Default.Value.ValueToString(isObscured)}");
+                    ? $"{indent2}default: {argument.Default.Value.ValueToString(argument)}"
+                    : $"{indent2}default: source={argument.Default.Source} key={argument.Default.Key}: {argument.Default.Value.ValueToString(argument)}");
             }
             else
             {

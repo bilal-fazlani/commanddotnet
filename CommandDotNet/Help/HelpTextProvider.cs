@@ -218,7 +218,7 @@ namespace CommandDotNet.Help
 
             return defaultValue.IsNullValue() 
                 ? null 
-                : $"[{defaultValue!.ValueToString(argument.IsObscured())}]";
+                : $"[{defaultValue!.ValueToString(argument)}]";
         }
 
         /// <summary>Row with default indent of 2 spaces</summary>

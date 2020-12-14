@@ -113,7 +113,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                             argument,
                             value.Source,
                             value.Key,
-                            value.Value.ValueToString(argument.IsObscured())
+                            value.Value.ValueToString(argument)
                         );
                     }
                 }
