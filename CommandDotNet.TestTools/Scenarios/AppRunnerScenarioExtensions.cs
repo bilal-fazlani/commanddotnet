@@ -54,19 +54,12 @@ namespace CommandDotNet.TestTools.Scenarios
             {
                 AssertExitCodeAndErrorMessage(scenario, results);
 
-                var allText = results.Console.AllText();
-                if (config.TestToolName is { })
-                {
-                    allText = allText
-                        .Replace(config.TestToolName, "dotnet testhost.dll");
-                }
-
-                scenario.Then.AssertOutput?.Invoke(allText);
+                scenario.Then.AssertOutput?.Invoke(results.Console.AllText());
                 scenario.Then.AssertContext?.Invoke(results.CommandContext);
 
                 if (scenario.Then.Output != null)
                 {
-                    allText.ShouldBe(scenario.Then.Output, "output");
+                    results.Console.AllText().ShouldBe(scenario.Then.Output, "output");
                 }
 
                 results.LogResult(logLine);
