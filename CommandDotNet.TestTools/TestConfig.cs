@@ -62,8 +62,6 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public short? Priority { get; set; }
 
-        public string? TestToolName { get; set; }
-
         public class OnSuccessConfig
         {
             public PrintConfig Print { get; set; } = new PrintConfig();
