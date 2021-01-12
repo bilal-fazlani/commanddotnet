@@ -1,7 +1,6 @@
 ﻿
 using System;
 using System.Collections;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -14,13 +13,13 @@ namespace CommandDotNet.Diagnostics
     {
         internal static void SetCommandContext(this Exception ex, CommandContext ctx)
         {
-            ex.Data[typeof(CommandContext)] = ctx;
+            ex.Data[typeof(CommandContext)] = new NonSerializableWrapper<CommandContext>(ctx);
         }
 
         public static CommandContext? GetCommandContext(this Exception ex)
         {
             return ex.Data.Contains(typeof(CommandContext))
-                ? (CommandContext)ex.Data[typeof(CommandContext)]
+                ? ((NonSerializableWrapper<CommandContext>)ex.Data[typeof(CommandContext)]).Item
                 : ex.InnerException?.GetCommandContext();
         }
 
