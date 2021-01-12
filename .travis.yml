@@ -46,9 +46,11 @@ jobs:
           os: windows
           script:
             - choco install dotnetcore-sdk
+            - choco install dotnetfx
             - dotnet --version
             - dotnet restore
             - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
+            - dotnet test --framework net48 CommandDotNet.Tests/CommandDotNet.Tests.csproj
         #-----------------------------------
 
         #--------- DEPLOYMENT JOB ----------  
