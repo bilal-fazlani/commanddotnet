@@ -1,4 +1,5 @@
 using System;
+using CommandDotNet.Builders;
 using CommandDotNet.Diagnostics.Parse;
 using CommandDotNet.Extensions;
 
@@ -61,6 +62,13 @@ namespace CommandDotNet.TestTools
         /// for verbose local logging and quite CI logging.<br/>
         /// </summary>
         public short? Priority { get; set; }
+
+        /// <summary>
+        /// Used to override the <see cref="AppInfo"/> used by tests.
+        /// This will ensure consistent results when verifying the Usage
+        /// section of the output.
+        /// </summary>
+        public AppInfo? AppInfoOverride { get; set; }
 
         public class OnSuccessConfig
         {

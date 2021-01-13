@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using CommandDotNet.Builders;
 using CommandDotNet.NewerReleasesAlerts;
+using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
@@ -22,7 +23,6 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
             var version = "1.0.0";
 
             new AppRunner<App>()
-                .Configure(c => c.Services.AddOrUpdate(BuildAppInfo(version)))
                 .UseNewerReleaseAlertOnGitHub(organizationName, repositoryName,
                     overrideHttpRequestCallback: (client, uri) => Task.FromResult(BuildGitHubApiResponse("1.0.1")))
                 .Verify(new Scenario
@@ -36,7 +36,8 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                             $"Download from https://github.com/{organizationName}/{repositoryName}/releases/tag/"
                         }
                     }
-                });
+                }, 
+                    config: TestConfig.Default.Where(c => c.AppInfoOverride = BuildAppInfo(version)));
         }
 
         [Fact]
@@ -47,21 +48,21 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
             var version = "1.0.1";
 
             new AppRunner<App>()
-                .Configure(c => c.Services.AddOrUpdate(BuildAppInfo(version)))
-                .UseNewerReleaseAlertOnGitHub(organizationName, repositoryName, 
+                .UseNewerReleaseAlertOnGitHub(organizationName, repositoryName,
                     overrideHttpRequestCallback: (client, uri) => Task.FromResult(BuildGitHubApiResponse("1.0.0")))
                 .Verify(new Scenario
-                {
-                    When = {Args = "Do"},
-                    Then =
                     {
-                        OutputNotContainsTexts =
+                        When = {Args = "Do"},
+                        Then =
                         {
-                            $"A newer release exists. Current:{version} Latest:",
-                            $"Download from https://github.com/{organizationName}/{repositoryName}/releases/tag/"
+                            OutputNotContainsTexts =
+                            {
+                                $"A newer release exists. Current:{version} Latest:",
+                                $"Download from https://github.com/{organizationName}/{repositoryName}/releases/tag/"
+                            }
                         }
-                    }
-                });
+                    },
+                    config: TestConfig.Default.Where(c => c.AppInfoOverride = BuildAppInfo(version)));
         }
 
         [Fact]
@@ -72,22 +73,22 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
             var version = "1.0.0";
 
             new AppRunner<App>()
-                .Configure(c => c.Services.AddOrUpdate(BuildAppInfo(version)))
                 .UseNewerReleaseAlertOnGitHub(organizationName, repositoryName,
                     overrideHttpRequestCallback: (client, uri) => Task.FromResult(BuildGitHubApiResponse("1.0.1")),
-                    skipCommand:command => true)
+                    skipCommand: command => true)
                 .Verify(new Scenario
-                {
-                    When = {Args = "Do"},
-                    Then =
                     {
-                        OutputNotContainsTexts =
+                        When = {Args = "Do"},
+                        Then =
                         {
-                            $"A newer release exists. Current:{version} Latest:",
-                            $"Download from https://github.com/{organizationName}/{repositoryName}/releases/tag/"
+                            OutputNotContainsTexts =
+                            {
+                                $"A newer release exists. Current:{version} Latest:",
+                                $"Download from https://github.com/{organizationName}/{repositoryName}/releases/tag/"
+                            }
                         }
-                    }
-                });
+                    },
+                    config: TestConfig.Default.Where(c => c.AppInfoOverride = BuildAppInfo(version)));
         }
 
         public class App

@@ -28,6 +28,8 @@ namespace CommandDotNet.Builders
 
         /// <summary>
         /// Use to override the AppInfo logic for consistent usage info in tests
+        /// or override using TestConfig.AppInfoOverride
+        /// https://commanddotnet.bilal-fazlani.com/testtools/harness/test-config/
         /// </summary>
         public static IDisposable OverrideInstance(AppInfo appInfo)
         {
@@ -81,7 +83,8 @@ namespace CommandDotNet.Builders
                 throw new AppRunnerException(
                     "Unable to determine version because Assembly.GetEntryAssembly() is null. " +
                     "This is a known issue when running unit tests in .net framework. https://tinyurl.com/y6rnjqsg \n" +
-                    "Set the version info in AppInfo.OverrideInstance(new AppInfo(...))\n");
+                    "Set the version info in AppInfo.OverrideInstance(new AppInfo(...))\n" +
+                    "If you are using the TestTools https://tinyurl.com/y6t4oxra, you can override using TestConfig.AppInfoOverride.");
             }
 
             // this could be dotnet.exe or {app_name}.exe if published as single executable
