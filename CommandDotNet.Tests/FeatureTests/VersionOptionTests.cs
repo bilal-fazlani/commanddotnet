@@ -72,8 +72,8 @@ namespace CommandDotNet.Tests.FeatureTests
                 When = {Args = "--version"},
                 Then =
                 {
-                    Output = @"testhost.dll
-16.2.0
+                    Output = @$"testhost.dll
+1.1.1.1
 "
                 }
             };
@@ -92,7 +92,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 Then =
                 {
                     Output = @"testhost.dll
-16.2.0
+1.1.1.1
 "
                 }
             };

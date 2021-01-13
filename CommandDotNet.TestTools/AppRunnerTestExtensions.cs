@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CommandDotNet.Builders;
 using CommandDotNet.Diagnostics.Parse;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
@@ -74,10 +75,15 @@ namespace CommandDotNet.TestTools
             logLine ??= Console.WriteLine;
             config ??= TestConfig.Default;
 
+            IDisposable appInfo = config.AppInfoOverride is null
+                ? new DisposableAction(() => { })
+                : AppInfo.OverrideInstance(config.AppInfoOverride);
+
             IDisposable logProvider = config.PrintCommandDotNetLogs
                 ? TestToolsLogProvider.InitLogProvider(logLine)
                 : new DisposableAction(() => { });
 
+            using (appInfo)
             using (logProvider)
             {
                 var testConsole = new TestConsole(
