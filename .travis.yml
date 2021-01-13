@@ -34,21 +34,21 @@ jobs:
           install:
             - dotnet restore
           script:
-            - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
+            - dotnet test
         - name: test on linux
           os: linux
           dotnet: 3.1
           install:
             - dotnet restore
           script:
-            - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
+            - dotnet test
         - name: test on windows
           os: windows
           script:
             - choco install dotnetcore-sdk
             - dotnet --version
             - dotnet restore
-            - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
+            - dotnet test
         #-----------------------------------
 
         #--------- DEPLOYMENT JOB ----------  
@@ -59,7 +59,7 @@ jobs:
           install:
             - dotnet restore
           script: 
-            - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
+            - dotnet test
           script: 
             - ./deploy.sh
           env:
