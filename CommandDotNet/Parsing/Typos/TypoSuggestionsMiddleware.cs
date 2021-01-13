@@ -130,7 +130,7 @@ namespace CommandDotNet.Parsing.Typos
                 return false;
             }
 
-            var usage = command.GetAppName(ctx.AppConfig.AppSettings.Help) + " " + command.GetPath();
+            var usage = ctx.AppConfig.AppSettings.Help.GetAppName() + " " + command.GetPath();
 
             var @out = ctx.Console.Out;
             @out.WriteLine($"'{typo}' {message}");

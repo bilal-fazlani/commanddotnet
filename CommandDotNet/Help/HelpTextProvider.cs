@@ -38,7 +38,7 @@ namespace CommandDotNet.Help
         }
 
         protected virtual string AppName(Command command) =>
-            _appName ??= command.GetAppName(_appHelpSettings);
+            _appName ??= _appHelpSettings.GetAppName();
 
         /// <summary>The current command and it's parents.  aka bread crumbs</summary>
         protected virtual string CommandPath(Command command) => command.GetPath();
