@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using CommandDotNet.Extensions;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
 using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;

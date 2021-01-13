@@ -47,7 +47,7 @@ namespace CommandDotNet.Diagnostics
             ParseReporter.Report(context, writeln: s => sb.AppendLine(s), indent: indent);
 
             var additionalHeaders = config.AdditionalHeadersCallback?.Invoke(context);
-            var otherConfigEntries = GetOtherConfigInfo(context, includeSystemInfo, additionalHeaders).ToList();
+            var otherConfigEntries = GetOtherConfigInfo(includeSystemInfo, additionalHeaders).ToList();
             if (!otherConfigEntries.IsNullOrEmpty())
             {
                 sb.AppendLine();
@@ -82,14 +82,12 @@ namespace CommandDotNet.Diagnostics
             return originalArgs;
         }
 
-        private static IEnumerable<(string name, string text)> GetOtherConfigInfo(
-            CommandContext commandContext,
-            bool includeSystemInfo,
+        private static IEnumerable<(string name, string text)> GetOtherConfigInfo(bool includeSystemInfo,
             IEnumerable<(string key, string value)>? additionalHeaders)
         {
             if (includeSystemInfo)
             {
-                var appInfo = AppInfo.GetAppInfo(commandContext);
+                var appInfo = AppInfo.Instance;
                 yield return ("Tool version", $"{appInfo.FileName} {appInfo.Version}");
                 yield return (".Net version",
                     System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription.Trim());

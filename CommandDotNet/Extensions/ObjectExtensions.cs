@@ -84,8 +84,21 @@ namespace CommandDotNet.Extensions
                 throw new ArgumentNullException(nameof(original));
             }
 
+            if (original is ICloneable cloneable)
+            {
+                return cloneable.Clone();
+            }
+
             var type = original.GetType();
-            object clone = Activator.CreateInstance(type);
+            object clone;
+            try
+            {
+                clone = Activator.CreateInstance(type);
+            }
+            catch (MissingMethodException e)
+            {
+                throw new MissingMethodException($"{e.Message}. The type must implement {nameof(ICloneable)} or a parameterless constructor.", e);
+            }
 
             type
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
