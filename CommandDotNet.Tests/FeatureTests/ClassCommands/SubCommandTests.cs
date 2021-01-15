@@ -53,14 +53,14 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                     Then =
                     {
                         ExitCode = ExitCodes.Error.Result,
-                        Output = @"Usage: dotnet testhost.dll [command]
+                        Output = @"Usage: testhost.dll [command]
 
 Commands:
 
   Do1
   Second
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+Use ""testhost.dll [command] --help"" for more information about a command.
 "
                     }
                 });
@@ -76,14 +76,14 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     When = { Args = "-h" },
                     Then =
                     {
-                        Output = @"Usage: dotnet testhost.dll [command]
+                        Output = @"Usage: testhost.dll [command]
 
 Commands:
 
   Do1
   Second
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+Use ""testhost.dll [command] --help"" for more information about a command.
 "
                     }
                 });
@@ -99,14 +99,14 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                     When = {Args = "Second -h"},
                     Then =
                     {
-                        Output = @"Usage: dotnet testhost.dll Second [command]
+                        Output = @"Usage: testhost.dll Second [command]
 
 Commands:
 
   Do2
   Third
 
-Use ""dotnet testhost.dll Second [command] --help"" for more information about a command.
+Use ""testhost.dll Second [command] --help"" for more information about a command.
 "
                     }
                 });
@@ -122,13 +122,13 @@ Use ""dotnet testhost.dll Second [command] --help"" for more information about a
                     When = {Args = "Second Third -h"},
                     Then =
                     {
-                        Output = @"Usage: dotnet testhost.dll Second Third [command]
+                        Output = @"Usage: testhost.dll Second Third [command]
 
 Commands:
 
   Do3
 
-Use ""dotnet testhost.dll Second Third [command] --help"" for more information about a command.
+Use ""testhost.dll Second Third [command] --help"" for more information about a command.
 "
                     }
                 });
