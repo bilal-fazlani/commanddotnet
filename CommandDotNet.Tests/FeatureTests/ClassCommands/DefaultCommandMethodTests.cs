@@ -25,12 +25,12 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                 When = {Args = "-h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll [command]
+                    Output = @"Usage: testhost.dll [command]
 
 Commands:
   AnotherCommand
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+Use ""testhost.dll [command] --help"" for more information about a command.
 "
                 }
             });
@@ -44,13 +44,13 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 When = {Args = "-h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll [command]
+                    Output = @"Usage: testhost.dll [command]
 
 Commands:
 
   AnotherCommand
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+Use ""testhost.dll [command] --help"" for more information about a command.
 "
                 }
             });
@@ -64,7 +64,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 When = {Args = "-h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll [command] <text>
+                    Output = @"Usage: testhost.dll [command] <text>
 
 Arguments:
   text  some text
@@ -72,7 +72,7 @@ Arguments:
 Commands:
   AnotherCommand
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+Use ""testhost.dll [command] --help"" for more information about a command.
 "
                 }
             });
@@ -86,7 +86,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 When = {Args = "-h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll [command] <text>
+                    Output = @"Usage: testhost.dll [command] <text>
 
 Arguments:
 
@@ -97,7 +97,7 @@ Commands:
 
   AnotherCommand
 
-Use ""dotnet testhost.dll [command] --help"" for more information about a command.
+Use ""testhost.dll [command] --help"" for more information about a command.
 "
                 }
             });
@@ -112,7 +112,7 @@ Use ""dotnet testhost.dll [command] --help"" for more information about a comman
                 When = {Args = "AnotherCommand -h"},
                 Then =
                 {
-                    Output = @"Usage: dotnet testhost.dll AnotherCommand
+                    Output = @"Usage: testhost.dll AnotherCommand
 "
                 }
             });

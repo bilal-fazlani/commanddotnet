@@ -27,7 +27,7 @@ namespace CommandDotNet.Tests.CommandDotNet.FluentValidation
                     When = {Args = "Save -h"},
                     Then =
                     {
-                        Output = @"Usage: dotnet testhost.dll Save <Id> <Name> <Email>
+                        Output = @"Usage: testhost.dll Save <Id> <Name> <Email>
 
 Arguments:
 
@@ -180,7 +180,7 @@ Arguments:
   'Name' should not be empty.
   'Email' should not be empty.
 
-Usage: dotnet testhost.dll Save <Id> <Name> <Email>"
+Usage: testhost.dll Save <Id> <Name> <Email>"
                         }
                     }
                 });

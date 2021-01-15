@@ -29,7 +29,7 @@ namespace CommandDotNet.Tests.FeatureTests.Suggestions
 Did you mean ...
    Dinner
 
-See 'dotnet testhost.dll Eat --help'"
+See 'testhost.dll Eat --help'"
                         }
                     }
                 });
@@ -50,7 +50,7 @@ See 'dotnet testhost.dll Eat --help'"
                         {
                             @"Unrecognized value '' for argument: meal
 
-Usage: dotnet testhost.dll Eat [options] <meal>"
+Usage: testhost.dll Eat [options] <meal>"
                         }
                     }
                 });
@@ -74,7 +74,7 @@ Usage: dotnet testhost.dll Eat [options] <meal>"
 Did you mean ...
    Cherry
 
-See 'dotnet testhost.dll Eat --help'"
+See 'testhost.dll Eat --help'"
                         }
                     }
                 });
@@ -95,7 +95,7 @@ See 'dotnet testhost.dll Eat --help'"
                         {
                             @"Unrecognized value '' for option: fruit
 
-Usage: dotnet testhost.dll Eat [options] <meal>"
+Usage: testhost.dll Eat [options] <meal>"
                         }
                     }
                 });

@@ -78,7 +78,7 @@ namespace CommandDotNet.Tests.FeatureTests.Suggestions
 Did you mean ...
    --username
 
-See 'dotnet testhost.dll User --help'
+See 'testhost.dll User --help'
 "
                         }
                     }
@@ -113,7 +113,7 @@ See 'dotnet testhost.dll User --help'
 Did you mean ...
    --username
 
-See 'dotnet testhost.dll User --help'
+See 'testhost.dll User --help'
 "
                             }
                         }
@@ -145,7 +145,7 @@ See 'dotnet testhost.dll User --help'
 Did you mean ...
    --username
 
-See 'dotnet testhost.dll User --help'
+See 'testhost.dll User --help'
 "
                             }
                         }
@@ -173,7 +173,7 @@ Did you mean ...
    --opt2
    --opt3
 
-See 'dotnet testhost.dll Similars --help'
+See 'testhost.dll Similars --help'
 "
                             }
                         }
@@ -221,7 +221,7 @@ Did you mean ...
    Unregister
    User
 
-See 'dotnet testhost.dll  --help'
+See 'testhost.dll  --help'
 "
                             }
                         }
@@ -244,7 +244,7 @@ See 'dotnet testhost.dll  --help'
                             {
                                 @"Unrecognized command or argument ''
 
-Usage: dotnet testhost.dll [command]
+Usage: testhost.dll [command]
 "
                             }
                         }
@@ -290,7 +290,7 @@ Usage: dotnet testhost.dll [command]
 Did you mean ...
    --username
 
-See 'dotnet testhost.dll  --help'
+See 'testhost.dll  --help'
 "
                             }
                         }
@@ -316,7 +316,7 @@ See 'dotnet testhost.dll  --help'
 Did you mean ...
    ListUsers
 
-See 'dotnet testhost.dll  --help'"
+See 'testhost.dll  --help'"
                             }
                         }
                     });

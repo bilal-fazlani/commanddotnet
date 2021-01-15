@@ -1,4 +1,3 @@
-using CommandDotNet.Builders;
 using CommandDotNet.TestTools.Scenarios;
 using NUnit.Framework;
 
@@ -10,7 +9,6 @@ namespace CommandDotNet.Example.Tests
         [Test]
         public void Help_Should_Include_ExtendedHelpText()
         {
-            var fileName = AppInfo.Instance.FileName;
             // Must convert NewLine to what was given
             // to the ExtendedHelpText property
             Program.GetAppRunner()
@@ -30,7 +28,7 @@ Directives:
 
 directives must be specified before any commands and arguments.
 
-Example: {fileName} [debug] [parse] [log:info] cancel-me".Replace("\r\n", "\n")
+Example: testhost.dll [debug] [parse] [log:info] cancel-me".Replace("\r\n", "\n")
                         }
                     }
                 });
