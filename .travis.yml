@@ -42,7 +42,17 @@ jobs:
             - dotnet restore
           script:
             - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
-        - name: test on windows
+        - name: test on windows (dotnet core)
+          os: windows
+          script:
+            - choco install dotnetcore-sdk
+            - dotnet --version
+            - dotnet nuget locals all --clear
+            - dotnet restore
+            - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
+        #-----------------------------------
+        
+        - name: test on windows (dotnet framework)
           os: windows
           script:
             - choco install dotnetcore-sdk
@@ -50,9 +60,9 @@ jobs:
             - dotnet --version
             - dotnet nuget locals all --clear
             - dotnet restore
-            - dotnet test CommandDotNet.Tests/CommandDotNet.Tests.csproj
             - dotnet test --framework net48 CommandDotNet.Tests/CommandDotNet.Tests.csproj
         #-----------------------------------
+
 
         #--------- DEPLOYMENT JOB ----------  
         - stage: deploy
