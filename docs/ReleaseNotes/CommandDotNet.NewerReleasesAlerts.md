@@ -1,5 +1,9 @@
 # CommandDotNet.NewerReleasesAlerts
 
+## 2.0.1
+
+Just some code cleanup. No new features.
+
 ## 2.0.0
 
 ### Nullable Reference Types

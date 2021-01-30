@@ -1,8 +1,12 @@
 # CommandDotNet
 
+## 4.1.6
+
+Add AppInfo.SetResolver to enable overriding for tests to get a consistent AppName. See [Deterministic AppName for tests](../TestTools/Tools/deterministic-appinfo.md) for details.
+
 ## 4.1.5
 
-Fixes [bug #331](https://github.com/bilal-fazlani/commanddotnet/issues/331) on .Net Framework when capturing CommandContext in Exception.Data.  Thanks to `@arendvw` for reporting this.
+Fixes [bug #331](https://github.com/bilal-fazlani/commanddotnet/issues/331) on .Net Framework when capturing CommandContext in Exception.Data.  In .Net Framework, items added to Data must be   Thanks to `@arendvw` for reporting this.
 
 ## 4.1.4
 
@@ -10,7 +14,7 @@ Fixes [bug #326](https://github.com/bilal-fazlani/commanddotnet/issues/326) wher
 
 ## 4.1.3
 
-Fixes a bug where the TypoSuggest middleware threw an exception when an argument value was an empty string.
+Fixes a bug where the TypoSuggest middleware threw an exception when an argument value was an empty string. Thanks to `@taori` for reporting this.
 
 ## 4.1.2
 
