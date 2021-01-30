@@ -14,10 +14,7 @@ namespace CommandDotNet.TestTools
         /// <summary>The <see cref="CommandContext"/> used during the run</summary>
         public CommandContext CommandContext { get; }
 
-        /// <summary>
-        /// The exception that escaped from <see cref="AppRunner.Run"/><br/>
-        /// Can only populated when <see cref="TestConfig.OnErrorConfig.CaptureAndReturnResult"/> is true.
-        /// </summary>
+        /// <summary>The exception that escaped from <see cref="AppRunner.Run"/><br/></summary>
         public Exception? EscapedException { get; }
 
         public AppRunnerResult(int exitCode, AppRunner runner,
