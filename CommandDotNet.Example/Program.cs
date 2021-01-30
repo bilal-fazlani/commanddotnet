@@ -11,21 +11,22 @@ namespace CommandDotNet.Example
         {
             Debugger.AttachIfDebugDirective(args);
 
-            var appSettings = new NameValueCollection {{"notify.--retry-count", "2"}};
+            var appConfigSettings = new NameValueCollection {{"notify.--retry-count", "2"}};
 
-            return GetAppRunner(appSettings).Run(args);
+
+            return GetAppRunner(appConfigSettings, null).Run(args);
         }
 
-        public static AppRunner GetAppRunner(NameValueCollection? appSettings = null)
+        public static AppRunner GetAppRunner(NameValueCollection? appConfigSettings = null, string? appNameForTests = "example_app")
         {
-            appSettings ??= new NameValueCollection();
-            return new AppRunner<Examples>()
+            appConfigSettings ??= new NameValueCollection();
+            return new AppRunner<Examples>(appNameForTests is null ? null : new AppSettings{Help = {UsageAppName = appNameForTests}})
                 .UseDefaultMiddleware()
                 .UseLog2ConsoleDirective()
                 .UseNameCasing(Case.KebabCase)
                 .UseFluentValidation()
                 .UseInteractiveMode("Example")
-                .UseDefaultsFromAppSetting(appSettings, includeNamingConventions: true);
+                .UseDefaultsFromAppSetting(appConfigSettings, includeNamingConventions: true);
         }
     }
 }
