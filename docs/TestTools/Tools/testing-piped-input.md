@@ -17,7 +17,7 @@ Simply supply an IEnumerable<string> to the optional PipedInput parameter or pro
                 .RunInMem("List aaa bbb", pipedInput: new[] { "ccc", "ddd" });
 
             result.ExitCode.Should().Be(0);
-            result.OutputShouldBe(@"aaa
+            result.Console.Out.Should().Be(@"aaa
     bbb
     ccc
     ddd

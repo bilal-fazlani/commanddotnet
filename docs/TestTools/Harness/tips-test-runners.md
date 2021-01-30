@@ -6,11 +6,15 @@ These tips apply when using the [RunInMem](run-in-mem.md) or [BDD Verify](bdd.md
 
 ### TestConfig & IDefaultTestConfig
 
-Configure the [TestConfig](test-config.md) in the AssemblySetup to avoid the one-time reflective cost of looking for an [IDefaultTestConfig](test-config.md#idefaulttestconfig)
+If you use a [TestConfig](test-config.md), configure it in the AssemblySetup to avoid the one-time reflective cost of looking for an [IDefaultTestConfig](test-config.md#idefaulttestconfig)
 
-### Ignore logLine
+### Do not use logLine
 
-logLine will use Console.Out when not provided and NUnit handles this well so logs will output to the console. 
+`RunInMem` contains the `logLine` parameter to direct logging output. When not provided, Console.WriteLine is used. NUnit redirects this output to the test results.
+
+### Use AppInfo.SetResolver for deterministic AppName
+
+Use AssemblySetup to set the AppInfo resolver to ensure the AppName is consistent despite which test runner is used.
 
 ## Tips for XUnit
 
@@ -19,6 +23,8 @@ XUnit is a bit more cumbersome than NUnit when you want to log results to the te
 ### TestConfig & IDefaultTestConfig
 
 XUnit does not have a concept like AssemblySetup so you'll want to create an [IDefaultTestConfig](test-config.md#idefaulttestconfig)
+
+Set the AppInfoOverride to ensure the AppName is consistent despite which test runner is used.
 
 ### logLine and ITestOutputHelper
 
