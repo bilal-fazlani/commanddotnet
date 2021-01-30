@@ -1,5 +1,9 @@
 # CommandDotNet.TestTools
 
+## 3.0.2
+
+TestConfig.AppInfoOverride to enable getting a consistent AppName. See [Deterministic AppName for tests](../TestTools/Tools/deterministic-appinfo.md) for details.
+
 ## 3.0.1
 
 Making FlattenedArgumentModels available via TrackingInvocation
