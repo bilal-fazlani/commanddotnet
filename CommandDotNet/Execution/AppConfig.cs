@@ -101,7 +101,7 @@ namespace CommandDotNet.Execution
                 .ToCsv(NewLine);
 
             return $"{nameof(AppConfig)}:{NewLine}" +
-                   $"{indent}{AppSettings.ToString(indent.Increment())}{NewLine}" +
+                   $"{indent}{AppSettings.ToString(indent2)}{NewLine}" +
                    $"{indent}DependencyResolver: {DependencyResolver}{NewLine}" +
                    $"{indent}HelpProvider: {HelpProvider}{NewLine}" +
                    $"{indent}TokenTransformations:{NewLine}{tokenTransformations}{NewLine}" +

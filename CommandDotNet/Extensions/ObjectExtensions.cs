@@ -7,7 +7,7 @@ using static System.Environment;
 
 namespace CommandDotNet.Extensions
 {
-    internal static class ObjectExtensions
+    public static class ObjectExtensions
     {
         internal static bool IsNullValue(this object? obj)
         {
@@ -39,7 +39,7 @@ namespace CommandDotNet.Extensions
             return value.ToString();
         }
 
-        internal static string ToStringFromPublicProperties(this object item, Indent? indent = null)
+        public static string ToStringFromPublicProperties(this object item, Indent? indent = null)
         {
             if (item == null)
             {
