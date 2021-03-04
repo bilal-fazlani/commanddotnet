@@ -14,7 +14,7 @@ namespace CommandDotNet.Builders
     /// For unit tests, use `AppRunner.Configure(c =&gt; c.Services.Set(new AppInfo(...)))`
     /// to set to specific version
     /// </summary>
-    public class AppInfo : ICloneable
+    public class AppInfo : ICloneable, IIndentableToString
     {
         private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
@@ -143,6 +143,16 @@ namespace CommandDotNet.Builders
         public object Clone()
         {
             return new AppInfo(IsExe, IsSelfContainedExe, IsRunViaDotNetExe, EntryAssembly, FilePath, FileName, _version);
+        }
+
+        public override string ToString()
+        {
+            return ToString(new Indent());
+        }
+
+        public string ToString(Indent indent)
+        {
+            return this.ToStringFromPublicProperties(indent);
         }
     }
 }
