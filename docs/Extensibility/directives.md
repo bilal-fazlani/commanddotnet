@@ -16,8 +16,8 @@ To disable the directives feature entirely, set `AppSettings.DisableDirectives =
 ## Custom directives
 
 Directives are middleware components.  
-See the implementations of [Debug](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Directives/DebugDirective.cs) 
-and [Parse](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Directives/ParseDirective.cs) directives
+See the implementations of [Debug](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Diagnostics/DebugDirective.cs) 
+and [Parse](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Diagnostics/ParseDirective.cs) directives
 for examples.
 
 The presence of a directive is checked with `commandContext.Tokens.TryGetDirective("debug", out _))`.  The out parameter will include the entire string within the square brackets. Using a possible logging directive `[log:debug]`, the out parameter value would be `log:debug`. You can parse the value however you'd like.

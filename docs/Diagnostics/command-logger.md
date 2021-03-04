@@ -1,7 +1,7 @@
 # Command Logger
 
 ## TLDR, How to enable 
-1. Enable the feature with `appRunner.UseCommandLogger()` or use `appRunner.UseDefaultMiddleware()`
+1. Enable the feature with `appRunner.UseCommandLogger()`
 
 ## Command logging
 
