@@ -1,5 +1,17 @@
 # CommandDotNet
 
+## 4.1.8
+
+Expose expose DefaultSources.GetValueFunc for host apps to reuse logic for alternate configuration sources.
+
+See the new [.Net Core Config](../ArgumentValues/default-values-from-config.md#.net-core-config) section for an example.
+
+## 4.1.7
+
+AppInfo.ToString will print out all properties making it easier to gather info for diagnostics.
+
+Expose object.ToStringFromPublicProperties to make it easier to output other classes for diagnostics.
+
 ## 4.1.6
 
 Add AppInfo.SetResolver to enable overriding for tests to get a consistent AppName. See [Deterministic AppName for tests](../TestTools/Tools/deterministic-appinfo.md) for details.

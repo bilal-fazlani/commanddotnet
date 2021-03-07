@@ -14,6 +14,9 @@ namespace CommandDotNet.Builders.ArgumentDefaults
 
         public static class EnvVar
         {
+            /// <summary>
+            /// Returns the value for <see cref="EnvVarAttribute.Key"/> for the <see cref="IArgument"/>
+            /// </summary>
             public static IEnumerable<string> GetKeyFromAttribute(IArgument argument)
             {
                 var key = argument.GetCustomAttribute<EnvVarAttribute>()?.Key;
@@ -23,25 +26,34 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                 }
             }
 
+            /// <summary>
+            /// The delegate to return the value for the <see cref="IArgument"/>
+            /// </summary>
+            /// <param name="envVars">A dictionary containing the environment variables</param>
+            /// <param name="getKeysDelegates">
+            /// The delegates that will return the keys for an argument.
+            /// Uses <see cref="GetKeyFromAttribute"/> if none provided.
+            /// </param>
             public static Func<IArgument, ArgumentDefault?> GetDefaultValue(
                 IDictionary? envVars = null,
-                params GetArgumentKeysDelegate[] getKeysDelegates)
+                params GetArgumentKeysDelegate[]? getKeysDelegates)
             {
                 envVars ??= Environment.GetEnvironmentVariables();
-                getKeysDelegates ??= new GetArgumentKeysDelegate[]
-                {
-                    GetKeyFromAttribute
-                };
-                return GetValue(
-                    "EnvVar", 
-                    getKeysDelegates, 
-                    key => envVars.Contains(key) ? (string)envVars[key] : null);
+                return GetValueFunc("EnvVar",
+                    key => envVars.Contains(key) ? (string)envVars[key] : null,
+                    getKeysDelegates ?? new GetArgumentKeysDelegate[]
+                    {
+                        GetKeyFromAttribute
+                    });
             }
         }
 
 
         public static class AppSetting
         {
+            /// <summary>
+            /// Returns the value for <see cref="AppSettingAttribute.Key"/> for the <see cref="IArgument"/>
+            /// </summary>
             public static IEnumerable<string> GetKeyFromAttribute(IArgument argument)
             {
                 var key = argument.GetCustomAttribute<AppSettingAttribute>()?.Key;
@@ -51,6 +63,11 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                 }
             }
 
+            /// <summary>
+            /// Returns the name of the <see cref="Operand"/> or long and short name of the <see cref="Option"/>.<br/>
+            /// Also returns the values prefixed with the defining command for more specificity.<br/>
+            /// Example in order: 'delete --force', 'delete -f', '--force', '-f'
+            /// </summary>
             public static IEnumerable<string> GetKeysFromConvention(IArgument argument)
             {
                 static IEnumerable<string> GetOptionKeys(Option option)
@@ -70,31 +87,60 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                 }
             }
 
+            /// <summary>
+            /// The delegate to return the value for the <see cref="IArgument"/>
+            /// </summary>
+            /// <param name="appSettings">A collection containing the environment variables</param>
+            /// <param name="getKeysDelegates">
+            /// The delegates that will return the keys for an argument.
+            /// Uses <see cref="GetKeyFromAttribute"/> if none provided.
+            /// </param>
             public static Func<IArgument, ArgumentDefault?> GetDefaultValue(
                 NameValueCollection appSettings,
-                params GetArgumentKeysDelegate[] getKeysCallbacks)
+                params GetArgumentKeysDelegate[]? getKeysDelegates)
             {
-                getKeysCallbacks ??= new GetArgumentKeysDelegate[]
-                {
-                    GetKeyFromAttribute
-                };
-                return GetValue(
-                    "AppSetting",
-                    getKeysCallbacks, 
-                    key => appSettings[key]);
+                return GetValueFunc("AppSetting",
+                    key => appSettings[key],
+                    getKeysDelegates ?? new GetArgumentKeysDelegate[]
+                    {
+                        GetKeyFromAttribute
+                    });
             }
         }
 
-        private static Func<IArgument, ArgumentDefault?> GetValue(
+        /// <summary>
+        /// The delegate to loop through the possible keys for an <see cref="IArgument"/>
+        /// and return the first value found using <see cref="getValueForKey"/>
+        /// </summary>
+        /// <param name="sourceName">Used in logging and CommandLogger to identify the source of a default value</param>
+        /// <param name="getValueForKey">The func to return a value for a given key</param>
+        /// <param name="getKeysDelegates">The delegates to harvest keys for an <see cref="IArgument"/></param>
+        /// <returns></returns>
+        public static Func<IArgument, ArgumentDefault?> GetValueFunc(
             string sourceName,
-            GetArgumentKeysDelegate[] getKeys,
-            Func<string, string?> getValueFromSource)
+            Func<string, string?> getValueForKey,
+            params GetArgumentKeysDelegate[] getKeysDelegates)
         {
+            if (sourceName == null)
+            {
+                throw new ArgumentNullException(nameof(sourceName));
+            }
+
+            if (getValueForKey == null)
+            {
+                throw new ArgumentNullException(nameof(getValueForKey));
+            }
+
+            if (getKeysDelegates == null)
+            {
+                throw new ArgumentNullException(nameof(getKeysDelegates));
+            }
+
             return argument =>
             {
-                var value = getKeys
+                var value = getKeysDelegates
                     .SelectMany(cb => cb(argument))
-                    .Select(key => (key, value:getValueFromSource(key)))
+                    .Select(key => (key, value:getValueForKey(key)))
                     .Where(v => v.value != null)
                     .Select(v =>
                     {

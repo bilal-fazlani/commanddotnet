@@ -94,6 +94,30 @@ To specify defaults for a specific command, prefix the key with the command name
 <add key="download -p" value="secret2"/>
 ```
 
+## .Net Core Config
+Enable the feature with `appRunner.UseDefaultsFromConfig(...)` and use the pattern below
+
+```c#
+var appConfig = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", true, true)
+    .Build();
+
+var evConfig = new ConfigurationBuilder()
+    .AddEnvironmentVariables()
+    .Build();
+
+new AppRunner<App>()
+    .UseDefaultsFromConfig(DefaultSources.GetValueFunc("AppSetting", 
+        key => appConfig[key],
+        DefaultSources.AppSetting.GetKeyFromAttribute
+        // includeNamingConventions as described above
+        DefaultSources.AppSetting.GetKeysFromConvention))
+    .UseDefaultsFromConfig(DefaultSources.GetValueFunc("EnvVar", key => evConfig[key]))
+    .Run(args)
+```
+
+Creating two different configs allows us to determine the source of the default value 
+for the [Parse directive](../Diagnostics/parse-directive.md) and the [CommandLogger](../Diagnostics/command-logger.md)
 
 ## Other Configs
 Enable the feature with `appRunner.UseDefaultsFromConfig(arg => ...)`
