@@ -424,7 +424,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             var modelOptions = range.Select(i => $"[Option]\npublic int {i.ModelOption} {{ get; set; }}");
             var modelArgs = range.Select(i => $"[Operand]\npublic int {i.ModelArg} {{ get; set; }}");
             _output.WriteLine("public class Model : IArgumentModel\n{");
-            _output.WriteLine(modelOptions.Union(modelArgs).ToCsv(Environment.NewLine));
+            _output.WriteLine(modelOptions.Concat(modelArgs).ToCsv(Environment.NewLine));
             _output.WriteLine("}");
         }
     }

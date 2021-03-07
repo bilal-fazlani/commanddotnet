@@ -33,7 +33,7 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
             var command = context.ParseResult.TargetCommand;
             var interceptor = command.Parent;
 
-            var arguments = command.Options.Cast<IArgument>().Union(command.Operands);
+            var arguments = command.Options.Cast<IArgument>().Concat(command.Operands);
             if (interceptor is { })
             {
                 arguments = arguments.Union(interceptor.Options).Union(interceptor.Operands);

@@ -17,7 +17,7 @@ namespace CommandDotNet.ClassModeling
             var parserFactory = new ParserFactory(commandContext.AppConfig.AppSettings);
 
             var arguments = commandContext.InvocationPipeline.All
-                .SelectMany(ic => ic.Command.Options.Cast<IArgument>().Union(ic.Command.Operands));
+                .SelectMany(ic => ic.Command.Options.Cast<IArgument>().Concat(ic.Command.Operands));
 
             if (arguments.Any(a => !TryBindArgument(a, console, parserFactory)))
             {
