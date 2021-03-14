@@ -59,11 +59,9 @@ jobs:
           install:
             - dotnet restore
           script: 
-            - dotnet test
-          script: 
             - ./deploy.sh
           env:
-              - secure: Koqnozl0bIsOKJLdumBLfIc4rxpxfHWrr78122YuNauIDq/nzb6eUiWqSr/QOGQueiiyhWxLgnLK2plpmdIkEqVP0xZbEpUVSWdi2OrP9iNqeAjH76Y1V0vnE79A9a5FtX8Qijtrr0MTttGCxgHPA3RDj95laD4/MeGcMYcnQZMapXH5tTqX201JbB1Kw6EBf5uZ2xKDcHvIxnd1cOt+jJPpNONLUUlwe01Vr5KzG0dbPZiFKU/Z5KH+eZPjptHVGBZlkY4d4PMxhKmJuXZ1npUr4mCUlLGWhAsyB7hmkeD+IsIm+d3sEivpzqpRvptoVdqwYd1RX80h2HvcyPQ6bZ/wjPbEWOI77ELDuedEts0TJhM7WF7KZfu2UMbmf+WrXOr0QXb6qcNkRKWvYMUV3zWtO2k+TEbAVKlWPABU4q1yH2sE8mtAsksq2YN8TsradrTSFIgjO5xR9JX0mPBC4d15tRQoF9kZhsiRUIgeFaLrGclU15/uBNmDk6n2pVw0i75v9p4K+bEvv3j7ve20eyJHTFIEInfSm9Bv1cPGB8M6c5szJYvxDkF/bCJq4w8A88DH4w8z1mG6qBP+ZWHDRHdSWyavueSo/4iW0TBEn307dXKNSW9BlYgcJNU3H4C1FwmeujTd7UhEg071D7umqSc4280w8K+xmvfHbS69Qso=
+              - secure: RYpQwVU5425ML7LNEya4GdPwnIlhgk/xVmMom/yGApRKvgfyZ4V/YJfTsojq+QK+E1nW9pLzwIxyzIYzetw8g4hTBrGhQssErjeQ/fLrY53RXEG8VaIYZKZrQcqEkfpx86JZA9iNewO8pB8N3tE1qHpYNehQV3caQPbijG4XPq5CLgiSy0GtcMKD5xIgN82cyLBVou+U2dJLxKw8xQsyY2Pl0FYY/OL5RGrYS3jgjJ9J1kH508n6Z452nu/XI1M0JKAKH7iqe3fhIOIbZmU0AjoCLKGRDuR0TwvEQYo0VLX6RMcVsmvCl0mGBQ0s+uLs5xf2y7FemgZq/EZ4WH/Ndvc/tVCjcuIGkVwepTJXJaJfI9xS8y77+rj747slsjsVEDLmSRmYx0lzp/sQJIFH16vXIQj4nxePd5MVSC6LWdwE4ZzyIVrBl248gcv5CMPXKXu8FWEhlassbjzPj2cQoYLFQOCiezOtI2xCUR0C6jwxhASEWEh16UDkDycTNSozg85F7a4ETApHPI896ROogHtrrKr3h3O65uY8oxOjmfdrG6HZl0e7vGjECwCXoLlGqpcKs4sR66Vqx3htoII9PDHZsZwblsjphtzkgRuNeeXr2aaZkiPvitXEXnDnsgat/BM4rxF1OHrQ23yH63B9bcV0JrWSmj662dVW1z9Qu48=
         #-----------------------------------
 #-----------------------------------
 
