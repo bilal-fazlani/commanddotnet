@@ -172,4 +172,4 @@ echo " "
 fixNupkgVersions
 
 # PUBLISH TO NUGET
-dotnet nuget push -s https://api.nuget.org/v3/index.json -k $NUGET_API_KEY_COMMANDDOTNET output/$NUPKG_FILE
+dotnet nuget push --skip-duplicate -s https://api.nuget.org/v3/index.json -k $NUGET_API_KEY_COMMANDDOTNET output/$NUPKG_FILE
