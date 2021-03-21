@@ -8,6 +8,7 @@ CommandDotNet.sln.DotSettings.user
 *.ncrunchsolution.user
 public
 site/
+Pipfile.lock
 *.user
 /CommandDotNet.Example/CommandDotNet.Example.exe
 DevDefaultTestConfig.cs
