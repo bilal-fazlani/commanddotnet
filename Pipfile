@@ -9,7 +9,7 @@ verify_ssl = true
 mkdocs = "==1.1.2"
 mkdocs-material = "==5.2.1"
 pymdown-extensions = "==7.1"
-Pygments = "==2.6.1"
+Pygments = "==2.7.4"
 Markdown = "==3.2.2"
 
 [requires]
