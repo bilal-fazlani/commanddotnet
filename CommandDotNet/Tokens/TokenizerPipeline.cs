@@ -61,11 +61,11 @@ namespace CommandDotNet.Tokens
                     {
                         new TokenTransformation(
                             "expand-clubbed-flags",
-                            Int32.MaxValue,
+                            int.MaxValue,
                             ExpandClubbedOptionsTransformation.Transform),
                         new TokenTransformation(
                             "split-option-assignments",
-                            Int32.MaxValue,
+                            int.MaxValue,
                             SplitOptionsTransformation.Transform)
                     })
                 .ToArray();

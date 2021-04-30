@@ -28,7 +28,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                 else
                 {
                     config.GetDefaultValueCallbacks =
-                        config.GetDefaultValueCallbacks.Union(getDefaultValueCallbacks).ToArray();
+                        config.GetDefaultValueCallbacks.Concat(getDefaultValueCallbacks).ToArray();
                 }
             });
         }
