@@ -144,7 +144,7 @@ Options:
 
         private class StringCtorObject
         {
-            public string Filename { get; }
+            public string Filename { get; } = null!;
 
             public StringCtorObject(string filename)
             {
@@ -154,7 +154,7 @@ Options:
 
         private class StaticParseObject
         {
-            public string Dirname { get; private set; }
+            public string Dirname { get; private set; } = null!;
 
             public static StaticParseObject Parse(string dirname)
             {

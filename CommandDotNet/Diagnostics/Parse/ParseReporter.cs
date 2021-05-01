@@ -64,13 +64,12 @@ namespace CommandDotNet.Diagnostics.Parse
             bool isObscured = argument.IsObscured();
             var indent2 = indent.Increment();
             
-            //TODO: reduce resource calls by resolving once in calling method
             var txtValue = Resources.A.Common_value_lc;
             var txtInputs = Resources.A.Input_inputs_lc;
             var txtDefault = Resources.A.Common_default_lc;
 
             var displayName = argument.TypeInfo.DisplayName.IsNullOrEmpty() 
-                ? (argument.Arity.RequiresNone() ? Resources.A.Common_Flag : null)
+                ? (((argument as Option)?.IsFlag ?? false) ? Resources.A.Common_Flag : null)
                 : argument.TypeInfo.DisplayName;
             writeln($"{indent}{argument.Name} <{displayName}>");
             var valueString = argument.Value?.ValueToString(argument);

@@ -260,7 +260,7 @@ namespace CommandDotNet
 
         /// <summary></summary>
         /// <param name="appRunner">The <see cref="AppRunner"/></param>
-        /// <param name="writerFactory">If null, `cmdlog` directive is enabled without Console.Out as the target</param>
+        /// <param name="writerFactory">If null, `cmdlog` directive is enabled with Console.Out as the target</param>
         /// <param name="excludeSystemInfo">Exclude machine name, username, OS, .net version and tool version</param>
         /// <param name="includeAppConfig">Prints the entire app configuration</param>
         /// <param name="additionalInfoCallback">Additional information to include.</param>

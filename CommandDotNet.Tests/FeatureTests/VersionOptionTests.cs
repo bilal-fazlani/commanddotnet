@@ -127,7 +127,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     Then =
                     {
                         ExitCode = 1,
-                        OutputContainsTexts = {"Unrecognized option '-v'"}
+                        OutputContainsTexts = { "Unrecognized command or argument '-v'" }
                     }
                 });
         }

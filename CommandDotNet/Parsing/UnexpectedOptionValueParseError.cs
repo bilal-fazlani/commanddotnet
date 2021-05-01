@@ -4,9 +4,9 @@ using CommandDotNet.Tokens;
 namespace CommandDotNet.Parsing
 {
     /// <summary>
-    /// A value was provided for an option that didn't expect it.
-    /// The option has an arity of 1 but was given multiple values.
-    /// Cannot be a flag.
+    /// A value was provided for an option that didn't expect it.<br/>
+    /// The option has an arity of 1 but was given multiple values<br/>
+    /// Or the option has an arity of 0 but was given a value.
     /// </summary>
     public class UnexpectedOptionValueParseError : IParseError
     {

@@ -13,6 +13,7 @@ namespace CommandDotNet.Parsing
 
             public CommandContext CommandContext { get; }
             public AppSettings AppSettings => CommandContext.AppConfig.AppSettings;
+            public ParseAppSettings ParseSettings => AppSettings.Parser;
 
             public Queue<Token> Tokens
             {
@@ -33,8 +34,8 @@ namespace CommandDotNet.Parsing
 
             public bool SubcommandsAreAllowed { get; private set; } = true;
 
-            public Option? Option { get; private set; }
-            public Token? OptionToken { get; private set; }
+            public Option? ExpectedOption { get; private set; }
+            public Token? ExpectedOptionToken { get; private set; }
             public OperandQueue Operands { get; private set; }
 
             public bool IgnoreRemainingArguments { get; set; }
@@ -52,14 +53,18 @@ namespace CommandDotNet.Parsing
 
             public void ExpectOption(Option option, Token token)
             {
-                Option = option ?? throw new ArgumentNullException(nameof(option));
-                OptionToken = token ?? throw new ArgumentNullException(nameof(token));
+                ExpectedOption = option ?? throw new ArgumentNullException(nameof(option));
+                ExpectedOptionToken = token ?? throw new ArgumentNullException(nameof(token));
+                if (!option.IsInterceptorOption || option.AssignToExecutableSubcommands)
+                {
+                    CommandArgumentParsed();
+                }
             }
 
             public void ClearOption()
             {
-                Option = null;
-                OptionToken = null;
+                ExpectedOption = null;
+                ExpectedOptionToken = null;
             }
 
             public void CommandArgumentParsed() => SubcommandsAreAllowed = false;

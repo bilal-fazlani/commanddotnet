@@ -51,13 +51,11 @@ token transformations:
 
 >>> from shell
   Directive: [parse:t]
-  Value    : Secure
-  Option   : -u
-  Value    : me
-  Option   : -p
-  Value    : super-secret
->>> after: expand-clubbed-flags (no changes)
->>> after: split-option-assignments (no changes)
+  Argument : Secure
+  Argument : -u
+  Argument : me
+  Argument : -p
+  Argument : super-secret
 "
                     }
                 });
@@ -93,17 +91,15 @@ token transformations:
 
 >>> from shell
   Directive: [parse:t]
-  Value    : Secure
-  Value    : @{tempFile}
+  Argument : Secure
+  Argument : @{tempFile}
 >>> after: expand-response-files
   Directive: [parse:t]
-  Value    : Secure
-  Option   : -u
-  Value    : me
-  Option   : -p
-  Value    : super-secret
->>> after: expand-clubbed-flags (no changes)
->>> after: split-option-assignments (no changes)
+  Argument : Secure
+  Argument : -u
+  Argument : me
+  Argument : -p
+  Argument : super-secret
 "
                     }
                 });
@@ -138,9 +134,7 @@ token transformations:
 
 >>> from shell
   Directive: [parse:t]
-  Value    : PromptSecure
->>> after: expand-clubbed-flags (no changes)
->>> after: split-option-assignments (no changes)
+  Argument : PromptSecure
 "
                     }
                 });
@@ -180,11 +174,9 @@ token transformations:
 
 >>> from shell
   Directive: [parse:t]
-  Value    : Secure
-  Option   : -u
-  Value    : me
->>> after: expand-clubbed-flags (no changes)
->>> after: split-option-assignments (no changes)
+  Argument : Secure
+  Argument : -u
+  Argument : me
 "
                     }
                 });

@@ -37,9 +37,9 @@ namespace CommandDotNet
                 throw new InvalidConfigurationException($"a long or short name is required. source:{definitionSource}");
             }
 
-            if (shortName.HasValue && !char.IsLetter(shortName.Value))
+            if (shortName.HasValue && !shortName.Value.IsAlphaNumeric())
             {
-                throw new InvalidConfigurationException($"short name must be a letter but was '{shortName.Value}'. source:{definitionSource}");
+                throw new InvalidConfigurationException($"short name must be alphanumeric but was '{shortName.Value}'. source:{definitionSource}");
             }
 
             if (isInterceptorOption && assignToExecutableSubcommands)

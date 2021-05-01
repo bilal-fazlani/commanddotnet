@@ -29,7 +29,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             }
 
             var appSettings = commandContext.AppConfig.AppSettings;
-            command.IgnoreUnexpectedOperands = commandAttribute?.IgnoreUnexpectedOperandsAsNullable ?? appSettings.IgnoreUnexpectedOperands;
+            command.IgnoreUnexpectedOperands = commandAttribute?.IgnoreUnexpectedOperandsAsNullable ?? appSettings.Parser.IgnoreUnexpectedOperands;
             command.ArgumentSeparatorStrategy = commandAttribute?.ArgumentSeparatorStrategyAsNullable ?? appSettings.DefaultArgumentSeparatorStrategy;
 
             var commandBuilder = new CommandBuilder(command);

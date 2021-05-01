@@ -16,11 +16,12 @@ namespace CommandDotNet
         /// </summary>
         public BooleanMode BooleanMode { get; set; } = BooleanMode.Implicit;
 
-        /// <summary>
-        /// When false, unexpected operands will generate a parse failure.<br/>
-        /// When true, unexpected arguments will be ignored and added to <see cref="ParseResult.RemainingOperands"/><br/>
-        /// </summary>
-        public bool IgnoreUnexpectedOperands { get; set; }
+        [Obsolete("Use Parser.IgnoreUnexpectedOperands")]
+        public bool IgnoreUnexpectedOperands
+        {
+            get => Parser.IgnoreUnexpectedOperands; 
+            set => Parser.IgnoreUnexpectedOperands = value;
+        }
 
         /// <summary>
         /// The default <see cref="ArgumentSeparatorStrategy"/>.
@@ -39,9 +40,12 @@ namespace CommandDotNet
         /// Set to true to prevent tokenizing arguments as <see cref="TokenType.Directive"/>,
         /// captured in <see cref="CommandContext.Tokens"/>.
         /// Arguments with the [directive syntax] will be tokenized
-        /// as <see cref="TokenType.Value"/>.
+        /// as <see cref="TokenType.Argument"/>.
         /// </summary>
         public bool DisableDirectives { get; set; }
+
+        /// <summary>Settings specific to built-in help providers</summary>
+        public ParseAppSettings Parser { get; set; } = new ParseAppSettings();
 
         /// <summary>Settings specific to built-in help providers</summary>
         public AppHelpSettings Help { get; set; } = new AppHelpSettings();

@@ -72,6 +72,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
             {
                 static IEnumerable<string> GetOptionKeys(Option option)
                 {
+                    // TOOD: support ParseAppSettings { AllowBackslashOptionPrefix & AllowSingleHyphenForLongNames }
                     if (!option.LongName.IsNullOrWhitespace()) yield return $"--{option.LongName}";
                     if (option.ShortName.HasValue) yield return $"-{option.ShortName}";
                 }
