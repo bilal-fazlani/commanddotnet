@@ -1,7 +1,6 @@
 ﻿using System;
-using CommandDotNet.Rendering;
 
-namespace CommandDotNet
+namespace CommandDotNet.ConsoleOnly
 {
     public class SystemConsoleReader : IConsoleReader
     {
@@ -27,7 +26,7 @@ namespace CommandDotNet
             return Console.Read();
         }
 
-        public string ReadLine()
+        public string? ReadLine()
         {
             return Console.ReadLine();
         }

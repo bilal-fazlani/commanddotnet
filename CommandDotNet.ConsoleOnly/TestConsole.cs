@@ -6,10 +6,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CommandDotNet.Logging;
-using CommandDotNet.Rendering;
 
-namespace CommandDotNet.TestTools
+namespace CommandDotNet.ConsoleOnly
 {
     /// <summary>
     /// A test console that can be used to <br/>
@@ -17,12 +15,11 @@ namespace CommandDotNet.TestTools
     /// - provide piped input <br/>
     /// - handle ReadLine and ReadToEnd requests
     /// </summary>
-    public partial class TestConsole : IConsole
+    public class TestConsole : IConsole
     {
         private readonly Action<TestConsole> _onClear;
-        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
-        public static class Default
+        public static class Defaults
         {
             public static ConsoleColor BackgroundColor { get; set; } = ConsoleColor.Black;
             public static ConsoleColor ForegroundColor { get; set; } = ConsoleColor.White;
@@ -72,7 +69,6 @@ namespace CommandDotNet.TestTools
                 () =>
                 {
                     var input = onReadLine?.Invoke(this);
-                    Log.Info($"IConsole.ReadLine > {input}");
                     return input;
                 },
                 onReadKey switch
@@ -129,25 +125,36 @@ namespace CommandDotNet.TestTools
         /// </summary>
         public string ErrorText() => Error.ToString();
 
-        public string OutLastLine => Out.ToString().SplitIntoLines().Last();
+        public string OutLastLine
+        {
+            get
+            {
+                var text = Out.ToString();
+                var index = text.LastIndexOfAny(new[] {'\r', '\n'});
+                return index < 0 ? text : text.Substring(index+1, text.Length-index-1);
+            }
+        }
+
+        private static string[] SplitIntoLines(string text) =>
+            text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
         #region IConsoleColor
 
-        public ConsoleColor BackgroundColor { get; set; } = Default.BackgroundColor;
-        public ConsoleColor ForegroundColor { get; set; } = Default.ForegroundColor;
+        public ConsoleColor BackgroundColor { get; set; } = Defaults.BackgroundColor;
+        public ConsoleColor ForegroundColor { get; set; } = Defaults.ForegroundColor;
 
         public void ResetColor()
         {
-            BackgroundColor = Default.BackgroundColor;
-            ForegroundColor = Default.ForegroundColor;
+            BackgroundColor = Defaults.BackgroundColor;
+            ForegroundColor = Defaults.ForegroundColor;
         }
 
         #endregion
 
         #region IConsoleBuffer
 
-        public int BufferWidth { get; set; } = Default.BufferWidth;
-        public int BufferHeight { get; set; } = Default.BufferHeight;
+        public int BufferWidth { get; set; } = Defaults.BufferWidth;
+        public int BufferHeight { get; set; } = Defaults.BufferHeight;
 
         public void SetBufferSize(int width, int height)
         {
@@ -164,10 +171,10 @@ namespace CommandDotNet.TestTools
 
         #region IConsoleWindow
 
-        public int WindowLeft { get; set; } = Default.WindowLeft;
-        public int WindowTop { get; set; } = Default.WindowTop;
-        public int WindowWidth { get; set; } = Default.WindowWidth;
-        public int WindowHeight { get; set; } = Default.WindowHeight;
+        public int WindowLeft { get; set; } = Defaults.WindowLeft;
+        public int WindowTop { get; set; } = Defaults.WindowTop;
+        public int WindowWidth { get; set; } = Defaults.WindowWidth;
+        public int WindowHeight { get; set; } = Defaults.WindowHeight;
 
         public void SetWindowPosition(int left, int top)
         {
