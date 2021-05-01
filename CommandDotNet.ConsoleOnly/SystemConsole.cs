@@ -5,7 +5,7 @@
 
 using System;
 
-namespace CommandDotNet.Rendering
+namespace CommandDotNet.ConsoleOnly
 {
     public class SystemConsole : IConsole
     {

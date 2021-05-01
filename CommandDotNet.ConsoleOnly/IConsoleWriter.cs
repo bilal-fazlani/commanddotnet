@@ -1,4 +1,4 @@
-﻿namespace CommandDotNet.Rendering
+﻿namespace CommandDotNet.ConsoleOnly
 {
     public interface IConsoleWriter
     {

@@ -5,10 +5,9 @@
 
 using System;
 using System.IO;
-using CommandDotNet.Rendering;
 using static System.Environment;
 
-namespace CommandDotNet
+namespace CommandDotNet.ConsoleOnly
 {
     public static class ConsoleWriter
     {
@@ -31,7 +30,6 @@ namespace CommandDotNet
             {
                 throw new ArgumentNullException(nameof(writer));
             }
-
             writer.Write(NewLine);
         }
 
@@ -42,21 +40,13 @@ namespace CommandDotNet
 
         public static void WriteLine(this IConsoleWriter writer, string? value)
         {
-            writer.WriteLine(value, avoidExtraNewLine: false);
-        }
-
-        internal static void WriteLine(this IConsoleWriter writer, string? value, bool avoidExtraNewLine)
-        {
             if (writer == null)
             {
                 throw new ArgumentNullException(nameof(writer));
             }
 
             writer.Write(value);
-            if (!avoidExtraNewLine || (!value?.EndsWith(NewLine) ?? false))
-            {
-                writer.Write(NewLine);
-            }
+            writer.WriteLine();
         }
 
         public static void Write(this IConsoleWriter writer, object? value)

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CommandDotNet.ConsoleOnly;
 using CommandDotNet.Extensions;
 using CommandDotNet.Logging;
-using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Prompts

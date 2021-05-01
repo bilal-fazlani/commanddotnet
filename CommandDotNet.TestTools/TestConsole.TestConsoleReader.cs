@@ -1,6 +1,6 @@
 ﻿using System;
+using CommandDotNet.ConsoleOnly;
 using CommandDotNet.Prompts;
-using CommandDotNet.Rendering;
 
 namespace CommandDotNet.TestTools
 {
