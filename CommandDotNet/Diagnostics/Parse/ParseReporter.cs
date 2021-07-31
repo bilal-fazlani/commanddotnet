@@ -63,7 +63,7 @@ namespace CommandDotNet.Diagnostics.Parse
         {
             bool isObscured = argument.IsObscured();
             var indent2 = indent.Increment();
-            
+              
             var txtValue = Resources.A.Common_value_lc;
             var txtInputs = Resources.A.Input_inputs_lc;
             var txtDefault = Resources.A.Common_default_lc;

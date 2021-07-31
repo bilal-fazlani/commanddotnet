@@ -27,7 +27,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
         }
 
         [Fact(Skip = "--opt2 will be treated as a value for --opt1 now")]
-        // TODO: identify this as a problem
+        // TODO: identify when --opt2 could be an option and --opt1 is missing value
         public void GivenOptionExpectingAValue_ValueMustBeSpecified_BeforeNextOption()
         {
             new AppRunner<App>().Verify(new Scenario

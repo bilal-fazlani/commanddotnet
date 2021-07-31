@@ -145,6 +145,7 @@ namespace CommandDotNet.Parsing
             {
                 if (node is Command cmd)
                 {
+                    // TODO: localize
                     var suggestion = parseContext.CommandContext.Original.Args.ToCsv(" ").Replace(token.RawValue, optionName);
                     parseContext.ParserError = new UnrecognizedArgumentParseError(parseContext.Command, token, optionPrefix, 
                         $"Unrecognized option '{token.RawValue}'. {Environment.NewLine}" +
@@ -158,7 +159,7 @@ namespace CommandDotNet.Parsing
                 if (!parseContext.ParseSettings.AllowSingleHyphenForLongNames
                     && optionPrefix == "-" && optionName.Length > 1)
                 {
-                    // must be long name, cannot be clubbed.
+                    // an option was found by long name but using a single hyphen which is not allowed
                     parseContext.ParserError = new UnrecognizedOptionParseError(command, optionToken, optionPrefix);
                     return true;
                 }
@@ -187,7 +188,7 @@ namespace CommandDotNet.Parsing
             // is '-' or '/'.  both can be long or short named or clubbed/bundled flags
             // Long name and short name has already been checked above so this is either
             // a clubbed set of options or an invalid option name.
-            // If it's an invalid option name, some of the letters could be match short names.
+            // If it's an invalid option name, some of the letters could match short names.
             //
             // * If all letters match short names, use them as short names
             // * If no letter match short name, raise error for the long name
@@ -204,7 +205,7 @@ namespace CommandDotNet.Parsing
 
             if (clubbedOptions.Count < optionName.Length)
             {
-                // TODO: Allow option value assignment without separator?
+                // TODO: Allow clubbed option value assignment without separator?
                 //       This is common in some tools and supported by System.CommandLine
                 parseContext.ParserError = new UnrecognizedOptionParseError(command, optionToken, optionPrefix);
                 return false;
@@ -214,13 +215,13 @@ namespace CommandDotNet.Parsing
             valueToken = null;
             foreach (var co in clubbedOptions)
             {
-                var isLastOption = co.index == optionName.Length - 1;
                 option = co.option;
                 optionToken = new Token($"{optionPrefix}{co.shortName}", co.shortName, TokenType.Argument)
                 {
                     SourceToken = token
                 };
 
+                var isLastOption = co.index == optionName.Length - 1;
                 if (isLastOption)
                 {
                     if (origValueToken is { })
@@ -230,6 +231,7 @@ namespace CommandDotNet.Parsing
                 }
                 else if (!option!.IsFlag)
                 {
+                    // TODO: localize
                     // TEST: all options must be flags except last 
                     parseContext.ParserError = new ExpectedFlagParseError(command, token, co.shortName, co.option, 
                         $"'{co.shortName}' expects a value so it must be the last option specified in '{token.Value}'");
@@ -237,7 +239,13 @@ namespace CommandDotNet.Parsing
                 }
 
                 SetValue();
+                if (parseContext.ParserError is { })
+                {
+                    // no need to continue
+                    return true;
+                }
             }
+            return true;
 
             void SetValue()
             {
@@ -263,8 +271,6 @@ namespace CommandDotNet.Parsing
                     }
                 }
             }
-
-            return true;
         }
 
         private static void ParseOperand(ParseContext parseContext, Token token)
@@ -287,6 +293,7 @@ namespace CommandDotNet.Parsing
             }
             else
             {
+                // TODO: localize
                 // use the term "argument" for messages displayed to users
                 parseContext.ParserError = new UnrecognizedArgumentParseError(parseContext.Command, token, null,
                     $"Unrecognized command or argument '{token.RawValue}'");
