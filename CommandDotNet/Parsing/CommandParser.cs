@@ -88,10 +88,18 @@ namespace CommandDotNet.Parsing
         {
             var optionTokenType = token.OptionTokenType!;
 
-            var option = parseContext.Command.Find<Option>(optionTokenType.GetName());
+            var node = parseContext.Command.FindArgumentNode(optionTokenType.GetName());
+            var option = node as Option;
             if (option is null)
             {
-                parseContext.ParserError = new UnrecognizedArgumentParseError(parseContext.Command, token, $"Unrecognized option '{token.RawValue}'");
+                if (node is {} && node is Command cmd)
+                {
+                    parseContext.ParserError = new UnrecognizedArgumentParseError(parseContext.Command, token, $"Unrecognized option '{token.RawValue}'. If you intended to use the '{optionTokenType.GetName()}' command, try again without the '{optionTokenType.GetPrefix()}' prefix.");
+                }
+                else
+                {
+                    parseContext.ParserError = new UnrecognizedArgumentParseError(parseContext.Command, token, $"Unrecognized option '{token.RawValue}'");
+                }
                 return;
             }
 

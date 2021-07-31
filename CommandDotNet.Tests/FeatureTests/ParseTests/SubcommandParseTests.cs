@@ -93,6 +93,20 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
                 });
         }
 
+        [Fact]
+        public void SubcommandsWithOptionPrefixGeneratesSuggestion()
+        {
+            new AppRunner<DefaultApp>().Verify(new Scenario
+            {
+                When = { Args = "--Do" },
+                Then =
+                {
+                    ExitCode = 1,
+                    OutputContainsTexts = { "Unrecognized option '--Do'. If you intended to use the 'Do' command, try again without the '--' prefix." }
+                }
+            });
+        }
+
         private class DefaultApp
         {
             public Task<int> Interceptor(InterceptorExecutionDelegate next, 
