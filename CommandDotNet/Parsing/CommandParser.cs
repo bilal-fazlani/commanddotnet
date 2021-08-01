@@ -94,7 +94,10 @@ namespace CommandDotNet.Parsing
             {
                 if (node is {} && node is Command cmd)
                 {
-                    parseContext.ParserError = new UnrecognizedArgumentParseError(parseContext.Command, token, $"Unrecognized option '{token.RawValue}'. If you intended to use the '{optionTokenType.GetName()}' command, try again without the '{optionTokenType.GetPrefix()}' prefix.");
+                    var suggestion = parseContext.CommandContext.Original.Args.ToCsv(" ").Replace(token.RawValue, optionTokenType.GetName());
+                    parseContext.ParserError = new UnrecognizedArgumentParseError(parseContext.Command, token, $"Unrecognized option '{token.RawValue}'. {Environment.NewLine}" +
+                        $"If you intended to use the '{optionTokenType.GetName()}' command, try again with the following {Environment.NewLine}{Environment.NewLine}" +
+                        suggestion);
                 }
                 else
                 {

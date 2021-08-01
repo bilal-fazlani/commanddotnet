@@ -102,7 +102,10 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
                 Then =
                 {
                     ExitCode = 1,
-                    OutputContainsTexts = { "Unrecognized option '--Do'. If you intended to use the 'Do' command, try again without the '--' prefix." }
+                    OutputContainsTexts = { @"Unrecognized option '--Do'. 
+If you intended to use the 'Do' command, try again with the following 
+
+Do" }
                 }
             });
         }
