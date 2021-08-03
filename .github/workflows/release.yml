@@ -21,4 +21,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Deploy
+      env:
+        NUGET_API_KEY_COMMANDDOTNET: ${{ secrets.NUGET_API_KEY_COMMANDDOTNET }}
       run: ./deploy.sh
