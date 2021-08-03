@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 #GIT_TAG_NAME=CommandDotNet.TestTools_1.0.0
 #GIT_TAG_NAME=CommandDotNet.TestTools_1.0.0-preview1
