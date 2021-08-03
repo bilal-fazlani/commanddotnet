@@ -1,0 +1,24 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "CommandDotNet*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:      
+    - uses: actions/checkout@v2
+    - name: Get all git tags
+      run: git fetch --prune --unshallow --tags -f
+    - uses: olegtarasov/get-tag@v2.1
+      id: tagName    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Deploy
+      run: ./deploy.sh
