@@ -1,25 +1,25 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
-#TRAVIS_TAG=CommandDotNet.TestTools_1.0.0
-#TRAVIS_TAG=CommandDotNet.TestTools_1.0.0-preview1
+#GIT_TAG_NAME=CommandDotNet.TestTools_1.0.0
+#GIT_TAG_NAME=CommandDotNet.TestTools_1.0.0-preview1
 
-parseTravisTag () {
+parseGitTag () {
   echo " "
-  echo ">>> parseTravisTag"
+  echo ">>> parseGitTag"
   echo " "
 
-  if [[ $TRAVIS_TAG =~ (.+)_(.+) ]]
+  if [[ $GIT_TAG_NAME =~ (.+)_(.+) ]]
   then
     PROJECT_NAME=${BASH_REMATCH[1]}
     DEPLOYMENT_VERSION=${BASH_REMATCH[2]}
-    echo "TRAVIS_TAG resolved to project $PROJECT_NAME & version $DEPLOYMENT_VERSION"
+    echo "GIT_TAG_NAME resolved to project $PROJECT_NAME & version $DEPLOYMENT_VERSION"
   else
-    >&2 echo "failed to parse TRAVIS_TAG of value '$TRAVIS_TAG'"
+    >&2 echo "failed to parse GIT_TAG_NAME of value '$GIT_TAG_NAME'"
     exit 1
   fi
   
   echo " "
-  echo "<<< parseTravisTag"
+  echo "<<< parseGitTag"
   echo " "
 }
 
@@ -129,7 +129,7 @@ fixNupkgVersions () {
   echo " "
 }
 
-parseTravisTag
+parseGitTag
 
 PROJECT_FILE=$PROJECT_NAME/$PROJECT_NAME.csproj
 NUPKG_FILE=$PROJECT_NAME.$DEPLOYMENT_VERSION.nupkg
