@@ -66,6 +66,7 @@ nav:
         - Extensibility/interceptors.md 
         - Extensibility/token-transformations.md
       - Tips & FAQs:
+        - TipsFaqs/cli-best-practices.md
         - TipsFaqs/nullable-reference-types.md
         - TipsFaqs/developing-middleware.md
     - Release Notes:

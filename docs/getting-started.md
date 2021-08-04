@@ -7,6 +7,8 @@
 Out of the box support for commands, sub-commands, validations, dependency injection, 
 piping and streaming, enums & custom types, typo suggestions, prompting, passwords, response files and much more!
 
+Favors [POSIX conventions](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap12.html)
+
 Includes [test tools](TestTools/overview.md) used by the framework to test all features of the framework.
 
 Modify and extend the functionality of the framework through configuration and middleware.
