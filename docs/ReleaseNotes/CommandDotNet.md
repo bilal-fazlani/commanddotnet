@@ -1,5 +1,13 @@
 # CommandDotNet
 
+## 4.1.13
+
+Fix [bug](https://github.com/bilal-fazlani/commanddotnet/issues/346) where calling a command using option syntax threw an exception.
+
+Now it will suggest the correct syntax to the user.
+
+4.1.9-4.1.12 were skipped while converting our build system over to GitHub Actions
+
 ## 4.1.8
 
 Expose expose DefaultSources.GetValueFunc for host apps to reuse logic for alternate configuration sources.
