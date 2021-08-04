@@ -16,13 +16,23 @@
 
 ### A modern framework for building modern CLI apps
 
-Out of the box support for commands, sub-commands, validations, dependency injection, piping and streaming, enums & custom types, typo suggestions, prompting, passwords, response files and more. See the [features page](https://commanddotnet.bilal-fazlani.com/features). 
+Out of the box support for commands, sub-commands, validations, dependency injection, 
+piping and streaming, enums & custom types, typo suggestions, prompting, passwords, response files and much more! 
+See the [features page](https://commanddotnet.bilal-fazlani.com/features). 
 
-Includes [test tools](https://commanddotnet.bilal-fazlani.com/test-tools) used by the framework to test all features of the framework.
+Favors [POSIX conventions](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap12.html)
+
+Includes [test tools](TestTools/overview.md) used by the framework to test all features of the framework.
 
 Modify and extend the functionality of the framework through configuration and middleware.
 
 ### Documentation 👉 https://commanddotnet.bilal-fazlani.com
+
+## Support
+
+For bugs, [create an issue](https://github.com/bilal-fazlani/commanddotnet/issues/new)
+
+For questions and feature requests, start [a discussion](https://github.com/bilal-fazlani/commanddotnet/discussions)
 
 ### Example
 

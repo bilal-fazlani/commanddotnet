@@ -12,6 +12,11 @@ Favors [POSIX conventions](https://pubs.opengroup.org/onlinepubs/9699919799/base
 Includes [test tools](TestTools/overview.md) used by the framework to test all features of the framework.
 
 Modify and extend the functionality of the framework through configuration and middleware.
+## Support
+
+For bugs, [create an issue](https://github.com/bilal-fazlani/commanddotnet/issues/new)
+
+For questions and feature requests, start [a discussion](https://github.com/bilal-fazlani/commanddotnet/discussions)
 
 ## Credits 🎉
 
