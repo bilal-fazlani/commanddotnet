@@ -37,6 +37,7 @@ nav:
         - Diagnostics/app-version.md
         - Diagnostics/debug-directive.md
         - Diagnostics/parse-directive.md
+        - Diagnostics/time-directive.md
         - Diagnostics/command-logger.md
         - Diagnostics/exceptions.md
       - Testing:
