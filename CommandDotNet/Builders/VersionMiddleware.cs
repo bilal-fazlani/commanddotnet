@@ -33,7 +33,7 @@ namespace CommandDotNet.Builders
                 TypeInfo.Flag, ArgumentArity.Zero, 
                 definitionSource: typeof(VersionMiddleware).FullName)
             {
-                Description = "Show version information",
+                Description = Resources.Help.Show_version_information,
                 IsMiddlewareOption = true
             };
 

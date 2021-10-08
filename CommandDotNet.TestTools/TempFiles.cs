@@ -40,7 +40,7 @@ namespace CommandDotNet.TestTools
         /// <summary>
         /// If no fileName is provided then one is randomly generated.<br/>
         /// If the fileName is not rooted, it will be created in the users temp dir<br/>
-        /// If the file already exists, it will be overwritten with an empy file
+        /// If the file already exists, it will be overwritten with an empty file
         /// </summary>
         public string CreateOrClearTempFile(string? fileName = null)
         {

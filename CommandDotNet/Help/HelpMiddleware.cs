@@ -30,7 +30,7 @@ namespace CommandDotNet.Help
                 aliases: new[] { "?" },
                 definitionSource: typeof(HelpMiddleware).FullName)
             {
-                Description = "Show help information",
+                Description = Resources.Help.Show_help_information,
                 IsMiddlewareOption = true,
                 Hidden = !appSettingsHelp.PrintHelpOption
             };

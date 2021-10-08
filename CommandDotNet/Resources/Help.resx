@@ -159,4 +159,10 @@
   <data name="Use" xml:space="preserve">
     <value>Use</value>
   </data>
+  <data name="Show help information" xml:space="preserve">
+    <value>Show help information</value>
+  </data>
+  <data name="Show version information" xml:space="preserve">
+    <value>Show version information</value>
+  </data>
 </root>

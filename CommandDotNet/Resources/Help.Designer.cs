@@ -160,6 +160,24 @@ namespace CommandDotNet.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show help information.
+        /// </summary>
+        public static string Show_help_information {
+            get {
+                return ResourceManager.GetString("Show help information", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show version information.
+        /// </summary>
+        public static string Show_version_information {
+            get {
+                return ResourceManager.GetString("Show version information", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Usage.
         /// </summary>
         public static string Usage {
