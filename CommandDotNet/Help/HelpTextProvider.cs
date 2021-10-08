@@ -20,11 +20,11 @@ namespace CommandDotNet.Help
         public virtual string GetHelpText(Command command) =>
             JoinSections(
                 (null, CommandDescription(command)),
-                ("Usage", SectionUsage(command)),
-                ("Arguments", SectionOperands(command)),
-                ("Options", SectionOptions(command, false)),
-                ("Options also available for subcommands", SectionOptions(command, true)),
-                ("Commands", SectionSubcommands(command)),
+                (Resources.Help.Usage, SectionUsage(command)),
+                (Resources.Help.Arguments, SectionOperands(command)),
+                (Resources.Help.Options, SectionOptions(command, false)),
+                (Resources.Help.OptionsForSubcommands, SectionOptions(command, true)),
+                (Resources.Help.Commands, SectionSubcommands(command)),
                 (null, ExtendedHelpText(command)));
 
         /// <summary>returns the body of the usage section</summary>
