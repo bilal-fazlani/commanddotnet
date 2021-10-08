@@ -117,19 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Allowed values" xml:space="preserve">
+    <value>Allowed values</value>
+  </data>
+  <data name="arg" xml:space="preserve">
+    <value>arg</value>
+  </data>
   <data name="Arguments" xml:space="preserve">
     <value>Arguments</value>
+  </data>
+  <data name="arguments_lc" xml:space="preserve">
+    <value>arguments</value>
   </data>
   <data name="Commands" xml:space="preserve">
     <value>Commands</value>
   </data>
+  <data name="command_lc" xml:space="preserve">
+    <value>command</value>
+  </data>
+  <data name="for more information about a command" xml:space="preserve">
+    <value>for more information about a command.</value>
+  </data>
+  <data name="Multiple" xml:space="preserve">
+    <value>Multiple</value>
+  </data>
   <data name="Options" xml:space="preserve">
     <value>Options</value>
   </data>
-  <data name="OptionsForSubcommands" xml:space="preserve">
+  <data name="Options also available for subcommands" xml:space="preserve">
     <value>Options also available for subcommands</value>
+  </data>
+  <data name="options_lc" xml:space="preserve">
+    <value>options</value>
   </data>
   <data name="Usage" xml:space="preserve">
     <value>Usage</value>
+  </data>
+  <data name="usage_lc" xml:space="preserve">
+    <value>usage</value>
+  </data>
+  <data name="Use" xml:space="preserve">
+    <value>Use</value>
   </data>
 </root>

@@ -17,14 +17,10 @@ namespace CommandDotNet.Example
         {
             if (context.Tokens.TryGetDirective("loc", out string? culture))
             {
-                context.Console.WriteLine($"{CultureInfo.CurrentUICulture.LCID} - {CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName} - {CultureInfo.CurrentUICulture.ThreeLetterWindowsLanguageName} - {CultureInfo.CurrentUICulture.Name} - {CultureInfo.CurrentUICulture.DisplayName}");
-
                 var name = culture!.Split(':').Last();
                 var cultureInfo = CultureInfo.GetCultureInfo(name);
                 CultureInfo.CurrentCulture = cultureInfo;
                 CultureInfo.CurrentUICulture = cultureInfo;
-
-                context.Console.WriteLine($"{CultureInfo.CurrentUICulture.LCID} - {CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName} - {CultureInfo.CurrentUICulture.ThreeLetterWindowsLanguageName} - {CultureInfo.CurrentUICulture.Name} - {CultureInfo.CurrentUICulture.DisplayName}");
             }
 
             return next(context);

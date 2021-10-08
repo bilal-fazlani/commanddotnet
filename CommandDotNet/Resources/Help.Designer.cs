@@ -61,6 +61,24 @@ namespace CommandDotNet.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allowed values.
+        /// </summary>
+        public static string Allowed_values {
+            get {
+                return ResourceManager.GetString("Allowed values", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to arg.
+        /// </summary>
+        public static string arg {
+            get {
+                return ResourceManager.GetString("arg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Arguments.
         /// </summary>
         public static string Arguments {
@@ -70,11 +88,47 @@ namespace CommandDotNet.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to arguments.
+        /// </summary>
+        public static string arguments_lc {
+            get {
+                return ResourceManager.GetString("arguments_lc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to command.
+        /// </summary>
+        public static string command_lc {
+            get {
+                return ResourceManager.GetString("command_lc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Commands.
         /// </summary>
         public static string Commands {
             get {
                 return ResourceManager.GetString("Commands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to for more information about a command..
+        /// </summary>
+        public static string for_more_information_about_a_command {
+            get {
+                return ResourceManager.GetString("for more information about a command", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiple.
+        /// </summary>
+        public static string Multiple {
+            get {
+                return ResourceManager.GetString("Multiple", resourceCulture);
             }
         }
         
@@ -90,9 +144,18 @@ namespace CommandDotNet.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Options also available for subcommands.
         /// </summary>
-        public static string OptionsForSubcommands {
+        public static string Options_also_available_for_subcommands {
             get {
-                return ResourceManager.GetString("OptionsForSubcommands", resourceCulture);
+                return ResourceManager.GetString("Options also available for subcommands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to options.
+        /// </summary>
+        public static string options_lc {
+            get {
+                return ResourceManager.GetString("options_lc", resourceCulture);
             }
         }
         
@@ -102,6 +165,24 @@ namespace CommandDotNet.Resources {
         public static string Usage {
             get {
                 return ResourceManager.GetString("Usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to usage.
+        /// </summary>
+        public static string usage_lc {
+            get {
+                return ResourceManager.GetString("usage_lc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use.
+        /// </summary>
+        public static string Use {
+            get {
+                return ResourceManager.GetString("Use", resourceCulture);
             }
         }
     }
