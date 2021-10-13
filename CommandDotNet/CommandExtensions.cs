@@ -97,7 +97,7 @@ namespace CommandDotNet
 
         /// <summary>Determines if help was requested for the specified command</summary>
         public static bool HelpWasRequested(this Command command) => 
-            command.HasInputValues(Constants.HelpOptionName);
+            command.HasInputValues(HelpText.Instance.help_lc);
 
         /// <summary>Returns true if the command contains an argument with the given alias</summary>
         public static bool ContainsArgumentNode(this Command command, string alias) =>

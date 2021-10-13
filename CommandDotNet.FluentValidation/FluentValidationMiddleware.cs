@@ -48,7 +48,7 @@ namespace CommandDotNet.FluentValidation
                     var console = ctx.Console;
                     failureResults.ForEach(f =>
                     {
-                        console.Error.WriteLine($"'{f.model.GetType().Name}' is invalid");
+                        console.Error.WriteLine(ErrorText.Instance.Argument_model_is_invalid(f.model.GetType().Name));
                         foreach (var error in f.result!.Errors)
                         {
                             console.Error.WriteLine($"  {error.ErrorMessage}");

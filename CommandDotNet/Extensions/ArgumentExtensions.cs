@@ -9,7 +9,7 @@ namespace CommandDotNet.Extensions
         {
             if (argument == null) throw new ArgumentNullException(nameof(argument));
 
-            return argument.Name == Constants.HelpOptionName;
+            return argument.Name == HelpText.Instance.help_lc;
         }
 
         /// <summary>Returns true if argument name is <see cref="Constants.VersionOptionName"/> and is on the root command.</summary>
@@ -17,7 +17,7 @@ namespace CommandDotNet.Extensions
         {
             if (argument == null) throw new ArgumentNullException(nameof(argument));
 
-            return argument.Name == Constants.VersionOptionName && argument.Parent!.IsRootCommand();
+            return argument.Name == HelpText.Instance.version_lc && argument.Parent!.IsRootCommand();
         }
 
         public static bool IsObscured(this IArgument argument) =>

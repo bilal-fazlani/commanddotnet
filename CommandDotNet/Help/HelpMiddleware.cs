@@ -18,19 +18,20 @@ namespace CommandDotNet.Help
 
         private static void AddHelpOption(BuildEvents.CommandCreatedEventArgs args)
         {
-            if (args.CommandBuilder.Command.ContainsArgumentNode(Constants.HelpOptionName))
+            var helpOptionName = HelpText.Instance.help_lc;
+            if (args.CommandBuilder.Command.ContainsArgumentNode(helpOptionName))
             {
                 return;
             }
 
             var appSettingsHelp = args.CommandContext.AppConfig.AppSettings.Help;
 
-            var option = new Option(Constants.HelpOptionName, 'h',
+            var option = new Option(helpOptionName, 'h',
                 TypeInfo.Flag, ArgumentArity.Zero,
                 aliases: new[] { "?" },
                 definitionSource: typeof(HelpMiddleware).FullName)
             {
-                Description = Resources.Help.Show_help_information,
+                Description = HelpText.Instance.Show_help_information,
                 IsMiddlewareOption = true,
                 Hidden = !appSettingsHelp.PrintHelpOption
             };

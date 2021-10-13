@@ -28,7 +28,7 @@ namespace CommandDotNet.Tokens
                 var fullPath = Path.GetFullPath(filePath);
                 if (!File.Exists(fullPath))
                 {
-                    throw new FileNotFoundException($"File not found: {fullPath}");
+                    throw new FileNotFoundException(ErrorText.Instance.File_not_found(fullPath));
                 }
 
                 var splitter = CommandLineStringSplitter.Instance;

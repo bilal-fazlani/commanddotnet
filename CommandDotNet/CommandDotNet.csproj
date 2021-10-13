@@ -31,17 +31,4 @@
   <ItemGroup>
     <None Remove="CommandDotNet.csproj.DotSettings" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Resources\Help.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Help.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\Help.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Help.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
 </Project>

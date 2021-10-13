@@ -154,11 +154,12 @@ namespace CommandDotNet.DataAnnotations
         private static string RemoveFieldTerminology(this string error, string memberName, IArgument argument)
         {
             memberName = argument.GetCustomAttribute<DisplayAttribute>()?.Name ?? memberName;
-            return error
-                .Replace($"The {memberName} field", $"'{argument.Name}'")
-                .Replace($"The field {memberName}", $"'{argument.Name}'")
-                .Replace($"The {memberName} property", $"'{argument.Name}'")
-                .Replace($"The property {memberName}", $"'{argument.Name}'");
+            var argName = $"'{argument.Name}'";
+            foreach (var phrase in ErrorText.Instance.DataAnnotation_phrases_to_replace_with_argument_name(memberName))
+            {
+                error = error.Replace(phrase, argName);
+            }
+            return error;
         }
     }
 }

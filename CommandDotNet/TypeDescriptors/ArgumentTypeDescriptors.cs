@@ -17,15 +17,15 @@ namespace CommandDotNet.TypeDescriptors
                 new BoolTypeDescriptor(),
                 new EnumTypeDescriptor(),
 
-                new DelegatedTypeDescriptor<string>(Constants.TypeDisplayNames.Text, v => v),
-                new DelegatedTypeDescriptor<Password>(Constants.TypeDisplayNames.Text, v => new Password(v)),
-                new DelegatedTypeDescriptor<char>(Constants.TypeDisplayNames.Character, v => char.Parse(v)),
+                new DelegatedTypeDescriptor<string>(HelpText.Instance.Text, v => v),
+                new DelegatedTypeDescriptor<Password>(HelpText.Instance.Text, v => new Password(v)),
+                new DelegatedTypeDescriptor<char>(HelpText.Instance.Character, v => char.Parse(v)),
 
-                new DelegatedTypeDescriptor<long>(Constants.TypeDisplayNames.Number, v => long.Parse(v, CultureInfo.InvariantCulture)),
-                new DelegatedTypeDescriptor<int>(Constants.TypeDisplayNames.Number, v => int.Parse(v, CultureInfo.InvariantCulture)),
-                new DelegatedTypeDescriptor<short>(Constants.TypeDisplayNames.Number, v => short.Parse(v, CultureInfo.InvariantCulture)),
-                new DelegatedTypeDescriptor<decimal>(Constants.TypeDisplayNames.DecimalNumber, v => decimal.Parse(v, CultureInfo.InvariantCulture)),
-                new DelegatedTypeDescriptor<double>(Constants.TypeDisplayNames.DoubleNumber, v => double.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<long>(HelpText.Instance.Number, v => long.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<int>(HelpText.Instance.Number, v => int.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<short>(HelpText.Instance.Number, v => short.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<decimal>(HelpText.Instance.Decimal, v => decimal.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<double>(HelpText.Instance.Double, v => double.Parse(v, CultureInfo.InvariantCulture)),
 
                 new ComponentModelTypeDescriptor(),
                 new StringCtorTypeDescriptor()
