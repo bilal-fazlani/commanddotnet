@@ -8,7 +8,6 @@ namespace CommandDotNet.Help
 {
     public class HelpTextProvider : IHelpProvider
     {
-        private readonly Resources _resources;
         private readonly AppHelpSettings _appHelpSettings;
         private string? _appName;
 
@@ -16,17 +15,16 @@ namespace CommandDotNet.Help
         {
             _appName = appName;
             _appHelpSettings = appSettings.Help;
-            _resources = new Resources();
         }
         
         public virtual string GetHelpText(Command command) =>
             JoinSections(
                 (null, CommandDescription(command)),
-                (_resources.Help_Usage, SectionUsage(command)),
-                (_resources.Help_Arguments, SectionOperands(command)),
-                (_resources.Help_Options, SectionOptions(command, false)),
-                (_resources.Help_Options_also_available_for_subcommands, SectionOptions(command, true)),
-                (_resources.Help_Commands, SectionSubcommands(command)),
+                (Resources.A.Help_Usage, SectionUsage(command)),
+                (Resources.A.Help_Arguments, SectionOperands(command)),
+                (Resources.A.Help_Options, SectionOptions(command, false)),
+                (Resources.A.Help_Options_also_available_for_subcommands, SectionOptions(command, true)),
+                (Resources.A.Help_Commands, SectionSubcommands(command)),
                 (null, ExtendedHelpText(command)));
 
         /// <summary>returns the body of the usage section</summary>
@@ -35,7 +33,7 @@ namespace CommandDotNet.Help
             var usage = PadFront(command.Usage)
                            ?? $"{PadFront(AppName(command))}{PadFront(CommandPath(command))}"
                            + $"{PadFront(UsageSubcommand(command))}{PadFront(UsageOption(command))}{PadFront(UsageOperand(command))}"
-                           + (command.ArgumentSeparatorStrategy == ArgumentSeparatorStrategy.PassThru ? $" [[--] <{_resources.Help_arg}>...]" : null);
+                           + (command.ArgumentSeparatorStrategy == ArgumentSeparatorStrategy.PassThru ? $" [[--] <{Resources.A.Help_arg}>...]" : null);
             return CommandReplacements(command, usage);
         }
 
@@ -55,7 +53,7 @@ namespace CommandDotNet.Help
 
             if (!_appHelpSettings.ExpandArgumentsInUsage)
             {
-                return $"[{_resources.Help_arguments_lc}]";
+                return $"[{Resources.A.Help_arguments_lc}]";
             }
 
             if (command.Operands.Last().Arity.Minimum > 0)
@@ -87,13 +85,13 @@ namespace CommandDotNet.Help
         /// <summary>How options are shown in the usage example</summary>
         protected virtual string? UsageOption(Command command) =>
             command.Options.Any(o => !o.Hidden)
-                ? $"[{_resources.Help_options_lc}]"
+                ? $"[{Resources.A.Help_options_lc}]"
                 : null;
 
         /// <summary>How subcommands are shown in the usage example</summary>
         protected virtual string? UsageSubcommand(Command command) =>
             command.Subcommands.Any()
-                ? $"[{_resources.Help_command_lc}]"
+                ? $"[{Resources.A.Help_command_lc}]"
                 : null;
 
         protected virtual string? ExtendedHelpText(Command command) => 
@@ -186,9 +184,9 @@ namespace CommandDotNet.Help
 
         /// <summary>Hint displayed in the subcommands section for getting help for a subcommand.</summary>
         protected virtual string? SubcommandHelpHint(Command command) =>
-            $"{_resources.Help_Use} \"{AppName(command)}{PadFront(CommandPath(command))} " +
-            $"[{_resources.Help_command_lc}] --{_resources.Command_help}\" " +
-            _resources.Help_for_more_information_about_a_command + ".";
+            $"{Resources.A.Help_Use} \"{AppName(command)}{PadFront(CommandPath(command))} " +
+            $"[{Resources.A.Help_command_lc}] --{Resources.A.Command_help}\" " +
+            Resources.A.Help_for_more_information_about_a_command + ".";
 
         protected virtual string CommandName(Command command) => command.Name;
 
@@ -207,11 +205,11 @@ namespace CommandDotNet.Help
             argument.Description.UnlessNullOrWhitespace();
 
         protected virtual string? ArgumentArity<T>(T argument) where T : IArgument => 
-            (argument.Arity.AllowsMany() ? $" ({_resources.Help_Multiple})" : "");
+            (argument.Arity.AllowsMany() ? $" ({Resources.A.Help_Multiple})" : "");
 
         /// <summary>Returns a comma-separated list of the allowed values</summary>
         protected virtual string? ArgumentAllowedValues<T>(T argument) where T : IArgument =>
-            argument.AllowedValues?.ToCsv(", ").UnlessNullOrWhitespace(v => $"{_resources.Help_Allowed_values}: {v}");
+            argument.AllowedValues?.ToCsv(", ").UnlessNullOrWhitespace(v => $"{Resources.A.Help_Allowed_values}: {v}");
 
         /// <summary></summary>
         protected virtual string? ArgumentDefaultValue(IArgument argument)
@@ -235,7 +233,7 @@ namespace CommandDotNet.Help
 
         /// <summary>Formats a section header.  Default appends line endings except for Usage</summary>
         protected virtual string? FormatSectionHeader(string header)
-            => _resources.Help_usage_lc.Equals(header, StringComparison.OrdinalIgnoreCase)
+            => Resources.A.Help_usage_lc.Equals(header, StringComparison.OrdinalIgnoreCase)
                     ? $"{header}:"
                     : $"{header}:{Environment.NewLine}{Environment.NewLine}";
 

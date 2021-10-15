@@ -24,8 +24,8 @@ namespace CommandDotNet.Diagnostics
             var config = context.AppConfig.Services.GetOrDefault<CommandLoggerConfig>();
             if (config == null)
             {
-                throw new InvalidConfigurationException($"{nameof(CommandLoggerMiddleware)} has not been registered. " +
-                                                        $"Try `appRunner.{nameof(AppRunnerConfigExtensions.UseCommandLogger)}()`");
+                throw new InvalidConfigurationException(
+                    Resources.A.Error_CommandLogger_has_not_been_registered());
             }
             if (context == null)
             {
@@ -39,7 +39,7 @@ namespace CommandDotNet.Diagnostics
             sb.AppendLine("***************************************");
 
             var originalArgs = RemovePasswords(context, context.Original.Args.ToCsv(" "));
-            sb.AppendLine("Original input:");
+            sb.AppendLine(Resources.A.CommandLogger_Original_input + ":");
             sb.AppendLine($"  {originalArgs}");
             sb.AppendLine();
 
@@ -88,12 +88,21 @@ namespace CommandDotNet.Diagnostics
             if (includeSystemInfo)
             {
                 var appInfo = AppInfo.Instance;
-                yield return ("Tool version", $"{appInfo.FileName} {appInfo.Version}");
-                yield return (".Net version",
+                yield return (
+                    Resources.A.CommandLogger_Tool_version, 
+                    $"{appInfo.FileName} {appInfo.Version}");
+                yield return (
+                    Resources.A.CommandLogger_DotNet_version,
                     System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription.Trim());
-                yield return ("OS version", System.Runtime.InteropServices.RuntimeInformation.OSDescription.Trim());
-                yield return ("Machine", Environment.MachineName);
-                yield return ("Username", $"{Environment.UserDomainName}\\{Environment.UserName}");
+                yield return (
+                    Resources.A.CommandLogger_OS_version, 
+                    System.Runtime.InteropServices.RuntimeInformation.OSDescription.Trim());
+                yield return (
+                    Resources.A.CommandLogger_Machine, 
+                    Environment.MachineName);
+                yield return (
+                    Resources.A.CommandLogger_Username, 
+                    $"{Environment.UserDomainName}\\{Environment.UserName}");
             }
 
             if (additionalHeaders is { })

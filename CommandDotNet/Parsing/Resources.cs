@@ -8,5 +8,8 @@ namespace CommandDotNet
 
         public string Error_ArgumentArity_Expected_single_value(string argumentName) => 
             $"{argumentName} accepts only a single value but multiple values were provided";
+
+        public string? Error_assigning_value_to_argument(IArgument argument, object defaultValue) => 
+            $"Failure assigning value to {argument}. Value={defaultValue}";
     }
 }

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
-using CommandDotNet.Parsing;
 using CommandDotNet.Rendering;
 
-namespace CommandDotNet.ClassModeling
+namespace CommandDotNet.Parsing
 {
     internal static class BindValuesMiddleware
     {
@@ -93,8 +92,7 @@ namespace CommandDotNet.ClassModeling
                         }
                         catch (Exception ex)
                         {
-                            console.Error.WriteLine(
-                                $"Failure assigning value to {argument}. Value={defaultValue}");
+                            console.Error.WriteLine(Resources.A.Error_assigning_value_to_argument(argument, defaultValue));
                             console.Error.WriteLine(ex.Message);
                             console.Error.WriteLine();
                             return false;
