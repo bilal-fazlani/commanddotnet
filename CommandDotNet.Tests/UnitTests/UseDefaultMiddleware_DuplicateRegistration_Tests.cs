@@ -91,8 +91,8 @@ namespace CommandDotNet.Tests.UnitTests
                         .UseDefaultMiddleware()
                         .UseVersionMiddleware())
                 .Message.Should().Be(MsgFor(
-                    "middleware", 
-                    "CommandDotNet.Builders.VersionMiddleware.DisplayVersionIfSpecified", 
+                    "middleware",
+                    "CommandDotNet.Diagnostics.VersionMiddleware.DisplayVersionIfSpecified", 
                     "excludeVersionMiddleware"));
         }
         

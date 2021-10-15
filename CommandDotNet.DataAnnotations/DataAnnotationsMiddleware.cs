@@ -155,7 +155,7 @@ namespace CommandDotNet.DataAnnotations
         {
             memberName = argument.GetCustomAttribute<DisplayAttribute>()?.Name ?? memberName;
             var argName = $"'{argument.Name}'";
-            foreach (var phrase in Resources.Instance.Error_DataAnnotation_phrases_to_replace_with_argument_name(memberName))
+            foreach (var phrase in Resources.A.Error_DataAnnotation_phrases_to_replace_with_argument_name(memberName))
             {
                 error = error.Replace(phrase, argName);
             }

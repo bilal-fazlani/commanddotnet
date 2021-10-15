@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
+using CommandDotNet.Builders;
 using CommandDotNet.Execution;
 using CommandDotNet.Rendering;
 
-namespace CommandDotNet.Builders
+namespace CommandDotNet.Diagnostics
 {
     internal static class VersionMiddleware
     {
-        private static string VersionOptionName => Resources.Instance.Command_version;
+        private static string VersionOptionName => Resources.A.Command_version;
 
         internal static AppRunner UseVersionMiddleware(AppRunner appRunner)
         {
@@ -24,7 +25,7 @@ namespace CommandDotNet.Builders
                 return;
             }
 
-            if (args.CommandBuilder.Command.ContainsArgumentNode(Resources.Instance.Command_version))
+            if (args.CommandBuilder.Command.ContainsArgumentNode(Resources.A.Command_version))
             {
                 return;
             }
@@ -33,7 +34,7 @@ namespace CommandDotNet.Builders
                 TypeInfo.Flag, ArgumentArity.Zero, 
                 definitionSource: typeof(VersionMiddleware).FullName)
             {
-                Description = Resources.Instance.Command_version_description,
+                Description = Resources.A.Command_version_description,
                 IsMiddlewareOption = true
             };
 

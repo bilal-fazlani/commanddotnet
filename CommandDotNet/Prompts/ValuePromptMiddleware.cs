@@ -77,7 +77,7 @@ namespace CommandDotNet.Prompts
                 {
                     Log.Debug($"Prompting for {a.Name}");
                     var values = argumentPrompter.PromptForArgumentValues(commandContext, a, out isCancellationRequested);
-                    a.InputValues.Add(new InputValue(Resources.Instance.Input_prompt_lc, false, values));
+                    a.InputValues.Add(new InputValue(Resources.A.Input_prompt_lc, false, values));
                 });
 
             if (isCancellationRequested)

@@ -33,12 +33,14 @@ namespace CommandDotNet.TypeDescriptors
             catch (FormatException)
             {
                 throw new ValueParsingException(
-                    $"'{value}' is not a valid {_innerDescriptor.GetDisplayName(argument)}");
+                    Resources.A.Error_Value_is_not_valid_for_type(value, 
+                        _innerDescriptor.GetDisplayName(argument)));
             }
             catch (ArgumentException)
             {
                 throw new ValueParsingException(
-                    $"'{value}' is not a valid {_innerDescriptor.GetDisplayName(argument)}");
+                    Resources.A.Error_Value_is_not_valid_for_type(value, 
+                        _innerDescriptor.GetDisplayName(argument)));
             }
             catch (OperationCanceledException)
             {
@@ -47,7 +49,8 @@ namespace CommandDotNet.TypeDescriptors
             catch (Exception ex)
             {
                 throw new ValueParsingException(
-                    $"failed parsing '{value}' for {_innerDescriptor.GetDisplayName(argument)}", ex);
+                    Resources.A.Error_Failed_parsing_value_for_type(value, 
+                        _innerDescriptor.GetDisplayName(argument)), ex);
             }
         }
 

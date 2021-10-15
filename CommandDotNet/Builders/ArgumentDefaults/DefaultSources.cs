@@ -39,7 +39,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                 params GetArgumentKeysDelegate[]? getKeysDelegates)
             {
                 envVars ??= Environment.GetEnvironmentVariables();
-                return GetValueFunc(Resources.Instance.ValueSource_EnvVar,
+                return GetValueFunc(Resources.A.ValueSource_EnvVar,
                     key => envVars.Contains(key) ? (string)envVars[key] : null,
                     getKeysDelegates ?? new GetArgumentKeysDelegate[]
                     {
@@ -99,7 +99,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                 NameValueCollection appSettings,
                 params GetArgumentKeysDelegate[]? getKeysDelegates)
             {
-                return GetValueFunc(Resources.Instance.ValueSource_AppSetting,
+                return GetValueFunc(Resources.A.ValueSource_AppSetting,
                     key => appSettings[key],
                     getKeysDelegates ?? new GetArgumentKeysDelegate[]
                     {

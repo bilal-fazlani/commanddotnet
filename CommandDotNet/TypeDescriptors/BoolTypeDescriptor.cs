@@ -17,7 +17,7 @@ namespace CommandDotNet.TypeDescriptors
         {
             return argument.Arity.AllowsNone()
                 ? ""
-                : Resources.Instance.Type_Boolean;
+                : Resources.A.Type_Boolean;
         }
 
         public object ParseString(IArgument argument, string value)

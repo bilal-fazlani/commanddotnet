@@ -18,7 +18,7 @@ namespace CommandDotNet.Help
 
         private static void AddHelpOption(BuildEvents.CommandCreatedEventArgs args)
         {
-            var helpOptionName = Resources.Instance.Command_help;
+            var helpOptionName = Resources.A.Command_help;
             if (args.CommandBuilder.Command.ContainsArgumentNode(helpOptionName))
             {
                 return;
@@ -31,7 +31,7 @@ namespace CommandDotNet.Help
                 aliases: new[] { "?" },
                 definitionSource: typeof(HelpMiddleware).FullName)
             {
-                Description = Resources.Instance.Command_help_description,
+                Description = Resources.A.Command_help_description,
                 IsMiddlewareOption = true,
                 Hidden = !appSettingsHelp.PrintHelpOption
             };
