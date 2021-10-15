@@ -31,6 +31,7 @@ namespace CommandDotNet.ClassModeling
         {
             bool SetFromStringInput(IArgument arg, IEnumerable<string> values)
             {
+                // DO NOT values.ToCollection() here as it could be a stream.
                 try
                 {
                     var parser = parserFactory.CreateInstance(arg);
@@ -40,7 +41,6 @@ namespace CommandDotNet.ClassModeling
                 }
                 catch (ValueParsingException ex)
                 {
-                    console.Error.WriteLine($"Failure parsing value for {argument.GetType().Name}: {arg.Name}.  value(s)={values?.ToCsv()}");
                     console.Error.WriteLine(ex.Message);
                     console.Error.WriteLine();
                     return false;

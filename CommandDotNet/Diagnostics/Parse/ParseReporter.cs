@@ -75,7 +75,7 @@ namespace CommandDotNet.Diagnostics.Parse
             {
                 var pwd = isObscured ? Password.ValueReplacement : null;
                 var values = argument.InputValues
-                    .Select(iv => iv.Source == HelpText.Instance.argument_lc && argument.InputValues.Count == 1
+                    .Select(iv => iv.Source == Resources.Instance.Help_argument_lc && argument.InputValues.Count == 1
                         ? $"{ValuesToString(iv, pwd)}"
                         : iv.IsStream
                             ? $"[{iv.Source} stream]"

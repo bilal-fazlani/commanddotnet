@@ -9,15 +9,15 @@ namespace CommandDotNet.Extensions
         {
             if (argument == null) throw new ArgumentNullException(nameof(argument));
 
-            return argument.Name == HelpText.Instance.help_lc;
+            return argument.Name == Resources.Instance.Command_help;
         }
 
-        /// <summary>Returns true if argument name is <see cref="Constants.VersionOptionName"/> and is on the root command.</summary>
+        /// <summary>Returns true if argument name is <see cref="Resources.Command_version"/> and is on the root command.</summary>
         public static bool IsAppVersionOption(this IArgument argument)
         {
             if (argument == null) throw new ArgumentNullException(nameof(argument));
 
-            return argument.Name == HelpText.Instance.version_lc && argument.Parent!.IsRootCommand();
+            return argument.Name == Resources.Instance.Command_version && argument.Parent!.IsRootCommand();
         }
 
         public static bool IsObscured(this IArgument argument) =>

@@ -6,7 +6,7 @@ namespace CommandDotNet.Builders
 {
     internal static class VersionMiddleware
     {
-        private static string VersionOptionName => HelpText.Instance.version_lc;
+        private static string VersionOptionName => Resources.Instance.Command_version;
 
         internal static AppRunner UseVersionMiddleware(AppRunner appRunner)
         {
@@ -24,7 +24,7 @@ namespace CommandDotNet.Builders
                 return;
             }
 
-            if (args.CommandBuilder.Command.ContainsArgumentNode(HelpText.Instance.version_lc))
+            if (args.CommandBuilder.Command.ContainsArgumentNode(Resources.Instance.Command_version))
             {
                 return;
             }
@@ -33,7 +33,7 @@ namespace CommandDotNet.Builders
                 TypeInfo.Flag, ArgumentArity.Zero, 
                 definitionSource: typeof(VersionMiddleware).FullName)
             {
-                Description = HelpText.Instance.Show_version_information,
+                Description = Resources.Instance.Command_version_description,
                 IsMiddlewareOption = true
             };
 

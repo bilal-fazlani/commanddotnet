@@ -122,7 +122,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 };
             }
 
-            throw new ArgumentOutOfRangeException($"{ErrorText.Instance.Unknown_argument_type()}: {argumentDef.CommandNodeType}");
+            throw new ArgumentOutOfRangeException($"Unknown argument type: {argumentDef.CommandNodeType}");
         }
 
         private static string? ParseLongName(IArgumentDef argumentDef, OptionAttribute? optionAttr)
@@ -150,7 +150,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             if (shortNameAsString!.Length > 1)
             {
-                throw new ArgumentException($"{ErrorText.Instance.Short_name_must_be_a_single_character()}: {shortNameAsString} {argumentDef}",
+                throw new ArgumentException($"Short name must be a single character: {shortNameAsString} {argumentDef}",
                     nameof(shortNameAsString));
             }
 

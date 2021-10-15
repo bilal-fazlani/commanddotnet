@@ -17,15 +17,15 @@ namespace CommandDotNet.TypeDescriptors
                 new BoolTypeDescriptor(),
                 new EnumTypeDescriptor(),
 
-                new DelegatedTypeDescriptor<string>(HelpText.Instance.Text, v => v),
-                new DelegatedTypeDescriptor<Password>(HelpText.Instance.Text, v => new Password(v)),
-                new DelegatedTypeDescriptor<char>(HelpText.Instance.Character, v => char.Parse(v)),
+                new DelegatedTypeDescriptor<string>(Resources.Instance.Type_Text, v => v),
+                new DelegatedTypeDescriptor<Password>(Resources.Instance.Type_Text, v => new Password(v)),
+                new DelegatedTypeDescriptor<char>(Resources.Instance.Type_Character, v => char.Parse(v)),
 
-                new DelegatedTypeDescriptor<long>(HelpText.Instance.Number, v => long.Parse(v, CultureInfo.InvariantCulture)),
-                new DelegatedTypeDescriptor<int>(HelpText.Instance.Number, v => int.Parse(v, CultureInfo.InvariantCulture)),
-                new DelegatedTypeDescriptor<short>(HelpText.Instance.Number, v => short.Parse(v, CultureInfo.InvariantCulture)),
-                new DelegatedTypeDescriptor<decimal>(HelpText.Instance.Decimal, v => decimal.Parse(v, CultureInfo.InvariantCulture)),
-                new DelegatedTypeDescriptor<double>(HelpText.Instance.Double, v => double.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<long>(Resources.Instance.Type_Number, v => long.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<int>(Resources.Instance.Type_Number, v => int.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<short>(Resources.Instance.Type_Number, v => short.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<decimal>(Resources.Instance.Type_Decimal, v => decimal.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<double>(Resources.Instance.Type_Double, v => double.Parse(v, CultureInfo.InvariantCulture)),
 
                 new ComponentModelTypeDescriptor(),
                 new StringCtorTypeDescriptor()

@@ -40,6 +40,15 @@ namespace CommandDotNet.TypeDescriptors
                 throw new ValueParsingException(
                     $"'{value}' is not a valid {_innerDescriptor.GetDisplayName(argument)}");
             }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new ValueParsingException(
+                    $"failed parsing '{value}' for {_innerDescriptor.GetDisplayName(argument)}", ex);
+            }
         }
 
         public IEnumerable<string> GetAllowedValues(IArgument argument)
