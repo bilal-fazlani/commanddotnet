@@ -43,8 +43,7 @@ Data:
                 TestEx.Print(includeStackTrace:true).Should().StartWith(
                     @"CommandDotNet.Tests.UnitTests.Extensions.TestException: I'm a test exception
 StackTrace:
-  at CommandDotNet.Tests.UnitTests.Extensions.TestException.ThrowEx() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 39
-  at CommandDotNet.Tests.UnitTests.Extensions.TestException.Build() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 25");
+  at CommandDotNet.Tests.UnitTests.Extensions.TestException.ThrowEx() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 46");
             }
             
             [Fact]
@@ -59,8 +58,7 @@ Data:
   data-key: data value
   non-serializable-key: non-serializable-value
 StackTrace:
-  at CommandDotNet.Tests.UnitTests.Extensions.TestException.ThrowEx() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 39
-  at CommandDotNet.Tests.UnitTests.Extensions.TestException.Build() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 25");
+  at CommandDotNet.Tests.UnitTests.Extensions.TestException.ThrowEx() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 46");
             }
 
             [Fact]
@@ -75,8 +73,7 @@ StackTrace:
       data-key: data value
       non-serializable-key: non-serializable-value
     StackTrace:
-      at CommandDotNet.Tests.UnitTests.Extensions.TestException.ThrowEx() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 39
-      at CommandDotNet.Tests.UnitTests.Extensions.TestException.Build() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 25");
+      at CommandDotNet.Tests.UnitTests.Extensions.TestException.ThrowEx() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 46");
             }
 
             [Fact]
@@ -92,8 +89,8 @@ Data:
   data-key: data value
   non-serializable-key: non-serializable-value
 StackTrace:
-  at CommandDotNet.Tests.UnitTests.Extensions.TestException.ThrowEx() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 39
-  at CommandDotNet.Tests.UnitTests.Extensions.TestException.Build() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 25");
+  at CommandDotNet.Tests.UnitTests.Extensions.TestException.ThrowEx() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 46
+  at CommandDotNet.Tests.UnitTests.Extensions.TestException.Build() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 32");
             }
         }
     }
