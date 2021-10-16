@@ -3,6 +3,8 @@ namespace CommandDotNet
 {
     public partial class Resources
     {
+        public virtual string Input_inputs_lc => "inputs";
+        public virtual string Input_stream_lc => "stream";
         public virtual string Input_piped_lc => "piped";
         public virtual string Input_prompt_lc => "prompt";
 

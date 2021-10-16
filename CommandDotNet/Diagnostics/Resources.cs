@@ -1,6 +1,6 @@
 ﻿// ReSharper disable CheckNamespace
 
-using CommandDotNet.Diagnostics;
+using System.Diagnostics;
 
 namespace CommandDotNet
 {
@@ -16,8 +16,17 @@ namespace CommandDotNet
         public virtual string CommandLogger_Machine => "Machine";
         public virtual string CommandLogger_Username => "Username";
 
-        public string Error_CommandLogger_has_not_been_registered() =>
-            $"{nameof(CommandLoggerMiddleware)} has not been registered. " +
-            $"Try `appRunner.{nameof(AppRunnerConfigExtensions.UseCommandLogger)}()`";
+        public virtual string Exceptions_Data => "Data";
+        public virtual string Exceptions_Properties => "Properties";
+        public virtual string Exceptions_StackTrace => "StackTrace";
+        public virtual string Exceptions_StackTrace_at => "at";
+
+        public virtual string Parse_Raw_command_line(string commandLine) => 
+            $"raw command line:{commandLine}";
+        public virtual string Parse_root_lc => "root";
+        
+        public virtual string Debugger_debug_lc => "debug";
+        public virtual string Debugger_Attach_debugger(Process process) => 
+            $"Attach your debugger to process {process.Id} ({process.ProcessName}).";
     }
 }

@@ -29,16 +29,16 @@ namespace CommandDotNet.Diagnostics.Parse
 
             if (includeRawCommandLine)
             {
-                writeln($"raw command line:{Environment.CommandLine}");
+                writeln(Resources.A.Parse_Raw_command_line(Environment.CommandLine));
             }
             
             var path = command.GetPath();
-            writeln($"{indent}command: {(path.IsNullOrWhitespace() ? "(root)" : path)}");
+            writeln($"{indent}{Resources.A.Help_command_lc}: {(path.IsNullOrWhitespace() ? $"({Resources.A.Parse_root_lc})" : path)}");
 
             if (command.Operands.Any())
             {
                 writeln("");
-                writeln($"{indent}arguments:");
+                writeln($"{indent}{Resources.A.Help_arguments_lc}:");
                 foreach (var operand in command.Operands)
                 {
                     writeln("");
@@ -50,7 +50,7 @@ namespace CommandDotNet.Diagnostics.Parse
             if (options.Any())
             {
                 writeln("");
-                writeln($"{indent}options:");
+                writeln($"{indent}{Resources.A.Help_options_lc}:");
                 foreach (var option in options)
                 {
                     writeln("");
@@ -63,13 +63,18 @@ namespace CommandDotNet.Diagnostics.Parse
         {
             bool isObscured = argument.IsObscured();
             var indent2 = indent.Increment();
+            
+            //TODO: reduce resource calls by resolving once in calling method
+            var txtValue = Resources.A.Common_value_lc;
+            var txtInputs = Resources.A.Input_inputs_lc;
+            var txtDefault = Resources.A.Common_default_lc;
 
             var displayName = argument.TypeInfo.DisplayName.IsNullOrEmpty() 
-                ? (argument.Arity.AllowsNone() ? "Flag" : null)
+                ? (argument.Arity.AllowsNone() ? Resources.A.Common_Flag : null)
                 : argument.TypeInfo.DisplayName;
             writeln($"{indent}{argument.Name} <{displayName}>");
             var valueString = argument.Value?.ValueToString(argument);
-            writeln(valueString == null ? $"{indent2}value:" : $"{indent2}value: {valueString}");
+            writeln(valueString == null ? $"{indent2}{txtValue}:" : $"{indent2}{txtValue}: {valueString}");
 
             if (!argument.InputValues.IsNullOrEmpty())
             {
@@ -78,23 +83,23 @@ namespace CommandDotNet.Diagnostics.Parse
                     .Select(iv => iv.Source == Resources.A.Help_argument_lc && argument.InputValues.Count == 1
                         ? $"{ValuesToString(iv, pwd)}"
                         : iv.IsStream
-                            ? $"[{iv.Source} stream]"
+                            ? $"[{iv.Source} {Resources.A.Input_stream_lc}]"
                             : $"[{iv.Source}] {ValuesToString(iv, pwd)}")
                     .ToList();
 
                 if (values.Count == 1)
                 {
-                    writeln($"{indent2}inputs: {values.Single()}");
+                    writeln($"{indent2}{txtInputs}: {values.Single()}");
                 }
                 else
                 {
-                    writeln($"{indent2}inputs:");
+                    writeln($"{indent2}{txtInputs}:");
                     values.ForEach(v => writeln($"{indent2.Increment()}{v}"));
                 }
             }
             else
             {
-                writeln($"{indent2}inputs:");
+                writeln($"{indent2}{txtInputs}:");
             }
 
             if (argument.Default != null)
@@ -102,12 +107,16 @@ namespace CommandDotNet.Diagnostics.Parse
                 // don't include source when the default is defined as a parameter or property.
                 // only show externally defined sources
                 writeln(argument.Default.Source.StartsWith("app.")
-                    ? $"{indent2}default: {argument.Default.Value.ValueToString(argument)}"
-                    : $"{indent2}default: source={argument.Default.Source} key={argument.Default.Key}: {argument.Default.Value.ValueToString(argument)}");
+                    ? $"{indent2}{txtDefault}: " +
+                      $"{argument.Default.Value.ValueToString(argument)}"
+                    : $"{indent2}{txtDefault}: " +
+                      $"{Resources.A.Common_source_lc}={argument.Default.Source} " +
+                      $"{Resources.A.Common_key_lc}={argument.Default.Key}: " +
+                      $"{argument.Default.Value.ValueToString(argument)}");
             }
             else
             {
-                writeln($"{indent2}default:");
+                writeln($"{indent2}{txtDefault}:");
             }
         }
 
@@ -124,7 +133,7 @@ namespace CommandDotNet.Diagnostics.Parse
             var supplyChain = RecurseTokens(new TokenValues(vft.ValueToken, vft.OptionToken), pwd);
             return vft.Value == supplyChain 
                 ? pwd ?? vft.Value 
-                : $"{pwd ?? vft.Value} (from: {supplyChain})";
+                : $"{pwd ?? vft.Value} ({Resources.A.Common_from_lc}: {supplyChain})";
         }
 
         private static string RecurseTokens(TokenValues vft, string? pwd)

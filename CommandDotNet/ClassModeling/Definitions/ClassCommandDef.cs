@@ -15,7 +15,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         private readonly Lazy<List<ICommandDef>> _subCommands;
 
         public string Name { get; }
-        public string SourcePath => CommandHostClassType.FullName;
+        public string SourcePath => CommandHostClassType.FullName!;
 
         public Type CommandHostClassType { get; }
 
