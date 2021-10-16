@@ -55,6 +55,7 @@ Text: ");
         SomeProperty: Some property value
       Data:
         data-key: data value
+        non-serializable-key: non-serializable-value
     Settings: 
     Text: ");
             }

@@ -13,13 +13,13 @@ namespace CommandDotNet.Diagnostics
     {
         internal static void SetCommandContext(this Exception ex, CommandContext ctx)
         {
-            ex.Data[typeof(CommandContext)] = new NonSerializableWrapper<CommandContext>(ctx);
+            ex.Data[nameof(CommandContext)] = new NonSerializableWrapper(ctx, skipPrint: true);
         }
 
         public static CommandContext? GetCommandContext(this Exception ex)
         {
-            return ex.Data.Contains(typeof(CommandContext))
-                ? ((NonSerializableWrapper<CommandContext>)ex.Data[typeof(CommandContext)]).Item
+            return ex.Data.Contains(nameof(CommandContext))
+                ? (CommandContext)((NonSerializableWrapper)ex.Data[nameof(CommandContext)]).Item
                 : ex.InnerException?.GetCommandContext();
         }
 
@@ -76,7 +76,11 @@ namespace CommandDotNet.Diagnostics
                 indent = indent.Increment();
                 foreach (DictionaryEntry entry in ex.Data)
                 {
-                    writeLine($"{indent}{entry.Key}: {entry.Value.ToIndentedString(indent)}");
+                    var skip = entry.Value is NonSerializableWrapper nsw && nsw.SkipPrint;
+                    if (!skip)
+                    {
+                        writeLine($"{indent}{entry.Key}: {entry.Value.ToIndentedString(indent)}");
+                    }
                 }
                 indent = indent.Decrement();
             }
