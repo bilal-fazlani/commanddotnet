@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Diagnostics
 {
@@ -9,7 +10,7 @@ namespace CommandDotNet.Diagnostics
     /// This is required for older versions of the dotnet.
     /// </summary>
     [Serializable]
-    internal class NonSerializableWrapper<T> : ISerializable
+    internal class NonSerializableWrapper<T> : ISerializable, IIndentableToString
     {
         public T Item { get; }
 
@@ -20,5 +21,7 @@ namespace CommandDotNet.Diagnostics
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => 
             info.AddValue(typeof(T).Name, Item?.ToString());
+
+        public string ToString(Indent indent) => Item.ToIndentedString(indent) ?? "";
     }
 }

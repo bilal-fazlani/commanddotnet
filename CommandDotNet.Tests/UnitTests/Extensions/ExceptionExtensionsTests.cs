@@ -33,7 +33,8 @@ Properties:
                 TestEx.Print(includeData:true).Should().Be(
                     @"CommandDotNet.Tests.UnitTests.Extensions.TestException: I'm a test exception
 Data:
-  data-key: data value");
+  data-key: data value
+  non-serializable-key: non-serializable-value");
             }
             
             [Fact]
@@ -42,8 +43,8 @@ Data:
                 TestEx.Print(includeStackTrace:true).Should().StartWith(
                     @"CommandDotNet.Tests.UnitTests.Extensions.TestException: I'm a test exception
 StackTrace:
-  at CommandDotNet.Tests.UnitTests.Extensions.TestException.ThrowEx() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 37
-  at CommandDotNet.Tests.UnitTests.Extensions.TestException.Build() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 23");
+  at CommandDotNet.Tests.UnitTests.Extensions.TestException.ThrowEx() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 39
+  at CommandDotNet.Tests.UnitTests.Extensions.TestException.Build() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 25");
             }
             
             [Fact]
@@ -56,9 +57,10 @@ Properties:
   SomeProperty: Some property value
 Data:
   data-key: data value
+  non-serializable-key: non-serializable-value
 StackTrace:
-  at CommandDotNet.Tests.UnitTests.Extensions.TestException.ThrowEx() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 37
-  at CommandDotNet.Tests.UnitTests.Extensions.TestException.Build() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 23");
+  at CommandDotNet.Tests.UnitTests.Extensions.TestException.ThrowEx() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 39
+  at CommandDotNet.Tests.UnitTests.Extensions.TestException.Build() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 25");
             }
 
             [Fact]
@@ -71,9 +73,10 @@ StackTrace:
       SomeProperty: Some property value
     Data:
       data-key: data value
+      non-serializable-key: non-serializable-value
     StackTrace:
-      at CommandDotNet.Tests.UnitTests.Extensions.TestException.ThrowEx() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 37
-      at CommandDotNet.Tests.UnitTests.Extensions.TestException.Build() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 23");
+      at CommandDotNet.Tests.UnitTests.Extensions.TestException.ThrowEx() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 39
+      at CommandDotNet.Tests.UnitTests.Extensions.TestException.Build() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 25");
             }
 
             [Fact]
@@ -87,9 +90,10 @@ Properties:
   SomeProperty: Some property value
 Data:
   data-key: data value
+  non-serializable-key: non-serializable-value
 StackTrace:
-  at CommandDotNet.Tests.UnitTests.Extensions.TestException.ThrowEx() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 37
-  at CommandDotNet.Tests.UnitTests.Extensions.TestException.Build() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 23");
+  at CommandDotNet.Tests.UnitTests.Extensions.TestException.ThrowEx() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 39
+  at CommandDotNet.Tests.UnitTests.Extensions.TestException.Build() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 25");
             }
         }
     }

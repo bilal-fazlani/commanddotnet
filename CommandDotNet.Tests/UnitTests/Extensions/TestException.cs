@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using CommandDotNet.Diagnostics;
 
 namespace CommandDotNet.Tests.UnitTests.Extensions
 {
@@ -14,6 +15,7 @@ namespace CommandDotNet.Tests.UnitTests.Extensions
         public TestException() : base("I'm a test exception")
         {
             base.Data.Add("data-key", "data value");
+            base.Data.Add("non-serializable-key", new NonSerializableWrapper<string>("non-serializable-value"));
         }
 
         private static TestException Build()
