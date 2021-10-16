@@ -28,6 +28,7 @@ namespace CommandDotNet
             bool excludeCancellationHandlers = false,
             bool excludeDebugDirective = false,
             bool excludeParseDirective = false,
+            bool excludeTimeDirective = false,
             bool excludePrompting = false,
             bool excludeResponseFiles = false,
             bool excludeVersionMiddleware = false,
@@ -54,6 +55,10 @@ namespace CommandDotNet
                 excludeParseDirective, 
                 nameof(excludeParseDirective),
                 ()=> appRunner.UseParseDirective());
+            Register(
+                excludeTimeDirective,
+                nameof(excludeTimeDirective),
+                () => appRunner.UseTimeDirective());
             Register(
                 excludePrompting, 
                 nameof(excludePrompting),
@@ -98,7 +103,17 @@ namespace CommandDotNet
             AssertDirectivesAreEnabled(appRunner);
             return DebugDirective.UseDebugDirective(appRunner);
         }
-        
+
+        /// <summary>
+        /// When the first argument is [time], the framework will time the execution of the command
+        /// and output the result to the console.
+        /// </summary>
+        public static AppRunner UseTimeDirective(this AppRunner appRunner)
+        {
+            AssertDirectivesAreEnabled(appRunner);
+            return TimeDirective.UseTimeDirective(appRunner);
+        }
+
         /// <summary>
         /// When the first argument is [parse], the framework will output the result of all <see cref="TokenTransformation"/>s<br/>
         /// </summary>
