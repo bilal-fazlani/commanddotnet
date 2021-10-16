@@ -19,7 +19,7 @@ namespace CommandDotNet.Diagnostics
         public static CommandContext? GetCommandContext(this Exception ex)
         {
             return ex.Data.Contains(nameof(CommandContext))
-                ? (CommandContext)((NonSerializableWrapper)ex.Data[typeof(CommandContext)]).Item
+                ? (CommandContext)((NonSerializableWrapper)ex.Data[nameof(CommandContext)]).Item
                 : ex.InnerException?.GetCommandContext();
         }
 
