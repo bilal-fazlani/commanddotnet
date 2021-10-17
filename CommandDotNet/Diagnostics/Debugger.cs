@@ -32,7 +32,7 @@ namespace CommandDotNet.Diagnostics
             bool waitForDebuggerToAttach)
         {
             var process = Process.GetCurrentProcess();
-            console.Out.WriteLine(Resources.A.Debugger_Attach_debugger(process));
+            console.Out.WriteLine(Resources.A.Debugger_Attach_debugger(process.Id.ToString(), process.ProcessName));
 
             if (!waitForDebuggerToAttach)
             {

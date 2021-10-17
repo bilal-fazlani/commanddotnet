@@ -21,8 +21,8 @@ namespace CommandDotNet
         public virtual string Error_Failed_parsing_value_for_type(string value, string typeDisplayName)
             => $"failed parsing '{value}' for {typeDisplayName}";
 
-        public string Error_Type_is_not_supported_as_argument(Type type)
-            => $"type : {type} is not supported. " +
+        public virtual string Error_Type_is_not_supported_as_argument(string typeFullName)
+            => $"type : {typeFullName} is not supported. " +
                Environment.NewLine +
                $"If it is an argument model, inherit from {nameof(IArgumentModel)}. " +
                Environment.NewLine +

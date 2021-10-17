@@ -1,7 +1,5 @@
 ﻿// ReSharper disable CheckNamespace
 
-using System.Diagnostics;
-
 namespace CommandDotNet
 {
     public partial class Resources
@@ -26,7 +24,7 @@ namespace CommandDotNet
         public virtual string Parse_root_lc => "root";
         
         public virtual string Debugger_debug_lc => "debug";
-        public virtual string Debugger_Attach_debugger(Process process) => 
-            $"Attach your debugger to process {process.Id} ({process.ProcessName}).";
+        public virtual string Debugger_Attach_debugger(string processId, string processName) => 
+            $"Attach your debugger to process {processId} ({processName}).";
     }
 }

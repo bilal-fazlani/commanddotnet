@@ -65,7 +65,7 @@ namespace CommandDotNet.TypeDescriptors
         public IArgumentTypeDescriptor GetDescriptorOrThrow(Type type)
         {
             return GetDescriptor(type) ?? throw new InvalidConfigurationException(
-                Resources.A.Error_Type_is_not_supported_as_argument(type));
+                Resources.A.Error_Type_is_not_supported_as_argument(type.FullName));
         }
 
         public IEnumerator<IArgumentTypeDescriptor> GetEnumerator()

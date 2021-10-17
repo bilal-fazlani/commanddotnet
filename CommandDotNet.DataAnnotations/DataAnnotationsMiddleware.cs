@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
@@ -10,10 +11,19 @@ namespace CommandDotNet.DataAnnotations
 {
     public static class DataAnnotationsMiddleware
     {
-        public static AppRunner UseDataAnnotationValidations(this AppRunner appRunner, bool showHelpOnError = false)
+        public static AppRunner UseDataAnnotationValidations(this AppRunner appRunner, bool showHelpOnError = false, 
+            Resources? resourcesOverride = null)
         {
             return appRunner.Configure(c =>
             {
+                if (resourcesOverride != null)
+                {
+                    Resources.A = resourcesOverride;
+                }
+                else if (appRunner.AppSettings.Localize != null)
+                {
+                    Resources.A = new ResourcesProxy(appRunner.AppSettings.Localize);
+                }
                 c.UseMiddleware(DataAnnotationsValidation, MiddlewareSteps.DataAnnotations);
                 c.Services.Add(new Config(showHelpOnError));
             });
@@ -58,18 +68,23 @@ namespace CommandDotNet.DataAnnotations
 
         private static IEnumerable<string> ValidateStep(InvocationStep step)
         {
+            var phrasesToReplace = Resources.A
+                .Error_DataAnnotation_phrases_to_replace_with_argument_name()
+                .Split('|');
+            
             var propertyArgumentErrors = step.Invocation.Arguments
-                .Select(GetParameterArgumentErrors);
+                .Select(argument => GetParameterArgumentErrors(argument, phrasesToReplace));
 
             var argumentModelErrors = step.Invocation.FlattenedArgumentModels
-                .Select(m => GetArgumentModelErrors(m, step.Invocation.Arguments));
+                .Select(m => GetArgumentModelErrors(m, step.Invocation.Arguments, phrasesToReplace));
 
             return propertyArgumentErrors
                 .Concat(argumentModelErrors)
                 .SelectMany(e => e);
         }
 
-        private static IEnumerable<string> GetArgumentModelErrors(IArgumentModel model, IReadOnlyCollection<IArgument> arguments)
+        private static IEnumerable<string> GetArgumentModelErrors(IArgumentModel model,
+            IReadOnlyCollection<IArgument> arguments, IEnumerable<string> phrasesToReplace)
         {
             var validationContext = new ValidationContext(model);
             var results = new List<ValidationResult>();
@@ -97,7 +112,7 @@ namespace CommandDotNet.DataAnnotations
                     var argument = GetArgument(memberName);
                     if (argument is { })
                     {
-                        errorMessage = errorMessage.RemoveFieldTerminology(memberName, argument);
+                        errorMessage = errorMessage.RemoveFieldTerminology(memberName, argument, phrasesToReplace);
                     }
                 }
 
@@ -107,7 +122,8 @@ namespace CommandDotNet.DataAnnotations
             return results.Select(SanitizedErrorMessage);
         }
 
-        private static IEnumerable<string> GetParameterArgumentErrors(IArgument argument)
+        private static IEnumerable<string> GetParameterArgumentErrors(IArgument argument,
+            IEnumerable<string> phrasesToReplace)
         {
             var parameterInfo = argument.Services.GetOrDefault<ParameterInfo>();
             if (parameterInfo is null)
@@ -132,7 +148,7 @@ namespace CommandDotNet.DataAnnotations
                     // when we handle localization
                     var message = validationAttribute
                         .FormatErrorMessage(argument.Name)
-                        .RemoveFieldTerminology(parameterInfo.Name, argument);
+                        .RemoveFieldTerminology(parameterInfo.Name, argument, phrasesToReplace);
                     (errors ??= new List<string>()).Add(message);
 
                     if (validationAttribute is RequiredAttribute)
@@ -151,11 +167,11 @@ namespace CommandDotNet.DataAnnotations
         /// <remarks>
         /// This is naive and will need to change when we handle localization
         /// </remarks>
-        private static string RemoveFieldTerminology(this string error, string memberName, IArgument argument)
+        private static string RemoveFieldTerminology(this string error, string memberName, IArgument argument, IEnumerable<string> phrasesToReplace)
         {
             memberName = argument.GetCustomAttribute<DisplayAttribute>()?.Name ?? memberName;
             var argName = $"'{argument.Name}'";
-            foreach (var phrase in Resources.A.Error_DataAnnotation_phrases_to_replace_with_argument_name(memberName))
+            foreach (var phrase in phrasesToReplace.Select(p => string.Format(p, memberName)))
             {
                 error = error.Replace(phrase, argName);
             }
