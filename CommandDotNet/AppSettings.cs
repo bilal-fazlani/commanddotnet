@@ -1,5 +1,7 @@
-﻿using CommandDotNet.Extensions;
+﻿using System;
+using CommandDotNet.Extensions;
 using CommandDotNet.Help;
+using CommandDotNet.Parsing;
 using CommandDotNet.Tokens;
 using CommandDotNet.TypeDescriptors;
 
@@ -55,6 +57,9 @@ namespace CommandDotNet
         /// <summary>Settings specific to built-in help providers</summary>
         public AppHelpSettings Help { get; set; } = new AppHelpSettings();
 
+        /// <summary>When specified, this function will be used to localize user output from the framework</summary>
+        public Func<string,string?>? Localize { get; set; }
+ 
         /// <summary>
         /// The collection of <see cref="IArgumentTypeDescriptor"/>'s use to convert arguments
         /// from the commandline to the parameter & property types for the command methods.

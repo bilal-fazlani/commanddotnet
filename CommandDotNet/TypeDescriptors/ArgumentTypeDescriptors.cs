@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using CommandDotNet.Extensions;
@@ -17,15 +16,15 @@ namespace CommandDotNet.TypeDescriptors
                 new BoolTypeDescriptor(),
                 new EnumTypeDescriptor(),
 
-                new DelegatedTypeDescriptor<string>(Constants.TypeDisplayNames.Text, v => v),
-                new DelegatedTypeDescriptor<Password>(Constants.TypeDisplayNames.Text, v => new Password(v)),
-                new DelegatedTypeDescriptor<char>(Constants.TypeDisplayNames.Character, v => char.Parse(v)),
+                new DelegatedTypeDescriptor<string>(Resources.A.Type_Text, v => v),
+                new DelegatedTypeDescriptor<Password>(Resources.A.Type_Text, v => new Password(v)),
+                new DelegatedTypeDescriptor<char>(Resources.A.Type_Character, v => char.Parse(v)),
 
-                new DelegatedTypeDescriptor<long>(Constants.TypeDisplayNames.Number, v => long.Parse(v, CultureInfo.InvariantCulture)),
-                new DelegatedTypeDescriptor<int>(Constants.TypeDisplayNames.Number, v => int.Parse(v, CultureInfo.InvariantCulture)),
-                new DelegatedTypeDescriptor<short>(Constants.TypeDisplayNames.Number, v => short.Parse(v, CultureInfo.InvariantCulture)),
-                new DelegatedTypeDescriptor<decimal>(Constants.TypeDisplayNames.DecimalNumber, v => decimal.Parse(v, CultureInfo.InvariantCulture)),
-                new DelegatedTypeDescriptor<double>(Constants.TypeDisplayNames.DoubleNumber, v => double.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<long>(Resources.A.Type_Number, v => long.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<int>(Resources.A.Type_Number, v => int.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<short>(Resources.A.Type_Number, v => short.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<decimal>(Resources.A.Type_Decimal, v => decimal.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<double>(Resources.A.Type_Double, v => double.Parse(v, CultureInfo.InvariantCulture)),
 
                 new ComponentModelTypeDescriptor(),
                 new StringCtorTypeDescriptor()
@@ -66,16 +65,7 @@ namespace CommandDotNet.TypeDescriptors
         public IArgumentTypeDescriptor GetDescriptorOrThrow(Type type)
         {
             return GetDescriptor(type) ?? throw new InvalidConfigurationException(
-                       $"type : {type} is not supported. " +
-                       Environment.NewLine +
-                       $"If it is an argument model, inherit from {nameof(IArgumentModel)}. " + 
-                       Environment.NewLine +
-                       "If it is a service and not an argument, register using " +
-                       $"{nameof(AppRunner)}.{nameof(AppRunner.Configure)}(b => b.{nameof(AppConfigBuilder.UseParameterResolver)}(ctx => ...)); " +
-                       Environment.NewLine +
-                       "Otherwise, to support this type, " +
-                       $"implement a {nameof(TypeConverter)} or {nameof(IArgumentTypeDescriptor)} " +
-                       "or add a constructor with a single string parameter.");
+                Resources.A.Error_Type_is_not_supported_as_argument(type.FullName));
         }
 
         public IEnumerator<IArgumentTypeDescriptor> GetEnumerator()

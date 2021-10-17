@@ -40,6 +40,9 @@ nav:
         - Diagnostics/time-directive.md
         - Diagnostics/command-logger.md
         - Diagnostics/exceptions.md
+      - Localization:
+        - Localization/overview.md
+        - Localization/testing.md
       - Testing:
         - TestTools/overview.md
         - Harness:

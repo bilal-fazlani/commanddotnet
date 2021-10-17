@@ -32,7 +32,7 @@ namespace CommandDotNet.Diagnostics
             bool waitForDebuggerToAttach)
         {
             var process = Process.GetCurrentProcess();
-            console.Out.WriteLine($"Attach your debugger to process {process.Id} ({process.ProcessName}).");
+            console.Out.WriteLine(Resources.A.Debugger_Attach_debugger(process.Id.ToString(), process.ProcessName));
 
             if (!waitForDebuggerToAttach)
             {
@@ -50,12 +50,12 @@ namespace CommandDotNet.Diagnostics
 
         internal static bool HasDebugDirective(this TokenCollection tokens)
         {
-            return tokens.TryGetDirective("debug", out _);
+            return tokens.TryGetDirective(Resources.A.Debugger_debug_lc, out _);
         }
 
         private static bool HasDebugDirective(this string[] args)
         {
-            return args.Any(a => a.Equals("[debug]", StringComparison.OrdinalIgnoreCase));
+            return args.Any(a => a.Equals($"[{Resources.A.Debugger_debug_lc}]", StringComparison.OrdinalIgnoreCase));
         }
     }
 }

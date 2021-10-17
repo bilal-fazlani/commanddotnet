@@ -67,6 +67,11 @@
 | \ \ \ SimpleInjector | ✔️ |
 | \ \ \ Test injector | [docs](TestTools/overview.md) ✔️ |
 | \ \ \ Custom | ✔️ |
+|   **Localization (beta)** |  |
+| \ \ \ IStringLocalizer pattern | [docs](Localization/overview.md) ✔️ |
+| \ \ \ resx<br/>\ \ \ \ \ \ _coming soon_ |  |
+| \ \ \ json<br/>\ \ \ \ \ \ _coming soon_ |  |
+| \ \ \ test support<br/>\ \ \ \ \ \ _coming soon - identify gaps in translations_ | [docs](Localization/testing.md) ✔️ |
 |   **Other** |  |
 | \ \ \ Ctrl+C | [docs](OtherFeatures/cancellation.md) ✔️ |
 | \ \ \ Name casing<br/>\ \ \ \ \ \ _consistent name casing via [Humanizer](https://github.com/Humanizr/Humanizer)_ | [docs](OtherFeatures/name-casing.md) ✔️ |

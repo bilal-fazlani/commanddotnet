@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
@@ -60,7 +59,7 @@ namespace CommandDotNet.Diagnostics
                     .ToList();
                 if (properties.Any())
                 {
-                    writeLine($"{indent}Properties:");
+                    writeLine($"{indent}{Resources.A.Exceptions_Properties}:");
                     indent = indent.Increment();
                     foreach (var property in properties)
                     {
@@ -72,7 +71,7 @@ namespace CommandDotNet.Diagnostics
 
             if (includeData && ex.Data.Count > 0)
             {
-                writeLine($"{indent}Data:");
+                writeLine($"{indent}{Resources.A.Exceptions_Data}:");
                 indent = indent.Increment();
                 foreach (DictionaryEntry entry in ex.Data)
                 {
@@ -87,12 +86,12 @@ namespace CommandDotNet.Diagnostics
 
             if (includeStackTrace && ex.StackTrace is { })
             {
-                writeLine($"{indent}StackTrace:");
+                writeLine($"{indent}{Resources.A.Exceptions_StackTrace}:");
                 indent = indent.Increment();
                 // replace default indents
                 var stack = ex.StackTrace.Replace(
-                    $"{Environment.NewLine}   at ", 
-                    $"{Environment.NewLine}{indent}at ");
+                    $"{Environment.NewLine}   {Resources.A.Exceptions_StackTrace_at} ", 
+                    $"{Environment.NewLine}{indent}{Resources.A.Exceptions_StackTrace_at} ");
                 writeLine($"{indent}{stack.Remove(0,3)}");
                 indent = indent.Decrement();
             }

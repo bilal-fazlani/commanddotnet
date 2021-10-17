@@ -34,8 +34,8 @@ namespace CommandDotNet.FluentValidation
                 }
                 catch (Exception e)
                 {
-                    throw new InvalidValidatorException($"Could not create instance of {declaredValidatorType.Name}. Please ensure it's injected via IoC or has a default constructor.\n" +
-                                                 "This exception could also occur if default constructor threw an exception", e);
+                    var msg = Resources.A.Error_Could_not_create_instance_of(declaredValidatorType.Name);
+                    throw new InvalidValidatorException(msg, e);
                 }
 
                 return ((IValidator)validator!).Validate(model);

@@ -24,8 +24,9 @@ namespace CommandDotNet.Diagnostics
             var config = context.AppConfig.Services.GetOrDefault<CommandLoggerConfig>();
             if (config == null)
             {
-                throw new InvalidConfigurationException($"{nameof(CommandLoggerMiddleware)} has not been registered. " +
-                                                        $"Try `appRunner.{nameof(AppRunnerConfigExtensions.UseCommandLogger)}()`");
+                throw new InvalidConfigurationException(
+                    $"{nameof(CommandLoggerMiddleware)} has not been registered. " +
+                    $"Try `appRunner.{nameof(AppRunnerConfigExtensions.UseCommandLogger)}()`");
             }
             if (context == null)
             {
@@ -39,7 +40,7 @@ namespace CommandDotNet.Diagnostics
             sb.AppendLine("***************************************");
 
             var originalArgs = RemovePasswords(context, context.Original.Args.ToCsv(" "));
-            sb.AppendLine("Original input:");
+            sb.AppendLine(Resources.A.CommandLogger_Original_input + ":");
             sb.AppendLine($"  {originalArgs}");
             sb.AppendLine();
 
@@ -76,7 +77,7 @@ namespace CommandDotNet.Diagnostics
                 .AllArguments(includeInterceptorOptions: true)
                 .Where(a => a.IsObscured())
                 .ForEach(a => a.InputValues
-                    .Where(iv => iv.Source == Constants.InputValueSources.Argument)
+                    .Where(iv => iv.Source == Resources.A.Help_argument_lc)
                     .SelectMany(iv => iv.Values)
                     .ForEach(pwd => originalArgs = originalArgs.Replace(pwd, Password.ValueReplacement)));
             return originalArgs;
@@ -88,12 +89,21 @@ namespace CommandDotNet.Diagnostics
             if (includeSystemInfo)
             {
                 var appInfo = AppInfo.Instance;
-                yield return ("Tool version", $"{appInfo.FileName} {appInfo.Version}");
-                yield return (".Net version",
+                yield return (
+                    Resources.A.CommandLogger_Tool_version, 
+                    $"{appInfo.FileName} {appInfo.Version}");
+                yield return (
+                    Resources.A.CommandLogger_DotNet_version,
                     System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription.Trim());
-                yield return ("OS version", System.Runtime.InteropServices.RuntimeInformation.OSDescription.Trim());
-                yield return ("Machine", Environment.MachineName);
-                yield return ("Username", $"{Environment.UserDomainName}\\{Environment.UserName}");
+                yield return (
+                    Resources.A.CommandLogger_OS_version, 
+                    System.Runtime.InteropServices.RuntimeInformation.OSDescription.Trim());
+                yield return (
+                    Resources.A.CommandLogger_Machine, 
+                    Environment.MachineName);
+                yield return (
+                    Resources.A.CommandLogger_Username, 
+                    $"{Environment.UserDomainName}\\{Environment.UserName}");
             }
 
             if (additionalHeaders is { })

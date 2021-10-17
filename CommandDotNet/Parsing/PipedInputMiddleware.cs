@@ -46,7 +46,7 @@ namespace CommandDotNet.Parsing
                 else
                 {
                     Log.DebugFormat("Piping input to {0}.{1}", ctx.ParseResult.TargetCommand.Name, operand.Name);
-                    operand.InputValues.Add(new InputValue(Constants.InputValueSources.Piped, true, GetPipedInput(ctx.Console)));
+                    operand.InputValues.Add(new InputValue(Resources.A.Input_piped_lc, true, GetPipedInput(ctx.Console)));
                 }
             }
 

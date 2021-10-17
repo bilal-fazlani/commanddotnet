@@ -9,6 +9,7 @@ using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Diagnostics
 {
+    //TODO: localize
     internal static class ParseDirective
     {
         internal static AppRunner UseParseDirective(this AppRunner appRunner)

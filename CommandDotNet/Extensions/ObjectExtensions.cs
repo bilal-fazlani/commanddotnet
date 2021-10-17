@@ -97,7 +97,7 @@ namespace CommandDotNet.Extensions
             }
             catch (MissingMethodException e)
             {
-                throw new MissingMethodException($"{e.Message}. The type must implement {nameof(ICloneable)} or a parameterless constructor.", e);
+                throw new InvalidConfigurationException($"{e.Message}. The type must implement {nameof(ICloneable)} or a parameterless constructor.", e);
             }
 
             type

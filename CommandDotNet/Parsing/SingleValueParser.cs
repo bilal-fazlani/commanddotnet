@@ -23,8 +23,8 @@ namespace CommandDotNet.Parsing
 
         private static void ThrowMultiForSingleEx(IArgument argument)
         {
-            var message = $"{argument.Name} accepts only a single value but multiple values were provided";
-            throw new ValueParsingException(message);
+            throw new ValueParsingException(
+                Resources.A.Error_ArgumentArity_Expected_single_value(argument.Name));
         }
     }
 }

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
-using CommandDotNet.Parsing;
 using CommandDotNet.Rendering;
 
-namespace CommandDotNet.ClassModeling
+namespace CommandDotNet.Parsing
 {
     internal static class BindValuesMiddleware
     {
@@ -31,6 +30,7 @@ namespace CommandDotNet.ClassModeling
         {
             bool SetFromStringInput(IArgument arg, IEnumerable<string> values)
             {
+                // DO NOT values.ToCollection() here as it could be a stream.
                 try
                 {
                     var parser = parserFactory.CreateInstance(arg);
@@ -40,7 +40,6 @@ namespace CommandDotNet.ClassModeling
                 }
                 catch (ValueParsingException ex)
                 {
-                    console.Error.WriteLine($"Failure parsing value for {argument.GetType().Name}: {arg.Name}.  value(s)={values?.ToCsv()}");
                     console.Error.WriteLine(ex.Message);
                     console.Error.WriteLine();
                     return false;
@@ -93,8 +92,7 @@ namespace CommandDotNet.ClassModeling
                         }
                         catch (Exception ex)
                         {
-                            console.Error.WriteLine(
-                                $"Failure assigning value to {argument}. Value={defaultValue}");
+                            console.Error.WriteLine(Resources.A.Error_assigning_value_to_argument(argument.ToString(), defaultValue?.ToString()));
                             console.Error.WriteLine(ex.Message);
                             console.Error.WriteLine();
                             return false;

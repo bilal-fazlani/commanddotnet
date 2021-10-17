@@ -6,7 +6,12 @@ namespace CommandDotNet.Parsing
     {
         public ValueParsingException(string message) : base(message)
         {
-            
+
+        }
+
+        public ValueParsingException(string message, Exception innerException) : base(message, innerException)
+        {
+
         }
     }
 }

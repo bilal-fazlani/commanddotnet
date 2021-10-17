@@ -9,10 +9,19 @@ namespace CommandDotNet.FluentValidation
         /// <summary>Enables FluentValidation for <see cref="IArgumentModel"/>s</summary>
         /// <param name="appRunner">the <see cref="AppRunner"/></param>
         /// <param name="showHelpOnError">when true, help will be display for the target command after the validation errors</param>
-        public static AppRunner UseFluentValidation(this AppRunner appRunner, bool showHelpOnError = false)
+        public static AppRunner UseFluentValidation(this AppRunner appRunner, bool showHelpOnError = false, 
+            Resources? resourcesOverride = null)
         {
             return appRunner.Configure(c =>
             {
+                if (resourcesOverride != null)
+                {
+                    Resources.A = resourcesOverride;
+                }
+                else if (appRunner.AppSettings.Localize != null)
+                {
+                    Resources.A = new ResourcesProxy(appRunner.AppSettings.Localize);
+                }
                 c.UseMiddleware(FluentValidationForModels, MiddlewareSteps.FluentValidation);
                 c.Services.Add(new Config(showHelpOnError));
             });
@@ -48,7 +57,7 @@ namespace CommandDotNet.FluentValidation
                     var console = ctx.Console;
                     failureResults.ForEach(f =>
                     {
-                        console.Error.WriteLine($"'{f.model.GetType().Name}' is invalid");
+                        console.Error.WriteLine(Resources.A.Error_Argument_model_is_invalid(f.model.GetType().Name));
                         foreach (var error in f.result!.Errors)
                         {
                             console.Error.WriteLine($"  {error.ErrorMessage}");

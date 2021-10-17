@@ -13,12 +13,12 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public object[] GetCustomAttributes(bool inherit)
         {
-            return new object[0];
+            return Array.Empty<object>();
         }
 
         public object[] GetCustomAttributes(Type attributeType, bool inherit)
         {
-            return new object[0];
+            return Array.Empty<object>();
         }
 
         public bool IsDefined(Type attributeType, bool inherit)

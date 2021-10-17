@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
+using CommandDotNet.Parsing;
 
 namespace CommandDotNet.ClassModeling
 {

@@ -46,12 +46,24 @@ namespace CommandDotNet
 
         static AppRunner() => LogProvider.IsDisabled = true;
 
-        public AppRunner(Type rootCommandType, AppSettings? settings = null)
+        public AppRunner(Type rootCommandType, 
+            AppSettings? settings = null, 
+            Resources? resourcesOverride = null)
         {
             LogProvider.IsDisabled = true;
 
             RootCommandType = rootCommandType ?? throw new ArgumentNullException(nameof(rootCommandType));
             AppSettings = settings ?? new AppSettings();
+            
+            if (resourcesOverride != null)
+            {
+                Resources.A = resourcesOverride;
+            }
+            else if (AppSettings.Localize != null)
+            {
+                Resources.A = new ResourcesProxy(AppSettings.Localize);
+            }
+            
             _appConfigBuilder = new AppConfigBuilder(AppSettings);
             AddCoreMiddleware();
         }

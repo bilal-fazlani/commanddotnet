@@ -16,8 +16,8 @@ namespace CommandDotNet.TypeDescriptors
         public string GetDisplayName(IArgument argument)
         {
             return argument.Arity.AllowsNone()
-                ? Constants.TypeDisplayNames.Flag
-                : Constants.TypeDisplayNames.Boolean;
+                ? ""
+                : Resources.A.Type_Boolean;
         }
 
         public object ParseString(IArgument argument, string value)
