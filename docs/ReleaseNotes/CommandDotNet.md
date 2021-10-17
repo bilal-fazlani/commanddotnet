@@ -10,7 +10,7 @@ Now it will suggest the correct syntax to the user.
 
 ## 4.1.8
 
-Expose expose DefaultSources.GetValueFunc for host apps to reuse logic for alternate configuration sources.
+Expose DefaultSources.GetValueFunc for host apps to reuse logic for alternate configuration sources.
 
 See the new [.Net Core Config](../ArgumentValues/default-values-from-config.md#.net-core-config) section for an example.
 
