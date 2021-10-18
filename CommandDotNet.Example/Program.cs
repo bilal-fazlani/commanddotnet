@@ -2,6 +2,7 @@
 using System.Globalization;
 using CommandDotNet.Diagnostics;
 using CommandDotNet.FluentValidation;
+using CommandDotNet.Localization;
 using CommandDotNet.NameCasing;
 
 namespace CommandDotNet.Example

@@ -182,9 +182,6 @@ namespace CommandDotNet
         public override string Error_Failed_parsing_value_for_type(string value, string typeDisplayName) =>
             _localize(base.Error_Failed_parsing_value_for_type("{0}", "{1}"))
             ?? base.Error_Failed_parsing_value_for_type(value, typeDisplayName);
-        public override string Error_Type_is_not_supported_as_argument(string typeFullName) =>
-            _localize(base.Error_Type_is_not_supported_as_argument("{0}"))
-            ?? base.Error_Type_is_not_supported_as_argument(typeFullName);
 
     }
 }

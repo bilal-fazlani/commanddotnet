@@ -1,14 +1,14 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Directives;
 using CommandDotNet.Execution;
 
-namespace CommandDotNet.Example
+namespace CommandDotNet.Localization
 {
-    public static class LocalizeDirectives
+    internal static class LocalizeDirective
     {
-        public static AppRunner UseLocalizeDirective(this AppRunner appRunner)
+        internal static AppRunner UseLocalizeDirective(AppRunner appRunner)
         {
             return appRunner.Configure(c => c.UseMiddleware(Localize, MiddlewareSteps.DebugDirective + 1));
         }

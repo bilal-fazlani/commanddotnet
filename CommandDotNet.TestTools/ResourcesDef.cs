@@ -9,8 +9,6 @@ namespace CommandDotNet.TestTools
 {
     public class ResourcesDef
     {
-        public static ICollection<ResourcesDef> Parse(params Type[] types) => types.Select(Parse).ToCollection();
-
         public static ResourcesDef Parse<T>() => Parse(typeof(T));
         
         public static ResourcesDef Parse(Type type)
@@ -27,11 +25,25 @@ namespace CommandDotNet.TestTools
             Type = type;
             Properties = properties;
             Methods = methods;
+            IsProxy = Type.BaseType != null && Type.GetConstructors().Any(c =>
+            {
+                var parameters = c.GetParameters();
+                return parameters.Length == 1
+                       && parameters.First().ParameterType == typeof(Func<string, string?>);
+            });
         }
 
+        public bool IsProxy { get; set; }
         public Type Type { get; }
         public ICollection<PropertyInfo> Properties { get; }
         public ICollection<MethodInfo> Methods { get; }
+
+        public object? NewProxyInstance()
+        {
+            return IsProxy
+                ? Activator.CreateInstance(Type, (Func<string, string?>)(s => s)) 
+                : throw new Exception($"type:{Type.FullName} is not a proxy");
+        }
 
         public IEnumerable<(string error, ICollection<MemberInfo> members)> Validate()
         {
@@ -59,6 +71,23 @@ namespace CommandDotNet.TestTools
                 .Select(m => m.FullName(true));
 
             return missingProperties.Concat(missingMethods);
+        }
+
+        public IEnumerable<(MemberInfo member, string value)> GetTemplatedValues()
+        {
+            var proxy = NewProxyInstance();
+            foreach (var property in Properties)
+            {
+                yield return (property, (string)property.GetValue(proxy));
+            }
+            foreach (var method in Methods)
+            {
+                var placeHolders = method.GetParameters()
+                    .Select((p, i) => $"{{{i}}}")
+                    .Cast<object>()
+                    .ToArray();
+                yield return (method, (string)method.Invoke(proxy, placeHolders));
+            }
         }
 
         public string? GenerateProxyClass()
