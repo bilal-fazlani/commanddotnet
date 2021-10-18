@@ -130,7 +130,7 @@ namespace CommandDotNet
         /// </summary>
         public static AppRunner UseLocalizeDirective(this AppRunner appRunner)
         {
-            return LocalizeDirective.UseLocalizeDirective(appRunner);
+            return CultureDirective.UseCultureDirective(appRunner);
         }
 
         /// <summary>Piped input will be appended to an operand list if one exists for the command</summary>

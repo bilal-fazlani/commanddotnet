@@ -62,7 +62,7 @@ namespace CommandDotNet.Tests.UnitTests.Localization
             proxies.ForEach(p =>
             {
                 var path = Path.Combine(folder, $"{p.Type.Namespace}.resx");
-                var resx = ResxWriter.Write(p.GetTemplatedValues());
+                var resx = ResxWriter.Write(p.GetMembersWithDefaults());
                 File.WriteAllText(path, resx);
             });
         }
@@ -81,7 +81,7 @@ namespace CommandDotNet.Tests.UnitTests.Localization
             
             proxies.ForEach(p =>
             {
-                var dictionary = p.GetTemplatedValues()
+                var dictionary = p.GetMembersWithDefaults()
                     .ToDictionary(t => t.value, t => t.value);
                 var json = (string)JsonSerializer.Serialize(dictionary);
                 var path = Path.Combine(folder, $"{p.Type.Namespace}.json");

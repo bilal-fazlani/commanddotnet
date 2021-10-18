@@ -25,9 +25,6 @@ namespace CommandDotNet.Tests.UnitTests.Localization
         }
         
         // TODO: public comments on tooling
-        // TODO: documentation on localization pattern and test tooling
-        // TODO: feature list
-        // TODO: localize directive
 
         [Fact]
         public void ResourceProxy_should_use_result_from_translate_func()

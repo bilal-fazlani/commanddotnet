@@ -69,9 +69,8 @@
 | \ \ \ Custom | ✔️ |
 |   **Localization (beta)** |  |
 | \ \ \ IStringLocalizer pattern | [docs](Localization/overview.md) ✔️ |
-| \ \ \ resx<br/>\ \ \ \ \ \ _coming soon_ |  |
-| \ \ \ json<br/>\ \ \ \ \ \ _coming soon_ |  |
-| \ \ \ test support | [docs](Localization/testing.md) ✔️ |
+| \ \ \ Culture directive<br/>\ \ \ \ \ \ set the culture a command will run in | [docs](Localization/culture-directive.md) ✔️ |
+| \ \ \ Test support | [docs](Localization/testing.md) ✔️ |
 |   **Other** |  |
 | \ \ \ Ctrl+C | [docs](OtherFeatures/cancellation.md) ✔️ |
 | \ \ \ Name casing<br/>\ \ \ \ \ \ _consistent name casing via [Humanizer](https://github.com/Humanizr/Humanizer)_ | [docs](OtherFeatures/name-casing.md) ✔️ |

@@ -9,22 +9,19 @@ namespace CommandDotNet.TestTools
 {
     public class ResourcesDef
     {
-        public static ResourcesDef Parse<T>() => Parse(typeof(T));
-        
-        public static ResourcesDef Parse(Type type)
-        {
-            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-            var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                .Where(m => !m.IsSpecialName);
+        public static ResourcesDef Parse<T>() => new ResourcesDef(typeof(T));
 
-            return new ResourcesDef(type, properties.ToCollection(), methods.ToCollection());
-        }
-            
-        public ResourcesDef(Type type, ICollection<PropertyInfo> properties, ICollection<MethodInfo> methods)
+        public ResourcesDef(Type type)
         {
+            Properties = type
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .ToCollection();
+            Methods = type
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .Where(m => !m.IsSpecialName) // exclude property methods
+                .ToCollection();
+
             Type = type;
-            Properties = properties;
-            Methods = methods;
             IsProxy = Type.BaseType != null && Type.GetConstructors().Any(c =>
             {
                 var parameters = c.GetParameters();
@@ -73,7 +70,7 @@ namespace CommandDotNet.TestTools
             return missingProperties.Concat(missingMethods);
         }
 
-        public IEnumerable<(MemberInfo member, string value)> GetTemplatedValues()
+        public IEnumerable<(MemberInfo member, string value)> GetMembersWithDefaults()
         {
             var proxy = NewProxyInstance();
             foreach (var property in Properties)
