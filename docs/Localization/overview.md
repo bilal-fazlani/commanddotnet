@@ -3,6 +3,8 @@
 ## Beta feature
 Coverage is not 100%. Help output and common use cases have been prioritized. Configuration errors for developers are not included at this time as it's assumed the app will be tested before being given to users who wouldn't be able to act on the errors anyway. We will accept PR's if this is important to you.
 
+We will also need help with translations and will accept PRs for those translations.
+
 ## TLDR, How to enable 
 Enable the feature by setting `appSettings.Localize` to a `Func<string,string?>` such as `text => stringLocalizer[text]`.
 Every package that supports localization will detect this during registration.
@@ -16,7 +18,7 @@ static int Main(string[] args)
 }
 ```
 
-## Advanced cases
+### Advanced cases
 
 To use a different `Func<string,string?>` per package, supply the appropriate `ResourcesProxy` in the `AppRunner` constructor and in the registration for each package.
 
@@ -47,3 +49,28 @@ static int Main(string[] args)
 }
 ```
 
+## Implementation
+
+### Goals
+
+* provide localization 
+* easy to use
+* extensible 
+* avoid the cost of translation lookups when not needed
+* common entries available for reuse in other middleware
+* easy to identify new entries
+* fallback to default when localized values are not found
+
+### Approach
+
+#### Resources and ResourcesProxy
+
+Every package that contains localizable content will contain, in the root namespace, a [Resources](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Resources.cs) class and a [ResourcesProxy](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/ResourcesProxy.cs) that takes a `Func<string,string>`.  Each package will have it's own implementation of `Resources` and `ResourcesProxy`.  For example, [DataAnnotations](https://github.com/bilal-fazlani/commanddotnet/tree/master/CommandDotNet.DataAnnotations) and [FluentValidation](https://github.com/bilal-fazlani/commanddotnet/tree/master/CommandDotNet.FluentValidation) have their own versions.
+
+As seen in the examples above, the [IStringLocalizer indexer](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.localization.istringlocalizer.item) can be used for `Func<string,string?>`, making this approach extensible without taking a dependency on localization extensions.
+
+We chose to use a class instead of interface for `Resources` to avoid every addition being a breaking change. Localization should not cause your app to fail and should not force you to recompile code for every update. We've provided tooling to help you identify when new resources are added via unit testing.
+
+#### Testing 
+
+See the [Localization testing](../testing.md) page to see how we ensure proxies include every member and how you can generate and test your own.

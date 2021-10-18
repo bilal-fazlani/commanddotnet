@@ -33,6 +33,7 @@ namespace CommandDotNet.Tests.UnitTests
         // TODO: release notes
         // TODO: generate json files
         // TODO: generate resx files
+        // TODO: localize directive
 
         [Fact]
         public void ResourceProxy_should_use_result_from_translate_func()
@@ -63,20 +64,8 @@ namespace CommandDotNet.Tests.UnitTests
         [Fact]
         public void ProxyContainsAllMembersOfBase()
         {
-            IEnumerable<MemberInfo> GetMissingMembers(ResourcesDef source, ResourcesDef proxy)
-            {
-                var missingProperties = source.Properties
-                    .Where(m => proxy.Properties.All(pm => pm.Name != m.Name));
-                
-                var missingMethods = source.Methods
-                    .Where(m => proxy.Methods.All(pm => pm.Name != m.Name));
-
-                return missingProperties.Cast<MemberInfo>().Concat(missingMethods);
-            }
-
             var missingMembers = _resourcesDefs
-                .SelectMany(r => GetMissingMembers(r.source, r.proxy))
-                .Select(m => m.FullName(true))
+                .SelectMany(r => r.proxy.IsMissingMembersFrom(r.source))
                 .ToCsv($"  {Environment.NewLine}");
 
             missingMembers.Should().BeNullOrEmpty(
@@ -84,8 +73,8 @@ namespace CommandDotNet.Tests.UnitTests
                 $"Run {nameof(RegenerateProxyClasses)} to add them");
         }
 
-        //[Fact(Skip = "run to regenerate the ResourceProxy classes")]
-        [Fact]
+        [Fact(Skip = "run to regenerate the ResourceProxy classes")]
+        //[Fact]
         public void RegenerateProxyClasses()
         {
             var solutionRoot = new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!.Parent!.FullName;

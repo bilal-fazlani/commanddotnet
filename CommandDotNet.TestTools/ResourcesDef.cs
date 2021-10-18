@@ -46,6 +46,21 @@ namespace CommandDotNet.TestTools
             }
         }
 
+        public IEnumerable<string> IsMissingMembersFrom(ResourcesDef source)
+        {
+            var proxy = this;
+            
+            var missingProperties = source.Properties
+                .Where(m => proxy.Properties.All(pm => pm.Name != m.Name))
+                .Select(m => m.FullName(true));
+                
+            var missingMethods = source.Methods
+                .Where(m => proxy.Methods.All(pm => pm.Name != m.Name))
+                .Select(m => m.FullName(true));
+
+            return missingProperties.Concat(missingMethods);
+        }
+
         public string? GenerateProxyClass()
         {
             var proxyCode = new StringBuilder();

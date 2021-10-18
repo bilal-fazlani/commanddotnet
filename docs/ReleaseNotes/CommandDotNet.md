@@ -1,5 +1,11 @@
 # CommandDotNet
 
+## 4.2.0
+
+* Added *beta* support for [Localization](../Localization/overview.md).
+* Added the [Time directive](../Diagnostics/time-directive.md)
+* Fixed bug where NonSerializableWrapper used to capture date in Exception.Data was not correctly outputting it's contents when printing exceptions.
+
 ## 4.1.13
 
 Fix [bug](https://github.com/bilal-fazlani/commanddotnet/issues/346) where calling a command using option syntax threw an exception.
