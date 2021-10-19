@@ -1,5 +1,17 @@
 # CommandDotNet.TestTools
 
+## 3.1.1
+
+Add `ResourcesDef.IsMissingMembersFrom` so tests can identify when a proxy does not override members of the base.
+
+## 3.1.0
+
+Tooling support for [Localization](../Localization/overview.md). 
+
+Added [ResourcesDef](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/ResourcesDef.cs) to simplify loading members of a [Resources](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Resources.cs) file and generate a corresponding [ResourcesProxy](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/ResourcesProxy.cs).
+
+Use `ResourcesDef` to generate a ResourcesProxy for Resources you've defined in your middleware packages 
+
 ## 3.0.2
 
 TestConfig.AppInfoOverride to enable getting a consistent AppName. See [Deterministic AppName for tests](../TestTools/Tools/deterministic-appinfo.md) for details.

@@ -7,6 +7,7 @@ using CommandDotNet.Builders.ArgumentDefaults;
 using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Diagnostics;
 using CommandDotNet.Execution;
+using CommandDotNet.Localization;
 using CommandDotNet.Parsing;
 using CommandDotNet.Parsing.Typos;
 using CommandDotNet.Prompts;
@@ -121,6 +122,15 @@ namespace CommandDotNet
         {
             AssertDirectivesAreEnabled(appRunner);
             return ParseDirective.UseParseDirective(appRunner);
+        }
+        
+        /// <summary>
+        /// When the first argument is [loc:{culture}], the framework will set the current culture
+        /// to the culture provided.  Useful for testing localization.
+        /// </summary>
+        public static AppRunner UseLocalizeDirective(this AppRunner appRunner)
+        {
+            return CultureDirective.UseCultureDirective(appRunner);
         }
 
         /// <summary>Piped input will be appended to an operand list if one exists for the command</summary>

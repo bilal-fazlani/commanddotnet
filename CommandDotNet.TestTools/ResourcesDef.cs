@@ -9,29 +9,38 @@ namespace CommandDotNet.TestTools
 {
     public class ResourcesDef
     {
-        public static ICollection<ResourcesDef> Parse(params Type[] types) => types.Select(Parse).ToCollection();
+        public static ResourcesDef Parse<T>() => new ResourcesDef(typeof(T));
 
-        public static ResourcesDef Parse<T>() => Parse(typeof(T));
-        
-        public static ResourcesDef Parse(Type type)
+        public ResourcesDef(Type type)
         {
-            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-            var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                .Where(m => !m.IsSpecialName);
+            Properties = type
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .ToCollection();
+            Methods = type
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                .Where(m => !m.IsSpecialName) // exclude property methods
+                .ToCollection();
 
-            return new ResourcesDef(type, properties.ToCollection(), methods.ToCollection());
-        }
-            
-        public ResourcesDef(Type type, ICollection<PropertyInfo> properties, ICollection<MethodInfo> methods)
-        {
             Type = type;
-            Properties = properties;
-            Methods = methods;
+            IsProxy = Type.BaseType != null && Type.GetConstructors().Any(c =>
+            {
+                var parameters = c.GetParameters();
+                return parameters.Length == 1
+                       && parameters.First().ParameterType == typeof(Func<string, string?>);
+            });
         }
 
+        public bool IsProxy { get; set; }
         public Type Type { get; }
         public ICollection<PropertyInfo> Properties { get; }
         public ICollection<MethodInfo> Methods { get; }
+
+        public object? NewProxyInstance()
+        {
+            return IsProxy
+                ? Activator.CreateInstance(Type, (Func<string, string?>)(s => s)) 
+                : throw new Exception($"type:{Type.FullName} is not a proxy");
+        }
 
         public IEnumerable<(string error, ICollection<MemberInfo> members)> Validate()
         {
@@ -43,6 +52,38 @@ namespace CommandDotNet.TestTools
             if (invalid.Any())
             {
                 yield return ("Proxy method parameters must be of type string", invalid);
+            }
+        }
+
+        public IEnumerable<string> IsMissingMembersFrom(ResourcesDef source)
+        {
+            var proxy = this;
+            
+            var missingProperties = source.Properties
+                .Where(m => proxy.Properties.All(pm => pm.Name != m.Name))
+                .Select(m => m.FullName(true));
+                
+            var missingMethods = source.Methods
+                .Where(m => proxy.Methods.All(pm => pm.Name != m.Name))
+                .Select(m => m.FullName(true));
+
+            return missingProperties.Concat(missingMethods);
+        }
+
+        public IEnumerable<(MemberInfo member, string value)> GetMembersWithDefaults()
+        {
+            var proxy = NewProxyInstance();
+            foreach (var property in Properties)
+            {
+                yield return (property, (string)property.GetValue(proxy));
+            }
+            foreach (var method in Methods)
+            {
+                var placeHolders = method.GetParameters()
+                    .Select((p, i) => $"{{{i}}}")
+                    .Cast<object>()
+                    .ToArray();
+                yield return (method, (string)method.Invoke(proxy, placeHolders));
             }
         }
 

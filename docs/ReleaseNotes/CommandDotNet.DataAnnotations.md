@@ -1,5 +1,9 @@
 # CommandDotNet.DataAnnotations
 
+## 1.1.0
+
+Added support for [Localization](../Localization/overview.md)
+
 ## 1.0.1
 
 The previous implementation validated each argument value in isolation.

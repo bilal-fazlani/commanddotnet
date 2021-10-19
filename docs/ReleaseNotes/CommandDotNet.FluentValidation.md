@@ -1,5 +1,9 @@
 # CommandDotNet.FluentValidation
 
+## 3.1.0
+
+Added support for [Localization](../Localization/overview.md)
+
 ## 3.0.1
 
 Changed name of middleware method from ValidateModels to FluentValidationForModels. 
