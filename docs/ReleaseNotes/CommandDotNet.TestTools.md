@@ -2,7 +2,10 @@
 
 ## 3.1.1
 
-Add `ResourcesDef.IsMissingMembersFrom` so tests can identify when a proxy does not override members of the base.
+Added to  `ResourcesDef`
+
+* `IsMissingMembersFrom` so tests can identify when a proxy does not override members of the base.
+* `GetMembersWithDefaults` to help generate resource files as shown in [ResourceGenerators](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Tests/UnitTests/Localization/ResourceGenerators.cs)
 
 ## 3.1.0
 
