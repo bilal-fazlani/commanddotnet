@@ -43,6 +43,7 @@ nav:
       - Localization:
         - Localization/overview.md
         - Localization/testing.md
+        - Localization/culture-directive.md
       - Testing:
         - TestTools/overview.md
         - Harness:

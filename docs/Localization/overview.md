@@ -61,9 +61,7 @@ static int Main(string[] args)
 * easy to identify new entries
 * fallback to default when localized values are not found
 
-### Approach
-
-#### Resources and ResourcesProxy
+### Resources and ResourcesProxy
 
 Every package that contains localizable content will contain, in the root namespace, a [Resources](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Resources.cs) class and a [ResourcesProxy](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/ResourcesProxy.cs) that takes a `Func<string,string>`.  Each package will have it's own implementation of `Resources` and `ResourcesProxy`.  For example, [DataAnnotations](https://github.com/bilal-fazlani/commanddotnet/tree/master/CommandDotNet.DataAnnotations) and [FluentValidation](https://github.com/bilal-fazlani/commanddotnet/tree/master/CommandDotNet.FluentValidation) have their own versions.
 
@@ -71,6 +69,12 @@ As seen in the examples above, the [IStringLocalizer indexer](https://docs.micro
 
 We chose to use a class instead of interface for `Resources` to avoid every addition being a breaking change. Localization should not cause your app to fail and should not force you to recompile code for every update. We've provided tooling to help you identify when new resources are added via unit testing.
 
-#### Testing 
+### Testing 
 
-See the [Localization testing](../testing.md) page to see how we ensure proxies include every member and how you can generate and test your own.
+See [Localization testing](/testing.md) to see how we ensure proxies include every member and how you can generate and test your own.
+
+See the [culture directive](/culture-directive.md) for a way to set the culture for a command. Enable for unit tests and manual testing.
+
+## Generating Resource Files
+
+There are examples in the [ResourceProxyTests](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Tests/UnitTests/ResourceProxyTests.cs)
