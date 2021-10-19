@@ -1,20 +1,12 @@
-# Set current culture
+# Culture Directive
 
 ## TLDR, How to enable 
-Enable the feature with `appRunner.UseTimeDirective()` or `appRunner.UseDefaultMiddleware()`.
+Enable the feature with `appRunner.UseCultureDirective()`.
 
-## Time Directive
+## Culture Directive
 
-Some shells come with the handy [time command](https://linuxize.com/post/linux-time-command/). 
-
-.Net Core can be executed in environments where the shells do not have the time command, so we've added an alternative
-
-When the `[time]` [directive](../Extensibility/directives.md) is used, a execution time will output to the console after the command has completed.
+When the `[culture:name]` [directive](../Extensibility/directives.md) is used, the `CultureInfo.CurrentCulture`is set to the specified culture.
 
 ```bash
-$ dotnet example.dll [time] Add 1 2
-
-4
-
-time: 00:00:00.0009052
+$ dotnet example.dll [culture:en-gb] Add 1 2
 ```

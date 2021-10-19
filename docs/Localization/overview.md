@@ -3,6 +3,8 @@
 ## Beta feature
 Coverage is not 100%. Help output and common use cases have been prioritized. Configuration errors for developers are not included at this time as it's assumed the app will be tested before being given to users who wouldn't be able to act on the errors anyway. We will accept PR's if this is important to you.
 
+Submit feedback via [GitHub Issues](https://github.com/bilal-fazlani/commanddotnet/issues), [GitHub Discussions](https://github.com/bilal-fazlani/commanddotnet/discussions) or [![Discord](https://img.shields.io/discord/678568687556493322?label=Discord%20Chat&style=for-the-badge)](https://discord.gg/QFxKSeG)
+
 We will also need help with translations and will accept PRs for those translations.
 
 ## TLDR, How to enable 
@@ -71,9 +73,9 @@ We chose to use a class instead of interface for `Resources` to avoid every addi
 
 ### Testing 
 
-See [Localization testing](/testing.md) to see how we ensure proxies include every member and how you can generate and test your own.
+See [Localization testing](testing.md) to see how we ensure proxies include every member and how you can generate and test your own.
 
-See the [culture directive](/culture-directive.md) for a way to set the culture for a command. Enable for unit tests and manual testing.
+See the [culture directive](culture-directive.md) for a way to set the culture for a command. Enable for unit tests and manual testing.
 
 ## Generating Resource Files
 
