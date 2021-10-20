@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using CommandDotNet.DataAnnotations;
@@ -153,6 +154,23 @@ Usage: testhost.dll Save [options] <Id> <Name>"
                 });
         }
 
+        [Fact]
+        public void Exec_IValidatableObject_IsValidated()
+        {
+            new AppRunner<App>()
+                .UseDataAnnotationValidations()
+                .Verify(new Scenario
+                {
+                    When = { Args = "Save 1 john --nick-name john" },
+                    Then =
+                    {
+                        ExitCode = 2,
+                        Output = @"Name and nick-name cannot have the same value.
+"
+                    }
+                });
+        }
+
         public class App
         {
             public void Save(
@@ -175,7 +193,7 @@ Usage: testhost.dll Save [options] <Id> <Name>"
             }
         }
 
-        public class Person : IArgumentModel
+        public class Person : IArgumentModel, IValidatableObject
         {
             [Operand, Required, Range(1, int.MaxValue)]
             public int? Id { get; set; }
@@ -188,6 +206,14 @@ Usage: testhost.dll Save [options] <Id> <Name>"
 
             [OrderByPositionInClass]
             public ContactInfo ContactInfo { get; set; } = new ContactInfo();
+
+            public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+            {
+                if (Name == NickName)
+                {
+                    yield return new ValidationResult("Name and nick-name cannot have the same value.");
+                }
+            }
         }
 
         public class ContactInfo : IArgumentModel
