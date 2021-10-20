@@ -53,7 +53,7 @@ namespace CommandDotNet.Help
 
             if (!_appHelpSettings.ExpandArgumentsInUsage)
             {
-                return $"[{Resources.A.Help_arguments_lc}]";
+                return $"[{Resources.A.Common_arguments_lc}]";
             }
 
             if (command.Operands.Last().Arity.Minimum > 0)
@@ -85,13 +85,13 @@ namespace CommandDotNet.Help
         /// <summary>How options are shown in the usage example</summary>
         protected virtual string? UsageOption(Command command) =>
             command.Options.Any(o => !o.Hidden)
-                ? $"[{Resources.A.Help_options_lc}]"
+                ? $"[{Resources.A.Common_options_lc}]"
                 : null;
 
         /// <summary>How subcommands are shown in the usage example</summary>
         protected virtual string? UsageSubcommand(Command command) =>
             command.Subcommands.Any()
-                ? $"[{Resources.A.Help_command_lc}]"
+                ? $"[{Resources.A.Common_command_lc}]"
                 : null;
 
         protected virtual string? ExtendedHelpText(Command command) => 
@@ -185,7 +185,7 @@ namespace CommandDotNet.Help
         /// <summary>Hint displayed in the subcommands section for getting help for a subcommand.</summary>
         protected virtual string? SubcommandHelpHint(Command command) =>
             $"{Resources.A.Help_Use} \"{AppName(command)}{PadFront(CommandPath(command))} " +
-            $"[{Resources.A.Help_command_lc}] --{Resources.A.Command_help}\" " +
+            $"[{Resources.A.Common_command_lc}] --{Resources.A.Command_help}\" " +
             Resources.A.Help_for_more_information_about_a_command + ".";
 
         protected virtual string CommandName(Command command) => command.Name;

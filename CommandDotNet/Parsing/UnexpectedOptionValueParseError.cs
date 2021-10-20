@@ -20,7 +20,7 @@ namespace CommandDotNet.Parsing
             Command = command ?? throw new ArgumentNullException(nameof(command));
             Option = option ?? throw new ArgumentNullException(nameof(option));
             Token = token ?? throw new ArgumentNullException(nameof(token));
-            Message = $"Unexpected value '{token.RawValue}' for option '{option.Name}'";
+            Message = Resources.A.Parse_unexpected_value_for_option(token.RawValue, option.Name);
         }
     }
 }

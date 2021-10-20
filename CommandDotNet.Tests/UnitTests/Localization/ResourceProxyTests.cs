@@ -35,7 +35,7 @@ namespace CommandDotNet.Tests.UnitTests.Localization
                 return "lala";
             });
             proxy.Command_help_description.Should().Be("lala");
-            proxy.Error_assigning_value_to_argument("a","b").Should().Be("lala");
+            proxy.Parse_assigning_value_to_argument("a","b").Should().Be("lala");
         }
         
         [Fact]
@@ -48,12 +48,12 @@ namespace CommandDotNet.Tests.UnitTests.Localization
             });
             var resources = new Resources();
             proxy.Command_help_description.Should().Be(resources.Command_help_description);
-            proxy.Error_assigning_value_to_argument("a","b")
-                .Should().Be(resources.Error_assigning_value_to_argument("a","b"));
+            proxy.Parse_assigning_value_to_argument("a","b")
+                .Should().Be(resources.Parse_assigning_value_to_argument("a","b"));
         }
 
         [Fact]
-        public void ProxyContainsAllMembersOfBase()
+        public void Proxies_should_contain_all_members_of_base()
         {
             var missingMembers = ResourcesDefs
                 .SelectMany(r => r.proxy.IsMissingMembersFrom(r.source))

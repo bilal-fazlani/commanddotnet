@@ -5,7 +5,6 @@ using System.Text;
 using CommandDotNet.Extensions;
 using CommandDotNet.Logging;
 using CommandDotNet.Rendering;
-using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Prompts
 {
@@ -20,7 +19,7 @@ namespace CommandDotNet.Prompts
             _console = console;
         }
 
-        public virtual string PromptForValue(string promptText, out bool isCancellationRequested, bool isPassword = false)
+        public virtual string? PromptForValue(string promptText, out bool isCancellationRequested, bool isPassword = false)
         {
             return PromptForValueImpl(promptText, isPassword, false, out isCancellationRequested).FirstOrDefault();
         }
@@ -30,7 +29,7 @@ namespace CommandDotNet.Prompts
             return PromptForValueImpl(promptText, isPassword, true, out isCancellationRequested);
         }
 
-        public bool TryPromptForValue(string promptText, out string value, out bool isCancellationRequested,
+        public bool TryPromptForValue(string promptText, out string? value, out bool isCancellationRequested,
             bool isPassword = false)
         {
             value = PromptForValue(promptText, out isCancellationRequested, isPassword);
@@ -168,40 +167,6 @@ namespace CommandDotNet.Prompts
             }
             consoleOut.WriteLine();
             return values;
-        }
-
-        private ICollection<string>? PromptForValueSimpleImpl(
-            string promptText, bool isPassword,
-            bool isList, out bool isCancellationRequested)
-        {
-            // cannot:
-            // - skip prompts w/ escape
-            // - skip out of prompting and exit app with ctrl+c
-            // - support multiple entry w/ enter+modifier
-
-            if (isPassword)
-            {
-                return PromptForValueRobustImpl(promptText, isPassword, isList, out isCancellationRequested);
-            }
-
-            isCancellationRequested = false;
-            var consoleOut = _console.Out;
-            consoleOut.Write(promptText);
-            if (isList)
-            {
-                consoleOut.Write(" [separate values by space]");
-            }
-            consoleOut.Write(": ");
-
-            var value = _console.In.ReadLine();
-            consoleOut.WriteLine();
-            if (value is null)
-            {
-                return null;
-            }
-            return isList
-                ? CommandLineStringSplitter.Instance.Split(value).ToCollection()
-                : new[] { value };
         }
 
         private static void ClearCurrent(StringBuilder sb, IStandardStreamWriter consoleOut)

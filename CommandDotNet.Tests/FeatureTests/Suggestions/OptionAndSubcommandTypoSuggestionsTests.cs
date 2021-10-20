@@ -214,7 +214,7 @@ See 'testhost.dll Similars --help'
                             ExitCode = 1,
                             OutputContainsTexts =
                             {
-                                @"'egister' is not a valid subcommand
+                                @"'egister' is not a valid command
 
 Did you mean ...
    Register
@@ -311,7 +311,7 @@ See 'testhost.dll  --help'
                             ExitCode = 1,
                             OutputContainsTexts =
                             {
-                                @"'users' is not a valid subcommand
+                                @"'users' is not a valid command
 
 Did you mean ...
    ListUsers
