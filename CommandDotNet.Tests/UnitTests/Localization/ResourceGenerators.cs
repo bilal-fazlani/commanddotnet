@@ -26,8 +26,8 @@ namespace CommandDotNet.Tests.UnitTests.Localization
         // resx with IStringLocalizer is problematic because the keys are case-insensitive in the format so we 
         // cannot have "arguments" and "Arguments", though we need both.
 
-        //[Fact(Skip = "run to regenerate the ResourceProxy classes")]
-        [Fact]
+        [Fact(Skip = "run to regenerate the ResourceProxy classes")]
+        //[Fact]
         public void RegenerateAll()
         {
             RegenerateProxyClasses();
