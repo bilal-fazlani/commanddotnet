@@ -49,6 +49,7 @@
 |   **Diagnostics** |  |
 | \ \ \ App Version<br/>\ \ \ \ \ \ _`-v` or `--version` | [docs](Diagnostics/app-version.md) ✔️ |
 | \ \ \ [debug] directive<br/>\ \ \ \ \ \ _step into debugger_ | [docs](Diagnostics/debug-directive.md)  ✔️|
+| \ \ \ [time] directive<br/>\ \ \ \ \ \ _outputs the execution time of a command_ | [docs](Diagnostics/time-directive.md)  ✔️|
 | \ \ \ [parse] directive | [docs](Diagnostics/parse-directive.md) ✔️ |
 | \ \ \ \ \ \ show final values | ✔️ |
 | \ \ \ \ \ \ show inputs and source<br/>\ \ \ \ \ \ \ \ \ _original source of value, including response file paths_ | ✔️ |
