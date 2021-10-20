@@ -70,6 +70,8 @@
 | \ \ \ Custom | ✔️ |
 |   **Localization (beta)** |  |
 | \ \ \ IStringLocalizer pattern | [docs](Localization/overview.md) ✔️ |
+| \ \ \ resx translation files<br/>\ \ \ \ \ \ currently english only. PRs accepted. | [src](https://github.com/bilal-fazlani/commanddotnet/tree/master/localization_files/resx) ✔️ |
+| \ \ \ json translation pattern<br/>\ \ \ \ \ \ currently english only. PRs accepted. | [src](https://github.com/bilal-fazlani/commanddotnet/tree/master/localization_files/simple_json) ✔️ |
 | \ \ \ Culture directive<br/>\ \ \ \ \ \ set the culture a command will run in | [docs](Localization/culture-directive.md) ✔️ |
 | \ \ \ Test support | [docs](Localization/testing.md) ✔️ |
 |   **Other** |  |

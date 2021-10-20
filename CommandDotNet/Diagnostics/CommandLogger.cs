@@ -77,7 +77,7 @@ namespace CommandDotNet.Diagnostics
                 .AllArguments(includeInterceptorOptions: true)
                 .Where(a => a.IsObscured())
                 .ForEach(a => a.InputValues
-                    .Where(iv => iv.Source == Resources.A.Help_argument_lc)
+                    .Where(iv => iv.Source == Resources.A.Common_argument_lc)
                     .SelectMany(iv => iv.Values)
                     .ForEach(pwd => originalArgs = originalArgs.Replace(pwd, Password.ValueReplacement)));
             return originalArgs;

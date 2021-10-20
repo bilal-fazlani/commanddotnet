@@ -1,5 +1,10 @@
 # CommandDotNet
 
+## 4.2.2
+
+* Finished localizing strings that would appear for user in normal settings. What remains are configuration exceptions that should be discovered during the development phase. There are no plans to localize these, but we accept PRs if it's critical for you.
+* resx and json translations files can be found in the [localization_files](https://github.com/bilal-fazlani/commanddotnet/tree/master/localization_files) folder. 
+
 ## 4.2.1
 
 * Added the [Culture directive](../Localization/culture-directive.md) for testing

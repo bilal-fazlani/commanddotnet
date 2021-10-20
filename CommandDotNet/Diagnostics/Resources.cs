@@ -24,7 +24,10 @@ namespace CommandDotNet
         public virtual string Parse_root_lc => "root";
         
         public virtual string Debugger_debug_lc => "debug";
-        public virtual string Debugger_Attach_debugger(string processId, string processName) => 
+
+        public virtual string Debugger_Attach_debugger(string processId, string processName) =>
             $"Attach your debugger to process {processId} ({processName}).";
+
+        public virtual string Time_time => "time";
     }
 }

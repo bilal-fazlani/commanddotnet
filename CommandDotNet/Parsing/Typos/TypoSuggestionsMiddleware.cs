@@ -74,7 +74,7 @@ namespace CommandDotNet.Parsing.Typos
             //       add an option to allow/prevent duplicates for list arguments?
             return TrySuggest(ctx, notAllowedValue.Command, notAllowedValue.Token.Value,
                 notAllowedValue.Argument.AllowedValues.ToCollection(),
-                $"is not a valid {notAllowedValue.Argument.TypeInfo.DisplayName}", 
+                Resources.A.Parse_is_not_a_valid(notAllowedValue.Argument.TypeInfo.DisplayName!), 
                 null);
         }
 
@@ -102,9 +102,9 @@ namespace CommandDotNet.Parsing.Typos
             return token.TokenType switch
             {
                 TokenType.Option => TrySuggest(ctx, command, token.Value, 
-                    GetOptionNames(), "is not a valid option", "--"),
+                    GetOptionNames(), Resources.A.Parse_is_not_a_valid(Resources.A.Common_option_lc), "--"),
                 TokenType.Value => TrySuggest(ctx, command, token.Value, 
-                    GetSubcommandNames(), "is not a valid subcommand", null),
+                    GetSubcommandNames(), Resources.A.Parse_is_not_a_valid(Resources.A.Common_command_lc), null),
                 _ => false
             };
         }
@@ -135,10 +135,10 @@ namespace CommandDotNet.Parsing.Typos
             var @out = ctx.Console.Out;
             @out.WriteLine($"'{typo}' {message}");
             @out.WriteLine();
-            @out.WriteLine("Did you mean ...");
+            @out.WriteLine(Resources.A.Parse_Did_you_mean);
             suggestions.ForEach(name => @out.WriteLine($"   {prefix}{name}"));
             @out.WriteLine();
-            @out.WriteLine($"See '{usage} --help'");
+            @out.WriteLine(Resources.A.Parse_See_usage(usage, Resources.A.Command_help));
 
             return true;
         }

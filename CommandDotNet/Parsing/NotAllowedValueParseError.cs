@@ -16,7 +16,9 @@ namespace CommandDotNet.Parsing
             Command = command ?? throw new ArgumentNullException(nameof(command));
             Argument = argument ?? throw new ArgumentNullException(nameof(argument));
             Token = token ?? throw new ArgumentNullException(nameof(token));
-            Message = $"Unrecognized value '{token.RawValue}' for {(argument is Option ? "option" : "argument")}: {argument.Name}";
+            Message = Resources.A.Parse_Unrecognized_value_for(token.RawValue,
+                (argument is Option ? Resources.A.Common_option_lc : Resources.A.Common_argument_lc),
+                argument.Name);
         }
     }
 }

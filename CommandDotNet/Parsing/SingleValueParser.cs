@@ -24,7 +24,7 @@ namespace CommandDotNet.Parsing
         private static void ThrowMultiForSingleEx(IArgument argument)
         {
             throw new ValueParsingException(
-                Resources.A.Error_ArgumentArity_Expected_single_value(argument.Name));
+                Resources.A.Parse_ArgumentArity_Expected_single_value(argument.Name));
         }
     }
 }

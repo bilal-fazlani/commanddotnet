@@ -33,12 +33,12 @@ namespace CommandDotNet.Diagnostics.Parse
             }
             
             var path = command.GetPath();
-            writeln($"{indent}{Resources.A.Help_command_lc}: {(path.IsNullOrWhitespace() ? $"({Resources.A.Parse_root_lc})" : path)}");
+            writeln($"{indent}{Resources.A.Common_command_lc}: {(path.IsNullOrWhitespace() ? $"({Resources.A.Parse_root_lc})" : path)}");
 
             if (command.Operands.Any())
             {
                 writeln("");
-                writeln($"{indent}{Resources.A.Help_arguments_lc}:");
+                writeln($"{indent}{Resources.A.Common_arguments_lc}:");
                 foreach (var operand in command.Operands)
                 {
                     writeln("");
@@ -50,7 +50,7 @@ namespace CommandDotNet.Diagnostics.Parse
             if (options.Any())
             {
                 writeln("");
-                writeln($"{indent}{Resources.A.Help_options_lc}:");
+                writeln($"{indent}{Resources.A.Common_options_lc}:");
                 foreach (var option in options)
                 {
                     writeln("");
@@ -80,7 +80,7 @@ namespace CommandDotNet.Diagnostics.Parse
             {
                 var pwd = isObscured ? Password.ValueReplacement : null;
                 var values = argument.InputValues
-                    .Select(iv => iv.Source == Resources.A.Help_argument_lc && argument.InputValues.Count == 1
+                    .Select(iv => iv.Source == Resources.A.Common_argument_lc && argument.InputValues.Count == 1
                         ? $"{ValuesToString(iv, pwd)}"
                         : iv.IsStream
                             ? $"[{iv.Source} {Resources.A.Input_stream_lc}]"

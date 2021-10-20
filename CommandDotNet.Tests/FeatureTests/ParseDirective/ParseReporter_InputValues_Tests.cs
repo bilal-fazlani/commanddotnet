@@ -140,12 +140,12 @@ arguments:
 
 options:
 
-  a <Flag>
+  a <flag>
     value: True
     inputs: true (from: @{file} -> -ab -> -a)
     default: False
 
-  b <Flag>
+  b <flag>
     value: True
     inputs: true (from: @{file} -> -ab -> -b)
     default: False

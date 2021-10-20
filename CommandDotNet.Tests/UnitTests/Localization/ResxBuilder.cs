@@ -1,18 +1,20 @@
 using System.Collections.Generic;
-using System.Reflection;
 using System.Text;
-using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Tests.UnitTests.Localization
 {
-    internal static class ResxWriter
+    internal static class ResxBuilder
     {
         /// <summary>WARNING: some keys differ only in case and VS.NET will not open them.</summary>
-        public static string Write(IEnumerable<(MemberInfo member, string value)> templates)
+        public static string Build(List<(string memberName, string value, string comments)> templates, bool valueAsKey)
         {
             var sb = new StringBuilder(Beginning);
-            templates.ForEach(t => 
-                sb.AppendLine(string.Format(DataTemplate, t.value, t.value, t.member.Name)));
+            templates.ForEach(t =>
+            {
+                var key = valueAsKey ? t.value : t.memberName;
+                var comment = valueAsKey ? $"{t.memberName}: {t.comments}" : t.comments;
+                sb.AppendLine(string.Format(DataTemplate, key, t.value, comment));
+            });
             sb.AppendLine(End);
             return sb.ToString();
         }

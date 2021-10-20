@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="EnvVar" xml:space="preserve">
+    <value>EnvVar</value>
+    <comment>ValueSource_EnvVar: </comment>
+  </data>
+
+  <data name="AppSetting" xml:space="preserve">
+    <value>AppSetting</value>
+    <comment>ValueSource_AppSetting: </comment>
+  </data>
+
+  <data name="version" xml:space="preserve">
+    <value>version</value>
+    <comment>Command_version: </comment>
+  </data>
+
+  <data name="Show version information" xml:space="preserve">
+    <value>Show version information</value>
+    <comment>Command_version_description: </comment>
+  </data>
+
+  <data name="Original input" xml:space="preserve">
+    <value>Original input</value>
+    <comment>CommandLogger_Original_input: </comment>
+  </data>
+
+  <data name="Tool version" xml:space="preserve">
+    <value>Tool version</value>
+    <comment>CommandLogger_Tool_version: </comment>
+  </data>
+
+  <data name=".Net version" xml:space="preserve">
+    <value>.Net version</value>
+    <comment>CommandLogger_DotNet_version: </comment>
+  </data>
+
+  <data name="OS version" xml:space="preserve">
+    <value>OS version</value>
+    <comment>CommandLogger_OS_version: </comment>
+  </data>
+
+  <data name="Machine" xml:space="preserve">
+    <value>Machine</value>
+    <comment>CommandLogger_Machine: </comment>
+  </data>
+
+  <data name="Username" xml:space="preserve">
+    <value>Username</value>
+    <comment>CommandLogger_Username: </comment>
+  </data>
+
+  <data name="Data" xml:space="preserve">
+    <value>Data</value>
+    <comment>Exceptions_Data: </comment>
+  </data>
+
+  <data name="Properties" xml:space="preserve">
+    <value>Properties</value>
+    <comment>Exceptions_Properties: </comment>
+  </data>
+
+  <data name="StackTrace" xml:space="preserve">
+    <value>StackTrace</value>
+    <comment>Exceptions_StackTrace: </comment>
+  </data>
+
+  <data name="at" xml:space="preserve">
+    <value>at</value>
+    <comment>Exceptions_StackTrace_at: </comment>
+  </data>
+
+  <data name="root" xml:space="preserve">
+    <value>root</value>
+    <comment>Parse_root_lc: </comment>
+  </data>
+
+  <data name="debug" xml:space="preserve">
+    <value>debug</value>
+    <comment>Debugger_debug_lc: </comment>
+  </data>
+
+  <data name="time" xml:space="preserve">
+    <value>time</value>
+    <comment>Time_time: </comment>
+  </data>
+
+  <data name="help" xml:space="preserve">
+    <value>help</value>
+    <comment>Command_help: </comment>
+  </data>
+
+  <data name="Show help information" xml:space="preserve">
+    <value>Show help information</value>
+    <comment>Command_help_description: </comment>
+  </data>
+
+  <data name="Allowed values" xml:space="preserve">
+    <value>Allowed values</value>
+    <comment>Help_Allowed_values: </comment>
+  </data>
+
+  <data name="arg" xml:space="preserve">
+    <value>arg</value>
+    <comment>Help_arg: </comment>
+  </data>
+
+  <data name="Arguments" xml:space="preserve">
+    <value>Arguments</value>
+    <comment>Help_Arguments: </comment>
+  </data>
+
+  <data name="Commands" xml:space="preserve">
+    <value>Commands</value>
+    <comment>Help_Commands: </comment>
+  </data>
+
+  <data name="for more information about a command" xml:space="preserve">
+    <value>for more information about a command</value>
+    <comment>Help_for_more_information_about_a_command: </comment>
+  </data>
+
+  <data name="Multiple" xml:space="preserve">
+    <value>Multiple</value>
+    <comment>Help_Multiple: </comment>
+  </data>
+
+  <data name="Options" xml:space="preserve">
+    <value>Options</value>
+    <comment>Help_Options: </comment>
+  </data>
+
+  <data name="Options also available for subcommands" xml:space="preserve">
+    <value>Options also available for subcommands</value>
+    <comment>Help_Options_also_available_for_subcommands: </comment>
+  </data>
+
+  <data name="Usage" xml:space="preserve">
+    <value>Usage</value>
+    <comment>Help_Usage: </comment>
+  </data>
+
+  <data name="usage" xml:space="preserve">
+    <value>usage</value>
+    <comment>Help_usage_lc: </comment>
+  </data>
+
+  <data name="Use" xml:space="preserve">
+    <value>Use</value>
+    <comment>Help_Use: </comment>
+  </data>
+
+  <data name="inputs" xml:space="preserve">
+    <value>inputs</value>
+    <comment>Input_inputs_lc: </comment>
+  </data>
+
+  <data name="stream" xml:space="preserve">
+    <value>stream</value>
+    <comment>Input_stream_lc: </comment>
+  </data>
+
+  <data name="piped" xml:space="preserve">
+    <value>piped</value>
+    <comment>Input_piped_lc: </comment>
+  </data>
+
+  <data name="prompt" xml:space="preserve">
+    <value>prompt</value>
+    <comment>Input_prompt_lc: </comment>
+  </data>
+
+  <data name="Did you mean ..." xml:space="preserve">
+    <value>Did you mean ...</value>
+    <comment>Parse_Did_you_mean: </comment>
+  </data>
+
+  <data name="[<enter> once to begin new value. <enter> twice to finish]" xml:space="preserve">
+    <value>[<enter> once to begin new value. <enter> twice to finish]</value>
+    <comment>Prompt_Enter_once_for_new_value_twice_to_finish: </comment>
+  </data>
+
+  <data name="default" xml:space="preserve">
+    <value>default</value>
+    <comment>Common_default_lc: </comment>
+  </data>
+
+  <data name="from" xml:space="preserve">
+    <value>from</value>
+    <comment>Common_from_lc: </comment>
+  </data>
+
+  <data name="key" xml:space="preserve">
+    <value>key</value>
+    <comment>Common_key_lc: </comment>
+  </data>
+
+  <data name="value" xml:space="preserve">
+    <value>value</value>
+    <comment>Common_value_lc: </comment>
+  </data>
+
+  <data name="source" xml:space="preserve">
+    <value>source</value>
+    <comment>Common_source_lc: </comment>
+  </data>
+
+  <data name="command" xml:space="preserve">
+    <value>command</value>
+    <comment>Common_command_lc: </comment>
+  </data>
+
+  <data name="argument" xml:space="preserve">
+    <value>argument</value>
+    <comment>Common_argument_lc: </comment>
+  </data>
+
+  <data name="option" xml:space="preserve">
+    <value>option</value>
+    <comment>Common_option_lc: </comment>
+  </data>
+
+  <data name="flag" xml:space="preserve">
+    <value>flag</value>
+    <comment>Common_Flag: </comment>
+  </data>
+
+  <data name="commands" xml:space="preserve">
+    <value>commands</value>
+    <comment>Common_commands_lc: </comment>
+  </data>
+
+  <data name="arguments" xml:space="preserve">
+    <value>arguments</value>
+    <comment>Common_arguments_lc: </comment>
+  </data>
+
+  <data name="options" xml:space="preserve">
+    <value>options</value>
+    <comment>Common_options_lc: </comment>
+  </data>
+
+  <data name="Boolean" xml:space="preserve">
+    <value>Boolean</value>
+    <comment>Type_Boolean: </comment>
+  </data>
+
+  <data name="Character" xml:space="preserve">
+    <value>Character</value>
+    <comment>Type_Character: </comment>
+  </data>
+
+  <data name="Decimal" xml:space="preserve">
+    <value>Decimal</value>
+    <comment>Type_Decimal: </comment>
+  </data>
+
+  <data name="Double" xml:space="preserve">
+    <value>Double</value>
+    <comment>Type_Double: </comment>
+  </data>
+
+  <data name="Number" xml:space="preserve">
+    <value>Number</value>
+    <comment>Type_Number: </comment>
+  </data>
+
+  <data name="Text" xml:space="preserve">
+    <value>Text</value>
+    <comment>Type_Text: </comment>
+  </data>
+
+  <data name="raw command line:{0}" xml:space="preserve">
+    <value>raw command line:{0}</value>
+    <comment>Parse_Raw_command_line: </comment>
+  </data>
+
+  <data name="Attach your debugger to process {0} ({1})." xml:space="preserve">
+    <value>Attach your debugger to process {0} ({1}).</value>
+    <comment>Debugger_Attach_debugger: </comment>
+  </data>
+
+  <data name="{0} accepts only a single value but multiple values were provided" xml:space="preserve">
+    <value>{0} accepts only a single value but multiple values were provided</value>
+    <comment>Parse_ArgumentArity_Expected_single_value: </comment>
+  </data>
+
+  <data name="Failure assigning value to {0}. Value={1}" xml:space="preserve">
+    <value>Failure assigning value to {0}. Value={1}</value>
+    <comment>Parse_assigning_value_to_argument: </comment>
+  </data>
+
+  <data name="See '{0} --{1}'" xml:space="preserve">
+    <value>See '{0} --{1}'</value>
+    <comment>Parse_See_usage: </comment>
+  </data>
+
+  <data name="is not a valid {0}" xml:space="preserve">
+    <value>is not a valid {0}</value>
+    <comment>Parse_is_not_a_valid: </comment>
+  </data>
+
+  <data name="Missing value for option '{0}'" xml:space="preserve">
+    <value>Missing value for option '{0}'</value>
+    <comment>Parse_Missing_value_for_option: </comment>
+  </data>
+
+  <data name="Unrecognized value '{0}' for {1}: {2}" xml:space="preserve">
+    <value>Unrecognized value '{0}' for {1}: {2}</value>
+    <comment>Parse_Unrecognized_value_for: </comment>
+  </data>
+
+  <data name="Unexpected value '{0}' for option '{1}'" xml:space="preserve">
+    <value>Unexpected value '{0}' for option '{1}'</value>
+    <comment>Parse_unexpected_value_for_option: </comment>
+  </data>
+
+  <data name="File not found: {0}" xml:space="preserve">
+    <value>File not found: {0}</value>
+    <comment>Error_File_not_found: </comment>
+  </data>
+
+  <data name="'{0}' is not a valid {1}" xml:space="preserve">
+    <value>'{0}' is not a valid {1}</value>
+    <comment>Error_Value_is_not_valid_for_type: </comment>
+  </data>
+
+  <data name="failed parsing '{0}' for {1}" xml:space="preserve">
+    <value>failed parsing '{0}' for {1}</value>
+    <comment>Error_Failed_parsing_value_for_type: </comment>
+  </data>
+
+</root>

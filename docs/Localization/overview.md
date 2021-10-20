@@ -79,4 +79,11 @@ See the [culture directive](culture-directive.md) for a way to set the culture f
 
 ## Generating Resource Files
 
-There are examples in the [ResourceProxyTests](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Tests/UnitTests/ResourceProxyTests.cs)
+There are examples in [ResourceGenerators](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Tests/UnitTests/Localization/ResourceGenerators.cs)
+
+Basic resx and json translations files can be found in the [localization_files](https://github.com/bilal-fazlani/commanddotnet/tree/master/localization_files) folder. 
+
+!!! Warning
+    Some keys differ only in case, eg. `Arguments` & `arguments`, which is not supported by the VS resx editor. The ResourceManager [should honor case by default](https://docs.microsoft.com/en-us/dotnet/api/system.resources.resourcemanager.ignorecase?view=net-5.0#remarks).
+
+If you'd like to see another format supported, submit a PR generating the file in `ResourceGenerators` and it will be updated when new keys are added.

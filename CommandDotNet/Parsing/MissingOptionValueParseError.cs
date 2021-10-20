@@ -13,7 +13,7 @@ namespace CommandDotNet.Parsing
         {
             Command = command ?? throw new ArgumentNullException(nameof(command));
             Option = option ?? throw new ArgumentNullException(nameof(option));
-            Message = $"Missing value for option '{option.Name}'";
+            Message = Resources.A.Parse_Missing_value_for_option(option.Name);
         }
     }
 }

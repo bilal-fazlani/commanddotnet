@@ -14,13 +14,13 @@ namespace CommandDotNet.Diagnostics
 
         private static Task<int> TimeCommand(CommandContext context, ExecutionDelegate next)
         {
-            if (context.Original.Tokens.TryGetDirective("time", out _))
+            if (context.Original.Tokens.TryGetDirective(Resources.A.Time_time, out _))
             {
                 var sw = Stopwatch.StartNew();
                 var result = next(context);
                 sw.Stop();
                 context.Console.WriteLine();
-                context.Console.WriteLine($"time: {sw.Elapsed}");
+                context.Console.WriteLine($"{Resources.A.Time_time}: {sw.Elapsed}");
                 return result;
             }
 

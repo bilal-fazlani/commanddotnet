@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using CommandDotNet.Extensions;
+using CommandDotNet.TestTools;
+using Namotion.Reflection;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -18,14 +21,43 @@ namespace CommandDotNet.Tests.UnitTests.Localization
         {
             _output = output;
         }
-        
+
         // possible file formats: https://docs.lokalise.com/en/collections/2909121-keys-and-files#supported-file-formats
         // resx with IStringLocalizer is problematic because the keys are case-insensitive in the format so we 
         // cannot have "arguments" and "Arguments", though we need both.
 
-        [Fact(Skip = "run to regenerate the ResourceProxy classes")]
-        //[Fact]
-        public void RegenerateProxyClasses()
+        //[Fact(Skip = "run to regenerate the ResourceProxy classes")]
+        [Fact]
+        public void RegenerateAll()
+        {
+            RegenerateProxyClasses();
+
+            var proxies = ResourceProxyTests.ResourcesDefs
+                .Select(r => r.proxy)
+                .ToList();
+
+            RegenerateSimpleJsonFiles(proxies);
+            RegenerateResxFiles(proxies);
+        }
+
+        #region Add File Formats Here
+
+        private void RegenerateResxFiles(List<ResourcesDef> proxies)
+        {
+            RegenerateFiles(proxies, "resx", "resx",
+                (proxy, parts) => ResxBuilder.Build(parts, true));
+        }
+
+        private void RegenerateSimpleJsonFiles(List<ResourcesDef> proxies)
+        {
+            RegenerateFiles(proxies, "simple_json", "json",
+                (proxy, parts) =>
+                    JsonSerializer.Serialize(parts.ToDictionary(t => t.value, t => t.value)));
+        }
+
+        #endregion
+
+        internal void RegenerateProxyClasses()
         {
             var sources = ResourceProxyTests.ResourcesDefs.Select(r => r.source);
             
@@ -46,47 +78,53 @@ namespace CommandDotNet.Tests.UnitTests.Localization
                 //File.Exists(path).Should().BeTrue("class should exist: {0}", path);
                 var proxyClass = s.GenerateProxyClass();
                 
-                var path = Path.Combine(SolutionRoot, s.Type.Namespace, "ResourcesProxy.cs");
+                var path = Path.Combine(SolutionRoot, s.Type.Namespace!, "ResourcesProxy.cs");
                 File.WriteAllText(path, $"{header}{proxyClass}");
             });
         }
-        
-        [Fact(Skip = "run to regenerate the resx files. WARNING: some keys differ only in case and VS.NET will not open them.")]
-        //[Fact]
-        public void RegenerateResxFiles()
-        {
-            var proxies = ResourceProxyTests.ResourcesDefs.Select(r => r.proxy);
 
-            var folder = Path.Combine(SolutionRoot, "CommandDotNet.Localization.Resx");
-            
-            proxies.ForEach(p =>
-            {
-                var path = Path.Combine(folder, $"{p.Type.Namespace}.resx");
-                var resx = ResxWriter.Write(p.GetMembersWithDefaults());
-                File.WriteAllText(path, resx);
-            });
+        private void RegenerateFiles(List<ResourcesDef> proxies, string format, string fileExtension,
+            Func<ResourcesDef, List<(string memberName, string value, string comments)>, string> buildFileText)
+        {
+            proxies.ForEach(p => RegenerateFiles(p, format, fileExtension, buildFileText));
         }
 
-        [Fact(Skip = "run to regenerate the json files")]
-        //[Fact]
-        public void RegenerateJsonFiles()
+        private void RegenerateFiles(ResourcesDef proxy, string format, string fileExtension,
+            Func<ResourcesDef, List<(string memberName, string value, string comments)>, string> buildFileText)
         {
-            var proxies = ResourceProxyTests.ResourcesDefs.Select(r => r.proxy);
+            var localizationParts = proxy.GetLocalizationParts();
 
-            var folder = Path.Combine(SolutionRoot, "localization");
-            if (!Directory.Exists(folder))
+            var fileName = $"{proxy.Type.Namespace}.{fileExtension}";
+            var folder = new[] { SolutionRoot, "localization_files", format, "en" }.EnsureDirectoryExists();
+
+            File.WriteAllText(Path.Combine(folder, fileName), buildFileText(proxy, localizationParts));
+        }
+    }
+
+    public static class ResourceGeneratorHelperExtensions
+    {
+        private static readonly Dictionary<string, List<(string key, string value, string comments)>> PartsByProxy = 
+                new Dictionary<string, List<(string key, string value, string comments)>>();
+
+        public static List<(string memberName, string value, string comments)> GetLocalizationParts(this ResourcesDef proxy)
+        {
+            return PartsByProxy!.GetOrAdd(proxy.Type.FullName, k => proxy.GetMembersWithDefaults()
+                .Select(mwd => (mwd.member.Name, mwd.value, mwd.member.GetXmlDocsSummary()))
+                .ToList());
+        }
+
+        public static string EnsureDirectoryExists(this string[] paths) => 
+            EnsureDirectoryExists(new DirectoryInfo(Path.Combine(paths))).FullName;
+
+        public static DirectoryInfo EnsureDirectoryExists(this DirectoryInfo directory)
+        {
+            if (!directory.Exists)
             {
-                Directory.CreateDirectory(folder);
+                EnsureDirectoryExists(directory.Parent!);
+                directory.Create();
             }
-            
-            proxies.ForEach(p =>
-            {
-                var dictionary = p.GetMembersWithDefaults()
-                    .ToDictionary(t => t.value, t => t.value);
-                var json = (string)JsonSerializer.Serialize(dictionary);
-                var path = Path.Combine(folder, $"{p.Type.Namespace}.json");
-                File.WriteAllText(path, json);
-            });
+
+            return directory;
         }
     }
 }
