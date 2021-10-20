@@ -1,5 +1,10 @@
 # CommandDotNet
 
+## 4.2.1
+
+* Added the [Culture directive](../Localization/culture-directive.md) for testing
+* Removed Resources.Error_Type_is_not_supported_as_argument(type.FullName)). It's should only be seen by developers during testing.
+
 ## 4.2.0
 
 * Added *beta* support for [Localization](../Localization/overview.md).

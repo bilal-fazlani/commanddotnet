@@ -13,12 +13,10 @@ Using the patterns displayed in `ResourceProxyTests`, generate the translation f
 ## ResourcesDef
 `ResourcesDef` is a class we've used to generate proxy classes and localization files. If you've built custom middleware following the same pattern used in CommandDotNet, you can use this class to do the same.
 
-### Generate your proxy classes
-
-Follow the pattern in the [ResourceProxyTests](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Tests/UnitTests/ResourceProxyTests.cs) `RegenerateProxyClasses` method to generate your proxy classes.
-
-Use this in unit tests . This will help identify missing overrides for new resources after updates of CommandDotNet.
-
 For this proxy pattern to work, all method parameters must be strings which allows the proxy to pass in place holders such as `{0}` and `{1}` for use in the `IStringLocalizer`.  Use the `ResourcesDef.Validate` method in unit tests to catch when a non-string parameter is used.
 
 Use `ResourcesDef.IsMissingMembersFrom` in unit tests to detect when changes to the base resources class have not been added to the proxy.
+### Generate your proxy classes
+
+Follow the pattern in the [ResourceGenerators](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Tests/UnitTests/Localization/ResourceGenerators.cs).`RegenerateProxyClasses` method to generate your proxy classes.
+
