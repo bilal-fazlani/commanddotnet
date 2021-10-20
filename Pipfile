@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-mkdocs = "==1.1.2"
+mkdocs = "==1.2.3"
 mkdocs-material = "==5.2.1"
 pymdown-extensions = "==7.1"
 Pygments = "==2.6.1"
