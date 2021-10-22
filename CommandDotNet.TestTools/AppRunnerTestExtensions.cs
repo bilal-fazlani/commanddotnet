@@ -55,7 +55,7 @@ namespace CommandDotNet.TestTools
         public static AppRunnerResult RunInMem(this AppRunner runner,
             string args,
             Action<string?>? logLine = null,
-            Func<TestConsole, string>? onReadLine = null,
+            Func<ITestConsole, string>? onReadLine = null,
             IEnumerable<string>? pipedInput = null,
             IPromptResponder? promptResponder = null,
             TestConfig? config = null)
@@ -67,7 +67,7 @@ namespace CommandDotNet.TestTools
         public static AppRunnerResult RunInMem(this AppRunner runner,
             string[] args,
             Action<string?>? logLine = null,
-            Func<TestConsole, string>? onReadLine = null,
+            Func<ITestConsole, string>? onReadLine = null,
             IEnumerable<string>? pipedInput = null,
             IPromptResponder? promptResponder = null,
             TestConfig? config = null)
@@ -90,7 +90,7 @@ namespace CommandDotNet.TestTools
                     onReadLine,
                     pipedInput,
                     promptResponder is null
-                        ? (Func<TestConsole, ConsoleKeyInfo>?) null
+                        ? (Func<ITestConsole, ConsoleKeyInfo>?) null
                         : promptResponder.OnReadKey);
                 runner.Configure(c => c.Console = testConsole);
 

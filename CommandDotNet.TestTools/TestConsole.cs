@@ -21,16 +21,16 @@ namespace CommandDotNet.TestTools
     /// - provide piped input <br/>
     /// - handle ReadLine and ReadToEnd requests
     /// </summary>
-    public class TestConsole : IConsole
+    public class TestConsole : ITestConsole
     {
-        private static ILog Log = LogProvider.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
-        private readonly Func<TestConsole, ConsoleKeyInfo>? _onReadKey;
+        private readonly Func<ITestConsole, ConsoleKeyInfo>? _onReadKey;
 
         public TestConsole(
-            Func<TestConsole, string?>? onReadLine = null,
+            Func<ITestConsole, string?>? onReadLine = null,
             IEnumerable<string>? pipedInput = null,
-            Func<TestConsole, ConsoleKeyInfo>? onReadKey = null)
+            Func<ITestConsole, ConsoleKeyInfo>? onReadKey = null)
         {
             _onReadKey = onReadKey;
             IsInputRedirected = pipedInput != null;
@@ -75,8 +75,6 @@ namespace CommandDotNet.TestTools
         public IStandardStreamWriter Out { get; }
 
         public IStandardStreamWriter Error { get; }
-
-        public string OutLastLine => Out.ToString().SplitIntoLines().Last();
 
         /// <summary>
         /// The combination of <see cref="Console.Error"/> and <see cref="Console.Out"/>

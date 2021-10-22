@@ -100,8 +100,8 @@ namespace CommandDotNet.TestTools
 
             /// <summary>Print the <see cref="CommandContext"/></summary>
             public bool CommandContext { get; set; }
-            
-            /// <summary>Print the <see cref="TestConsole.AllText"/></summary>
+
+            /// <summary>Print the <see cref="ITestConsole.AllText"/></summary>
             public bool ConsoleOutput { get; set; }
 
             /// <summary>
