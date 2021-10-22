@@ -16,6 +16,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Spectre.Console" Version="0.42.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
   </ItemGroup>
@@ -27,6 +28,7 @@
     <ProjectReference Include="..\CommandDotNet.IoC.MicrosoftDependencyInjection\CommandDotNet.IoC.MicrosoftDependencyInjection.csproj" />
     <ProjectReference Include="..\CommandDotNet.IoC.SimpleInjector\CommandDotNet.IoC.SimpleInjector.csproj" />
     <ProjectReference Include="..\CommandDotNet.NameCasing\CommandDotNet.NameCasing.csproj" />
+    <ProjectReference Include="..\CommandDotNet.Spectre\CommandDotNet.Spectre.csproj" />
     <ProjectReference Include="..\CommandDotNet.TestTools\CommandDotNet.TestTools.csproj" />
     <ProjectReference Include="..\CommandDotNet\CommandDotNet.csproj" />
   </ItemGroup>
