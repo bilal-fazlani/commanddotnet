@@ -10,8 +10,6 @@ namespace CommandDotNet.Tests.UnitTests.Localization
 {
     public class ResourceProxyTests
     {
-        private readonly ITestOutputHelper _output;
-
         internal static readonly (ResourcesDef source, ResourcesDef proxy)[] ResourcesDefs =
         {
             (ResourcesDef.Parse<Resources>(), ResourcesDef.Parse<ResourcesProxy>()),
@@ -21,7 +19,7 @@ namespace CommandDotNet.Tests.UnitTests.Localization
 
         public ResourceProxyTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
         
         // TODO: public comments on tooling
@@ -31,7 +29,7 @@ namespace CommandDotNet.Tests.UnitTests.Localization
         {
             var proxy = new ResourcesProxy(text =>
             {
-                _output.WriteLine(text);
+                Ambient.Output!.WriteLine(text);
                 return "lala";
             });
             proxy.Command_help_description.Should().Be("lala");
@@ -43,7 +41,7 @@ namespace CommandDotNet.Tests.UnitTests.Localization
         {
             var proxy = new ResourcesProxy(text =>
             {
-                _output.WriteLine(text);
+                Ambient.Output!.WriteLine(text);
                 return null;
             });
             var resources = new Resources();

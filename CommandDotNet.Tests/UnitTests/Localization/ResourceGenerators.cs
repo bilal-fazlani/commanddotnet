@@ -13,13 +13,12 @@ namespace CommandDotNet.Tests.UnitTests.Localization
 {
     public class ResourceGenerators
     {
-        private readonly ITestOutputHelper _output;
         private static readonly string SolutionRoot = 
             new DirectoryInfo(Environment.CurrentDirectory).Parent!.Parent!.Parent!.Parent!.FullName!;
 
         public ResourceGenerators(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = output;
         }
 
         // possible file formats: https://docs.lokalise.com/en/collections/2909121-keys-and-files#supported-file-formats
@@ -64,7 +63,7 @@ namespace CommandDotNet.Tests.UnitTests.Localization
             var errors = sources.SelectMany(s => s.Validate()).ToList();
             if (errors.Any())
             {
-                errors.ForEach(e => _output.WriteLine(
+                errors.ForEach(e => Ambient.Output!.WriteLine(
                     $"{e.error}:{Environment.NewLine}" +
                     $"  {e.members.ToCsv($"{Environment.NewLine}  ")}"));
                 Assert.True(false);
