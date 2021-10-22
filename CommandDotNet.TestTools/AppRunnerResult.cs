@@ -9,7 +9,7 @@ namespace CommandDotNet.TestTools
 
         public int ExitCode { get; }
 
-        public TestConsole Console { get; }
+        public ITestConsole Console { get; }
 
         /// <summary>The <see cref="CommandContext"/> used during the run</summary>
         public CommandContext CommandContext { get; }
@@ -18,7 +18,7 @@ namespace CommandDotNet.TestTools
         public Exception? EscapedException { get; }
 
         public AppRunnerResult(int exitCode, AppRunner runner,
-            CommandContext commandContext, TestConsole testConsole,
+            CommandContext commandContext, ITestConsole testConsole,
             TestConfig config, Exception? escapedException = null)
         {
             ExitCode = exitCode;

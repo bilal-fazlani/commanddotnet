@@ -30,7 +30,7 @@ namespace CommandDotNet.TestTools.Scenarios
         }
 
         /// <summary>
-        /// A delegate to perform assertions on the <seealso cref="TestConsole.AllText"/>
+        /// A delegate to perform assertions on the <seealso cref="ITestConsole.AllText"/>
         /// which includes the standard and error output streams.
         /// </summary>
         public Action<string>? AssertOutput { get; set; }

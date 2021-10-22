@@ -16,7 +16,7 @@ namespace CommandDotNet.TestTools.Prompts
             answers.ForEach(a => GetListFor(a).Add(a));
         }
 
-        public ConsoleKeyInfo OnReadKey(TestConsole testConsole)
+        public ConsoleKeyInfo OnReadKey(ITestConsole testConsole)
         {
             if (_currentAnswer is null)
             {
@@ -34,9 +34,9 @@ namespace CommandDotNet.TestTools.Prompts
 
         private List<IAnswer> GetListFor(IAnswer a) => a.PromptFilter is null ? _unfilteredAnswers : _filteredAnswers;
 
-        private IAnswer GetNextAnswer(TestConsole testConsole)
+        private IAnswer GetNextAnswer(ITestConsole testConsole)
         {
-            var promptLine = testConsole.OutLastLine;
+            var promptLine = testConsole.OutText().SplitIntoLines().Last();
             var answer = _filteredAnswers.FirstOrDefault(a => a.PromptFilter?.Invoke(promptLine) ?? false)
                          ?? _unfilteredAnswers.FirstOrDefault(a => a.PromptFilter is null);
 
