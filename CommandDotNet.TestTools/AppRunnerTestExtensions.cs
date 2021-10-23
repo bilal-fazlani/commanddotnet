@@ -86,13 +86,18 @@ namespace CommandDotNet.TestTools
             using (appInfo)
             using (logProvider)
             {
-                var testConsole = new TestConsole(
-                    onReadLine,
-                    pipedInput,
-                    promptResponder is null
-                        ? (Func<ITestConsole, ConsoleKeyInfo>?) null
-                        : promptResponder.OnReadKey);
-                runner.Configure(c => c.Console = testConsole);
+                ITestConsole testConsole = null!;
+                runner.Configure(c =>
+                {
+                    c.Console = testConsole = c.Console as ITestConsole 
+                                              ?? c.Services.GetOrDefault<ITestConsole>()
+                                              ?? new TestConsole(
+                                                  onReadLine,
+                                                  pipedInput,
+                                                  promptResponder is null
+                                                      ? (Func<ITestConsole, ConsoleKeyInfo>?)null
+                                                      : promptResponder.OnReadKey);
+                });
 
                 CommandContext? context = null;
                 Task<int> CaptureCommandContext(CommandContext commandContext, ExecutionDelegate next)
