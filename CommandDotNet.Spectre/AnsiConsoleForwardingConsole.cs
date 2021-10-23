@@ -4,7 +4,7 @@ using Spectre.Console;
 
 namespace CommandDotNet.Spectre
 {
-    internal class AnsiConsoleForwardingConsole : IConsole
+    public class AnsiConsoleForwardingConsole : IConsole
     {
         private readonly IAnsiConsole _ansiConsole;
 

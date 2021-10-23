@@ -1,4 +1,5 @@
-﻿using Spectre.Console;
+﻿using CommandDotNet.Rendering;
+using Spectre.Console;
 
 namespace CommandDotNet.Spectre
 {
@@ -10,7 +11,7 @@ namespace CommandDotNet.Spectre
             {
                 var console = ansiConsole ?? AnsiConsole.Console;
 
-                c.Console = new AnsiConsoleForwardingConsole(console);
+                c.Console = ansiConsole as IConsole ?? new AnsiConsoleForwardingConsole(console);
                 c.UseParameterResolver(ctx => console);
                 c.Services.Add(console);
             });

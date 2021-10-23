@@ -15,7 +15,7 @@ namespace CommandDotNet.Tests.CommandDotNet.Spectre
         }
 
         [Fact]
-        public void AnsiConsole_should_resolve_as_parameter()
+        public void UseSpectreAnsiConsole_should_register_IAnsiConsole_as_resolveable_parameter()
         {
             AnsiConsole.Record();
             var result = new AppRunner<App>()
