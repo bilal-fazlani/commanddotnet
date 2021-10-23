@@ -25,13 +25,29 @@ namespace CommandDotNet.TestTools
     {
         private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
-        private readonly Func<ITestConsole, ConsoleKeyInfo>? _onReadKey;
+        private Func<ITestConsole, ConsoleKeyInfo>? _onReadKey;
+        private bool _initialized;
 
-        public TestConsole(
+        public TestConsole()
+        {
+            var all = new StandardStreamWriter();
+            All = all;
+            Out = new StandardStreamWriter(all);
+            Error = new StandardStreamWriter(all);
+            In = new StandardStreamReader();
+        }
+
+        public void Init(
             Func<ITestConsole, string?>? onReadLine = null,
             IEnumerable<string>? pipedInput = null,
             Func<ITestConsole, ConsoleKeyInfo>? onReadKey = null)
         {
+            if (_initialized)
+            {
+                throw new InvalidOperationException($"{nameof(TestConsole)} is already initialized");
+            }
+            _initialized = true;
+
             _onReadKey = onReadKey;
             IsInputRedirected = pipedInput != null;
 
@@ -40,7 +56,7 @@ namespace CommandDotNet.TestTools
                 if (onReadLine != null)
                 {
                     throw new Exception($"{nameof(onReadLine)} and {nameof(pipedInput)} cannot both be specified. " +
-                                        "Windows will throw 'System.IO.IOException: The handle is invalid' on an attempt to ");
+                                        "Windows will throw 'System.IO.IOException: The handle is invalid' on an attempt to ...");
                 }
 
                 if (pipedInput is ICollection<string> inputs)
@@ -54,10 +70,6 @@ namespace CommandDotNet.TestTools
                 }
             }
 
-            var all = new StandardStreamWriter();
-            All = all;
-            Out = new StandardStreamWriter(all);
-            Error = new StandardStreamWriter(all);
             In = new StandardStreamReader(
                 () =>
                 {
@@ -70,11 +82,11 @@ namespace CommandDotNet.TestTools
         /// <summary>
         /// This is the combined output for <see cref="Error"/> and <see cref="Out"/> in the order the lines were output.
         /// </summary>
-        public IStandardStreamWriter All { get; }
+        public IStandardStreamWriter All { get; private set; }
 
-        public IStandardStreamWriter Out { get; }
+        public IStandardStreamWriter Out { get; private set; }
 
-        public IStandardStreamWriter Error { get; }
+        public IStandardStreamWriter Error { get; private set; }
 
         /// <summary>
         /// The combination of <see cref="Console.Error"/> and <see cref="Console.Out"/>
@@ -97,9 +109,9 @@ namespace CommandDotNet.TestTools
 
         public bool IsErrorRedirected { get; } = false;
 
-        public IStandardStreamReader In { get; }
+        public IStandardStreamReader In { get; private set; }
 
-        public bool IsInputRedirected { get; }
+        public bool IsInputRedirected { get; private set; }
 
         /// <summary>
         /// Read a key from the input
@@ -139,7 +151,7 @@ namespace CommandDotNet.TestTools
         {
             private readonly Func<string?>? _onReadLine;
 
-            public StandardStreamReader(Func<string?>? onReadLine)
+            public StandardStreamReader(Func<string?>? onReadLine = null)
             {
                 _onReadLine = onReadLine;
             }

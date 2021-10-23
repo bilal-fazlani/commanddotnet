@@ -1,5 +1,6 @@
 using CommandDotNet.Rendering;
 using CommandDotNet.Spectre;
+using CommandDotNet.Spectre.Testing;
 using FluentAssertions;
 using Spectre.Console;
 using Xunit;
@@ -30,6 +31,8 @@ namespace CommandDotNet.Tests.CommandDotNet.Spectre
         [Fact]
         public void Console_should_forward_to_AnsiConsole()
         {
+            AnsiConsole.Record();
+            
             var result = new AppRunner<App>()
                 .UseSpectreAnsiConsole()
                 .RunInMem("Console lala");
@@ -37,7 +40,7 @@ namespace CommandDotNet.Tests.CommandDotNet.Spectre
             result.ExitCode.Should().Be(0);
             result.Console.AllText().Should().Be(@"lala
 ");
-            AnsiConsole.ExportText().Should().Be("lala");
+            AnsiConsole.ExportText().Should().BeEmpty("lala");
         }
 
         class App

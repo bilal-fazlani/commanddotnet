@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using CommandDotNet.Execution;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
@@ -14,22 +12,14 @@ namespace CommandDotNet.Tests
         public static AppRunner StopAfter(this AppRunner runner, MiddlewareStages stage)
             => runner.StopAfter(new MiddlewareStep(stage));
 
-        public static AppRunnerResult RunInMem(
-            this AppRunner runner,
-            string args,
-            Func<ITestConsole, string>? onReadLine = null,
-            IEnumerable<string>? pipedInput = null)
+        public static AppRunnerResult RunInMem(this AppRunner runner, string args)
         {
-            return runner.RunInMem(args, Ambient.WriteLine, onReadLine, pipedInput);
+            return runner.RunInMem(args, Ambient.WriteLine);
         }
 
-        public static AppRunnerResult RunInMem(
-            this AppRunner runner,
-            string[] args,
-            Func<ITestConsole, string>? onReadLine = null,
-            IEnumerable<string>? pipedInput = null)
+        public static AppRunnerResult RunInMem(this AppRunner runner, string[] args)
         {
-            return runner.RunInMem(args, Ambient.WriteLine, onReadLine, pipedInput);
+            return runner.RunInMem(args, Ambient.WriteLine);
         }
 
         public static AppRunnerResult Verify(this AppRunner appRunner, IScenario scenario)

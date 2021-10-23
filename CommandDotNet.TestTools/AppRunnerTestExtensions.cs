@@ -91,13 +91,15 @@ namespace CommandDotNet.TestTools
                 {
                     c.Console = testConsole = c.Console as ITestConsole 
                                               ?? c.Services.GetOrDefault<ITestConsole>()
-                                              ?? new TestConsole(
-                                                  onReadLine,
-                                                  pipedInput,
-                                                  promptResponder is null
-                                                      ? (Func<ITestConsole, ConsoleKeyInfo>?)null
-                                                      : promptResponder.OnReadKey);
+                                              ?? new TestConsole();
                 });
+
+                testConsole.Init(
+                    onReadLine,
+                    pipedInput,
+                    promptResponder is null
+                        ? (Func<ITestConsole, ConsoleKeyInfo>?)null
+                        : promptResponder.OnReadKey);
 
                 CommandContext? context = null;
                 Task<int> CaptureCommandContext(CommandContext commandContext, ExecutionDelegate next)

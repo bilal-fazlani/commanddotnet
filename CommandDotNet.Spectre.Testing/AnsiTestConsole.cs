@@ -6,6 +6,7 @@ using Spectre.Console;
 using Spectre.Console.Rendering;
 using Spectre.Console.Testing;
 using SpectreTestConsole= Spectre.Console.Testing.TestConsole;
+using TestConsole = CommandDotNet.TestTools.TestConsole;
 
 namespace CommandDotNet.Spectre.Testing
 {
@@ -13,14 +14,23 @@ namespace CommandDotNet.Spectre.Testing
     {
         private readonly SpectreTestConsole _spectreTestConsole;
         private readonly AnsiConsoleForwardingConsole _forwardingConsole;
+        private readonly TestConsole _testConsole;
 
         public AnsiTestConsole()
         {
             _spectreTestConsole = new SpectreTestConsole();
             _forwardingConsole = new AnsiConsoleForwardingConsole(_spectreTestConsole);
+            _testConsole = new TestConsole();
         }
 
         #region Implementation of ITestConsole
+        public void Init(
+            Func<ITestConsole, string?>? onReadLine = null, 
+            IEnumerable<string>? pipedInput = null, 
+            Func<ITestConsole, ConsoleKeyInfo>? onReadKey = null)
+        {
+            _testConsole.Init(onReadLine, pipedInput, onReadKey);
+        }
 
         // the SpectreTestConsole converts line endings to \n which can break assertions against literal strings in tests.
         // convert them back to Environment.NewLine
@@ -67,15 +77,15 @@ namespace CommandDotNet.Spectre.Testing
 
         public IStandardStreamWriter Out => _forwardingConsole.Out;
 
-        public bool IsOutputRedirected => _forwardingConsole.IsOutputRedirected;
+        public bool IsOutputRedirected => _testConsole.IsOutputRedirected;
 
         public IStandardStreamWriter Error => _forwardingConsole.Error;
 
-        public bool IsErrorRedirected => _forwardingConsole.IsErrorRedirected;
+        public bool IsErrorRedirected => _testConsole.IsErrorRedirected;
 
-        public IStandardStreamReader In => _forwardingConsole.In;
+        public IStandardStreamReader In => _testConsole.In;
 
-        public bool IsInputRedirected => _forwardingConsole.IsInputRedirected;
+        public bool IsInputRedirected => _testConsole.IsInputRedirected;
 
         public ConsoleKeyInfo ReadKey(bool intercept = false)
         {
