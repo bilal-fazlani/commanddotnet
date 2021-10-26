@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CommandDotNet.Rendering;
 
 namespace CommandDotNet.TestTools
@@ -21,5 +22,9 @@ namespace CommandDotNet.TestTools
         /// The accumulated text of the <see cref="Console.Error"/> stream.
         /// </summary>
         string ErrorText();
+
+        ITestConsole Mock(IEnumerable<string> pipedInput, bool overwrite = false);
+        ITestConsole Mock(Func<ITestConsole, string?> onReadLine, bool overwrite = false);
+        ITestConsole Mock(Func<ITestConsole, ConsoleKeyInfo>? onReadKey, bool overwrite = false);
     }
 }

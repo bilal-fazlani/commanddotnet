@@ -35,8 +35,8 @@ namespace CommandDotNet.TestTools
         private static void Fail(string valueName, string? expected, string? actual, int diffIndex)
         {
             var startIndex = Math.Max(0, diffIndex-10);
-            var actualSnippet = actual?.Substring(startIndex, Math.Min(actual.Length - 1, diffIndex + 10));
-            var expectedSnippet = expected?.Substring(startIndex, Math.Min(expected.Length - 1, diffIndex + 10));
+            var actualSnippet = actual?.Substring(startIndex, Math.Min(actual.Length - startIndex, diffIndex + 10));
+            var expectedSnippet = expected?.Substring(startIndex, Math.Min(expected.Length - startIndex, diffIndex + 10));
 
             throw new AssertFailedException(
                 $"Mismatch at index {diffIndex}{Environment.NewLine}" +
