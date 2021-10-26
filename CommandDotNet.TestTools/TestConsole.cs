@@ -21,62 +21,156 @@ namespace CommandDotNet.TestTools
     /// - provide piped input <br/>
     /// - handle ReadLine and ReadToEnd requests
     /// </summary>
-    public class TestConsole : IConsole
+    public class TestConsole : ITestConsole
     {
-        private static ILog Log = LogProvider.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
-        private readonly Func<TestConsole, ConsoleKeyInfo>? _onReadKey;
+        private Func<ITestConsole, ConsoleKeyInfo>? _onReadKey;
+        private Func<ITestConsole, string?>? _onReadLine;
 
-        public TestConsole(
-            Func<TestConsole, string?>? onReadLine = null,
-            IEnumerable<string>? pipedInput = null,
-            Func<TestConsole, ConsoleKeyInfo>? onReadKey = null)
+        public TestConsole()
         {
-            _onReadKey = onReadKey;
-            IsInputRedirected = pipedInput != null;
-
-            if (pipedInput != null)
-            {
-                if (onReadLine != null)
-                {
-                    throw new Exception($"{nameof(onReadLine)} and {nameof(pipedInput)} cannot both be specified. " +
-                                        "Windows will throw 'System.IO.IOException: The handle is invalid' on an attempt to ");
-                }
-
-                if (pipedInput is ICollection<string> inputs)
-                {
-                    var queue = new Queue<string>(inputs);
-                    onReadLine = console => queue.Count == 0 ? null : queue.Dequeue();
-                }
-                else
-                {
-                    onReadLine = console => pipedInput.Take(1).FirstOrDefault();
-                }
-            }
 
             var all = new StandardStreamWriter();
             All = all;
             Out = new StandardStreamWriter(all);
             Error = new StandardStreamWriter(all);
+            In = new StandardStreamReader();
+        }
+
+        [Obsolete("use default ctor and Mock methods instead.")]
+        public TestConsole(
+            Func<ITestConsole, string?>? onReadLine = null,
+            IEnumerable<string>? pipedInput = null,
+            Func<ITestConsole, ConsoleKeyInfo>? onReadKey = null)
+            :this()
+        {
+            if (onReadLine != null)
+            {
+                Mock(onReadLine);
+            }
+            if (pipedInput != null)
+            {
+                Mock(pipedInput);
+            }
+            if (onReadKey != null)
+            {
+                Mock(onReadKey);
+            }
+        }
+
+        public ITestConsole Mock(IEnumerable<string> pipedInput, bool overwrite = false)
+        {
+            if (pipedInput == null)
+            {
+                throw new ArgumentNullException(nameof(pipedInput));
+            }
+
+            if (IsInputRedirected)
+            {
+                if (overwrite)
+                {
+                    _onReadLine = null;
+                }
+                else
+                {
+                    throw new Exception($"{nameof(pipedInput)} has already been mocked");
+                }
+            }
+
+            if (_onReadLine != null)
+            {
+                throw new Exception("onReadLine and pipedInput cannot both be specified. " +
+                                    "Windows will throw 'System.IO.IOException: The handle is invalid' on an attempt to ");
+            }
+            
+            IsInputRedirected = true;
+
+            if (pipedInput is ICollection<string> inputs)
+            {
+                var queue = new Queue<string>(inputs);
+                _onReadLine = console => queue.Count == 0 ? null : queue.Dequeue();
+            }
+            else
+            {
+                // take one at a time
+                _onReadLine = console => pipedInput.Take(1).FirstOrDefault();
+            }
+
             In = new StandardStreamReader(
                 () =>
                 {
-                    var input = onReadLine?.Invoke(this);
-                    Log.Info($"IConsole.ReadLine > {input}");
+                    var input = _onReadLine?.Invoke(this);
+                    Log.Info($"ITestConsole.ReadLine > {input}");
                     return input;
                 });
+
+            return this;
+        }
+
+        public ITestConsole Mock(Func<ITestConsole, string?> onReadLine, bool overwrite = false)
+        {
+            if (onReadLine == null)
+            {
+                throw new ArgumentNullException(nameof(onReadLine));
+            }
+
+            if (_onReadLine != null)
+            {
+                if (overwrite)
+                {
+                    _onReadLine = null;
+                }
+                else
+                {
+                    throw new Exception($"{nameof(onReadLine)} has already been mocked");
+                }
+            }
+
+            if (IsInputRedirected)
+            {
+                throw new Exception("onReadLine and pipedInput cannot both be specified. " +
+                                    "Windows will throw 'System.IO.IOException: The handle is invalid' on an attempt to ");
+            }
+
+            _onReadLine = onReadLine;
+
+            In = new StandardStreamReader(
+                () =>
+                {
+                    var input = _onReadLine?.Invoke(this);
+                    Log.Info($"ITestConsole.ReadLine > {input}");
+                    return input;
+                });
+            return this;
+        }
+
+        public ITestConsole Mock(Func<ITestConsole, ConsoleKeyInfo>? onReadKey, bool overwrite = false)
+        {
+            if (_onReadKey != null)
+            {
+                if (overwrite)
+                {
+                    _onReadKey = null;
+                }
+                else
+                {
+                    throw new Exception($"{nameof(onReadKey)} has already been mocked");
+                }
+            }
+
+            _onReadKey = onReadKey;
+            return this;
         }
 
         /// <summary>
         /// This is the combined output for <see cref="Error"/> and <see cref="Out"/> in the order the lines were output.
         /// </summary>
-        public IStandardStreamWriter All { get; }
+        public IStandardStreamWriter All { get; private set; }
 
-        public IStandardStreamWriter Out { get; }
+        public IStandardStreamWriter Out { get; private set; }
 
-        public IStandardStreamWriter Error { get; }
-
-        public string OutLastLine => Out.ToString().SplitIntoLines().Last();
+        public IStandardStreamWriter Error { get; private set; }
 
         /// <summary>
         /// The combination of <see cref="Console.Error"/> and <see cref="Console.Out"/>
@@ -99,9 +193,9 @@ namespace CommandDotNet.TestTools
 
         public bool IsErrorRedirected { get; } = false;
 
-        public IStandardStreamReader In { get; }
+        public IStandardStreamReader In { get; private set; }
 
-        public bool IsInputRedirected { get; }
+        public bool IsInputRedirected { get; private set; }
 
         /// <summary>
         /// Read a key from the input
@@ -141,7 +235,7 @@ namespace CommandDotNet.TestTools
         {
             private readonly Func<string?>? _onReadLine;
 
-            public StandardStreamReader(Func<string?>? onReadLine)
+            public StandardStreamReader(Func<string?>? onReadLine = null)
             {
                 _onReadLine = onReadLine;
             }

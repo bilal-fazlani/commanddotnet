@@ -17,7 +17,7 @@ namespace CommandDotNet.Tests
         public static AppRunnerResult RunInMem(
             this AppRunner runner,
             string args,
-            Func<TestConsole, string>? onReadLine = null,
+            Func<ITestConsole, string>? onReadLine = null,
             IEnumerable<string>? pipedInput = null)
         {
             return runner.RunInMem(args, Ambient.WriteLine, onReadLine, pipedInput);
@@ -26,7 +26,7 @@ namespace CommandDotNet.Tests
         public static AppRunnerResult RunInMem(
             this AppRunner runner,
             string[] args,
-            Func<TestConsole, string>? onReadLine = null,
+            Func<ITestConsole, string>? onReadLine = null,
             IEnumerable<string>? pipedInput = null)
         {
             return runner.RunInMem(args, Ambient.WriteLine, onReadLine, pipedInput);

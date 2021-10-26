@@ -15,14 +15,16 @@ namespace CommandDotNet
         // the WriteLine extension methods will be frequently used by developers
         // keep class in CommandDotNet namespace to avoid force reference to Rendering namespace
 
-        public static IStandardStreamWriter Create(TextWriter writer)
+        public static IStandardStreamWriter Create(TextWriter writer) => Create(writer.Write);
+
+        public static IStandardStreamWriter Create(Action<string?> write)
         {
-            if (writer == null)
+            if (write == null)
             {
-                throw new ArgumentNullException(nameof(writer));
+                throw new ArgumentNullException(nameof(write));
             }
 
-            return new AnonymousStandardStreamWriter(writer.Write);
+            return new AnonymousStandardStreamWriter(write);
         }
 
         public static void WriteLine(this IStandardStreamWriter writer)

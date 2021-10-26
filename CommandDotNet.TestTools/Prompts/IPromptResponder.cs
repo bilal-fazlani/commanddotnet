@@ -4,6 +4,6 @@ namespace CommandDotNet.TestTools.Prompts
 {
     public interface IPromptResponder
     {
-        ConsoleKeyInfo OnReadKey(TestConsole testConsole);
+        ConsoleKeyInfo OnReadKey(ITestConsole testConsole);
     }
 }

@@ -55,7 +55,7 @@ namespace CommandDotNet.TestTools
         public static AppRunnerResult RunInMem(this AppRunner runner,
             string args,
             Action<string?>? logLine = null,
-            Func<TestConsole, string>? onReadLine = null,
+            Func<ITestConsole, string>? onReadLine = null,
             IEnumerable<string>? pipedInput = null,
             IPromptResponder? promptResponder = null,
             TestConfig? config = null)
@@ -67,7 +67,7 @@ namespace CommandDotNet.TestTools
         public static AppRunnerResult RunInMem(this AppRunner runner,
             string[] args,
             Action<string?>? logLine = null,
-            Func<TestConsole, string>? onReadLine = null,
+            Func<ITestConsole, string>? onReadLine = null,
             IEnumerable<string>? pipedInput = null,
             IPromptResponder? promptResponder = null,
             TestConfig? config = null)
@@ -86,13 +86,26 @@ namespace CommandDotNet.TestTools
             using (appInfo)
             using (logProvider)
             {
-                var testConsole = new TestConsole(
-                    onReadLine,
-                    pipedInput,
-                    promptResponder is null
-                        ? (Func<TestConsole, ConsoleKeyInfo>?) null
-                        : promptResponder.OnReadKey);
-                runner.Configure(c => c.Console = testConsole);
+                ITestConsole testConsole = null!;
+                runner.Configure(c =>
+                {
+                    c.Console = testConsole = c.Console as ITestConsole
+                                              ?? c.Services.GetOrDefault<ITestConsole>()
+                                              ?? new TestConsole();
+                });
+
+                if (onReadLine != null)
+                {
+                    testConsole.Mock(onReadLine);
+                }
+                if (pipedInput != null)
+                {
+                    testConsole.Mock(pipedInput);
+                }
+                if (promptResponder != null)
+                {
+                    testConsole.Mock(promptResponder.OnReadKey);
+                }
 
                 CommandContext? context = null;
                 Task<int> CaptureCommandContext(CommandContext commandContext, ExecutionDelegate next)

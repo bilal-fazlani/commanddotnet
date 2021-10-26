@@ -21,7 +21,7 @@ namespace CommandDotNet.Tests.UnitTests.Localization
 
         public ResourceProxyTests(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = _output = output;
         }
         
         // TODO: public comments on tooling
