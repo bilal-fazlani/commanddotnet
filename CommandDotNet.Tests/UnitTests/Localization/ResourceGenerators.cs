@@ -19,7 +19,7 @@ namespace CommandDotNet.Tests.UnitTests.Localization
 
         public ResourceGenerators(ITestOutputHelper output)
         {
-            _output = output;
+            Ambient.Output = _output = output;
         }
 
         // possible file formats: https://docs.lokalise.com/en/collections/2909121-keys-and-files#supported-file-formats
