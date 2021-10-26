@@ -31,6 +31,21 @@ namespace CommandDotNet.Spectre.Testing
 
         public string ErrorText() => _spectreTestConsole.Output.Replace("\n", Environment.NewLine);
 
+        public ITestConsole Mock(IEnumerable<string> pipedInput, bool overwrite = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ITestConsole Mock(Func<ITestConsole, string?> onReadLine, bool overwrite = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ITestConsole Mock(Func<ITestConsole, ConsoleKeyInfo>? onReadKey, bool overwrite = false)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Spectre.TestConsole members
