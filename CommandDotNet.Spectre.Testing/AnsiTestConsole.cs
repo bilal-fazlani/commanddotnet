@@ -5,7 +5,8 @@ using CommandDotNet.TestTools;
 using Spectre.Console;
 using Spectre.Console.Rendering;
 using Spectre.Console.Testing;
-using SpectreTestConsole= Spectre.Console.Testing.TestConsole;
+using SpectreTestConsole = Spectre.Console.Testing.TestConsole;
+using TestConsole = CommandDotNet.TestTools.TestConsole;
 
 namespace CommandDotNet.Spectre.Testing
 {
@@ -13,11 +14,13 @@ namespace CommandDotNet.Spectre.Testing
     {
         private readonly SpectreTestConsole _spectreTestConsole;
         private readonly AnsiConsoleForwardingConsole _forwardingConsole;
+        private readonly TestConsole _testConsole;
 
         public AnsiTestConsole()
         {
             _spectreTestConsole = new SpectreTestConsole();
             _forwardingConsole = new AnsiConsoleForwardingConsole(_spectreTestConsole);
+            _testConsole = new TestConsole();
         }
 
         #region Implementation of ITestConsole
@@ -33,17 +36,22 @@ namespace CommandDotNet.Spectre.Testing
 
         public ITestConsole Mock(IEnumerable<string> pipedInput, bool overwrite = false)
         {
-            throw new NotImplementedException();
+            _testConsole.Mock(pipedInput, overwrite);
+            return this;
         }
 
         public ITestConsole Mock(Func<ITestConsole, string?> onReadLine, bool overwrite = false)
         {
-            throw new NotImplementedException();
+            _testConsole.Mock(onReadLine, overwrite);
+            return this;
         }
 
         public ITestConsole Mock(Func<ITestConsole, ConsoleKeyInfo>? onReadKey, bool overwrite = false)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException(
+                $"When using the Spectre {nameof(AnsiTestConsole)}, " +
+                "follow the patterns they use for testing prompts in their tests here: " +
+                "https://github.com/spectreconsole/spectre.console/tree/main/test/Spectre.Console.Tests/Unit/Prompts");
         }
 
         #endregion
@@ -82,15 +90,15 @@ namespace CommandDotNet.Spectre.Testing
 
         public IStandardStreamWriter Out => _forwardingConsole.Out;
 
-        public bool IsOutputRedirected => _forwardingConsole.IsOutputRedirected;
+        public bool IsOutputRedirected => _testConsole.IsOutputRedirected;
 
         public IStandardStreamWriter Error => _forwardingConsole.Error;
 
-        public bool IsErrorRedirected => _forwardingConsole.IsErrorRedirected;
+        public bool IsErrorRedirected => _testConsole.IsErrorRedirected;
 
-        public IStandardStreamReader In => _forwardingConsole.In;
+        public IStandardStreamReader In => _testConsole.In;
 
-        public bool IsInputRedirected => _forwardingConsole.IsInputRedirected;
+        public bool IsInputRedirected => _testConsole.IsInputRedirected;
 
         public ConsoleKeyInfo ReadKey(bool intercept = false)
         {
