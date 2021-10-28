@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Execution
 {
     public class Services : IServices
     {
+        private readonly IServices? _appConfigServices;
         private readonly Dictionary<Type, object> _servicesByType = new Dictionary<Type, object>();
+
+        public Services(IServices? appConfigServices = null)
+        {
+            _appConfigServices = appConfigServices;
+        }
 
         public void Add<T>(T value) where T : class
         {
@@ -85,7 +92,7 @@ namespace CommandDotNet.Execution
         {
             return _servicesByType.TryGetValue(type, out var value)
                 ? value
-                : null;
+                : _appConfigServices?.GetOrDefault(type);
         }
 
         public T GetOrThrow<T>() where T : class
@@ -95,16 +102,17 @@ namespace CommandDotNet.Execution
 
         public object GetOrThrow(Type type)
         {
-            if (!_servicesByType.ContainsKey(type))
-            {
-                throw new ArgumentOutOfRangeException($"no service exists for type '{type}'");
-            }
-            return _servicesByType[type];
+            return GetOrDefault(type) 
+                   ?? throw new ArgumentOutOfRangeException($"no service exists for type '{type}'");
         }
 
         public ICollection<KeyValuePair<Type, object>> GetAll()
         {
-            return _servicesByType.ToCollection();
+            return _appConfigServices is null
+                ? _servicesByType.ToCollection()
+                : _servicesByType
+                    .Union(_appConfigServices.GetAll())
+                    .ToCollection();
         }
 
         public bool Contains<T>() where T : class
@@ -114,7 +122,8 @@ namespace CommandDotNet.Execution
 
         public bool Contains(Type type)
         {
-            return _servicesByType.ContainsKey(type);
+            return _servicesByType.ContainsKey(type)
+                   || (_appConfigServices?.Contains(type) ?? false);
         }
     }
 }

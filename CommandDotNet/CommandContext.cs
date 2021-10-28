@@ -62,7 +62,7 @@ namespace CommandDotNet
         /// Services registered for the lifetime of the <see cref="CommandContext"/>.<br/>
         /// Can be used to store state for coordination between middleware and across middleware stages.
         /// </summary>
-        public IServices Services { get; } = new Services();
+        public IServices Services { get; }
 
         /// <summary>
         /// The application <see cref="IDependencyResolver"/>.<br/>
@@ -83,6 +83,7 @@ namespace CommandDotNet
             Tokens = originalTokens;
             AppConfig = appConfig;
             Console = appConfig.Console;
+            Services = new Services(appConfig.Services);
         }
 
         public override string ToString()
