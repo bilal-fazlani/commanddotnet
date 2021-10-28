@@ -34,8 +34,13 @@ namespace CommandDotNet.Prompts
                 {
                     argumentFilter ??= a => a.Arity.RequiresAtLeastOne(); 
                     c.UseMiddleware(
-                        (ctx, next) => PromptForMissingArguments(ctx, next,
-                            new ArgumentPrompter(prompterOverride(ctx), argumentPromptTextOverride), argumentFilter), 
+                        (ctx, next) =>
+                        {
+                            var argumentPrompter = ctx.Services.GetOrDefault<IArgumentPrompter>()
+                                                   ?? new ArgumentPrompter(prompterOverride(ctx),
+                                                       argumentPromptTextOverride);
+                            return PromptForMissingArguments(ctx, next, argumentPrompter, argumentFilter);
+                        }, 
                         MiddlewareSteps.ValuePromptMissingArguments);
                 }
             });
@@ -45,7 +50,7 @@ namespace CommandDotNet.Prompts
             CommandContext commandContext, 
             ExecutionDelegate next, 
             IArgumentPrompter argumentPrompter,
-            Predicate<IArgument> argumentFilter)
+            Predicate<IArgument>? argumentFilter)
         {
             var parseResult = commandContext.ParseResult;
 
@@ -76,8 +81,11 @@ namespace CommandDotNet.Prompts
                 .ForEach(a =>
                 {
                     Log.Debug($"Prompting for {a.Name}");
+                    
                     var values = argumentPrompter.PromptForArgumentValues(commandContext, a, out isCancellationRequested);
                     a.InputValues.Add(new InputValue(Resources.A.Input_prompt_lc, false, values));
+
+                    Log.Debug($"Prompt for {a.Name} returned: {values.ToCsv()}");
                 });
 
             if (isCancellationRequested)

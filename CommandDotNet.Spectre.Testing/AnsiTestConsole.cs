@@ -12,14 +12,14 @@ namespace CommandDotNet.Spectre.Testing
 {
     public class AnsiTestConsole : ITestConsole, IAnsiConsole
     {
-        private readonly SpectreTestConsole _spectreTestConsole;
+        internal SpectreTestConsole SpectreTestConsole { get; }
         private readonly AnsiConsoleForwardingConsole _forwardingConsole;
         private readonly TestConsole _testConsole;
 
         public AnsiTestConsole()
         {
-            _spectreTestConsole = new SpectreTestConsole();
-            _forwardingConsole = new AnsiConsoleForwardingConsole(_spectreTestConsole);
+            SpectreTestConsole = new SpectreTestConsole();
+            _forwardingConsole = new AnsiConsoleForwardingConsole(SpectreTestConsole);
             _testConsole = new TestConsole();
         }
 
@@ -28,15 +28,19 @@ namespace CommandDotNet.Spectre.Testing
         // the SpectreTestConsole converts line endings to \n which can break assertions against literal strings in tests.
         // convert them back to Environment.NewLine
 
-        public string AllText() => _spectreTestConsole.Output.Replace("\n", Environment.NewLine);
+        public string AllText() => SpectreTestConsole.Output.Replace("\n", Environment.NewLine);
 
-        public string OutText() => _spectreTestConsole.Output.Replace("\n", Environment.NewLine);
+        public string OutText() => SpectreTestConsole.Output.Replace("\n", Environment.NewLine);
 
-        public string ErrorText() => _spectreTestConsole.Output.Replace("\n", Environment.NewLine);
+        public string ErrorText() => SpectreTestConsole.Output.Replace("\n", Environment.NewLine);
 
         public ITestConsole Mock(IEnumerable<string> pipedInput, bool overwrite = false)
         {
-            _testConsole.Mock(pipedInput, overwrite);
+            //_testConsole.Mock(pipedInput, overwrite);
+            foreach (var input in pipedInput)
+            {
+                SpectreTestConsole.Input.PushTextWithEnter(input);
+            }
             return this;
         }
 
@@ -58,30 +62,30 @@ namespace CommandDotNet.Spectre.Testing
 
         #region Spectre.TestConsole members
 
-        public void Clear(bool home) => _spectreTestConsole.Clear();
+        public void Clear(bool home) => SpectreTestConsole.Clear();
 
-        public void Write(IRenderable renderable) => _spectreTestConsole.Write(renderable);
+        public void Write(IRenderable renderable) => SpectreTestConsole.Write(renderable);
 
-        public Profile Profile => _spectreTestConsole.Profile;
+        public Profile Profile => SpectreTestConsole.Profile;
 
         IAnsiConsoleInput IAnsiConsole.Input => Input;
 
-        public IExclusivityMode ExclusivityMode => _spectreTestConsole.ExclusivityMode;
+        public IExclusivityMode ExclusivityMode => SpectreTestConsole.ExclusivityMode;
 
-        public TestConsoleInput Input => _spectreTestConsole.Input;
+        public TestConsoleInput Input => SpectreTestConsole.Input;
 
-        public RenderPipeline Pipeline => _spectreTestConsole.Pipeline;
+        public RenderPipeline Pipeline => SpectreTestConsole.Pipeline;
 
-        public IAnsiConsoleCursor Cursor => _spectreTestConsole.Cursor;
+        public IAnsiConsoleCursor Cursor => SpectreTestConsole.Cursor;
 
-        public string Output => _spectreTestConsole.Output;
+        public string Output => SpectreTestConsole.Output;
 
-        public IReadOnlyList<string> Lines => _spectreTestConsole.Lines;
+        public IReadOnlyList<string> Lines => SpectreTestConsole.Lines;
 
         public bool EmitAnsiSequences
         {
-            get => _spectreTestConsole.EmitAnsiSequences;
-            set => _spectreTestConsole.EmitAnsiSequences = value;
+            get => SpectreTestConsole.EmitAnsiSequences;
+            set => SpectreTestConsole.EmitAnsiSequences = value;
         }
 
         #endregion
