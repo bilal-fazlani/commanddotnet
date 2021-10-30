@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Spectre;
@@ -14,6 +13,8 @@ namespace CommandDotNet.Tests.CommandDotNet.Spectre
 {
     public class SpectreArgumentPrompterTests
     {
+        // Adapted from PromptForMissingArgumentTests
+
         public SpectreArgumentPrompterTests(ITestOutputHelper output)
         {
             Ambient.Output = output;
