@@ -2,6 +2,7 @@
 using CommandDotNet.Diagnostics;
 using CommandDotNet.FluentValidation;
 using CommandDotNet.NameCasing;
+using CommandDotNet.Spectre;
 
 namespace CommandDotNet.Example
 {
@@ -22,7 +23,8 @@ namespace CommandDotNet.Example
             return new AppRunner<Examples>(appNameForTests is null ? null : new AppSettings{Help = {UsageAppName = appNameForTests}})
                 .UseDefaultMiddleware()
                 .UsePrompter()
-                .UseArgumentPrompter()
+                .UseSpectreAnsiConsole()
+                .UseSpectreToPromptForMissingArguments()
                 .UseLocalizeDirective()
                 .UseLog2ConsoleDirective()
                 .UseNameCasing(Case.KebabCase)
