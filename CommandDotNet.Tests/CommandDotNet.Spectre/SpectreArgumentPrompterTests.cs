@@ -300,7 +300,7 @@ password (Text) *******
         public void WhenBoolOperandMissing_Prompts()
         {
             var testConsole = new AnsiTestConsole().Interactive();
-            testConsole.Input.PushCharacter('y');
+            testConsole.Input.PushTextWithEnter("y");
 
             new AppRunner<App>()
                 .UseSpectreAnsiConsole(testConsole)
