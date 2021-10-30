@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using CommandDotNet.Rendering;
 using Spectre.Console;
 
@@ -45,7 +46,8 @@ namespace CommandDotNet.Spectre
 
         public ConsoleKeyInfo ReadKey(bool intercept = false)
         {
-            return (ConsoleKeyInfo)_ansiConsole.Input.ReadKey(intercept)!;
+            var consoleKeyInfo = _ansiConsole.Input.ReadKeyAsync(intercept, CancellationToken.None).Result;
+            return (ConsoleKeyInfo)consoleKeyInfo;
         }
 
         public bool TreatControlCAsInput
