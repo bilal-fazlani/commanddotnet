@@ -60,14 +60,11 @@ namespace CommandDotNet.Spectre
             {
                 if (argument.TypeInfo.Type == typeof(bool))
                 {
-                    if (defaultValue != null)
-                    {
-                        ansiConsole.Confirm(promptText, (bool)defaultValue);
-                    }
-                    else
-                    {
-                        ansiConsole.Confirm(promptText);
-                    }
+                    var result = defaultValue != null
+                        ? ansiConsole.Confirm(promptText, (bool)defaultValue)
+                        : ansiConsole.Confirm(promptText);
+
+                    return new[] { result.ToString() };
                 }
                 if (argument.AllowedValues.Any())
                 {
