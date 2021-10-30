@@ -36,24 +36,20 @@ namespace CommandDotNet.Spectre
             {
                 if (argument.AllowedValues.Any())
                 {
+                    // TODO: how to show default? is it the first choice?
                     var p = new MultiSelectionPrompt<string>()
                         .Title(promptText)
                         .AddChoices(argument.AllowedValues)
-                        .PageSize(_defaultPageSize)
-                        .MoreChoicesText($"[grey](Move up and down to reveal more {argument.TypeInfo.DisplayName})[/]")
-                        .InstructionsText(
-                            "[grey](Press [blue]<space>[/] to toggle a fruit, " +
-                            "[green]<enter>[/] to accept)[/]");
+                        .PageSize(_defaultPageSize);
+                        //.MoreChoicesText($"[grey](Move up and down to reveal more {argument.TypeInfo.DisplayName})[/]")
+                        // .InstructionsText(
+                        //     "[grey](Press [blue]<space>[/] to toggle a fruit, " +
+                        //     "[green]<enter>[/] to accept)[/]");
                     return ansiConsole.Prompt(p);
                 }
                 else
                 {
-                    // TODO: how to prompt multiple free hand? use old prompter? Loop Prompt until no value returned? 
-                    //       Ask spectre community? 
-                    //       comma separated?  first non-alpha-numeric is separater, else comma?
-                    // TODO: how to show default? is it the first choice?
-                    throw new NotImplementedException("prompting for free-entry lists not yet supported");
-                    return Array.Empty<string>();
+                    return MultiPrompt(ansiConsole, promptText);
                 }
             }
             else
@@ -94,6 +90,23 @@ namespace CommandDotNet.Spectre
                     }
                     return new[] { ansiConsole.Prompt(p) };
                 }
+            }
+        }
+
+        private List<string> MultiPrompt(IAnsiConsole ansiConsole, string prompt)
+        {
+            var answers = new List<string>();
+            ansiConsole.WriteLine(prompt);
+            while (true)
+            {
+                var textPrompt = new TextPrompt<string>("> ") { AllowEmpty = true };
+                var answer = ansiConsole.Prompt(textPrompt);
+                if (string.IsNullOrEmpty(answer))
+                {
+                    return answers;
+                }
+
+                answers.Add(answer);
             }
         }
     }

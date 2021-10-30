@@ -143,7 +143,7 @@ opt1 (Text) simple
         public void WhenOperandListMissing_Prompts()
         {
             var testConsole = new AnsiTestConsole();
-            testConsole.Input.PushTextsWithEnter("something", "simple");
+            testConsole.Input.PushTextsWithEnter("something", "simple", "");
 
             new AppRunner<App>()
                 .UseSpectreAnsiConsole(testConsole)
@@ -157,10 +157,10 @@ opt1 (Text) simple
                     Then =
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe(new List<string>{"something", "simple"}),
-                        Output = @"args (Text) [<enter> once to begin new value. <enter> twice to finish]: 
-something
-simple
-
+                        Output = @"args (Text)
+> something
+> simple
+> 
 "
                     }
                 });
@@ -170,7 +170,7 @@ simple
         public void ListPrompt_CanIncludeQuotes()
         {
             var testConsole = new AnsiTestConsole();
-            testConsole.Input.PushTextsWithEnter("something", "simple", "'or not'", "\"so simple\"");
+            testConsole.Input.PushTextsWithEnter("something", "simple", "'or not'", "\"so simple\"", "");
 
             new AppRunner<App>()
                 .UseSpectreAnsiConsole(testConsole)
