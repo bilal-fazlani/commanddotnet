@@ -36,11 +36,11 @@ namespace CommandDotNet.Spectre.Testing
 
         public ITestConsole Mock(IEnumerable<string> pipedInput, bool overwrite = false)
         {
-            //_testConsole.Mock(pipedInput, overwrite);
-            foreach (var input in pipedInput)
-            {
-                SpectreTestConsole.Input.PushTextWithEnter(input);
-            }
+            _testConsole.Mock(pipedInput, overwrite);
+            // foreach (var input in pipedInput)
+            // {
+            //     SpectreTestConsole.Input.PushTextWithEnter(input);
+            // }
             return this;
         }
 
