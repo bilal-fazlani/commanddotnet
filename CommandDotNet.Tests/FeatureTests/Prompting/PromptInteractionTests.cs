@@ -19,7 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         public void CtrlC_ExitsApp()
         {
             new AppRunner<App>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -41,7 +41,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
             var arg1Answer = "take1".ToConsoleKeyInfos().AppendEscapeKey().Concat("take2".ToConsoleKeyInfos());
 
             new AppRunner<App>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -65,7 +65,7 @@ opt1 (Text): simple
         public void DoubleEscape_ExitsPrompt()
         {
             new AppRunner<App>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When=
@@ -88,7 +88,7 @@ opt1 (Text):
         public void BackspaceRemovesCharactersButNotPrompt()
         {
             new AppRunner<App>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =

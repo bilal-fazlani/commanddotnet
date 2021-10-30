@@ -1,8 +1,6 @@
 ﻿using System.Collections.Specialized;
-using System.Globalization;
 using CommandDotNet.Diagnostics;
 using CommandDotNet.FluentValidation;
-using CommandDotNet.Localization;
 using CommandDotNet.NameCasing;
 
 namespace CommandDotNet.Example
@@ -23,6 +21,8 @@ namespace CommandDotNet.Example
             appConfigSettings ??= new NameValueCollection();
             return new AppRunner<Examples>(appNameForTests is null ? null : new AppSettings{Help = {UsageAppName = appNameForTests}})
                 .UseDefaultMiddleware()
+                .UsePrompter()
+                .UseArgumentPrompter()
                 .UseLocalizeDirective()
                 .UseLog2ConsoleDirective()
                 .UseNameCasing(Case.KebabCase)

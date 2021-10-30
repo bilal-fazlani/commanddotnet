@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommandDotNet.Prompts;
 using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Prompts;
 using CommandDotNet.TestTools.Scenarios;
@@ -11,6 +12,9 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
 {
     public class PromptForMissingArgumentTests
     {
+        // Adapted in SpectreArgumentPrompterTests.
+        // When expectations change here, update above too
+
         public PromptForMissingArgumentTests(ITestOutputHelper output)
         {
             Ambient.Output = output;
@@ -20,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         public void WhenOperandAndOptionProvided_DoesNotPrompt()
         {
             new AppRunner<App>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -40,7 +44,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         public void WhenOptionMissing_PromptsOnlyForOption()
         {
             new AppRunner<App>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -61,7 +65,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         public void WhenOperandMissing_PromptsOnlyForOperand()
         {
             new AppRunner<App>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -82,7 +86,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         public void WhenOptionAndOperandMissing_PromptsForBoth()
         {
             new AppRunner<App>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -107,7 +111,7 @@ opt1 (Text): simple
         public void WhenOperandListProvided_DoesNotPrompt()
         {
             new AppRunner<App>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -127,7 +131,7 @@ opt1 (Text): simple
         public void WhenOperandListMissing_Prompts()
         {
             new AppRunner<App>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -151,7 +155,7 @@ simple
         public void ListPrompt_CanIncludeQuotes()
         {
             new AppRunner<App>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -171,7 +175,7 @@ simple
         public void WhenInterceptorOptionMissing_Prompts()
         {
             new AppRunner<HierApp>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -190,7 +194,7 @@ simple
         public void WhenInheritedOptionMissing_Prompts()
         {
             new AppRunner<HierApp>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -209,7 +213,7 @@ simple
         public void WhenPasswordMissing_PromptMasksInput()
         {
             new AppRunner<App>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -235,7 +239,7 @@ password (Text):
             // \b is Console for Backspace
 
             new AppRunner<App>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -259,7 +263,7 @@ password (Text):
         public void WhenFlagsMissing_DoesNotPrompt()
         {
             new AppRunner<App>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -276,7 +280,7 @@ password (Text):
         {
 
             new AppRunner<App>(new AppSettings { BooleanMode = BooleanMode.Explicit })
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -295,7 +299,7 @@ password (Text):
         public void WhenBoolOperandMissing_Prompts()
         {
             new AppRunner<App>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -316,7 +320,7 @@ password (Text):
         public void CanOverridePromptText()
         {
             new AppRunner<App>()
-                .UsePrompting(argumentPromptTextOverride: (ctx, arg) => "lala")
+                .UseArgumentPrompter( (c, p) => new ArgumentPrompter(p, (ctx, a) => "lala"))
                 .Verify(new Scenario
                 {
                     When =
@@ -338,7 +342,7 @@ lala (Text): fishies
         public void CanFilterListOfArgumentsForPrompting()
         {
             new AppRunner<App>()
-                .UsePrompting(argumentFilter: arg => arg.Name == "arg1")
+                .UseArgumentPrompter(argumentFilter: arg => arg.Name == "arg1")
                 .Verify(new Scenario
                 {
                     When =
@@ -360,7 +364,7 @@ lala (Text): fishies
         {
             var pipedInput = new[] { "a", "b", "c" };
             new AppRunner<App>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .AppendPipedInputToOperandList()
                 .Verify(new Scenario
                 {

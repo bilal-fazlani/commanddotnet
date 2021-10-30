@@ -18,7 +18,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         public void InjectedPrompterCanPromptForValues()
         {
             new AppRunner<App>()
-                .UsePrompting()
+                .UsePrompter()
                 .Verify(new Scenario
                 {
                     When =

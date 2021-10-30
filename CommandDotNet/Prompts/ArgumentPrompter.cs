@@ -17,7 +17,7 @@ namespace CommandDotNet.Prompts
             _getPromptTextCallback = getPromptTextCallback;
         }
 
-        public virtual ICollection<string> PromptForArgumentValues(
+        public ICollection<string> PromptForArgumentValues(
             CommandContext commandContext, IArgument argument, out bool isCancellationRequested)
         {
             var argumentName = _getPromptTextCallback?.Invoke(commandContext, argument) ?? argument.Name;
@@ -37,7 +37,7 @@ namespace CommandDotNet.Prompts
             {
                 if (_prompter.TryPromptForValue(promptText, out var value, out isCancellationRequested, isPassword: isPassword))
                 {
-                    inputs.Add(value);
+                    inputs.Add(value!);
                 }
             }
 

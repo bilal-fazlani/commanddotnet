@@ -32,7 +32,7 @@ namespace CommandDotNet.Spectre
                         $"must register {nameof(UseSpectreAnsiConsole)} to ensure an {nameof(IAnsiConsole)} is available.");
                 }
                 c.Services.Add<IArgumentPrompter>(new SpectreArgumentPrompter(defaultPageSize, argumentPromptTextOverride));
-                appRunner.UsePrompting(argumentFilter: argumentFilter);
+                appRunner.UseArgumentPrompter(argumentFilter: argumentFilter);
             });
         }
     }

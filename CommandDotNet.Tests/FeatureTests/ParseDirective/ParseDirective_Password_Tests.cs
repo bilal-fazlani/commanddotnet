@@ -113,7 +113,7 @@ token transformations:
         public void Given_InputFromPrompt_OnlyExposedInTokenTransformations()
         {
             new AppRunner<App>()
-                .UsePrompting()
+                .UseArgumentPrompter()
                 .UseParseDirective()
                 .Verify(new Scenario
                 {
