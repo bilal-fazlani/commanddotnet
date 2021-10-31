@@ -60,6 +60,13 @@ namespace CommandDotNet.Prompts
                 return next(commandContext);
             }
 
+            // TODO: add IConsole.UserInteractive for testing purposes 
+            if (!Environment.UserInteractive)
+            {
+                Log.Debug("Skipping prompts. Environment.UserInteractive is false.");
+                return next(commandContext);
+            }
+
             if (parseResult!.HelpWasRequested())
             {
                 Log.Debug("Skipping prompts. Help was requested.");
