@@ -16,7 +16,7 @@ namespace CommandDotNet.TypeDescriptors
 
         public string GetDisplayName(IArgument argument)
         {
-            return GetConverter(argument).MethodBase.GetParameters().Single().Name;
+            return GetConverter(argument).MethodBase!.GetParameters().Single().Name;
         }
 
         public object ParseString(IArgument argument, string value)
@@ -39,7 +39,7 @@ namespace CommandDotNet.TypeDescriptors
             static bool HasSingleStringArgument(MethodBase method)
             {
                 var parameterInfos = method.GetParameters();
-                return parameterInfos.Length == 1 && parameterInfos.First().ParameterType == typeof(string);
+                return parameterInfos.Count(p => p.ParameterType == typeof(string) && !p.IsOptional) == 1;
             }
             
             return Cache.GetOrAdd(type, t =>

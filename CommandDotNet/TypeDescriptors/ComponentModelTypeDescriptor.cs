@@ -21,7 +21,7 @@ namespace CommandDotNet.TypeDescriptors
             var typeConverter = argument.Arity.AllowsMany()
                 ? TypeDescriptor.GetConverter(argument.TypeInfo.UnderlyingType)
                 : TypeDescriptor.GetConverter(argument.TypeInfo.Type);
-            return typeConverter.ConvertFrom(value);
+            return typeConverter.ConvertFrom(value)!;
         }
     }
 }
