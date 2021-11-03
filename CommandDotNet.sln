@@ -40,6 +40,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandDotNet.Example.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandDotNet.DataAnnotations", "CommandDotNet.DataAnnotations\CommandDotNet.DataAnnotations.csproj", "{558AA426-06D4-4FC9-B2E5-B6742F0A5D77}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandDotNet.Spectre", "CommandDotNet.Spectre\CommandDotNet.Spectre.csproj", "{C70E36CC-4143-4D23-B581-CBF3A098CD5A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandDotNet.Spectre.Testing", "CommandDotNet.Spectre.Testing\CommandDotNet.Spectre.Testing.csproj", "{1452576F-513A-493E-B871-3D9B40118B45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,6 +98,14 @@ Global
 		{558AA426-06D4-4FC9-B2E5-B6742F0A5D77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{558AA426-06D4-4FC9-B2E5-B6742F0A5D77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{558AA426-06D4-4FC9-B2E5-B6742F0A5D77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C70E36CC-4143-4D23-B581-CBF3A098CD5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C70E36CC-4143-4D23-B581-CBF3A098CD5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C70E36CC-4143-4D23-B581-CBF3A098CD5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C70E36CC-4143-4D23-B581-CBF3A098CD5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1452576F-513A-493E-B871-3D9B40118B45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1452576F-513A-493E-B871-3D9B40118B45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1452576F-513A-493E-B871-3D9B40118B45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1452576F-513A-493E-B871-3D9B40118B45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

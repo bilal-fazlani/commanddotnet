@@ -25,6 +25,7 @@
 | \ \ \ Dictionaries | [#251](https://github.com/bilal-fazlani/commanddotnet/issues/251) ❌ |
 | \ \ \ Password: _mask value in logs and output with `*****`_ | [docs](Arguments/passwords.md) ✔️ |
 | \ \ \ Any type with a string constructor | [docs](Arguments/argument-types.md#adding-support-for-other-types) ✔️ |
+| \ \ \ Any type with a static Parse(string) method | [docs](Arguments/argument-types.md#adding-support-for-other-types) ✔️ |
 | \ \ \ Any type with a [TypeConverter](https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.typeconverter?view=netframework-4.8) | [docs](Arguments/argument-types.md#adding-support-for-other-types) ✔️ |
 | \ \ \ Custom Type Descriptors<br/>\ \ \ \ \ \ _Customize parsing and the type name shown in help and_ | [docs](Arguments/argument-types.md#type-descriptors) ✔️ |
 | \ \ \ Define allowed values by type<br/>\ \ \ \ \ \ _Allowed values are shown in help and will soon be used for suggestions_ | [docs](Arguments/argument-types.md#type-descriptors) ✔️ |
@@ -77,6 +78,7 @@
 |   **Other** |  |
 | \ \ \ Ctrl+C | [docs](OtherFeatures/cancellation.md) ✔️ |
 | \ \ \ Name casing<br/>\ \ \ \ \ \ _consistent name casing via [Humanizer](https://github.com/Humanizr/Humanizer)_ | [docs](OtherFeatures/name-casing.md) ✔️ |
+| \ \ \ Spectre [AnsiConsole](https://spectreconsole.net)<br/>\ \ \ \ \ \ ansi, colors, [markup syntax](https://spectreconsole.net/markup), [prompting](https://spectreconsole.net/prompts/text), [progress bars](https://spectreconsole.net/live/progress), [tables](https://spectreconsole.net/widgets/table). [live displays](https://spectreconsole.net/live/live-display), test capture, and much more | [docs](OtherFeatures/spectre.md) ✔️ |
 |   **Extensibility** |  |
 | \ \ \ Custom middleware | [docs](Extensibility/middleware.md) ✔️ |
 | \ \ \ Custom directives | [docs](Extensibility/directives.md) ✔️ |

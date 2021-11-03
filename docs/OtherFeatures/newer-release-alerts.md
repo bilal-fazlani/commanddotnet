@@ -2,7 +2,14 @@
 
 This middleware will check a url for the latest version of your app and alert the user if a new release is found.
 
-This was created as proof-of-concept. It will make a web request every time the command is run. It is recommended to use `skipCommand` to have this run for specific commands, when --version is requested or to cache last request time locally to control the frequency of the request.
+It was created as proof-of-concept of the middleware architecture. 
+
+By default, a web request will occure every time a command is run. It is recommended to use `skipCommand` delegate to optimize this. 
+For example
+
+* to have this run for specific commands: `cmd.Name == "check-for-updates"`
+* when the --version option is specified: `cmd.HasInputValues(Resources.A.Command_version)`
+* to cache the result locally with a TTL
 
 ## Github
 

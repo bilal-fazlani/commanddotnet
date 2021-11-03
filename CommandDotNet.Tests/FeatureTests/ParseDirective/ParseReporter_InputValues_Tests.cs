@@ -30,7 +30,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         {
             new AppRunner<App>()
                 .UseParseDirective()
-                .UsePrompting(promptForMissingArguments: true)
+                .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =

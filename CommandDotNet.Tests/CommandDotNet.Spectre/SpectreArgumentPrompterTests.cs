@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CommandDotNet.Prompts;
+using CommandDotNet.Spectre;
+using CommandDotNet.Spectre.Testing;
 using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Prompts;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests.Prompting
+namespace CommandDotNet.Tests.CommandDotNet.Spectre
 {
-    public class PromptForMissingArgumentTests
+    public class SpectreArgumentPrompterTests
     {
-        // Adapted in SpectreArgumentPrompterTests.
-        // When expectations change here, update above too
+        // Adapted from PromptForMissingArgumentTests
 
-        public PromptForMissingArgumentTests(ITestOutputHelper output)
+        public SpectreArgumentPrompterTests(ITestOutputHelper output)
         {
             Ambient.Output = output;
         }
@@ -23,14 +23,17 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         [Fact]
         public void WhenOperandAndOptionProvided_DoesNotPrompt()
         {
+            var testConsole = new AnsiTestConsole();
+            testConsole.Input.PushTextWithEnter("lala");
+
             new AppRunner<App>()
-                .UseArgumentPrompter()
+                .UseSpectreAnsiConsole(testConsole)
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
                     {
                         Args = $"{nameof(App.Do)} something --opt1 simple",
-                        OnPrompt = Respond.FailOnPrompt()
                     },
                     Then =
                     {
@@ -43,19 +46,22 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         [Fact]
         public void WhenOptionMissing_PromptsOnlyForOption()
         {
+            var testConsole = new AnsiTestConsole();
+            testConsole.Input.PushTextWithEnter("simple");
+
             new AppRunner<App>()
-                .UseArgumentPrompter()
+                .UseSpectreAnsiConsole(testConsole)
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
                     {
-                        Args = $"{nameof(App.Do)} something",
-                        OnPrompt = Respond.WithText("simple", prompt => prompt.StartsWith("opt1"))
+                        Args = $"{nameof(App.Do)} something"
                     },
                     Then =
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("simple", "something"),
-                        Output = @"opt1 (Text): simple
+                        Output = @"opt1 (Text) simple
 "
                     }
                 });
@@ -64,19 +70,22 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         [Fact]
         public void WhenOperandMissing_PromptsOnlyForOperand()
         {
+            var testConsole = new AnsiTestConsole();
+            testConsole.Input.PushTextWithEnter("something");
+
             new AppRunner<App>()
-                .UseArgumentPrompter()
+                .UseSpectreAnsiConsole(testConsole)
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
                     {
                         Args = $"{nameof(App.Do)} --opt1 simple",
-                        OnPrompt = Respond.WithText("something", prompt => prompt.StartsWith("arg1"))
                     },
                     Then =
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("simple", "something"),
-                        Output = @"arg1 (Text): something
+                        Output = @"arg1 (Text) something
 "
                     }
                 });
@@ -85,23 +94,23 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
         [Fact]
         public void WhenOptionAndOperandMissing_PromptsForBoth()
         {
+            var testConsole = new AnsiTestConsole();
+            testConsole.Input.PushTextsWithEnter("something", "simple");
+
             new AppRunner<App>()
-                .UseArgumentPrompter()
+                .UseSpectreAnsiConsole(testConsole)
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
                     {
-                        Args = $"{nameof(App.Do)}",
-                        OnPrompt = Respond.With(
-                            new TextAnswer("something", prompt => prompt.StartsWith("arg1")),
-                            new TextAnswer("simple", prompt => prompt.StartsWith("opt1"))
-                        )
+                        Args = $"{nameof(App.Do)}"
                     },
                     Then =
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("simple", "something"),
-                        Output = @"arg1 (Text): something
-opt1 (Text): simple
+                        Output = @"arg1 (Text) something
+opt1 (Text) simple
 "
                     }
                 });
@@ -110,14 +119,17 @@ opt1 (Text): simple
         [Fact]
         public void WhenOperandListProvided_DoesNotPrompt()
         {
+            var testConsole = new AnsiTestConsole();
+            testConsole.Input.PushTextWithEnter("lala");
+
             new AppRunner<App>()
-                .UseArgumentPrompter()
+                .UseSpectreAnsiConsole(testConsole)
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
                     {
-                        Args = $"{nameof(App.DoList)} something simple",
-                        OnPrompt = Respond.WithText("yes")
+                        Args = $"{nameof(App.DoList)} something simple"
                     },
                     Then =
                     {
@@ -130,22 +142,25 @@ opt1 (Text): simple
         [Fact]
         public void WhenOperandListMissing_Prompts()
         {
+            var testConsole = new AnsiTestConsole();
+            testConsole.Input.PushTextsWithEnter("something", "simple", "");
+
             new AppRunner<App>()
-                .UseArgumentPrompter()
+                .UseSpectreAnsiConsole(testConsole)
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
                     {
-                        Args = $"{nameof(App.DoList)}",
-                        OnPrompt = Respond.WithList(new []{"something", "simple"})
+                        Args = $"{nameof(App.DoList)}"
                     },
                     Then =
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe(new List<string>{"something", "simple"}),
-                        Output = @"args (Text) [<enter> once to begin new value. <enter> twice to finish]: 
-something
-simple
-
+                        Output = @"args (Text)
+> something
+> simple
+> 
 "
                     }
                 });
@@ -154,14 +169,17 @@ simple
         [Fact]
         public void ListPrompt_CanIncludeQuotes()
         {
+            var testConsole = new AnsiTestConsole();
+            testConsole.Input.PushTextsWithEnter("something", "simple", "'or not'", "\"so simple\"", "");
+
             new AppRunner<App>()
-                .UseArgumentPrompter()
+                .UseSpectreAnsiConsole(testConsole)
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
                     {
-                        Args = $"{nameof(App.DoList)}",
-                        OnPrompt = Respond.WithList(new[] { "something", "simple", "'or not'", "\"so simple\"" })
+                        Args = $"{nameof(App.DoList)}"
                     },
                     Then =
                     {
@@ -174,14 +192,17 @@ simple
         [Fact]
         public void WhenInterceptorOptionMissing_Prompts()
         {
+            var testConsole = new AnsiTestConsole();
+            testConsole.Input.PushTextWithEnter("1");
+
             new AppRunner<HierApp>()
-                .UseArgumentPrompter()
+                .UseSpectreAnsiConsole(testConsole)
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
                     {
                         Args = $"{nameof(HierApp.Do)} --inherited1 2",
-                        OnPrompt = Respond.WithText("1", prompt => prompt.StartsWith("intercept1"))
                     },
                     Then =
                     {
@@ -193,14 +214,17 @@ simple
         [Fact]
         public void WhenInheritedOptionMissing_Prompts()
         {
+            var testConsole = new AnsiTestConsole();
+            testConsole.Input.PushTextWithEnter("2");
+
             new AppRunner<HierApp>()
-                .UseArgumentPrompter()
+                .UseSpectreAnsiConsole(testConsole)
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
                     {
-                        Args = $" --intercept1 1 {nameof(HierApp.Do)}",
-                        OnPrompt = Respond.WithText("2", prompt => prompt.StartsWith("inherited1"))
+                        Args = $" --intercept1 1 {nameof(HierApp.Do)}"
                     },
                     Then =
                     {
@@ -212,48 +236,23 @@ simple
         [Fact]
         public void WhenPasswordMissing_PromptMasksInput()
         {
+            var testConsole = new AnsiTestConsole();
+            testConsole.Input.PushTextsWithEnter("lala", "fishies");
+
             new AppRunner<App>()
-                .UseArgumentPrompter()
+                .UseSpectreAnsiConsole(testConsole)
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
                     {
-                        Args = $"{nameof(App.Secure)}",
-                        OnPrompt = Respond.With(
-                            new TextAnswer("lala", prompt => prompt.StartsWith("user")),
-                            new TextAnswer("fishies", prompt => prompt.StartsWith("password")))
+                        Args = $"{nameof(App.Secure)}"
                     },
                     Then =
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("lala", new Password("fishies")),
-                        Output = @"user (Text): lala
-password (Text): 
-"
-                    }
-                });
-        }
-
-        [Fact]
-        public void WhenPasswordMissing_BackspaceDoesNotRemovePromptText()
-        {
-            // \b is Console for Backspace
-
-            new AppRunner<App>()
-                .UseArgumentPrompter()
-                .Verify(new Scenario
-                {
-                    When =
-                    {
-                        Args = $"{nameof(App.Secure)}",
-                        OnPrompt = Respond.With(
-                            new TextAnswer("lala", prompt => prompt.StartsWith("user")),
-                            new TextAnswer("fishies\b\b\b\b\b\b\bnew", prompt => prompt.StartsWith("password")))
-                    },
-                    Then =
-                    {
-                        AssertContext = ctx => ctx.ParamValuesShouldBe("lala", new Password("new")),
-                        Output = @"user (Text): lala
-password (Text): 
+                        Output = @"user (Text) lala
+password (Text) *******
 "
                     }
                 });
@@ -262,55 +261,61 @@ password (Text):
         [Fact]
         public void WhenFlagsMissing_DoesNotPrompt()
         {
+            var testConsole = new AnsiTestConsole();
+            testConsole.Input.PushTextsWithEnter("y", "y");
+
             new AppRunner<App>()
-                .UseArgumentPrompter()
+                .UseSpectreAnsiConsole(testConsole)
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
                     {
-                        Args = $"{nameof(App.Flags)}",
-                        OnPrompt = Respond.FailOnPrompt()
+                        Args = $"{nameof(App.Flags)}"
                     },
-                    Then = { Output = ""}
+                    Then = { AssertContext = ctx => ctx.ParamValuesShouldBe(null, null)}
                 });
         }
 
         [Fact]
         public void WhenExplicitBoolOptionMissing_Prompts()
         {
+            var testConsole = new AnsiTestConsole().Interactive();
+            testConsole.Input.PushTextWithEnter("y"); 
+            testConsole.Input.PushTextWithEnter("y");
 
             new AppRunner<App>(new AppSettings { BooleanMode = BooleanMode.Explicit })
-                .UseArgumentPrompter()
+                .UseSpectreAnsiConsole(testConsole)
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
                     {
-                        Args = $"{nameof(App.Flags)}",
-                        OnPrompt = Respond.With(
-                            new TextAnswer("true", prompt => prompt.StartsWith("a ")),
-                            new TextAnswer("false", prompt => prompt.StartsWith("b "))
-                        )
+                        Args = $"{nameof(App.Flags)}"
                     },
-                    Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(true, false)}
+                    Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(true, true)}
                 });
         }
 
         [Fact]
         public void WhenBoolOperandMissing_Prompts()
         {
+            var testConsole = new AnsiTestConsole().Interactive();
+            testConsole.Input.PushTextWithEnter("y");
+
             new AppRunner<App>()
-                .UseArgumentPrompter()
+                .UseSpectreAnsiConsole(testConsole)
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
                     {
-                        Args = $"{nameof(App.Bool)}",
-                        OnPrompt = Respond.WithText("true", prompt => prompt.StartsWith("operand1"))
+                        Args = $"{nameof(App.Bool)}"
                     },
                     Then =
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe(true),
-                        Output = @"operand1 (Boolean): true
+                        Output = @"operand1 (Boolean) [y/n] (y): y
 "
                     }
                 });
@@ -319,20 +324,24 @@ password (Text):
         [Fact]
         public void CanOverridePromptText()
         {
+            var testConsole = new AnsiTestConsole();
+            testConsole.Input.PushTextWithEnter("fishies");
+            testConsole.Input.PushTextWithEnter("fishies");
+
             new AppRunner<App>()
-                .UseArgumentPrompter( (c, p) => new ArgumentPrompter(p, (ctx, a) => "lala"))
+                .UseSpectreAnsiConsole(testConsole)
+                .UseSpectreArgumentPrompter(getPromptTextCallback: (ctx, arg) => "lala")
                 .Verify(new Scenario
                 {
                     When =
                     {
                         Args = $"{nameof(App.Do)}",
-                        OnPrompt = Respond.WithText("fishies", reuse: true)
                     },
                     Then =
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("fishies", "fishies"),
-                        Output = @"lala (Text): fishies
-lala (Text): fishies
+                        Output = @"lala (Text) fishies
+lala (Text) fishies
 "
                     }
                 });
@@ -341,19 +350,22 @@ lala (Text): fishies
         [Fact]
         public void CanFilterListOfArgumentsForPrompting()
         {
+            var testConsole = new AnsiTestConsole();
+            testConsole.Input.PushTextWithEnter("something");
+
             new AppRunner<App>()
-                .UseArgumentPrompter(argumentFilter: arg => arg.Name == "arg1")
+                .UseSpectreAnsiConsole(testConsole)
+                .UseSpectreArgumentPrompter(argumentFilter: arg => arg.Name == "arg1")
                 .Verify(new Scenario
                 {
                     When =
                     {
-                        Args = $"{nameof(App.Do)}",
-                        OnPrompt = Respond.WithText("something", prompt => prompt.StartsWith("arg1"))
+                        Args = $"{nameof(App.Do)}"
                     },
                     Then =
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe(null, "something"),
-                        Output = @"arg1 (Text): something
+                        Output = @"arg1 (Text) something
 "
                     }
                 });
@@ -364,7 +376,8 @@ lala (Text): fishies
         {
             var pipedInput = new[] { "a", "b", "c" };
             new AppRunner<App>()
-                .UseArgumentPrompter()
+                .UseSpectreAnsiConsole()
+                .UseSpectreArgumentPrompter()
                 .AppendPipedInputToOperandList()
                 .Verify(new Scenario
                 {

@@ -58,19 +58,6 @@ namespace CommandDotNet.Tests.UnitTests
         }
         
         [Fact]
-        public void UsePrompting_GivesInformativeError()
-        {
-            Assert.Throws<InvalidConfigurationException>(() => 
-                    new AppRunner<AppConfigBuilder_UseMiddleware_Tests>()
-                        .UseDefaultMiddleware()
-                        .UsePrompting())
-                .Message.Should().Be(MsgFor(
-                    "parameter resolver",
-                    "CommandDotNet.Prompts.IPrompter",
-                    "excludePrompting"));
-        }
-        
-        [Fact]
         public void UseResponseFiles_GivesInformativeError()
         {
             Assert.Throws<InvalidConfigurationException>(() => 

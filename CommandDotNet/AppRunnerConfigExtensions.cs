@@ -30,7 +30,6 @@ namespace CommandDotNet
             bool excludeDebugDirective = false,
             bool excludeParseDirective = false,
             bool excludeTimeDirective = false,
-            bool excludePrompting = false,
             bool excludeResponseFiles = false,
             bool excludeVersionMiddleware = false,
             bool excludeAppendPipedInputToOperandList = false,
@@ -60,10 +59,6 @@ namespace CommandDotNet
                 excludeTimeDirective,
                 nameof(excludeTimeDirective),
                 () => appRunner.UseTimeDirective());
-            Register(
-                excludePrompting, 
-                nameof(excludePrompting),
-                ()=> appRunner.UsePrompting());
             Register(
                 excludeResponseFiles, 
                 nameof(excludeResponseFiles),
@@ -159,21 +154,7 @@ namespace CommandDotNet
                 argumentModelResolveStrategy, commandClassResolveStrategy);
         }
 
-        /// <summary>
-        /// Adds support for prompting. <see cref="IPrompter"/> parameters can be used in interceptor and command methods.
-        /// <see cref="IPrompter"/> simplifies prompting and is supported by the TestTools nuget package.
-        /// </summary>
-        /// <param name="appRunner">The <see cref="AppRunner"/> instance</param>
-        /// <param name="prompterOverride">The <see cref="IPrompter"/> to use instead of the default.  Overriding this may impact TestTool support.</param>
-        /// <param name="promptForMissingArguments">
-        /// Prompt users for missing arguments.<br/>
-        /// Default is True.
-        /// </param>
-        /// <param name="argumentPromptTextOverride">Override the default prompt text format.</param>
-        /// <param name="argumentFilter">
-        /// Filter the arguments that will be prompted. i.e. Create a [PromptWhenMissing] attribute, or only prompt for operands.<br/>
-        /// Default filter includes only arguments where <see cref="IArgumentArity.Minimum"/> is greater than zero.
-        /// </param>
+        [Obsolete("Use UseIPrompter and UseMissingArgumentPrompter methods instead")]
         public static AppRunner UsePrompting(
             this AppRunner appRunner,
             Func<CommandContext, IPrompter>? prompterOverride = null,
@@ -181,7 +162,63 @@ namespace CommandDotNet
             Func<CommandContext, IArgument, string>? argumentPromptTextOverride = null,
             Predicate<IArgument>? argumentFilter = null)
         {
-            return ValuePromptMiddleware.UsePrompting(appRunner, prompterOverride, promptForMissingArguments, argumentPromptTextOverride, argumentFilter);
+
+            ValuePromptMiddleware.UseIPrompter(appRunner, prompterOverride);
+            if (promptForMissingArguments)
+            {
+                ValuePromptMiddleware.UseArgumentPrompter(
+                    appRunner,
+                    (context, prompter) => new ArgumentPrompter(prompter, argumentPromptTextOverride),
+                    argumentFilter);
+            }
+
+            return appRunner;
+        }
+
+        /// <summary>
+        /// Adds support for prompting. <see cref="IPrompter"/> parameters can be used in interceptor and command methods.
+        /// <see cref="IPrompter"/> simplifies prompting and is supported by the TestTools nuget package.
+        /// </summary>
+        /// <param name="appRunner">The <see cref="AppRunner"/> instance</param>
+        /// <param name="prompterFactory">
+        /// The <see cref="IPrompter"/> to use instead of the default.
+        /// Overriding this may impact TestTool support.
+        /// </param>
+        /// <remarks>
+        /// Consider using UseSpectreAnsiConsole from the CommandDotNet.Spectre
+        /// package for a richer prompting experience integrated with that console
+        /// </remarks>
+        public static AppRunner UsePrompter(
+            this AppRunner appRunner,
+            Func<CommandContext, IPrompter>? prompterFactory = null)
+        {
+            return ValuePromptMiddleware.UseIPrompter(appRunner, prompterFactory);
+        }
+
+        /// <summary>
+        /// Adds support for prompting arguments.<br/>
+        /// By default, prompts for arguments missing a required value.<br/>
+        /// Missing is determined by <see cref="IArgumentArity"/>, not by any validation frameworks.
+        /// </summary>
+        /// <param name="appRunner">The <see cref="AppRunner"/> instance</param>
+        /// <param name="argumentPrompterFactory">
+        /// The <see cref="IArgumentPrompter"/> to use instead of the default.
+        /// Overriding this may impact TestTool support.
+        /// </param>
+        /// <param name="argumentFilter">
+        /// Filter the arguments that will be prompted. i.e. Create a [PromptWhenMissing] attribute, or only prompt for operands.<br/>
+        /// Default filter includes only arguments where <see cref="IArgumentArity"/>.<see cref="IArgumentArity.Minimum"/> is greater than zero.
+        /// </param>
+        /// <remarks>
+        /// Consider using UseSpectreArgumentPrompter from the CommandDotNet.Spectre
+        /// package for a richer prompting experience, including selection for Enums
+        /// </remarks>
+        public static AppRunner UseArgumentPrompter(
+            this AppRunner appRunner,
+            Func<CommandContext, IPrompter, IArgumentPrompter>? argumentPrompterFactory = null,
+            Predicate<IArgument>? argumentFilter = null)
+        {
+            return ValuePromptMiddleware.UseArgumentPrompter(appRunner, argumentPrompterFactory, argumentFilter); ;
         }
 
         /// <summary>Prefix a filepath with @ and it will be replaced by its contents during <see cref="MiddlewareStages.Tokenize"/></summary>

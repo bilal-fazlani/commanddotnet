@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Prompts;
 using CommandDotNet.Rendering;
+using Spectre.Console;
 
 namespace CommandDotNet.Example.Commands
 {
@@ -68,14 +69,35 @@ namespace CommandDotNet.Example.Commands
             console.Out.WriteLine(string.Join(Environment.NewLine, items));
         }
 
+
+        [Command(Description = "Confirms required boolean argumentS")]
+        public void Confirm(IAnsiConsole console, bool @continue)
+        {
+            console.WriteLine($"{nameof(@continue)} {@continue}");
+        }
+
+        [Command(Description = "knock-knock joke, demonstrating use of IAnsiConsole")]
+        public void Choose(IAnsiConsole console, int pageSize = 5)
+        {
+            var prompt = new SelectionPrompt<string>
+            {
+                Title = "What is your favorite color?",
+                PageSize = pageSize
+            }.AddChoices("blue", "purple", "red", "orange", "yellow", "green");
+            var answer = console.Prompt(prompt);
+            
+            console.WriteLine(answer);
+        }
+
+
         [Command(Description = "knock-knock joke, demonstrating use of IPrompter")]
         public void Knock(IConsole console, IPrompter prompter)
         {
             if (prompter.TryPromptForValue("who's there?", out var answer1, out bool isCancellationRequested) && !isCancellationRequested)
             {
                 var answer2 = prompter.PromptForValue($"{answer1} who?", out isCancellationRequested);
-
-                console.Out.WriteLine($"{answer2}");
+        
+                console.Out.WriteLine($"{answer1} {answer2}");
                 console.Out.WriteLine("lulz");
             }
         }
