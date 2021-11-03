@@ -79,7 +79,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                                                                 $"{MethodDef.MiddlewareNextParameterType} or {MethodDef.InterceptorNextParameterType}. " +
                                                                 "There can be only one.");
                     }
-                    if (method.HasAttribute<DefaultMethodAttribute>())
+                    if (method.HasAttribute<DefaultCommandAttribute>())
                     {
                         throw new InvalidConfigurationException($"`{CommandHostClassType}.{method.Name}` default method cannot contain parameter of type " +
                                                                 $"{MethodDef.MiddlewareNextParameterType} or {MethodDef.InterceptorNextParameterType}.");
@@ -93,11 +93,11 @@ namespace CommandDotNet.ClassModeling.Definitions
 
                     interceptorMethodInfo = method;
                 }
-                else if (method.HasAttribute<DefaultMethodAttribute>())
+                else if (method.HasAttribute<DefaultCommandAttribute>())
                 {
                     if (defaultCommandMethodInfo != null)
                     {
-                        throw new InvalidConfigurationException($"`{CommandHostClassType}` defines more than one method with {nameof(DefaultMethodAttribute)}.  There can be only one.");
+                        throw new InvalidConfigurationException($"`{CommandHostClassType}` defines more than one method with {nameof(DefaultCommandAttribute)}.  There can be only one.");
                     }
                     defaultCommandMethodInfo = method;
                 }

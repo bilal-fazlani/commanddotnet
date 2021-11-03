@@ -161,13 +161,13 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         {
             public void Cmd() { }
 
-            [DefaultMethod]
+            [DefaultCommand]
             public void DefaultCmd() { }
 
             [SubCommand]
             public class Nested
             {
-                [DefaultMethod]
+                [DefaultCommand]
                 public void DefaultCmd() { }
                 public void Cmd() { }
             }

@@ -15,7 +15,7 @@ namespace CommandDotNet.Example.DocExamples
         [SubCommand]
         public class Stash
         {
-            [DefaultMethod]
+            [DefaultCommand]
             public void StashDefaultCommand()
             {
                 Console.WriteLine("changes stashed");

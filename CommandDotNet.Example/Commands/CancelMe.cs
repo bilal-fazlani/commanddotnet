@@ -13,7 +13,7 @@ namespace CommandDotNet.Example.Commands
         )]
     public class CancelMe
     {
-        [DefaultMethod]
+        [DefaultCommand]
         public void Default(
             CancellationToken cancellationToken, 
             IConsole console,
