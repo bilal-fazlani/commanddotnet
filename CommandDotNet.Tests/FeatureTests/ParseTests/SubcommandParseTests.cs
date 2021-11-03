@@ -119,7 +119,7 @@ Do" }
                 return next();
             }
 
-            [DefaultMethod]
+            [DefaultCommand]
             public void Default(string opd1, string opd2, [Option] string opt1, [Option] string opt2)
             {
             }

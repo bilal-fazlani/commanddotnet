@@ -38,11 +38,9 @@ IAnsiConsole only outputs to the Console.Out stream. Continue to use `IConsole.E
 ```c#
 public class Calculator
 {
-    [DefaultMethod]
-    public void Go(IAnsiConsole console, int x, int y)
+    public void Sum(IAnsiConsole console, int x, int y)
     {
         console.Markup($"The sum of [bold yellow]x[/] and [bold yellow]y[/] is [red]{x + y}[/]");
-        console.Markup("[bold yellow]Hello[/] [red]World![/]");
     }
 }
 ```

@@ -16,7 +16,7 @@ namespace CommandDotNet.Example
     {
         private static bool _inSession;
 
-        [DefaultMethod]
+        [DefaultCommand]
         public void StartSession(
             CommandContext context,
             InteractiveSession interactiveSession, 
