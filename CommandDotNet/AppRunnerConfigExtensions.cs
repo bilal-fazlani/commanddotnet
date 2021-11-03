@@ -207,10 +207,10 @@ namespace CommandDotNet
         /// </param>
         /// <param name="argumentFilter">
         /// Filter the arguments that will be prompted. i.e. Create a [PromptWhenMissing] attribute, or only prompt for operands.<br/>
-        /// Default filter includes only arguments where <see cref="IArgumentArity.Minimum"/> is greater than zero.
+        /// Default filter includes only arguments where <see cref="IArgumentArity"/>.<see cref="IArgumentArity.Minimum"/> is greater than zero.
         /// </param>
         /// <remarks>
-        /// Consider using UseSpectreToPromptForMissingArguments from the CommandDotNet.Spectre
+        /// Consider using UseSpectreArgumentPrompter from the CommandDotNet.Spectre
         /// package for a richer prompting experience, including selection for Enums
         /// </remarks>
         public static AppRunner UseArgumentPrompter(

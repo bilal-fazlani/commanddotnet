@@ -3,6 +3,12 @@
 ## TLDR, How to enable
 Enable the feature with `appRunner.UsePrompting()` or `appRunner.UseDefaultMiddleware()`.
 
+!!! Tip
+    Check out the [Spectre extensions](../OtherFeatures/spectre.md) for a richer prompting experience.
+    
+    Use the `AnsiTestConsole` from the `CommandDotNet.Spectre.Testing`package to test the IAnsiConsole features work as expected.
+    Example included in the link above.
+
 ## Introduction
 
 Prompting is supported for two scenarios:

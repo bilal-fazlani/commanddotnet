@@ -13,8 +13,8 @@ namespace CommandDotNet.Spectre
         {
             _ansiConsole = ansiConsole;
             Out = StandardStreamWriter.Create(ansiConsole.Write!);
-            Error = StandardStreamWriter.Create(ansiConsole.Write!);
 
+            Error = StandardStreamWriter.Create(Console.Error);
             // In is used to read piped input, which does not appear to be handled by Spectre.
             // ReadKey is implemented further down and delegates to IAnsiConsole.
             In = StandardStreamReader.Create(Console.In);

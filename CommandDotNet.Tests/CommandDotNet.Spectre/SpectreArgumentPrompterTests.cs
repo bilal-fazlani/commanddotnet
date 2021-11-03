@@ -28,7 +28,7 @@ namespace CommandDotNet.Tests.CommandDotNet.Spectre
 
             new AppRunner<App>()
                 .UseSpectreAnsiConsole(testConsole)
-                .UseSpectreToPromptForMissingArguments()
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -51,7 +51,7 @@ namespace CommandDotNet.Tests.CommandDotNet.Spectre
 
             new AppRunner<App>()
                 .UseSpectreAnsiConsole(testConsole)
-                .UseSpectreToPromptForMissingArguments()
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -75,7 +75,7 @@ namespace CommandDotNet.Tests.CommandDotNet.Spectre
 
             new AppRunner<App>()
                 .UseSpectreAnsiConsole(testConsole)
-                .UseSpectreToPromptForMissingArguments()
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -99,7 +99,7 @@ namespace CommandDotNet.Tests.CommandDotNet.Spectre
 
             new AppRunner<App>()
                 .UseSpectreAnsiConsole(testConsole)
-                .UseSpectreToPromptForMissingArguments()
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -124,7 +124,7 @@ opt1 (Text) simple
 
             new AppRunner<App>()
                 .UseSpectreAnsiConsole(testConsole)
-                .UseSpectreToPromptForMissingArguments()
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -147,7 +147,7 @@ opt1 (Text) simple
 
             new AppRunner<App>()
                 .UseSpectreAnsiConsole(testConsole)
-                .UseSpectreToPromptForMissingArguments()
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -174,7 +174,7 @@ opt1 (Text) simple
 
             new AppRunner<App>()
                 .UseSpectreAnsiConsole(testConsole)
-                .UseSpectreToPromptForMissingArguments()
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -197,7 +197,7 @@ opt1 (Text) simple
 
             new AppRunner<HierApp>()
                 .UseSpectreAnsiConsole(testConsole)
-                .UseSpectreToPromptForMissingArguments()
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -219,7 +219,7 @@ opt1 (Text) simple
 
             new AppRunner<HierApp>()
                 .UseSpectreAnsiConsole(testConsole)
-                .UseSpectreToPromptForMissingArguments()
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -241,7 +241,7 @@ opt1 (Text) simple
 
             new AppRunner<App>()
                 .UseSpectreAnsiConsole(testConsole)
-                .UseSpectreToPromptForMissingArguments()
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -266,7 +266,7 @@ password (Text) *******
 
             new AppRunner<App>()
                 .UseSpectreAnsiConsole(testConsole)
-                .UseSpectreToPromptForMissingArguments()
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -286,7 +286,7 @@ password (Text) *******
 
             new AppRunner<App>(new AppSettings { BooleanMode = BooleanMode.Explicit })
                 .UseSpectreAnsiConsole(testConsole)
-                .UseSpectreToPromptForMissingArguments()
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -305,7 +305,7 @@ password (Text) *******
 
             new AppRunner<App>()
                 .UseSpectreAnsiConsole(testConsole)
-                .UseSpectreToPromptForMissingArguments()
+                .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
                 {
                     When =
@@ -330,7 +330,7 @@ password (Text) *******
 
             new AppRunner<App>()
                 .UseSpectreAnsiConsole(testConsole)
-                .UseSpectreToPromptForMissingArguments(argumentPromptTextOverride: (ctx, arg) => "lala")
+                .UseSpectreArgumentPrompter(getPromptTextCallback: (ctx, arg) => "lala")
                 .Verify(new Scenario
                 {
                     When =
@@ -355,7 +355,7 @@ lala (Text) fishies
 
             new AppRunner<App>()
                 .UseSpectreAnsiConsole(testConsole)
-                .UseSpectreToPromptForMissingArguments(argumentFilter: arg => arg.Name == "arg1")
+                .UseSpectreArgumentPrompter(argumentFilter: arg => arg.Name == "arg1")
                 .Verify(new Scenario
                 {
                     When =
@@ -377,7 +377,7 @@ lala (Text) fishies
             var pipedInput = new[] { "a", "b", "c" };
             new AppRunner<App>()
                 .UseSpectreAnsiConsole()
-                .UseSpectreToPromptForMissingArguments()
+                .UseSpectreArgumentPrompter()
                 .AppendPipedInputToOperandList()
                 .Verify(new Scenario
                 {

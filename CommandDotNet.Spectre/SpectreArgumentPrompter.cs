@@ -6,16 +6,24 @@ using Spectre.Console;
 
 namespace CommandDotNet.Spectre
 {
+    /// <summary>
+    /// Contains the logic to prompt for the various types of arguments.
+    /// </summary>
     public class SpectreArgumentPrompter : IArgumentPrompter
     {
-        private readonly int _defaultPageSize;
+        private readonly int _pageSize;
         private readonly Func<CommandContext, IArgument, string>? _getPromptTextCallback;
 
+        /// <summary>
+        /// Contains the logic to prompt for the various types of arguments.
+        /// </summary>
+        /// <param name="pageSize">the page size for selection lists.</param>
+        /// <param name="getPromptTextCallback">Used to customize the generation of the prompt text.</param>
         public SpectreArgumentPrompter(
-            int defaultPageSize = 10,
+            int pageSize = 10,
             Func<CommandContext, IArgument, string>? getPromptTextCallback = null)
         {
-            _defaultPageSize = defaultPageSize;
+            _pageSize = pageSize;
             _getPromptTextCallback = getPromptTextCallback;
         }
 
@@ -40,7 +48,7 @@ namespace CommandDotNet.Spectre
                     var p = new MultiSelectionPrompt<string>()
                         .Title(promptText)
                         .AddChoices(argument.AllowedValues)
-                        .PageSize(_defaultPageSize);
+                        .PageSize(_pageSize);
                         //.MoreChoicesText($"[grey](Move up and down to reveal more {argument.TypeInfo.DisplayName})[/]")
                         // .InstructionsText(
                         //     "[grey](Press [blue]<space>[/] to toggle a fruit, " +
@@ -67,7 +75,7 @@ namespace CommandDotNet.Spectre
                     var p = new SelectionPrompt<string>()
                         {
                             Title = promptText,
-                            PageSize = _defaultPageSize,
+                            PageSize = _pageSize,
                             MoreChoicesText = $"[grey](Move up and down to reveal more {argument.TypeInfo.DisplayName})[/]"
                         }
                         .AddChoices(argument.AllowedValues);

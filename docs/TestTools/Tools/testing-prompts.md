@@ -1,5 +1,8 @@
 # Testing Prompts
 
+!!! Note
+    If you're using [CommandDotNet.Spectre](../../OtherFeatures/spectre.md) (recommended) use the `AnsiTestConsole` from the `CommandDotNet.Spectre.Testing`package to test the IAnsiConsole features work as expected. See examples in the linked doc as these examples will not work with Spectre.
+
 Prompts 
 
 Prompts are easily tested using the `Resond` methods to provide `Answer`s for the OnPrompt value.

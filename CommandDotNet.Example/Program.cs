@@ -24,7 +24,7 @@ namespace CommandDotNet.Example
                 .UseDefaultMiddleware()
                 .UsePrompter()
                 .UseSpectreAnsiConsole()
-                .UseSpectreToPromptForMissingArguments()
+                .UseSpectreArgumentPrompter()
                 .UseLocalizeDirective()
                 .UseLog2ConsoleDirective()
                 .UseNameCasing(Case.KebabCase)

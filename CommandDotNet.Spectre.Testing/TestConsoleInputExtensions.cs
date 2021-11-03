@@ -12,6 +12,7 @@ namespace CommandDotNet.Spectre.Testing
                 testConsoleInput.PushTextWithEnter(input);
             }
         }
+
         public static void PushCharacters(this TestConsoleInput testConsoleInput, string inputs)
         {
             foreach (var input in inputs)
@@ -19,6 +20,7 @@ namespace CommandDotNet.Spectre.Testing
                 testConsoleInput.PushCharacter(input);
             }
         }
+
         public static void PushKeys(this TestConsoleInput testConsoleInput, params ConsoleKey[] inputs)
         {
             foreach (var input in inputs)

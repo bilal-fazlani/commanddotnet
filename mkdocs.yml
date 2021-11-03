@@ -62,6 +62,7 @@ nav:
         - Ctrl+C and<br/>CancellationToken: OtherFeatures/cancellation.md
         - OtherFeatures/dependency-injection.md
         - OtherFeatures/name-casing.md
+        - OtherFeatures/spectre.md
         - OtherFeatures/newer-release-alerts.md
       - Extensibility:
         - Extensibility/directives.md

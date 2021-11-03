@@ -172,6 +172,9 @@ The framework includes the following tools that can be used independently of the
 * provide piped input
 * handle ReadLine and ReadKey
 
+!!! Note
+    If you're using [CommandDotNet.Spectre](../OtherFeatures/spectre.md) use the `AnsiTestConsole` from the `CommandDotNet.Spectre.Testing`package to test the IAnsiConsole features work as expected.
+
 ### [TempFiles](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/TempFiles.cs)
 
 * Creates temp files, give content and receive a file path.
