@@ -84,6 +84,8 @@ nav:
       - ReleaseNotes/CommandDotNet.IoC.SimpleInjector.md
       - ReleaseNotes/CommandDotNet.NameCasing.md
       - ReleaseNotes/CommandDotNet.NewerReleasesAlerts.md
+      - ReleaseNotes/CommandDotNet.Spectre.md
+      - ReleaseNotes/CommandDotNet.Spectre.Testing.md
       - ReleaseNotes/CommandDotNet.TestTools.md
       - ReleaseNotes/whats-new-in-v3.md
     - Legacy Versions:

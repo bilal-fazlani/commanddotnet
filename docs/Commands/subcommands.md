@@ -28,7 +28,7 @@ public class Git
 [Command(Description = "Stashes all changes when executed without any arguments")]
 public class Stash
 {
-    [DefaultMethod]
+    [DefaultCommand]
     public void StashDefaultCommand()
     {
         Console.WriteLine($"changes stashed");
@@ -116,7 +116,7 @@ public class Git
     [Command(Description = "Stashes all changes when executed without any arguments")]
     public class Stash
     {
-        [DefaultMethod]
+        [DefaultCommand]
         public void StashDefaultCommand()
         {
             Console.WriteLine($"changes stashed");

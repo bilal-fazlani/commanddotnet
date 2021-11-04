@@ -13,7 +13,6 @@ static int Main(string[] args)
         .UseCancellationHandlers()
         .UseDebugDirective()
         .UseParseDirective()
-        .UsePrompting()
         .UseResponseFiles()
         .UseVersionMiddleware()
         .AppendPipedInputToOperandList()
@@ -76,8 +75,8 @@ Some middleware accept options to modify behavior. To provide options, first exc
 static int Main(string[] args)
 {
     return new AppRunner<ValidationApp>()
-        .UseDefaultMiddleware(excludePrompting: true)
-        .UsePrompting(promptForMissingArguments: false)
+        .UseDefaultMiddleware(excludeTypoSuggestions: true)
+        .UseTypoSuggestions(maxSuggestionCount: 10)
         .Run(args);
 }
 ```
@@ -93,7 +92,6 @@ public static AppRunner UseDefaultMiddleware(this AppRunner appRunner,
     bool excludeCancellationHandlers = false,
     bool excludeDebugDirective = false,
     bool excludeParseDirective = false,
-    bool excludePrompting = false,
     bool excludeResponseFiles = false,
     bool excludeVersionMiddleware = false,
     bool excludeAppendPipedInputToOperandList = false,
@@ -102,7 +100,6 @@ public static AppRunner UseDefaultMiddleware(this AppRunner appRunner,
     if (!excludeCancellationHandlers) appRunner.UseCancellationHandlers();
     if (!excludeDebugDirective) appRunner.UseDebugDirective();
     if (!excludeParseDirective) appRunner.UseParseDirective();
-    if (!excludePrompting) appRunner.UsePrompting();
     if (!excludeResponseFiles) appRunner.UseResponseFiles();
     if (!excludeVersionMiddleware) appRunner.UseVersionMiddleware();
     if (!excludeAppendPipedInputToOperandList) appRunner.AppendPipedInputToOperandList();
