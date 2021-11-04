@@ -133,5 +133,7 @@ namespace {Type.Namespace}
 }}";
             return classDef;
         }
+        
+        public override string ToString() => Type.FullName!;
     }
 }

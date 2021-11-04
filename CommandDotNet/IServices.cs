@@ -25,5 +25,6 @@ namespace CommandDotNet
         ICollection<KeyValuePair<Type, object>> GetAll();
         bool Contains<T>() where T : class;
         bool Contains(Type type);
+        T GetOrCreate<T>() where T : class, new();
     }
 }

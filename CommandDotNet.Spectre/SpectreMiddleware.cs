@@ -8,6 +8,23 @@ namespace CommandDotNet.Spectre
     public static class SpectreMiddleware
     {
         /// <summary>
+        /// Override the resources to localize or change the text used in the <see cref="SpectreArgumentPrompter"/>
+        /// </summary>
+        /// <param name="appRunner">the <see cref="AppRunner"/> instance</param>
+        /// <param name="resourcesOverride">
+        /// The resources to use. If this method is not called,
+        /// <see cref="AppSettings"/>.<see cref="AppSettings.Localize"/> will be used if available.</param>
+        /// <returns></returns>
+        public static AppRunner UseSpectreResources(this AppRunner appRunner, Resources resourcesOverride)
+        {
+            return appRunner.Configure(c =>
+            {
+                c.Services.GetOrCreate<SpectreAppConfig>().ResourcesSet = true;
+                Resources.A = resourcesOverride;
+            });
+        }
+
+        /// <summary>
         /// Makes the <see cref="IAnsiConsole"/> available as a command parameter and will
         /// forward <see cref="IConsole"/>.Out to the <see cref="IAnsiConsole"/>.
         /// </summary>
@@ -26,6 +43,8 @@ namespace CommandDotNet.Spectre
                 c.Console = ansiConsole as IConsole ?? new AnsiConsoleForwardingConsole(ansiConsole);
                 c.UseParameterResolver(ctx => ansiConsole);
                 c.Services.Add(ansiConsole);
+
+                EnsureResourcesAreSet(appRunner, c);
             });
         }
 
@@ -56,7 +75,26 @@ namespace CommandDotNet.Spectre
                 }
                 c.Services.Add<IArgumentPrompter>(new SpectreArgumentPrompter(pageSize, getPromptTextCallback));
                 appRunner.UseArgumentPrompter(argumentFilter: argumentFilter);
+
+                EnsureResourcesAreSet(appRunner, c);
             });
+        }
+
+        private static void EnsureResourcesAreSet(AppRunner appRunner, AppConfigBuilder c)
+        {
+            if (appRunner.AppSettings.Localize != null)
+            {
+                var config = c.Services.GetOrCreate<SpectreAppConfig>();
+                if (!config.ResourcesSet)
+                {
+                    Resources.A = new ResourcesProxy(appRunner.AppSettings.Localize);
+                    config.ResourcesSet = true;
+                }
+            }
+        }
+        private class SpectreAppConfig
+        {
+            public bool ResourcesSet { get; set; }
         }
     }
 }
