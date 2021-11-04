@@ -4,6 +4,7 @@
         <AssemblyTitle>CommandDotNet.Spectre</AssemblyTitle>
         <Description>Integrate Spectre Console utilities into CommandDotNet</Description>
         <PackageTags>dotnet core; console; prompt; ansi; tables</PackageTags>
+    <ReleaseNotes>https://commanddotnet.bilal-fazlani.com/releasenotes/commanddotnet.spectre/</ReleaseNotes>
     </PropertyGroup>
     <ItemGroup>
         <Compile Remove="output\**" />

@@ -2,7 +2,8 @@
   <PropertyGroup>
     <AssemblyTitle>CommandDotNet.FluentValidation</AssemblyTitle>
     <Description>Uses FluentValidation validators to validate arguments defined using an IArgumentModel</Description>
-      <PackageTags>dotnet core; console; argument parse; FluentValidation; validation;</PackageTags>
+    <PackageTags>dotnet core; console; argument parse; FluentValidation; validation;</PackageTags>
+    <ReleaseNotes>https://commanddotnet.bilal-fazlani.com/releasenotes/commanddotnet.fluentvalidation/</ReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="output\**" />

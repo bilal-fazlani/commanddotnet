@@ -4,6 +4,7 @@
         <AssemblyTitle>CommandDotNet.DataAnnotations</AssemblyTitle>
         <Description>Uses System.ComponentModel.DataAnnotations to validate arguments</Description>
         <PackageTags>dotnet core; console; argument parse; DataAnnotations; validation;</PackageTags>
+        <ReleaseNotes>https://commanddotnet.bilal-fazlani.com/releasenotes/commanddotnet.dataannotations/</ReleaseNotes>
     </PropertyGroup>
     <ItemGroup>
         <Compile Remove="output\**" />

@@ -15,6 +15,7 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <ReleaseNotes>https://commanddotnet.bilal-fazlani.com/releasenotes</ReleaseNotes>
  </PropertyGroup>
  <PropertyGroup>
     <!-- prettify stack traces by replacing build machine path with CommandDotNet -->
