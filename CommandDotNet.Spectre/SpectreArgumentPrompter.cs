@@ -76,7 +76,7 @@ namespace CommandDotNet.Spectre
                         {
                             Title = promptText,
                             PageSize = _pageSize,
-                            MoreChoicesText = $"[grey](Move up and down to reveal more {argument.TypeInfo.DisplayName})[/]"
+                            MoreChoicesText = $"[grey]({Resources.A.Selection_paging_instructions(argument.TypeInfo.DisplayName)})[/]"
                         }
                         .AddChoices(argument.AllowedValues);
                     
