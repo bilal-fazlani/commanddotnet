@@ -4,21 +4,17 @@ using System.Runtime.CompilerServices;
 namespace CommandDotNet
 {
     /// <summary>
-    /// <see cref="Operand"/>s are the positional arguments of a command.<br/>
+    /// Positional arguments are the <see cref="Operand"/>s of a command and
+    /// will be referred to as <see cref="Operand"/> in the rest of the framework.<br/>
     /// <see cref="Operand"/>s are what the command operates on.<br/>
     /// <see cref="Option"/>s are are how the command operates on the <see cref="Operand"/>s<br/>
     /// https://commanddotnet.bilal-fazlani.com/arguments/option-or-operand/
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property)]
-    public class OperandAttribute : Attribute, INameAndDescription
+    public class PositionalAttribute : OperandAttribute
     {
-        public string? Name { get; set; }
-        public string? Description { get; set; }
-
-        public int CallerLineNumber { get; }
-
         /// <summary>
-        /// Constructs an <see cref="OperandAttribute"/>
+        /// Constructs a <see cref="PositionalAttribute"/>
         /// </summary>
         /// <param name="__callerLineNumber">
         /// DO NOT USE. Populated by <see cref="CallerLineNumberAttribute"/>.<br/>
@@ -26,9 +22,9 @@ namespace CommandDotNet
         /// are positioned based on their property's order in the class definition.<br/>
         /// This value is ignored for parameters.
         /// </param>
-        public OperandAttribute([CallerLineNumber] int __callerLineNumber = 0)
+        public PositionalAttribute([CallerLineNumber] int __callerLineNumber = 0) 
+            : base(__callerLineNumber)
         {
-            CallerLineNumber = __callerLineNumber;
         }
     }
 }

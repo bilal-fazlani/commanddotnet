@@ -9,21 +9,25 @@ As discussed in [Terminology](../argument-terminology.md), Option and Operand ar
 
 By default, arguments are operands. Change the default by assigning `#!c# AppSettings.DefaultArgumentMode = ArgumentMode.Option`
 
-Use the `[Operand]` and `[Option]` attributes to explicity denote which argument type and to configure the arguments.
+Use the `[Operand]` (or `[Positional]`) and `[Option]` (or `[Named]`) attributes to explicity denote which argument type and to configure the arguments.
+
+The Positional and Named attributes are provided for those who prefer that terminology for defining commands. The terms operand and option are still used for these arguments elsewhere in the framework.
 
 !!!Tip
     See [Option vs Operand](option-or-operand.md) for recommendations on when to use one vs the other.
 
 ## Operand Attribute
 
-The operand attribute has the following properties:
+The OperandAttribute has the following properties:
 
 * __Name__: Used in help documentation only. Defaults to the parameter or property name.
 * __Description__: Used in help documentation.
 
+The PositionalAttribute is a subclass of OperandAttribute
+
 ## Option Attribute
 
-The option attribute has the following properties:
+The OptionAttribute has the following properties:
 
 * __LongName__: Used in help documentation and on the command line. Defaults to the parameter or property name. 
     * Set to `null` to remove the default long name and have only a short name.
@@ -34,6 +38,8 @@ The option attribute has the following properties:
     * The default is _Implicit_ and can be changed with `#!c# AppSettings.BooleanMode = BooleanMode.Explicit`
     * _Implicit_ boolean options are also called __Flags__
 * __AssignToExecutableSubcommands__: only valid when used in [Interceptor](../Extensibility/interceptors.md) methods.
+
+The NamedAttribute is a subclass of OptionAttribute, provided for those who prefer 
 
 ## Example
 
