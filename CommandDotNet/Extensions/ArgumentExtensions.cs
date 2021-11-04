@@ -4,6 +4,18 @@ namespace CommandDotNet.Extensions
 {
     public static class ArgumentExtensions
     {
+        /// <summary>Returns true if value was input from the shell</summary>
+        public static bool HasValueFromInput(this IArgument argument) 
+            => !argument.InputValues.IsEmpty();
+
+        /// <summary>Returns true if a default value is available</summary>
+        public static bool HasValueFromDefault(this IArgument argument)
+            => !argument.Default?.Value.IsNullValue() ?? false;
+
+        /// <summary>Returns true if value was input from the shell or a default value is available</summary>
+        public static bool HasValueFromInputOrDefault(this IArgument argument)
+            => argument.HasValueFromInput() || argument.HasValueFromDefault();
+
         /// <summary>Returns true if argument name is <see cref="Constants.HelpOptionName"/></summary>
         public static bool IsHelpOption(this IArgument argument)
         {
