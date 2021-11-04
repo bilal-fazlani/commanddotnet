@@ -1,5 +1,9 @@
 # CommandDotNet.TestTools
 
+## 3.1.2
+
+Extracted `ITestConsole` interface from `TestConsole` to support the [Spectre extensions](../OtherFeatures/spectre.md)
+
 ## 3.1.1
 
 Added to  `ResourcesDef`

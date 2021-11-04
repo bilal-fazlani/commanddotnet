@@ -4,6 +4,7 @@
     <AssemblyTitle>CommandDotNet.IoC.Autofac</AssemblyTitle>
     <Description>Configures Autofac for dependency injection</Description>
     <PackageTags>dotnet core; console; argument parse; autofac;</PackageTags>
+    <ReleaseNotes>https://commanddotnet.bilal-fazlani.com/releasenotes/commanddotnet.ioc.autofac/</ReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="output\**" />

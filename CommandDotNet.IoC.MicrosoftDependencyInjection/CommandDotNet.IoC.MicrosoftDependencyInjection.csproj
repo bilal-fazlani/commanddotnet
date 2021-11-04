@@ -3,6 +3,7 @@
   <PropertyGroup>
     <AssemblyTitle>CommandDotNet.IoC.MicrosoftDependencyInjection</AssemblyTitle>
     <Description>Configures Microsoft.Extensions.DependencyInjection for dependency injection</Description>
+    <ReleaseNotes>https://commanddotnet.bilal-fazlani.com/releasenotes/commanddotnet.ioc.microsoftdependencyinjection/</ReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="output\**" />

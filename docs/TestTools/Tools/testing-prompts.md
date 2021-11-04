@@ -18,7 +18,7 @@ Notice `Respond.WithText` in the examples below.
         public void PipedInput_Should_UnionWithUserSuppliedValues()
         {
             var result = new AppRunner<App>()
-                .UsePrompting()
+                .UsePrompter()
                 .RunInMem("TellAJoke", onPrompt: Respond.WithText("who's there"));
 
             result.ExitCode.Should().Be(0);
@@ -44,7 +44,7 @@ Notice `Respond.WithText` in the examples below.
     public void InjectedPrompterCanPromptForValues()
     {
         new AppRunner<App>()
-            .UsePrompting()
+            .UsePrompter()
             .Verify(new Scenario
             {
                 When = 

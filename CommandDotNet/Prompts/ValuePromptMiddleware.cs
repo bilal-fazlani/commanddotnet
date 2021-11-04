@@ -38,7 +38,8 @@ namespace CommandDotNet.Prompts
                     c.Services.Add(argumentPrompterFactory);
                 }
 
-                argumentFilter ??= a => a.Arity.RequiresAtLeastOne();
+                argumentFilter ??= a => 
+                    a.Arity.RequiresAtLeastOne() && !a.HasValueFromInputOrDefault();
 
                 c.UseMiddleware(
                     (ctx, next) => PromptForMissingArguments(ctx, next, argumentFilter),
@@ -49,7 +50,7 @@ namespace CommandDotNet.Prompts
         private static Task<int> PromptForMissingArguments(
             CommandContext commandContext, 
             ExecutionDelegate next,
-            Predicate<IArgument>? argumentFilter)
+            Predicate<IArgument> argumentFilter)
         {
             var parseResult = commandContext.ParseResult;
 
@@ -79,12 +80,7 @@ namespace CommandDotNet.Prompts
 
             parseResult.TargetCommand
                 .AllArguments(includeInterceptorOptions: true)
-                .Where(a => a.SwitchFuncStruct(
-                    operand => true,
-                    option => !option.Arity.AllowsNone() // exclude flag options: help, version, ...
-                ))
-                .Where(a => argumentFilter == null || argumentFilter(a))
-                .Where(a => a.InputValues.IsEmpty() && (a.Default?.Value.IsNullValue() ?? true))
+                .Where(a => argumentFilter(a))
                 .TakeWhile(a => !commandContext.CancellationToken.IsCancellationRequested && !isCancellationRequested)
                 .ForEach(a =>
                 {

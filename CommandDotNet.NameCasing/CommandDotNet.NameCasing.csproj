@@ -3,6 +3,7 @@
   <PropertyGroup>
     <AssemblyTitle>CommandDotNet.NameCasing</AssemblyTitle>
     <Description>Uses Humanizer to transform the case of command and argument names</Description>
+    <ReleaseNotes>https://commanddotnet.bilal-fazlani.com/releasenotes/commanddotnet.namecasing/</ReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="output\**" />

@@ -137,12 +137,12 @@ Now executed as
 dotnet add.dll Add 1 2
 ```
 
-If the root command has only one command, you may want to exectute it by default without specifying any commands names. We can do this with the `[DefaultMethod]` attribute.
+If the root command has only one command, you may want to exectute it by default without specifying any commands names. We can do this with the `[DefaultCommand]` attribute.
 
 ```c#
 public class Calculator
 {
-    [DefaultMethod]
+    [DefaultCommand]
     public void Add(int value1, int value2)
     {
         Console.WriteLine($"Answer:  {value1 + value2}");

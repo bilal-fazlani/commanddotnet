@@ -4,6 +4,7 @@
     <AssemblyTitle>CommandDotNet.IoC.SimpleInjector</AssemblyTitle>
     <Description>Configures SimpleInjector for dependency injection</Description>
     <PackageTags>dotnet core; console; argument parse; simpleinjector;</PackageTags>
+    <ReleaseNotes>https://commanddotnet.bilal-fazlani.com/releasenotes/commanddotnet.ioc.simpleinjector/</ReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="output\**" />

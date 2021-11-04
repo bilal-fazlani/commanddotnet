@@ -1,5 +1,16 @@
 # CommandDotNet
 
+## 4.2.3
+
+* Prompting
+    * remove `exludePrompting` from `UseDefaultMiddleware` configuration extension
+    * obsoleted `UsePrompting`, breaking it into two methods: `UsePrompter` and `UseArgumentPrompter`
+    * argumentFilter must now include arity check and if argument has value.  See example in [../ArgumentValues/prompting.md]
+* Added IArgument extensions to simplify creating argument filters: HasValueFromInput, HasValueFromDefault, & HasValueFromInputOrDefault
+* obsoleted `DefaultMethodAttribute` in favor of `DefaultCommandAttribute` to be consistent with naming in the rest of the framework
+* When converting from string, types with string ctor or static Parse methods can now contain additional optional parameters as long as there is a single required parameter of type string.
+* For middleware developers, CommandContext.Services will now find fallback to AppConfig.Services.
+
 ## 4.2.2
 
 * Finished localizing strings that would appear for user in normal settings. What remains are configuration exceptions that should be discovered during the development phase. There are no plans to localize these, but we accept PRs if it's critical for you.

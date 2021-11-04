@@ -1,7 +1,7 @@
 # Prompting
 
 ## TLDR, How to enable
-Enable the feature with `appRunner.UsePrompting()` or `appRunner.UseDefaultMiddleware()`.
+Enable the feature with `appRunner.UsePrompter()` and / or `appRunner.UseArgumentPrompter()`.
 
 !!! Tip
     Check out the [Spectre extensions](../OtherFeatures/spectre.md) for a richer prompting experience.
@@ -20,7 +20,7 @@ Examples can be found in the [prompts](https://github.com/bilal-fazlani/commandd
 
 ## Prompting from within the command method
 
-A [parameter resolver](../Extensibility/parameter-resolvers.md) will be registered for `IPrompter`.
+When using `appRunner.UsePrompter()`, a [parameter resolver](../Extensibility/parameter-resolvers.md) will be registered for `IPrompter`.
 The IPrompter can prompt for a single value or a list.
 
 ```c#
@@ -46,9 +46,9 @@ Use Ctrl+C to exit prompting, setting the out parameter `isCancellationRequested
 
 Set the `isPassword` parameter to true to hide the input value.
 
-Override the default IPrompter with the `prompterOverride` paramter...
+Override the default IPrompter with the `prompterFactory` paramter...
 
-`prompterOverride: context => new MyPrompter(context)`
+`prompterFactory: context => new MyPrompter(context)`
 
 ### Handling Ctrl+C
 
@@ -58,13 +58,15 @@ If you'd prefer to ignore it, just discard it like this: `prompter.PromptForValu
 
 ## Prompting for missing arguments
 
-`UsePrompting` enables argument prompting by default.  Use `promptForMissingArguments:false` to disable.
+`appRunner.UseArgumentPrompter()` enables prompting for arguments where the ArgumentArity requires at least 1 value but none were provided.
 
-Prompt text can be overridden using the `argumentPromptTextOverride` parameter. This example shows using a custom attribute to provide prompt text.
+Prompt text can be overridden using the `argumentPrompterFactory` parameter to construct a new ArgumentPrompter and providing a `getPromptTextCallback`. 
+
+This example shows how you could create a custom attribute to provide prompt text.
 
 ``` cs
-argumentPromptTextOverride: (context, argument) => 
-    $"{argument.CustomAttributes.Get<MyPromptAttribute>().PromptText}"
+argumentPrompterFactory: (context, prompter) => new ArgumentPrompter(prompter, (ctx, argument) =>  
+    $"{argument.CustomAttributes.Get<MyPromptAttribute>().PromptText}")
 ```
 
 By default, the arguments that will be prompted are those where `argument.Arity.RequiresAtLeastOne()` and no value was provided.
@@ -73,7 +75,9 @@ This behavior can be changed using the `argumentFilter` parameter.
 
 ``` cs
 argumentFilter: argument => 
-    argument.CustomAttributes.Get<MyPromptAttribute>() != null
+    argument.CustomAttributes.Get<MyPromptAttribute>() != null 
+    && argument.Arity.RequiresAtLeastOne() 
+    && !argument.HasValueFromInputOrDefault()
 ```
 
 ## Passwords

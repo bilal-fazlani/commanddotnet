@@ -2,6 +2,7 @@
   <PropertyGroup>
     <AssemblyTitle>CommandDotNet</AssemblyTitle>
     <Description>Model your command line application interface in a class</Description>
+    <ReleaseNotes>https://commanddotnet.bilal-fazlani.com/releasenotes/commanddotnet/</ReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LibLog" Version="5.0.8">

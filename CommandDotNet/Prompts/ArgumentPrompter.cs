@@ -31,7 +31,7 @@ namespace CommandDotNet.Prompts
             var argumentName = _getPromptTextCallback?.Invoke(commandContext, argument) ?? argument.Name;
             var promptText = $"{argumentName} ({argument.TypeInfo.DisplayName})";
             var isPassword = argument.TypeInfo.UnderlyingType == typeof(Password);
-
+            
             ICollection<string> inputs = new List<string>();
             
             if (argument.Arity.AllowsMany())
