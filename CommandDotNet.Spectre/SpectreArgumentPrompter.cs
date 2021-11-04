@@ -45,14 +45,16 @@ namespace CommandDotNet.Spectre
                 if (argument.AllowedValues.Any())
                 {
                     // TODO: how to show default? is it the first choice?
-                    var p = new MultiSelectionPrompt<string>()
+
+                    var p = new MultiSelectionPrompt<string>
+                        {
+                            MoreChoicesText = Resources.A.Selection_paging_instructions(argument.Name),
+                            InstructionsText = Resources.A.MultiSelection_selection_instructions(argument.Name)
+                        }
                         .Title(promptText)
                         .AddChoices(argument.AllowedValues)
                         .PageSize(_pageSize);
-                        //.MoreChoicesText($"[grey](Move up and down to reveal more {argument.TypeInfo.DisplayName})[/]")
-                        // .InstructionsText(
-                        //     "[grey](Press [blue]<space>[/] to toggle a fruit, " +
-                        //     "[green]<enter>[/] to accept)[/]");
+
                     return ansiConsole.Prompt(p);
                 }
                 else
@@ -76,10 +78,10 @@ namespace CommandDotNet.Spectre
                         {
                             Title = promptText,
                             PageSize = _pageSize,
-                            MoreChoicesText = $"[grey](Move up and down to reveal more {argument.TypeInfo.DisplayName})[/]"
+                            MoreChoicesText = Resources.A.Selection_paging_instructions(argument.Name)
                         }
                         .AddChoices(argument.AllowedValues);
-                    
+
                     // TODO: how to show default? is it the first choice?
 
                     return new []{ ansiConsole.Prompt(p) };

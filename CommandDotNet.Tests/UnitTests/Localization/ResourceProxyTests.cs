@@ -1,10 +1,13 @@
-using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using CommandDotNet.Extensions;
 using CommandDotNet.TestTools;
 using FluentAssertions;
+using FluentAssertions.Common;
 using Xunit;
 using Xunit.Abstractions;
+using AssemblyExtensions = CommandDotNet.Tests.Utils.AssemblyExtensions;
 
 namespace CommandDotNet.Tests.UnitTests.Localization
 {
@@ -13,11 +16,14 @@ namespace CommandDotNet.Tests.UnitTests.Localization
         private readonly ITestOutputHelper _output;
 
         internal static readonly (ResourcesDef source, ResourcesDef proxy)[] ResourcesDefs =
-        {
-            (ResourcesDef.Parse<Resources>(), ResourcesDef.Parse<ResourcesProxy>()),
-            (ResourcesDef.Parse<DataAnnotations.Resources>(), ResourcesDef.Parse<DataAnnotations.ResourcesProxy>()),
-            (ResourcesDef.Parse<FluentValidation.Resources>(), ResourcesDef.Parse<FluentValidation.ResourcesProxy>())
-        };
+            AssemblyExtensions.GetAllCommandDotNetAssemblies()
+                .SelectMany(a => a.ExportedTypes)
+                .Where(t => t.Name == nameof(ResourcesProxy))
+                .Select(t => (new ResourcesDef(t.BaseType!), new ResourcesDef(t)))
+                .ToArray();
+
+        public static IEnumerable<object[]> ResourceDefsTestData =>
+            ResourcesDefs.Select(t => new[] { t.source, t.proxy });
 
         public ResourceProxyTests(ITestOutputHelper output)
         {
@@ -52,16 +58,42 @@ namespace CommandDotNet.Tests.UnitTests.Localization
                 .Should().Be(resources.Parse_assigning_value_to_argument("a","b"));
         }
 
-        [Fact]
-        public void Proxies_should_contain_all_members_of_base()
+        [Theory]
+        [MemberData(nameof(ResourceDefsTestData))]
+        public void Proxies_should_contain_all_members_of_base(ResourcesDef source, ResourcesDef proxy)
         {
-            var missingMembers = ResourcesDefs
-                .SelectMany(r => r.proxy.IsMissingMembersFrom(r.source))
-                .ToCsv($"  {Environment.NewLine}");
+            var missingMembers = proxy.IsMissingMembersFrom(source).ToCsv();
 
             missingMembers.Should().BeNullOrEmpty(
                 $"... But members are missing from a ResourceProxy. " +
                 $"Run {nameof(ResourceGenerators)}.{nameof(ResourceGenerators.RegenerateProxyClasses)} to add them");
+        }
+
+        [Theory]
+        [MemberData(nameof(ResourceDefsTestData))]
+        public void Assembly_contains_method_to_override_resources(ResourcesDef source, ResourcesDef proxy)
+        {
+            var assembly = source.Type.Assembly;
+            if (assembly.GetName().Name == "CommandDotNet")
+            {
+                // this assembly using AppSetting.Localize
+                return;
+            }
+
+            var hasResourceOverride = assembly.ExportedTypes
+                .Where(t => t.IsCSharpStatic())
+                .SelectMany(t => t.GetMethods(BindingFlags.Static|BindingFlags.Public)
+                    .Where(m =>
+                    {
+                        var parameters = m.GetParameters();
+                        return parameters.Length > 1
+                               && parameters.First().ParameterType == typeof(AppRunner)
+                               && parameters.Any(p => p.ParameterType.Name == nameof(Resources));
+                    }))
+                .Any();
+
+            hasResourceOverride.Should().BeTrue(
+                $"... Assembly should contain method to override localization Resources. {assembly}");
         }
     }
 }

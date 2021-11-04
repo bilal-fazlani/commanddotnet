@@ -57,6 +57,11 @@ namespace CommandDotNet.Execution
             _servicesByType[type] = value;
         }
 
+        public T GetOrCreate<T>() where T : class, new()
+        {
+            return (T)GetOrAdd(typeof(T), () => new T());
+        }
+
         public T GetOrAdd<T>(Func<T> factory) where T : class
         {
             return (T) GetOrAdd(typeof(T), factory);
