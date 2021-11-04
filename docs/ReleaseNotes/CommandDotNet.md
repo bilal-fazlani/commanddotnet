@@ -1,5 +1,11 @@
 # CommandDotNet
 
+## 4.3.0
+
+* add `[Named]` and `[Positional]` attributes which can be used in place of `[Option]` and `[Operand]` respectively.
+* fixed bug in argument prompting where optional operands were being prompted
+* include release notes link in nuget package
+
 ## 4.2.3
 
 * Prompting
