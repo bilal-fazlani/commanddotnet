@@ -3,6 +3,12 @@ using System.Runtime.CompilerServices;
 
 namespace CommandDotNet
 {
+    /// <summary>
+    /// <see cref="Option"/>s are the named arguments of a command.<br/>
+    /// <see cref="Operand"/>s are what the command operates on.<br/>
+    /// <see cref="Option"/>s are are how the command operates on the <see cref="Operand"/>s<br/>
+    /// https://commanddotnet.bilal-fazlani.com/arguments/option-or-operand/
+    /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property)]
     public class OptionAttribute : Attribute, INameAndDescription
     {
