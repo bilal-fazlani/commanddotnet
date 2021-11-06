@@ -117,6 +117,9 @@ theme:
         name: Switch to light mode
   logo: 'img/small-logo.svg'
 
+extra_css:
+  - stylesheets/extra.css  
+
 markdown_extensions:
   - admonition
   - attr_list
