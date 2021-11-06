@@ -10,7 +10,10 @@
     .md-content{display:none}
     .tx-container{
       padding-top:1rem;
-      background:url("img/home-bkg.svg") no-repeat bottom,linear-gradient(to bottom,rgb(0, 147, 125),rgb(5, 141, 215) 99%,#fff 99%)
+      background:url("img/home-bkg.svg") no-repeat bottom,linear-gradient(to bottom,rgb(0, 147, 125),rgb(5, 141, 215) 99%, var(--md-default-bg-color) 99%);
+    }
+    [data-md-color-scheme=slate] .tx-container {
+      background: url(img/home-bkg-slate.svg) no-repeat bottom,linear-gradient(to bottom,rgb(1 104 89),rgb(0 99 153) 99%, var(--md-default-bg-color) 99%);
     }
     .tx-hero{margin:0 .8rem;color:var(--md-primary-bg-color)}
     .tx-hero h1{margin-bottom:1rem;color:currentColor;font-weight:700}
