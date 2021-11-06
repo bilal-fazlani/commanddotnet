@@ -92,22 +92,33 @@ nav:
       - legacy-versions.md
 theme:
   features:
-    - tabs
-    - instant
+    - navigation.tabs
+    - nagivation.instant
+    - navigation.top
   name: 'material'
   custom_dir: docs/overrides
   icon:
     repo: fontawesome/brands/github
   favicon: 'img/favicon.ico'
   palette:
-    scheme: light
-    primary: 'black'
-    accent: 'teal'  
+    - media: "(prefers-color-scheme: light)" 
+      scheme: light
+      primary: 'black'
+      accent: 'teal'  
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: 'black'
+      accent: 'teal'  
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
   logo: 'img/small-logo.svg'
 
-google_analytics:
-  - 'UA-39358317-3'
-  - 'auto'
+extra_css:
+  - stylesheets/extra.css  
 
 markdown_extensions:
   - admonition
@@ -141,6 +152,9 @@ plugins:
 
 # Customization
 extra:
+  analytics:
+    provider: google
+    property: UA-39358317-3
   version: '4'
   legacy: false
   social:
@@ -150,6 +164,3 @@ extra:
       link: 'https://twitter.com/bilal_fazlani'
     - icon: fontawesome/brands/linkedin
       link: 'https://www.linkedin.com/in/bilal-fazlani/'
-
-# extra_css:
-  # - stylesheets/dark.css 

@@ -10,14 +10,17 @@
     .md-content{display:none}
     .tx-container{
       padding-top:1rem;
-      background:url("img/home-bkg.svg") no-repeat bottom,linear-gradient(to bottom,rgb(0, 147, 125),rgb(5, 141, 215) 99%,#fff 99%)
+      background:url("img/home-bkg.svg") no-repeat bottom,linear-gradient(to bottom,rgb(0, 147, 125),rgb(5, 141, 215) 99%, var(--md-default-bg-color) 99%);
+    }
+    [data-md-color-scheme=slate] .tx-container {
+      background: url(img/home-bkg-slate.svg) no-repeat bottom,linear-gradient(to bottom,rgb(1 104 89),rgb(0 99 153) 99%, var(--md-default-bg-color) 99%);
     }
     .tx-hero{margin:0 .8rem;color:var(--md-primary-bg-color)}
     .tx-hero h1{margin-bottom:1rem;color:currentColor;font-weight:700}
     .tx-hero__content{padding-bottom:6rem}
     .tx-hero .md-button{margin-top:.5rem;margin-right:.5rem;color:var(--md-primary-bg-color)}
     .tx-hero .md-button--primary{background-color:var(--md-primary-bg-color);color:var(--md-primary-fg-color);border-color:var(--md-primary-bg-color)}
-    .tx-hero .md-button:focus,.tx-hero .md-button:hover{background-color: rgb(7, 46, 79) ;color:var(--md-default-bg-color);border-color:rgb(7, 46, 79)}
+    .tx-hero .md-button:focus,.tx-hero .md-button:hover{background-color: var(--md-accent-fg-color) ;color:var(--md-default-bg-color);border-color:var(--md-accent-fg-color)}
     .tx-hero__image {padding:1rem; opacity: 0.85;}
     @media screen and (max-width:30em)
     {
