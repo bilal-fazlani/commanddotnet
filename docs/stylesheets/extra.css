@@ -2,11 +2,32 @@
   --md-typeset-a-color: #3c8aff !important; 
 }
 
+#features-page {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  /* gap: 2em; */
+}
+
 @media screen and (min-width:60em) {
   #features-page {
-    display: grid;
-    grid-column-gap: 0.5em;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: repeat(2, 1fr);
   }
+}
+
+
+.feature {
+  padding: 1em;
+  background-color: rgb(233, 233, 233);
+  border-radius: 1em;
+  margin:2em 1em;
+}
+
+[data-md-color-scheme=slate] .feature {
+  background-color: rgb(163 163 163 / 5%);
+}
+
+.feature > h2 {
+  margin: 0;
+  text-align: center;
 }
 
