@@ -5,21 +5,23 @@
 #features-page {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
-  /* gap: 2em; */
 }
-
-@media screen and (min-width:60em) {
-  #features-page {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 
 .feature {
   padding: 1em;
   background-color: rgb(233, 233, 233);
   border-radius: 1em;
-  margin:2em 1em;
+  margin: 1em 0;
+}
+
+@media (min-width:60em) {
+  #features-page {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .feature {
+    margin: 2em 1em;
+  }
 }
 
 [data-md-color-scheme=slate] .feature {
