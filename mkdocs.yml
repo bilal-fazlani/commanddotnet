@@ -75,9 +75,7 @@ nav:
         - TipsFaqs/nullable-reference-types.md
         - TipsFaqs/developing-middleware.md
     - Features: 
-      - features.md
-    - Features New: 
-      - features-new.md  
+      - features.md  
     - Release Notes:
       - ReleaseNotes/CommandDotNet.md
       - ReleaseNotes/CommandDotNet.DataAnnotations.md
