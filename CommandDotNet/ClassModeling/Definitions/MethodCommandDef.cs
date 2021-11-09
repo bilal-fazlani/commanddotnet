@@ -26,7 +26,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             Name = method.BuildName(CommandNodeType.Command, appConfig);
             CommandHostClassType = commandHostClassType;
-            InvokeMethodDef = new MethodDef(method, appConfig);
+            InvokeMethodDef = new MethodDef(method, appConfig, false);
         }
 
         public override string ToString()

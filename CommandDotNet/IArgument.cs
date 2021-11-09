@@ -13,6 +13,12 @@ namespace CommandDotNet
         /// <summary>The <see cref="IArgumentArity"/> for this argument, describing how many values are allowed.</summary>
         IArgumentArity Arity { get; set; }
 
+        /// <summary>When true, the argument is optional. an be true for Nullable and NRT types and optional parameters</summary>
+        bool IsOptional { get; set; }
+
+        /// <summary>The <see cref="BooleanMode"/> for this argument. This property is only set for boolean arguments.</summary>
+        BooleanMode? BooleanMode { get; set; }
+
         /// <summary>The default value for this argument</summary>
         ArgumentDefault? Default { get; set; }
 

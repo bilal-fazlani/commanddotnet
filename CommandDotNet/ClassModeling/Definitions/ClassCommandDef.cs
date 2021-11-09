@@ -63,7 +63,8 @@ namespace CommandDotNet.ClassModeling.Definitions
             _subCommands = new Lazy<List<ICommandDef>>(() => GetSubCommands(localCommands));
         }
 
-        private (IMethodDef? interceptorMethod, ICommandDef? defaultCommand, List<ICommandDef> localCommands) ParseMethods(AppConfig appConfig)
+        private (IMethodDef? interceptorMethod, ICommandDef? defaultCommand, List<ICommandDef> localCommands) 
+            ParseMethods(AppConfig appConfig)
         {
             MethodInfo? interceptorMethodInfo = null;
             MethodInfo? defaultCommandMethodInfo = null;
@@ -109,7 +110,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             var interceptorMethod = interceptorMethodInfo == null 
                 ? null
-                : new MethodDef(interceptorMethodInfo, appConfig);
+                : new MethodDef(interceptorMethodInfo, appConfig, true);
 
             var defaultCommand = defaultCommandMethodInfo == null
                 ? null

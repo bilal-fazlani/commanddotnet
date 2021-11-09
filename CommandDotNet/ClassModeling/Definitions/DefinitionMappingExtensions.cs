@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using CommandDotNet.Builders;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
@@ -33,12 +34,10 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             var commandBuilder = new CommandBuilder(command);
 
-            commandDef.InvokeMethodDef?.ArgumentDefs
-                .Select(a => a.ToArgument(commandContext.AppConfig, false))
+            commandDef.InvokeMethodDef?.Arguments
                 .ForEach(commandBuilder.AddArgument);
 
-            commandDef.InterceptorMethodDef?.ArgumentDefs
-                .Select(a => a.ToArgument(commandContext.AppConfig, true))
+            commandDef.InterceptorMethodDef?.Arguments
                 .ForEach(commandBuilder.AddArgument);
 
             commandDef.SubCommands
@@ -50,17 +49,24 @@ namespace CommandDotNet.ClassModeling.Definitions
             return commandBuilder;
         }
 
-        private static IArgument ToArgument(this IArgumentDef argumentDef, AppConfig appConfig, bool isInterceptorOption)
+        internal static IArgument ToArgument(this IArgumentDef argumentDef, AppConfig appConfig, bool isInterceptorOption)
         {
             var underlyingType = argumentDef.Type.GetUnderlyingType();
 
             var argument = BuildArgument(
                 argumentDef,
-                appConfig,
                 new TypeInfo(argumentDef.Type, underlyingType), 
                 isInterceptorOption);
-            argumentDef.Argument = argument;
+            
             argument.Services.AddOrUpdate(argumentDef);
+            if (argumentDef.CustomAttributes is ParameterInfo param)
+            {
+                argument.Services.Add(param);
+            }
+            else if (argumentDef.CustomAttributes is PropertyInfo prop)
+            {
+                argument.Services.Add(prop);
+            }
 
             var typeDescriptor = appConfig.AppSettings.ArgumentTypeDescriptors.GetDescriptorOrThrow(underlyingType);
             argument.TypeInfo.DisplayName = typeDescriptor.GetDisplayName(argument);
@@ -72,13 +78,10 @@ namespace CommandDotNet.ClassModeling.Definitions
             return argument;
         }
 
-        private static IArgument BuildArgument(IArgumentDef argumentDef,
-            AppConfig appConfig,
-            TypeInfo typeInfo,
-            bool isInterceptorOption)
+        private static IArgument BuildArgument(IArgumentDef argumentDef, TypeInfo typeInfo, bool isInterceptorOption)
         {
             var argumentDefault = argumentDef.HasDefaultValue && !argumentDef.DefaultValue.IsNullValue()
-                ? new ArgumentDefault($"app.{argumentDef.ArgumentDefType}", argumentDef.SourcePath, argumentDef.DefaultValue)
+                ? new ArgumentDefault($"app.{argumentDef.ArgumentDefType}", argumentDef.SourcePath, argumentDef.DefaultValue!)
                 : null;
 
             if (argumentDef.CommandNodeType == CommandNodeType.Operand)
@@ -87,7 +90,9 @@ namespace CommandDotNet.ClassModeling.Definitions
                 return new Operand(
                     argumentDef.Name,
                     typeInfo,
-                    ArgumentArity.Default(argumentDef.Type, argumentDef.HasDefaultValue, BooleanMode.Explicit), 
+                    argumentDef.Arity, 
+                    argumentDef.IsOptional,
+                    argumentDef.BooleanMode,
                     argumentDef.SourcePath,
                     customAttributes: argumentDef.CustomAttributes,
                     argumentDef.ValueProxy)
@@ -100,17 +105,16 @@ namespace CommandDotNet.ClassModeling.Definitions
             if (argumentDef.CommandNodeType == CommandNodeType.Option)
             {
                 var optionAttr = argumentDef.GetCustomAttribute<OptionAttribute>();
-                var booleanMode = GetOptionBooleanMode(argumentDef, appConfig.AppSettings.BooleanMode, optionAttr);
-                var argumentArity = ArgumentArity.Default(argumentDef.Type, argumentDef.HasDefaultValue, booleanMode);
-
                 var assignOnlyToExecutableSubcommands = optionAttr?.AssignToExecutableSubcommands ?? false;
                 isInterceptorOption = isInterceptorOption && !assignOnlyToExecutableSubcommands;
                 
                 return new Option(
                     ParseLongName(argumentDef, optionAttr),
                     ParseShortName(argumentDef, optionAttr?.ShortName),
-                    typeInfo, 
-                    argumentArity, 
+                    typeInfo,
+                    argumentDef.Arity,
+                    argumentDef.IsOptional,
+                    argumentDef.BooleanMode,
                     definitionSource: argumentDef.SourcePath,
                     customAttributes: argumentDef.CustomAttributes,
                     isInterceptorOption: isInterceptorOption,
@@ -157,9 +161,21 @@ namespace CommandDotNet.ClassModeling.Definitions
             return shortNameAsString.Single();
         }
 
-        private static BooleanMode GetOptionBooleanMode(
-            IArgumentDef argumentDef, BooleanMode defaultBooleanMode, OptionAttribute? optionAttr)
+        internal static BooleanMode? GetBooleanMode(
+            this IArgumentDef argumentDef, BooleanMode defaultBooleanMode)
         {
+            if (argumentDef.Type != typeof(bool) && argumentDef.Type != typeof(bool?))
+            {
+                return null;
+            }
+
+            if (argumentDef.CommandNodeType == CommandNodeType.Operand)
+            {
+                return BooleanMode.Explicit;
+            }
+
+            OptionAttribute? optionAttr = argumentDef.GetCustomAttribute<OptionAttribute>();
+            ;
             if (optionAttr?.BooleanModeAsNullable == null)
                 return defaultBooleanMode;
 

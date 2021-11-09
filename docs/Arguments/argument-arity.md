@@ -12,7 +12,7 @@ When...
 
   * _minimum_ == 0, no values are required 
       * this applies to flags and [optional arguments](#optional-arguments)
-  *  _maximum_ > 1, multiple values can be provided
+  * _maximum_ > 1, multiple values can be provided
   * _maximum_ == int.MaxValue, an unlimited number of values can be provided
 
 !!! note
@@ -60,7 +60,8 @@ The static method `ArgumentArity.Default(type, ...)` will return one of these st
 
 An argument is considered optional when defined as...
 
-* a Nullable<T> type  eg. bool?, Guid?
+* a Nullable<T> type: bool?, Guid?
+* a [Nullable refernce type](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/nullable-reference-types) (NRT): object?
 * an optional parameter
 * an `IArgumentModel` property with a default value where the default value != default(T)
     * the value must be set in the ctor or property assignment. This condition is evaluated immediately after instantiation.
@@ -78,7 +79,7 @@ Consider there are two categories of default values
 1. Default values specified by the user to simplify use of the application. For example, pulling default values from [Environment Variables and AppSettings](../ArgumentValues/default-values-from-config.md). 
     * The application requires a value but the user does not have to enter it because it is defaulted by a middleware component.
 
-Any middleware updating the default values according to the first category should also update the arity. 
+Any middleware updating the default values from statically defined sources should also update the arity. 
 Use `argument.Arity = ArgumentArity.Default(argument)` to calculate a new arity for the argument.
 
 ## Summary by definition type

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using CommandDotNet.Prompts;
 using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Prompts;
@@ -167,44 +166,6 @@ simple
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe(
                             new List<string>{"something", "simple", "'or not'", "\"so simple\""}),
-                    }
-                });
-        }
-
-        [Fact]
-        public void WhenInterceptorOptionMissing_Prompts()
-        {
-            new AppRunner<HierApp>()
-                .UseArgumentPrompter()
-                .Verify(new Scenario
-                {
-                    When =
-                    {
-                        Args = $"{nameof(HierApp.Do)} --inherited1 2",
-                        OnPrompt = Respond.WithText("1", prompt => prompt.StartsWith("intercept1"))
-                    },
-                    Then =
-                    {
-                        AssertContext = ctx => ctx.ParamValuesShouldBe<HierApp>(1, 2)
-                    }
-                });
-        }
-
-        [Fact]
-        public void WhenInheritedOptionMissing_Prompts()
-        {
-            new AppRunner<HierApp>()
-                .UseArgumentPrompter()
-                .Verify(new Scenario
-                {
-                    When =
-                    {
-                        Args = $" --intercept1 1 {nameof(HierApp.Do)}",
-                        OnPrompt = Respond.WithText("2", prompt => prompt.StartsWith("inherited1"))
-                    },
-                    Then =
-                    {
-                        AssertContext = ctx => ctx.ParamValuesShouldBe<HierApp>(1, 2)
                     }
                 });
         }
@@ -399,20 +360,6 @@ lala (Text): fishies
             }
 
             public void Bool(bool operand1)
-            {
-            }
-        }
-
-        class HierApp
-        {
-            public Task<int> Intercept(InterceptorExecutionDelegate next, 
-                int intercept1, 
-                [Option(AssignToExecutableSubcommands = true)] int inherited1)
-            {
-                return next();
-            }
-
-            public void Do()
             {
             }
         }
