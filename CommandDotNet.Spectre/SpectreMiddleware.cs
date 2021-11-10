@@ -1,4 +1,5 @@
 ﻿using System;
+using CommandDotNet.Execution;
 using CommandDotNet.Prompts;
 using CommandDotNet.Rendering;
 using Spectre.Console;
@@ -40,11 +41,23 @@ namespace CommandDotNet.Spectre
             {
                 ansiConsole ??= AnsiConsole.Console;
 
-                c.Console = ansiConsole as IConsole ?? new AnsiConsoleForwardingConsole(ansiConsole);
+                var fc = new AnsiConsoleForwardingConsole(ansiConsole);
+
+                c.Console = fc;
                 c.UseParameterResolver(ctx => ansiConsole);
                 c.Services.Add(ansiConsole);
 
                 EnsureResourcesAreSet(appRunner, c);
+
+                c.UseMiddleware((ctx, next) =>
+                {
+                    // store original token to support REPL sessions
+                    var orig = fc.CancellationToken;
+                    fc.CancellationToken = ctx.CancellationToken;
+                    var result = next(ctx);
+                    fc.CancellationToken = orig;
+                    return result;
+                }, MiddlewareSteps.CancellationHandler + 1);
             });
         }
 

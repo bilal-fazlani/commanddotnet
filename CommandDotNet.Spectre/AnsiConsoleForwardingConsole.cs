@@ -20,6 +20,8 @@ namespace CommandDotNet.Spectre
             In = StandardStreamReader.Create(Console.In);
         }
 
+        public CancellationToken CancellationToken { get; set; } = CancellationToken.None;
+
         #region Implementation of IStandardOut
 
         public IStandardStreamWriter Out { get; }
@@ -46,7 +48,7 @@ namespace CommandDotNet.Spectre
 
         public ConsoleKeyInfo ReadKey(bool intercept = false)
         {
-            var consoleKeyInfo = _ansiConsole.Input.ReadKeyAsync(intercept, CancellationToken.None).Result;
+            var consoleKeyInfo = _ansiConsole.Input.ReadKeyAsync(intercept, CancellationToken).Result;
             return (ConsoleKeyInfo)consoleKeyInfo;
         }
 
