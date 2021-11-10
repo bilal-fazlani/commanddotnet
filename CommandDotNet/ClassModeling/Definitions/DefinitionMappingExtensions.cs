@@ -90,8 +90,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 return new Operand(
                     argumentDef.Name,
                     typeInfo,
-                    argumentDef.Arity, 
-                    argumentDef.IsOptional,
+                    argumentDef.Arity,
                     argumentDef.BooleanMode,
                     argumentDef.SourcePath,
                     customAttributes: argumentDef.CustomAttributes,
@@ -113,7 +112,6 @@ namespace CommandDotNet.ClassModeling.Definitions
                     ParseShortName(argumentDef, optionAttr?.ShortName),
                     typeInfo,
                     argumentDef.Arity,
-                    argumentDef.IsOptional,
                     argumentDef.BooleanMode,
                     definitionSource: argumentDef.SourcePath,
                     customAttributes: argumentDef.CustomAttributes,

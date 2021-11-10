@@ -21,7 +21,6 @@ namespace CommandDotNet
             string name,
             TypeInfo typeInfo,
             IArgumentArity arity,
-            bool isOptional = false,
             BooleanMode? booleanMode = null,
             string? definitionSource = null,
             ICustomAttributeProvider? customAttributes = null,
@@ -31,7 +30,6 @@ namespace CommandDotNet
             Name = name ?? throw new ArgumentNullException(nameof(name));
             TypeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
             Arity = arity ?? throw new ArgumentNullException(nameof(arity));
-            IsOptional = isOptional;
             BooleanMode = booleanMode;
             DefinitionSource = definitionSource;
             Aliases = new[] {name};
@@ -46,8 +44,7 @@ namespace CommandDotNet
 
         /// <summary>The <see cref="IArgumentArity"/> for this argument, describing how many values are allowed.</summary>
         public IArgumentArity Arity { get; set; }
-
-        public bool IsOptional { get; set; }
+        
         public BooleanMode? BooleanMode { get; set; }
 
         /// <summary>The default value for this argument</summary>

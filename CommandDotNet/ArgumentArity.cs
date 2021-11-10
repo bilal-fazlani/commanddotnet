@@ -44,20 +44,23 @@ namespace CommandDotNet
 
         public static IArgumentArity OneOrMore => new ArgumentArity(1, Unlimited);
 
-        internal static IArgumentArity Default(IArgumentDef argument)
+        internal static IArgumentArity Default(IArgumentDef argumentDef)
         {
-            var type = argument.Type;
-            var defaultValue = argument.DefaultValue;
-            var hasDefaultValue = !defaultValue.IsNullValue() && !defaultValue.IsDefaultFor(type);
-            return Default(type, argument.IsOptional, hasDefaultValue, argument.BooleanMode);
+            var type = argumentDef.Type;
+            var defaultValue = argumentDef.DefaultValue;
+            var hasDefaultValue = !defaultValue.IsNullValue() && !defaultValue!.IsDefaultFor(type);
+            return Default(type, argumentDef.IsOptional, hasDefaultValue, argumentDef.BooleanMode);
         }
 
         public static IArgumentArity Default(IArgument argument)
         {
             var type = argument.TypeInfo.Type;
             var defaultValue = argument.Default?.Value;
-            var hasDefaultValue = !defaultValue.IsNullValue() && !defaultValue.IsDefaultFor(type);
-            return Default(type, argument.IsOptional, hasDefaultValue, argument.BooleanMode);
+            var hasDefaultValue = !defaultValue.IsNullValue() && !defaultValue!.IsDefaultFor(type);
+            var isOptional = argument.Services.GetOrDefault<IArgumentDef>()?.IsOptional 
+                             ?? argument.Arity?.AllowsNone()
+                             ?? false;
+            return Default(type, isOptional, hasDefaultValue, argument.BooleanMode);
         }
         
         [Obsolete("Use other Default method instead. This method does not account for NRTs.")]

@@ -57,7 +57,7 @@ namespace CommandDotNet.Tests.UnitTests
         [InlineData(1, int.MaxValue, false)]
         public void AllowsNone(int min, int max, bool expected)
         {
-            new ArgumentArity(min, max).AllowsNone().Should().Be(expected);
+            new ArgumentArity(min, max).RequiresNone().Should().Be(expected);
         }
     }
 }

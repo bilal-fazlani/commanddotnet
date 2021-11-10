@@ -15,7 +15,7 @@ namespace CommandDotNet.TypeDescriptors
         
         public string GetDisplayName(IArgument argument)
         {
-            return argument.Arity.AllowsNone()
+            return argument.Arity.RequiresNone()
                 ? ""
                 : Resources.A.Type_Boolean;
         }
@@ -27,7 +27,7 @@ namespace CommandDotNet.TypeDescriptors
 
         public IEnumerable<string> GetAllowedValues(IArgument argument)
         {
-            return argument.Arity.AllowsNone()
+            return argument.Arity.RequiresNone()
                 ? Enumerable.Empty<string>()
                 : new List<string> { "true", "false" };
         }
