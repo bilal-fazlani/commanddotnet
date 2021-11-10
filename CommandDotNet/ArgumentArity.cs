@@ -62,20 +62,11 @@ namespace CommandDotNet
                              ?? false;
             return Default(type, isOptional, hasDefaultValue, argument.BooleanMode);
         }
-        
-        [Obsolete("Use other Default method instead. This method does not account for NRTs.")]
-        public static IArgumentArity Default(Type type, bool hasDefaultValue, BooleanMode booleanMode) =>
-            Default(type, false, hasDefaultValue, booleanMode);
 
         /// <summary>Returns the default IArgumentArity for the given type</summary>
         /// <remarks>internal for tests</remarks>
         internal static IArgumentArity Default(Type type, bool isOptional, bool hasDefaultValue, BooleanMode? booleanMode)
         {
-            if (type == typeof(bool) && booleanMode == BooleanMode.Unknown)
-            {
-                throw new ArgumentException($"{nameof(booleanMode)} cannot be {nameof(BooleanMode.Unknown)}");
-            }
-
             bool isRequired = !(isOptional || hasDefaultValue);
 
             if (type != typeof(string) && type.IsEnumerable())

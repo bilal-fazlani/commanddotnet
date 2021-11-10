@@ -154,27 +154,6 @@ namespace CommandDotNet
                 argumentModelResolveStrategy, commandClassResolveStrategy);
         }
 
-        [Obsolete("Use UseIPrompter and UseMissingArgumentPrompter methods instead")]
-        public static AppRunner UsePrompting(
-            this AppRunner appRunner,
-            Func<CommandContext, IPrompter>? prompterOverride = null,
-            bool promptForMissingArguments = true,
-            Func<CommandContext, IArgument, string>? argumentPromptTextOverride = null,
-            Predicate<IArgument>? argumentFilter = null)
-        {
-
-            ValuePromptMiddleware.UseIPrompter(appRunner, prompterOverride);
-            if (promptForMissingArguments)
-            {
-                ValuePromptMiddleware.UseArgumentPrompter(
-                    appRunner,
-                    (context, prompter) => new ArgumentPrompter(prompter, argumentPromptTextOverride),
-                    argumentFilter);
-            }
-
-            return appRunner;
-        }
-
         /// <summary>
         /// Adds support for prompting. <see cref="IPrompter"/> parameters can be used in interceptor and command methods.
         /// <see cref="IPrompter"/> simplifies prompting and is supported by the TestTools nuget package.

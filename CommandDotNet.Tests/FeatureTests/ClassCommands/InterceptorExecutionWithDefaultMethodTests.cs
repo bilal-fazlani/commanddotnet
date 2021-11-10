@@ -216,7 +216,7 @@ Options:
                 return next();
             }
 
-            [DefaultMethod]
+            [DefaultCommand]
             public void Default(int defaultArg)
             {
             }
@@ -242,7 +242,7 @@ Options:
                     : returnCode;
             }
 
-            [DefaultMethod]
+            [DefaultCommand]
             public void Default(int defaultArg)
             {
             }

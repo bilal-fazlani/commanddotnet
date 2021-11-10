@@ -1,8 +1,10 @@
 # CommandDotNet.TestTools
 
-## 3.1.3
+## 4.0.0
 
 TrackingInvocation implements new IInvocation.IsInterceptor property
+
+### Removed Obsoleted 
 
 ## 3.1.2
 

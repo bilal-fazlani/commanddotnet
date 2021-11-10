@@ -95,7 +95,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
         public class ExceptionApp
         {
-            [DefaultMethod]
+            [DefaultCommand]
             public void Default()
             {
                 throw new Exception(nameof(Default));
