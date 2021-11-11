@@ -35,6 +35,21 @@ namespace CommandDotNet.Diagnostics
 
             var writer = commandContext.Console.Out;
 
+            void WriteLine(string? line)
+            {
+                if (writer == null)
+                {
+                    throw new ArgumentNullException(nameof(writer));
+                }
+
+                // avoid extra new lines
+                writer.Write(line);
+                if (!line?.EndsWith(Environment.NewLine) ?? false)
+                {
+                    writer.Write(Environment.NewLine);
+                }
+            }
+
             try
             {
                 // ParseReportByArg is run within this pipeline
@@ -43,26 +58,26 @@ namespace CommandDotNet.Diagnostics
                 {
                     // in case ParseReportByArg wasn't run due to parsing errors,
                     // output this the transformations as a temporary aid
-                    writer.WriteLine(null);
+                    writer.WriteLine();
                     writer.WriteLine(commandContext.ParseResult!.HelpWasRequested() 
                         ? "Help requested. Only token transformations are available."
                         : "Unable to map tokens to arguments. Falling back to token transformations.");
-                    writer.WriteLine(parseContext.Transformations.ToString(), avoidExtraNewLine: true);
+                    WriteLine(parseContext.Transformations.ToString());
                 }
                 else if (parseContext.IncludeTokenization || parseContext.IncludeRawCommandLine)
                 {
                     if (parseContext.IncludeTokenization)
                     {
-                        writer.WriteLine(parseContext.Transformations.ToString(), avoidExtraNewLine: true);
+                        WriteLine(parseContext.Transformations.ToString());
                     }
                     if (parseContext.IncludeRawCommandLine)
                     {
-                        writer.WriteLine(Environment.CommandLine, avoidExtraNewLine: true);
+                        WriteLine(Environment.CommandLine);
                     }
                 }
                 else
                 {
-                    writer.WriteLine(null);
+                    writer.WriteLine();
                     writer.WriteLine($"Parse usage: [parse:{ParseContext.IncludeTransformationsArgName}:{ParseContext.IncludeRawCommandLineArgName}]" +
                                      " to include token transformations.");
                     writer.WriteLine($" '{ParseContext.IncludeTransformationsArgName}'" +
@@ -77,9 +92,9 @@ namespace CommandDotNet.Diagnostics
             {
                 // in case ParseReportByArg wasn't run due to parsing errors,
                 // output this the transformations as a temporary aid
-                writer.WriteLine(null);
+                writer.WriteLine();
                 writer.WriteLine("Unable to map tokens to arguments. Falling back to token transformations.");
-                writer.WriteLine(parseContext.Transformations.ToString(), avoidExtraNewLine: true);
+                WriteLine(parseContext.Transformations.ToString());
                 throw;
             }
         }

@@ -1,5 +1,9 @@
 # CommandDotNet.Spectre
 
+## 2.0.0
+
+AnsiConsoleForwardingConsole updated in response to changes in IConsole
+
 ## 1.0.1
 
 Localize argument prompt instructions

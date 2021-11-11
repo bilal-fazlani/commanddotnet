@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using CommandDotNet.Rendering;
+using System.IO;
 using CommandDotNet.TestTools;
 using Spectre.Console;
 using Spectre.Console.Rendering;
@@ -10,17 +10,15 @@ using TestConsole = CommandDotNet.TestTools.TestConsole;
 
 namespace CommandDotNet.Spectre.Testing
 {
-    public class AnsiTestConsole : ITestConsole, IAnsiConsole
+    public class AnsiTestConsole : TestConsole, IAnsiConsole
     {
         internal SpectreTestConsole SpectreTestConsole { get; }
         private readonly AnsiConsoleForwardingConsole _forwardingConsole;
-        private readonly TestConsole _testConsole;
 
         public AnsiTestConsole()
         {
             SpectreTestConsole = new SpectreTestConsole();
             _forwardingConsole = new AnsiConsoleForwardingConsole(SpectreTestConsole);
-            _testConsole = new TestConsole();
         }
 
         #region Implementation of ITestConsole
@@ -28,28 +26,13 @@ namespace CommandDotNet.Spectre.Testing
         // the SpectreTestConsole converts line endings to \n which can break assertions against literal strings in tests.
         // convert them back to Environment.NewLine
 
-        public string AllText() => SpectreTestConsole.Output.Replace("\n", Environment.NewLine);
+        public override string AllText() => SpectreTestConsole.Output.Replace("\n", Environment.NewLine);
 
-        public string OutText() => SpectreTestConsole.Output.Replace("\n", Environment.NewLine);
+        public override string OutText() => SpectreTestConsole.Output.Replace("\n", Environment.NewLine);
 
-        public string ErrorText() => SpectreTestConsole.Output.Replace("\n", Environment.NewLine);
-
-        public ITestConsole Mock(IEnumerable<string> pipedInput, bool overwrite = false)
-        {
-            _testConsole.Mock(pipedInput, overwrite);
-
-            // Spectre does not handle piped input
-
-            return this;
-        }
-
-        public ITestConsole Mock(Func<ITestConsole, string?> onReadLine, bool overwrite = false)
-        {
-            _testConsole.Mock(onReadLine, overwrite);
-            return this;
-        }
-
-        public ITestConsole Mock(Func<ITestConsole, ConsoleKeyInfo>? onReadKey, bool overwrite = false)
+        public override string ErrorText() => SpectreTestConsole.Output.Replace("\n", Environment.NewLine);
+        
+        public override ITestConsole Mock(Func<ITestConsole, ConsoleKeyInfo>? onReadKey, bool overwrite = false)
         {
             throw new NotSupportedException(
                 $"When using the Spectre {nameof(AnsiTestConsole)}, " +
@@ -91,24 +74,16 @@ namespace CommandDotNet.Spectre.Testing
 
         #region AnsiConsoleForwardingConsole members
 
-        public IStandardStreamWriter Out => _forwardingConsole.Out;
+        public override TextWriter Out => _forwardingConsole.Out;
 
-        public bool IsOutputRedirected => _testConsole.IsOutputRedirected;
+        public override TextWriter Error => _forwardingConsole.Error;
 
-        public IStandardStreamWriter Error => _forwardingConsole.Error;
-
-        public bool IsErrorRedirected => _testConsole.IsErrorRedirected;
-
-        public IStandardStreamReader In => _testConsole.In;
-
-        public bool IsInputRedirected => _testConsole.IsInputRedirected;
-
-        public ConsoleKeyInfo ReadKey(bool intercept = false)
+        public override ConsoleKeyInfo ReadKey(bool intercept = false)
         {
             return _forwardingConsole.ReadKey(intercept);
         }
 
-        public bool TreatControlCAsInput
+        public override bool TreatControlCAsInput
         {
             get => _forwardingConsole.TreatControlCAsInput;
             set => _forwardingConsole.TreatControlCAsInput = value;
