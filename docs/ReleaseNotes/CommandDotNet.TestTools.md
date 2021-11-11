@@ -5,7 +5,7 @@
 TrackingInvocation implements new IInvocation.IsInterceptor property
 
 TestConsole updated to support new IConsole members. In, Out, and Error now implement TextReader and TextWriter.
-SystemConsole and TestConsole can be inherited for simpler adaptation resiliant to breakimg changes in IConsole if new members are added
+SystemConsole and TestConsole can be inherited for simpler adaptation resiliant to breakimg changes in IConsole if new members are added.
 
 ### Removed Obsoleted 
 
