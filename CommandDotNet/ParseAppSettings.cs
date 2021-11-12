@@ -10,12 +10,10 @@ namespace CommandDotNet
         /// When true, unexpected arguments will be ignored and added to <see cref="ParseResult.RemainingOperands"/><br/>
         /// </summary>
         public bool IgnoreUnexpectedOperands { get; set; }
+        
+        public bool AllowBackslashOptionPrefix { get; set; }
 
-        // TEST: test this and make public
-        internal bool AllowBackslashOptionPrefix { get; set; }
-
-        // TEST: test this and make public
-        internal bool AllowSingleHyphenForLongNames { get; set; }
+        public bool AllowSingleHyphenForLongNames { get; set; }
 
         public override string ToString()
         {

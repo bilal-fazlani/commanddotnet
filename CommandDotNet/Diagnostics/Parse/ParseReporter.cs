@@ -29,11 +29,11 @@ namespace CommandDotNet.Diagnostics.Parse
 
             if (includeRawCommandLine)
             {
-                writeln(Resources.A.Parse_Raw_command_line(Environment.CommandLine));
+                writeln(Resources.A.ParseReport_Raw_command_line(Environment.CommandLine));
             }
             
             var path = command.GetPath();
-            writeln($"{indent}{Resources.A.Common_command_lc}: {(path.IsNullOrWhitespace() ? $"({Resources.A.Parse_root_lc})" : path)}");
+            writeln($"{indent}{Resources.A.Common_command_lc}: {(path.IsNullOrWhitespace() ? $"({Resources.A.ParseReport_root_lc})" : path)}");
 
             if (command.Operands.Any())
             {

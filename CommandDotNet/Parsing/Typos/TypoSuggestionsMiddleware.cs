@@ -72,7 +72,7 @@ namespace CommandDotNet.Parsing.Typos
             //       add an option to allow/prevent duplicates for list arguments?
             return TrySuggest(ctx, notAllowedValue.Command, notAllowedValue.Token.Value,
                 notAllowedValue.Argument.AllowedValues.ToCollection(),
-                Resources.A.Parse_is_not_a_valid(notAllowedValue.Argument.TypeInfo.DisplayName!), 
+                Resources.A.Parse_Is_not_a_valid(notAllowedValue.Argument.TypeInfo.DisplayName!), 
                 null);
         }
 
@@ -99,9 +99,9 @@ namespace CommandDotNet.Parsing.Typos
             
             return optionPrefix is null
                 ? TrySuggest(ctx, command, token.Value,
-                    GetSubcommandNames(), Resources.A.Parse_is_not_a_valid(Resources.A.Common_command_lc), null)
+                    GetSubcommandNames(), Resources.A.Parse_Is_not_a_valid(Resources.A.Common_command_lc), null)
                 : TrySuggest(ctx, command, token.Value,
-                    GetOptionNames(), Resources.A.Parse_is_not_a_valid(Resources.A.Common_option_lc), optionPrefix);
+                    GetOptionNames(), Resources.A.Parse_Is_not_a_valid(Resources.A.Common_option_lc), optionPrefix);
         }
 
         private static bool TrySuggest(CommandContext ctx,

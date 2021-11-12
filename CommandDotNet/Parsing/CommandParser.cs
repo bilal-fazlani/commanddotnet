@@ -145,12 +145,9 @@ namespace CommandDotNet.Parsing
             {
                 if (node is Command cmd)
                 {
-                    // TODO: localize
                     var suggestion = parseContext.CommandContext.Original.Args.ToCsv(" ").Replace(token.RawValue, optionName);
-                    parseContext.ParserError = new UnrecognizedArgumentParseError(parseContext.Command, token, optionPrefix, 
-                        $"Unrecognized option '{token.RawValue}'. {Environment.NewLine}" +
-                        $"If you intended to use the '{optionName}' command, try again with the following {Environment.NewLine}{Environment.NewLine}" +
-                        suggestion);
+                    parseContext.ParserError = new UnrecognizedArgumentParseError(parseContext.Command, token, optionPrefix,
+                        Resources.A.Parse_Intended_command_instead_of_option(token.RawValue, optionName, suggestion));
                     return true;
                 }
             }
@@ -174,8 +171,7 @@ namespace CommandDotNet.Parsing
                 parseContext.ParserError = new UnrecognizedOptionParseError(command, optionToken, optionPrefix);
                 return true;
             }
-
-            // TEST: invalid option where first characters could be short name but not all are
+            
             if (optionPrefix == "-")
             {
                 if (double.TryParse(optionName, out _))
@@ -231,10 +227,8 @@ namespace CommandDotNet.Parsing
                 }
                 else if (!option!.IsFlag)
                 {
-                    // TODO: localize
-                    // TEST: all options must be flags except last 
                     parseContext.ParserError = new ExpectedFlagParseError(command, token, co.shortName, co.option, 
-                        $"'{co.shortName}' expects a value so it must be the last option specified in '{token.Value}'");
+                        Resources.A.Parse_Clubbed_options_with_values_must_be_last_option(co.shortName, token.Value));
                     return true;
                 }
 
@@ -293,10 +287,8 @@ namespace CommandDotNet.Parsing
             }
             else
             {
-                // TODO: localize
-                // use the term "argument" for messages displayed to users
                 parseContext.ParserError = new UnrecognizedArgumentParseError(parseContext.Command, token, null,
-                    $"Unrecognized command or argument '{token.RawValue}'");
+                    Resources.A.Parse_Unrecognized_command_or_argument(token.RawValue));
             }
         }
 
@@ -338,20 +330,17 @@ namespace CommandDotNet.Parsing
                 optionPrefix = "--";
                 return true;
             }
-
-            // TODO: AppSettings to allow this prefix for long names?
-            // TEST: - prefix for long names
+            
             if (arg.StartsWith("-"))
             {
                 optionPrefix = "-";
                 return true;
             }
 
-            // TODO: add AppHelpSettings{LongNamePrefix,ShortNamePrefix}
-            //       Q: use callbacks so can be set based on OS and ENV?
-            //       A: No, because it creates inconsistent user experience across machines
-            // TODO: AppSettings to allow this prefix?
-            // TEST: / prefix 
+            // Decision: add AppHelpSettings{LongNamePrefix,ShortNamePrefix}?
+            //      A: No, complicates the parser for little to no value
+            // Decision: use callbacks so can be set based on OS and ENV?
+            //      A: No, because it creates inconsistent user experience across machines
             if (parseContext.ParseSettings.AllowBackslashOptionPrefix && arg.StartsWith("/"))
             {
                 optionPrefix = "/";

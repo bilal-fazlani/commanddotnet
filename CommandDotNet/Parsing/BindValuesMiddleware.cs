@@ -92,7 +92,7 @@ namespace CommandDotNet.Parsing
                         }
                         catch (Exception ex)
                         {
-                            console.Error.WriteLine(Resources.A.Parse_assigning_value_to_argument(argument.ToString(), defaultValue?.ToString()));
+                            console.Error.WriteLine(Resources.A.Parse_Assigning_value_to_argument(argument.ToString(), defaultValue?.ToString()));
                             console.Error.WriteLine(ex.Message);
                             console.Error.WriteLine();
                             return false;
