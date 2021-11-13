@@ -237,8 +237,8 @@ namespace CommandDotNet
             return includeNamingConventions
                 ? appRunner.UseDefaultsFromConfig(
                     DefaultSources.AppSetting.GetDefaultValue(appSettings, 
-                        DefaultSources.AppSetting.GetKeyFromAttribute, 
-                        DefaultSources.AppSetting.GetKeysFromConvention))
+                        DefaultSources.AppSetting.GetKeyFromAttribute,
+                        argument => DefaultSources.AppSetting.GetKeysFromConvention(appRunner.AppSettings, argument)))
                 : appRunner.UseDefaultsFromConfig(
                     DefaultSources.AppSetting.GetDefaultValue(appSettings, DefaultSources.AppSetting.GetKeyFromAttribute));
         }
