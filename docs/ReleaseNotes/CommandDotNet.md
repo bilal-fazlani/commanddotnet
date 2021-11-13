@@ -4,49 +4,98 @@
 
 ### Highlights
 
+#### NRT
+CommandDotNet now supports [Nullable reference types](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/nullable-reference-types) (NRT) when calculating Arity.  Arityfor.Minimum will be 0 for NRTs.
+
+#### target net5.0
 CommandDotNet targets net5.0 instead of netstandard2.0.  This will allow us to take advantage of new language features.
 We're holding off on net6.0 at the moment because it's new enough many companies will not be able to adopt it yet.
-We are eager to take advantage of [Source Generators](https://devblogs.microsoft.com/dotnet/introducing-c-source-generators/) though so we will likely also target net6.0 in early 2022. 
+We are eager to take advantage of [Source Generators](https://devblogs.microsoft.com/dotnet/introducing-c-source-generators/) though so we will likely also target net6.0 in early 2022.
 
-CommandDotNet now supports [Nullable reference types](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/nullable-reference-types) (NRT) when calculating Arity.
+#### Windows and Powershell conventions
+Added support for Windows and Powershell conventions when using options
 
+* backslash `/help` and `/h` for windows conventions 
+* single hypen `-help` for long names for powershell conventions
+
+These are not enabled by default. Enable by setting `AppSettings.Parser.AllowBackslashOptionPrefix` and/or `AppSettings.Parser.AllowSingleHyphenForLongNames` = `true`.
+
+#### Support negative numbers as arguments
+Previously, negative numbers were only support when proceeded by `:` or `=`, eg `--amount=-15` which meant they could only be used with options. CommandDotNet now supports `--amount -15` or `-15` as an operand.
+
+#### IConsole
 Overhaul of IConsole, now covering most the System.Console members. Converted In, Out and Error to TextReader and TextWriter to match System.Console.
 This includes updates to the TestConsole and AnsiTestConsole for the Spectre integration.
 
 ### Breaking Changes in behavior
 
-NRT support
+#### NRT support
 
-* The behavior for calculating Arity and prompting on missing arguments changes as these arguments were not previously considered nullable and so the Arity has changed to expect a minimum of 0 instead of 1
-* Using the UseArgumentPrompter will work as expected now when using NRTs. They will no longer prompt the user.
+The behavior for calculating Arity and prompting on missing arguments changes as these arguments were not previously considered nullable and so the Arity has changed to expect a minimum of 0 instead of 1
 
-ArgumentArity.AllowsNone() change
+Using the UseArgumentPrompter will now work as expected when using NRTs. They will no longer prompt the user.
 
-* This has been a confusing method. It currently evaluates as `arity.Maximum == 0` but it intuitively it makes more sense as `arity.Minimum == 0`.
+#### ArgumentArity.AllowsNone() change
+
+This has been a confusing method. It currently evaluates as `arity.Maximum == 0` but it intuitively it makes more sense as `arity.Minimum == 0`.
+
+ArgumentArity.AllowsNone() has been changed to `arity.Minimum == 0`
+
+ArgumentArity.RequiresNone() has been added for `arity.Maximum == 0`.
 
 
 ### Breaking Changes in API
 
-#### For AppRunner configuration
+#### For application developers
 
-Obsoleted cleanup
+##### Obsoleted cleanup
 
 * removed `DefaultMethodAttribute`. Use `DefaultCommandAttribute` instead.
 * removed `appRunner.UsePrompting(...)` extension method. Use `.UseIPrompter` and `.UseArgumentPrompter` instead.
 * removed `BooleanMode.Unknown`. Use either `Implicit`, `Explicit`, or `BooleanMode?` instead.
 
-#### For middleware development
+##### Localizable Resources
+Several updates to localizeable Resources. Changed a few member names for clarity and anded a several new members.
 
-IArgument updates
+##### AppSettings
+
+* Added AppSettings.Parser
+* Moved IgnoreUexpectedOperands to AppSettings.Parser.IgnoreUnexpectedOperands
+
+
+#### For middleware developers
+
+##### IArgument updates
 
 * added BooleanMode properties to help determine the Arity for an argument.
 * BooleanMode will only be set for boolean arguments
 
-IInvocation updates
+##### IConsole updates
 
-* added IsInterceptor property to distinguish between command and interceptor invocations
+* added numerous members to bring closer to parity with System.Console
+* removed StandardStreamReader and StandardStreamWriter
+* added ForwardingTextWriter to support integrations where text forwards to another console utility, such as Spectre's AnsiConsole
+* SystemConsole and TestConsole can be inherited for simpler adaptation resiliant to breakimg changes in IConsole if new members are added
 
-Obsoleted cleanup
+##### DefaultSources.AppSetting.GetKeysFromConvention
+
+Now takes AppSettings to support `/` and `-` option prefixes.
+
+##### TokenType.Option removed
+
+To support negative numbers and prefixing options with `/` and `-`, we needed more context from the command definition so determining if a token is an option or value has been moved to the command parser. Token transformation  no longer distinguishes options vs values. 
+
+* TokenType.Option and TokenType.Value have merged into TokenType.Argument
+* OptionTokenType and Token.OptionTokenType have been removed
+* Clubbed options are no longer split during token transformation
+* Option assignments are no longer separated during token transformation
+* Tokenizer.TryTokenizeOption has been removed
+
+##### IInvocation updates
+
+added IsInterceptor property to distinguish between command and interceptor invocations
+
+##### Obsoleted cleanup
 
 * removed `ArgumentArity.Default(Type, ...)`. Use `ArgumentArity.Default(IArgument)` instead. This is a reversal of previous direction, but the addition of IArgument.BooleanMode makes this reliable.
 * removed `FindOption(string alias)`. Use `Find<Option>(string alias)` instead.
