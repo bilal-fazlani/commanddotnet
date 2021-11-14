@@ -37,14 +37,13 @@ namespace CommandDotNet.Parsing.Typos
                 switch (ctx.ParseResult.ParseError)
                 {
                     case UnrecognizedArgumentParseError unrecognizedArgument:
-                        if (TrySuggestArgumentNames(ctx, unrecognizedArgument.Command, unrecognizedArgument.Token))
+                        // TODO: suggest other directives? We'd need a list of names which we don't collect atm.
+                        if (TrySuggestArgumentNames(ctx, unrecognizedArgument.Command, unrecognizedArgument.Token, unrecognizedArgument.OptionPrefix))
                         {
                             // in case help was requested by CommandParser
                             ctx.ShowHelpOnExit = false;
                             return ExitCodes.Error;
                         }
-
-                        // TODO: suggest other directives? We'd need a list of names which we don't collect atm.
                         break;
                     case NotAllowedValueParseError notAllowedValue:
                         if (TrySuggestValues(ctx, notAllowedValue))
@@ -53,7 +52,6 @@ namespace CommandDotNet.Parsing.Typos
                             ctx.ShowHelpOnExit = false;
                             return ExitCodes.Error;
                         }
-
                         break;
                 }
             }
@@ -74,11 +72,11 @@ namespace CommandDotNet.Parsing.Typos
             //       add an option to allow/prevent duplicates for list arguments?
             return TrySuggest(ctx, notAllowedValue.Command, notAllowedValue.Token.Value,
                 notAllowedValue.Argument.AllowedValues.ToCollection(),
-                Resources.A.Parse_is_not_a_valid(notAllowedValue.Argument.TypeInfo.DisplayName!), 
+                Resources.A.Parse_Is_not_a_valid(notAllowedValue.Argument.TypeInfo.DisplayName!), 
                 null);
         }
 
-        private static bool TrySuggestArgumentNames(CommandContext ctx, Command command, Token token)
+        private static bool TrySuggestArgumentNames(CommandContext ctx, Command command, Token token, string? optionPrefix)
         {
             if (token.Value == "")
             {
@@ -98,15 +96,12 @@ namespace CommandDotNet.Parsing.Typos
             {
                 return command.Subcommands.SelectMany(o => o.Aliases).ToList();
             }
-
-            return token.TokenType switch
-            {
-                TokenType.Option => TrySuggest(ctx, command, token.Value, 
-                    GetOptionNames(), Resources.A.Parse_is_not_a_valid(Resources.A.Common_option_lc), "--"),
-                TokenType.Value => TrySuggest(ctx, command, token.Value, 
-                    GetSubcommandNames(), Resources.A.Parse_is_not_a_valid(Resources.A.Common_command_lc), null),
-                _ => false
-            };
+            
+            return optionPrefix is null
+                ? TrySuggest(ctx, command, token.Value,
+                    GetSubcommandNames(), Resources.A.Parse_Is_not_a_valid(Resources.A.Common_command_lc), null)
+                : TrySuggest(ctx, command, token.Value,
+                    GetOptionNames(), Resources.A.Parse_Is_not_a_valid(Resources.A.Common_option_lc), optionPrefix);
         }
 
         private static bool TrySuggest(CommandContext ctx,

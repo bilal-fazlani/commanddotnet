@@ -9,7 +9,6 @@ using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Diagnostics
 {
-    //TODO: localize
     internal static class ParseDirective
     {
         internal static AppRunner UseParseDirective(this AppRunner appRunner)
@@ -24,7 +23,7 @@ namespace CommandDotNet.Diagnostics
         // adapted from https://github.com/dotnet/command-line-api directives
         private static Task<int> ConfigureParseReportByTokenTransform(CommandContext commandContext, ExecutionDelegate next)
         {
-            if (!commandContext.Tokens.TryGetDirective("parse", out string? value))
+            if (!commandContext.Tokens.TryGetDirective(Resources.A.ParseDirective_parse_lc, out string? value))
             {
                 return next(commandContext);
             }
@@ -59,9 +58,9 @@ namespace CommandDotNet.Diagnostics
                     // in case ParseReportByArg wasn't run due to parsing errors,
                     // output this the transformations as a temporary aid
                     writer.WriteLine();
-                    writer.WriteLine(commandContext.ParseResult!.HelpWasRequested() 
-                        ? "Help requested. Only token transformations are available."
-                        : "Unable to map tokens to arguments. Falling back to token transformations.");
+                    writer.WriteLine(commandContext.ParseResult!.HelpWasRequested()
+                        ? Resources.A.ParseDirective_Help_was_requested
+                        : Resources.A.ParseDirective_Unable_to_map_tokens_to_arguments);
                     WriteLine(parseContext.Transformations.ToString());
                 }
                 else if (parseContext.IncludeTokenization || parseContext.IncludeRawCommandLine)
@@ -78,12 +77,9 @@ namespace CommandDotNet.Diagnostics
                 else
                 {
                     writer.WriteLine();
-                    writer.WriteLine($"Parse usage: [parse:{ParseContext.IncludeTransformationsArgName}:{ParseContext.IncludeRawCommandLineArgName}]" +
-                                     " to include token transformations.");
-                    writer.WriteLine($" '{ParseContext.IncludeTransformationsArgName}'" +
-                            " to include token transformations.");
-                    writer.WriteLine($" '{ParseContext.IncludeRawCommandLineArgName}'" +
-                                     " to include command line as passed to this process.");
+                    writer.WriteLine(Resources.A.ParseDirective_Usage(
+                        ParseContext.IncludeTransformationsArgName,
+                        ParseContext.IncludeRawCommandLineArgName));
                 }
 
                 return result;
@@ -93,7 +89,7 @@ namespace CommandDotNet.Diagnostics
                 // in case ParseReportByArg wasn't run due to parsing errors,
                 // output this the transformations as a temporary aid
                 writer.WriteLine();
-                writer.WriteLine("Unable to map tokens to arguments. Falling back to token transformations.");
+                writer.WriteLine(Resources.A.ParseDirective_Unable_to_map_tokens_to_arguments);
                 WriteLine(parseContext.Transformations.ToString());
                 throw;
             }
@@ -120,10 +116,10 @@ namespace CommandDotNet.Diagnostics
             void WriteLine(string? ln) => parseContext.Transformations.AppendLine(ln);
 
             WriteLine(null);
-            WriteLine("token transformations:");
+            WriteLine($"{Resources.A.ParseDirective_token_transformations_lc}:");
             WriteLine(null);
 
-            CaptureTransformation(WriteLine, commandContext.Tokens, ">>> from shell");
+            CaptureTransformation(WriteLine, commandContext.Tokens, $">>> {Resources.A.ParseDirective_from_shell_lc}");
 
             commandContext.AppConfig.TokenizationEvents.OnTokenTransformation += args =>
             {
@@ -131,12 +127,13 @@ namespace CommandDotNet.Diagnostics
                     Enumerable.Range(0, args.PreTransformTokens.Count)
                         .All(i => args.PreTransformTokens[i] == args.PostTransformTokens[i]))
                 {
-                    CaptureTransformation(WriteLine, null, $">>> after: {args.Transformation.Name} (no changes)");
+                    CaptureTransformation(WriteLine, null, 
+                        $">>> {Resources.A.ParseDirective_after_no_changes(args.Transformation.Name)}");
                 }
                 else
                 {
                     CaptureTransformation(WriteLine, args.PostTransformTokens,
-                        $">>> after: {args.Transformation.Name}");
+                        $">>> {Resources.A.ParseDirective_after(args.Transformation.Name)}");
                 }
             };
         }

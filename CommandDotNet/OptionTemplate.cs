@@ -24,6 +24,7 @@ namespace CommandDotNet
                 sb.Append(value);
             }
 
+            // TOOD: support ParseAppSettings { AllowBackslashOptionPrefix & AllowSingleHyphenForLongNames }
             AppendIfNotNull("-", shortName?.ToString());
             AppendIfNotNull("--", longName);
 

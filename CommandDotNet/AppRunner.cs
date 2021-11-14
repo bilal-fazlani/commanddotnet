@@ -164,7 +164,9 @@ namespace CommandDotNet
             }
             if (_handleErrorDelegate != null)
             {
-                return _handleErrorDelegate(ex.GetCommandContext(), ex);
+                var context = ex.GetCommandContext();
+                ex.RemoveCommandContext();
+                return _handleErrorDelegate(context, ex);
             }
             
             ExceptionDispatchInfo.Capture(ex).Throw();

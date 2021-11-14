@@ -189,7 +189,32 @@
 
   <data name="root" xml:space="preserve">
     <value>root</value>
-    <comment>Parse_root_lc: </comment>
+    <comment>ParseReport_root_lc: </comment>
+  </data>
+
+  <data name="Help requested. Only token transformations are available." xml:space="preserve">
+    <value>Help requested. Only token transformations are available.</value>
+    <comment>ParseDirective_Help_was_requested: </comment>
+  </data>
+
+  <data name="Unable to map tokens to arguments. Falling back to token transformations." xml:space="preserve">
+    <value>Unable to map tokens to arguments. Falling back to token transformations.</value>
+    <comment>ParseDirective_Unable_to_map_tokens_to_arguments: </comment>
+  </data>
+
+  <data name="parse" xml:space="preserve">
+    <value>parse</value>
+    <comment>ParseDirective_parse_lc: </comment>
+  </data>
+
+  <data name="token transformations" xml:space="preserve">
+    <value>token transformations</value>
+    <comment>ParseDirective_token_transformations_lc: </comment>
+  </data>
+
+  <data name="from shell" xml:space="preserve">
+    <value>from shell</value>
+    <comment>ParseDirective_from_shell_lc: </comment>
   </data>
 
   <data name="debug" xml:space="preserve">
@@ -389,7 +414,26 @@
 
   <data name="raw command line:{0}" xml:space="preserve">
     <value>raw command line:{0}</value>
-    <comment>Parse_Raw_command_line: </comment>
+    <comment>ParseReport_Raw_command_line: </comment>
+  </data>
+
+  <data name="Parse usage: [parse:{0}:{1}] to include token transformations.
+ '{0}' to include token transformations.
+ '{1}' to include command line as passed to this process." xml:space="preserve">
+    <value>Parse usage: [parse:{0}:{1}] to include token transformations.
+ '{0}' to include token transformations.
+ '{1}' to include command line as passed to this process.</value>
+    <comment>ParseDirective_Usage: </comment>
+  </data>
+
+  <data name="after: {0}" xml:space="preserve">
+    <value>after: {0}</value>
+    <comment>ParseDirective_after: </comment>
+  </data>
+
+  <data name="after: {0} (no changes)" xml:space="preserve">
+    <value>after: {0} (no changes)</value>
+    <comment>ParseDirective_after_no_changes: </comment>
   </data>
 
   <data name="Attach your debugger to process {0} ({1})." xml:space="preserve">
@@ -404,7 +448,7 @@
 
   <data name="Failure assigning value to {0}. Value={1}" xml:space="preserve">
     <value>Failure assigning value to {0}. Value={1}</value>
-    <comment>Parse_assigning_value_to_argument: </comment>
+    <comment>Parse_Assigning_value_to_argument: </comment>
   </data>
 
   <data name="See '{0} --{1}'" xml:space="preserve">
@@ -414,7 +458,7 @@
 
   <data name="is not a valid {0}" xml:space="preserve">
     <value>is not a valid {0}</value>
-    <comment>Parse_is_not_a_valid: </comment>
+    <comment>Parse_Is_not_a_valid: </comment>
   </data>
 
   <data name="Missing value for option '{0}'" xml:space="preserve">
@@ -429,7 +473,33 @@
 
   <data name="Unexpected value '{0}' for option '{1}'" xml:space="preserve">
     <value>Unexpected value '{0}' for option '{1}'</value>
-    <comment>Parse_unexpected_value_for_option: </comment>
+    <comment>Parse_Unexpected_value_for_option: </comment>
+  </data>
+
+  <data name="Unrecognized option '{0}'
+If you intended to use the '{1}' command, try again with the following
+
+{2}" xml:space="preserve">
+    <value>Unrecognized option '{0}'
+If you intended to use the '{1}' command, try again with the following
+
+{2}</value>
+    <comment>Parse_Intended_command_instead_of_option: </comment>
+  </data>
+
+  <data name="'{0}' expects a value so it must be the last option specified in '{1}'" xml:space="preserve">
+    <value>'{0}' expects a value so it must be the last option specified in '{1}'</value>
+    <comment>Parse_Clubbed_options_with_values_must_be_last_option: </comment>
+  </data>
+
+  <data name="Unrecognized command or argument '{0}'" xml:space="preserve">
+    <value>Unrecognized command or argument '{0}'</value>
+    <comment>Parse_Unrecognized_command_or_argument: </comment>
+  </data>
+
+  <data name="Unrecognized option '{0}'" xml:space="preserve">
+    <value>Unrecognized option '{0}'</value>
+    <comment>Parse_Unrecognized_option: </comment>
   </data>
 
   <data name="File not found: {0}" xml:space="preserve">

@@ -29,11 +29,11 @@ namespace CommandDotNet.Diagnostics.Parse
 
             if (includeRawCommandLine)
             {
-                writeln(Resources.A.Parse_Raw_command_line(Environment.CommandLine));
+                writeln(Resources.A.ParseReport_Raw_command_line(Environment.CommandLine));
             }
             
             var path = command.GetPath();
-            writeln($"{indent}{Resources.A.Common_command_lc}: {(path.IsNullOrWhitespace() ? $"({Resources.A.Parse_root_lc})" : path)}");
+            writeln($"{indent}{Resources.A.Common_command_lc}: {(path.IsNullOrWhitespace() ? $"({Resources.A.ParseReport_root_lc})" : path)}");
 
             if (command.Operands.Any())
             {
@@ -63,14 +63,13 @@ namespace CommandDotNet.Diagnostics.Parse
         {
             bool isObscured = argument.IsObscured();
             var indent2 = indent.Increment();
-            
-            //TODO: reduce resource calls by resolving once in calling method
+              
             var txtValue = Resources.A.Common_value_lc;
             var txtInputs = Resources.A.Input_inputs_lc;
             var txtDefault = Resources.A.Common_default_lc;
 
             var displayName = argument.TypeInfo.DisplayName.IsNullOrEmpty() 
-                ? (argument.Arity.RequiresNone() ? Resources.A.Common_Flag : null)
+                ? (((argument as Option)?.IsFlag ?? false) ? Resources.A.Common_Flag : null)
                 : argument.TypeInfo.DisplayName;
             writeln($"{indent}{argument.Name} <{displayName}>");
             var valueString = argument.Value?.ValueToString(argument);

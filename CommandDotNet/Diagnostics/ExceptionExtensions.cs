@@ -15,6 +15,14 @@ namespace CommandDotNet.Diagnostics
             ex.Data[nameof(CommandContext)] = new NonSerializableWrapper(ctx, skipPrint: true);
         }
 
+        internal static void RemoveCommandContext(this Exception ex)
+        {
+            if (ex.Data.Contains(typeof(CommandContext)))
+            {
+                ex.Data.Remove(typeof(CommandContext));
+            }
+        }
+
         public static CommandContext? GetCommandContext(this Exception ex)
         {
             return ex.Data.Contains(nameof(CommandContext))

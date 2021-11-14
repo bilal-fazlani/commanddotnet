@@ -42,6 +42,20 @@ Options:
         }
 
         [Fact]
+        public void FlagsCannotBeAssignedValues()
+        {
+            new AppRunner<FlagApp>().Verify(new Scenario
+            {
+                When = { Args = "Do --flag false" },
+                Then =
+                {
+                    ExitCode = 1,
+                    OutputContainsTexts = {"Unrecognized command or argument 'false'"}
+                }
+            });
+        }
+
+        [Fact]
         public void WhenFlagIsNotSpecified_ValueIsFalse()
         {
             new AppRunner<FlagApp>().Verify(new Scenario

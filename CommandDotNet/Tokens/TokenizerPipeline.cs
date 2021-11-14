@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
@@ -26,9 +27,15 @@ namespace CommandDotNet.Tokens
 
         private static bool ApplyTokenTransformations(CommandContext commandContext)
         {
-            var tokens = commandContext.Tokens;
+            return Transform(commandContext, 
+                commandContext.AppConfig.TokenTransformations, 
+                commandContext.Tokens);
+        }
+
+        internal static bool Transform(CommandContext commandContext, IEnumerable<TokenTransformation> transformations, TokenCollection tokens)
+        {
             var appConfig = commandContext.AppConfig;
-            foreach (var transformation in appConfig.TokenTransformations)
+            foreach (var transformation in transformations)
             {
                 try
                 {
@@ -44,11 +51,10 @@ namespace CommandDotNet.Tokens
                     return false;
                 }
             }
-
             commandContext.Tokens = tokens;
             return true;
         }
-
+        
         private static void InsertSystemTransformations(AppConfig appConfig)
         {
             // append system transformations to the end.
@@ -56,18 +62,6 @@ namespace CommandDotNet.Tokens
             // because parsing logic depends on these being processed
             appConfig.TokenTransformations = appConfig.TokenTransformations
                 .OrderBy(t => t.Order)
-                .Union(
-                    new[]
-                    {
-                        new TokenTransformation(
-                            "expand-clubbed-flags",
-                            int.MaxValue,
-                            ExpandClubbedOptionsTransformation.Transform),
-                        new TokenTransformation(
-                            "split-option-assignments",
-                            int.MaxValue,
-                            SplitOptionsTransformation.Transform)
-                    })
                 .ToArray();
         }
     }

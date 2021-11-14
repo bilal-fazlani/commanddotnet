@@ -237,8 +237,8 @@ namespace CommandDotNet
             return includeNamingConventions
                 ? appRunner.UseDefaultsFromConfig(
                     DefaultSources.AppSetting.GetDefaultValue(appSettings, 
-                        DefaultSources.AppSetting.GetKeyFromAttribute, 
-                        DefaultSources.AppSetting.GetKeysFromConvention))
+                        DefaultSources.AppSetting.GetKeyFromAttribute,
+                        argument => DefaultSources.AppSetting.GetKeysFromConvention(appRunner.AppSettings, argument)))
                 : appRunner.UseDefaultsFromConfig(
                     DefaultSources.AppSetting.GetDefaultValue(appSettings, DefaultSources.AppSetting.GetKeyFromAttribute));
         }
@@ -260,7 +260,7 @@ namespace CommandDotNet
 
         /// <summary></summary>
         /// <param name="appRunner">The <see cref="AppRunner"/></param>
-        /// <param name="writerFactory">If null, `cmdlog` directive is enabled without Console.Out as the target</param>
+        /// <param name="writerFactory">If null, `cmdlog` directive is enabled with Console.Out as the target</param>
         /// <param name="excludeSystemInfo">Exclude machine name, username, OS, .net version and tool version</param>
         /// <param name="includeAppConfig">Prints the entire app configuration</param>
         /// <param name="additionalInfoCallback">Additional information to include.</param>

@@ -64,11 +64,7 @@ namespace CommandDotNet.Tokens
                         directives.Add(token);
                         _combined.Add(token);
                         break;
-                    case TokenType.Option:
-                        arguments.Add(token);
-                        _combined.Add(token);
-                        break;
-                    case TokenType.Value:
+                    case TokenType.Argument:
                         arguments.Add(token);
                         _combined.Add(token);
                         break;

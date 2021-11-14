@@ -47,7 +47,7 @@ namespace CommandDotNet.Tokens
 
         private static string? GetFilePath(Token token)
         {
-            return token.TokenType == TokenType.Value && token.Value.StartsWith("@") 
+            return token.TokenType == TokenType.Argument && token.Value.StartsWith("@") 
                 ? token.Value.Substring(1) 
                 : null;
         }
