@@ -9,7 +9,7 @@ namespace CommandDotNet.TestTools
 {
     public class ResourcesDef
     {
-        public static ResourcesDef Parse<T>() => new ResourcesDef(typeof(T));
+        public static ResourcesDef Parse<T>() => new(typeof(T));
 
         public ResourcesDef(Type type)
         {
@@ -75,15 +75,20 @@ namespace CommandDotNet.TestTools
             var proxy = NewProxyInstance();
             foreach (var property in Properties)
             {
-                yield return (property, (string)property.GetValue(proxy));
+                // should never be null because Proxy will use 
+                // base member if the null was returned from localize function
+                yield return (property, (string)property.GetValue(proxy)!);
             }
             foreach (var method in Methods)
             {
                 var placeHolders = method.GetParameters()
-                    .Select((p, i) => $"{{{i}}}")
+                    .Select((_, i) => $"{{{i}}}")
                     .Cast<object>()
                     .ToArray();
-                yield return (method, (string)method.Invoke(proxy, placeHolders));
+
+                // should never be null because Proxy will use 
+                // base member if the null was returned from localize function
+                yield return (method, (string)method.Invoke(proxy, placeHolders)!);
             }
         }
 
@@ -105,13 +110,13 @@ namespace CommandDotNet.TestTools
             {
                 var parameters = method.GetParameters();
                 var paramDef = parameters.Select(p => $"string {p.Name}").ToCsv(", ");
-                var paramPlaceHolders = parameters.Select((p, i) => $"\"{{{i}}}\"").ToCsv(", ");
-                var paramPassthrus = parameters.Select(p => $"{p.Name}").ToCsv(", ");
+                var paramPlaceHolders = parameters.Select((_, i) => $"\"{{{i}}}\"").ToCsv(", ");
+                var paramPassThrus = parameters.Select(p => $"{p.Name}").ToCsv(", ");
 
                 proxyCode.AppendLine(
                     $"        public override string {method.Name}({paramDef}) =>{Environment.NewLine}" +
                     $"            _localize(base.{method.Name}({paramPlaceHolders})){Environment.NewLine}" +
-                    $"            ?? base.{method.Name}({paramPassthrus});");
+                    $"            ?? base.{method.Name}({paramPassThrus});");
             }
 
             var classDef = @$"

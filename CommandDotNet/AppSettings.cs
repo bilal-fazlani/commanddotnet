@@ -1,7 +1,6 @@
 ﻿using System;
 using CommandDotNet.Extensions;
 using CommandDotNet.Help;
-using CommandDotNet.Parsing;
 using CommandDotNet.Tokens;
 using CommandDotNet.TypeDescriptors;
 
@@ -45,10 +44,10 @@ namespace CommandDotNet
         public bool DisableDirectives { get; set; }
 
         /// <summary>Settings specific to built-in help providers</summary>
-        public ParseAppSettings Parser { get; set; } = new ParseAppSettings();
+        public ParseAppSettings Parser { get; set; } = new();
 
         /// <summary>Settings specific to built-in help providers</summary>
-        public AppHelpSettings Help { get; set; } = new AppHelpSettings();
+        public AppHelpSettings Help { get; set; } = new();
 
         /// <summary>When specified, this function will be used to localize user output from the framework</summary>
         public Func<string,string?>? Localize { get; set; }
@@ -57,7 +56,7 @@ namespace CommandDotNet
         /// The collection of <see cref="IArgumentTypeDescriptor"/>'s use to convert arguments
         /// from the commandline to the parameter & property types for the command methods.
         /// </summary>
-        public ArgumentTypeDescriptors ArgumentTypeDescriptors { get; internal set; } = new ArgumentTypeDescriptors();
+        public ArgumentTypeDescriptors ArgumentTypeDescriptors { get; internal set; } = new();
 
         public override string ToString()
         {

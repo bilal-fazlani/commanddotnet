@@ -23,7 +23,7 @@ namespace CommandDotNet.TypeDescriptors
             return _displayName;
         }
 
-        public object ParseString(IArgument argument, string value)
+        public object? ParseString(IArgument argument, string value)
         {
             return _parseValueDelegate(value);
         }

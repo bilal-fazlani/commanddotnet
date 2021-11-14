@@ -14,7 +14,7 @@ namespace CommandDotNet
         public virtual string Parse_ArgumentArity_Expected_single_value(string argumentName) =>
             $"{argumentName} accepts only a single value but multiple values were provided";
 
-        public virtual string Parse_Assigning_value_to_argument(string argumentToString, string? defaultValue) =>
+        public virtual string Parse_Assigning_value_to_argument(string? argumentToString, string? defaultValue) =>
             $"Failure assigning value to {argumentToString}. Value={defaultValue}";
 
         public virtual string Parse_Did_you_mean => "Did you mean ...";

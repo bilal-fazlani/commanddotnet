@@ -93,7 +93,7 @@ namespace CommandDotNet.Extensions
             object clone;
             try
             {
-                clone = Activator.CreateInstance(type);
+                clone = Activator.CreateInstance(type)!;
             }
             catch (MissingMethodException e)
             {

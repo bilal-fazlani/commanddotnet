@@ -22,7 +22,7 @@ namespace CommandDotNet.TestTools
         }
 
         /// <summary>Nothing will be printed and errors will be captured</summary>
-        public static TestConfig Silent { get; set; } = new TestConfig
+        public static TestConfig Silent { get; set; } = new()
         {
             OnSuccess = new OnSuccessConfig(), 
             OnError = new OnErrorConfig(),
@@ -33,13 +33,13 @@ namespace CommandDotNet.TestTools
         /// Configuration to be used when no exception has escaped <see cref="AppRunner.Run"/><br/>
         /// Default: prints nothing
         /// </summary>
-        public OnSuccessConfig OnSuccess { get; set; } = new OnSuccessConfig();
+        public OnSuccessConfig OnSuccess { get; set; } = new();
 
         /// <summary>
         /// Configuration to be used when no exception has escaped <see cref="AppRunner.Run"/><br/>
         /// Default: prints <see cref="PrintConfig.ConsoleOutput"/>
         /// </summary>
-        public OnErrorConfig OnError { get; set; } = new OnErrorConfig
+        public OnErrorConfig OnError { get; set; } = new()
         {
             Print = { ConsoleOutput = true }
         };
@@ -72,7 +72,7 @@ namespace CommandDotNet.TestTools
 
         public class OnSuccessConfig
         {
-            public PrintConfig Print { get; set; } = new PrintConfig();
+            public PrintConfig Print { get; set; } = new();
         }
 
         public class OnErrorConfig
@@ -83,7 +83,7 @@ namespace CommandDotNet.TestTools
             /// will be set to 1. This mimics how the shell will process it.
             /// </summary>
             public bool CaptureAndReturnResult { get; set; }
-            public PrintConfig Print { get; set; } = new PrintConfig();
+            public PrintConfig Print { get; set; } = new();
         }
 
         public class PrintConfig

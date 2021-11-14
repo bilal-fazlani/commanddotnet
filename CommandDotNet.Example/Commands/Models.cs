@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CommandDotNet.Rendering;
 using FluentValidation;
 using FluentValidation.Attributes;
@@ -54,6 +55,7 @@ namespace CommandDotNet.Example.Commands
             public bool IsDryRun { get; set; } = false;
         }
 
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
         public class VerbosityArgs : IArgumentModel
         {
             [Option(LongName = "verbose", ShortName = "v",
@@ -66,6 +68,7 @@ namespace CommandDotNet.Example.Commands
 
 
         [Validator(typeof(NotificationValidator))]
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
         public class Notification : IArgumentModel
         {
             [Operand]
@@ -87,7 +90,7 @@ namespace CommandDotNet.Example.Commands
             public int? RetryCount { get; set; }
         }
 
-        public class NotificationValidator : AbstractValidator<Notification>
+        private class NotificationValidator : AbstractValidator<Notification>
         {
             public NotificationValidator()
             {

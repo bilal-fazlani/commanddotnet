@@ -186,7 +186,7 @@ Usage: testhost.dll Save <Id> <Name> <Email>"
                 });
         }
 
-        public class App
+        private class App
         {
             public void Save(Person person)
             {
@@ -198,14 +198,14 @@ Usage: testhost.dll Save <Id> <Name> <Email>"
         }
 
         [Validator(typeof(PersonValidator))]
-        public class Person : IArgumentModel
+        private class Person : IArgumentModel
         {
             [Operand] public int Id { get; set; }
             [Operand] public string Name { get; set; } = null!;
             [Operand] public string Email { get; set; } = null!;
         }
 
-        public class PersonValidator : AbstractValidator<Person>
+        private class PersonValidator : AbstractValidator<Person>
         {
             public PersonValidator()
             {
@@ -216,13 +216,13 @@ Usage: testhost.dll Save <Id> <Name> <Email>"
         }
 
         [Validator(typeof(InvalidPersonValidator))]
-        public class InvalidPerson : IArgumentModel
+        private class InvalidPerson : IArgumentModel
         {
             [Operand]
             public int Id { get; set; }
         }
 
-        public class InvalidPersonValidator : AbstractValidator<Person>
+        private class InvalidPersonValidator : AbstractValidator<Person>
         {
             public InvalidPersonValidator(bool nonDefaultCtor)
             {

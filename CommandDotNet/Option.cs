@@ -64,10 +64,10 @@ namespace CommandDotNet
                 ? new HashSet<string>()
                 : new HashSet<string>(aliases);
             if (!LongName.IsNullOrWhitespace()) _aliases.Add(LongName!);
-            if (ShortName.HasValue) _aliases.Add(ShortName.ToString());
+            if (ShortName.HasValue) _aliases.Add(ShortName.ToString()!);
         }
 
-        public string Name => LongName ?? ShortName.ToString();
+        public string Name => LongName ?? ShortName.ToString()!; // ShortName has to exist if LongName does not
 
         /// <summary>A single character that will be prefixed with a single hyphen.</summary>
         public char? ShortName { get; }
@@ -179,6 +179,7 @@ namespace CommandDotNet
             return $"Option: {Name} ({DefinitionSource})";
         }
 
+        // ReSharper disable once RedundantCast
         public static bool operator ==(Option x, Option y) => (object)x == (object)y;
 
         public static bool operator !=(Option x, Option y) => !(x == y);
@@ -189,7 +190,7 @@ namespace CommandDotNet
                    && Equals(ShortName, other.ShortName);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is null)
             {

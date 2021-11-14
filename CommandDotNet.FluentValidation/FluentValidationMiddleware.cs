@@ -9,6 +9,10 @@ namespace CommandDotNet.FluentValidation
         /// <summary>Enables FluentValidation for <see cref="IArgumentModel"/>s</summary>
         /// <param name="appRunner">the <see cref="AppRunner"/></param>
         /// <param name="showHelpOnError">when true, help will be display for the target command after the validation errors</param>
+        /// <param name="resourcesOverride">
+        /// use with <see cref="ResourcesProxy"/> to localize output this plugin.
+        /// This does not cover FluentValidation validations.
+        /// </param>
         public static AppRunner UseFluentValidation(this AppRunner appRunner, bool showHelpOnError = false, 
             Resources? resourcesOverride = null)
         {
@@ -49,7 +53,7 @@ namespace CommandDotNet.FluentValidation
             {
                 var failureResults = paramValues
                     .Select(model => new { model, result = modelValidator.ValidateModel(model) })
-                    .Where(v => v.result is { } && !v.result.IsValid)
+                    .Where(v => v.result is { IsValid: false })
                     .ToList();
 
                 if (failureResults.Any())

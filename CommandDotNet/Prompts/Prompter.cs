@@ -96,7 +96,14 @@ namespace CommandDotNet.Prompts
 
             do
             {
-                var key = _console.ReadKey(true);
+                var keyOrNull = _console.ReadKey(true);
+                if (keyOrNull is null)
+                {
+                    // escape or ctrl+c
+                    break;
+                }
+
+                var key = keyOrNull.Value;
 
                 if (key.IsCtrlC())
                 {

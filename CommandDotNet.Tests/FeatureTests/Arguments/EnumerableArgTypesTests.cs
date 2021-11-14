@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
@@ -167,6 +168,7 @@ Options:
             }
         }
 
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
         private class EnumerableModel : IArgumentModel
         {
             [Option]

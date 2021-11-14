@@ -8,7 +8,6 @@ namespace CommandDotNet.ClassModeling.Definitions
     internal class ParameterArgumentDef : IArgumentDef
     {
         private readonly ParameterInfo _parameterInfo;
-        private IArgument? _argument;
 
         public string ArgumentDefType => "Parameter";
 

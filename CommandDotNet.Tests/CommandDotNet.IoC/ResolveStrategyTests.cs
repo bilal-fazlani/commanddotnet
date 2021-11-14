@@ -78,7 +78,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
             }
         }
 
-        public class ArgModel : IArgumentModel
+        private class ArgModel : IArgumentModel
         {
 
         }

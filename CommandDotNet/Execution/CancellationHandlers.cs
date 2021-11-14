@@ -13,7 +13,7 @@ namespace CommandDotNet.Execution
         // using a stack to handle interactive sessions
         // so ctrl+c for a long running interactive command
         // stops only that command and not the interactive session
-        private static readonly Stack<CommandContext> SourceStack = new Stack<CommandContext>();
+        private static readonly Stack<CommandContext> SourceStack = new();
 
         private class Handler
         {
@@ -79,7 +79,7 @@ namespace CommandDotNet.Execution
 
         private static void Console_CancelKeyPress(object? sender, ConsoleCancelEventArgs e)
         {
-            var handler = SourceStack.Peek()?.GetHandler();
+            var handler = SourceStack.Peek().GetHandler();
             if (handler == null)
             {
                 return;
@@ -148,6 +148,10 @@ namespace CommandDotNet.Execution
                 var bindingFlags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.CreateInstance;
                 var parameterTypes = parameters.Select(p => p.GetType()).ToArray();
                 var constructorInfo = typeof(T).GetConstructor(bindingFlags, null, parameterTypes, null);
+                if (constructorInfo is null)
+                {
+                    throw new Exception(".net core contracts have changed. update code to handle new contracts");
+                }
                 return (T)constructorInfo.Invoke(parameters);
             }
         }

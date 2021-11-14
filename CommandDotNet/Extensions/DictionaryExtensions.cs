@@ -1,14 +1,18 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace CommandDotNet.Extensions
 {
     internal static class DictionaryExtensions
     {
+        internal static TValue? GetValueOrDefault<TValue>(this IDictionary dictionary, string key) =>
+            dictionary.Contains(key) ? (TValue)dictionary[key]! : default;
+
         internal static TValue GetOrAdd<TKey, TValue>(
             this IDictionary<TKey, TValue> dictionary, TKey key, Func<TKey,TValue> createDefault)
         {
-            if (!dictionary.TryGetValue(key, out TValue value))
+            if (!dictionary.TryGetValue(key, out TValue? value))
             {
                 dictionary[key] = value = createDefault(key);
             }

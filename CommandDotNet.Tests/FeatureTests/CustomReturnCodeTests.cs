@@ -22,7 +22,7 @@ namespace CommandDotNet.Tests.FeatureTests
             result.ExitCode.Should().Be(expectedExitCode);
         }
 
-        public class App
+        private class App
         {
             public void VoidMethodThatHasNoException()
             {

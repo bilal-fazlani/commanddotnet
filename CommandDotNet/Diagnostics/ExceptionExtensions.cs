@@ -25,9 +25,8 @@ namespace CommandDotNet.Diagnostics
 
         public static CommandContext? GetCommandContext(this Exception ex)
         {
-            return ex.Data.Contains(nameof(CommandContext))
-                ? (CommandContext)((NonSerializableWrapper)ex.Data[nameof(CommandContext)]).Item
-                : ex.InnerException?.GetCommandContext();
+            return ex.Data.GetValueOrDefault<NonSerializableWrapper>(nameof(CommandContext))?.As<CommandContext>() 
+                   ?? ex.InnerException?.GetCommandContext();
         }
 
         public static string Print(this Exception ex, Indent? indent = null,
@@ -83,7 +82,7 @@ namespace CommandDotNet.Diagnostics
                 indent = indent.Increment();
                 foreach (DictionaryEntry entry in ex.Data)
                 {
-                    var skip = entry.Value is NonSerializableWrapper nsw && nsw.SkipPrint;
+                    var skip = entry.Value is NonSerializableWrapper { SkipPrint: true };
                     if (!skip)
                     {
                         writeLine($"{indent}{entry.Key}: {entry.Value.ToIndentedString(indent)}");
@@ -101,7 +100,7 @@ namespace CommandDotNet.Diagnostics
                     $"{Environment.NewLine}   {Resources.A.Exceptions_StackTrace_at} ", 
                     $"{Environment.NewLine}{indent}{Resources.A.Exceptions_StackTrace_at} ");
                 writeLine($"{indent}{stack.Remove(0,3)}");
-                indent = indent.Decrement();
+                indent.Decrement();
             }
         }
 
@@ -119,7 +118,7 @@ namespace CommandDotNet.Diagnostics
                 }
             }
 
-            if (exception is TargetInvocationException tie && tie.InnerException != null)
+            if (exception is TargetInvocationException { InnerException: { } } tie)
             {
                 exception = EscapeWrappers(tie.InnerException).WithDataFrom(tie);
             }

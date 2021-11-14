@@ -36,7 +36,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             operand!.Value.Should().Be("fishies");
         }
 
-        public class App
+        private class App
         {
             public void Do()
             {

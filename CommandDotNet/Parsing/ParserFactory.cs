@@ -19,7 +19,7 @@ namespace CommandDotNet.Parsing
                     argument.TypeInfo.Type, 
                     argument.TypeInfo.UnderlyingType, 
                     GetDescriptor(argument.TypeInfo.UnderlyingType))
-                : (IParser)new SingleValueParser(GetDescriptor(argument.TypeInfo.Type));
+                : new SingleValueParser(GetDescriptor(argument.TypeInfo.Type));
         }
 
         private IArgumentTypeDescriptor GetDescriptor(Type argumentType)

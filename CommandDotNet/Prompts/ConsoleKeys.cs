@@ -5,7 +5,7 @@ namespace CommandDotNet.Prompts
 {
     internal static class ConsoleKeys
     {
-        internal static readonly HashSet<ConsoleKey> PassThroughKeys = new HashSet<ConsoleKey>()
+        internal static readonly HashSet<ConsoleKey> PassThroughKeys = new()
         {
             ConsoleKey.Enter,
             ConsoleKey.Spacebar,
@@ -78,7 +78,7 @@ namespace CommandDotNet.Prompts
 
         // Keeping the following two for reference.  At some point, DirectionKeys support may be implemented for current prompt
 
-        private static readonly HashSet<ConsoleKey> DirectionKeys = new HashSet<ConsoleKey>()
+        private static readonly HashSet<ConsoleKey> DirectionKeys = new()
         {
             ConsoleKey.LeftArrow,
             ConsoleKey.Delete,
@@ -89,7 +89,7 @@ namespace CommandDotNet.Prompts
             ConsoleKey.UpArrow,
         };
 
-        private static readonly HashSet<ConsoleKey> IgnoredKeys = new HashSet<ConsoleKey>
+        private static readonly HashSet<ConsoleKey> IgnoredKeys = new()
         {
             ConsoleKey.Applications,
             ConsoleKey.Attention,

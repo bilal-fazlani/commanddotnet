@@ -132,7 +132,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 });
         }
 
-        public class App
+        private class App
         {
 
         }

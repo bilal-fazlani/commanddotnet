@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
@@ -84,7 +83,7 @@ namespace CommandDotNet.DataAnnotations
         }
 
         private static IEnumerable<string> GetArgumentModelErrors(IArgumentModel model,
-            IReadOnlyCollection<IArgument> arguments, IEnumerable<string> phrasesToReplace)
+            IReadOnlyCollection<IArgument> arguments, string[] phrasesToReplace)
         {
             var validationContext = new ValidationContext(model);
             var results = new List<ValidationResult>();
@@ -99,31 +98,35 @@ namespace CommandDotNet.DataAnnotations
                 {
                     var info = a.Services.GetOrDefault<PropertyInfo>();
                     return info != null
-                           && info.DeclaringType.IsInstanceOfType(model)
+                           && (info.DeclaringType?.IsInstanceOfType(model) ?? false)
                            && propertyName.Equals(info.Name);
                 });
             }
 
-            string SanitizedErrorMessage(ValidationResult validationResult)
+            string? SanitizedErrorMessage(ValidationResult validationResult)
             {
                 var errorMessage = validationResult.ErrorMessage;
-                foreach (var memberName in validationResult.MemberNames)
+                if (errorMessage is not null)
                 {
-                    var argument = GetArgument(memberName);
-                    if (argument is { })
+                    foreach (var memberName in validationResult.MemberNames)
                     {
-                        errorMessage = errorMessage.RemoveFieldTerminology(memberName, argument, phrasesToReplace);
+                        var argument = GetArgument(memberName);
+                        if (argument is { })
+                        {
+                            errorMessage = errorMessage.RemoveFieldTerminology(memberName, argument, phrasesToReplace);
+                        }
                     }
                 }
-
                 return errorMessage;
             }
 
-            return results.Select(SanitizedErrorMessage);
+            return results
+                .Select(SanitizedErrorMessage)
+                .Where(m => m != null)!;
         }
 
         private static IEnumerable<string> GetParameterArgumentErrors(IArgument argument,
-            IEnumerable<string> phrasesToReplace)
+            string[] phrasesToReplace)
         {
             var parameterInfo = argument.Services.GetOrDefault<ParameterInfo>();
             if (parameterInfo is null)
@@ -167,9 +170,14 @@ namespace CommandDotNet.DataAnnotations
         /// <remarks>
         /// This is naive and will need to change when we handle localization
         /// </remarks>
-        private static string RemoveFieldTerminology(this string error, string memberName, IArgument argument, IEnumerable<string> phrasesToReplace)
+        private static string RemoveFieldTerminology(this string error, string? memberName, IArgument argument, IEnumerable<string> phrasesToReplace)
         {
             memberName = argument.GetCustomAttribute<DisplayAttribute>()?.Name ?? memberName;
+            if (memberName is null)
+            {
+                return error;
+            }
+
             var argName = $"'{argument.Name}'";
             foreach (var phrase in phrasesToReplace.Select(p => string.Format(p, memberName)))
             {

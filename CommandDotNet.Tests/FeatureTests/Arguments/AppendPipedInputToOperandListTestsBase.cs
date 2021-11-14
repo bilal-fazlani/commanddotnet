@@ -150,7 +150,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             }
         }
 
-        public class App
+        private class App
         {
             public void Single([Operand] string singleArg)
             {
@@ -165,7 +165,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             }
         }
 
-        public class StreamingApp
+        private class StreamingApp
         {
             public List<string> StreamedInput { get; set; } = null!;
 

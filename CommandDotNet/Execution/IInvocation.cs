@@ -45,6 +45,6 @@ namespace CommandDotNet.Execution
         IReadOnlyCollection<IArgumentModel> FlattenedArgumentModels { get; }
 
         /// <summary>Invokes the instance</summary>
-        object Invoke(CommandContext commandContext, object instance, ExecutionDelegate next);
+        object? Invoke(CommandContext commandContext, object instance, ExecutionDelegate next);
     }
 }

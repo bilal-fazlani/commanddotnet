@@ -284,9 +284,9 @@ Arguments:
         [Fact]
         public void ObjectList_Exec_Positional()
         {
-            new AppRunner<OperandsNoDefaults>().Verify(new Scenario
+            _ = new AppRunner<OperandsNoDefaults>().Verify(new Scenario
             {
-                When = {Args = $"{nameof(OperandsNoDefaults.ObjectListNoDefault)} http://google.com http://apple.com http://github.com"},
+                When = { Args = $"{nameof(OperandsNoDefaults.ObjectListNoDefault)} http://google.com http://apple.com http://github.com" },
                 Then =
                 {
                     AssertContext = ctx => ctx.ParamValuesShouldBe(
@@ -294,9 +294,9 @@ Arguments:
                         {
                             ObjectListArg = new List<Uri>
                             {
-                                new Uri("http://google.com"),
-                                new Uri("http://apple.com"),
-                                new Uri("http://github.com"),
+                                new("http://google.com"),
+                                new("http://apple.com"),
+                                new("http://github.com"),
                             }
                         })
                 }

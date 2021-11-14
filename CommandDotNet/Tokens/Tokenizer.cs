@@ -5,7 +5,7 @@ namespace CommandDotNet.Tokens
 {
     public static class Tokenizer
     {
-        internal static Token SeparatorToken { get; } = new Token("--", "--", TokenType.Separator);
+        internal static Token SeparatorToken { get; } = new("--", "--", TokenType.Separator);
 
         public static TokenCollection Tokenize(this IEnumerable<string> args, bool includeDirectives = false, string sourceName = "args")
         {
@@ -24,7 +24,7 @@ namespace CommandDotNet.Tokens
 
         public static bool TryTokenizeDirective(string arg, out Token? token)
         {
-            if (arg.Length > 2 && arg[0] == '[' && arg[arg.Length - 1] == ']')
+            if (arg.Length > 2 && arg[0] == '[' && arg[^1] == ']')
             {
                 token = new Token(arg, arg.Substring(1, arg.Length - 2), TokenType.Directive);
                 return true;

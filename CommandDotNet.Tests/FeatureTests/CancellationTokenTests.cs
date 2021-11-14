@@ -275,7 +275,7 @@ namespace CommandDotNet.Tests.FeatureTests
             return next(context);
         }
 
-        public class App
+        private class App
         {
             public int Do()
             {

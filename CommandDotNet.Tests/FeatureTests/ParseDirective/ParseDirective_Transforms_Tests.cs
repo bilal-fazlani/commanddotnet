@@ -56,7 +56,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                 });
         }
 
-        public class App
+        private class App
         {
             public void Do() { }
         }

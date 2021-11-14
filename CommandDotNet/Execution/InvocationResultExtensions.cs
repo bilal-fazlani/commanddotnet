@@ -5,7 +5,7 @@ namespace CommandDotNet.Execution
 {
     internal static class InvocationResultExtensions
     {
-        internal static async Task<int> GetResultCodeAsync(this object value)
+        internal static async Task<int> GetResultCodeAsync(this object? value)
         {
             switch (value)
             {

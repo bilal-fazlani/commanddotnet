@@ -68,7 +68,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         {
             MethodInfo? interceptorMethodInfo = null;
             MethodInfo? defaultCommandMethodInfo = null;
-            List<MethodInfo> localCommandMethodInfos = new List<MethodInfo>();
+            List<MethodInfo> localCommandMethodInfos = new();
 
             foreach (var method in CommandHostClassType.GetDeclaredMethods())
             {
@@ -86,7 +86,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                                                                 $"{MethodDef.MiddlewareNextParameterType} or {MethodDef.InterceptorNextParameterType}.");
                     }
 
-                    var emDelegate = new ExecutionMiddleware((context, next) => ExitCodes.Error).Method;
+                    var emDelegate = new ExecutionMiddleware((_, _) => ExitCodes.Error).Method;
                     if (method.ReturnType != emDelegate.ReturnType)
                     {
                         throw new InvalidConfigurationException($"`{CommandHostClassType}.{method.Name}` must return type of {emDelegate.ReturnType}.");

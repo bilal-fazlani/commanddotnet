@@ -14,23 +14,22 @@ namespace CommandDotNet
 {
     public class AppConfigBuilder
     {
-        private short _orderAdded = 0;
+        private short _orderAdded;
         
         private readonly SingleRegistrationGuard<ExecutionMiddleware> _middlewareSingleRegistrationGuard = 
-            new SingleRegistrationGuard<ExecutionMiddleware>(
+            new(
                 "middleware", 
                 middleware => middleware.Method.FullName(includeNamespace: true));
         private readonly SortedDictionary<MiddlewareStages, List<(ExecutionMiddleware middleware, short order, short orderAdded)>> _middlewareByStage = 
-            new SortedDictionary<MiddlewareStages, List<(ExecutionMiddleware middleware, short order, short orderAdded)>>();
+            new();
 
         private readonly SingleRegistrationGuard<string> _tokenTransformationSingleRegistrationGuard = 
-            new SingleRegistrationGuard<string>("token transformation", name => name);
-        private readonly Dictionary<string, TokenTransformation> _tokenTransformationsByName = 
-            new Dictionary<string, TokenTransformation>();
+            new("token transformation", name => name);
+        private readonly Dictionary<string, TokenTransformation> _tokenTransformationsByName = new();
 
         private readonly SingleRegistrationGuard<Type> _parameterResolverSingleRegistrationGuard = 
-            new SingleRegistrationGuard<Type>("parameter resolver", type => type.FullName);
-        private readonly Dictionary<Type, Func<CommandContext, object>> _parameterResolversByType = new Dictionary<Type, Func<CommandContext, object>>
+            new("parameter resolver", type => type.FullName);
+        private readonly Dictionary<Type, Func<CommandContext, object>> _parameterResolversByType = new()
         {
             [typeof(CommandContext)] = ctx => ctx,
             [typeof(IConsole)] = ctx => ctx.Console,
@@ -40,7 +39,7 @@ namespace CommandDotNet
         public AppConfigBuilder(AppSettings appSettings)
         {
             AppSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
-            NameTransformation = (attributes, memberName, overrideName, commandNodeType) => overrideName ?? memberName;
+            NameTransformation = (_, memberName, overrideName, _) => overrideName ?? memberName;
         }
 
         public AppSettings AppSettings { get; }
@@ -76,14 +75,14 @@ namespace CommandDotNet
         /// </summary>
         public event Action<OnRunCompletedEventArgs>? OnRunCompleted;
 
-        public BuildEvents BuildEvents { get; } = new BuildEvents();
-        public TokenizationEvents TokenizationEvents { get; } = new TokenizationEvents();
+        public BuildEvents BuildEvents { get; } = new();
+        public TokenizationEvents TokenizationEvents { get; } = new();
 
         /// <summary>
         /// Services registered for the lifetime of the application.<br/>
         /// Use to store configurations for use by middleware.<br/>
         /// </summary>
-        public Services Services { get; } = new Services();
+        public Services Services { get; } = new();
 
         /// <summary>
         /// Resolvers functions registered here are available to inject into constructors, interceptor methods and command methods.<br/>
@@ -126,7 +125,7 @@ namespace CommandDotNet
             }
             
             var values = _middlewareByStage
-                .GetOrAdd(step.Stage, s => new List<(ExecutionMiddleware, short, short)>());
+                .GetOrAdd(step.Stage, _ => new List<(ExecutionMiddleware, short, short)>());
 
             values.Add((middleware, step.OrderWithinStage, _orderAdded++));
 
@@ -167,15 +166,14 @@ namespace CommandDotNet
                 _parameterResolversByType, middlewarePipeline, tokenTransformations);
         }
 
-        private class SingleRegistrationGuard<T>
+        private class SingleRegistrationGuard<T> where T: notnull
         {
             private readonly string _type;
-            private readonly Func<T, string> _getName;
+            private readonly Func<T, string?> _getName;
 
-            private readonly Dictionary<T, SingleRegistrationInfo> _registrations = 
-                new Dictionary<T, SingleRegistrationInfo>();
+            private readonly Dictionary<T, SingleRegistrationInfo> _registrations = new();
 
-            public SingleRegistrationGuard(string type, Func<T, string> getName)
+            public SingleRegistrationGuard(string type, Func<T, string?> getName)
             {
                 _type = type ?? throw new ArgumentNullException(nameof(type));
                 _getName = getName ?? throw new ArgumentNullException(nameof(getName));
@@ -185,7 +183,7 @@ namespace CommandDotNet
             {
                 if (_registrations.TryGetValue(key, out var info))
                 {
-                    var msg = $"{_type} '{_getName(key)}' has already been registered";
+                    var msg = $"{_type} '{_getName(key) ?? "<name unavailable>"}' has already been registered";
                     if (AppRunnerConfigExtensions.InUseDefaultMiddleware
                         || info.InUseDefaultMiddleware)
                     {
@@ -201,7 +199,7 @@ namespace CommandDotNet
 
             private class SingleRegistrationInfo
             {
-                public string? ExcludeParamName;
+                public readonly string? ExcludeParamName;
                 public bool InUseDefaultMiddleware => !ExcludeParamName.IsNullOrWhitespace();
 
                 public SingleRegistrationInfo()

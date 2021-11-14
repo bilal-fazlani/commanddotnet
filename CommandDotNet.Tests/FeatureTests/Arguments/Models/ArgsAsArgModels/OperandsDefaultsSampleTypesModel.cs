@@ -21,9 +21,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels
         public DayOfWeek EnumArg { get; set; } = DayOfWeek.Tuesday;
 
         [Operand]
-        public Uri? ObjectArg { get; set; } = new Uri("http://google.com");
+        public Uri? ObjectArg { get; set; } = new("http://google.com");
 
         [Operand]
-        public List<string>? StringListArg { get; set; } = new List<string> {"red", "blue"};
+        public List<string>? StringListArg { get; set; } = new() {"red", "blue"};
     }
 }

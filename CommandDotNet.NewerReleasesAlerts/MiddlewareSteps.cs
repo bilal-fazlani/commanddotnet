@@ -4,6 +4,6 @@ namespace CommandDotNet.NewerReleasesAlerts
 {
     public static class MiddlewareSteps
     {
-        public static MiddlewareStep NewerReleaseAlerts { get; set; } = new MiddlewareStep(MiddlewareStages.PostParseInputPreBindValues);
+        public static MiddlewareStep NewerReleaseAlerts { get; set; } = new(MiddlewareStages.PostParseInputPreBindValues);
     }
 }

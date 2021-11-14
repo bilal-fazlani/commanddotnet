@@ -78,7 +78,7 @@ namespace CommandDotNet.Spectre.Testing
 
         public override TextWriter Error => _forwardingConsole.Error;
 
-        public override ConsoleKeyInfo ReadKey(bool intercept = false)
+        public override ConsoleKeyInfo? ReadKey(bool intercept = false)
         {
             return _forwardingConsole.ReadKey(intercept);
         }

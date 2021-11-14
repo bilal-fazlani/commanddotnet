@@ -113,7 +113,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 });
         }
 
-        public class App
+        private class App
         {
             public void Do(
                 [Option(ShortName = "a")] bool optionA,

@@ -6,16 +6,16 @@ namespace CommandDotNet.Rendering
 {
     public class ForwardingTextWriter : TextWriter
     {
-        private Action<string?> _write;
+        private readonly Action<string?> _write;
 
         public ForwardingTextWriter(Action<string?> write)
         {
             _write = write;
         }
 
-        public override Encoding Encoding { get; }
+        public override Encoding Encoding { get; } = Encoding.Default;
 
-        public override void Write(string value)
+        public override void Write(string? value)
         {
             _write(value);
         }

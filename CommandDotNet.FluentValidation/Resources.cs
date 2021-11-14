@@ -2,7 +2,7 @@
 {
     public class Resources
     {
-        public static Resources A = new Resources();
+        public static Resources A = new();
 
         public virtual string Error_Argument_model_is_invalid(string modelName) => $"'{modelName}' is invalid";
 

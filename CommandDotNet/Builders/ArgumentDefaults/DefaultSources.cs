@@ -40,7 +40,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
             {
                 envVars ??= Environment.GetEnvironmentVariables();
                 return GetValueFunc(Resources.A.ValueSource_EnvVar,
-                    key => envVars.Contains(key) ? (string)envVars[key] : null,
+                    key => envVars.GetValueOrDefault<string>(key),
                     getKeysDelegates ?? new GetArgumentKeysDelegate[]
                     {
                         GetKeyFromAttribute
@@ -166,7 +166,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                     {
                         object defaultValue = argument.Arity.AllowsMany()
                             ? v.value!.Split(',')
-                            : (object)v.value!;
+                            : v.value!;
                         return new ArgumentDefault(sourceName, v.key, defaultValue);
                     })
                     .FirstOrDefault();

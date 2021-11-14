@@ -25,7 +25,7 @@ namespace CommandDotNet.TestTools
             _backingInvocation = backingInvocation ?? throw new ArgumentNullException(nameof(backingInvocation));
         }
 
-        public object Invoke(CommandContext commandContext, object instance, ExecutionDelegate next)
+        public object? Invoke(CommandContext commandContext, object instance, ExecutionDelegate next)
         {
             WasInvoked = true;
             try

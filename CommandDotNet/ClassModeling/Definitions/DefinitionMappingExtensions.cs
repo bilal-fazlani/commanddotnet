@@ -173,7 +173,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             }
 
             OptionAttribute? optionAttr = argumentDef.GetCustomAttribute<OptionAttribute>();
-            ;
+            
             if (optionAttr?.BooleanModeAsNullable == null)
                 return defaultBooleanMode;
 

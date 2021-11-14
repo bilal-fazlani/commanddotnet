@@ -35,7 +35,7 @@ who's there
                 });
         }
 
-        public class App
+        private class App
         {
             public void Do(IConsole console, IPrompter prompter)
             {

@@ -14,9 +14,9 @@ namespace CommandDotNet.NameCasing
         public static AppRunner UseNameCasing(this AppRunner appRunner, Case @case, bool applyToNameOverrides = false)
         {
             return applyToNameOverrides
-                ? appRunner.Configure(b => b.NameTransformation = (attributes, memberName, nameOverride, commandNodeType) =>
+                ? appRunner.Configure(b => b.NameTransformation = (_, memberName, nameOverride, _) =>
                     (nameOverride ?? memberName).ChangeCase(@case))
-                : appRunner.Configure(b => b.NameTransformation = (attributes, memberName, nameOverride, commandNodeType) =>
+                : appRunner.Configure(b => b.NameTransformation = (_, memberName, nameOverride, _) =>
                     nameOverride ?? memberName.ChangeCase(@case));
 
         }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using CommandDotNet.Builders;
@@ -13,10 +14,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class DefaultArityTests
     {
-        private static readonly ArgumentArity ZeroToOne = new ArgumentArity(0, 1);
-        private static readonly ArgumentArity OneToOne = new ArgumentArity(1, 1);
-        private static readonly ArgumentArity ZeroToMany = new ArgumentArity(0, int.MaxValue);
-        private static readonly ArgumentArity OneToMany = new ArgumentArity(1, int.MaxValue);
+        private static readonly ArgumentArity ZeroToOne = new(0, 1);
+        private static readonly ArgumentArity OneToOne = new(1, 1);
+        private static readonly ArgumentArity ZeroToMany = new(0, int.MaxValue);
+        private static readonly ArgumentArity OneToMany = new(1, int.MaxValue);
 
         public DefaultArityTests(ITestOutputHelper output)
         {
@@ -128,9 +129,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 {
                     Boolean = false,
                     Number = 0,
-                    Text = null,
-                    Uri = null,
-                    Texts = null
+                    Text = null!,
+                    Uri = null!,
+                    Texts = null!
                 }
             });
 
@@ -174,6 +175,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             public void NrtModel(NrtArgModel model) { }
         }
 
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
         class ArgModel : IArgumentModel
         {
             [Operand]
@@ -181,11 +183,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             [Operand]
             public int Number { get; set; }
             [Operand]
-            public string Text { get; set; }
+            public string Text { get; set; } = null!;
             [Operand]
-            public Uri Uri { get; set; }
+            public Uri Uri { get; set; } = null!;
             [Operand]
-            public IEnumerable<string> Texts { get; set; }
+            public IEnumerable<string> Texts { get; set; } = null!;
         }
 
         class NrtArgModel : IArgumentModel
@@ -208,13 +210,13 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .ToDictionary(p => p.Name, StringComparer.OrdinalIgnoreCase);
 
-            public Operand Boolean { get; set; }
-            public Operand Number { get; set; }
-            public Operand Text { get; set; }
-            public Operand Uri { get; set; }
-            public Operand Texts { get; set; }
-            public Operand NullableBoolean { get; set; }
-            public Operand NullableNumber { get; set; }
+            public Operand Boolean { get; set; } = null!;
+            public Operand Number { get; set; } = null!;
+            public Operand Text { get; set; } = null!;
+            public Operand Uri { get; set; } = null!;
+            public Operand Texts { get; set; } = null!;
+            public Operand NullableBoolean { get; set; } = null!;
+            public Operand NullableNumber { get; set; } = null!;
 
             public static Operands FromCommand(Command command)
             {

@@ -197,7 +197,7 @@ namespace CommandDotNet
             Func<CommandContext, IPrompter, IArgumentPrompter>? argumentPrompterFactory = null,
             Predicate<IArgument>? argumentFilter = null)
         {
-            return ValuePromptMiddleware.UseArgumentPrompter(appRunner, argumentPrompterFactory, argumentFilter); ;
+            return ValuePromptMiddleware.UseArgumentPrompter(appRunner, argumentPrompterFactory, argumentFilter);
         }
 
         /// <summary>Prefix a filepath with @ and it will be replaced by its contents during <see cref="MiddlewareStages.Tokenize"/></summary>

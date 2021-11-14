@@ -209,7 +209,7 @@ namespace CommandDotNet
         public override string Parse_ArgumentArity_Expected_single_value(string argumentName) =>
             _localize(base.Parse_ArgumentArity_Expected_single_value("{0}"))
             ?? base.Parse_ArgumentArity_Expected_single_value(argumentName);
-        public override string Parse_Assigning_value_to_argument(string argumentToString, string defaultValue) =>
+        public override string Parse_Assigning_value_to_argument(string? argumentToString, string? defaultValue) =>
             _localize(base.Parse_Assigning_value_to_argument("{0}", "{1}"))
             ?? base.Parse_Assigning_value_to_argument(argumentToString, defaultValue);
         public override string Parse_See_usage(string usage, string helpCommand) =>

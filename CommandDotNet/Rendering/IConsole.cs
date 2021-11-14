@@ -29,7 +29,7 @@ namespace CommandDotNet.Rendering
         /// whether one or more Shift, Alt or Ctrl modifier keys was pressed simultaneously with
         /// the console key.
         /// </returns>
-        ConsoleKeyInfo ReadKey(bool intercept = false);
+        ConsoleKeyInfo? ReadKey(bool intercept = false);
     }
 
     public interface IStandardError

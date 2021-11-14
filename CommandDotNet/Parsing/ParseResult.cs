@@ -42,16 +42,16 @@ namespace CommandDotNet.Parsing
             IReadOnlyCollection<Token> separatedArguments)
         {
             TargetCommand = command ?? throw new ArgumentNullException(nameof(command));
-            RemainingOperands = remainingOperands?.ToArgsArray() ?? new string[0];
-            SeparatedArguments = separatedArguments?.ToArgsArray() ?? new string[0];
+            RemainingOperands = remainingOperands.ToArgsArray();
+            SeparatedArguments = separatedArguments.ToArgsArray();
         }
 
         public ParseResult(IParseError error)
         {
             ParseError = error ?? throw new ArgumentNullException(nameof(error));
             TargetCommand = error.Command;
-            RemainingOperands = new string[0];
-            SeparatedArguments = new string[0];
+            RemainingOperands = Array.Empty<string>();
+            SeparatedArguments = Array.Empty<string>();
         }
 
         public override string ToString()

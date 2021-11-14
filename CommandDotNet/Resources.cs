@@ -5,7 +5,7 @@ namespace CommandDotNet
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public partial class Resources
     {
-        public static Resources A = new Resources();
+        public static Resources A = new();
 
         public virtual string Common_default_lc => "default";
         public virtual string Common_from_lc => "from";

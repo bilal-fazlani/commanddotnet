@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -51,10 +50,15 @@ namespace CommandDotNet.Extensions
                     : x == typeof(ICollection));
         }
 
-        internal static object GetDefaultValue(this Type type)
+        private static readonly Dictionary<Type, MethodInfo> DefaultMethodByType = new();
+
+        internal static object? GetDefaultValue(this Type type)
         {
-            Func<object> f = GetDefaultValue<object>;
-            return f.Method.GetGenericMethodDefinition().MakeGenericMethod(type).Invoke(null, null);
+            return DefaultMethodByType.GetOrAdd(type, _ =>
+            {
+                Func<object?> f = GetDefaultValue<object>;
+                return f.Method.GetGenericMethodDefinition().MakeGenericMethod(type);
+            }).Invoke(null, null);
         }
 
         internal static bool IsDefaultFor(this object defaultValue, Type type)
@@ -62,18 +66,16 @@ namespace CommandDotNet.Extensions
             return Equals(defaultValue, type.GetDefaultValue());
         }
 
-        [return: MaybeNull]
-        private static T GetDefaultValue<T>()
+        private static T? GetDefaultValue<T>()
         {
             return Box<T>.CreateDefault().Value;
         }
 
-        internal static bool IsCompilerGenerated(this Type t) {
-            if (t == null)
-                return false;
-
-            return t.IsDefined(typeof(CompilerGeneratedAttribute), false)
-                   || IsCompilerGenerated(t.DeclaringType);
+        internal static bool IsCompilerGenerated(this Type? t)
+        {
+            return t is not null
+                   && (t.IsDefined(typeof(CompilerGeneratedAttribute), false)
+                       || IsCompilerGenerated(t.DeclaringType));
         }
 
         internal static IEnumerable<PropertyInfo> GetDeclaredProperties<TAttribute>(this Type type) where TAttribute: Attribute

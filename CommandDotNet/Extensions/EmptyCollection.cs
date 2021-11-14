@@ -6,7 +6,7 @@ namespace CommandDotNet.Extensions
 {
     internal class EmptyCollection<T> : IReadOnlyCollection<T>, ICollection<T>
     {
-        internal static readonly EmptyCollection<T> Instance = new EmptyCollection<T>();
+        internal static readonly EmptyCollection<T> Instance = new();
 
         public int Count { get; } = 0;
 

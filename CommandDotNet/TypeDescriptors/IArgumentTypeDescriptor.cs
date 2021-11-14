@@ -11,6 +11,6 @@ namespace CommandDotNet.TypeDescriptors
         string GetDisplayName(IArgument argument);
 
         /// <summary>Parses the string</summary>
-        object ParseString(IArgument argument, string value);
+        object? ParseString(IArgument argument, string value);
     }
 }

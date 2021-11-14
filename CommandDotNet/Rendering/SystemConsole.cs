@@ -86,7 +86,7 @@ namespace CommandDotNet.Rendering
             set => SysConsole.TreatControlCAsInput = value;
         }
 
-        public virtual ConsoleKeyInfo ReadKey(bool intercept = false)
+        public virtual ConsoleKeyInfo? ReadKey(bool intercept = false)
         {
             return SysConsole.ReadKey(intercept);
         }

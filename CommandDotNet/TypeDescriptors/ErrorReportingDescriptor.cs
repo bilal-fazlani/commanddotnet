@@ -24,7 +24,7 @@ namespace CommandDotNet.TypeDescriptors
             return _innerDescriptor.GetDisplayName(argument);
         }
 
-        public object ParseString(IArgument argument, string value)
+        public object? ParseString(IArgument argument, string value)
         {
             try
             {
