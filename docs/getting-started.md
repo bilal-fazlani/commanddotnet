@@ -183,6 +183,8 @@ Answer: 60
     }
     ```
 
+    _note: `Should()` is a feature of the [FluentAssertions](https://fluentassertions.com/) library and will be used in many examples._
+
 === "BDD Style"
 
     ```c#

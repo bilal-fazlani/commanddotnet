@@ -1,61 +1,46 @@
 ﻿using System;
+using System.IO;
+using System.Text;
 using System.Threading;
 using CommandDotNet.Rendering;
 using Spectre.Console;
 
 namespace CommandDotNet.Spectre
 {
-    public class AnsiConsoleForwardingConsole : IConsole
+    public class AnsiConsoleForwardingConsole : SystemConsole
     {
         private readonly IAnsiConsole _ansiConsole;
 
         public AnsiConsoleForwardingConsole(IAnsiConsole ansiConsole)
         {
             _ansiConsole = ansiConsole;
-            Out = StandardStreamWriter.Create(ansiConsole.Write!);
-
-            Error = StandardStreamWriter.Create(Console.Error);
-            // In is used to read piped input, which does not appear to be handled by Spectre.
-            // ReadKey is implemented further down and delegates to IAnsiConsole.
-            In = StandardStreamReader.Create(Console.In);
+            Out = new ForwardingTextWriter(ansiConsole.Write!);
         }
 
-        #region Implementation of IStandardOut
+        public override Encoding OutputEncoding
+        {
+            get => _ansiConsole.Profile.Encoding;
+            set => _ansiConsole.Profile.Encoding = value;
+        }
 
-        public IStandardStreamWriter Out { get; }
-        public bool IsOutputRedirected => Console.IsOutputRedirected;
+        public override TextWriter Out { get; }
 
-        #endregion
+        public override int WindowWidth
+        {
+            get => _ansiConsole.Profile.Width;
+            set => _ansiConsole.Profile.Width = value;
+        }
 
-        #region Implementation of IStandardError
+        public override int WindowHeight
+        {
+            get => _ansiConsole.Profile.Height;
+            set => _ansiConsole.Profile.Height = value;
+        }
 
-        public IStandardStreamWriter Error { get; }
-        public bool IsErrorRedirected => Console.IsErrorRedirected;
-
-        #endregion
-
-        #region Implementation of IStandardIn
-
-        public IStandardStreamReader In { get; }
-
-        public bool IsInputRedirected => Console.IsInputRedirected;
-
-        #endregion
-
-        #region Implementation of IConsole
-
-        public ConsoleKeyInfo ReadKey(bool intercept = false)
+        public override ConsoleKeyInfo ReadKey(bool intercept = false)
         {
             var consoleKeyInfo = _ansiConsole.Input.ReadKeyAsync(intercept, CancellationToken.None).Result;
             return (ConsoleKeyInfo)consoleKeyInfo;
         }
-
-        public bool TreatControlCAsInput
-        {
-            get => Console.TreatControlCAsInput;
-            set => Console.TreatControlCAsInput = value;
-        }
-
-        #endregion
     }
 }

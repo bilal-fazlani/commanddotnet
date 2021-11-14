@@ -10,6 +10,9 @@ We are eager to take advantage of [Source Generators](https://devblogs.microsoft
 
 CommandDotNet now supports [Nullable reference types](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/nullable-reference-types) (NRT) when calculating Arity.
 
+Overhaul of IConsole, now covering most the System.Console members. Converted In, Out and Error to TextReader and TextWriter to match System.Console.
+This includes updates to the TestConsole and AnsiTestConsole for the Spectre integration.
+
 ### Breaking Changes in behavior
 
 NRT support
