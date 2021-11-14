@@ -39,7 +39,7 @@ namespace CommandDotNet.Builders
 
         private class Config
         {
-            public Func<CommandContext, IDisposable> RunInScopeCallback;
+            public readonly Func<CommandContext, IDisposable> RunInScopeCallback;
 
             public Config(Func<CommandContext, IDisposable> runInScopeCallback)
             {

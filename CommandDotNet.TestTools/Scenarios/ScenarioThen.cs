@@ -5,8 +5,8 @@ namespace CommandDotNet.TestTools.Scenarios
 {
     public class ScenarioThen
     {
-        private List<string> _outputContainsTexts = new List<string>();
-        private List<string> _outputNotContainsTexts = new List<string>();
+        private List<string> _outputContainsTexts = new();
+        private List<string> _outputNotContainsTexts = new();
 
         /// <summary>If specified, asserts the actual exit code is this value</summary>
         public int? ExitCode { get; set; }

@@ -200,7 +200,7 @@ token transformations:
             public string? Username { get; set; }
 
             [Option(ShortName = "p", LongName = "password")]
-            public Password Password { get; set; } = new Password("default-secret");
+            public Password Password { get; set; } = new("default-secret");
 
         }
     }

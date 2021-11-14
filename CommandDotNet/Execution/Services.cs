@@ -8,7 +8,7 @@ namespace CommandDotNet.Execution
     public class Services : IServices
     {
         private readonly IServices? _appConfigServices;
-        private readonly Dictionary<Type, object> _servicesByType = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, object> _servicesByType = new();
 
         public Services(IServices? appConfigServices = null)
         {

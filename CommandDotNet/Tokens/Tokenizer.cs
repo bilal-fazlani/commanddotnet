@@ -5,7 +5,7 @@ namespace CommandDotNet.Tokens
 {
     public static class Tokenizer
     {
-        internal static Token SeparatorToken { get; } = new Token("--", "--", TokenType.Separator);
+        internal static Token SeparatorToken { get; } = new("--", "--", TokenType.Separator);
 
         public static TokenCollection Tokenize(this IEnumerable<string> args, bool includeDirectives = false, string sourceName = "args")
         {

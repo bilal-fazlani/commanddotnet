@@ -294,9 +294,9 @@ Arguments:
                         {
                             ObjectListArg = new List<Uri>
                             {
-                                new Uri("http://google.com"),
-                                new Uri("http://apple.com"),
-                                new Uri("http://github.com"),
+                                new("http://google.com"),
+                                new("http://apple.com"),
+                                new("http://github.com"),
                             }
                         })
                 }

@@ -7,7 +7,7 @@ using CommandDotNet.Extensions;
 namespace CommandDotNet.TypeDescriptors
 {    public class StringCtorTypeDescriptor : IArgumentTypeDescriptor
     {
-        private static readonly Dictionary<Type, Converter> Cache = new Dictionary<Type, Converter>();
+        private static readonly Dictionary<Type, Converter> Cache = new();
 
         public bool CanSupport(Type type)
         {

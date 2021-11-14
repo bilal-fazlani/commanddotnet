@@ -9,7 +9,7 @@ namespace CommandDotNet.TestTools
 {
     public class ResourcesDef
     {
-        public static ResourcesDef Parse<T>() => new ResourcesDef(typeof(T));
+        public static ResourcesDef Parse<T>() => new(typeof(T));
 
         public ResourcesDef(Type type)
         {

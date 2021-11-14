@@ -385,7 +385,7 @@ options:
 
         }
 
-        public class App
+        private class App
         {
             public Task<int> Intercept(InterceptorExecutionDelegate next, Password password)
             {

@@ -7,7 +7,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class Option_With_Single_Hyphen_Tests
     {
-        private readonly AppSettings _allowSingleHyphenForLongNames = new AppSettings { Parser = { AllowSingleHyphenForLongNames = true } };
+        private readonly AppSettings _allowSingleHyphenForLongNames = new() { Parser = { AllowSingleHyphenForLongNames = true } };
 
         public Option_With_Single_Hyphen_Tests(ITestOutputHelper testOutputHelper)
         {
@@ -54,7 +54,7 @@ Options:
                 });
         }
 
-        public class App
+        private class App
         {
             public void Do(
                 [Option(ShortName = "f")] bool flag,

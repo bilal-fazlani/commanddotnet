@@ -260,7 +260,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                 });
         }
 
-        public class App
+        private class App
         {
             public void ByConvention(
                 [Option(LongName = "option1", ShortName = "o")] string option1,

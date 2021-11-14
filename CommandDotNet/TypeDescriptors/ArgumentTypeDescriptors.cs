@@ -10,7 +10,7 @@ namespace CommandDotNet.TypeDescriptors
 {
     public class ArgumentTypeDescriptors: IEnumerable<IArgumentTypeDescriptor>, IIndentableToString
     {
-        private readonly List<IArgumentTypeDescriptor> _customDescriptors = new List<IArgumentTypeDescriptor>();
+        private readonly List<IArgumentTypeDescriptor> _customDescriptors = new();
 
         private readonly List<IArgumentTypeDescriptor> _defaultDescriptors = new List<IArgumentTypeDescriptor>
             {

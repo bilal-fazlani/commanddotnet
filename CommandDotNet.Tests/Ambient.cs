@@ -6,7 +6,7 @@ namespace CommandDotNet.Tests
 {
     public static class Ambient
     {
-        private static readonly AsyncLocal<ITestOutputHelper> TestOutputHelper = new AsyncLocal<ITestOutputHelper>();
+        private static readonly AsyncLocal<ITestOutputHelper> TestOutputHelper = new();
 
         public static ITestOutputHelper? Output
         {

@@ -33,7 +33,7 @@ namespace CommandDotNet.Tests.CommandDotNet.Spectre
 ");
         }
 
-        public class AnsiApp
+        private class AnsiApp
         {
             public void Ansi(IAnsiConsole ansiConsole, string text)
             {

@@ -9,12 +9,12 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
 {
     public class ArgumentSeparatorTests
     {
-        private readonly AppSettings _endOfOptionsSettings = new AppSettings
+        private readonly AppSettings _endOfOptionsSettings = new()
         {
             DefaultArgumentSeparatorStrategy = ArgumentSeparatorStrategy.EndOfOptions
         };
 
-        private readonly AppSettings _passThruSettings = new AppSettings
+        private readonly AppSettings _passThruSettings = new()
         {
             DefaultArgumentSeparatorStrategy = ArgumentSeparatorStrategy.PassThru
         };

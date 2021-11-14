@@ -13,10 +13,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class DefaultArityTests
     {
-        private static readonly ArgumentArity ZeroToOne = new ArgumentArity(0, 1);
-        private static readonly ArgumentArity OneToOne = new ArgumentArity(1, 1);
-        private static readonly ArgumentArity ZeroToMany = new ArgumentArity(0, int.MaxValue);
-        private static readonly ArgumentArity OneToMany = new ArgumentArity(1, int.MaxValue);
+        private static readonly ArgumentArity ZeroToOne = new(0, 1);
+        private static readonly ArgumentArity OneToOne = new(1, 1);
+        private static readonly ArgumentArity ZeroToMany = new(0, int.MaxValue);
+        private static readonly ArgumentArity OneToMany = new(1, int.MaxValue);
 
         public DefaultArityTests(ITestOutputHelper output)
         {

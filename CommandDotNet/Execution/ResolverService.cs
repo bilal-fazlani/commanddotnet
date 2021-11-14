@@ -109,7 +109,7 @@ namespace CommandDotNet.Execution
 
         private class Disposables
         {
-            internal readonly List<IDisposable> Items = new List<IDisposable>();
+            internal readonly List<IDisposable> Items = new();
         }
     }
 }

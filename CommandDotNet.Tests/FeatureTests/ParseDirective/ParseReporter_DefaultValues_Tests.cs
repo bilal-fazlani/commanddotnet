@@ -116,7 +116,7 @@ Parse usage: [parse:t:raw] to include token transformations.
                 });
         }
 
-        public class App
+        private class App
         {
 
             public void Do(IConsole console,
@@ -132,11 +132,11 @@ Parse usage: [parse:t:raw] to include token transformations.
         {
             [EnvVar("opdList")]
             [Operand]
-            public List<string>? opdList { get; set; } = new List<string> { "one", "two", "three" };
+            public List<string>? opdList { get; set; } = new() { "one", "two", "three" };
 
             [EnvVar("optList")]
             [Option(ShortName = "l")]
-            public List<string>? optList { get; set; } = new List<string> { "one", "two", "three" };
+            public List<string>? optList { get; set; } = new() { "one", "two", "three" };
         }
     }
 }

@@ -16,12 +16,12 @@ namespace CommandDotNet
     public sealed class Command : IArgumentNode
     {
         private Command? _parent;
-        private readonly List<Option> _options = new List<Option>();
-        private readonly List<Option> _optionsForExecutableSubcommands = new List<Option>();
-        private readonly List<Operand> _operands = new List<Operand>();
-        private readonly List<Command> _subcommands = new List<Command>();
+        private readonly List<Option> _options = new();
+        private readonly List<Option> _optionsForExecutableSubcommands = new();
+        private readonly List<Operand> _operands = new();
+        private readonly List<Command> _subcommands = new();
 
-        private readonly Dictionary<string, IArgumentNode> _argumentsByAlias = new Dictionary<string, IArgumentNode>();
+        private readonly Dictionary<string, IArgumentNode> _argumentsByAlias = new();
 
         public Command(string name, 
             ICustomAttributeProvider? customAttributeProvider = null,

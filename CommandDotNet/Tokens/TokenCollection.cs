@@ -11,7 +11,7 @@ namespace CommandDotNet.Tokens
         private readonly List<Token> _directives;
         private readonly List<Token> _arguments;
         private readonly List<Token> _separated;
-        private readonly List<Token> _combined = new List<Token>();
+        private readonly List<Token> _combined = new();
 
         /// <summary>The total count of all tokens.  Includes argument separators if they exist.</summary>
         public int Count => _combined.Count;

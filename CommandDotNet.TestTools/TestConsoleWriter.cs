@@ -7,7 +7,7 @@ namespace CommandDotNet.TestTools
     {
         internal TextWriter? Replaced { get; set; }
         private readonly TestConsoleWriter? _inner;
-        private readonly StringBuilder _stringBuilder = new StringBuilder();
+        private readonly StringBuilder _stringBuilder = new();
 
         public TestConsoleWriter(TestConsoleWriter? inner = null)
         {

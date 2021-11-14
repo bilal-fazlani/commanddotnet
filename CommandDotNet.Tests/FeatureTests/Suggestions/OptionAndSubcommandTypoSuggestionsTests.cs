@@ -322,7 +322,7 @@ See 'testhost.dll  --help'"
                     });
         }
 
-        public class App
+        private class App
         {
             public void User([Option] string username, [Option] string firstname, [Option] string lastname)
             {

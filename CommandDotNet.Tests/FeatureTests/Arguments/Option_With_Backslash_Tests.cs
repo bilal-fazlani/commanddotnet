@@ -7,7 +7,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class Option_With_Backslash_Tests
     {
-        private readonly AppSettings _allowBackslash = new AppSettings { Parser = { AllowBackslashOptionPrefix = true } };
+        private readonly AppSettings _allowBackslash = new() { Parser = { AllowBackslashOptionPrefix = true } };
 
         public Option_With_Backslash_Tests(ITestOutputHelper testOutputHelper)
         {
@@ -76,7 +76,7 @@ Options:
                 });
         }
 
-        public class App
+        private class App
         {
             public void Do(
                 [Option(ShortName = "f")] bool flag,

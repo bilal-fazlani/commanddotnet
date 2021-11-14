@@ -19,11 +19,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         private class Names
         {
-            public int Index;
-            public string ModelOption;
-            public string ModelArg;
-            public string ParamOption;
-            public string ParamArg;
+            public readonly int Index;
+            public readonly string ModelOption;
+            public readonly string ModelArg;
+            public readonly string ParamOption;
+            public readonly string ParamArg;
 
             public Names(int i)
             {

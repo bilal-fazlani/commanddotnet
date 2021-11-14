@@ -108,8 +108,8 @@ Options:
                             EnumListArg = new List<DayOfWeek>{DayOfWeek.Friday, DayOfWeek.Tuesday},
                             ObjectListArg = new List<Uri>
                             {
-                                new Uri("http://apple.com"),
-                                new Uri("http://github.com"),
+                                new("http://apple.com"),
+                                new("http://github.com"),
                             }
                         })
                 }

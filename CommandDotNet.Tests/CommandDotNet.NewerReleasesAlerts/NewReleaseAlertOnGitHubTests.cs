@@ -91,14 +91,14 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
                     config: TestConfig.Default.Where(c => c.AppInfoOverride = BuildAppInfo(version)));
         }
 
-        public class App
+        private class App
         {
             public void Do()
             {
             }
         }
 
-        private static AppInfo BuildAppInfo(string version) => new AppInfo(
+        private static AppInfo BuildAppInfo(string version) => new(
             false, false, false,
             typeof(NewReleaseAlertOnGitHubTests).Assembly, "blah", version);
 

@@ -6,7 +6,7 @@ namespace CommandDotNet.Rendering
 {
     public class ForwardingTextWriter : TextWriter
     {
-        private Action<string?> _write;
+        private readonly Action<string?> _write;
 
         public ForwardingTextWriter(Action<string?> write)
         {

@@ -13,7 +13,7 @@ namespace CommandDotNet.Execution
         // using a stack to handle interactive sessions
         // so ctrl+c for a long running interactive command
         // stops only that command and not the interactive session
-        private static readonly Stack<CommandContext> SourceStack = new Stack<CommandContext>();
+        private static readonly Stack<CommandContext> SourceStack = new();
 
         private class Handler
         {

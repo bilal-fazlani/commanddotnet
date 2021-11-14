@@ -7,8 +7,8 @@ namespace CommandDotNet.TestTools.Prompts
 {
     public class PromptResponder : IPromptResponder
     {
-        private readonly List<IAnswer> _filteredAnswers = new List<IAnswer>();
-        private readonly List<IAnswer> _unfilteredAnswers = new List<IAnswer>();
+        private readonly List<IAnswer> _filteredAnswers = new();
+        private readonly List<IAnswer> _unfilteredAnswers = new();
         private Queue<ConsoleKeyInfo>? _currentAnswer;
 
         public PromptResponder(IEnumerable<IAnswer> answers)

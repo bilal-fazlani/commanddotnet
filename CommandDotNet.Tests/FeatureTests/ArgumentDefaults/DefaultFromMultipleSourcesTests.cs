@@ -43,7 +43,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                 : new ArgumentDefault("test", "key", value);
         }
 
-        public class App
+        private class App
         {
             public void Do(
                 [AppSetting("opt1")]

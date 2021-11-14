@@ -87,7 +87,7 @@ namespace CommandDotNet.Example.Commands
             public int? RetryCount { get; set; }
         }
 
-        public class NotificationValidator : AbstractValidator<Notification>
+        private class NotificationValidator : AbstractValidator<Notification>
         {
             public NotificationValidator()
             {

@@ -12,7 +12,7 @@ namespace CommandDotNet.TestTools
         private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
         private readonly TestConsole _host;
-        private readonly Queue<char> _currentLine = new Queue<char>();
+        private readonly Queue<char> _currentLine = new();
         private Func<ITestConsole, string?>? _onReadLine;
 
         public TestConsoleReader(TestConsole host)

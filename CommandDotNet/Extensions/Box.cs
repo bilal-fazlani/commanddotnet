@@ -12,6 +12,6 @@ namespace CommandDotNet.Extensions
             Value = value;
         }
 
-        public static Box<T> CreateDefault() => new Box<T>(default!);
+        public static Box<T> CreateDefault() => new(default!);
     }
 }

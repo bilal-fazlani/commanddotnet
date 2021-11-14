@@ -103,8 +103,8 @@ Options:
                     AssertContext = ctx => ctx.ParamValuesShouldBe(
                         new List<StringCtorObject>
                         {
-                            new StringCtorObject("file1"),
-                            new StringCtorObject("file2")
+                            new("file1"),
+                            new("file2")
                         },
                         new List<StaticParseObject>
                         {

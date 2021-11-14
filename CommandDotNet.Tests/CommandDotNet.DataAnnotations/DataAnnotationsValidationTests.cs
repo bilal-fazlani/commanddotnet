@@ -171,7 +171,7 @@ Usage: testhost.dll Save [options] <Id> <Name>"
                 });
         }
 
-        public class App
+        private class App
         {
             public void Save(
                 Person person, 
@@ -180,7 +180,7 @@ Usage: testhost.dll Save [options] <Id> <Name>"
             }
         }
 
-        public class Calc
+        private class Calc
         {
             public Task<int> Interceptor(InterceptorExecutionDelegate next, [Required] string note)
             {
@@ -193,7 +193,7 @@ Usage: testhost.dll Save [options] <Id> <Name>"
             }
         }
 
-        public class Person : IArgumentModel, IValidatableObject
+        private class Person : IArgumentModel, IValidatableObject
         {
             [Operand, Required, Range(1, int.MaxValue)]
             public int? Id { get; set; }
@@ -205,7 +205,7 @@ Usage: testhost.dll Save [options] <Id> <Name>"
             public string NickName { get; set; } = null!;
 
             [OrderByPositionInClass]
-            public ContactInfo ContactInfo { get; set; } = new ContactInfo();
+            public ContactInfo ContactInfo { get; set; } = new();
 
             public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
             {

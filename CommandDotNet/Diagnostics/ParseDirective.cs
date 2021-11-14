@@ -162,7 +162,7 @@ namespace CommandDotNet.Diagnostics
             internal bool IncludeTokenization;
             internal bool IncludeRawCommandLine;
             internal bool Reported;
-            internal readonly StringBuilder Transformations = new StringBuilder();
+            internal readonly StringBuilder Transformations = new();
 
             internal static ParseContext Parse(string value)
             {

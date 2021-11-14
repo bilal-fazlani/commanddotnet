@@ -37,7 +37,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 });
         }
 
-        public class App
+        private class App
         {
             public void Do(IConsole console, [Option] string opt1, string arg1 = "wet dog")
             {

@@ -89,7 +89,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                 });
         }
 
-        public class App
+        private class App
         {
             public void ByAttribute(
                 [EnvVar("opt1")] [Option(LongName = "option1", ShortName = "o")]

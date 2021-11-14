@@ -110,8 +110,8 @@ namespace CommandDotNet.Tests.FeatureTests.EnabledMiddlewareScenarios
                         AssertContext = ctx => ctx.ParamValuesShouldBe(
                             new List<Uri>
                             {
-                                new Uri("http://www.google.com"),
-                                new Uri("http://www.apple.com")
+                                new("http://www.google.com"),
+                                new("http://www.apple.com")
                             }),
                     }
                 });

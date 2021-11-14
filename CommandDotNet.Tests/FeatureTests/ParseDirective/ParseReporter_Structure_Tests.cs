@@ -51,7 +51,7 @@ Parse usage: [parse:t:raw] to include token transformations.
                 });
         }
 
-        public class App
+        private class App
         {
             public Task<int> Interceptor(InterceptorExecutionDelegate next,
                 [Option] string iOption1) => next();

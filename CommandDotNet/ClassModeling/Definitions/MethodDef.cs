@@ -65,13 +65,13 @@ namespace CommandDotNet.ClassModeling.Definitions
             private readonly AppConfig _appConfig;
 
             private ParameterInfo? _nextParameterInfo;
-            private readonly List<Action<CommandContext>> _resolvers = new List<Action<CommandContext>>();
+            private readonly List<Action<CommandContext>> _resolvers = new();
 
             internal readonly IReadOnlyCollection<IArgumentDef> ArgumentDefs;
             internal readonly IReadOnlyCollection<IArgument> Arguments;
             internal readonly ParameterInfo[] Parameters;
             internal readonly object[] Values;
-            internal readonly HashSet<IArgumentModel> ArgumentModels = new HashSet<IArgumentModel>();
+            internal readonly HashSet<IArgumentModel> ArgumentModels = new();
 
             public Result(MethodInfo methodInfo, AppConfig appConfig, bool isInterceptor)
             {

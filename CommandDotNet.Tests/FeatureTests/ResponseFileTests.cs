@@ -140,7 +140,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void WhenFileNotFound_Exit_Code1_And_InformativeErrorMessage_And_LogError()
         {
-            List<string?> logs = new List<string?>();
+            List<string?> logs = new();
 
             new AppRunner<App>()
                 .UseResponseFiles()

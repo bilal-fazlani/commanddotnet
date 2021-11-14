@@ -68,7 +68,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         {
             MethodInfo? interceptorMethodInfo = null;
             MethodInfo? defaultCommandMethodInfo = null;
-            List<MethodInfo> localCommandMethodInfos = new List<MethodInfo>();
+            List<MethodInfo> localCommandMethodInfos = new();
 
             foreach (var method in CommandHostClassType.GetDeclaredMethods())
             {

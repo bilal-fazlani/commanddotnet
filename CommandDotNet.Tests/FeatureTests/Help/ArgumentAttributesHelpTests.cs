@@ -59,7 +59,7 @@ Options:
                     });
         }
 
-        public class App
+        private class App
         {
             public void Do(
                 [Option(Description = "option-descr")] string option,

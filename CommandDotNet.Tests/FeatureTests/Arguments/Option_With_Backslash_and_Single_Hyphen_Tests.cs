@@ -7,11 +7,14 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class Option_With_Backslash_and_Single_Hyphen_Tests
     {
-        private readonly AppSettings _allowBoth = new AppSettings { Parser =
+        private readonly AppSettings _allowBoth = new()
         {
-            AllowBackslashOptionPrefix = true,
-            AllowSingleHyphenForLongNames = true
-        } };
+            Parser =
+            {
+                AllowBackslashOptionPrefix = true,
+                AllowSingleHyphenForLongNames = true
+            }
+        };
 
         public Option_With_Backslash_and_Single_Hyphen_Tests(ITestOutputHelper testOutputHelper)
         {
@@ -60,7 +63,7 @@ Options:
                 });
         }
 
-        public class App
+        private class App
         {
             public void Do(
                 [Option(ShortName = "f")] bool flag,

@@ -97,7 +97,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                 : new ArgumentDefault("test", "key", value);
         }
 
-        public class App
+        private class App
         {
             public void Multi([Operand] string first, [Operand] string second)
             {

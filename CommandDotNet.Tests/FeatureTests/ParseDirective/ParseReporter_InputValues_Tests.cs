@@ -169,7 +169,7 @@ Parse usage: [parse:t:raw] to include token transformations.
 
         }
 
-        public class App
+        private class App
         {
             public void Do(
                 IConsole console,

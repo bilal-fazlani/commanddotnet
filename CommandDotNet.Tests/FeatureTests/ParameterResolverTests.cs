@@ -137,7 +137,7 @@ Options:
             }
         }
 
-        public class App
+        private class App
         {
             public Task<int> Interceptor(InterceptorExecutionDelegate next, CommandContext commandContext, IConsole console, CancellationToken cancellationToken)
             {
