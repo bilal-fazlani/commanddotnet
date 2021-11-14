@@ -27,6 +27,9 @@ Previously, negative numbers were only support when proceeded by `:` or `=`, eg 
 Overhaul of IConsole, now covering most the System.Console members. Converted In, Out and Error to TextReader and TextWriter to match System.Console.
 This includes updates to the TestConsole and AnsiTestConsole for the Spectre integration.
 
+Overhaul of IConsole, now covering most the System.Console members. Converted In, Out and Error to TextReader and TextWriter to match System.Console.
+This includes updates to the TestConsole and AnsiTestConsole for the Spectre integration.
+
 ### Breaking Changes in behavior
 
 #### NRT support

@@ -58,7 +58,7 @@ namespace CommandDotNet.Diagnostics
                     // in case ParseReportByArg wasn't run due to parsing errors,
                     // output this the transformations as a temporary aid
                     writer.WriteLine();
-                    writer.WriteLine(commandContext.ParseResult!.HelpWasRequested() 
+                    writer.WriteLine(commandContext.ParseResult!.HelpWasRequested()
                         ? Resources.A.ParseDirective_Help_was_requested
                         : Resources.A.ParseDirective_Unable_to_map_tokens_to_arguments);
                     WriteLine(parseContext.Transformations.ToString());
