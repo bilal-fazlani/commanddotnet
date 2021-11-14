@@ -4,7 +4,7 @@
 Enable the feature with `appRunner.UsePrompter()` and / or `appRunner.UseArgumentPrompter()`.
 
 !!! Tip
-    Check out the [Spectre extensions](../OtherFeatures/spectre.md) for a richer prompting experience.
+    Check out the [Spectre extensions](../OtherFeatures/spectre.md) for an alternate prompting experience.
     
     Use the `AnsiTestConsole` from the `CommandDotNet.Spectre.Testing`package to test the IAnsiConsole features work as expected.
     Example included in the link above.
