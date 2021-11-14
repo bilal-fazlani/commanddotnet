@@ -65,7 +65,7 @@ namespace CommandDotNet.Tests.UnitTests.Localization
             var missingMembers = proxy.IsMissingMembersFrom(source).ToCsv();
 
             missingMembers.Should().BeNullOrEmpty(
-                $"... But members are missing from a ResourceProxy. " +
+                "... But members are missing from a ResourceProxy. " +
                 $"Run {nameof(ResourceGenerators)}.{nameof(ResourceGenerators.RegenerateProxyClasses)} to add them");
         }
 
