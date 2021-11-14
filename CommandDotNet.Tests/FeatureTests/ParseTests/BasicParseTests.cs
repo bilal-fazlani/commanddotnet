@@ -114,6 +114,19 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
                 }
             });
         }
+        
+        [Fact]
+        public void NegativeDecimalsCanBeUsedForArgumentValues()
+        {
+            new AppRunner<App>().Verify(new Scenario
+            {
+                When = { Args = "Decimals -1.111 -y -10.25" },
+                Then =
+                {
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(-1.111,-10.25)
+                }
+            });
+        }
 
         [Fact]
         public void EmptyStringCanBeUsedForOptionValues()
@@ -152,6 +165,8 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             public void Do([Operand] string arg)
             {
             }
+
+            public void Decimals(decimal x, [Option] decimal y){}
         }
     }
 }

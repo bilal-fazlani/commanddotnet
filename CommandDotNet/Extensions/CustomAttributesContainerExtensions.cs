@@ -14,7 +14,7 @@ namespace CommandDotNet.Extensions
                 throw new ArgumentNullException(nameof(container));
             }
 
-            return container.CustomAttributes?.HasAttribute<T>() ?? false;
+            return container.CustomAttributes.HasAttribute<T>();
         }
 
         public static T? GetCustomAttribute<T>(this ICustomAttributesContainer container) where T : Attribute

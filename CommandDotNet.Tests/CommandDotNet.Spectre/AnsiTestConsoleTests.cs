@@ -26,7 +26,7 @@ namespace CommandDotNet.Tests.CommandDotNet.Spectre
 ");
         }
 
-        public class App
+        private class App
         {
             public void Ansi(IAnsiConsole ansiConsole, string text)
             {

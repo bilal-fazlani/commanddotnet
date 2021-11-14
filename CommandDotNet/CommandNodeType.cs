@@ -4,9 +4,9 @@ namespace CommandDotNet
 {
     public class CommandNodeType
     {
-        public static readonly CommandNodeType Command = new CommandNodeType(nameof(Command)) {IsCommand = true};
-        public static readonly CommandNodeType Operand = new CommandNodeType(nameof(Operand)) {IsOperand = true};
-        public static readonly CommandNodeType Option = new CommandNodeType(nameof(Option)) {IsOption = true};
+        public static readonly CommandNodeType Command = new(nameof(Command)) {IsCommand = true};
+        public static readonly CommandNodeType Operand = new(nameof(Operand)) {IsOperand = true};
+        public static readonly CommandNodeType Option = new(nameof(Option)) {IsOption = true};
 
         private readonly string _name;
 

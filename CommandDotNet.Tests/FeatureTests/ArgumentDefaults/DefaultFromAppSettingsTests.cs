@@ -16,6 +16,67 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
 
         [Theory]
         [InlineData("ByConvention", false, "--option1")]
+        [InlineData("ByConvention /option1", true, "--option1")]
+        [InlineData("ByConvention /o", true, "--option1")]
+        [InlineData("/option1", true, "--option1")]
+        [InlineData("/o", true, "--option1")]
+        [InlineData("option1", false, "--option1")]
+        [InlineData("o", false, "--option1")]
+        [InlineData("ByConvention operand1", true, "operand1")]
+        [InlineData("operand1", true, "operand1")]
+        [InlineData("/operand1", false, "operand1")]
+        public void ByConvention_with_Backslash(string key, bool includes, string nameToInclude)
+        {
+            var scenario = includes
+                ? new Scenario
+                {
+                    When = { Args = "ByConvention -h" },
+                    Then = { OutputContainsTexts = { $"{nameToInclude}  <TEXT>  [red]" } }
+                }
+                : new Scenario
+                {
+                    When = { Args = "ByConvention -h" },
+                    Then = { OutputNotContainsTexts = { $"{nameToInclude}  <TEXT>  [red]" } }
+                };
+
+            new AppRunner<App>(new AppSettings { Parser = { AllowBackslashOptionPrefix = true } })
+                .UseDefaultsFromAppSetting(
+                    new NameValueCollection { { key, "red" } },
+                    includeNamingConventions: true)
+                .Verify(scenario);
+        }
+
+        [Theory]
+        [InlineData("ByConvention", false, "--option1")]
+        [InlineData("ByConvention -option1", true, "--option1")]
+        [InlineData("-option1", true, "--option1")]
+        [InlineData("option1", false, "--option1")]
+        [InlineData("ByConvention operand1", true, "operand1")]
+        [InlineData("operand1", true, "operand1")]
+        [InlineData("-operand1", false, "operand1")]
+        public void ByConvention_with_SingleHyphen(string key, bool includes, string nameToInclude)
+        {
+            var scenario = includes
+                ? new Scenario
+                {
+                    When = { Args = "ByConvention -h" },
+                    Then = { OutputContainsTexts = { $"{nameToInclude}  <TEXT>  [red]" } }
+                }
+                : new Scenario
+                {
+                    When = { Args = "ByConvention -h" },
+                    Then = { OutputNotContainsTexts = { $"{nameToInclude}  <TEXT>  [red]" } }
+                };
+
+            new AppRunner<App>(new AppSettings { Parser = { AllowSingleHyphenForLongNames = true } })
+                .UseDefaultsFromAppSetting(
+                    new NameValueCollection { { key, "red" } },
+                    includeNamingConventions: true)
+                .Verify(scenario);
+        }
+
+        [Theory]
+        [InlineData("ByConvention", false, "--option1")]
         [InlineData("ByConvention --option1", true, "--option1")]
         [InlineData("ByConvention -o", true, "--option1")]
         [InlineData("--option1", true, "--option1")]
@@ -35,6 +96,13 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
         [InlineData("ByConvention operand2", true, "operand2")]
         [InlineData("operand2", true, "operand2")]
         [InlineData("--operand2", false, "operand2")]
+        // backslash and singlehyphen not included if not enabled
+        [InlineData("ByConvention -option1", false, "--option1")]
+        [InlineData("-option1", false, "--option1")]
+        [InlineData("ByConvention /option1", false, "--option1")]
+        [InlineData("ByConvention /o", false, "--option1")]
+        [InlineData("/option1", false, "--option1")]
+        [InlineData("/o", false, "--option1")]
         public void ByConvention(string key, bool includes, string nameToInclude)
         {
             var scenario = includes
@@ -192,7 +260,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                 });
         }
 
-        public class App
+        private class App
         {
             public void ByConvention(
                 [Option(LongName = "option1", ShortName = "o")] string option1,

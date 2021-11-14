@@ -40,7 +40,7 @@ Options:
 ");
         }
 
-        public class App
+        private class App
         {
             public void Do() { }
         }

@@ -8,8 +8,8 @@ namespace CommandDotNet.Tests
 {
     public static class TestAppSettings
     {
-        public static AppSettings BasicHelp => new AppSettings {Help = {TextStyle = HelpTextStyle.Basic}};
-        public static AppSettings DetailedHelp => new AppSettings {Help = {TextStyle = HelpTextStyle.Detailed}};
+        public static AppSettings BasicHelp => new() {Help = {TextStyle = HelpTextStyle.Basic}};
+        public static AppSettings DetailedHelp => new() {Help = {TextStyle = HelpTextStyle.Detailed}};
 
         public static AppSettings Clone(this AppSettings original, Action<AppSettings> modify)
         {

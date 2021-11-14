@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CommandDotNet.Parsing;
 
 namespace CommandDotNet.Tokens
 {
     public static class Tokenizer
     {
-        internal static Token SeparatorToken { get; } = new Token("--", "--", TokenType.Separator);
+        internal static Token SeparatorToken { get; } = new("--", "--", TokenType.Separator);
 
         public static TokenCollection Tokenize(this IEnumerable<string> args, bool includeDirectives = false, string sourceName = "args")
         {
@@ -17,7 +16,6 @@ namespace CommandDotNet.Tokens
         {
             Token token = (includeDirectives && TryTokenizeDirective(arg, out Token? parsedToken))
                                 || TryTokenizeSeparator(arg, out parsedToken)
-                                || TryTokenizeOption(arg, out parsedToken)
                 ? parsedToken!
                 : TokenizeValue(arg);
             token.SourceName = sourceName;
@@ -26,7 +24,7 @@ namespace CommandDotNet.Tokens
 
         public static bool TryTokenizeDirective(string arg, out Token? token)
         {
-            if (arg.Length > 2 && arg[0] == '[' && arg[arg.Length - 1] == ']')
+            if (arg.Length > 2 && arg[0] == '[' && arg[^1] == ']')
             {
                 token = new Token(arg, arg.Substring(1, arg.Length - 2), TokenType.Directive);
                 return true;
@@ -48,46 +46,9 @@ namespace CommandDotNet.Tokens
             return false;
         }
 
-        public static bool TryTokenizeOption(string arg, out Token? token)
-        {
-            bool IsShortOption(string arg)
-            {
-                return arg.Length > 1
-                       && arg[0] == '-'
-                       && arg[1] != '-'
-                       && char.IsLetter(arg[1]);
-            }
-
-            bool IsLongOption(string arg)
-            {
-                return arg.Length > 2
-                       && arg[0] == '-'
-                       && arg[1] == '-'
-                       && arg[2] != '-';
-            }
-
-            bool isShortOption = IsShortOption(arg);
-            bool isLongOption = !isShortOption && IsLongOption(arg);
-
-            if (!isShortOption && !isLongOption)
-            {
-                token = null;
-                return false;
-            }
-
-            var value = arg.Substring(isShortOption ? 1 : 2);
-            var assignmentIndex = value.IndexOfAny(new[] { ':', '=' });
-            var hasValue = assignmentIndex > 0;
-            var isClubbed = isShortOption && !hasValue && value.Length > 1;
-
-            token = new Token(arg, value, TokenType.Option,
-                new OptionTokenType(value, isLongOption, isClubbed, hasValue, assignmentIndex));
-            return true;
-        }
-
         public static Token TokenizeValue(string argValue)
         {
-            return new Token(argValue, argValue, TokenType.Value);
+            return new Token(argValue, argValue, TokenType.Argument);
         }
 
         public static string[] ToArgsArray(this IEnumerable<Token> tokens)
@@ -103,7 +64,7 @@ namespace CommandDotNet.Tokens
             {
                 if (foundSeparator)
                 {
-                    yield return new Token(arg, arg, TokenType.Value){SourceName = sourceName};
+                    yield return new Token(arg, arg, TokenType.Argument){SourceName = sourceName};
                 }
                 else
                 {

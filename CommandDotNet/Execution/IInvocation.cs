@@ -34,6 +34,9 @@ namespace CommandDotNet.Execution
         /// </remarks>
         MethodInfo MethodInfo { get; }
 
+        /// <summary>The invocation is for an interceptor method, not a command</summary>
+        public bool IsInterceptor { get; }
+
         /// <summary>
         /// All <see cref="IArgumentModel"/>s for the invocation,
         /// flattened so you do not need to reflect properties to
@@ -42,6 +45,6 @@ namespace CommandDotNet.Execution
         IReadOnlyCollection<IArgumentModel> FlattenedArgumentModels { get; }
 
         /// <summary>Invokes the instance</summary>
-        object Invoke(CommandContext commandContext, object instance, ExecutionDelegate next);
+        object? Invoke(CommandContext commandContext, object instance, ExecutionDelegate next);
     }
 }

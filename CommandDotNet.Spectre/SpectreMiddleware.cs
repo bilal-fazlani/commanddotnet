@@ -41,7 +41,7 @@ namespace CommandDotNet.Spectre
                 ansiConsole ??= AnsiConsole.Console;
 
                 c.Console = ansiConsole as IConsole ?? new AnsiConsoleForwardingConsole(ansiConsole);
-                c.UseParameterResolver(ctx => ansiConsole);
+                c.UseParameterResolver(_ => ansiConsole);
                 c.Services.Add(ansiConsole);
 
                 EnsureResourcesAreSet(appRunner, c);

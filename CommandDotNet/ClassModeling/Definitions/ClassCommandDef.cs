@@ -63,11 +63,12 @@ namespace CommandDotNet.ClassModeling.Definitions
             _subCommands = new Lazy<List<ICommandDef>>(() => GetSubCommands(localCommands));
         }
 
-        private (IMethodDef? interceptorMethod, ICommandDef? defaultCommand, List<ICommandDef> localCommands) ParseMethods(AppConfig appConfig)
+        private (IMethodDef? interceptorMethod, ICommandDef? defaultCommand, List<ICommandDef> localCommands) 
+            ParseMethods(AppConfig appConfig)
         {
             MethodInfo? interceptorMethodInfo = null;
             MethodInfo? defaultCommandMethodInfo = null;
-            List<MethodInfo> localCommandMethodInfos = new List<MethodInfo>();
+            List<MethodInfo> localCommandMethodInfos = new();
 
             foreach (var method in CommandHostClassType.GetDeclaredMethods())
             {
@@ -85,7 +86,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                                                                 $"{MethodDef.MiddlewareNextParameterType} or {MethodDef.InterceptorNextParameterType}.");
                     }
 
-                    var emDelegate = new ExecutionMiddleware((context, next) => ExitCodes.Error).Method;
+                    var emDelegate = new ExecutionMiddleware((_, _) => ExitCodes.Error).Method;
                     if (method.ReturnType != emDelegate.ReturnType)
                     {
                         throw new InvalidConfigurationException($"`{CommandHostClassType}.{method.Name}` must return type of {emDelegate.ReturnType}.");
@@ -109,7 +110,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             var interceptorMethod = interceptorMethodInfo == null 
                 ? null
-                : new MethodDef(interceptorMethodInfo, appConfig);
+                : new MethodDef(interceptorMethodInfo, appConfig, true);
 
             var defaultCommand = defaultCommandMethodInfo == null
                 ? null

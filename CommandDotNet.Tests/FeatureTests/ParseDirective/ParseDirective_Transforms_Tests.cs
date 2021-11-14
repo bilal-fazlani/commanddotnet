@@ -25,9 +25,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
 
 >>> from shell
   Directive: [parse:t]
-  Value    : Do
->>> after: expand-clubbed-flags (no changes)
->>> after: split-option-assignments (no changes)" }
+  Argument : Do" }
                     }
                 });
         }
@@ -47,42 +45,18 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
 
 >>> from shell
   Directive: [parse:t]
-  Value    : Do
-  Option   : -abc
-  Option   : --one
-  Value    : two
-  Option   : --three:four
-  Option   : --five=six
-  Value    : seven
->>> after: expand-clubbed-flags
-  Directive: [parse:t]
-  Value    : Do
-  Option   : -a
-  Option   : -b
-  Option   : -c
-  Option   : --one
-  Value    : two
-  Option   : --three:four
-  Option   : --five=six
-  Value    : seven
->>> after: split-option-assignments
-  Directive: [parse:t]
-  Value    : Do
-  Option   : -a
-  Option   : -b
-  Option   : -c
-  Option   : --one
-  Value    : two
-  Option   : --three
-  Value    : four
-  Option   : --five
-  Value    : six
-  Value    : seven" }
+  Argument : Do
+  Argument : -abc
+  Argument : --one
+  Argument : two
+  Argument : --three:four
+  Argument : --five=six
+  Argument : seven" }
                     }
                 });
         }
 
-        public class App
+        private class App
         {
             public void Do() { }
         }

@@ -16,12 +16,12 @@ namespace CommandDotNet
     public sealed class Command : IArgumentNode
     {
         private Command? _parent;
-        private readonly List<Option> _options = new List<Option>();
-        private readonly List<Option> _optionsForExecutableSubcommands = new List<Option>();
-        private readonly List<Operand> _operands = new List<Operand>();
-        private readonly List<Command> _subcommands = new List<Command>();
+        private readonly List<Option> _options = new();
+        private readonly List<Option> _optionsForExecutableSubcommands = new();
+        private readonly List<Operand> _operands = new();
+        private readonly List<Command> _subcommands = new();
 
-        private readonly Dictionary<string, IArgumentNode> _argumentsByAlias = new Dictionary<string, IArgumentNode>();
+        private readonly Dictionary<string, IArgumentNode> _argumentsByAlias = new();
 
         public Command(string name, 
             ICustomAttributeProvider? customAttributeProvider = null,
@@ -119,9 +119,6 @@ namespace CommandDotNet
         public TArgumentNode? Find<TArgumentNode>(string alias)
             where TArgumentNode : class, IArgumentNode => 
             (TArgumentNode?) FindArgumentNode(alias);
-
-        [Obsolete("Use Find<Option> instead")]
-        public Option? FindOption(string alias) => Find<Option>(alias);
 
         internal void AddArgumentNode(IArgumentNode argumentNode)
         {
@@ -241,7 +238,8 @@ namespace CommandDotNet
 
         }
 
-        public static bool operator ==(Command x, Command y) => (object) x == (object) y;
+        // ReSharper disable once RedundantCast
+        public static bool operator ==(Command x, Command y) => (object)x == (object) y;
 
         public static bool operator !=(Command x, Command y) => !(x == y);
 
@@ -251,7 +249,7 @@ namespace CommandDotNet
                    && Equals(Parent, other.Parent);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is null)
             {
@@ -275,7 +273,7 @@ namespace CommandDotNet
         {
             unchecked
             {
-                return ((Name != null ? Name.GetHashCode() : 0) * 397) ^ (Parent is { } ? Parent.GetHashCode() : 0);
+                return (Name.GetHashCode() * 397) ^ (Parent is { } ? Parent.GetHashCode() : 0);
             }
         }
     }

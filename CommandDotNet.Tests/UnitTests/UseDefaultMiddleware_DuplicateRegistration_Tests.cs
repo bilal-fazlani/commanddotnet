@@ -114,7 +114,7 @@ namespace CommandDotNet.Tests.UnitTests
             return $"{componentType} '{componentName}' " +
                    "has already been registered via 'UseDefaultMiddleware'. " +
                    $"Try `.UseDefaultMiddleware({excludeParamName}:true)` " +
-                   $"to register with other extension methods.";
+                   "to register with other extension methods.";
         }
     }
 }

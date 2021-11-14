@@ -18,16 +18,15 @@ namespace CommandDotNet.TestTools
                     .Where(t => t.IsClass && t.InheritsFrom<IDefaultTestConfig>())
                     .Select(t =>
                     {
-                        var defaultTestConfig = (IDefaultTestConfig) Activator.CreateInstance(t);
+                        var defaultTestConfig = (IDefaultTestConfig) Activator.CreateInstance(t)!;
                         var config = defaultTestConfig.Default;
-                        if (config != null && config.Source.IsNullOrWhitespace())
+                        if (config.Source.IsNullOrWhitespace())
                         {
                             config.Source = t.FullName;
                         }
                         return config;
-                    })
-                    .Where(c => c is { })
-                    .OrderBy(c => c!.Priority ?? int.MaxValue)
+                    })                           
+                    .OrderBy(c => c.Priority ?? int.MaxValue)
                     .ToList();
 
                 /*

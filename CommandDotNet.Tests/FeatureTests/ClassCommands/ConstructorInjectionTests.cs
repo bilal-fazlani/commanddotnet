@@ -26,9 +26,9 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 
         class UseLargestCtorApp
         {
-            public CommandContext CommandContext = null!;
-            public IConsole Console = null!;
-            public CancellationToken CancellationToken;
+            public readonly CommandContext CommandContext = null!;
+            public readonly IConsole Console = null!;
+            public readonly CancellationToken CancellationToken;
 
             public UseLargestCtorApp()
             {

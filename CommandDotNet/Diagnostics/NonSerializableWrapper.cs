@@ -12,14 +12,16 @@ namespace CommandDotNet.Diagnostics
     [Serializable]
     internal class NonSerializableWrapper : ISerializable, IIndentableToString
     {
-        public object Item { get; }
+        public object? Item { get; }
         public bool SkipPrint { get; }
 
-        public NonSerializableWrapper(object item, bool skipPrint = false)
+        public NonSerializableWrapper(object? item, bool skipPrint = false)
         {
             Item = item;
             SkipPrint = skipPrint;
         }
+
+        public T As<T>() => (T)Item! ?? throw new InvalidConfigurationException($"{nameof(NonSerializableWrapper)}.{nameof(Item)} cannot be null when using As<T>");
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => 
             info.AddValue(Item?.GetType().Namespace ?? "???", Item?.ToString());

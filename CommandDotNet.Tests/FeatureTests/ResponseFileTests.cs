@@ -140,7 +140,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void WhenFileNotFound_Exit_Code1_And_InformativeErrorMessage_And_LogError()
         {
-            List<string?> logs = new List<string?>();
+            List<string?> logs = new();
 
             new AppRunner<App>()
                 .UseResponseFiles()
@@ -153,7 +153,7 @@ namespace CommandDotNet.Tests.FeatureTests
                         AssertOutput = o =>
                         {
                             o.Should().StartWith("File not found: ");
-                            o.TrimEnd(Environment.NewLine.ToCharArray())
+                            o!.TrimEnd(Environment.NewLine.ToCharArray())
                                 .Should().EndWith("not-exists.rsp");
                         }
                     }

@@ -1,5 +1,21 @@
 # CommandDotNet.TestTools
 
+## 4.0.0
+
+### target net5.0
+CommandDotNet.TestTools targets net5.0 instead of netstandard2.0.  This will allow us to take advantage of new framework features.
+We're holding off on net6.0 at the moment because it's new enough many companies will not be able to adopt it yet.
+
+### Breaking Changes
+TrackingInvocation implements new IInvocation.IsInterceptor property
+
+TestConsole updated to support new IConsole members. In, Out, and Error now implement TextReader and TextWriter.
+SystemConsole and TestConsole can be inherited for simpler adaptation resiliant to breakimg changes in IConsole if new members are added.
+
+### Removed Obsoleted 
+
+* Removed TestConcolse constructor containing mock paramters. Use the Mock methods instead.
+
 ## 3.1.2
 
 Extracted `ITestConsole` interface from `TestConsole` to support the [Spectre extensions](../OtherFeatures/spectre.md)

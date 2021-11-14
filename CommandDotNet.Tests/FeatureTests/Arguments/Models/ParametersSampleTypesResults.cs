@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments.Models
 {
     /// <summary>To capture outputs for args from params tests</summary>
+    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
     public class ParametersSampleTypesResults : ISampleTypesArgumentsModel
     {
         public bool BoolArg { get; set; }

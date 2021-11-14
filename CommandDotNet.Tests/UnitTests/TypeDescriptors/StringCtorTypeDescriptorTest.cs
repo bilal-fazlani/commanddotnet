@@ -36,18 +36,16 @@ namespace CommandDotNet.Tests.UnitTests.TypeDescriptors
 
         public class StaticParse
         {
-            public string Value { get; private set; }
+            public string Value { get; private set; } = null!;
 
-            public static StaticParse Parse(string value) 
-                => new StaticParse { Value = value };
+            public static StaticParse Parse(string value) => new() { Value = value };
         }
 
         public class StaticParseWithOptional
         {
-            public string Value { get; private set; }
+            public string Value { get; private set; } = null!;
 
-            public static StaticParseWithOptional Parse(string value, bool optional = true) => 
-                new StaticParseWithOptional { Value = value };
+            public static StaticParseWithOptional Parse(string value, bool optional = true) => new() { Value = value };
         }
     }
 }

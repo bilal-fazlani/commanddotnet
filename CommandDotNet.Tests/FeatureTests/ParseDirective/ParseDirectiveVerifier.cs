@@ -109,9 +109,9 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             if (showsHelp && showsTokens)
             {
                 // help before token transformations
-                var consoleOut = result.Console.OutText();
-                var helpIndex = consoleOut.IndexOf("Usage: testhost.dll ");
-                var tokensIndex = consoleOut.IndexOf("token transformations:");
+                var consoleOut = result.Console.OutText()!;
+                var helpIndex = consoleOut.IndexOf("Usage: testhost.dll ", StringComparison.OrdinalIgnoreCase);
+                var tokensIndex = consoleOut.IndexOf("token transformations:", StringComparison.OrdinalIgnoreCase);
                 tokensIndex.Should().BeLessThan(helpIndex);
             }
         }

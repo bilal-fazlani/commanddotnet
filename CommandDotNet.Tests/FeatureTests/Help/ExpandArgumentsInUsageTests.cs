@@ -56,7 +56,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
                 });
         }
 
-        public class App
+        private class App
         {
             public void Do(string arg1, FileInfo arg2, string optional = "lala")
             {

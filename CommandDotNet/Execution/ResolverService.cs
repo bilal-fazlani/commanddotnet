@@ -22,17 +22,17 @@ namespace CommandDotNet.Execution
             // sources.
             return ConditionalTryResolve(modelType, out var item, ArgumentModelResolveStrategy)
                 ? item!
-                : Activator.CreateInstance(modelType);
+                : Activator.CreateInstance(modelType)!;
         }
 
-        internal object ResolveCommandClass(Type classType, CommandContext commandContext)
+        internal object? ResolveCommandClass(Type classType, CommandContext commandContext)
         {
             // Default uses Resolve so the container can throw an exception if the class isn't registered.
             // if null is returned, then the container gives consent for other the class to
             // be created by this framework. 
             if (ConditionalTryResolve(classType, out var item, CommandClassResolveStrategy))
             {
-                return item!;
+                return item;
             }
 
             var parameterResolversByType = commandContext.AppConfig.ParameterResolversByType;
@@ -109,7 +109,7 @@ namespace CommandDotNet.Execution
 
         private class Disposables
         {
-            internal readonly List<IDisposable> Items = new List<IDisposable>();
+            internal readonly List<IDisposable> Items = new();
         }
     }
 }

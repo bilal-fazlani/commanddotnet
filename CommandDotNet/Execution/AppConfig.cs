@@ -63,7 +63,7 @@ namespace CommandDotNet.Execution
             Console = console;
             DependencyResolver = dependencyResolver;
             HelpProvider = helpProvider;
-            NameTransformation = nameTransformation ?? ((attributes, memberName, overrideName, commandNodeType) => overrideName ?? memberName);
+            NameTransformation = nameTransformation ?? ((_, memberName, overrideName, _) => overrideName ?? memberName);
             OnRunCompleted = onRunCompleted;
             TokenizationEvents = tokenizationEvents;
             BuildEvents = buildEvents;

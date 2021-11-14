@@ -57,10 +57,10 @@ namespace CommandDotNet.Tests.FeatureTests
                 ownerName.Name.Should().Be("owner");
 
                 carNumber.InputValues.Should().NotBeNullOrEmpty();
-                carNumber.InputValues.Single().Values.Single().Should().Be("1");
+                carNumber.InputValues.Single().Values!.Single().Should().Be("1");
 
                 ownerName.InputValues.Single().Values.Should().HaveCountGreaterThan(0);
-                ownerName.InputValues.Single().Values.Single().Should().Be("Jack");
+                ownerName.InputValues.Single().Values!.Single().Should().Be("Jack");
                 ownerName.InputValues.Single().Values = new []{ "Jill" };
 
                 return next(context);

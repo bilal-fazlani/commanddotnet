@@ -19,7 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             _options = new AppRunner<App>()
                 .GetFromContext("Do".SplitArgs(),
                     ctx => ctx.ParseResult!.TargetCommand.Options,
-                    middlewareStage: MiddlewareStages.PostParseInputPreBindValues)
+                    middlewareStage: MiddlewareStages.PostParseInputPreBindValues)!
                 .ToDictionary(o => o.DefinitionSource!.Split('.').Last());
         }
 
@@ -60,6 +60,42 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             var option = _options[propertyName];
             option.LongName.Should().Be(longName);
+        }
+
+        [Fact]
+        public void LongNamesCanBeNumbers()
+        {
+            var result = new AppRunner<App>()
+                .OnCommandCreated(cmd =>
+                {
+                    if (cmd.Name == nameof(App.Do))
+                    {
+                        cmd.AddArgumentNode(new Option("123", null, TypeInfo.Single<string>(), ArgumentArity.ZeroOrOne));
+                    }
+                })
+                .RunInMem("Do --123 lala");
+            result.ExitCode.Should().Be(0);
+            var option = result.CommandContext.ParseResult!.TargetCommand.Find<Option>("123");
+            option.Should().NotBeNull();
+            option!.Value.Should().Be("lala");
+        }
+
+        [Fact]
+        public void ShortNamesCanBeNumbers()
+        {
+            var result = new AppRunner<App>()
+                .OnCommandCreated(cmd =>
+                {
+                    if (cmd.Name == nameof(App.Do))
+                    {
+                        cmd.AddArgumentNode(new Option(null, '1', TypeInfo.Single<string>(), ArgumentArity.ZeroOrOne));
+                    }
+                })
+                .RunInMem("Do -1 lala");
+            result.ExitCode.Should().Be(0);
+            var option = result.CommandContext.ParseResult!.TargetCommand.Find<Option>("1");
+            option.Should().NotBeNull();
+            option!.Value.Should().Be("lala");
         }
 
         private const string DefaultName = "defaultName";

@@ -40,7 +40,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
             {
                 envVars ??= Environment.GetEnvironmentVariables();
                 return GetValueFunc(Resources.A.ValueSource_EnvVar,
-                    key => envVars.Contains(key) ? (string)envVars[key] : null,
+                    key => envVars.GetValueOrDefault<string>(key),
                     getKeysDelegates ?? new GetArgumentKeysDelegate[]
                     {
                         GetKeyFromAttribute
@@ -68,12 +68,32 @@ namespace CommandDotNet.Builders.ArgumentDefaults
             /// Also returns the values prefixed with the defining command for more specificity.<br/>
             /// Example in order: 'delete --force', 'delete -f', '--force', '-f'
             /// </summary>
-            public static IEnumerable<string> GetKeysFromConvention(IArgument argument)
+            public static IEnumerable<string> GetKeysFromConvention(AppSettings appSettings,
+                IArgument argument)
             {
-                static IEnumerable<string> GetOptionKeys(Option option)
+                IEnumerable<string> GetOptionKeys(Option option)
                 {
-                    if (!option.LongName.IsNullOrWhitespace()) yield return $"--{option.LongName}";
-                    if (option.ShortName.HasValue) yield return $"-{option.ShortName}";
+                    if (!option.LongName.IsNullOrWhitespace())
+                    {
+                        yield return $"--{option.LongName}";
+                        if (appSettings.Parser.AllowBackslashOptionPrefix)
+                        {
+                            yield return $"/{option.LongName}";
+                        }
+                        if (appSettings.Parser.AllowSingleHyphenForLongNames)
+                        {
+                            yield return $"-{option.LongName}";
+                        }
+                    }
+
+                    if (option.ShortName.HasValue)
+                    {
+                        yield return $"-{option.ShortName}";
+                        if (appSettings.Parser.AllowBackslashOptionPrefix)
+                        {
+                            yield return $"/{option.ShortName}";
+                        }
+                    }
                 }
 
                 var keys = argument.SwitchFunc(o => o.Name.ToEnumerable(), GetOptionKeys);
@@ -146,7 +166,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                     {
                         object defaultValue = argument.Arity.AllowsMany()
                             ? v.value!.Split(',')
-                            : (object)v.value!;
+                            : v.value!;
                         return new ArgumentDefault(sourceName, v.key, defaultValue);
                     })
                     .FirstOrDefault();

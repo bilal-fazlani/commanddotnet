@@ -72,7 +72,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 When = {Args = "--version"},
                 Then =
                 {
-                    Output = @$"testhost.dll
+                    Output = @"testhost.dll
 1.1.1.1
 "
                 }
@@ -127,12 +127,12 @@ namespace CommandDotNet.Tests.FeatureTests
                     Then =
                     {
                         ExitCode = 1,
-                        OutputContainsTexts = {"Unrecognized option '-v'"}
+                        OutputContainsTexts = { "Unrecognized command or argument '-v'" }
                     }
                 });
         }
 
-        public class App
+        private class App
         {
 
         }

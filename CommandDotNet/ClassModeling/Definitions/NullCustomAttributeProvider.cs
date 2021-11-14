@@ -5,7 +5,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 {
     public class NullCustomAttributeProvider : ICustomAttributeProvider
     {
-        internal static readonly NullCustomAttributeProvider Instance = new NullCustomAttributeProvider();
+        internal static readonly NullCustomAttributeProvider Instance = new();
 
         private NullCustomAttributeProvider()
         {

@@ -103,8 +103,7 @@ namespace CommandDotNet.Tests.UnitTests.Localization
 
     public static class ResourceGeneratorHelperExtensions
     {
-        private static readonly Dictionary<string, List<(string key, string value, string comments)>> PartsByProxy = 
-                new Dictionary<string, List<(string key, string value, string comments)>>();
+        private static readonly Dictionary<string, List<(string key, string value, string comments)>> PartsByProxy = new();
 
         public static List<(string memberName, string value, string comments)> GetLocalizationParts(this ResourcesDef proxy)
         {

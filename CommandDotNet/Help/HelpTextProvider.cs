@@ -126,7 +126,7 @@ namespace CommandDotNet.Help
             }
 
             var helpValues = BuildArgumentHelpValues(arguments);
-            var templateMaxLength = helpValues.Max(a => a.Template?.Length) ?? 0;
+            var templateMaxLength = helpValues.Max(a => a.Template.Length);
             var displayNameMaxLength = helpValues.Max(a => a.TypeName?.Length) ?? 0;
 
             var sb = new StringBuilder();
@@ -209,7 +209,7 @@ namespace CommandDotNet.Help
 
         /// <summary>Returns a comma-separated list of the allowed values</summary>
         protected virtual string? ArgumentAllowedValues<T>(T argument) where T : IArgument =>
-            argument.AllowedValues?.ToCsv(", ").UnlessNullOrWhitespace(v => $"{Resources.A.Help_Allowed_values}: {v}");
+            argument.AllowedValues.ToCsv(", ").UnlessNullOrWhitespace(v => $"{Resources.A.Help_Allowed_values}: {v}");
 
         /// <summary></summary>
         protected virtual string? ArgumentDefaultValue(IArgument argument)

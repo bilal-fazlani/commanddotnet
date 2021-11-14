@@ -25,7 +25,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<OperandsNoDefaults>().Verify(new Scenario
             {
-                When = {Args = "ArgsNoDefault -h"},
+                When = {Args = $"{nameof(OperandsNoDefaults.ArgsNoDefault)} -h"},
                 Then =
                 {
                     AssertContext = ctx =>
@@ -50,7 +50,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         {
             new AppRunner<OperandsNoDefaults>(BasicHelp).Verify(new Scenario
             {
-                When = {Args = "ArgsNoDefault -h"},
+                When = {Args = $"{nameof(OperandsNoDefaults.ArgsNoDefault)} -h"},
                 Then =
                 {
                     Output = @"Usage: testhost.dll ArgsNoDefault <BoolArg> <StringArg> <StructArg> <StructNArg> <EnumArg> <ObjectArg> <StringListArg>
@@ -73,7 +73,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>(DetailedHelp).Verify(new Scenario
             {
-                When = {Args = "ArgsNoDefault -h"},
+                When = {Args = $"{nameof(OperandsNoDefaults.ArgsNoDefault)} -h"},
                 Then =
                 {
                     Output = @"Usage: testhost.dll ArgsNoDefault <BoolArg> <StringArg> <StructArg> <StructNArg> <EnumArg> <ObjectArg> <StringListArg>
@@ -105,7 +105,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>(BasicHelp).Verify(new Scenario
             {
-                When = {Args = "StructListNoDefault -h"},
+                When = {Args = $"{nameof(OperandsNoDefaults.StructListNoDefault)} -h"},
                 Then =
                 {
                     Output = @"Usage: testhost.dll StructListNoDefault <StructListArg>
@@ -122,7 +122,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>(DetailedHelp).Verify(new Scenario
             {
-                When = {Args = "StructListNoDefault -h"},
+                When = {Args = $"{nameof(OperandsNoDefaults.StructListNoDefault)} -h"},
                 Then =
                 {
                     Output = @"Usage: testhost.dll StructListNoDefault <StructListArg>
@@ -140,7 +140,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>(BasicHelp).Verify(new Scenario
             {
-                When = {Args = "EnumListNoDefault -h"},
+                When = {Args = $"{nameof(OperandsNoDefaults.EnumListNoDefault)} -h"},
                 Then =
                 {
                     Output = @"Usage: testhost.dll EnumListNoDefault <EnumListArg>
@@ -157,7 +157,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>(DetailedHelp).Verify(new Scenario
             {
-                When = {Args = "EnumListNoDefault -h"},
+                When = {Args = $"{nameof(OperandsNoDefaults.EnumListNoDefault)} -h"},
                 Then =
                 {
                     Output = @"Usage: testhost.dll EnumListNoDefault <EnumListArg>
@@ -176,7 +176,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>(BasicHelp).Verify(new Scenario
             {
-                When = {Args = "ObjectListNoDefault -h"},
+                When = {Args = $"{nameof(OperandsNoDefaults.ObjectListNoDefault)} -h"},
                 Then =
                 {
                     Output = @"Usage: testhost.dll ObjectListNoDefault <ObjectListArg>
@@ -193,7 +193,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>(DetailedHelp).Verify(new Scenario
             {
-                When = {Args = "ObjectListNoDefault -h"},
+                When = {Args = $"{nameof(OperandsNoDefaults.ObjectListNoDefault)}  -h" },
                 Then =
                 {
                     Output = @"Usage: testhost.dll ObjectListNoDefault <ObjectListArg>
@@ -211,7 +211,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>().Verify(new Scenario
             {
-                When = {Args = "ArgsNoDefault true green 1 2 Monday http://google.com yellow orange"},
+                When = {Args = $"{nameof(OperandsNoDefaults.ArgsNoDefault)} true green 1 2 Monday http://google.com yellow orange" },
                 Then =
                 {
                     AssertContext = ctx => ctx.ParamValuesShouldBe(
@@ -234,7 +234,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>().Verify(new Scenario
             {
-                When = {Args = "ArgsNoDefault"},
+                When = {Args = nameof(OperandsNoDefaults.ArgsNoDefault)},
                 Then =
                 {
                     AssertContext = ctx => ctx.ParamValuesShouldBe(
@@ -252,7 +252,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>().Verify(new Scenario
             {
-                When = {Args = "StructListNoDefault 23 5 7"},
+                When = {Args = $"{nameof(OperandsNoDefaults.StructListNoDefault)} 23 5 7"},
                 Then =
                 {
                     AssertContext = ctx => ctx.ParamValuesShouldBe(
@@ -269,7 +269,7 @@ Arguments:
         {
             new AppRunner<OperandsNoDefaults>().Verify(new Scenario
             {
-                When = {Args = "EnumListNoDefault Friday Tuesday Thursday"},
+                When = {Args = $"{nameof(OperandsNoDefaults.EnumListNoDefault)} Friday Tuesday Thursday"},
                 Then =
                 {
                     AssertContext = ctx => ctx.ParamValuesShouldBe(
@@ -284,9 +284,9 @@ Arguments:
         [Fact]
         public void ObjectList_Exec_Positional()
         {
-            new AppRunner<OperandsNoDefaults>().Verify(new Scenario
+            _ = new AppRunner<OperandsNoDefaults>().Verify(new Scenario
             {
-                When = {Args = "ObjectListNoDefault http://google.com http://apple.com http://github.com"},
+                When = { Args = $"{nameof(OperandsNoDefaults.ObjectListNoDefault)} http://google.com http://apple.com http://github.com" },
                 Then =
                 {
                     AssertContext = ctx => ctx.ParamValuesShouldBe(
@@ -294,9 +294,9 @@ Arguments:
                         {
                             ObjectListArg = new List<Uri>
                             {
-                                new Uri("http://google.com"),
-                                new Uri("http://apple.com"),
-                                new Uri("http://github.com"),
+                                new("http://google.com"),
+                                new("http://apple.com"),
+                                new("http://github.com"),
                             }
                         })
                 }
@@ -309,7 +309,15 @@ Arguments:
             {
             }
 
+            public void NrtArgsNoDefault(NrtOperandsNoDefaultsSampleTypesModel model)
+            {
+            }
+
             public void StructListNoDefault(OperandsNoDefaultsStructListArgumentModel model)
+            {
+            }
+
+            public void NrtStructListNoDefault(NrtOperandsNoDefaultsStructListArgumentModel model)
             {
             }
 
@@ -317,7 +325,15 @@ Arguments:
             {
             }
 
+            public void NrtEnumListNoDefault(NrtOperandsNoDefaultsEnumListArgumentModel model)
+            {
+            }
+
             public void ObjectListNoDefault(OperandsNoDefaultsObjectListArgumentModel model)
+            {
+            }
+
+            public void NrtObjectListNoDefault(NrtOperandsNoDefaultsObjectListArgumentModel model)
             {
             }
         }

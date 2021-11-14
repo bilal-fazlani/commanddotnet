@@ -8,7 +8,6 @@ namespace CommandDotNet.ClassModeling.Definitions
     internal class PropertyArgumentDef : IArgumentDef
     {
         private readonly PropertyInfo _propertyInfo;
-        private IArgument? _argument;
 
         public string ArgumentDefType => "Property";
         
@@ -22,21 +21,15 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public bool HasDefaultValue { get; }
 
-        public object DefaultValue { get; }
-
-        public IArgument? Argument
-        {
-            get => _argument;
-            set
-            {
-                _argument = value;
-                value?.Services.AddOrUpdate(_propertyInfo);
-            }
-        }
+        public object? DefaultValue { get; }
 
         public ICustomAttributeProvider CustomAttributes => _propertyInfo;
 
         public ValueProxy ValueProxy { get; }
+
+        public bool IsOptional { get; }
+        public BooleanMode? BooleanMode { get; }
+        public IArgumentArity Arity { get; }
 
         public PropertyArgumentDef(
             PropertyInfo propertyInfo,
@@ -53,6 +46,9 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             CommandNodeType = commandNodeType;
             Name = propertyInfo.BuildName(commandNodeType, appConfig);
+            IsOptional = propertyInfo.PropertyType.IsNullableType()
+                         || propertyInfo.GetNullability() == NullabilityState.Nullable;
+            BooleanMode = this.GetBooleanMode(appConfig.AppSettings.BooleanMode);
             ValueProxy = new ValueProxy(
                 () => _propertyInfo.GetValue(modelInstance),
 
@@ -61,7 +57,8 @@ namespace CommandDotNet.ClassModeling.Definitions
             DefaultValue = propertyInfo.GetValue(modelInstance);
             HasDefaultValue = propertyInfo.PropertyType.IsClass
                 ? !DefaultValue.IsNullValue()
-                : !DefaultValue.IsDefaultFor(propertyInfo.PropertyType);
+                : !DefaultValue?.IsDefaultFor(propertyInfo.PropertyType) ?? false;
+            Arity = ArgumentArity.Default(this);
         }
 
         public override string ToString()

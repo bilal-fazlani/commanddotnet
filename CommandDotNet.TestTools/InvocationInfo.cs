@@ -25,8 +25,6 @@ namespace CommandDotNet.TestTools
         public object? Instance => _invocationStep?.Instance;
         public Command? Command => _invocationStep?.Command;
         public IInvocation? Invocation => _invocationStep?.Invocation;
-
-        public IReadOnlyCollection<IArgument>? Arguments => Invocation?.Arguments;
         public IReadOnlyCollection<ParameterInfo>? Parameters => Invocation?.Parameters;
         public object?[]? ParameterValues => Invocation?.ParameterValues;
         public MethodInfo? MethodInfo => Invocation?.MethodInfo;

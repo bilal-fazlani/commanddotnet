@@ -48,7 +48,9 @@ namespace CommandDotNet.Parsing
 
             if (argument.InputValues.Any())
             {
-                if (!SetFromStringInput(argument, argument.InputValues.SelectMany(iv => iv.Values)))
+                if (!SetFromStringInput(argument, argument.InputValues
+                    .Where(iv => iv.Values is not null)
+                    .SelectMany(iv => iv.Values!)))
                 {
                     return false;
                 }
@@ -92,7 +94,7 @@ namespace CommandDotNet.Parsing
                         }
                         catch (Exception ex)
                         {
-                            console.Error.WriteLine(Resources.A.Parse_assigning_value_to_argument(argument.ToString(), defaultValue?.ToString()));
+                            console.Error.WriteLine(Resources.A.Parse_Assigning_value_to_argument(argument.ToString(), defaultValue.ToString()));
                             console.Error.WriteLine(ex.Message);
                             console.Error.WriteLine();
                             return false;

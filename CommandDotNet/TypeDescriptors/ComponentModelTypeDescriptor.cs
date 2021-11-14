@@ -16,7 +16,7 @@ namespace CommandDotNet.TypeDescriptors
             return argument.TypeInfo.UnderlyingType.Name;
         }
 
-        public object ParseString(IArgument argument, string value)
+        public object? ParseString(IArgument argument, string value)
         {
             var typeConverter = argument.Arity.AllowsMany()
                 ? TypeDescriptor.GetConverter(argument.TypeInfo.UnderlyingType)

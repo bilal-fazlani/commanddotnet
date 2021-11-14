@@ -33,7 +33,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             result.CommandContext.ShowHelpOnExit.Should().BeTrue();
         }
 
-        public class App
+        private class App
         {
             public void Do(){ }
         }

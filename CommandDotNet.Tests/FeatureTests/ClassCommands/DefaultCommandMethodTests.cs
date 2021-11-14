@@ -165,7 +165,7 @@ Use ""testhost.dll [command] --help"" for more information about a command.
 
         private class WithoutDefaultArgsApp
         {
-            [DefaultMethod]
+            [DefaultCommand]
             public void DefaultMethod()
             {
             }
@@ -177,7 +177,7 @@ Use ""testhost.dll [command] --help"" for more information about a command.
 
         private class WithDefaultArgsApp
         {
-            [DefaultMethod]
+            [DefaultCommand]
             public void DefaultMethod(
                 [Operand(Description = "some text")]
                 string text)

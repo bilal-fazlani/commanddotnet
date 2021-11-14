@@ -41,7 +41,7 @@ namespace CommandDotNet
         /// <see cref="InvocationStep.Instance"/> and <see cref="IInvocation.ParameterValues"/>
         /// are populated in the <see cref="MiddlewareStages.BindValues"/> stage.
         /// </summary>
-        public InvocationPipeline InvocationPipeline { get; } = new InvocationPipeline();
+        public InvocationPipeline InvocationPipeline { get; } = new();
 
         public AppConfig AppConfig { get; }
 

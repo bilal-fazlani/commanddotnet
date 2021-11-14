@@ -30,7 +30,7 @@ namespace CommandDotNet.Tests.FeatureTests
             result.CommandContext.GetCommandInvocationInfo().WasInvoked.Should().BeTrue();
         }
 
-        public class App
+        private class App
         {
             [Command(Description = "Invokes an async method and exits with return code 2", Name = "get2")]
             public async Task<int> Get2Async()

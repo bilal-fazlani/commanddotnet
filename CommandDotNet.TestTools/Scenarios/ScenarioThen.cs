@@ -5,8 +5,8 @@ namespace CommandDotNet.TestTools.Scenarios
 {
     public class ScenarioThen
     {
-        private List<string> _outputContainsTexts = new List<string>();
-        private List<string> _outputNotContainsTexts = new List<string>();
+        private List<string> _outputContainsTexts = new();
+        private List<string> _outputNotContainsTexts = new();
 
         /// <summary>If specified, asserts the actual exit code is this value</summary>
         public int? ExitCode { get; set; }
@@ -33,7 +33,7 @@ namespace CommandDotNet.TestTools.Scenarios
         /// A delegate to perform assertions on the <seealso cref="ITestConsole.AllText"/>
         /// which includes the standard and error output streams.
         /// </summary>
-        public Action<string>? AssertOutput { get; set; }
+        public Action<string?>? AssertOutput { get; set; }
 
         /// <summary>
         /// A delegate to perform assertions on the <see cref="CommandContext"/>

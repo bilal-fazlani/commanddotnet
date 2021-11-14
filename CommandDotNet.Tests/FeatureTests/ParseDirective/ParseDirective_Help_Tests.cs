@@ -113,7 +113,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
                 expectedParseResult: "command: Cmd");
         }
 
-        public class App
+        private class App
         {
             public void Cmd() { }
         }

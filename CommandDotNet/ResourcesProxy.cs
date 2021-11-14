@@ -55,9 +55,24 @@ namespace CommandDotNet
         public override string Exceptions_StackTrace_at =>
             _localize(base.Exceptions_StackTrace_at)
             ?? base.Exceptions_StackTrace_at;
-        public override string Parse_root_lc =>
-            _localize(base.Parse_root_lc)
-            ?? base.Parse_root_lc;
+        public override string ParseReport_root_lc =>
+            _localize(base.ParseReport_root_lc)
+            ?? base.ParseReport_root_lc;
+        public override string ParseDirective_Help_was_requested =>
+            _localize(base.ParseDirective_Help_was_requested)
+            ?? base.ParseDirective_Help_was_requested;
+        public override string ParseDirective_Unable_to_map_tokens_to_arguments =>
+            _localize(base.ParseDirective_Unable_to_map_tokens_to_arguments)
+            ?? base.ParseDirective_Unable_to_map_tokens_to_arguments;
+        public override string ParseDirective_parse_lc =>
+            _localize(base.ParseDirective_parse_lc)
+            ?? base.ParseDirective_parse_lc;
+        public override string ParseDirective_token_transformations_lc =>
+            _localize(base.ParseDirective_token_transformations_lc)
+            ?? base.ParseDirective_token_transformations_lc;
+        public override string ParseDirective_from_shell_lc =>
+            _localize(base.ParseDirective_from_shell_lc)
+            ?? base.ParseDirective_from_shell_lc;
         public override string Debugger_debug_lc =>
             _localize(base.Debugger_debug_lc)
             ?? base.Debugger_debug_lc;
@@ -176,33 +191,54 @@ namespace CommandDotNet
             _localize(base.Type_Text)
             ?? base.Type_Text;
 
-        public override string Parse_Raw_command_line(string commandLine) =>
-            _localize(base.Parse_Raw_command_line("{0}"))
-            ?? base.Parse_Raw_command_line(commandLine);
+        public override string ParseReport_Raw_command_line(string commandLine) =>
+            _localize(base.ParseReport_Raw_command_line("{0}"))
+            ?? base.ParseReport_Raw_command_line(commandLine);
+        public override string ParseDirective_Usage(string includeTransformationsArgName, string includeRawCommandLineArgName) =>
+            _localize(base.ParseDirective_Usage("{0}", "{1}"))
+            ?? base.ParseDirective_Usage(includeTransformationsArgName, includeRawCommandLineArgName);
+        public override string ParseDirective_after(string transformationName) =>
+            _localize(base.ParseDirective_after("{0}"))
+            ?? base.ParseDirective_after(transformationName);
+        public override string ParseDirective_after_no_changes(string transformationName) =>
+            _localize(base.ParseDirective_after_no_changes("{0}"))
+            ?? base.ParseDirective_after_no_changes(transformationName);
         public override string Debugger_Attach_debugger(string processId, string processName) =>
             _localize(base.Debugger_Attach_debugger("{0}", "{1}"))
             ?? base.Debugger_Attach_debugger(processId, processName);
         public override string Parse_ArgumentArity_Expected_single_value(string argumentName) =>
             _localize(base.Parse_ArgumentArity_Expected_single_value("{0}"))
             ?? base.Parse_ArgumentArity_Expected_single_value(argumentName);
-        public override string Parse_assigning_value_to_argument(string argumentToString, string defaultValue) =>
-            _localize(base.Parse_assigning_value_to_argument("{0}", "{1}"))
-            ?? base.Parse_assigning_value_to_argument(argumentToString, defaultValue);
+        public override string Parse_Assigning_value_to_argument(string? argumentToString, string? defaultValue) =>
+            _localize(base.Parse_Assigning_value_to_argument("{0}", "{1}"))
+            ?? base.Parse_Assigning_value_to_argument(argumentToString, defaultValue);
         public override string Parse_See_usage(string usage, string helpCommand) =>
             _localize(base.Parse_See_usage("{0}", "{1}"))
             ?? base.Parse_See_usage(usage, helpCommand);
-        public override string Parse_is_not_a_valid(string typeName) =>
-            _localize(base.Parse_is_not_a_valid("{0}"))
-            ?? base.Parse_is_not_a_valid(typeName);
+        public override string Parse_Is_not_a_valid(string typeName) =>
+            _localize(base.Parse_Is_not_a_valid("{0}"))
+            ?? base.Parse_Is_not_a_valid(typeName);
         public override string Parse_Missing_value_for_option(string optionName) =>
             _localize(base.Parse_Missing_value_for_option("{0}"))
             ?? base.Parse_Missing_value_for_option(optionName);
         public override string Parse_Unrecognized_value_for(string token, string argumentType, string argumentName) =>
             _localize(base.Parse_Unrecognized_value_for("{0}", "{1}", "{2}"))
             ?? base.Parse_Unrecognized_value_for(token, argumentType, argumentName);
-        public override string Parse_unexpected_value_for_option(string token, string optionName) =>
-            _localize(base.Parse_unexpected_value_for_option("{0}", "{1}"))
-            ?? base.Parse_unexpected_value_for_option(token, optionName);
+        public override string Parse_Unexpected_value_for_option(string token, string optionName) =>
+            _localize(base.Parse_Unexpected_value_for_option("{0}", "{1}"))
+            ?? base.Parse_Unexpected_value_for_option(token, optionName);
+        public override string Parse_Intended_command_instead_of_option(string token, string commandName, string suggestion) =>
+            _localize(base.Parse_Intended_command_instead_of_option("{0}", "{1}", "{2}"))
+            ?? base.Parse_Intended_command_instead_of_option(token, commandName, suggestion);
+        public override string Parse_Clubbed_options_with_values_must_be_last_option(string optionShortName, string token) =>
+            _localize(base.Parse_Clubbed_options_with_values_must_be_last_option("{0}", "{1}"))
+            ?? base.Parse_Clubbed_options_with_values_must_be_last_option(optionShortName, token);
+        public override string Parse_Unrecognized_command_or_argument(string token) =>
+            _localize(base.Parse_Unrecognized_command_or_argument("{0}"))
+            ?? base.Parse_Unrecognized_command_or_argument(token);
+        public override string Parse_Unrecognized_option(string optionName) =>
+            _localize(base.Parse_Unrecognized_option("{0}"))
+            ?? base.Parse_Unrecognized_option(optionName);
         public override string Error_File_not_found(string fullPath) =>
             _localize(base.Error_File_not_found("{0}"))
             ?? base.Error_File_not_found(fullPath);

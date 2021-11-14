@@ -85,7 +85,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     Then =
                     {
                         ExitCode = 0,
-                        Output = @"reached expected step"
+                        Output = "reached expected step"
                     }
                 });
         }
@@ -157,7 +157,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     Then =
                     {
                         ExitCode = 5,
-                        Output = @"reached expected step"
+                        Output = "reached expected step"
                     }
                 });
         }
@@ -275,7 +275,7 @@ namespace CommandDotNet.Tests.FeatureTests
             return next(context);
         }
 
-        public class App
+        private class App
         {
             public int Do()
             {

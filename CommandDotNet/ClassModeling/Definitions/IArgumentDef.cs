@@ -8,8 +8,10 @@ namespace CommandDotNet.ClassModeling.Definitions
         CommandNodeType CommandNodeType { get; }
         Type Type { get; }
         bool HasDefaultValue { get; }
-        object DefaultValue { get; }
-        IArgument? Argument { get; set; }
+        object? DefaultValue { get; }
         ValueProxy ValueProxy { get; }
+        bool IsOptional { get; }
+        BooleanMode? BooleanMode { get; }
+        IArgumentArity Arity { get; }
     }
 }

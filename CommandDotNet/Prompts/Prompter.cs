@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using CommandDotNet.Extensions;
@@ -95,7 +96,14 @@ namespace CommandDotNet.Prompts
 
             do
             {
-                var key = _console.ReadKey(true);
+                var keyOrNull = _console.ReadKey(true);
+                if (keyOrNull is null)
+                {
+                    // escape or ctrl+c
+                    break;
+                }
+
+                var key = keyOrNull.Value;
 
                 if (key.IsCtrlC())
                 {
@@ -169,7 +177,7 @@ namespace CommandDotNet.Prompts
             return values;
         }
 
-        private static void ClearCurrent(StringBuilder sb, IStandardStreamWriter consoleOut)
+        private static void ClearCurrent(StringBuilder sb, TextWriter consoleOut)
         {
             if (sb.Length > 0)
             {

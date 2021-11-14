@@ -10,7 +10,7 @@ namespace CommandDotNet.TestTools
     /// </summary>
     public class TestDependencyResolver : IDependencyResolver, IEnumerable<object>
     {
-        private readonly Dictionary<Type, object?> _services = new Dictionary<Type, object?>();
+        private readonly Dictionary<Type, object?> _services = new();
 
         public object? Resolve(Type type)
         {

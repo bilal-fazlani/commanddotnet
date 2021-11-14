@@ -19,7 +19,7 @@ namespace CommandDotNet.Example.Tests
                     {
                         OutputContainsTexts =
                         {
-                            @$"
+                            @"
 Directives:
   [debug] to attach a debugger to the app
   [parse] to output how the inputs were tokenized

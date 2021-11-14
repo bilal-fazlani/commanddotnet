@@ -154,27 +154,6 @@ namespace CommandDotNet
                 argumentModelResolveStrategy, commandClassResolveStrategy);
         }
 
-        [Obsolete("Use UseIPrompter and UseMissingArgumentPrompter methods instead")]
-        public static AppRunner UsePrompting(
-            this AppRunner appRunner,
-            Func<CommandContext, IPrompter>? prompterOverride = null,
-            bool promptForMissingArguments = true,
-            Func<CommandContext, IArgument, string>? argumentPromptTextOverride = null,
-            Predicate<IArgument>? argumentFilter = null)
-        {
-
-            ValuePromptMiddleware.UseIPrompter(appRunner, prompterOverride);
-            if (promptForMissingArguments)
-            {
-                ValuePromptMiddleware.UseArgumentPrompter(
-                    appRunner,
-                    (context, prompter) => new ArgumentPrompter(prompter, argumentPromptTextOverride),
-                    argumentFilter);
-            }
-
-            return appRunner;
-        }
-
         /// <summary>
         /// Adds support for prompting. <see cref="IPrompter"/> parameters can be used in interceptor and command methods.
         /// <see cref="IPrompter"/> simplifies prompting and is supported by the TestTools nuget package.
@@ -218,7 +197,7 @@ namespace CommandDotNet
             Func<CommandContext, IPrompter, IArgumentPrompter>? argumentPrompterFactory = null,
             Predicate<IArgument>? argumentFilter = null)
         {
-            return ValuePromptMiddleware.UseArgumentPrompter(appRunner, argumentPrompterFactory, argumentFilter); ;
+            return ValuePromptMiddleware.UseArgumentPrompter(appRunner, argumentPrompterFactory, argumentFilter);
         }
 
         /// <summary>Prefix a filepath with @ and it will be replaced by its contents during <see cref="MiddlewareStages.Tokenize"/></summary>
@@ -258,8 +237,8 @@ namespace CommandDotNet
             return includeNamingConventions
                 ? appRunner.UseDefaultsFromConfig(
                     DefaultSources.AppSetting.GetDefaultValue(appSettings, 
-                        DefaultSources.AppSetting.GetKeyFromAttribute, 
-                        DefaultSources.AppSetting.GetKeysFromConvention))
+                        DefaultSources.AppSetting.GetKeyFromAttribute,
+                        argument => DefaultSources.AppSetting.GetKeysFromConvention(appRunner.AppSettings, argument)))
                 : appRunner.UseDefaultsFromConfig(
                     DefaultSources.AppSetting.GetDefaultValue(appSettings, DefaultSources.AppSetting.GetKeyFromAttribute));
         }
@@ -281,7 +260,7 @@ namespace CommandDotNet
 
         /// <summary></summary>
         /// <param name="appRunner">The <see cref="AppRunner"/></param>
-        /// <param name="writerFactory">If null, `cmdlog` directive is enabled without Console.Out as the target</param>
+        /// <param name="writerFactory">If null, `cmdlog` directive is enabled with Console.Out as the target</param>
         /// <param name="excludeSystemInfo">Exclude machine name, username, OS, .net version and tool version</param>
         /// <param name="includeAppConfig">Prints the entire app configuration</param>
         /// <param name="additionalInfoCallback">Additional information to include.</param>

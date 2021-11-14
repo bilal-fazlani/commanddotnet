@@ -57,7 +57,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         {
             Assert.Throws<Exception>(() => new AppRunner<App>()
                     .UseDependencyResolver(new TestDependencyResolver { new App() }, argumentModelResolveStrategy: ResolveStrategy.Resolve)
-                    .Run(new[] { "Do" }))
+                    .Run("Do"))
                 .Message.Should().Contain(
                     "Dependency not registered: CommandDotNet.Tests.CommandDotNet.IoC.ResolveStrategyTests+ArgModel");
         }
@@ -78,7 +78,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
             }
         }
 
-        public class ArgModel : IArgumentModel
+        private class ArgModel : IArgumentModel
         {
 
         }

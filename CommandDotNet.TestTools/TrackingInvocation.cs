@@ -17,6 +17,7 @@ namespace CommandDotNet.TestTools
         public IReadOnlyCollection<ParameterInfo> Parameters => _backingInvocation.Parameters;
         public object[] ParameterValues => _backingInvocation.ParameterValues;
         public MethodInfo MethodInfo => _backingInvocation.MethodInfo;
+        public bool IsInterceptor => _backingInvocation.IsInterceptor;
         public IReadOnlyCollection<IArgumentModel> FlattenedArgumentModels => _backingInvocation.FlattenedArgumentModels;
 
         public TrackingInvocation(IInvocation backingInvocation)
@@ -24,7 +25,7 @@ namespace CommandDotNet.TestTools
             _backingInvocation = backingInvocation ?? throw new ArgumentNullException(nameof(backingInvocation));
         }
 
-        public object Invoke(CommandContext commandContext, object instance, ExecutionDelegate next)
+        public object? Invoke(CommandContext commandContext, object instance, ExecutionDelegate next)
         {
             WasInvoked = true;
             try

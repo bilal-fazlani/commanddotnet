@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.FeatureTests
                             skipDirectives: true,
                             skipSeparated: true,
                             transformation: t =>
-                                t.TokenType == TokenType.Value && t.Value == "like"
+                                t.TokenType == TokenType.Argument && t.Value == "like"
                                     ? Tokenizer.TokenizeValue("roses").ToEnumerable()
                                     : t.ToEnumerable())))
                 .Verify(new Scenario
@@ -37,7 +37,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 });
         }
 
-        public class App
+        private class App
         {
             public void Do(IConsole console, [Option] string opt1, string arg1 = "wet dog")
             {

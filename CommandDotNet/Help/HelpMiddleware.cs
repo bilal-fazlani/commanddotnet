@@ -27,7 +27,7 @@ namespace CommandDotNet.Help
             var appSettingsHelp = args.CommandContext.AppConfig.AppSettings.Help;
 
             var option = new Option(helpOptionName, 'h',
-                TypeInfo.Flag, ArgumentArity.Zero,
+                TypeInfo.Flag, ArgumentArity.Zero, BooleanMode.Implicit,
                 aliases: new[] { "?" },
                 definitionSource: typeof(HelpMiddleware).FullName)
             {

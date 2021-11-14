@@ -14,19 +14,15 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         private readonly AppConfig _appConfig;
         private Result? _result;
-        private IReadOnlyCollection<IArgument>? _arguments;
 
-        private Result GetResult() => _result ??= new Result(MethodInfo, _appConfig);
+        private Result GetResult() => _result ??= new Result(MethodInfo, _appConfig, IsInterceptor);
 
         public MethodInfo MethodInfo { get; }
+        public bool IsInterceptor { get; }
 
         public IReadOnlyCollection<IArgumentDef> ArgumentDefs => GetResult().ArgumentDefs;
 
-        public IReadOnlyCollection<IArgument> Arguments => _arguments
-            ??= ArgumentDefs
-                .Where(a => !Equals(a.Argument, null))
-                .Select(a => a.Argument!)
-                .ToReadOnlyCollection();
+        public IReadOnlyCollection<IArgument> Arguments => GetResult().Arguments;
 
         public IReadOnlyCollection<ParameterInfo> Parameters => GetResult().Parameters;
 
@@ -34,10 +30,11 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public IReadOnlyCollection<IArgumentModel> FlattenedArgumentModels => GetResult().ArgumentModels;
 
-        public MethodDef(MethodInfo method, AppConfig appConfig)
+        public MethodDef(MethodInfo method, AppConfig appConfig, bool isInterceptor)
         {
             MethodInfo = method ?? throw new ArgumentNullException(nameof(method));
             _appConfig = appConfig ?? throw new ArgumentNullException(nameof(appConfig));
+            IsInterceptor = isInterceptor;
         }
 
         public static bool IsInterceptorMethod(MethodBase methodBase)
@@ -51,7 +48,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                    || parameterInfo.ParameterType == InterceptorNextParameterType;
         }
 
-        public object Invoke(CommandContext commandContext, object instance, ExecutionDelegate next)
+        public object? Invoke(CommandContext commandContext, object instance, ExecutionDelegate next)
         {
             return GetResult().Invoke(commandContext, instance, next);
         }
@@ -68,14 +65,15 @@ namespace CommandDotNet.ClassModeling.Definitions
             private readonly AppConfig _appConfig;
 
             private ParameterInfo? _nextParameterInfo;
-            private readonly List<Action<CommandContext>> _resolvers = new List<Action<CommandContext>>();
+            private readonly List<Action<CommandContext>> _resolvers = new();
 
             internal readonly IReadOnlyCollection<IArgumentDef> ArgumentDefs;
+            internal readonly IReadOnlyCollection<IArgument> Arguments;
             internal readonly ParameterInfo[] Parameters;
             internal readonly object[] Values;
-            internal readonly HashSet<IArgumentModel> ArgumentModels = new HashSet<IArgumentModel>();
+            internal readonly HashSet<IArgumentModel> ArgumentModels = new();
 
-            public Result(MethodInfo methodInfo, AppConfig appConfig)
+            public Result(MethodInfo methodInfo, AppConfig appConfig, bool isInterceptor)
             {
                 _appConfig = appConfig;
                 _methodInfo = methodInfo;
@@ -91,18 +89,20 @@ namespace CommandDotNet.ClassModeling.Definitions
                 Values = new object[Parameters.Length];
 
                 var parametersByName = Parameters.ToDictionary(
-                    p => p.Name,
+                    p => p.Name!,
                     p => (param: p, args: GetArgsFromParameter(p, argumentMode).ToCollection()));
 
-                var arguments = parametersByName.Values
+                ArgumentDefs = parametersByName.Values
                     .OrderBy(v => v.param.Position)
                     .SelectMany(p => p.args)
                     .ToReadOnlyCollection();
-
-                ArgumentDefs = arguments;
+                
+                Arguments = ArgumentDefs
+                    .Select(a => a.ToArgument(appConfig, isInterceptor))
+                    .ToReadOnlyCollection();
             }
 
-            public object Invoke(CommandContext commandContext, object instance, ExecutionDelegate next)
+            public object? Invoke(CommandContext commandContext, object instance, ExecutionDelegate next)
             {
                 if (_nextParameterInfo != null)
                 {
@@ -124,7 +124,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                     }
                 }
 
-                _resolvers?.ForEach(r => r(commandContext));
+                _resolvers.ForEach(r => r(commandContext));
 
                 return _methodInfo.Invoke(instance, Values);
             }
@@ -184,7 +184,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
                 if (existingDefault == null)
                 {
-                    instanceCreated?.Invoke(instance);
+                    instanceCreated.Invoke(instance);
                 }
 
                 // sum we have to add these every time because the existingDefault could have been instantiated in the model

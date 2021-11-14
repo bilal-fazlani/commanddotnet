@@ -5,7 +5,7 @@ namespace CommandDotNet.Tests
 {
     public class CmdNetDefaultTestConfig : IDefaultTestConfig
     {
-        public TestConfig Default => new TestConfig
+        public TestConfig Default => new()
         {
             OnError = {Print = {ConsoleOutput = true, CommandContext = true}},
             AppInfoOverride = new AppInfo(

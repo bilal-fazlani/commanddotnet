@@ -41,7 +41,7 @@ namespace CommandDotNet.Tests.UnitTests.Localization
                 return "lala";
             });
             proxy.Command_help_description.Should().Be("lala");
-            proxy.Parse_assigning_value_to_argument("a","b").Should().Be("lala");
+            proxy.Parse_Assigning_value_to_argument("a","b").Should().Be("lala");
         }
         
         [Fact]
@@ -54,8 +54,8 @@ namespace CommandDotNet.Tests.UnitTests.Localization
             });
             var resources = new Resources();
             proxy.Command_help_description.Should().Be(resources.Command_help_description);
-            proxy.Parse_assigning_value_to_argument("a","b")
-                .Should().Be(resources.Parse_assigning_value_to_argument("a","b"));
+            proxy.Parse_Assigning_value_to_argument("a","b")
+                .Should().Be(resources.Parse_Assigning_value_to_argument("a","b"));
         }
 
         [Theory]
@@ -65,7 +65,7 @@ namespace CommandDotNet.Tests.UnitTests.Localization
             var missingMembers = proxy.IsMissingMembersFrom(source).ToCsv();
 
             missingMembers.Should().BeNullOrEmpty(
-                $"... But members are missing from a ResourceProxy. " +
+                "... But members are missing from a ResourceProxy. " +
                 $"Run {nameof(ResourceGenerators)}.{nameof(ResourceGenerators.RegenerateProxyClasses)} to add them");
         }
 

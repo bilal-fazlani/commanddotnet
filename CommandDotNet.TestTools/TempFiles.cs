@@ -8,7 +8,7 @@ namespace CommandDotNet.TestTools
     public class TempFiles : IDisposable
     {
         private readonly Action<string> _logLine;
-        private readonly List<string> _files = new List<string>();
+        private readonly List<string> _files = new();
 
         public TempFiles(Action<string> logLine)
         {

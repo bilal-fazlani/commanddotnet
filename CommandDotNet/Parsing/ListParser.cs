@@ -47,7 +47,7 @@ namespace CommandDotNet.Parsing
         private IList CreateGenericList()
         {
             var listType = typeof(List<>).MakeGenericType(_underlyingType);
-            return (IList) Activator.CreateInstance(listType);
+            return (IList) Activator.CreateInstance(listType)!;
         }
     }
 }

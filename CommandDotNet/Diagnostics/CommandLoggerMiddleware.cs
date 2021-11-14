@@ -29,7 +29,7 @@ namespace CommandDotNet.Diagnostics
         {
             return ctx.Tokens.TryGetDirective("cmdlog", out _) 
                 ? s => ctx.Console.Out.WriteLine(s)
-                : (Action<string?>?)null;
+                : null;
         }
 
         private static Task<int> CommandLogger(CommandContext commandContext, ExecutionDelegate next)

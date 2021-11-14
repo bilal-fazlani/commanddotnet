@@ -7,57 +7,67 @@ namespace CommandDotNet.Tests.UnitTests
 {
     public class ArgumentArityTests
     {
-        private const bool NoDefault = false;
+        private const bool IsOptional = true;
         private const bool HasDefault = true;
         
         [Theory]
-        [InlineData(typeof(string), NoDefault, 1, 1)]
-        [InlineData(typeof(string), HasDefault, 0, 1)]
-        [InlineData(typeof(int), NoDefault, 1, 1)]
-        [InlineData(typeof(int), HasDefault, 0, 1)]
-        [InlineData(typeof(int?), NoDefault, 0, 1)]
-        [InlineData(typeof(int?), HasDefault, 0, 1)]
-        [InlineData(typeof(object), NoDefault, 1, 1)]
-        [InlineData(typeof(object), HasDefault, 0, 1)]
-        [InlineData(typeof(IEnumerable), NoDefault, 1, int.MaxValue)]
-        [InlineData(typeof(IEnumerable), HasDefault, 0, int.MaxValue)]
-        public void Default(Type type, bool hasDefaultValue, int expectedMin, int expectedMax)
+        [InlineData(typeof(string), IsOptional, !HasDefault, 0, 1)]
+        [InlineData(typeof(string), IsOptional, HasDefault, 0, 1)]
+        [InlineData(typeof(string), !IsOptional, !HasDefault, 1, 1)]
+        [InlineData(typeof(string), !IsOptional, HasDefault, 0, 1)]
+        [InlineData(typeof(int), IsOptional, !HasDefault, 0, 1)]
+        [InlineData(typeof(int), IsOptional, HasDefault, 0, 1)]
+        [InlineData(typeof(int), !IsOptional, !HasDefault, 1, 1)]
+        [InlineData(typeof(int), !IsOptional, HasDefault, 0, 1)]
+        [InlineData(typeof(int?), IsOptional, !HasDefault, 0, 1)]
+        [InlineData(typeof(int?), IsOptional, HasDefault, 0, 1)]
+        [InlineData(typeof(int?), !IsOptional, !HasDefault, 1, 1)]
+        [InlineData(typeof(int?), !IsOptional, HasDefault, 0, 1)]
+        [InlineData(typeof(object), IsOptional, !HasDefault, 0, 1)]
+        [InlineData(typeof(object), IsOptional, HasDefault, 0, 1)]
+        [InlineData(typeof(object), !IsOptional, !HasDefault, 1, 1)]
+        [InlineData(typeof(object), !IsOptional, HasDefault, 0, 1)]
+        [InlineData(typeof(IEnumerable), IsOptional, !HasDefault, 0, int.MaxValue)]
+        [InlineData(typeof(IEnumerable), IsOptional, HasDefault, 0, int.MaxValue)]
+        [InlineData(typeof(IEnumerable), !IsOptional, !HasDefault, 1, int.MaxValue)]
+        [InlineData(typeof(IEnumerable), !IsOptional, HasDefault, 0, int.MaxValue)]
+        public void Default(Type type, bool isOptional, bool hasDefault, int expectedMin, int expectedMax)
         {
-            var actual = ArgumentArity.Default(type, hasDefaultValue, BooleanMode.Explicit);
+            var actual = ArgumentArity.Default(type, isOptional, hasDefault, BooleanMode.Explicit);
             var expected = new ArgumentArity(expectedMin, expectedMax);
-            expected.Should().Be(actual);
+            actual.Should().Be(expected);
         }
 
         [Theory]
-        [InlineData(BooleanMode.Explicit, NoDefault, 1, 1)]
-        [InlineData(BooleanMode.Explicit, HasDefault, 0, 1)]
-        [InlineData(BooleanMode.Implicit, NoDefault, 0, 0)]
-        [InlineData(BooleanMode.Implicit, HasDefault, 0, 0)]
-        public void DefaultBool(BooleanMode booleanMode, bool hasDefaultValue, int expectedMin, int expectedMax)
+        [InlineData(BooleanMode.Explicit, IsOptional, !HasDefault, 0, 1)]
+        [InlineData(BooleanMode.Explicit, IsOptional, HasDefault, 0, 1)]
+        [InlineData(BooleanMode.Explicit, !IsOptional, !HasDefault, 1, 1)]
+        [InlineData(BooleanMode.Explicit, !IsOptional, HasDefault, 0, 1)]
+        [InlineData(BooleanMode.Implicit, IsOptional, !HasDefault, 0, 0)]
+        [InlineData(BooleanMode.Implicit, IsOptional, HasDefault, 0, 0)]
+        [InlineData(BooleanMode.Implicit, !IsOptional, !HasDefault, 0, 0)]
+        [InlineData(BooleanMode.Implicit, !IsOptional, HasDefault, 0, 0)]
+        public void DefaultBool(BooleanMode booleanMode, bool isOptional, bool hasDefault, int expectedMin, int expectedMax)
         {
-            var actual = ArgumentArity.Default(typeof(bool), hasDefaultValue, booleanMode);
+            var actual = ArgumentArity.Default(typeof(bool), isOptional, hasDefault, booleanMode);
             var expected = new ArgumentArity(expectedMin, expectedMax);
-            expected.Should().Be(actual);
+            actual.Should().Be(expected);
         }
 
         [Theory]
-        [InlineData(BooleanMode.Explicit, NoDefault, 0 , 1)]
-        [InlineData(BooleanMode.Explicit, HasDefault, 0, 1)]
-        [InlineData(BooleanMode.Implicit, NoDefault, 0, 0)]
-        [InlineData(BooleanMode.Implicit, HasDefault, 0, 0)]
-        public void DefaultNullableBool(BooleanMode booleanMode, bool hasDefaultValue, int expectedMin, int expectedMax)
+        [InlineData(BooleanMode.Explicit, IsOptional, !HasDefault, 0, 1)]
+        [InlineData(BooleanMode.Explicit, IsOptional, HasDefault, 0, 1)]
+        [InlineData(BooleanMode.Explicit, !IsOptional, !HasDefault, 1, 1)]
+        [InlineData(BooleanMode.Explicit, !IsOptional, HasDefault, 0, 1)]
+        [InlineData(BooleanMode.Implicit, IsOptional, !HasDefault, 0, 0)]
+        [InlineData(BooleanMode.Implicit, IsOptional, HasDefault, 0, 0)]
+        [InlineData(BooleanMode.Implicit, !IsOptional, !HasDefault, 0, 0)]
+        [InlineData(BooleanMode.Implicit, !IsOptional, HasDefault, 0, 0)]
+        public void DefaultNullableBool(BooleanMode booleanMode, bool isOptional, bool hasDefault, int expectedMin, int expectedMax)
         {
-            var actual = ArgumentArity.Default(typeof(bool?), hasDefaultValue, booleanMode);
+            var actual = ArgumentArity.Default(typeof(bool?), isOptional, hasDefault, booleanMode);
             var expected = new ArgumentArity(expectedMin, expectedMax);
-            expected.Should().Be(actual);
-        }
-
-        [Fact]
-        public void DefaultBooleanModeCannotBeUnknown()
-        {
-            Assert.Throws<ArgumentException>(
-                    () => ArgumentArity.Default(typeof(bool), NoDefault, BooleanMode.Unknown))
-                .Message.Should().Be("booleanMode cannot be Unknown");
+            actual.Should().Be(expected);
         }
     }
 }

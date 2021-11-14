@@ -13,7 +13,7 @@ namespace CommandDotNet.Execution
         // using a stack to handle interactive sessions
         // so ctrl+c for a long running interactive command
         // stops only that command and not the interactive session
-        private static readonly Stack<CommandContext> SourceStack = new Stack<CommandContext>();
+        private static readonly Stack<CommandContext> SourceStack = new();
 
         private class Handler
         {
@@ -28,30 +28,32 @@ namespace CommandDotNet.Execution
 
         private static Handler? GetHandler(this CommandContext ctx) => ctx.Services.GetOrDefault<Handler>();
         private static void SetHandler(this CommandContext ctx, CancellationTokenSource src) => ctx.Services.Add(new Handler(src));
-
-        static CancellationHandlers()
-        {
-            Console.CancelKeyPress += Console_CancelKeyPress;
-            AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-        }
-
+        
         internal static void BeginRun(CommandContext ctx)
         {
+            if (!SourceStack.Any())
+            {
+                // initialize for first command
+                // we don't want to add additional events for commands in a REPL session
+                ctx.Console.CancelKeyPress += Console_CancelKeyPress;
+                AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
+                AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            }
+
             var tokenSource = new CancellationTokenSource();
             ctx.CancellationToken = tokenSource.Token;
             ctx.SetHandler(tokenSource);
             SourceStack.Push(ctx);
         }
 
-        internal static void EndRun()
+        internal static void EndRun(CommandContext ctx)
         {
             SourceStack.Pop();
             if (!SourceStack.Any())
             {
                 // the app will exit now
                 // clean up for tests
-                Console.CancelKeyPress -= Console_CancelKeyPress;
+                ctx.Console.CancelKeyPress -= Console_CancelKeyPress;
                 AppDomain.CurrentDomain.ProcessExit -= CurrentDomain_ProcessExit;
                 AppDomain.CurrentDomain.UnhandledException -= CurrentDomain_UnhandledException;
             }
@@ -59,7 +61,7 @@ namespace CommandDotNet.Execution
 
         /// <summary>
         /// Prefer <see cref="IConsole.TreatControlCAsInput"/> when possible.
-        /// Use this in cases where another component depends on the <see cref="Console.CancelKeyPress"/>
+        /// Use this in cases where another component depends on the <see cref="IConsole.CancelKeyPress"/>
         /// event and CommandDotNet should ignore the event during this time. 
         /// </summary>
         public static IDisposable IgnoreCtrlC()
@@ -75,9 +77,9 @@ namespace CommandDotNet.Execution
             return new DisposableAction(() => handler.ShouldIgnoreCtrlC = false);
         }
 
-        private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        private static void Console_CancelKeyPress(object? sender, ConsoleCancelEventArgs e)
         {
-            var handler = SourceStack.Peek()?.GetHandler();
+            var handler = SourceStack.Peek().GetHandler();
             if (handler == null)
             {
                 return;
@@ -89,7 +91,7 @@ namespace CommandDotNet.Execution
             }
         }
 
-        private static void CurrentDomain_ProcessExit(object sender, EventArgs e)
+        private static void CurrentDomain_ProcessExit(object? sender, EventArgs e)
         {
             Shutdown();
         }
@@ -146,6 +148,10 @@ namespace CommandDotNet.Execution
                 var bindingFlags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.CreateInstance;
                 var parameterTypes = parameters.Select(p => p.GetType()).ToArray();
                 var constructorInfo = typeof(T).GetConstructor(bindingFlags, null, parameterTypes, null);
+                if (constructorInfo is null)
+                {
+                    throw new Exception(".net core contracts have changed. update code to handle new contracts");
+                }
                 return (T)constructorInfo.Invoke(parameters);
             }
         }

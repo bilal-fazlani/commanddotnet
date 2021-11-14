@@ -91,12 +91,12 @@ namespace CommandDotNet.Spectre
                     var p = new TextPrompt<string>(promptText)
                     {
                         IsSecret = isPassword,
-                        AllowEmpty = argument.Arity.AllowsNone(),
+                        AllowEmpty = argument.Arity.RequiresNone(),
                         ShowDefaultValue = true
                     };
                     if (defaultValue != null)
                     {
-                        p.DefaultValue(defaultValue.ToString());
+                        p.DefaultValue(defaultValue.ToString()!);
                     }
                     return new[] { ansiConsole.Prompt(p) };
                 }

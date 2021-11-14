@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
@@ -103,8 +104,8 @@ Options:
                     AssertContext = ctx => ctx.ParamValuesShouldBe(
                         new List<StringCtorObject>
                         {
-                            new StringCtorObject("file1"),
-                            new StringCtorObject("file2")
+                            new("file1"),
+                            new("file2")
                         },
                         new List<StaticParseObject>
                         {
@@ -142,6 +143,7 @@ Options:
             }
         }
 
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
         private class StringCtorObject
         {
             public string Filename { get; }
@@ -152,9 +154,10 @@ Options:
             }
         }
 
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
         private class StaticParseObject
         {
-            public string Dirname { get; private set; }
+            public string Dirname { get; private set; } = null!;
 
             public static StaticParseObject Parse(string dirname)
             {

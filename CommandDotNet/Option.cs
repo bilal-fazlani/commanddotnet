@@ -24,6 +24,7 @@ namespace CommandDotNet
             char? shortName,
             TypeInfo typeInfo,
             IArgumentArity arity,
+            BooleanMode? booleanMode = null,
             string? definitionSource = null,
             IEnumerable<string>? aliases = null,
             ICustomAttributeProvider? customAttributes = null,
@@ -36,9 +37,9 @@ namespace CommandDotNet
                 throw new InvalidConfigurationException($"a long or short name is required. source:{definitionSource}");
             }
 
-            if (shortName.HasValue && !char.IsLetter(shortName.Value))
+            if (shortName.HasValue && !shortName.Value.IsAlphaNumeric())
             {
-                throw new InvalidConfigurationException($"short name must be a letter but was '{shortName.Value}'. source:{definitionSource}");
+                throw new InvalidConfigurationException($"short name must be alphanumeric but was '{shortName.Value}'. source:{definitionSource}");
             }
 
             if (isInterceptorOption && assignToExecutableSubcommands)
@@ -51,6 +52,7 @@ namespace CommandDotNet
 
             TypeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
             Arity = arity ?? throw new ArgumentNullException(nameof(arity));
+            BooleanMode = booleanMode;
             DefinitionSource = definitionSource;
             IsInterceptorOption = isInterceptorOption;
             AssignToExecutableSubcommands = assignToExecutableSubcommands;
@@ -62,10 +64,10 @@ namespace CommandDotNet
                 ? new HashSet<string>()
                 : new HashSet<string>(aliases);
             if (!LongName.IsNullOrWhitespace()) _aliases.Add(LongName!);
-            if (ShortName.HasValue) _aliases.Add(ShortName.ToString());
+            if (ShortName.HasValue) _aliases.Add(ShortName.ToString()!);
         }
 
-        public string Name => LongName ?? ShortName.ToString();
+        public string Name => LongName ?? ShortName.ToString()!; // ShortName has to exist if LongName does not
 
         /// <summary>A single character that will be prefixed with a single hyphen.</summary>
         public char? ShortName { get; }
@@ -108,6 +110,8 @@ namespace CommandDotNet
 
         /// <summary>The <see cref="IArgumentArity"/> for this argument, describing how many values are allowed.</summary>
         public IArgumentArity Arity { get; set; }
+
+        public BooleanMode? BooleanMode { get; set; }
 
         /// <summary>The default value for this argument</summary>
         public ArgumentDefault? Default { get; set; }
@@ -154,14 +158,7 @@ namespace CommandDotNet
         /// for parent commands.
         /// </summary>
         public bool IsInterceptorOption { get; }
-
-        /// <summary>
-        /// When true, the option should be shown in help.<br/>
-        /// Default: true
-        /// </summary>
-        [Obsolete("Use Hidden instead. ShowInHelp == !Hidden")]
-        public bool ShowInHelp { get => !Hidden; set => Hidden = !value; }
-
+        
         /// <summary>
         /// When true, the option is hidden and should not be shown
         /// to the user in help or suggestions or anywhere else.
@@ -182,6 +179,7 @@ namespace CommandDotNet
             return $"Option: {Name} ({DefinitionSource})";
         }
 
+        // ReSharper disable once RedundantCast
         public static bool operator ==(Option x, Option y) => (object)x == (object)y;
 
         public static bool operator !=(Option x, Option y) => !(x == y);
@@ -192,7 +190,7 @@ namespace CommandDotNet
                    && Equals(ShortName, other.ShortName);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is null)
             {

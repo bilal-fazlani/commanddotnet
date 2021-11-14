@@ -3,9 +3,9 @@
     public class MiddlewareStep
     {
         public static MiddlewareStep operator +(MiddlewareStep step, short increment) => 
-            new MiddlewareStep(step.Stage, (short)(step.OrderWithinStage + increment));
+            new(step.Stage, (short)(step.OrderWithinStage + increment));
         public static MiddlewareStep operator -(MiddlewareStep step, short decrement) =>
-            new MiddlewareStep(step.Stage, (short)(step.OrderWithinStage - decrement));
+            new(step.Stage, (short)(step.OrderWithinStage - decrement));
 
         public MiddlewareStages Stage { get; }
 
@@ -28,7 +28,7 @@
                    && OrderWithinStage == other.OrderWithinStage;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj))
             {

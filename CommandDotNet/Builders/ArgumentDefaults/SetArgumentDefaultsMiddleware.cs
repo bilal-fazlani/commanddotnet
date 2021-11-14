@@ -19,11 +19,11 @@ namespace CommandDotNet.Builders.ArgumentDefaults
             return appRunner.Configure(c =>
             {
                 var config = c.Services.GetOrDefault<Config>();
-                if (config == null)
+                if (config is null)
                 {
                     // run before help so the default values can be displayed in the help text 
                     c.UseMiddleware(SetDefaults, MiddlewareSteps.SetArgumentDefaults);
-                    c.Services.Add(config = new Config(getDefaultValueCallbacks));
+                    c.Services.Add(new Config(getDefaultValueCallbacks));
                 }
                 else
                 {

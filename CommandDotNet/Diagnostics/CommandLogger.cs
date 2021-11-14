@@ -12,7 +12,7 @@ namespace CommandDotNet.Diagnostics
     {
         public static bool HasLoggedFor(CommandContext context)
         {
-            return context?.Services.GetOrDefault<CommandLoggerHasLoggedMarker>() != null;
+            return context.Services.GetOrDefault<CommandLoggerHasLoggedMarker>() != null;
         }
 
         public static void Log(
@@ -73,12 +73,12 @@ namespace CommandDotNet.Diagnostics
 
         private static string RemovePasswords(CommandContext commandContext, string originalArgs)
         {
-            commandContext.ParseResult?.TargetCommand?
+            commandContext.ParseResult?.TargetCommand
                 .AllArguments(includeInterceptorOptions: true)
                 .Where(a => a.IsObscured())
                 .ForEach(a => a.InputValues
-                    .Where(iv => iv.Source == Resources.A.Common_argument_lc)
-                    .SelectMany(iv => iv.Values)
+                    .Where(iv => iv.Source == Resources.A.Common_argument_lc && iv.Values is not null)
+                    .SelectMany(iv => iv.Values!)
                     .ForEach(pwd => originalArgs = originalArgs.Replace(pwd, Password.ValueReplacement)));
             return originalArgs;
         }

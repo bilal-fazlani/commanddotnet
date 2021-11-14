@@ -34,7 +34,7 @@ namespace CommandDotNet
             return _password == other._password;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj))
             {
@@ -56,7 +56,7 @@ namespace CommandDotNet
 
         public override int GetHashCode()
         {
-            return (_password != null ? _password.GetHashCode() : 0);
+            return _password.GetHashCode();
         }
     }
 }

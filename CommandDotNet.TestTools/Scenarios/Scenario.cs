@@ -5,10 +5,10 @@ namespace CommandDotNet.TestTools.Scenarios
     public class Scenario : IScenario
     {
         /// <summary>The user input</summary>
-        public ScenarioWhen When { get; } = new ScenarioWhen();
+        public ScenarioWhen When { get; } = new();
 
         /// <summary>The expectations</summary>
-        public ScenarioThen Then { get; } = new ScenarioThen();
+        public ScenarioThen Then { get; } = new();
 
         public override string ToString()
         {

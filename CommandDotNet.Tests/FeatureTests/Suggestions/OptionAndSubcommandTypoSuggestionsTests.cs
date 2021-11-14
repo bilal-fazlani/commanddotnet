@@ -73,7 +73,7 @@ namespace CommandDotNet.Tests.FeatureTests.Suggestions
                         ExitCode = 1,
                         OutputContainsTexts =
                         {
-                            @"'user' is not a valid option
+                            @"'--user' is not a valid option
 
 Did you mean ...
    --username
@@ -108,7 +108,7 @@ See 'testhost.dll User --help'
                             ExitCode = 1,
                             OutputContainsTexts =
                             {
-                                @"'user' is not a valid option
+                                @"'--user' is not a valid option
 
 Did you mean ...
    --username
@@ -140,7 +140,7 @@ See 'testhost.dll User --help'
                             ExitCode = 1,
                             OutputContainsTexts =
                             {
-                                @"'user' is not a valid option
+                                @"'--user' is not a valid option
 
 Did you mean ...
    --username
@@ -166,7 +166,7 @@ See 'testhost.dll User --help'
                             ExitCode = 1,
                             OutputContainsTexts =
                             {
-                                @"'opt' is not a valid option
+                                @"'--opt' is not a valid option
 
 Did you mean ...
    --opt1
@@ -285,7 +285,7 @@ Usage: testhost.dll [command]
                             ExitCode = 1,
                             OutputContainsTexts =
                             {
-                                @"'users' is not a valid option
+                                @"'--users' is not a valid option
 
 Did you mean ...
    --username
@@ -322,7 +322,7 @@ See 'testhost.dll  --help'"
                     });
         }
 
-        public class App
+        private class App
         {
             public void User([Option] string username, [Option] string firstname, [Option] string lastname)
             {

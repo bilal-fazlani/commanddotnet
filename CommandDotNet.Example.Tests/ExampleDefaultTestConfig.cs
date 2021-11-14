@@ -4,7 +4,7 @@ namespace CommandDotNet.Example.Tests
 {
     public class ExampleDefaultTestConfig : IDefaultTestConfig
     {
-        public TestConfig Default => new TestConfig
+        public TestConfig Default => new()
         {
             //PrintCommandDotNetLogs = true,
             OnSuccess = {Print = {ConsoleOutput = true}},
