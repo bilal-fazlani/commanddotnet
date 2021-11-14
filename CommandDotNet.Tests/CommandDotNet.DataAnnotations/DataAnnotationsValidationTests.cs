@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using CommandDotNet.DataAnnotations;
 using CommandDotNet.Tests.Utils;
@@ -193,6 +194,7 @@ Usage: testhost.dll Save [options] <Id> <Name>"
             }
         }
 
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
         private class Person : IArgumentModel, IValidatableObject
         {
             [Operand, Required, Range(1, int.MaxValue)]
@@ -216,6 +218,7 @@ Usage: testhost.dll Save [options] <Id> <Name>"
             }
         }
 
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
         public class ContactInfo : IArgumentModel
         {
             [Option(LongName = "email"), EmailAddress] 

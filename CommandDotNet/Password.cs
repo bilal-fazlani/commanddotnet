@@ -56,7 +56,7 @@ namespace CommandDotNet
 
         public override int GetHashCode()
         {
-            return (_password != null ? _password.GetHashCode() : 0);
+            return _password.GetHashCode();
         }
     }
 }

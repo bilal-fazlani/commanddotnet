@@ -21,11 +21,6 @@ namespace CommandDotNet.Example.Commands
             [Option] int times = 1, 
             [Option(Description = "sleep N seconds between each echo")] int sleep = 0)
         {
-            if (inputs == null)
-            {
-                return;
-            }
-
             foreach (var input in inputs)
             {
                 for (int i = 0; i < times; i++)

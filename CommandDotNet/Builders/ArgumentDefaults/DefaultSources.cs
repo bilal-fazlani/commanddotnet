@@ -166,7 +166,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
                     {
                         object defaultValue = argument.Arity.AllowsMany()
                             ? v.value!.Split(',')
-                            : (object)v.value!;
+                            : v.value!;
                         return new ArgumentDefault(sourceName, v.key, defaultValue);
                     })
                     .FirstOrDefault();

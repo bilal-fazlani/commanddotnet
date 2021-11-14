@@ -79,7 +79,7 @@ namespace CommandDotNet.Execution
 
         private static void Console_CancelKeyPress(object? sender, ConsoleCancelEventArgs e)
         {
-            var handler = SourceStack.Peek()?.GetHandler();
+            var handler = SourceStack.Peek().GetHandler();
             if (handler == null)
             {
                 return;

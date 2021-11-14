@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
@@ -10,7 +9,6 @@ using CommandDotNet.Extensions;
 using CommandDotNet.Help;
 using CommandDotNet.Logging;
 using CommandDotNet.Parsing;
-using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
 
 [assembly: InternalsVisibleTo("CommandDotNet.Tests")]
@@ -92,7 +90,7 @@ namespace CommandDotNet
             }
             catch (Exception e)
             {
-                return HandleException(e, _appConfigBuilder.Console, commandContext);
+                return HandleException(e, commandContext);
             }
         }
 
@@ -114,7 +112,7 @@ namespace CommandDotNet
             }
             catch (Exception e)
             {
-                return HandleException(e, _appConfigBuilder.Console, commandContext);
+                return HandleException(e, commandContext);
             }
         }
 
@@ -155,7 +153,7 @@ namespace CommandDotNet
             return result;
         }
 
-        private int HandleException(Exception ex, IConsole console, CommandContext? commandContext)
+        private int HandleException(Exception ex, CommandContext? commandContext)
         {
             ex = ex.EscapeWrappers();
             if (commandContext is { })

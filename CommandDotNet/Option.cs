@@ -179,6 +179,7 @@ namespace CommandDotNet
             return $"Option: {Name} ({DefinitionSource})";
         }
 
+        // ReSharper disable once RedundantCast
         public static bool operator ==(Option x, Option y) => (object)x == (object)y;
 
         public static bool operator !=(Option x, Option y) => !(x == y);

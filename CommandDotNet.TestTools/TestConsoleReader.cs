@@ -78,17 +78,17 @@ namespace CommandDotNet.TestTools
             if (pipedInput is ICollection<string> inputs)
             {
                 var queue = new Queue<string>(inputs);
-                _onReadLine = console => queue.Count == 0 ? null : queue.Dequeue();
+                _onReadLine = _ => queue.Count == 0 ? null : queue.Dequeue();
             }
             else
             {
                 // take one at a time
-                _onReadLine = console => pipedInput.Take(1).FirstOrDefault();
+                _onReadLine = _ => pipedInput.Take(1).FirstOrDefault();
             }
 
             var onReadLine = _onReadLine;
 
-            _onReadLine = console =>
+            _onReadLine = _ =>
             {
                 var input = onReadLine?.Invoke(_host);
                 Log.Info($"ITestConsole.ReadLine > {input}");
@@ -121,7 +121,7 @@ namespace CommandDotNet.TestTools
                                     "Windows will throw 'System.IO.IOException: The handle is invalid' on an attempt to ");
             }
 
-            _onReadLine = console =>
+            _onReadLine = _ =>
             {
                 var input = onReadLine?.Invoke(_host);
                 Log.Info($"ITestConsole.ReadLine > {input}");

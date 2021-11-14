@@ -82,7 +82,7 @@ namespace CommandDotNet.TestTools
             foreach (var method in Methods)
             {
                 var placeHolders = method.GetParameters()
-                    .Select((p, i) => $"{{{i}}}")
+                    .Select((_, i) => $"{{{i}}}")
                     .Cast<object>()
                     .ToArray();
 
@@ -110,13 +110,13 @@ namespace CommandDotNet.TestTools
             {
                 var parameters = method.GetParameters();
                 var paramDef = parameters.Select(p => $"string {p.Name}").ToCsv(", ");
-                var paramPlaceHolders = parameters.Select((p, i) => $"\"{{{i}}}\"").ToCsv(", ");
-                var paramPassthrus = parameters.Select(p => $"{p.Name}").ToCsv(", ");
+                var paramPlaceHolders = parameters.Select((_, i) => $"\"{{{i}}}\"").ToCsv(", ");
+                var paramPassThrus = parameters.Select(p => $"{p.Name}").ToCsv(", ");
 
                 proxyCode.AppendLine(
                     $"        public override string {method.Name}({paramDef}) =>{Environment.NewLine}" +
                     $"            _localize(base.{method.Name}({paramPlaceHolders})){Environment.NewLine}" +
-                    $"            ?? base.{method.Name}({paramPassthrus});");
+                    $"            ?? base.{method.Name}({paramPassThrus});");
             }
 
             var classDef = @$"

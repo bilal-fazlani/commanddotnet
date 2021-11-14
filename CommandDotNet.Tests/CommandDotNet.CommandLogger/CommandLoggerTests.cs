@@ -187,7 +187,7 @@ AppConfig:
         public void AdditionalInfo_CanBe_Null()
         {
             new AppRunner<App>()
-                .UseCommandLogger(excludeSystemInfo: true, additionalInfoCallback: ctx => null)
+                .UseCommandLogger(excludeSystemInfo: true, additionalInfoCallback: _ => null)
                 .Verify(new Scenario
                 {
                     When = {Args = "[cmdlog] Do"},
@@ -228,7 +228,7 @@ options:
         public void AdditionalInfo_CanBe_Shown()
         {
             new AppRunner<App>()
-                .UseCommandLogger(excludeSystemInfo: true, additionalInfoCallback: ctx => new[]
+                .UseCommandLogger(excludeSystemInfo: true, additionalInfoCallback: _ => new[]
                 {
                     ("header1", "value1"),
                     ("header2", "value2")
@@ -275,10 +275,8 @@ header2  = value2
         [Fact]
         public void WriterFactory_Can_ReturnNull_And_NothingIsLogged()
         {
-            var sb = new StringBuilder();
-
             new AppRunner<App>()
-                .UseCommandLogger(excludeSystemInfo: true, writerFactory: context => null)
+                .UseCommandLogger(excludeSystemInfo: true, writerFactory: _ => null)
                 .Verify(new Scenario
                 {
                     When = {Args = "Do"},
@@ -295,7 +293,7 @@ header2  = value2
             var sb = new StringBuilder();
 
             new AppRunner<App>()
-                .UseCommandLogger(excludeSystemInfo: true, writerFactory: context => text => sb.AppendLine(text))
+                .UseCommandLogger(excludeSystemInfo: true, writerFactory: _ => text => sb.AppendLine(text))
                 .Verify(new Scenario
                 {
                     When = {Args = "Do"},

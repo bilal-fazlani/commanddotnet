@@ -30,7 +30,7 @@ namespace CommandDotNet.Execution
                             }
                         }));
 
-            return middlewareChain(commandContext, ctx => ExitCodes.Success);
+            return middlewareChain(commandContext, _ => ExitCodes.Success);
         }
     }
 }

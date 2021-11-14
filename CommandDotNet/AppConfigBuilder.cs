@@ -14,7 +14,7 @@ namespace CommandDotNet
 {
     public class AppConfigBuilder
     {
-        private short _orderAdded = 0;
+        private short _orderAdded;
         
         private readonly SingleRegistrationGuard<ExecutionMiddleware> _middlewareSingleRegistrationGuard = 
             new(
@@ -39,7 +39,7 @@ namespace CommandDotNet
         public AppConfigBuilder(AppSettings appSettings)
         {
             AppSettings = appSettings ?? throw new ArgumentNullException(nameof(appSettings));
-            NameTransformation = (attributes, memberName, overrideName, commandNodeType) => overrideName ?? memberName;
+            NameTransformation = (_, memberName, overrideName, _) => overrideName ?? memberName;
         }
 
         public AppSettings AppSettings { get; }
@@ -125,7 +125,7 @@ namespace CommandDotNet
             }
             
             var values = _middlewareByStage
-                .GetOrAdd(step.Stage, s => new List<(ExecutionMiddleware, short, short)>());
+                .GetOrAdd(step.Stage, _ => new List<(ExecutionMiddleware, short, short)>());
 
             values.Add((middleware, step.OrderWithinStage, _orderAdded++));
 

@@ -24,10 +24,7 @@ namespace CommandDotNet.NewerReleasesAlerts
             OverrideHttpRequestCallback? overrideHttpRequestCallback = null,
             Predicate<Command>? skipCommand = null)
         {
-            if (getVersionFromReleaseName == null)
-            {
-                getVersionFromReleaseName = name => name;
-            }
+            getVersionFromReleaseName ??= name => name;
 
             var latestReleaseUrl = BuildLatestReleaseUrl(organizationName, repositoryName);
             return appRunner.UseNewerReleaseAlert(

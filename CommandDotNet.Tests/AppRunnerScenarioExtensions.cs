@@ -9,7 +9,7 @@ namespace CommandDotNet.Tests
     public static class AppRunnerScenarioExtensions
     {
         public static AppRunner StopAfter(this AppRunner runner, MiddlewareStep step)
-            => runner.Configure(cfg => cfg.UseMiddleware((c, n) => ExitCodes.Success, step+1));
+            => runner.Configure(cfg => cfg.UseMiddleware((_, _) => ExitCodes.Success, step+1));
 
         public static AppRunner StopAfter(this AppRunner runner, MiddlewareStages stage)
             => runner.StopAfter(new MiddlewareStep(stage));

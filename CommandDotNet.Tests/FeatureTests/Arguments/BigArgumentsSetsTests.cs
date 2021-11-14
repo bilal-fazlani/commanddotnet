@@ -1,10 +1,12 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CommandDotNet.Extensions;
 using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
@@ -376,6 +378,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             GenerateScenario(range);
         }
 
+        [SuppressMessage("ReSharper", "FormatStringProblem")]
         private void GenerateScenario(Names[] range)
         {
             _output.WriteLine("\n  --- generate scenario --- \n");
@@ -398,6 +401,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             _output.WriteLine("});");
         }
 
+        [SuppressMessage("ReSharper", "FormatStringProblem")]
         private void GenerateCommandMethod(Names[] range)
         {
             _output.WriteLine("\n  --- generate Do method --- \n");
@@ -417,6 +421,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             _output.WriteLine("}");
         }
 
+        [SuppressMessage("ReSharper", "FormatStringProblem")]
         private void GenerateModel(Names[] range)
         {
             _output.WriteLine("\n  --- generate model --- \n");

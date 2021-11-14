@@ -253,6 +253,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             public string Operand2 { get; set; } = null!;
 
             // mimic operand defined first but returned last when reflected
+            // ReSharper disable once ExplicitCallerInfoArgument
             [Operand(1)] public string OperandDefinedFirstReflectedLast { get; set; } = null!;
         }
     }

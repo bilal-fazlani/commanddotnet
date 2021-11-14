@@ -81,7 +81,7 @@ namespace CommandDotNet.Prompts
             parseResult.TargetCommand
                 .AllArguments(includeInterceptorOptions: true)
                 .Where(a => argumentFilter(a))
-                .TakeWhile(a => !commandContext.CancellationToken.IsCancellationRequested && !isCancellationRequested)
+                .TakeWhile(_ => !commandContext.CancellationToken.IsCancellationRequested && !isCancellationRequested)
                 .ForEach(a =>
                 {
                     Log.Debug($"Prompting for {a.Name}");
@@ -109,7 +109,7 @@ namespace CommandDotNet.Prompts
                 prompter = prompterFactory?.Invoke(ctx) ?? new Prompter(ctx.Console);
                 ctx.Services.Add(prompter);
             }
-            return prompter!;
+            return prompter;
         }
 
         private static IArgumentPrompter GetArgumentPrompter(this CommandContext ctx)
@@ -126,7 +126,7 @@ namespace CommandDotNet.Prompts
                                    ?? new ArgumentPrompter(prompter);
                 ctx.Services.Add(argumentPrompter);
             }
-            return argumentPrompter!;
+            return argumentPrompter;
         }
     }
 }

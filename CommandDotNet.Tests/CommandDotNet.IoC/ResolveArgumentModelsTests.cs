@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
@@ -50,6 +51,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
             }
         }
 
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
         class ArgModel : IArgumentModel
         {
             [Operand]

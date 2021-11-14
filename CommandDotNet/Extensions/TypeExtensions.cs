@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -55,7 +54,7 @@ namespace CommandDotNet.Extensions
 
         internal static object? GetDefaultValue(this Type type)
         {
-            return DefaultMethodByType.GetOrAdd(type, t =>
+            return DefaultMethodByType.GetOrAdd(type, _ =>
             {
                 Func<object?> f = GetDefaultValue<object>;
                 return f.Method.GetGenericMethodDefinition().MakeGenericMethod(type);
@@ -67,8 +66,7 @@ namespace CommandDotNet.Extensions
             return Equals(defaultValue, type.GetDefaultValue());
         }
 
-        [return: MaybeNull]
-        private static T GetDefaultValue<T>()
+        private static T? GetDefaultValue<T>()
         {
             return Box<T>.CreateDefault().Value;
         }

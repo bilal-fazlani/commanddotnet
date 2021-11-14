@@ -58,8 +58,7 @@ namespace CommandDotNet
             var defaultValue = argument.Default?.Value;
             var hasDefaultValue = !defaultValue.IsNullValue() && !defaultValue!.IsDefaultFor(type);
             var isOptional = argument.Services.GetOrDefault<IArgumentDef>()?.IsOptional 
-                             ?? argument.Arity?.AllowsNone()
-                             ?? false;
+                             ?? argument.Arity.AllowsNone();
             return Default(type, isOptional, hasDefaultValue, argument.BooleanMode);
         }
 
@@ -87,6 +86,7 @@ namespace CommandDotNet
             return $"{nameof(ArgumentArity)}:{Minimum}..{Maximum}";
         }
 
+        // ReSharper disable once RedundantCast
         public static bool operator ==(ArgumentArity x, ArgumentArity y) => (object)x == (object)y;
 
         public static bool operator !=(ArgumentArity x, ArgumentArity y) => !(x == y);

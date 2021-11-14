@@ -238,7 +238,8 @@ namespace CommandDotNet
 
         }
 
-        public static bool operator ==(Command x, Command y) => (object) x == (object) y;
+        // ReSharper disable once RedundantCast
+        public static bool operator ==(Command x, Command y) => (object)x == (object) y;
 
         public static bool operator !=(Command x, Command y) => !(x == y);
 
@@ -272,7 +273,7 @@ namespace CommandDotNet
         {
             unchecked
             {
-                return ((Name != null ? Name.GetHashCode() : 0) * 397) ^ (Parent is { } ? Parent.GetHashCode() : 0);
+                return (Name.GetHashCode() * 397) ^ (Parent is { } ? Parent.GetHashCode() : 0);
             }
         }
     }

@@ -19,7 +19,7 @@ namespace CommandDotNet
             void AppendIfNotNull(string prefix, string? value)
             {
                 if (value.IsNullOrWhitespace()) return;
-                if (sb!.Length > 0) sb.Append(delimiter);
+                if (sb.Length > 0) sb.Append(delimiter);
                 sb.Append(prefix);
                 sb.Append(value);
             }

@@ -124,7 +124,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                     }
                 }
 
-                _resolvers?.ForEach(r => r(commandContext));
+                _resolvers.ForEach(r => r(commandContext));
 
                 return _methodInfo.Invoke(instance, Values);
             }
@@ -184,7 +184,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
                 if (existingDefault == null)
                 {
-                    instanceCreated?.Invoke(instance);
+                    instanceCreated.Invoke(instance);
                 }
 
                 // sum we have to add these every time because the existingDefault could have been instantiated in the model

@@ -61,7 +61,7 @@ namespace CommandDotNet.Parsing
                 && parseContext.Command.ArgumentSeparatorStrategy == ArgumentSeparatorStrategy.EndOfOptions)
             {
                 commandContext.Tokens.Separated
-                    .TakeWhile(t => parseContext.ParserError is null)
+                    .TakeWhile(_ => parseContext.ParserError is null)
                     .ForEach(t => ParseValue(parseContext, t, operandsOnly:true));
             }
 
@@ -143,7 +143,7 @@ namespace CommandDotNet.Parsing
 
             if (option is null)
             {
-                if (node is Command cmd)
+                if (node is Command)
                 {
                     var suggestion = parseContext.CommandContext.Original.Args.ToCsv(" ").Replace(token.RawValue, optionName);
                     parseContext.ParserError = new UnrecognizedArgumentParseError(parseContext.Command, token, optionPrefix,
@@ -378,7 +378,7 @@ namespace CommandDotNet.Parsing
         private static ICollection<ValueFromToken> GetAlreadyParsedValues(this IArgument argument)
         {
             // in most cases, this will be the first and only InputValues
-            var source = (string)Resources.A.Common_argument_lc;
+            var source = Resources.A.Common_argument_lc;
             var parserValues = argument.InputValues.FirstOrDefault(iv => iv.Source == source);
 
             if (parserValues is null)

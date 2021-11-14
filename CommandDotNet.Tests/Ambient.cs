@@ -14,7 +14,7 @@ namespace CommandDotNet.Tests
             set => TestOutputHelper.Value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        public static Action<string?>? WriteLine
+        public static Action<string?> WriteLine
         {
             get
             {
@@ -27,10 +27,7 @@ namespace CommandDotNet.Tests
                 return msg =>
                 {
                     // XUnit does not like null values
-                    if (msg == null)
-                    {
-                        msg = "";
-                    }
+                    msg ??= "";
                     output.WriteLine(msg);
                 };
             }

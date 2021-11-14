@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using CommandDotNet.Builders;
@@ -174,6 +175,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             public void NrtModel(NrtArgModel model) { }
         }
 
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
         class ArgModel : IArgumentModel
         {
             [Operand]

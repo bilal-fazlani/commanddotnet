@@ -108,6 +108,7 @@ namespace CommandDotNet
             return $"Operand: {Name} ({DefinitionSource})";
         }
         
+        // ReSharper disable once RedundantCast
         public static bool operator ==(Operand x, Operand y) => (object)x == (object)y;
 
         public static bool operator !=(Operand x, Operand y) => !(x == y);
@@ -139,7 +140,7 @@ namespace CommandDotNet
 
         public override int GetHashCode()
         {
-            return (Name != null ? Name.GetHashCode() : 0);
+            return Name.GetHashCode();
         }
     }
 }

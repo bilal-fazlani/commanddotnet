@@ -1,7 +1,5 @@
 ﻿// ReSharper disable CheckNamespace
 
-using System.Reflection;
-
 namespace CommandDotNet
 {
     public partial class Resources
