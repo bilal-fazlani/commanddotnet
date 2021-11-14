@@ -48,7 +48,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                    || parameterInfo.ParameterType == InterceptorNextParameterType;
         }
 
-        public object Invoke(CommandContext commandContext, object instance, ExecutionDelegate next)
+        public object? Invoke(CommandContext commandContext, object instance, ExecutionDelegate next)
         {
             return GetResult().Invoke(commandContext, instance, next);
         }
@@ -89,7 +89,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 Values = new object[Parameters.Length];
 
                 var parametersByName = Parameters.ToDictionary(
-                    p => p.Name,
+                    p => p.Name!,
                     p => (param: p, args: GetArgsFromParameter(p, argumentMode).ToCollection()));
 
                 ArgumentDefs = parametersByName.Values
@@ -102,7 +102,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                     .ToReadOnlyCollection();
             }
 
-            public object Invoke(CommandContext commandContext, object instance, ExecutionDelegate next)
+            public object? Invoke(CommandContext commandContext, object instance, ExecutionDelegate next)
             {
                 if (_nextParameterInfo != null)
                 {

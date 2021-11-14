@@ -48,7 +48,9 @@ namespace CommandDotNet.Parsing
 
             if (argument.InputValues.Any())
             {
-                if (!SetFromStringInput(argument, argument.InputValues.SelectMany(iv => iv.Values)))
+                if (!SetFromStringInput(argument, argument.InputValues
+                    .Where(iv => iv.Values is not null)
+                    .SelectMany(iv => iv.Values!)))
                 {
                     return false;
                 }

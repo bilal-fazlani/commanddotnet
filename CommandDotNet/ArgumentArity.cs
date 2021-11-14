@@ -96,7 +96,7 @@ namespace CommandDotNet
             return Minimum == other.Minimum && Maximum == other.Maximum;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is null)
             {

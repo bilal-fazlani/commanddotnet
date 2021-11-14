@@ -153,7 +153,7 @@ namespace CommandDotNet.Tests.FeatureTests
                         AssertOutput = o =>
                         {
                             o.Should().StartWith("File not found: ");
-                            o.TrimEnd(Environment.NewLine.ToCharArray())
+                            o!.TrimEnd(Environment.NewLine.ToCharArray())
                                 .Should().EndWith("not-exists.rsp");
                         }
                     }

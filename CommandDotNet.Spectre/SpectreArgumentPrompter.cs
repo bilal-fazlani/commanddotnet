@@ -96,7 +96,7 @@ namespace CommandDotNet.Spectre
                     };
                     if (defaultValue != null)
                     {
-                        p.DefaultValue(defaultValue.ToString());
+                        p.DefaultValue(defaultValue.ToString()!);
                     }
                     return new[] { ansiConsole.Prompt(p) };
                 }

@@ -36,7 +36,7 @@ namespace CommandDotNet.TestTools.Prompts
 
         private IAnswer GetNextAnswer(ITestConsole testConsole)
         {
-            var promptLine = testConsole.OutText().SplitIntoLines().Last();
+            var promptLine = testConsole.OutText()!.SplitIntoLines().Last();
             var answer = _filteredAnswers.FirstOrDefault(a => a.PromptFilter?.Invoke(promptLine) ?? false)
                          ?? _unfilteredAnswers.FirstOrDefault(a => a.PromptFilter is null);
 

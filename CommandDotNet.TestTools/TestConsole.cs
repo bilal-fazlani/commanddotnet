@@ -79,17 +79,17 @@ namespace CommandDotNet.TestTools
         /// in the order they were written from the app.<br/>
         /// This is how the output would appear in the shell.
         /// </summary>
-        public virtual string AllText() => _allOutput.ToString();
+        public virtual string? AllText() => _allOutput.ToString();
 
         /// <summary>
         /// The accumulated text of the <see cref="Console.Out"/> stream.
         /// </summary>
-        public virtual string OutText() => Out.ToString();
+        public virtual string? OutText() => Out.ToString();
 
         /// <summary>
         /// The accumulated text of the <see cref="Console.Error"/> stream.
         /// </summary>
-        public virtual string ErrorText() => Error.ToString();
+        public virtual string? ErrorText() => Error.ToString();
 
         #region IConsole
 
@@ -97,7 +97,7 @@ namespace CommandDotNet.TestTools
         public virtual Encoding InputEncoding { get; set; } = Encoding.Unicode;
         public virtual Encoding OutputEncoding { get; set; } = Encoding.Unicode;
         
-        public virtual ConsoleKeyInfo ReadKey(bool intercept = false)
+        public virtual ConsoleKeyInfo? ReadKey(bool intercept = false)
         {
             ConsoleKeyInfo consoleKeyInfo;
 

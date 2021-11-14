@@ -37,10 +37,9 @@ namespace CommandDotNet.Spectre
             set => _ansiConsole.Profile.Height = value;
         }
 
-        public override ConsoleKeyInfo ReadKey(bool intercept = false)
+        public override ConsoleKeyInfo? ReadKey(bool intercept = false)
         {
-            var consoleKeyInfo = _ansiConsole.Input.ReadKeyAsync(intercept, CancellationToken.None).Result;
-            return (ConsoleKeyInfo)consoleKeyInfo;
+            return _ansiConsole.Input.ReadKeyAsync(intercept, CancellationToken.None).Result;
         }
     }
 }

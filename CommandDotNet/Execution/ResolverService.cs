@@ -22,7 +22,7 @@ namespace CommandDotNet.Execution
             // sources.
             return ConditionalTryResolve(modelType, out var item, ArgumentModelResolveStrategy)
                 ? item!
-                : Activator.CreateInstance(modelType);
+                : Activator.CreateInstance(modelType)!;
         }
 
         internal object ResolveCommandClass(Type classType, CommandContext commandContext)

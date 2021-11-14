@@ -26,7 +26,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
                     Then =
                     {
                         AssertContext = ctx => 
-                            ctx.GetCommandInvocationInfo().ParameterValues.First().Should().BeSameAs(argModel)
+                            ctx.GetCommandInvocationInfo().ParameterValues!.First().Should().BeSameAs(argModel)
                     }
                 });
         }

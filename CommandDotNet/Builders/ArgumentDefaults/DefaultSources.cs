@@ -40,7 +40,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
             {
                 envVars ??= Environment.GetEnvironmentVariables();
                 return GetValueFunc(Resources.A.ValueSource_EnvVar,
-                    key => envVars.Contains(key) ? (string)envVars[key] : null,
+                    key => envVars.GetValueOrDefault<string>(key),
                     getKeysDelegates ?? new GetArgumentKeysDelegate[]
                     {
                         GetKeyFromAttribute

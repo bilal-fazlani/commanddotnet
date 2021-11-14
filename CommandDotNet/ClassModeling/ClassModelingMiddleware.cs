@@ -73,7 +73,7 @@ namespace CommandDotNet.ClassModeling
                 var result = step.Invocation.Invoke(context, step.Instance!, next);
                 return isCommand
                     ? result.GetResultCodeAsync()
-                    : (Task<int>)result;
+                    : result as Task<int> ?? Task.FromResult(0);
             }
 
             var pipeline = commandContext.InvocationPipeline;

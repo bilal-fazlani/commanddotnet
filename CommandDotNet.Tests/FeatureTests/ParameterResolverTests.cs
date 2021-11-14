@@ -103,7 +103,7 @@ Options:
                         ExitCode = 1,
                         OutputContainsTexts =
                         {
-                            "CommandDotNet.Tests.FeatureTests.ParameterResolverTests+SomeService is not supported.",
+                            "`CommandDotNet.Tests.FeatureTests.ParameterResolverTests+SomeService` is not supported.",
                             "If it is a service and not an argument, register using AppRunner.Configure(b => b.UseParameterResolver(ctx => ...));"
                         }
                     }

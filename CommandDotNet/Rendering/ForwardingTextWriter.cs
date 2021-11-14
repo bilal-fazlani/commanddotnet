@@ -13,9 +13,9 @@ namespace CommandDotNet.Rendering
             _write = write;
         }
 
-        public override Encoding Encoding { get; }
+        public override Encoding Encoding { get; } = Encoding.Default;
 
-        public override void Write(string value)
+        public override void Write(string? value)
         {
             _write(value);
         }

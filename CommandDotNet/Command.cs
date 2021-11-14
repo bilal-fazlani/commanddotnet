@@ -248,7 +248,7 @@ namespace CommandDotNet
                    && Equals(Parent, other.Parent);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is null)
             {

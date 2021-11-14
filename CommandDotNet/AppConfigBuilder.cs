@@ -166,14 +166,14 @@ namespace CommandDotNet
                 _parameterResolversByType, middlewarePipeline, tokenTransformations);
         }
 
-        private class SingleRegistrationGuard<T>
+        private class SingleRegistrationGuard<T> where T: notnull
         {
             private readonly string _type;
-            private readonly Func<T, string> _getName;
+            private readonly Func<T, string?> _getName;
 
             private readonly Dictionary<T, SingleRegistrationInfo> _registrations = new();
 
-            public SingleRegistrationGuard(string type, Func<T, string> getName)
+            public SingleRegistrationGuard(string type, Func<T, string?> getName)
             {
                 _type = type ?? throw new ArgumentNullException(nameof(type));
                 _getName = getName ?? throw new ArgumentNullException(nameof(getName));
@@ -183,7 +183,7 @@ namespace CommandDotNet
             {
                 if (_registrations.TryGetValue(key, out var info))
                 {
-                    var msg = $"{_type} '{_getName(key)}' has already been registered";
+                    var msg = $"{_type} '{_getName(key) ?? "<name unavailable>"}' has already been registered";
                     if (AppRunnerConfigExtensions.InUseDefaultMiddleware
                         || info.InUseDefaultMiddleware)
                     {

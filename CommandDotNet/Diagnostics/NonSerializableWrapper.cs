@@ -21,6 +21,8 @@ namespace CommandDotNet.Diagnostics
             SkipPrint = skipPrint;
         }
 
+        public T As<T>() => (T)Item;
+
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => 
             info.AddValue(Item?.GetType().Namespace ?? "???", Item?.ToString());
 

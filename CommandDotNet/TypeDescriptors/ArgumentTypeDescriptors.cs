@@ -53,7 +53,7 @@ namespace CommandDotNet.TypeDescriptors
         /// Returns the first descriptor that supports this type. Returns null if no descriptor found.<br/>
         /// Custom descriptors are evaluated before built-in descriptors
         /// </summary>
-        public IArgumentTypeDescriptor GetDescriptor(Type type)
+        public IArgumentTypeDescriptor? GetDescriptor(Type type)
         {
             return _customDescriptors.FirstOrDefault(d => d.CanSupport(type))
                    ?? _defaultDescriptors.FirstOrDefault(d => d.CanSupport(type));
@@ -68,8 +68,9 @@ namespace CommandDotNet.TypeDescriptors
             return GetDescriptor(type) ?? throw new InvalidConfigurationException(
                 Error_Type_is_not_supported_as_argument(type.FullName));
         }
-        private static string Error_Type_is_not_supported_as_argument(string typeFullName)
-            => $"type : {typeFullName} is not supported. " +
+
+        private static string Error_Type_is_not_supported_as_argument(string? typeFullName)
+            => $"type : `{typeFullName}` is not supported. " +
                Environment.NewLine +
                $"If it is an argument model, inherit from {nameof(IArgumentModel)}. " +
                Environment.NewLine +

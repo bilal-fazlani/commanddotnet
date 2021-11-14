@@ -58,7 +58,7 @@ namespace CommandDotNet.Builders
         /// <summary>The file name used to execute the app</summary>
         public string FileName { get; }
 
-        public string Version => _version ??= GetVersion(Instance.EntryAssembly);
+        public string? Version => _version ??= GetVersion(Instance.EntryAssembly);
 
         public AppInfo(
             bool isExe, bool isSelfContainedExe, bool isRunViaDotNetExe, 
@@ -90,7 +90,7 @@ namespace CommandDotNet.Builders
             // this could be dotnet.exe or {app_name}.exe if published as single executable
             var mainModule = Process.GetCurrentProcess().MainModule;
             var mainModuleFilePath = mainModule?.FileName;
-            var entryAssemblyFilePath = entryAssembly?.Location;
+            var entryAssemblyFilePath = entryAssembly.Location;
             
             Log.Debug($"{nameof(mainModuleFilePath)}: {mainModuleFilePath}");
             Log.Debug($"{nameof(entryAssemblyFilePath)}: {entryAssemblyFilePath}");
@@ -124,35 +124,23 @@ namespace CommandDotNet.Builders
                 ? mainModuleFilePath
                 : entryAssemblyFilePath;
 
-            var fileName = Path.GetFileName(filePath);
+            var fileName = Path.GetFileName(filePath)!;
 
             Log.Debug($"  {nameof(FileName)}={fileName} " +
                       $"{nameof(IsRunViaDotNetExe)}={isRunViaDotNetExe} " +
                       $"{nameof(IsSelfContainedExe)}={isSelfContainedExe} " +
                       $"{nameof(FilePath)}={filePath}");
 
-            return new AppInfo(isExe, isSelfContainedExe, isRunViaDotNetExe, entryAssembly!, filePath!, fileName);
+            return new AppInfo(isExe, isSelfContainedExe, isRunViaDotNetExe, entryAssembly, filePath!, fileName);
         }
 
-        private static string GetVersion(Assembly hostAssembly)
-        {
-            var fvi = FileVersionInfo.GetVersionInfo(hostAssembly.Location);
-            return fvi.ProductVersion;
-        }
+        private static string? GetVersion(Assembly hostAssembly) => 
+            FileVersionInfo.GetVersionInfo(hostAssembly.Location).ProductVersion;
 
-        public object Clone()
-        {
-            return new AppInfo(IsExe, IsSelfContainedExe, IsRunViaDotNetExe, EntryAssembly, FilePath, FileName, _version);
-        }
+        public object Clone() => new AppInfo(IsExe, IsSelfContainedExe, IsRunViaDotNetExe, EntryAssembly, FilePath, FileName, _version);
 
-        public override string ToString()
-        {
-            return ToString(new Indent());
-        }
+        public override string ToString() => ToString(new Indent());
 
-        public string ToString(Indent indent)
-        {
-            return this.ToStringFromPublicProperties(indent);
-        }
+        public string ToString(Indent indent) => this.ToStringFromPublicProperties(indent);
     }
 }

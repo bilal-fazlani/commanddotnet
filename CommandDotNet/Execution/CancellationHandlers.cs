@@ -148,6 +148,10 @@ namespace CommandDotNet.Execution
                 var bindingFlags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.CreateInstance;
                 var parameterTypes = parameters.Select(p => p.GetType()).ToArray();
                 var constructorInfo = typeof(T).GetConstructor(bindingFlags, null, parameterTypes, null);
+                if (constructorInfo is null)
+                {
+                    throw new Exception(".net core contracts have changed. update code to handle new contracts");
+                }
                 return (T)constructorInfo.Invoke(parameters);
             }
         }

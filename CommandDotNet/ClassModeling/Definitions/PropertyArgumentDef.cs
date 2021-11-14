@@ -8,7 +8,6 @@ namespace CommandDotNet.ClassModeling.Definitions
     internal class PropertyArgumentDef : IArgumentDef
     {
         private readonly PropertyInfo _propertyInfo;
-        private IArgument? _argument;
 
         public string ArgumentDefType => "Property";
         
@@ -58,7 +57,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             DefaultValue = propertyInfo.GetValue(modelInstance);
             HasDefaultValue = propertyInfo.PropertyType.IsClass
                 ? !DefaultValue.IsNullValue()
-                : !DefaultValue.IsDefaultFor(propertyInfo.PropertyType);
+                : !DefaultValue?.IsDefaultFor(propertyInfo.PropertyType) ?? false;
             Arity = ArgumentArity.Default(this);
         }
 

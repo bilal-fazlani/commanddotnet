@@ -96,8 +96,9 @@ namespace CommandDotNet.TestTools.Scenarios
 
         private static void AssertMissingOutputTexts(IScenario scenario, AppRunnerResult result, StringBuilder sb)
         {
+            var allText = result.Console.AllText();
             var missingHelpTexts = scenario.Then.OutputContainsTexts
-                .Where(t => !result.Console.AllText().Contains(t))
+                .Where(t => !allText?.Contains(t) ?? true)
                 .ToList();
             if (missingHelpTexts.Count > 0)
             {
@@ -113,8 +114,9 @@ namespace CommandDotNet.TestTools.Scenarios
 
         private static void AssertUnexpectedOutputTexts(IScenario scenario, AppRunnerResult result, StringBuilder sb)
         {
+            var allText = result.Console.AllText();
             var unexpectedHelpTexts = scenario.Then.OutputNotContainsTexts
-                .Where(result.Console.AllText().Contains)
+                .Where(t => allText?.Contains(t) ?? false)
                 .ToList();
             if (unexpectedHelpTexts.Count > 0)
             {

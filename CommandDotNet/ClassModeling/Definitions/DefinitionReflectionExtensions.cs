@@ -10,6 +10,11 @@ namespace CommandDotNet.ClassModeling.Definitions
     {
         internal static string BuildName(this ParameterInfo parameterInfo, CommandNodeType commandNodeType, AppConfig appConfig)
         {
+            if (parameterInfo.Name is null)
+            {
+                throw new InvalidConfigurationException(
+                    $"{nameof(parameterInfo)}.{nameof(parameterInfo.Name)} cannot be null. host:{parameterInfo.Member} position:{parameterInfo.Position}");
+            }
             return BuildName(parameterInfo, parameterInfo.Name, commandNodeType, appConfig);
         }
 

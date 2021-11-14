@@ -75,7 +75,9 @@ namespace CommandDotNet.TestTools
             var proxy = NewProxyInstance();
             foreach (var property in Properties)
             {
-                yield return (property, (string)property.GetValue(proxy));
+                // should never be null because Proxy will use 
+                // base member if the null was returned from localize function
+                yield return (property, (string)property.GetValue(proxy)!);
             }
             foreach (var method in Methods)
             {
@@ -83,7 +85,10 @@ namespace CommandDotNet.TestTools
                     .Select((p, i) => $"{{{i}}}")
                     .Cast<object>()
                     .ToArray();
-                yield return (method, (string)method.Invoke(proxy, placeHolders));
+
+                // should never be null because Proxy will use 
+                // base member if the null was returned from localize function
+                yield return (method, (string)method.Invoke(proxy, placeHolders)!);
             }
         }
 

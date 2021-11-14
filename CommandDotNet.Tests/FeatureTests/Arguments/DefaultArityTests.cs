@@ -128,9 +128,9 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 {
                     Boolean = false,
                     Number = 0,
-                    Text = null,
-                    Uri = null,
-                    Texts = null
+                    Text = null!,
+                    Uri = null!,
+                    Texts = null!
                 }
             });
 
@@ -181,11 +181,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             [Operand]
             public int Number { get; set; }
             [Operand]
-            public string Text { get; set; }
+            public string Text { get; set; } = null!;
             [Operand]
-            public Uri Uri { get; set; }
+            public Uri Uri { get; set; } = null!;
             [Operand]
-            public IEnumerable<string> Texts { get; set; }
+            public IEnumerable<string> Texts { get; set; } = null!;
         }
 
         class NrtArgModel : IArgumentModel
@@ -208,13 +208,13 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .ToDictionary(p => p.Name, StringComparer.OrdinalIgnoreCase);
 
-            public Operand Boolean { get; set; }
-            public Operand Number { get; set; }
-            public Operand Text { get; set; }
-            public Operand Uri { get; set; }
-            public Operand Texts { get; set; }
-            public Operand NullableBoolean { get; set; }
-            public Operand NullableNumber { get; set; }
+            public Operand Boolean { get; set; } = null!;
+            public Operand Number { get; set; } = null!;
+            public Operand Text { get; set; } = null!;
+            public Operand Uri { get; set; } = null!;
+            public Operand Texts { get; set; } = null!;
+            public Operand NullableBoolean { get; set; } = null!;
+            public Operand NullableNumber { get; set; } = null!;
 
             public static Operands FromCommand(Command command)
             {

@@ -16,14 +16,14 @@ namespace CommandDotNet.TypeDescriptors
 
         public string GetDisplayName(IArgument argument)
         {
-            return GetConverter(argument).MethodBase!.GetParameters().Single().Name;
+            return GetConverter(argument).MethodBase!.GetParameters().Single().Name!;
         }
 
-        public object ParseString(IArgument argument, string value)
+        public object? ParseString(IArgument argument, string value)
         {
             var converter = GetConverter(argument);
-            return converter.StringConstructor is { } 
-                ? converter.StringConstructor.Invoke(new object[] { value }) 
+            return converter.StringConstructor is not null 
+                ? converter.StringConstructor!.Invoke(new object[] { value }) 
                 : converter.ParseMethod!.Invoke(null, new object[] { value });
         }
 
