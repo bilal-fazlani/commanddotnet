@@ -24,6 +24,7 @@ namespace CommandDotNet
             char? shortName,
             TypeInfo typeInfo,
             IArgumentArity arity,
+            BooleanMode? booleanMode = null,
             string? definitionSource = null,
             IEnumerable<string>? aliases = null,
             ICustomAttributeProvider? customAttributes = null,
@@ -51,6 +52,7 @@ namespace CommandDotNet
 
             TypeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
             Arity = arity ?? throw new ArgumentNullException(nameof(arity));
+            BooleanMode = booleanMode;
             DefinitionSource = definitionSource;
             IsInterceptorOption = isInterceptorOption;
             AssignToExecutableSubcommands = assignToExecutableSubcommands;
@@ -108,6 +110,8 @@ namespace CommandDotNet
 
         /// <summary>The <see cref="IArgumentArity"/> for this argument, describing how many values are allowed.</summary>
         public IArgumentArity Arity { get; set; }
+
+        public BooleanMode? BooleanMode { get; set; }
 
         /// <summary>The default value for this argument</summary>
         public ArgumentDefault? Default { get; set; }

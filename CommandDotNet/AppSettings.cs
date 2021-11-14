@@ -40,9 +40,9 @@ namespace CommandDotNet
         public ArgumentSeparatorStrategy DefaultArgumentSeparatorStrategy { get; set; } = ArgumentSeparatorStrategy.EndOfOptions;
 
         /// <summary>
-        /// When arguments are not decorated with [Operand] or [Option]
-        /// DefaultArgumentMode is used to determine which mode to use.
-        /// Operand is the default.
+        /// When arguments are not decorated with <see cref="OperandAttribute"/> or <see cref="OptionAttribute"/>
+        /// DefaultArgumentMode is used to determine which type of argument to assign.
+        /// <see cref="Operand"/> is the default.
         /// </summary>
         public ArgumentMode DefaultArgumentMode { get; set; } = ArgumentMode.Operand;
 

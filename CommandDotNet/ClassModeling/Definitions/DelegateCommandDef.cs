@@ -26,7 +26,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             _delegate = handlerDelegate;
             
             Name = name;
-            InvokeMethodDef = new MethodDef(handlerDelegate.Method, appConfig);
+            InvokeMethodDef = new MethodDef(handlerDelegate.Method, appConfig, false);
         }
 
         public override string ToString()

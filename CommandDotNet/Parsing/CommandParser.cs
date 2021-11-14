@@ -115,7 +115,7 @@ namespace CommandDotNet.Parsing
                 throw new InvalidOperationException($"Bug: SplitOptionAssignments transformation should have split values from all option tokens: {token}");
             }
 
-            if (option.Arity.AllowsNone())
+            if (option.Arity.RequiresNone())
             {
                 var values = option.GetAlreadyParsedValues();
                 // only possible for flags which are boolean type
@@ -140,7 +140,7 @@ namespace CommandDotNet.Parsing
                 {
                     AddOptionValue(parseContext, option, values, optionToken, token, token.Value);
                 }
-                else if (option.Arity.AllowsNone())
+                else if (option.Arity.RequiresNone())
                 {
                     throw new InvalidOperationException($"Bug: flag '{option.Name}' should have finished processing in {nameof(ParseOption)}");
                 }

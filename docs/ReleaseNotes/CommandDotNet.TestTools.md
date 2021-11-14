@@ -1,5 +1,9 @@
 # CommandDotNet.TestTools
 
+## 3.1.3
+
+TrackingInvocation implements new IInvocation.IsInterceptor property
+
 ## 3.1.2
 
 Extracted `ITestConsole` interface from `TestConsole` to support the [Spectre extensions](../OtherFeatures/spectre.md)

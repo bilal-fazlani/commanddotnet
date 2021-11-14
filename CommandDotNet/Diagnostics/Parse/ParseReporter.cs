@@ -70,7 +70,7 @@ namespace CommandDotNet.Diagnostics.Parse
             var txtDefault = Resources.A.Common_default_lc;
 
             var displayName = argument.TypeInfo.DisplayName.IsNullOrEmpty() 
-                ? (argument.Arity.AllowsNone() ? Resources.A.Common_Flag : null)
+                ? (argument.Arity.RequiresNone() ? Resources.A.Common_Flag : null)
                 : argument.TypeInfo.DisplayName;
             writeln($"{indent}{argument.Name} <{displayName}>");
             var valueString = argument.Value?.ValueToString(argument);

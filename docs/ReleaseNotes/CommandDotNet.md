@@ -1,5 +1,14 @@
 # CommandDotNet
 
+## 5.0.0
+
+NRT support
+
+* this is a breaking change in behavior since these arguments were not previously considered nullable and so the Arity has changed to expect a minimum of 0 instead of 1
+* Using the UseArgumentPrompter will work more as expected now when using NRTs. They will no longer prompt the user.
+
+
+
 ## 4.3.0
 
 * add `[Named]` and `[Positional]` attributes which can be used in place of `[Option]` and `[Operand]` respectively.

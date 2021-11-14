@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using CommandDotNet.Builders;
 using CommandDotNet.Execution;
 using CommandDotNet.TestTools;
@@ -51,17 +52,27 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         }
 
         [Fact]
-        public void ModelProperties_WithoutDefaults_AreRequired_UnlessNullable()
+        public void ModelProperties_WithoutDefaults_AreRequired()
         {
             var operands = GetOperands(nameof(App.Model));
 
             operands!.Boolean.Arity.Should().Be(OneToOne);
-            operands.NullableBoolean.Arity.Should().Be(ZeroToOne);
             operands.Number.Arity.Should().Be(OneToOne);
-            operands.NullableNumber.Arity.Should().Be(ZeroToOne);
             operands.Text.Arity.Should().Be(OneToOne);
             operands.Uri.Arity.Should().Be(OneToOne);
             operands.Texts.Arity.Should().Be(OneToMany);
+        }
+
+        [Fact]
+        public void NRT_ModelProperties_WithoutDefaults_AreNotRequired()
+        {
+            var operands = GetOperands(nameof(App.NrtModel));
+
+            operands!.Boolean.Arity.Should().Be(ZeroToOne);
+            operands.Number.Arity.Should().Be(ZeroToOne);
+            operands.Text.Arity.Should().Be(ZeroToOne);
+            operands.Uri.Arity.Should().Be(ZeroToOne);
+            operands.Texts.Arity.Should().Be(ZeroToMany);
         }
 
         [Fact]
@@ -72,9 +83,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 new ArgModel
                 {
                     Boolean = true,
-                    NullableBoolean = true,
                     Number = 1,
-                    NullableNumber = 1,
                     Text = "lala",
                     Uri = new Uri("http://google.com"),
                     Texts = new[] {"one"}
@@ -82,25 +91,43 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             });
 
             operands!.Boolean.Arity.Should().Be(ZeroToOne);
-            operands.NullableBoolean.Arity.Should().Be(ZeroToOne);
             operands.Number.Arity.Should().Be(ZeroToOne);
-            operands.NullableNumber.Arity.Should().Be(ZeroToOne);
             operands.Text.Arity.Should().Be(ZeroToOne);
             operands.Uri.Arity.Should().Be(ZeroToOne);
             operands.Texts.Arity.Should().Be(ZeroToMany);
         }
 
         [Fact]
-        public void ModelProperties_WithDefaults_OfDefaultValues_AreRequired_UnlessNullable()
+        public void NRT_ModelProperties_WithDefaults_OfNonDefaultValues_AreNotRequired()
+        {
+            var operands = GetOperands(nameof(App.NrtModel), new TestDependencyResolver
+            {
+                new ArgModel
+                {
+                    Boolean = true,
+                    Number = 1,
+                    Text = "lala",
+                    Uri = new Uri("http://google.com"),
+                    Texts = new[] {"one"}
+                }
+            });
+
+            operands!.Boolean.Arity.Should().Be(ZeroToOne);
+            operands.Number.Arity.Should().Be(ZeroToOne);
+            operands.Text.Arity.Should().Be(ZeroToOne);
+            operands.Uri.Arity.Should().Be(ZeroToOne);
+            operands.Texts.Arity.Should().Be(ZeroToMany);
+        }
+
+        [Fact]
+        public void ModelProperties_WithDefaults_OfDefaultValues_AreRequired()
         {
             var operands = GetOperands(nameof(App.Model), new TestDependencyResolver
             {
                 new ArgModel
                 {
                     Boolean = false,
-                    NullableBoolean = null,
                     Number = 0,
-                    NullableNumber = null,
                     Text = null,
                     Uri = null,
                     Texts = null
@@ -108,9 +135,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             });
 
             operands!.Boolean.Arity.Should().Be(OneToOne);
-            operands.NullableBoolean.Arity.Should().Be(ZeroToOne);
             operands.Number.Arity.Should().Be(OneToOne);
-            operands.NullableNumber.Arity.Should().Be(ZeroToOne);
             operands.Text.Arity.Should().Be(OneToOne);
             operands.Uri.Arity.Should().Be(OneToOne);
             operands.Texts.Arity.Should().Be(OneToMany);
@@ -145,6 +170,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             { }
 
             public void Model(ArgModel model) { }
+
+            public void NrtModel(NrtArgModel model) { }
         }
 
         class ArgModel : IArgumentModel
@@ -152,11 +179,21 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             [Operand]
             public bool Boolean { get; set; }
             [Operand]
-            public bool? NullableBoolean { get; set; }
-            [Operand]
             public int Number { get; set; }
             [Operand]
-            public int? NullableNumber { get; set; }
+            public string Text { get; set; }
+            [Operand]
+            public Uri Uri { get; set; }
+            [Operand]
+            public IEnumerable<string> Texts { get; set; }
+        }
+
+        class NrtArgModel : IArgumentModel
+        {
+            [Operand]
+            public bool? Boolean { get; set; }
+            [Operand]
+            public int? Number { get; set; }
             [Operand]
             public string? Text { get; set; }
             [Operand]
@@ -167,36 +204,27 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         class Operands
         {
-            public Operand Boolean { get; }
-            public Operand NullableBoolean { get; }
-            public Operand Number { get; }
-            public Operand NullableNumber { get; }
-            public Operand Text { get; }
-            public Operand Uri { get; }
-            public Operand Texts { get; }
+            private static readonly Dictionary<string, PropertyInfo> Properties = typeof(Operands)
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .ToDictionary(p => p.Name, StringComparer.OrdinalIgnoreCase);
+
+            public Operand Boolean { get; set; }
+            public Operand Number { get; set; }
+            public Operand Text { get; set; }
+            public Operand Uri { get; set; }
+            public Operand Texts { get; set; }
+            public Operand NullableBoolean { get; set; }
+            public Operand NullableNumber { get; set; }
 
             public static Operands FromCommand(Command command)
             {
-                var operands = command.Operands.ToArray();
-                return new Operands(operands[0], operands[1],
-                    operands[2], operands[3],
-                    operands[4], operands[5],
-                    operands[6]);
-            }
-
-            public Operands(
-                Operand boolean, Operand nullableBoolean, 
-                Operand number, Operand nullableNumber, 
-                Operand text, Operand uri,
-                Operand texts)
-            {
-                Boolean = boolean;
-                NullableBoolean = nullableBoolean;
-                Number = number;
-                NullableNumber = nullableNumber;
-                Text = text;
-                Uri = uri;
-                Texts = texts;
+                var model = new Operands();
+                foreach (var operand in command.Operands)
+                {
+                    var property = Properties[operand.Name];
+                    property.SetValue(model, operand);
+                }
+                return model;
             }
         }
     }

@@ -31,7 +31,7 @@ namespace CommandDotNet.Diagnostics
             }
 
             var option = new Option(VersionOptionName, 'v', 
-                TypeInfo.Flag, ArgumentArity.Zero, 
+                TypeInfo.Flag, ArgumentArity.Zero, BooleanMode.Implicit,
                 definitionSource: typeof(VersionMiddleware).FullName)
             {
                 Description = Resources.A.Command_version_description,

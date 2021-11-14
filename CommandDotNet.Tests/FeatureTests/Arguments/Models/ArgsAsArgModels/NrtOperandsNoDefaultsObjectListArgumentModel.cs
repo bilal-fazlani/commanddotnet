@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels
 {
-    public class OperandsNoDefaultsEnumListArgumentModel : IEnumListArgumentModel
+    public class NrtOperandsNoDefaultsObjectListArgumentModel : IObjectListArgumentModel
     {
         [Operand]
-        public List<DayOfWeek> EnumListArg { get; set; }
+        public List<Uri>? ObjectListArg { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Extensions;
 
 namespace CommandDotNet
@@ -43,25 +44,39 @@ namespace CommandDotNet
 
         public static IArgumentArity OneOrMore => new ArgumentArity(1, Unlimited);
 
-        [Obsolete("Use other Default method instead. This method is not reliable for bool values")]
+        internal static IArgumentArity Default(IArgumentDef argumentDef)
+        {
+            var type = argumentDef.Type;
+            var defaultValue = argumentDef.DefaultValue;
+            var hasDefaultValue = !defaultValue.IsNullValue() && !defaultValue!.IsDefaultFor(type);
+            return Default(type, argumentDef.IsOptional, hasDefaultValue, argumentDef.BooleanMode);
+        }
+
         public static IArgumentArity Default(IArgument argument)
         {
             var type = argument.TypeInfo.Type;
             var defaultValue = argument.Default?.Value;
-            var hasDefaultValue = defaultValue != null && !defaultValue.IsDefaultFor(type);
-            var booleanMode = argument.Services.GetOrAdd(() => new Box<BooleanMode>(BooleanMode.Unknown)).Value;
-            return Default(type, hasDefaultValue, booleanMode);
+            var hasDefaultValue = !defaultValue.IsNullValue() && !defaultValue!.IsDefaultFor(type);
+            var isOptional = argument.Services.GetOrDefault<IArgumentDef>()?.IsOptional 
+                             ?? argument.Arity?.AllowsNone()
+                             ?? false;
+            return Default(type, isOptional, hasDefaultValue, argument.BooleanMode);
         }
+        
+        [Obsolete("Use other Default method instead. This method does not account for NRTs.")]
+        public static IArgumentArity Default(Type type, bool hasDefaultValue, BooleanMode booleanMode) =>
+            Default(type, false, hasDefaultValue, booleanMode);
 
         /// <summary>Returns the default IArgumentArity for the given type</summary>
-        public static IArgumentArity Default(Type type, bool hasDefaultValue, BooleanMode booleanMode)
+        /// <remarks>internal for tests</remarks>
+        internal static IArgumentArity Default(Type type, bool isOptional, bool hasDefaultValue, BooleanMode? booleanMode)
         {
             if (type == typeof(bool) && booleanMode == BooleanMode.Unknown)
             {
                 throw new ArgumentException($"{nameof(booleanMode)} cannot be {nameof(BooleanMode.Unknown)}");
             }
 
-            bool isRequired = !(hasDefaultValue || type.IsNullableType());
+            bool isRequired = !(isOptional || hasDefaultValue);
 
             if (type != typeof(string) && type.IsEnumerable())
             {
