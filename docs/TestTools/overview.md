@@ -171,6 +171,7 @@ The framework includes the following tools that can be used independently of the
 * capture output for assertions
 * provide piped input
 * handle ReadLine and ReadKey
+* covers most members of System.Console
 
 !!! Note
     If you're using [CommandDotNet.Spectre](../OtherFeatures/spectre.md) use the `AnsiTestConsole` from the `CommandDotNet.Spectre.Testing`package to test the IAnsiConsole features work as expected.

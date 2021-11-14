@@ -8,7 +8,7 @@
 CommandDotNet now supports [Nullable reference types](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/nullable-reference-types) (NRT) when calculating Arity.  Arityfor.Minimum will be 0 for NRTs.
 
 #### target net5.0
-CommandDotNet targets net5.0 instead of netstandard2.0.  This will allow us to take advantage of new language features.
+CommandDotNet targets net5.0 instead of netstandard2.0.  This will allow us to take advantage of new framework features.
 We're holding off on net6.0 at the moment because it's new enough many companies will not be able to adopt it yet.
 We are eager to take advantage of [Source Generators](https://devblogs.microsoft.com/dotnet/introducing-c-source-generators/) though so we will likely also target net6.0 in early 2022.
 

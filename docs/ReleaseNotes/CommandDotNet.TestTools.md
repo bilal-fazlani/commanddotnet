@@ -2,6 +2,11 @@
 
 ## 4.0.0
 
+### target net5.0
+CommandDotNet.TestTools targets net5.0 instead of netstandard2.0.  This will allow us to take advantage of new framework features.
+We're holding off on net6.0 at the moment because it's new enough many companies will not be able to adopt it yet.
+
+### Breaking Changes
 TrackingInvocation implements new IInvocation.IsInterceptor property
 
 TestConsole updated to support new IConsole members. In, Out, and Error now implement TextReader and TextWriter.

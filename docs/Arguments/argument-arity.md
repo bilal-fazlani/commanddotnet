@@ -61,7 +61,7 @@ The static method `ArgumentArity.Default(type, ...)` will return one of these st
 An argument is considered optional when defined as...
 
 * a Nullable<T> type: bool?, Guid?
-* a [Nullable refernce type](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/nullable-reference-types) (NRT): object?
+* a [Nullable reference type](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/nullable-reference-types) (NRT): object?
 * an optional parameter
 * an `IArgumentModel` property with a default value where the default value != default(T)
     * the value must be set in the ctor or property assignment. This condition is evaluated immediately after instantiation.
