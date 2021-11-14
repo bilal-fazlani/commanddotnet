@@ -110,27 +110,5 @@ namespace CommandDotNet
         /// <summary>Returns the input values for the argument with the given alias or null</summary>
         public static ICollection<InputValue>? FindInputValues(this Command command, string alias) => 
             command.Find<IArgument>(alias)?.InputValues;
-
-        [Obsolete("Use command.IgnoreUnexpectedOperands. It now defaults from AppSettings.")]
-        public static bool GetIgnoreUnexpectedOperands(this Command command, AppSettings appSettings)
-        {
-            if (appSettings == null)
-            {
-                throw new ArgumentNullException(nameof(appSettings));
-            }
-
-            return command.IgnoreUnexpectedOperands;
-        }
-
-        [Obsolete("Use command.ArgumentSeparatorStrategy. It now defaults from AppSettings.")]
-        public static ArgumentSeparatorStrategy GetArgumentSeparatorStrategy(this Command command, AppSettings appSettings)
-        {
-            if (appSettings == null)
-            {
-                throw new ArgumentNullException(nameof(appSettings));
-            }
-
-            return command.ArgumentSeparatorStrategy;
-        }
     }
 }

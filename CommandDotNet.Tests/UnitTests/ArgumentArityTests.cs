@@ -69,13 +69,5 @@ namespace CommandDotNet.Tests.UnitTests
             var expected = new ArgumentArity(expectedMin, expectedMax);
             actual.Should().Be(expected);
         }
-
-        [Fact]
-        public void DefaultBooleanModeCannotBeUnknown()
-        {
-            Assert.Throws<ArgumentException>(
-                    () => ArgumentArity.Default(typeof(bool), false, !HasDefault, BooleanMode.Unknown))
-                .Message.Should().Be("booleanMode cannot be Unknown");
-        }
     }
 }

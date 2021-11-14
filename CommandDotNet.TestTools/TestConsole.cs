@@ -38,27 +38,6 @@ namespace CommandDotNet.TestTools
             In = new StandardStreamReader();
         }
 
-        [Obsolete("use default ctor and Mock methods instead.")]
-        public TestConsole(
-            Func<ITestConsole, string?>? onReadLine = null,
-            IEnumerable<string>? pipedInput = null,
-            Func<ITestConsole, ConsoleKeyInfo>? onReadKey = null)
-            :this()
-        {
-            if (onReadLine != null)
-            {
-                Mock(onReadLine);
-            }
-            if (pipedInput != null)
-            {
-                Mock(pipedInput);
-            }
-            if (onReadKey != null)
-            {
-                Mock(onReadKey);
-            }
-        }
-
         public ITestConsole Mock(IEnumerable<string> pipedInput, bool overwrite = false)
         {
             if (pipedInput == null)

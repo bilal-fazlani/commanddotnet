@@ -120,9 +120,6 @@ namespace CommandDotNet
             where TArgumentNode : class, IArgumentNode => 
             (TArgumentNode?) FindArgumentNode(alias);
 
-        [Obsolete("Use Find<Option> instead")]
-        public Option? FindOption(string alias) => Find<Option>(alias);
-
         internal void AddArgumentNode(IArgumentNode argumentNode)
         {
             if (argumentNode == null)

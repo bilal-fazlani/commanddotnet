@@ -158,14 +158,7 @@ namespace CommandDotNet
         /// for parent commands.
         /// </summary>
         public bool IsInterceptorOption { get; }
-
-        /// <summary>
-        /// When true, the option should be shown in help.<br/>
-        /// Default: true
-        /// </summary>
-        [Obsolete("Use Hidden instead. ShowInHelp == !Hidden")]
-        public bool ShowInHelp { get => !Hidden; set => Hidden = !value; }
-
+        
         /// <summary>
         /// When true, the option is hidden and should not be shown
         /// to the user in help or suggestions or anywhere else.

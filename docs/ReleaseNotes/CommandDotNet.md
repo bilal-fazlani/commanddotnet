@@ -2,12 +2,54 @@
 
 ## 5.0.0
 
+### Highlights
+
+CommandDotNet targets net5.0 instead of netstandard2.0.  This will allow us to take advantage of new language features.
+We're holding off on net6.0 at the moment because it's new enough many companies will not be able to adopt it yet.
+We are eager to take advantage of [Source Generators](https://devblogs.microsoft.com/dotnet/introducing-c-source-generators/) though so we will likely also target net6.0 in early 2022. 
+
+CommandDotNet now supports [Nullable reference types](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/nullable-reference-types) (NRT) when calculating Arity.
+
+### Breaking Changes in behavior
+
 NRT support
 
-* this is a breaking change in behavior since these arguments were not previously considered nullable and so the Arity has changed to expect a minimum of 0 instead of 1
-* Using the UseArgumentPrompter will work more as expected now when using NRTs. They will no longer prompt the user.
+* The behavior for calculating Arity and prompting on missing arguments changes as these arguments were not previously considered nullable and so the Arity has changed to expect a minimum of 0 instead of 1
+* Using the UseArgumentPrompter will work as expected now when using NRTs. They will no longer prompt the user.
+
+ArgumentArity.AllowsNone() change
+
+* This has been a confusing method. It currently evaluates as `arity.Maximum == 0` but it intuitively it makes more sense as `arity.Minimum == 0`.
 
 
+### Breaking Changes in API
+
+#### For AppRunner configuration
+
+Obsoleted cleanup
+
+* removed `DefaultMethodAttribute`. Use `DefaultCommandAttribute` instead.
+* removed `appRunner.UsePrompting(...)` extension method. Use `.UseIPrompter` and `.UseArgumentPrompter` instead.
+* removed `BooleanMode.Unknown`. Use either `Implicit`, `Explicit`, or `BooleanMode?` instead.
+
+#### For middleware development
+
+IArgument updates
+
+* added BooleanMode properties to help determine the Arity for an argument.
+* BooleanMode will only be set for boolean arguments
+
+IInvocation updates
+
+* added IsInterceptor property to distinguish between command and interceptor invocations
+
+Obsoleted cleanup
+
+* removed `ArgumentArity.Default(Type, ...)`. Use `ArgumentArity.Default(IArgument)` instead. This is a reversal of previous direction, but the addition of IArgument.BooleanMode makes this reliable.
+* removed `FindOption(string alias)`. Use `Find<Option>(string alias)` instead.
+* removed `command.GetIgnoreUnexpectedOperands(AppSettings)`. Use `command.IgnoreUnexpectedOperands` as it now defaults from AppSettings.
+* removed `command.GetArgumentSeparatorStrategy(AppSettings)`. Use `command.ArgumentSeparatorStrategy` as it now defaults from AppSettings.
+* removed `Option.ShowInHelp`. Use `Option.Hidden` instead. There were cases where this had meaning outside of generating help.
 
 ## 4.3.0
 

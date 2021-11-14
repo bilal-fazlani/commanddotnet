@@ -9,23 +9,12 @@ namespace CommandDotNet
 {
     public class AppSettings : IIndentableToString
     {
-        private BooleanMode _booleanMode = BooleanMode.Implicit;
-
         /// <summary>
         /// When Explicit, boolean options require a 'true' or 'false' value be specified.<br/>
         /// When Implicit, boolean options are treated as Flags, considered false unless it's specified
         /// and the next argument will be considered a new argument.
         /// </summary>
-        public BooleanMode BooleanMode
-        {
-            get => _booleanMode;
-            set
-            {
-                if (value == BooleanMode.Unknown)
-                    throw new InvalidConfigurationException("BooleanMode can not be set to BooleanMode.Unknown explicitly");
-                _booleanMode = value;
-            }
-        }
+        public BooleanMode BooleanMode { get; set; } = BooleanMode.Implicit;
 
         /// <summary>
         /// When false, unexpected operands will generate a parse failure.<br/>
