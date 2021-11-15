@@ -9,7 +9,6 @@ nav:
     - Home: index.md
     - Documentation:
       - getting-started.md
-      - features.md
       - argument-terminology.md
       - Commands:
         - Commands/commands.md
@@ -76,6 +75,8 @@ nav:
         - TipsFaqs/cli-best-practices.md
         - TipsFaqs/nullable-reference-types.md
         - TipsFaqs/developing-middleware.md
+    - Features: 
+      - features.md  
     - Release Notes:
       - ReleaseNotes/CommandDotNet.md
       - ReleaseNotes/CommandDotNet.DataAnnotations.md
@@ -122,6 +123,8 @@ extra_css:
   - stylesheets/extra.css  
 
 markdown_extensions:
+  - md_in_html
+  - def_list
   - admonition
   - attr_list
   - codehilite:
@@ -130,6 +133,7 @@ markdown_extensions:
   - pymdownx.betterem:
       smart_enable: all
   - pymdownx.caret
+  - pymdownx.keys
   - pymdownx.critic
   - pymdownx.details
   - pymdownx.emoji:
