@@ -11,8 +11,7 @@
     <ProjectReference Include="..\CommandDotNet\CommandDotNet.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="8.0.0" />
-    <PackageReference Include="FluentValidation.ValidatorAttribute" Version="8.0.0" />
+    <PackageReference Include="FluentValidation" Version="10.3.4" />
     <PackageReference Include="Humanizer.Core" Version="2.11.10" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
