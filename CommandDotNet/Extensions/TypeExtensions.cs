@@ -50,6 +50,8 @@ namespace CommandDotNet.Extensions
                     : x == typeof(ICollection));
         }
 
+        internal static bool IsStaticClass(this Type type) => type.IsAbstract && type.IsSealed;
+
         private static readonly Dictionary<Type, MethodInfo> DefaultMethodByType = new();
 
         internal static object? GetDefaultValue(this Type type)

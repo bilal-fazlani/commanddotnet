@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using CommandDotNet.TestTools;
 using FluentAssertions;
 using FluentAssertions.Collections;
@@ -8,7 +9,7 @@ namespace CommandDotNet.Tests.Utils
     public static class AssertionExtensions
     {
         /// <summary>Should be same order</summary>
-        public static AndConstraint<StringCollectionAssertions> BeEquivalentSequenceTo(
+        public static AndConstraint<StringCollectionAssertions<IEnumerable<string>>> BeEquivalentSequenceTo(
             this StringCollectionAssertions assertions,
             params string[] expectedValues)
         {

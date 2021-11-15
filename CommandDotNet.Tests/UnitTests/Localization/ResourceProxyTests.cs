@@ -81,7 +81,7 @@ namespace CommandDotNet.Tests.UnitTests.Localization
             }
 
             var hasResourceOverride = assembly.ExportedTypes
-                .Where(t => t.IsCSharpStatic())
+                .Where(t => t.IsStaticClass())
                 .SelectMany(t => t.GetMethods(BindingFlags.Static|BindingFlags.Public)
                     .Where(m =>
                     {
