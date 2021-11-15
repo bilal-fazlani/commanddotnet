@@ -4,7 +4,6 @@ using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using FluentValidation;
-using FluentValidation.Attributes;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -54,8 +53,8 @@ Arguments:
                         ExitCode = 2,
                         Output = @"'Person' is invalid
   'Id' must be greater than '0'.
-  'Name' should not be empty.
-  'Email' should not be empty.
+  'Name' must not be empty.
+  'Email' must not be empty.
 "
                     }
                 });
@@ -77,8 +76,8 @@ Arguments:
                         ExitCode = 2,
                         Output = @"'Person' is invalid
   'Id' must be greater than '0'.
-  'Name' should not be empty.
-  'Email' should not be empty.
+  'Name' must not be empty.
+  'Email' must not be empty.
 "
                     }
                 });
@@ -97,6 +96,26 @@ Arguments:
                     When = {Args = "Save 1 john john@doe.com"},
                     Then = {AssertContext = ctx => 
                             ctx.ParamValuesShouldBe(new Person { Id = 1, Name = "john", Email = "john@doe.com" }) }
+                });
+        }
+
+        [Fact]
+        public void Exec_WithValidatorFactory_UsesValidatorFromFactory()
+        {
+            new AppRunner<App>()
+                .UseFluentValidation(validatorFactory: m => new PersonValidator("lala"))
+                .Verify(new Scenario
+                {
+                    When = { Args = "Save" },
+                    Then =
+                    {
+                        ExitCode = 2,
+                        Output = @"'Person' is invalid
+  lala
+  lala
+  lala
+"
+                    }
                 });
         }
 
@@ -177,8 +196,8 @@ Arguments:
                         {
                             @"'Person' is invalid
   'Id' must be greater than '0'.
-  'Name' should not be empty.
-  'Email' should not be empty.
+  'Name' must not be empty.
+  'Email' must not be empty.
 
 Usage: testhost.dll Save <Id> <Name> <Email>"
                         }
@@ -196,16 +215,15 @@ Usage: testhost.dll Save <Id> <Name> <Email>"
             {
             }
         }
-
-        [Validator(typeof(PersonValidator))]
-        private class Person : IArgumentModel
+        
+        public class Person : IArgumentModel
         {
             [Operand] public int Id { get; set; }
             [Operand] public string Name { get; set; } = null!;
             [Operand] public string Email { get; set; } = null!;
         }
 
-        private class PersonValidator : AbstractValidator<Person>
+        public class PersonValidator : AbstractValidator<Person>
         {
             public PersonValidator()
             {
@@ -213,22 +231,25 @@ Usage: testhost.dll Save <Id> <Name> <Email>"
                 RuleFor(x => x.Name).NotEmpty();
                 RuleFor(x => x.Email).NotEmpty().EmailAddress();
             }
+            public PersonValidator(string message)
+            {
+                RuleFor(x => x.Id).GreaterThan(0).WithMessage(message);
+                RuleFor(x => x.Name).NotEmpty().WithMessage(message);
+                RuleFor(x => x.Email).NotEmpty().WithMessage(message).EmailAddress().WithMessage(message);
+            }
         }
-
-        [Validator(typeof(InvalidPersonValidator))]
-        private class InvalidPerson : IArgumentModel
+        
+        public class InvalidPerson : IArgumentModel
         {
             [Operand]
             public int Id { get; set; }
         }
 
-        private class InvalidPersonValidator : AbstractValidator<Person>
+        public class InvalidPersonValidator : AbstractValidator<InvalidPerson>
         {
             public InvalidPersonValidator(bool nonDefaultCtor)
             {
                 RuleFor(x => x.Id).GreaterThan(0);
-                RuleFor(x => x.Name).NotEmpty();
-                RuleFor(x => x.Email).NotEmpty().EmailAddress();
             }
         }
     }

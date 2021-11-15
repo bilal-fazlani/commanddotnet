@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using CommandDotNet.Rendering;
 using FluentValidation;
-using FluentValidation.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -66,8 +65,6 @@ namespace CommandDotNet.Example.Commands
             public bool Quite { get; set; }
         }
 
-
-        [Validator(typeof(NotificationValidator))]
         [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
         public class Notification : IArgumentModel
         {

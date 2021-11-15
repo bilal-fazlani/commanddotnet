@@ -62,7 +62,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
                 new AppRunner<IoCApp>()
                     .UseSimpleInjector(container)
                     .RunInMem("Do")
-            ).Message.Should().StartWith("No registration for type IoCApp could be found and an implicit registration could not be made.");
+            ).Message.Should().StartWith("No registration for type IoCApp could be found.");
         }
     }
 }

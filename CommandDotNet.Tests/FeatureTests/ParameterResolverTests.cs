@@ -77,15 +77,22 @@ Options:
                         ctx.ParamValuesShouldBeEmpty<App>();
 
                         var invocation = ctx.GetCommandInvocationInfo();
-                        invocation.ParameterValues![0].Should().BeOfType<CommandContext>().And.Should().NotBeNull();
-                        invocation.ParameterValues[1].Should().BeAssignableTo<IConsole>().And.Should().NotBeNull();
-                        invocation.ParameterValues[2].Should().BeOfType<CancellationToken>().And.Should().NotBeNull();
+                        invocation.ParameterValues![0].Should().BeOfType<CommandContext>();
+                        invocation.ParameterValues[0].Should().NotBeNull();
+                        invocation.ParameterValues[1].Should().BeAssignableTo<IConsole>();
+                        invocation.ParameterValues[1].Should().NotBeNull();
+                        invocation.ParameterValues[2].Should().BeOfType<CancellationToken>();
+                        invocation.ParameterValues[2].Should().NotBeNull();
 
                         invocation = ctx.GetInterceptorInvocationInfo<App>();
-                        invocation.ParameterValues![0].Should().BeOfType<InterceptorExecutionDelegate>().And.Should().NotBeNull();
-                        invocation.ParameterValues[1].Should().BeOfType<CommandContext>().And.Should().NotBeNull();
-                        invocation.ParameterValues[2].Should().BeAssignableTo<IConsole>().And.Should().NotBeNull();
-                        invocation.ParameterValues[3].Should().BeOfType<CancellationToken>().And.Should().NotBeNull();
+                        invocation.ParameterValues![0].Should().BeOfType<InterceptorExecutionDelegate>();
+                        invocation.ParameterValues[0].Should().NotBeNull();
+                        invocation.ParameterValues[1].Should().BeOfType<CommandContext>();
+                        invocation.ParameterValues[1].Should().NotBeNull();
+                        invocation.ParameterValues[2].Should().BeAssignableTo<IConsole>();
+                        invocation.ParameterValues[2].Should().NotBeNull();
+                        invocation.ParameterValues[3].Should().BeOfType<CancellationToken>();
+                        invocation.ParameterValues[3].Should().NotBeNull();
                     }
                 }
             });

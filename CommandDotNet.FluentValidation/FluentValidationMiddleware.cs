@@ -1,19 +1,31 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
+using FluentValidation;
+using FluentValidation.Internal;
+using FluentValidation.Results;
 
 namespace CommandDotNet.FluentValidation
 {
     public static class FluentValidationMiddleware
     {
+        private static readonly DefaultValidatorSelector Selector = new();
+
         /// <summary>Enables FluentValidation for <see cref="IArgumentModel"/>s</summary>
         /// <param name="appRunner">the <see cref="AppRunner"/></param>
         /// <param name="showHelpOnError">when true, help will be display for the target command after the validation errors</param>
+        /// <param name="validatorFactory">
+        /// Override how validators are resolved.
+        /// By default, checks the <see cref="CommandContext"/>.<see cref="CommandContext.DependencyResolver"/> for <see cref="IValidator{TModel}"/>
+        /// If not found, the assembly of the model is scanned (only once).
+        /// </param>
         /// <param name="resourcesOverride">
         /// use with <see cref="ResourcesProxy"/> to localize output this plugin.
         /// This does not cover FluentValidation validations.
         /// </param>
-        public static AppRunner UseFluentValidation(this AppRunner appRunner, bool showHelpOnError = false, 
+        public static AppRunner UseFluentValidation(this AppRunner appRunner, bool showHelpOnError = false,
+            Func<IArgumentModel, IValidator?>? validatorFactory = null,
             Resources? resourcesOverride = null)
         {
             return appRunner.Configure(c =>
@@ -27,32 +39,41 @@ namespace CommandDotNet.FluentValidation
                     Resources.A = new ResourcesProxy(appRunner.AppSettings.Localize);
                 }
                 c.UseMiddleware(FluentValidationForModels, MiddlewareSteps.FluentValidation);
-                c.Services.Add(new Config(showHelpOnError));
+                c.Services.Add(new Config(showHelpOnError, validatorFactory));
             });
         }
 
         private class Config
         {
-            public bool ShowHelpOnError { get; }
+            internal readonly bool ShowHelpOnError;
+            internal readonly Func<IArgumentModel, IValidator?>? ValidatorFactory;
 
-            public Config(bool showHelpOnError)
+            public Config(bool showHelpOnError, Func<IArgumentModel, IValidator?>? validatorFactory)
             {
                 ShowHelpOnError = showHelpOnError;
+                ValidatorFactory = validatorFactory;
             }
         }
 
         private static Task<int> FluentValidationForModels(CommandContext ctx, ExecutionDelegate next)
         {
-            var modelValidator = new ModelValidator(ctx.AppConfig.DependencyResolver);
+            var config = ctx.Services.GetOrThrow<Config>();
 
-            var paramValues = ctx.InvocationPipeline
-                .All
-                .SelectMany(i => i.Invocation.ParameterValues.OfType<IArgumentModel>());
+            var validatorFactory = config.ValidatorFactory ?? new ValidatorFactory(ctx).Resolve;
+            ValidationResult? Validate(IArgumentModel argumentModel)
+            {
+                return validatorFactory(argumentModel)?
+                    .Validate(new ValidationContext<object>(argumentModel, new PropertyChain(), Selector));
+            }
 
             try
             {
+                var paramValues = ctx.InvocationPipeline
+                    .All
+                    .SelectMany(i => i.Invocation.ParameterValues.OfType<IArgumentModel>());
+
                 var failureResults = paramValues
-                    .Select(model => new { model, result = modelValidator.ValidateModel(model) })
+                    .Select(model => new { model, result = Validate(model) })
                     .Where(v => v.result is { IsValid: false })
                     .ToList();
 
