@@ -1,5 +1,9 @@
 # CommandDotNet.Spectre
 
+## 2.0.1
+
+remove nuget package refs no longer required after move to net5.0
+
 ## 2.0.0
 
 CommandDotNet.Spectre.Testing targets net5.0 instead of netstandard2.0.  This will allow us to take advantage of new framework features.

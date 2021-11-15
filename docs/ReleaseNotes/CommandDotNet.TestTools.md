@@ -1,5 +1,9 @@
 # CommandDotNet.TestTools
 
+## 4.0.1
+
+remove nuget package refs no longer required after move to net5.0
+
 ## 4.0.0
 
 ### target net5.0
