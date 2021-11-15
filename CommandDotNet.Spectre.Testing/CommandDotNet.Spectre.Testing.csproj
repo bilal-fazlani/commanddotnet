@@ -23,10 +23,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Nullable" Version="1.2.1">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
       <PackageReference Include="Spectre.Console" Version="0.42.0" />
       <PackageReference Include="Spectre.Console.Testing" Version="0.42.0" />
       <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
