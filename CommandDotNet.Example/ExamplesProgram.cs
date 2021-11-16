@@ -6,7 +6,7 @@ using CommandDotNet.Spectre;
 
 namespace CommandDotNet.Example
 {
-    public class Program
+    public class ExamplesProgram
     {
         static int Main(string[] args)
         {

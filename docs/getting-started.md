@@ -49,74 +49,80 @@ Let's say you want to create a calculator console application which can perform 
 It prints the results on console.
 
 Let's begin with creating the class
-
+<!-- snippet: getting_started_calculator -->
+<a id='snippet-getting_started_calculator'></a>
 ```c#
-public class Calculator
+public class Program
 {
+    static int Main(string[] args)
+    {
+        return new AppRunner<Program>().Run(args);
+    }
+    
     public void Add(int value1, int value2)
     {
-        Console.WriteLine($"Answer:  {value1 + value2}");
+        Console.WriteLine(value1 + value2);
     }
 
     public void Subtract(int value1, int value2)
     {
-        Console.WriteLine($"Answer:  {value1 - value2}");
+        Console.WriteLine(value1 + value2);
     }
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/GettingStarted/Example1/Program.cs#L5-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 Now that we have our calculator ready, let's see about how we can call it from command line.
 
-
-```c#
-class Program
-{
-    static int Main(string[] args)
-    {
-        return new AppRunner<Calculator>().Run(args);
-    }
-}
-```
-
-Assuming our application's name is `example.dll`
-
-let's try and run this app from command line using dotnet
+Assuming our application's name is `calculator.dll`, let's run this app from command line using dotnet
 
 ```bash
 ~
-$ dotnet example.dll --help
-Usage: dotnet example.dll [command]
+$ dotnet calculator.dll --help
+Usage: dotnet calculator.dll [command]
 
 Commands:
 
   Add
   Subtract
 
-Use "dotnet example.dll [command] --help" for more information about a command.
+Use "dotnet calculator.dll [command] --help" for more information about a command.
 
 ```
 
 Voila!
 
-So, as you might have already guessed, it is detecting methods of the calculator class. How about adding some helpful description.
+So, as you might have already guessed, it is generating commands from the methods of the calculator class. 
 
+How about adding some helpful description.
+
+<!-- snippet: getting_started_calculator_with_descriptions -->
+<a id='snippet-getting_started_calculator_with_descriptions'></a>
 ```c#
 [Command(Description = "Performs mathematical calculations")]
-public class Calculator
+public class Program
 {
-    [Command(Description = "Adds two numbers")]
-    public void Add(int value1, int value2)
+    static int Main(string[] args)
     {
-        Console.WriteLine($"Answer:  {value1 + value2}");
+        return new AppRunner<Program>().Run(args);
+    }
+
+    [Command(Description = "Adds two numbers")]
+    public void Add(IConsole console, int value1, int value2)
+    {
+        console.WriteLine(value1 + value2);
     }
 
     [Command(Description = "Subtracts two numbers")]
-    public void Subtract(int value1, int value2)
+    public void Subtract(IConsole console, int value1, int value2)
     {
-        Console.WriteLine($"Answer:  {value1 - value2}");
+        console.WriteLine(value1 - value2);
     }
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/GettingStarted/Example2/Program.cs#L6-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_with_descriptions' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 This should do it.
 
@@ -156,9 +162,9 @@ Arguments:
   y  <NUMBER>
 ```
 
-Here we see arguments for addition and their type.  See the [Arguments](Arguments/arguments.md) section for more options.
+Here we see arguments for addition and their type.  See the [Arguments](Arguments/arguments.md) section for more options to configure arguments.
 
-Let's try and add two numbers.
+Let's add two numbers.
 
 ```bash
 ~
@@ -170,37 +176,40 @@ Answer: 60
 
 === "Standard"
 
+    <!-- snippet: getting_started_calculator_add_command_tests -->
+    <a id='snippet-getting_started_calculator_add_command_tests'></a>
     ```c#
-    public class PipedInputTests
+    [Test]
+    public void Given2Numbers_Should_OutputSum()
     {
-        [Test]
-        public void Add_Given2Numbers_Should_OutputSum()
-        {
-            var result = new AppRunner<Calculator>().RunInMem("Add 40 20");
-            result.ExitCode.Should().Be(0);
-            result.Console.Out.Should().Be(@"60");
-        }
+        var result = new AppRunner<Program>()
+            .RunInMem("Add 40 20");
+        result.ExitCode.Should().Be(0);
+        result.Console.OutText().Should().Be("60" + Environment.NewLine);
     }
     ```
+    <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example.Tests/DocExamples/GettingStarted/AddCommandTests.cs#L12-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_add_command_tests' title='Start of snippet'>anchor</a></sup>
+    <!-- endSnippet -->
 
     _note: `Should()` is a feature of the [FluentAssertions](https://fluentassertions.com/) library and will be used in many examples._
 
 === "BDD Style"
 
+    <!-- snippet: getting_started_calculator_add_command_tests_bdd -->
+    <a id='snippet-getting_started_calculator_add_command_tests_bdd'></a>
     ```c#
-    public class PipedInputTests
+    [Test]
+    public void Given2Numbers_Should_OutputSum_BDD()
     {
-        [Test]
-        public void Add_Given2Numbers_Should_OutputSum()
+        new AppRunner<Program>().Verify(new Scenario
         {
-            new AppRunner<Calculator>().Verify(new Scenario
-            {
-                When = { Args = "Add 40 20" },
-                Then = { Output = @"60" }
-            });
-        }
+            When = { Args = "Add 40 20" },
+            Then = { Output = "60" + Environment.NewLine }
+        });
     }
     ```
+    <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example.Tests/DocExamples/GettingStarted/AddCommandTests.cs#L23-L33' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_add_command_tests_bdd' title='Start of snippet'>anchor</a></sup>
+    <!-- endSnippet -->
 
 See [Test Tools](TestTools/overview.md) in the Testing help section for more details 
 
