@@ -156,7 +156,7 @@ extra:
     provider: google
     property: UA-39358317-3
   version: '4'
-  legacy: false
+  legacy: true
   social:
     - icon: fontawesome/brands/github
       link: 'https://github.com/bilal-fazlani'
