@@ -1,5 +1,19 @@
 # CommandDotNet.FluentValidation
 
+## 5.0.0
+
+remove nuget package refs no longer required after move to net5.0
+
+### Breaking Changes
+
+Upgraded to latest FluentValidator 10.3.4 (from 8.0.0). 
+
+The ValidatorAttribute was deprecated in v8 so we dropped support for it.
+The assemblies containg the IArgModels will be scanned for validators if 
+they aren't registered with a DI container.
+
+Alternatively, you can provide a factory func via `.UseFluentValidation(validatorFactory:...)`
+
 ## 4.0.0
 
 CommandDotNet.FluentValidation targets net5.0 instead of netstandard2.0.  This will allow us to take advantage of new framework features.
