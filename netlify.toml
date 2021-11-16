@@ -5,6 +5,7 @@
   # publish = "site/"
 
   # Default build command.
-  command = "mkdocs build"
+  #command = "mkdocs build"
+  command = "ls /opt/buildhome/"
 
   # ignore = "git diff --quiet HEAD^ HEAD mkdocs.yml Pipfile netlify.toml docs/"
