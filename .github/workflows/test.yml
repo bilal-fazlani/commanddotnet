@@ -5,10 +5,10 @@ on:
   #   paths-ignore:
   #     - 'docs/**'
   #     - 'images/**'
-  pull_request:
-    paths-ignore:
-      - 'docs/**'
-      - 'images/**'
+  # pull_request:
+  #   paths-ignore:
+  #     - 'docs/**'
+  #     - 'images/**'
 
 jobs:
   test:
