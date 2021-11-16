@@ -1,1 +1,1 @@
-pipenv run mkdocs serve
+mkdocs serve

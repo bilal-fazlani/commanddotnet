@@ -7,4 +7,5 @@
 # export PIPENV_PYUP_API_KEY=""
 # pipenv check
 
-pipenv update
+# pipenv update
+pip3 install -r requirements.txt
