@@ -11,6 +11,3 @@ mkdocs-material = "==7.3.6"
 pymdown-extensions = "==9.0"
 Pygments = "==2.10.0"
 Markdown = "==3.3.4"
-
-[requires]
-python_version = "3.8"
