@@ -245,12 +245,12 @@ namespace CommandDotNet
 
         /// <summary>
         /// When <see cref="EnvVarAttribute"/> is present, looks for the key in the provided envVars config.<br/>
-        /// If envVars is not provided the default <see cref="Environment.GetEnvironmentVariables()"/>
+        /// If envVars is not provided the default <see cref="IEnvironment.GetEnvironmentVariables()"/>
         /// </summary>
         public static AppRunner UseDefaultsFromEnvVar(this AppRunner appRunner, IDictionary? envVars = null)
         {
             return appRunner.UseDefaultsFromConfig(
-                DefaultSources.EnvVar.GetDefaultValue(envVars, DefaultSources.EnvVar.GetKeyFromAttribute));
+                DefaultSources.EnvVar.GetDefaultValue(appRunner, envVars, DefaultSources.EnvVar.GetKeyFromAttribute));
         }
 
         /// <summary>Provide your own strategies for setting argument defaults from a configuration source</summary>

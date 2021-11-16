@@ -5,7 +5,6 @@ using CommandDotNet.Builders;
 using CommandDotNet.Extensions;
 using CommandDotNet.Help;
 using CommandDotNet.Parsing;
-using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
 using static System.Environment;
 
@@ -22,6 +21,12 @@ namespace CommandDotNet.Execution
         /// Override in <see cref="AppRunner.Configure"/>
         /// </summary>
         public IConsole Console { get; }
+
+        /// <summary>
+        /// The application environment. Defaults from <see cref="System.Environment"/>.
+        /// Override in <see cref="AppRunner.Configure"/>
+        /// </summary>
+        public IEnvironment Environment { get; }
 
         /// <summary>
         /// Services registered for the lifetime of the application.<br/>
@@ -53,6 +58,7 @@ namespace CommandDotNet.Execution
         internal ResolverService ResolverService { get; }
 
         public AppConfig(AppSettings appSettings, IConsole console,
+            IEnvironment environment,
             IDependencyResolver? dependencyResolver, IHelpProvider helpProvider,
             NameTransformation? nameTransformation, Action<OnRunCompletedEventArgs>? onRunCompleted,
             TokenizationEvents tokenizationEvents, BuildEvents buildEvents, IServices services,
@@ -61,6 +67,7 @@ namespace CommandDotNet.Execution
         {
             AppSettings = appSettings;
             Console = console;
+            Environment = environment;
             DependencyResolver = dependencyResolver;
             HelpProvider = helpProvider;
             NameTransformation = nameTransformation ?? ((_, memberName, overrideName, _) => overrideName ?? memberName);
