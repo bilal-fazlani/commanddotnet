@@ -13,4 +13,4 @@ Pygments = "==2.10.0"
 Markdown = "==3.3.4"
 
 [requires]
-python_version = "3.8.10"
+python_version = "3.8"
