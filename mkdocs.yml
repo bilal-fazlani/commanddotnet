@@ -75,21 +75,6 @@ nav:
         - TipsFaqs/cli-best-practices.md
         - TipsFaqs/nullable-reference-types.md
         - TipsFaqs/developing-middleware.md
-    - Release Notes:
-      - ReleaseNotes/CommandDotNet.md
-      - ReleaseNotes/CommandDotNet.DataAnnotations.md
-      - ReleaseNotes/CommandDotNet.FluentValidation.md
-      - ReleaseNotes/CommandDotNet.IoC.Autofac.md
-      - ReleaseNotes/CommandDotNet.IoC.MicrosoftDependencyInjection.md
-      - ReleaseNotes/CommandDotNet.IoC.SimpleInjector.md
-      - ReleaseNotes/CommandDotNet.NameCasing.md
-      - ReleaseNotes/CommandDotNet.NewerReleasesAlerts.md
-      - ReleaseNotes/CommandDotNet.Spectre.md
-      - ReleaseNotes/CommandDotNet.Spectre.Testing.md
-      - ReleaseNotes/CommandDotNet.TestTools.md
-      - ReleaseNotes/whats-new-in-v3.md
-    - Legacy Versions:
-      - legacy-versions.md
 theme:
   features:
     - navigation.tabs
