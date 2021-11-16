@@ -1,5 +1,6 @@
 using System;
 using CommandDotNet.TestTools.Scenarios;
+using static System.Environment;
 
 namespace CommandDotNet.TestTools
 {
@@ -39,13 +40,13 @@ namespace CommandDotNet.TestTools
             var expectedSnippet = expected?.Substring(startIndex, Math.Min(expected.Length - startIndex, diffIndex + 10));
 
             throw new AssertFailedException(
-                $"Mismatch at index {diffIndex}{Environment.NewLine}" +
-                $"expected:{expectedSnippet}{Environment.NewLine}" +
-                $"actual  :{actualSnippet}{Environment.NewLine}" +
+                $"Mismatch at index {diffIndex}{NewLine}" +
+                $"expected:{expectedSnippet}{NewLine}" +
+                $"actual  :{actualSnippet}{NewLine}" +
                 $"Expected value for {valueName} to be {FormatMessage(expected)} " +
                 $"but was {FormatMessage(actual)}");
         }
 
-        private static string FormatMessage(object? item) => item == null ? "<null>" : $"{Environment.NewLine}\"{item}\"{Environment.NewLine}";
+        private static string FormatMessage(object? item) => item == null ? "<null>" : $"{NewLine}\"{item}\"{NewLine}";
     }
 }

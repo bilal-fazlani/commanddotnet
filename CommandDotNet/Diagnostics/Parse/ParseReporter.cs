@@ -29,7 +29,7 @@ namespace CommandDotNet.Diagnostics.Parse
 
             if (includeRawCommandLine)
             {
-                writeln(Resources.A.ParseReport_Raw_command_line(Environment.CommandLine));
+                writeln(Resources.A.ParseReport_Raw_command_line(commandContext.Environment.CommandLine));
             }
             
             var path = command.GetPath();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CommandDotNet.Extensions;
+using static System.Environment;
 
 namespace CommandDotNet.Help
 {
@@ -235,14 +236,14 @@ namespace CommandDotNet.Help
         protected virtual string? FormatSectionHeader(string header)
             => Resources.A.Help_usage_lc.Equals(header, StringComparison.OrdinalIgnoreCase)
                     ? $"{header}:"
-                    : $"{header}:{Environment.NewLine}{Environment.NewLine}";
+                    : $"{header}:{NewLine}{NewLine}";
 
         /// <summary>Joins the content into a single string, with headers and sections</summary>
         protected virtual string JoinSections(params (string? header, string? body)[] sections) =>
             sections
                 .Where(s => !s.body.IsNullOrWhitespace())
                 .Select(s => $"{(s.header.IsNullOrWhitespace() ? null : FormatSectionHeader(s.header!))}{s.body!.Trim('\n', '\r')}")
-                .ToCsv($"{Environment.NewLine}{Environment.NewLine}");
+                .ToCsv($"{NewLine}{NewLine}");
 
         protected static string? PadFront(string? value) =>
             value.IsNullOrWhitespace() ? null : " " + value;

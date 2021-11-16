@@ -1,6 +1,4 @@
-﻿using CommandDotNet.Rendering;
-
-namespace CommandDotNet
+﻿namespace CommandDotNet
 {
     public static class ConsoleExtensions
     {

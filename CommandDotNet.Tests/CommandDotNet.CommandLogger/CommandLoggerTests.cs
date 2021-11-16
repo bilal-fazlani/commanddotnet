@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
+using CommandDotNet.Extensions;
 using Diag=CommandDotNet.Diagnostics;
 using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;

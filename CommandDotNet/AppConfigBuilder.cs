@@ -33,6 +33,7 @@ namespace CommandDotNet
         {
             [typeof(CommandContext)] = ctx => ctx,
             [typeof(IConsole)] = ctx => ctx.Console,
+            [typeof(IEnvironment)] = ctx => ctx.Console,
             [typeof(CancellationToken)] = ctx => ctx.CancellationToken
         };
 
@@ -67,6 +68,9 @@ namespace CommandDotNet
 
         /// <summary>Replace the internal system console with provided console</summary>
         public IConsole Console { get; set; } = new SystemConsole();
+
+        /// <summary>Replace the internal system environment with provided environment</summary>
+        public IEnvironment Environment { get; set; } = new SystemEnvironment();
 
         /// <summary>
         /// <see cref="OnRunCompleted"/> is triggered when after the pipeline has completed execution.
@@ -161,7 +165,7 @@ namespace CommandDotNet
                 .ToArray();
 
             return new AppConfig(
-                AppSettings, Console, DependencyResolver, helpProvider, NameTransformation,
+                AppSettings, Console, Environment, DependencyResolver, helpProvider, NameTransformation,
                 OnRunCompleted, TokenizationEvents, BuildEvents, Services,
                 _parameterResolversByType, middlewarePipeline, tokenTransformations);
         }
