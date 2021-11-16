@@ -1,14 +1,14 @@
 name: Test
 
 on:
-  # push:
-  #   paths-ignore:
-  #     - 'docs/**'
-  #     - 'images/**'
-  # pull_request:
-  #   paths-ignore:
-  #     - 'docs/**'
-  #     - 'images/**'
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - 'images/**'
+  pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - 'images/**'
 
 jobs:
   test:
