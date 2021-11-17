@@ -8,12 +8,12 @@ namespace CommandDotNet
 {
     public class AppSettings : IIndentableToString
     {
-        /// <summary>
-        /// When Explicit, boolean options require a 'true' or 'false' value be specified.<br/>
-        /// When Implicit, boolean options are treated as Flags, considered false unless it's specified
-        /// and the next argument will be considered a new argument.
-        /// </summary>
-        public BooleanMode BooleanMode { get; set; } = BooleanMode.Implicit;
+        [Obsolete("Use Arguments.BooleanMode")]
+        public BooleanMode BooleanMode
+        {
+            get => Arguments.BooleanMode; 
+            set => Arguments.BooleanMode = value;
+        }
 
         [Obsolete("Use Parser.IgnoreUnexpectedOperands")]
         public bool IgnoreUnexpectedOperands
@@ -22,18 +22,19 @@ namespace CommandDotNet
             set => Parser.IgnoreUnexpectedOperands = value;
         }
 
-        /// <summary>
-        /// The default <see cref="ArgumentSeparatorStrategy"/>.
-        /// This can be overridden for a <see cref="Command"/> using the <see cref="CommandAttribute"/>
-        /// </summary>
-        public ArgumentSeparatorStrategy DefaultArgumentSeparatorStrategy { get; set; } = ArgumentSeparatorStrategy.EndOfOptions;
+        [Obsolete("Use Parser.IgnoreUnexpectedOperands")]
+        public ArgumentSeparatorStrategy DefaultArgumentSeparatorStrategy
+        {
+            get => Parser.DefaultArgumentSeparatorStrategy;
+            set => Parser.DefaultArgumentSeparatorStrategy = value;
+        }
 
-        /// <summary>
-        /// When arguments are not decorated with <see cref="OperandAttribute"/> or <see cref="OptionAttribute"/>
-        /// DefaultArgumentMode is used to determine which type of argument to assign.
-        /// <see cref="Operand"/> is the default.
-        /// </summary>
-        public ArgumentMode DefaultArgumentMode { get; set; } = ArgumentMode.Operand;
+        [Obsolete("Use Arguments.DefaultArgumentMode")]
+        public ArgumentMode DefaultArgumentMode
+        {
+            get => Arguments.DefaultArgumentMode;
+            set => Arguments.DefaultArgumentMode = value;
+        }
 
         /// <summary>
         /// Set to true to prevent tokenizing arguments as <see cref="TokenType.Directive"/>,
@@ -43,7 +44,10 @@ namespace CommandDotNet
         /// </summary>
         public bool DisableDirectives { get; set; }
 
-        /// <summary>Settings specific to built-in help providers</summary>
+        /// <summary>Settings specific to arguments</summary>
+        public ArgumentAppSettings Arguments { get; set; } = new();
+
+        /// <summary>Settings specific to the command parsing</summary>
         public ParseAppSettings Parser { get; set; } = new();
 
         /// <summary>Settings specific to built-in help providers</summary>

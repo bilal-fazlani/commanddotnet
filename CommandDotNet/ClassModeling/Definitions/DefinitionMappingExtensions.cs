@@ -120,6 +120,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                     valueProxy: argumentDef.ValueProxy)
                 {
                     Description = optionAttr?.Description,
+                    Split = argumentDef.Split,
                     Default = argumentDefault
                 };
             }
@@ -140,6 +141,17 @@ namespace CommandDotNet.ClassModeling.Definitions
             }
 
             return optionAttr.NoLongName ? null : argumentDef.Name;
+        }
+
+        internal static char? GetSplitChar(this IArgumentDef argumentDef, AppSettings appSettings)
+        {
+            OptionAttribute? optionAttr = argumentDef.GetCustomAttribute<OptionAttribute>();
+            return optionAttr?.SplitAsNullable is null
+                ? appSettings.Arguments.DefaultOptionSplit
+                : argumentDef.Type.IsNonStringEnumerable()
+                    ? optionAttr.SplitAsNullable
+                    : throw new InvalidConfigurationException(
+                        $"Split can only be specified for IEnumerable<T> types. {argumentDef.SourcePath} is type {argumentDef.Type}");
         }
 
         internal static BooleanMode? GetBooleanMode(
