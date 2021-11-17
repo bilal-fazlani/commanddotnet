@@ -1,4 +1,5 @@
-﻿using CommandDotNet.Extensions;
+﻿
+using CommandDotNet.Extensions;
 
 namespace CommandDotNet
 {
@@ -18,6 +19,13 @@ namespace CommandDotNet
         /// </summary>
         public ArgumentMode DefaultArgumentMode { get; set; } = ArgumentMode.Operand;
 
+        /// <summary>
+        /// Character used to split the option values into substrings.
+        /// Setting it here will enable for all options that accept multiple values.<br/>
+        /// The character can be set and overridden for each option in the <see cref="OptionAttribute"/>
+        /// or <see cref="NamedAttribute"/>. 
+        /// </summary>
+        public char? DefaultOptionSplit { get; set; }
 
         public override string ToString()
         {

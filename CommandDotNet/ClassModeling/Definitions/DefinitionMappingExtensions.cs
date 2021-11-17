@@ -146,15 +146,12 @@ namespace CommandDotNet.ClassModeling.Definitions
         internal static char? GetSplitChar(this IArgumentDef argumentDef, AppSettings appSettings)
         {
             OptionAttribute? optionAttr = argumentDef.GetCustomAttribute<OptionAttribute>();
-            if (optionAttr?.SplitAsNullable is not null)
-            {
-                return argumentDef.Type.IsNonStringEnumerable()
-                    ? optionAttr?.SplitAsNullable
+            return optionAttr?.SplitAsNullable is null
+                ? appSettings.Arguments.DefaultOptionSplit
+                : argumentDef.Type.IsNonStringEnumerable()
+                    ? optionAttr.SplitAsNullable
                     : throw new InvalidConfigurationException(
                         $"Split can only be specified for IEnumerable<T> types. {argumentDef.SourcePath} is type {argumentDef.Type}");
-            }
-
-            return null;
         }
 
         internal static BooleanMode? GetBooleanMode(

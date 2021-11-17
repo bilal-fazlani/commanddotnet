@@ -71,7 +71,7 @@ namespace CommandDotNet
         /// <summary></summary>
         public int CallerLineNumber { get; }
 
-        /// <summary>Split the option values into substrings based on this character.</summary>
+        /// <summary>Character used to split the option values into substrings.</summary>
         public char Split
         {
             get => SplitAsNullable.GetValueOrDefault();
