@@ -89,9 +89,9 @@ nav:
       - ReleaseNotes/CommandDotNet.Spectre.md
       - ReleaseNotes/CommandDotNet.Spectre.Testing.md
       - ReleaseNotes/CommandDotNet.TestTools.md
-      - ReleaseNotes/whats-new-in-v3.md
     - Legacy Versions:
       - legacy-versions.md
+      - ReleaseNotes/whats-new-in-v3.md
 theme:
   features:
     - navigation.tabs
