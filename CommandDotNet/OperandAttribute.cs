@@ -20,7 +20,7 @@ namespace CommandDotNet
         public int CallerLineNumber { get; }
 
         /// <summary>
-        /// Constructs an <see cref="OperandAttribute"/>
+        /// Identifies a property or parameter as an <see cref="Operand"/>, aka positional argument.
         /// </summary>
         /// <param name="__callerLineNumber">
         /// DO NOT USE. Populated by <see cref="CallerLineNumberAttribute"/>.<br/>
@@ -34,7 +34,7 @@ namespace CommandDotNet
         }
 
         /// <summary>
-        /// Constructs an <see cref="OperandAttribute"/>
+        /// Identifies a property or parameter as an <see cref="Operand"/>, aka positional argument.
         /// </summary>
         /// <param name="__callerLineNumber">
         /// DO NOT USE. Populated by <see cref="CallerLineNumberAttribute"/>.<br/>

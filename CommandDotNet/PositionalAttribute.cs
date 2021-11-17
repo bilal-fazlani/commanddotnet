@@ -14,7 +14,7 @@ namespace CommandDotNet
     public class PositionalAttribute : OperandAttribute
     {
         /// <summary>
-        /// Constructs a <see cref="PositionalAttribute"/>
+        /// Identifies a property or parameter as an <see cref="Operand"/>, aka positional argument.
         /// </summary>
         /// <param name="__callerLineNumber">
         /// DO NOT USE. Populated by <see cref="CallerLineNumberAttribute"/>.<br/>
@@ -24,6 +24,20 @@ namespace CommandDotNet
         /// </param>
         public PositionalAttribute([CallerLineNumber] int __callerLineNumber = 0) 
             : base(__callerLineNumber)
+        {
+        }
+
+        /// <summary>
+        /// Identifies a property or parameter as an <see cref="Operand"/>, aka positional argument.
+        /// </summary>
+        /// <param name="__callerLineNumber">
+        /// DO NOT USE. Populated by <see cref="CallerLineNumberAttribute"/>.<br/>
+        /// This value is used to ensure operands defined in an <see cref="IArgumentModel"/>
+        /// are positioned based on their property's order in the class definition.<br/>
+        /// This value is ignored for parameters.
+        /// </param>
+        public PositionalAttribute(string name, [CallerLineNumber] int __callerLineNumber = 0)
+            : base(name, __callerLineNumber)
         {
         }
     }

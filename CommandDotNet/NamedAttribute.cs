@@ -15,7 +15,7 @@ namespace CommandDotNet
     {
 
         /// <summary>
-        /// Constructs a <see cref="NamedAttribute"/>
+        /// Identifies a property or parameter as an <see cref="Option"/>, aka named argument.
         /// </summary>
         /// <param name="__callerLineNumber">
         /// DO NOT USE. Populated by <see cref="CallerLineNumberAttribute"/>.<br/>
@@ -28,7 +28,7 @@ namespace CommandDotNet
         }
 
         /// <summary>
-        /// Constructs an <see cref="NamedAttribute"/>
+        /// Identifies a property or parameter as an <see cref="Option"/>, aka named argument.
         /// </summary>
         /// <param name="shortName">The single character short name for the option.</param>
         /// <param name="__callerLineNumber">
@@ -42,7 +42,7 @@ namespace CommandDotNet
         }
 
         /// <summary>
-        /// Constructs an <see cref="NamedAttribute"/>
+        /// Identifies a property or parameter as an <see cref="Option"/>, aka named argument.
         /// </summary>
         /// <param name="longName">
         /// The long name for the option. Defaults to the parameter or property name.<br/>
@@ -58,7 +58,7 @@ namespace CommandDotNet
         }
 
         /// <summary>
-        /// Constructs an <see cref="OptionAttribute"/>
+        /// Identifies a property or parameter as an <see cref="Option"/>, aka named argument.
         /// </summary>
         /// <param name="shortName">The single character short name for the option.</param>
         /// <param name="longName">
