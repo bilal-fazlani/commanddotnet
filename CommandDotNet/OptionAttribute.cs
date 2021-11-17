@@ -68,7 +68,17 @@ namespace CommandDotNet
         /// </summary>
         public bool AssignToExecutableSubcommands { get; set; }
 
+        /// <summary></summary>
         public int CallerLineNumber { get; }
+
+        /// <summary>Split the option values into substrings based on this character.</summary>
+        public char Split
+        {
+            get => SplitAsNullable.GetValueOrDefault();
+            set => SplitAsNullable = value;
+        }
+
+        internal char? SplitAsNullable { get; private set; }
 
         /// <summary>
         /// Identifies a property or parameter as an <see cref="Option"/>, aka named argument.

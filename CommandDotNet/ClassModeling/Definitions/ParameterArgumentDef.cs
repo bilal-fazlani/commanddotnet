@@ -29,6 +29,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         public bool IsOptional { get; }
         public BooleanMode? BooleanMode { get; }
         public IArgumentArity Arity { get; }
+        public char? Split { get; set; }
 
         public ParameterArgumentDef(
             ParameterInfo parameterInfo,
@@ -50,6 +51,8 @@ namespace CommandDotNet.ClassModeling.Definitions
                          || parameterInfo.GetNullability() == NullabilityState.Nullable;
 
             BooleanMode = this.GetBooleanMode(appConfig.AppSettings.BooleanMode);
+            Split = this.GetSplitChar(appConfig.AppSettings);
+
             ValueProxy = new ValueProxy(
                 () => parameterValues[parameterInfo.Position],
 

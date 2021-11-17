@@ -28,7 +28,7 @@ namespace CommandDotNet.Parsing
                 switch (token.TokenType)
                 {
                     case TokenType.Argument:
-                        if (parseContext.ExpectedOption is { })
+                        if (parseContext.ExpectedOption is not null)
                         {
                             ParseOptionValue(parseContext, token);
                         }
@@ -357,7 +357,16 @@ namespace CommandDotNet.Parsing
             values ??= option.GetAlreadyParsedValues();
             value ??= valueToken!.Value; //valueToken is not null when value is null
 
-            values.Add(new ValueFromToken(value, valueToken, optionToken));
+            if (option.Split.HasValue)
+            {
+                var parts = value.Split(option.Split.Value, StringSplitOptions.RemoveEmptyEntries);
+                parts.ForEach(p => values.Add(new ValueFromToken(p, valueToken, optionToken)));
+            }
+            else
+            {
+                values.Add(new ValueFromToken(value, valueToken, optionToken));
+            }
+
             parseContext.ClearOption();
         }
 
