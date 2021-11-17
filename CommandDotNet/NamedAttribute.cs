@@ -26,5 +26,52 @@ namespace CommandDotNet
         public NamedAttribute(int __callerLineNumber = 0) : base(__callerLineNumber)
         {
         }
+
+        /// <summary>
+        /// Constructs an <see cref="NamedAttribute"/>
+        /// </summary>
+        /// <param name="shortName">The single character short name for the option.</param>
+        /// <param name="__callerLineNumber">
+        /// DO NOT USE. Populated by <see cref="CallerLineNumberAttribute"/>.<br/>
+        /// This value is used to ensure options defined in an <see cref="IArgumentModel"/>
+        /// are positioned based on their property's order in the class definition.<br/>
+        /// This value is ignored for parameters.
+        /// </param>
+        public NamedAttribute(char shortName, int __callerLineNumber = 0) : base(shortName, __callerLineNumber)
+        {
+        }
+
+        /// <summary>
+        /// Constructs an <see cref="NamedAttribute"/>
+        /// </summary>
+        /// <param name="longName">
+        /// The long name for the option. Defaults to the parameter or property name.<br/>
+        /// Set to null to prevent the option from having a long name.</param>
+        /// <param name="__callerLineNumber">
+        /// DO NOT USE. Populated by <see cref="CallerLineNumberAttribute"/>.<br/>
+        /// This value is used to ensure options defined in an <see cref="IArgumentModel"/>
+        /// are positioned based on their property's order in the class definition.<br/>
+        /// This value is ignored for parameters.
+        /// </param>
+        public NamedAttribute(string? longName, int __callerLineNumber = 0) : base(longName, __callerLineNumber)
+        {
+        }
+
+        /// <summary>
+        /// Constructs an <see cref="OptionAttribute"/>
+        /// </summary>
+        /// <param name="shortName">The single character short name for the option.</param>
+        /// <param name="longName">
+        /// The long name for the option. Defaults to the parameter or property name.<br/>
+        /// Set to null to prevent the option from having a long name.</param>
+        /// <param name="__callerLineNumber">
+        /// DO NOT USE. Populated by <see cref="CallerLineNumberAttribute"/>.<br/>
+        /// This value is used to ensure options defined in an <see cref="IArgumentModel"/>
+        /// are positioned based on their property's order in the class definition.<br/>
+        /// This value is ignored for parameters.
+        /// </param>
+        public NamedAttribute(char shortName, string? longName, int __callerLineNumber = 0) : base(shortName, longName, __callerLineNumber)
+        {
+        }
     }
 }

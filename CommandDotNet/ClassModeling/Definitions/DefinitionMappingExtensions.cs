@@ -109,7 +109,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 
                 return new Option(
                     ParseLongName(argumentDef, optionAttr),
-                    ParseShortName(argumentDef, optionAttr?.ShortName),
+                    optionAttr?.ShortName,
                     typeInfo,
                     argumentDef.Arity,
                     argumentDef.BooleanMode,
@@ -140,23 +140,6 @@ namespace CommandDotNet.ClassModeling.Definitions
             }
 
             return optionAttr.NoLongName ? null : argumentDef.Name;
-        }
-
-
-        private static char? ParseShortName(IArgumentDef argumentDef, string? shortNameAsString)
-        {
-            if (shortNameAsString.IsNullOrWhitespace())
-            {
-                return null;
-            }
-
-            if (shortNameAsString!.Length > 1)
-            {
-                throw new ArgumentException($"Short name must be a single character: {shortNameAsString} {argumentDef}",
-                    nameof(shortNameAsString));
-            }
-
-            return shortNameAsString.Single();
         }
 
         internal static BooleanMode? GetBooleanMode(
