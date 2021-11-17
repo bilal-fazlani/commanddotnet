@@ -48,7 +48,7 @@ namespace CommandDotNet.Diagnostics
             ParseReporter.Report(context, writeln: s => sb.AppendLine(s), indent: indent);
 
             var additionalHeaders = config.AdditionalHeadersCallback?.Invoke(context);
-            var otherConfigEntries = GetOtherConfigInfo(includeSystemInfo, additionalHeaders).ToList();
+            var otherConfigEntries = GetOtherConfigInfo(context.Environment, includeSystemInfo, additionalHeaders).ToList();
             if (!otherConfigEntries.IsNullOrEmpty())
             {
                 sb.AppendLine();
@@ -83,7 +83,8 @@ namespace CommandDotNet.Diagnostics
             return originalArgs;
         }
 
-        private static IEnumerable<(string name, string text)> GetOtherConfigInfo(bool includeSystemInfo,
+        private static IEnumerable<(string name, string text)> GetOtherConfigInfo(IEnvironment env,
+            bool includeSystemInfo,
             IEnumerable<(string key, string value)>? additionalHeaders)
         {
             if (includeSystemInfo)
@@ -94,16 +95,16 @@ namespace CommandDotNet.Diagnostics
                     $"{appInfo.FileName} {appInfo.Version}");
                 yield return (
                     Resources.A.CommandLogger_DotNet_version,
-                    System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription.Trim());
+                    env.FrameworkDescription);
                 yield return (
                     Resources.A.CommandLogger_OS_version, 
-                    System.Runtime.InteropServices.RuntimeInformation.OSDescription.Trim());
+                    env.OSDescription);
                 yield return (
-                    Resources.A.CommandLogger_Machine, 
-                    Environment.MachineName);
+                    Resources.A.CommandLogger_Machine,
+                    env.MachineName);
                 yield return (
                     Resources.A.CommandLogger_Username, 
-                    $"{Environment.UserDomainName}\\{Environment.UserName}");
+                    $"{env.UserDomainName}\\{env.UserName}");
             }
 
             if (additionalHeaders is { })

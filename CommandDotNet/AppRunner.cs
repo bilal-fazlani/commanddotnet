@@ -36,8 +36,9 @@ namespace CommandDotNet
     public class AppRunner : IIndentableToString
     {
         private readonly AppConfigBuilder _appConfigBuilder;
-        private AppConfig? _appConfig;
         private HandleErrorDelegate? _handleErrorDelegate;
+        
+        internal AppConfig? AppConfig { get; private set; }
 
         public AppSettings AppSettings { get; }
         public Type RootCommandType { get; }
@@ -125,7 +126,7 @@ namespace CommandDotNet
         private CommandContext BuildCommandContext(string[] args)
         {
             var tokens = args.Tokenize(includeDirectives: !AppSettings.DisableDirectives);
-            var appConfig = _appConfig ??= _appConfigBuilder.Build();
+            var appConfig = AppConfig ??= _appConfigBuilder.Build();
             var commandContext = new CommandContext(args, tokens, appConfig);
             return commandContext;
         }
@@ -181,9 +182,9 @@ namespace CommandDotNet
 
         public string ToString(Indent indent)
         {
-            return _appConfig == null
+            return AppConfig == null
                 ? $"{indent}{nameof(AppRunner)}<{RootCommandType.Name}>"
-                : $"{indent}{nameof(AppRunner)}<{RootCommandType.Name}>:{Environment.NewLine}{indent.Increment()}{_appConfig.ToString(indent.Increment())}";
+                : $"{indent}{nameof(AppRunner)}<{RootCommandType.Name}>:{Environment.NewLine}{indent.Increment()}{AppConfig.ToString(indent.Increment())}";
         }
     }
 }

@@ -4,7 +4,6 @@ using CommandDotNet.Diagnostics.Parse;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Parsing;
-using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
 using static System.Environment;
 
@@ -48,6 +47,9 @@ namespace CommandDotNet
         /// <summary>The <see cref="IConsole"/>, defaulted from <see cref="Execution.AppConfig.Console"/>.</summary>
         public IConsole Console { get; set; }
 
+        /// <summary>The <see cref="IEnvironment"/>, defaulted from <see cref="Execution.AppConfig.Environment"/>.</summary>
+        public IEnvironment Environment { get; set; }
+
         /// <summary>When true, help will be displayed as the app exits</summary>
         public bool ShowHelpOnExit { get; set; }
 
@@ -83,6 +85,7 @@ namespace CommandDotNet
             Tokens = originalTokens;
             AppConfig = appConfig;
             Console = appConfig.Console;
+            Environment = appConfig.Environment;
             Services = new Services(appConfig.Services);
         }
 

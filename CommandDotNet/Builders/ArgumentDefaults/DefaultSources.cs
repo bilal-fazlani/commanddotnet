@@ -29,18 +29,30 @@ namespace CommandDotNet.Builders.ArgumentDefaults
             /// <summary>
             /// The delegate to return the value for the <see cref="IArgument"/>
             /// </summary>
+            /// <param name="appRunner"></param>
             /// <param name="envVars">A dictionary containing the environment variables</param>
             /// <param name="getKeysDelegates">
-            /// The delegates that will return the keys for an argument.
-            /// Uses <see cref="GetKeyFromAttribute"/> if none provided.
+            ///     The delegates that will return the keys for an argument.
+            ///     Uses <see cref="GetKeyFromAttribute"/> if none provided.
             /// </param>
             public static Func<IArgument, ArgumentDefault?> GetDefaultValue(
-                IDictionary? envVars = null,
+                AppRunner appRunner, IDictionary? envVars = null,
                 params GetArgumentKeysDelegate[]? getKeysDelegates)
             {
-                envVars ??= Environment.GetEnvironmentVariables();
+                IDictionary? ev = envVars;
+                // AppConfig should never be null by the time this runs
+                IDictionary GetEnvVars()
+                {
+                    if (appRunner.AppConfig is null)
+                    {
+                        throw new InvalidConfigurationException(
+                            "AppRunner.AppConfig is null. This method has been called before AppRunner.Run was executed.");
+                    }
+                    return ev ??= appRunner.AppConfig!.Environment.GetEnvironmentVariables();
+                }
+
                 return GetValueFunc(Resources.A.ValueSource_EnvVar,
-                    key => envVars.GetValueOrDefault<string>(key),
+                    key => GetEnvVars().GetValueOrDefault<string>(key),
                     getKeysDelegates ?? new GetArgumentKeysDelegate[]
                     {
                         GetKeyFromAttribute

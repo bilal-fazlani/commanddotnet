@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using CommandDotNet.Extensions;
+using static System.Environment;
 
 namespace CommandDotNet.TestTools
 {
@@ -99,8 +100,8 @@ namespace CommandDotNet.TestTools
             foreach (var property in Properties)
             {
                 proxyCode.AppendLine(
-                    $"        public override string {property.Name} =>{Environment.NewLine}" +
-                    $"            _localize(base.{property.Name}){Environment.NewLine}" +
+                    $"        public override string {property.Name} =>{NewLine}" +
+                    $"            _localize(base.{property.Name}){NewLine}" +
                     $"            ?? base.{property.Name};");
             }
 
@@ -114,8 +115,8 @@ namespace CommandDotNet.TestTools
                 var paramPassThrus = parameters.Select(p => $"{p.Name}").ToCsv(", ");
 
                 proxyCode.AppendLine(
-                    $"        public override string {method.Name}({paramDef}) =>{Environment.NewLine}" +
-                    $"            _localize(base.{method.Name}({paramPlaceHolders})){Environment.NewLine}" +
+                    $"        public override string {method.Name}({paramDef}) =>{NewLine}" +
+                    $"            _localize(base.{method.Name}({paramPlaceHolders})){NewLine}" +
                     $"            ?? base.{method.Name}({paramPassThrus});");
             }
 
