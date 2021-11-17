@@ -109,7 +109,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                 
                 return new Option(
                     ParseLongName(argumentDef, optionAttr),
-                    ParseShortName(argumentDef, optionAttr?.ShortName),
+                    optionAttr?.ShortName,
                     typeInfo,
                     argumentDef.Arity,
                     argumentDef.BooleanMode,
@@ -120,6 +120,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                     valueProxy: argumentDef.ValueProxy)
                 {
                     Description = optionAttr?.Description,
+                    Split = argumentDef.Split,
                     Default = argumentDefault
                 };
             }
@@ -142,21 +143,15 @@ namespace CommandDotNet.ClassModeling.Definitions
             return optionAttr.NoLongName ? null : argumentDef.Name;
         }
 
-
-        private static char? ParseShortName(IArgumentDef argumentDef, string? shortNameAsString)
+        internal static char? GetSplitChar(this IArgumentDef argumentDef, AppSettings appSettings)
         {
-            if (shortNameAsString.IsNullOrWhitespace())
-            {
-                return null;
-            }
-
-            if (shortNameAsString!.Length > 1)
-            {
-                throw new ArgumentException($"Short name must be a single character: {shortNameAsString} {argumentDef}",
-                    nameof(shortNameAsString));
-            }
-
-            return shortNameAsString.Single();
+            OptionAttribute? optionAttr = argumentDef.GetCustomAttribute<OptionAttribute>();
+            return optionAttr?.SplitAsNullable is null
+                ? appSettings.Arguments.DefaultOptionSplit
+                : argumentDef.Type.IsNonStringEnumerable()
+                    ? optionAttr.SplitAsNullable
+                    : throw new InvalidConfigurationException(
+                        $"Split can only be specified for IEnumerable<T> types. {argumentDef.SourcePath} is type {argumentDef.Type}");
         }
 
         internal static BooleanMode? GetBooleanMode(

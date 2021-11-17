@@ -20,7 +20,7 @@ namespace CommandDotNet.Example
         public void StartSession(
             CommandContext context,
             InteractiveSession interactiveSession, 
-            [Option(ShortName = "i")] bool interactive)
+            [Option('i')] bool interactive)
         {
             if (interactive && !_inSession)
             {

@@ -67,7 +67,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
 
         private class App
         {
-            public void Add(int x, int y, [Option(ShortName = "o")] string @operator = "+")
+            public void Add(int x, int y, [Option('o')] string @operator = "+")
             {
             }
         }

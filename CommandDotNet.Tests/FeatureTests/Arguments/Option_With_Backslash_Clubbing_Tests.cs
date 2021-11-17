@@ -63,10 +63,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         private class App
         {
             public void Do(
-                [Option(ShortName = "a")] bool optionA,
-                [Option(ShortName = "b")] bool optionB,
-                [Option(ShortName = "x")] string optionX,
-                [Option(ShortName = "y")] string optionY)
+                [Option('a')] bool optionA,
+                [Option('b')] bool optionB,
+                [Option('x')] string optionX,
+                [Option('y')] string optionY)
             {
             }
         }

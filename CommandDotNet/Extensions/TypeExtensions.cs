@@ -34,6 +34,9 @@ namespace CommandDotNet.Extensions
                     : null;
         }
 
+        internal static bool IsNonStringEnumerable(this Type type) => 
+            type != typeof(string) && type.IsEnumerable();
+
         internal static bool IsEnumerable(this Type type)
         {
             return type.GetInterfaces()

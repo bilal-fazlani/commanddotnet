@@ -57,8 +57,8 @@ Options:
         private class App
         {
             public void Do(
-                [Option(ShortName = "f")] bool flag,
-                [Option(ShortName = "v")] string value)
+                [Option('f')] bool flag,
+                [Option('v')] string value)
             {
             }
         }

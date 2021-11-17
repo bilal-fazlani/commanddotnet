@@ -76,7 +76,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         {
             public void Do(
                 [Operand(Name = "lala")] string operand,
-                [Option(LongName = "lala")] string option)
+                [Option("lala")] string option)
             { }
         }
 
