@@ -6,7 +6,7 @@ namespace CommandDotNet.Example.DocExamples
     public class Git
     {
         [Command(Description = "Commits all staged changes")]
-        public void Commit([Option(ShortName = "m")]string commitMessage)
+        public void Commit([Option('m')]string commitMessage)
         {
             Console.WriteLine("Commit successful");
         }

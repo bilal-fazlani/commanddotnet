@@ -121,8 +121,8 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
                 return 10;
             }
 
-            public int Send([Option] string messageName, [Option(LongName = "Sender")] string senderName,
-                [Option(ShortName = "P")] int priority, [Option]int c)
+            public int Send([Option] string messageName, [Option("Sender")] string senderName,
+                [Option('P')] int priority, [Option]int c)
             {
                 return messageName == "m" && senderName == "s" && priority == 3 && c == 4 ? 10 : 1;
             }

@@ -196,10 +196,10 @@ token transformations:
 
         class Args : IArgumentModel
         {
-            [Option(ShortName = "u", LongName = "username")]
+            [Option('u', "username")]
             public string? Username { get; set; }
 
-            [Option(ShortName = "p", LongName = "password")]
+            [Option('p', "password")]
             public Password Password { get; set; } = new("default-secret");
 
         }

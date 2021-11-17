@@ -203,7 +203,7 @@ Usage: testhost.dll Save [options] <Id> <Name>"
             [Operand, Required, MaxLength(5)] 
             public string Name { get; set; } = null!;
 
-            [Option(LongName = "nick-name"), MaxLength(5), Display(Name="MyFriendsCallMe")]
+            [Option("nick-name"), MaxLength(5), Display(Name="MyFriendsCallMe")]
             public string NickName { get; set; } = null!;
 
             [OrderByPositionInClass]
@@ -221,7 +221,7 @@ Usage: testhost.dll Save [options] <Id> <Name>"
         [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
         public class ContactInfo : IArgumentModel
         {
-            [Option(LongName = "email"), EmailAddress] 
+            [Option("email"), EmailAddress] 
             public string Email { get; set; } = null!;
         }
     }
