@@ -97,6 +97,7 @@ theme:
     - navigation.tabs
     - nagivation.instant
     - navigation.top
+    - navigation.tracking
   name: 'material'
   custom_dir: docs/overrides
   icon:
@@ -127,12 +128,12 @@ markdown_extensions:
   - def_list
   - admonition
   - attr_list
-  - codehilite:
-      linenums: true
   - pymdownx.arithmatex
   - pymdownx.betterem:
       smart_enable: all
   - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde  
   - pymdownx.keys
   - pymdownx.critic
   - pymdownx.details
@@ -141,17 +142,18 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.escapeall:
       nbsp: true
-  - pymdownx.inlinehilite
-  - pymdownx.magiclink
-  - pymdownx.mark
+  - pymdownx.magiclink  
   - pymdownx.smartsymbols
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
   - pymdownx.superfences
-  - pymdownx.tabbed
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.tasklist:
       custom_checkbox: true
-  - pymdownx.tilde
   - toc:
-     permalink: "#"   
+      permalink: "#"   
 
 plugins:
   - search
