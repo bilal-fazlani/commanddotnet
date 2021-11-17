@@ -240,7 +240,7 @@ password (Text):
         public void WhenExplicitBoolOptionMissing_Prompts()
         {
 
-            new AppRunner<App>(new AppSettings { BooleanMode = BooleanMode.Explicit })
+            new AppRunner<App>(new AppSettings {.Arguments.BooleanMode = BooleanMode.Explicit })
                 .UseArgumentPrompter()
                 .Verify(new Scenario
                 {

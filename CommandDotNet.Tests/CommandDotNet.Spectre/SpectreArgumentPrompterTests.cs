@@ -284,7 +284,7 @@ password (Text) *******
             testConsole.Input.PushTextWithEnter("y"); 
             testConsole.Input.PushTextWithEnter("y");
 
-            new AppRunner<App>(new AppSettings { BooleanMode = BooleanMode.Explicit })
+            new AppRunner<App>(new AppSettings {.Arguments.BooleanMode = BooleanMode.Explicit })
                 .UseSpectreAnsiConsole(testConsole)
                 .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
