@@ -82,8 +82,8 @@ Options:
             }
 
             public void Club(
-                [Option(ShortName = "a")] bool flagA, 
-                [Option(ShortName = "b")] bool flagB)
+                [Option('a')] bool flagA, 
+                [Option('b')] bool flagB)
             {
             }
         }

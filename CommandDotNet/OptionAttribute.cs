@@ -12,29 +12,29 @@ namespace CommandDotNet
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property)]
     public class OptionAttribute : Attribute, INameAndDescription
     {
-        /// <summary>
-        /// The single character short name for the option.<br/>
-        /// </summary>
-        public string? ShortName { get; set; }
+        private char? _shortName;
 
         private string? _longName;
+
+        /// <summary>
+        /// The single character short name for the option.
+        /// </summary>
+        [Obsolete("Use constructors instead of setting this property")]
+        public char? ShortName
+        {
+            get => _shortName;
+            set => _shortName = value;
+        }
 
         /// <summary>
         /// The long name for the option. Defaults to the parameter or property name.<br/>
         /// Set to null to prevent the option from having a long name.
         /// </summary>
+        [Obsolete("Use constructors instead of setting this property")]
         public string? LongName
         {
             get => _longName;
-            set
-            {
-                if (value == string.Empty)
-                {
-                    value = null;
-                }
-                NoLongName = value == null;
-                _longName = value;
-            }
+            set => SetLongName(value);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace CommandDotNet
         /// </summary>
         public bool NoLongName { get; private set; }
         
-        string? INameAndDescription.Name => LongName;
+        string? INameAndDescription.Name => _longName;
 
         public string? Description { get; set; }
 
@@ -71,7 +71,7 @@ namespace CommandDotNet
         public int CallerLineNumber { get; }
 
         /// <summary>
-        /// Constructs an <see cref="OptionAttribute"/>
+        /// Identifies a property or parameter as an <see cref="Option"/>, aka named argument.
         /// </summary>
         /// <param name="__callerLineNumber">
         /// DO NOT USE. Populated by <see cref="CallerLineNumberAttribute"/>.<br/>
@@ -82,6 +82,78 @@ namespace CommandDotNet
         public OptionAttribute([CallerLineNumber] int __callerLineNumber = 0)
         {
             CallerLineNumber = __callerLineNumber;
+        }
+
+        /// <summary>
+        /// Identifies a property or parameter as an <see cref="Option"/>, aka named argument.
+        /// </summary>
+        /// <param name="shortName">The single character short name for the option.</param>
+        /// <param name="__callerLineNumber">
+        /// DO NOT USE. Populated by <see cref="CallerLineNumberAttribute"/>.<br/>
+        /// This value is used to ensure options defined in an <see cref="IArgumentModel"/>
+        /// are positioned based on their property's order in the class definition.<br/>
+        /// This value is ignored for parameters.
+        /// </param>
+        public OptionAttribute(char shortName, [CallerLineNumber] int __callerLineNumber = 0)
+        {
+            _shortName = shortName;
+            CallerLineNumber = __callerLineNumber;
+        }
+
+        /// <summary>
+        /// Identifies a property or parameter as an <see cref="Option"/>, aka named argument.
+        /// </summary>
+        /// <param name="longName">
+        /// The long name for the option. Defaults to the parameter or property name.<br/>
+        /// Set to null to prevent the option from having a long name.</param>
+        /// <param name="__callerLineNumber">
+        /// DO NOT USE. Populated by <see cref="CallerLineNumberAttribute"/>.<br/>
+        /// This value is used to ensure options defined in an <see cref="IArgumentModel"/>
+        /// are positioned based on their property's order in the class definition.<br/>
+        /// This value is ignored for parameters.
+        /// </param>
+        public OptionAttribute(string? longName, [CallerLineNumber] int __callerLineNumber = 0)
+        {
+            SetLongName(longName);
+            CallerLineNumber = __callerLineNumber;
+        }
+
+        /// <summary>
+        /// Identifies a property or parameter as an <see cref="Option"/>, aka named argument.
+        /// </summary>
+        /// <param name="shortName">The single character short name for the option.</param>
+        /// <param name="longName">
+        /// The long name for the option. Defaults to the parameter or property name.<br/>
+        /// Set to null to prevent the option from having a long name.</param>
+        /// <param name="__callerLineNumber">
+        /// DO NOT USE. Populated by <see cref="CallerLineNumberAttribute"/>.<br/>
+        /// This value is used to ensure options defined in an <see cref="IArgumentModel"/>
+        /// are positioned based on their property's order in the class definition.<br/>
+        /// This value is ignored for parameters.
+        /// </param>
+        public OptionAttribute(char shortName, string? longName, [CallerLineNumber] int __callerLineNumber = 0)
+        {
+            SetLongName(longName);
+            _shortName = shortName;
+            CallerLineNumber = __callerLineNumber;
+        }
+
+        private void SetLongName(string? longName)
+        {
+            if (longName?.Length == 1)
+            {
+                throw new InvalidConfigurationException(
+                    "option longName must contain more than one character. " +
+                    $"Did you mean to use '{longName}' instead of \"{longName}\"");
+            }
+
+            if (longName == string.Empty)
+            {
+                longName = null;
+            }
+
+            NoLongName = longName == null;
+            _longName = longName;
         }
     }
 }

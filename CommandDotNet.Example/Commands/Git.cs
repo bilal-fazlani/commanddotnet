@@ -47,7 +47,7 @@ namespace CommandDotNet.Example.Commands
         }
         
         [Command(Name = "commit", Description = "Commits all staged changes")]
-        public void Commit([Option(ShortName = "m")]string commitMessage)
+        public void Commit([Option('m')]string commitMessage)
         {
             Console.WriteLine("Commit successful");
         }

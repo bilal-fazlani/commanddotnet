@@ -92,10 +92,10 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
         private class App
         {
             public void ByAttribute(
-                [EnvVar("opt1")] [Option(LongName = "option1", ShortName = "o")]
+                [EnvVar("opt1")] [Option('o', "option1")]
                 string option1,
                 [EnvVar("oper1")] [Operand] string operand1,
-                [EnvVar("opt2")] [Option(LongName = "option2", ShortName = "t")]
+                [EnvVar("opt2")] [Option('t', "option2")]
                 string option2 = "lala",
                 [EnvVar("oper2")] [Operand] string operand2 = "fishies"
             )

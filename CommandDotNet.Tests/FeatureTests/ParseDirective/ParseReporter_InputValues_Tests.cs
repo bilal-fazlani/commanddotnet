@@ -175,10 +175,10 @@ Parse usage: [parse:t:raw] to include token transformations.
                 IConsole console,
                 [Operand] string opd,
                 [Operand] List<string> opdList,
-                [Option(ShortName = "a", LongName = null)] bool optA = false,
-                [Option(ShortName = "b", LongName = null)] bool optB = false,
+                [Option('a', (string)null)] bool optA = false,
+                [Option('b', (string)null)] bool optB = false,
                 [Option] string? lala = null,
-                [Option(ShortName = "l")] List<string>? optList = null)
+                [Option('l')] List<string>? optList = null)
             {
                 console.Out.WriteLine(new
                 {

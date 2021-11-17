@@ -135,7 +135,7 @@ Parse usage: [parse:t:raw] to include token transformations.
             public List<string>? opdList { get; set; } = new() { "one", "two", "three" };
 
             [EnvVar("optList")]
-            [Option(ShortName = "l")]
+            [Option('l')]
             public List<string>? optList { get; set; } = new() { "one", "two", "three" };
         }
     }
