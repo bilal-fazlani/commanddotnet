@@ -1,5 +1,11 @@
 # CommandDotNet.TestTools
 
+## 5.0.0
+
+Changing default behavior of TestConsole to trim whitespace from the end of the output. This removes the trailing newlines, making the test ssertions cleaner and more what you'd expect.
+
+This change can be reverted using TestConfig,SkipTrimEndOfConsoleOutputs or passing in a TestConsole(trimEnd: false)
+
 ## 4.0.1
 
 remove nuget package refs no longer required after move to net5.0

@@ -1,5 +1,56 @@
 # CommandDotNet
 
+## 6.0.0
+
+Back with some more goodness. This fix focuses on improvements for developers and some features to support advanced use cases.
+
+### Highlights
+
+#### Terser definition of argument names
+
+We've simplified how you can define short names and override long names. 
+
+Until now, it worked like `[Option(ShortName="f", LongName="file")]` and `[Operand(Name = "file")]`
+
+Now available: `[Option('f', "file")]` and `[Operand("file")]`
+
+You can run this script in git bash in the folder containing your commmand definitions to update usages.
+
+The old pattern has been deprecated but is still supported.
+
+#### IEnvironment
+
+Added IEnvironment for testability. Covers most of System.Environment
+
+IEnvironment can be injected into command methods.  eg `Move(IConsole console, IEnvironment env, string file)`
+
+#### Piped Input targeting
+
+Piped input can now target any argument. By default, piped input will be unioned into inputs for any type of IEnumerable<T> Operand if it exists.
+
+Using `$*` as a value for an argument will union the piped input to that argument instead.  i.e. `find ... | move --files $* ~/tmp/` will move the files into the users tmp directory.
+
+`$*` can be overridden using AppSettings.Arguments.DefaultPipeTargetSymbol. It can also be overridden using the `[pipeto:...]` directive to avoid conflicts in scripts.
+
+#### Splitting multi-value options
+
+To provide multiple values for an option, you've had to repeat the option name each time, eg. `--name jack --name jill`
+
+Now you can define a separator character to use to split a string. `[Optiom(Split=",")]` and then `--name=jack,jill`
+
+A global default can be set using AppSettings.Arguments.DefaultOptionSplit
+
+The user can also override by using the `[split:-]` directive for `--name=jack-jill`.
+
+#### Error handling improvements
+
+The CommandDotNet exceptions have been consolidated into two types 
+
+- Dev errors (InvalidConfigurationException)
+- User errors (ValueParsingException)
+
+These errors are intercepted and displayed to the user before the registered error handler is called. This ensures your error handler can focus on exceptions from your app. We've also ensured stack traces will not be shown for these exceptions
+
 ## 5.0.1
 
 remove nuget package refs no longer required after move to net5.0
@@ -520,6 +571,8 @@ See [help docs](../Help/help.md#expandargumentsinusage) for more details.
 
 #### Setting parent commands
 Option & Operand & Command should now be created without a parent command. Parent will be assigned when added to a command.
+
+
 
 ## 3.0.1
 
