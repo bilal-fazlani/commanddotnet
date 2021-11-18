@@ -91,7 +91,7 @@ namespace CommandDotNet.TestTools
                 {
                     c.Console = testConsole = c.Console as ITestConsole
                                               ?? c.Services.GetOrDefault<ITestConsole>()
-                                              ?? new TestConsole();
+                                              ?? new TestConsole(!config.SkipTrimEndOfConsoleOutputs);
                 });
 
                 if (onReadLine != null)

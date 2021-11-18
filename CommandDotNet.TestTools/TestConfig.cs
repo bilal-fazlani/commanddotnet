@@ -47,6 +47,9 @@ namespace CommandDotNet.TestTools
         /// <summary>When true, CommandDotNet logs will output to logLine</summary>
         public bool PrintCommandDotNetLogs { get; set; }
 
+        /// <summary>When true, CommandDotNet will not trim the end of the outputs from TestConsole</summary>
+        public bool SkipTrimEndOfConsoleOutputs { get; set; } = true;
+
         /// <summary>
         /// To identify the <see cref="TestConfig"/> in case the expected config was not used.<br/>
         /// Will be auto-populated when created from <seealso cref="IDefaultTestConfig"/>
