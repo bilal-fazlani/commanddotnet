@@ -34,8 +34,7 @@ Arguments:
 
   Name   <TEXT>
 
-  Email  <TEXT>
-"
+  Email  <TEXT>"
                     }
                 });
         }
@@ -54,8 +53,7 @@ Arguments:
                         Output = @"'Person' is invalid
   'Id' must be greater than '0'.
   'Name' must not be empty.
-  'Email' must not be empty.
-"
+  'Email' must not be empty."
                     }
                 });
         }
@@ -77,8 +75,7 @@ Arguments:
                         Output = @"'Person' is invalid
   'Id' must be greater than '0'.
   'Name' must not be empty.
-  'Email' must not be empty.
-"
+  'Email' must not be empty."
                     }
                 });
         }
@@ -113,8 +110,7 @@ Arguments:
                         Output = @"'Person' is invalid
   lala
   lala
-  lala
-"
+  lala"
                     }
                 });
         }

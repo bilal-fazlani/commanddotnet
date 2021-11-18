@@ -27,8 +27,7 @@ Options:
 
   -f | --flag
 
-  -v | --value  <TEXT>
-" }
+  -v | --value  <TEXT>" }
                 });
         }
 

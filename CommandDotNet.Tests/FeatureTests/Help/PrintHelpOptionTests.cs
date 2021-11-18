@@ -21,8 +21,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             result.Console.AllText().Should().Be(@"Usage: testhost.dll Do [options]
 
 Options:
-  -h | --help  Show help information
-");
+  -h | --help  Show help information");
         }
 
         [Fact]
@@ -36,8 +35,7 @@ Options:
 Options:
 
   -h | --help
-  Show help information
-");
+  Show help information");
         }
 
         private class App

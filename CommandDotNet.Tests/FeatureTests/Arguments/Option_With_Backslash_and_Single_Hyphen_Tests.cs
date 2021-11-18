@@ -36,8 +36,7 @@ Options:
 
   -v | --value  <TEXT>
 
-  -o | --other  <TEXT>
-" }
+  -o | --other  <TEXT>" }
                 });
         }
 

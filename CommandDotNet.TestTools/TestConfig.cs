@@ -48,7 +48,7 @@ namespace CommandDotNet.TestTools
         public bool PrintCommandDotNetLogs { get; set; }
 
         /// <summary>When true, CommandDotNet will not trim the end of the outputs from TestConsole</summary>
-        public bool SkipTrimEndOfConsoleOutputs { get; set; } = true;
+        public bool SkipTrimEndOfConsoleOutputs { get; set; }
 
         /// <summary>
         /// To identify the <see cref="TestConfig"/> in case the expected config was not used.<br/>

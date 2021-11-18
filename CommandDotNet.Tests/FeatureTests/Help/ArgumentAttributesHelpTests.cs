@@ -27,8 +27,7 @@ Arguments:
   operand  operand-descr
 
 Options:
-  --option  option-descr
-"
+  --option  option-descr"
                         }
                     });
         }
@@ -53,8 +52,7 @@ Arguments:
 Options:
 
   --option  <TEXT>
-  option-descr
-"
+  option-descr"
                         }
                     });
         }
