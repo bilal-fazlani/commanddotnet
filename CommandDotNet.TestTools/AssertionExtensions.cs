@@ -1,11 +1,54 @@
 using System;
+using System.Collections.Generic;
 using CommandDotNet.TestTools.Scenarios;
 using static System.Environment;
 
 namespace CommandDotNet.TestTools
 {
-    internal static class AssertionExtensions
+    public static class AssertionExtensions
     {
+        public static AppRunner Expect<TEx>(this AppRunner appRunner,
+            Action<TEx>? assertEx = null)
+            where TEx : Exception
+        {
+            const int exceptionAsserted = int.MinValue + 1234;
+
+            return appRunner
+                .UseErrorHandler((ctx, ex) =>
+                {
+                    if (ex is not TEx)
+                    {
+                        throw new AssertFailedException($"exception {ex.GetType()} is not of type {typeof(TEx)}");
+                    }
+                    assertEx?.Invoke((TEx)ex);
+                    return exceptionAsserted;
+                })
+                .AssertAfterRun(r =>
+                {
+                    if (r.ExitCode != exceptionAsserted)
+                    {
+                        throw new AssertFailedException($"exception {typeof(TEx)} was not raised in the test run. {nameof(appRunner.UseErrorHandler)}");
+                    }
+                });
+        }
+
+        internal static AppRunnerResult VerifyAfterRunAssertions(this AppRunnerResult result)
+        {
+            result.Runner.AppConfig!.Services
+                .GetOrDefault<List<Action<AppRunnerResult>>>()
+                ?.ForEach(a => a(result));
+            return result;
+        }
+
+        internal static AppRunner AssertAfterRun(this AppRunner appRunner, Action<AppRunnerResult> assert)
+        {
+            return appRunner.Configure(cfg =>
+            {
+                var assertions = cfg.Services.GetOrAdd(() => new List<Action<AppRunnerResult>>());
+                assertions.Add(assert);
+            });
+        }
+
         internal static void ShouldBe(this string? actual, string? expected, string valueName)
         {
             if (expected?.Equals(actual) ?? actual == null)

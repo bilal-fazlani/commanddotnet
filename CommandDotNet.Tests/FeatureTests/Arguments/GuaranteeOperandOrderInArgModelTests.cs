@@ -36,7 +36,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 1,
-                        Output = "Operand property must be attributed with OperandAttribute or " +
+                        Output = "CommandDotNet.InvalidConfigurationException: Operand property must be attributed with OperandAttribute or " +
                                  "OrderByPositionInClassAttribute to guarantee consistent order. " +
                                  "Property: CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedArgModel.Arg1"
                     }
@@ -117,7 +117,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 1,
-                        Output = "Operand property must be attributed with OperandAttribute or " +
+                        Output = "CommandDotNet.InvalidConfigurationException: Operand property must be attributed with OperandAttribute or " +
                                  "OrderByPositionInClassAttribute to guarantee consistent order. " +
                                  "Property: CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedArgModel.Arg1"
                     }
@@ -134,7 +134,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 1,
-                        Output = "Operand property must be attributed with OperandAttribute or " +
+                        Output = "CommandDotNet.InvalidConfigurationException: Operand property must be attributed with OperandAttribute or " +
                                  "OrderByPositionInClassAttribute to guarantee consistent order. " +
                                  @"Properties:
   CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedNestedModelAttributedArgModel.Model"
@@ -152,7 +152,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 1,
-                        Output = "Operand property must be attributed with OperandAttribute or " +
+                        Output = "CommandDotNet.InvalidConfigurationException: Operand property must be attributed with OperandAttribute or " +
                                  "OrderByPositionInClassAttribute to guarantee consistent order. " +
                                  "Property: CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedArgModel.Arg1"
                     }
@@ -169,7 +169,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 1,
-                        Output = "Operand property must be attributed with OperandAttribute or " +
+                        Output = "CommandDotNet.InvalidConfigurationException: Operand property must be attributed with OperandAttribute or " +
                                  "OrderByPositionInClassAttribute to guarantee consistent order. " +
                                  @"Properties:
   CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedNestedModelAttributedArgModel.Model

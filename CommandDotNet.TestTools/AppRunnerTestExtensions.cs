@@ -119,7 +119,8 @@ namespace CommandDotNet.TestTools
                 {
                     var exitCode = runner.Run(args);
                     return new AppRunnerResult(exitCode, runner, context!, testConsole, config)
-                        .LogResult(logLine);
+                        .LogResult(logLine)
+                        .VerifyAfterRunAssertions();
                 }
                 catch (Exception e)
                 {
@@ -129,10 +130,11 @@ namespace CommandDotNet.TestTools
                         testConsole.Error.WriteLine(e.Message);
                         logLine(e.Message);
                         logLine(e.StackTrace);
-                        return result.LogResult(logLine, onError: true);
                     }
 
-                    result.LogResult(logLine, onError: true);
+                    result
+                        .LogResult(logLine, onError: true)
+                        .VerifyAfterRunAssertions();
                     throw;
                 }
             }

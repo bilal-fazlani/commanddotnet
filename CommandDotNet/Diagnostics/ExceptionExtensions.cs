@@ -30,25 +30,28 @@ namespace CommandDotNet.Diagnostics
         }
 
         public static string Print(this Exception ex, Indent? indent = null,
-            bool includeProperties = false, bool includeData = false, bool includeStackTrace = false)
+            bool includeProperties = false, bool includeData = false, bool includeStackTrace = false,
+            bool excludeTypeName = false)
         {
             var sb = new StringBuilder();
             ex.Print(line => sb.AppendLine(line), 
-                indent, includeProperties, includeData, includeStackTrace);
+                indent, includeProperties, includeData, includeStackTrace, excludeTypeName);
             // trim trailing new line
             sb.Length = sb.Length - NewLine.Length;
             return sb.ToString();
         }
 
         public static void Print(this Exception ex, IConsole console, Indent? indent = null,
-            bool includeProperties = false, bool includeData = false, bool includeStackTrace = false)
+            bool includeProperties = false, bool includeData = false, bool includeStackTrace = false,
+            bool excludeTypeName = false)
         {
             ex.Print(line => console.Error.WriteLine(line), 
-                indent, includeProperties, includeData, includeStackTrace);
+                indent, includeProperties, includeData, includeStackTrace, excludeTypeName);
         }
         
         public static void Print(this Exception ex, Action<string?> writeLine, Indent? indent = null, 
-            bool includeProperties = false, bool includeData = false, bool includeStackTrace = false)
+            bool includeProperties = false, bool includeData = false, bool includeStackTrace = false,
+            bool excludeTypeName = false)
         {
             if (ex is null)
             {
@@ -56,8 +59,11 @@ namespace CommandDotNet.Diagnostics
             }
 
             indent ??= new Indent();
-            writeLine($"{indent}{ex.GetType().FullName}: {ex.Message}");
-            
+
+            writeLine(excludeTypeName
+                ? $"{indent}{ex.Message}"
+                : $"{indent}{ex.GetType().FullName}: {ex.Message}");
+
             if (includeProperties)
             {
                 var properties = ex.GetType()

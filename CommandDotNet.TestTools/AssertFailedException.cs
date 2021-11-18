@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace CommandDotNet.TestTools.Scenarios
+namespace CommandDotNet.TestTools
 {
     [Serializable]
     public class AssertFailedException : Exception

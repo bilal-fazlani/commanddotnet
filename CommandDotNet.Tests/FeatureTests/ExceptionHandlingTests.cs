@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommandDotNet.Diagnostics;
 using FluentAssertions;
@@ -19,12 +20,12 @@ namespace CommandDotNet.Tests.FeatureTests
         [InlineData(nameof(ExceptionApp.ThrowException))]
         [InlineData(nameof(ExceptionApp.ThrowOneMoreException))]
         [InlineData(nameof(ExceptionApp.ThrowExceptionAsync))]
-        public void CanThrowExceptions(string commandName, string? exceptionMessage = null)
+        public void CanThrowExceptions(string? commandName, string? exceptionMessage = null)
         {
-            var args = commandName == null ? new string[0] : new[] { commandName };
+            var args = commandName == null ? Array.Empty<string>() : new[] { commandName };
             var exception = Assert.Throws<Exception>(() => 
                 new AppRunner<ExceptionApp>().Run(args));
-            AssertException(exception, exceptionMessage ?? commandName!, "ExceptionApp");
+            AssertException(exception, exceptionMessage ?? commandName!, "ExceptionApp", true);
         }
 
         [Fact]
@@ -32,7 +33,7 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             var exception = Assert.Throws<Exception>(() => 
                 new AppRunner<ExceptionConstructorApp>().Run("Process"));
-            AssertException(exception, "Constructor is broken", "ExceptionConstructorApp");
+            AssertException(exception, "Constructor is broken", "ExceptionConstructorApp", true);
         }
 
         [Theory]
@@ -40,9 +41,9 @@ namespace CommandDotNet.Tests.FeatureTests
         [InlineData(nameof(ExceptionApp.ThrowException))]
         [InlineData(nameof(ExceptionApp.ThrowOneMoreException))]
         [InlineData(nameof(ExceptionApp.ThrowExceptionAsync))]
-        public void CanHandleErrors(string commandName, string? exceptionMessage = null)
+        public void CanHandleErrors(string? commandName, string? exceptionMessage = null)
         {
-            var args = commandName == null ? new string[0] : new[] { commandName };
+            var args = commandName == null ? Array.Empty<string>() : new[] { commandName };
             CommandContext? context = null;
             Exception? exception = null;
             var exitCode = new AppRunner<ExceptionApp>()
@@ -54,7 +55,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 })
                 .Run(args);
             exitCode.Should().Be(1);
-            AssertException(exception!, exceptionMessage ?? commandName!, "ExceptionApp");
+            AssertException(exception!, exceptionMessage ?? commandName!, "ExceptionApp", false);
             context.Should().NotBeNull();
         }
 
@@ -73,24 +74,55 @@ namespace CommandDotNet.Tests.FeatureTests
                 .Run("Process");
 
             exitCode.Should().Be(1);
-            AssertException(exception!, "Constructor is broken", "ExceptionConstructorApp");
+            AssertException(exception!, "Constructor is broken", "ExceptionConstructorApp", false);
             context.Should().NotBeNull();
         }
 
-        private void AssertException(Exception exception, string exceptionMessage, string appName)
+        [Fact]
+        public void ErrorHandlerIsNotTriggeredForValueParsingException()
+        {
+            Exception? exception = null;
+            var exitCode = new AppRunner<ExceptionApp>()
+                .UseErrorHandler((ctx, ex) =>
+                {
+                    exception = ex;
+                    return ExitCodes.Error.Result;
+                })
+                .Run("Process -o");
+
+            exitCode.Should().Be(1);
+            exception.Should().BeNull();
+        }
+
+        [Fact]
+        public void ErrorHandlerIsNotTriggeredForInvalidConfigurationException()
+        {
+            Exception? exception = null;
+            var exitCode = new AppRunner<InvalidConfigurationApp>()
+                .UseErrorHandler((ctx, ex) =>
+                {
+                    exception = ex;
+                    return ExitCodes.Error.Result;
+                })
+                .Run("Do");
+
+            exitCode.Should().Be(1);
+            exception.Should().BeNull();
+        }
+
+        private void AssertException(Exception exception, string exceptionMessage, string appName, bool errorHasContext)
         {
             exception.Should().NotBeNull();
             exception.Message.Should().Be(exceptionMessage);
             exception.StackTrace.Should()
                 .StartWith($"   at CommandDotNet.Tests.FeatureTests.ExceptionHandlingTests.{appName}.");
-            AssertHasCommandContext(exception);
-            //_output.WriteLine(exception.StackTrace);
-        }
 
-        private static void AssertHasCommandContext(Exception exception)
-        {
-            var ctx = exception.GetCommandContext();
-            ctx.Should().NotBeNull();
+            if (errorHasContext)
+            {
+                var ctx = exception.GetCommandContext();
+                ctx.Should().NotBeNull();
+            }
+            //_output.WriteLine(exception.StackTrace);
         }
 
         public class ExceptionApp
@@ -130,6 +162,11 @@ namespace CommandDotNet.Tests.FeatureTests
             {
 
             }
+        }
+
+        public class InvalidConfigurationApp
+        {
+            public void Do(List<string> opList1, List<string> opList2){}
         }
     }
 }

@@ -70,7 +70,7 @@ namespace CommandDotNet.Parsing
             if (args.Count > 1)
             {
                 var argumentNames = args.Select(a => a.Name).ToCsv(", ");
-                throw new AppRunnerException(Resources.A.Input_Piped_targetted_multiple_arguments(argumentNames));
+                throw new ValueParsingException(Resources.A.Input_Piped_targetted_multiple_arguments(argumentNames));
             }
 
             if (args.Count == 0)

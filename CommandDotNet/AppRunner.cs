@@ -9,6 +9,7 @@ using CommandDotNet.Extensions;
 using CommandDotNet.Help;
 using CommandDotNet.Logging;
 using CommandDotNet.Parsing;
+using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
 
 [assembly: InternalsVisibleTo("CommandDotNet.Tests")]
@@ -158,17 +159,28 @@ namespace CommandDotNet
         private int HandleException(Exception ex, CommandContext? commandContext)
         {
             ex = ex.EscapeWrappers();
-            if (commandContext is { })
+
+            var console = commandContext?.Console ?? AppConfig?.Console ?? new SystemConsole();
+
+            if (ex is ValueParsingException)
             {
-                ex.SetCommandContext(commandContext);
+                console.Error.WriteLine(ex.Print(excludeTypeName: true));
+                return ExitCodes.Error.Result;
+            }
+            if (ex is InvalidConfigurationException)
+            {
+                console.Error.WriteLine(ex.Print());
+                return ExitCodes.Error.Result;
             }
             if (_handleErrorDelegate != null)
             {
-                var context = ex.GetCommandContext();
-                ex.RemoveCommandContext();
-                return _handleErrorDelegate(context, ex);
+                return _handleErrorDelegate(commandContext, ex);
             }
-            
+            if (commandContext is not null)
+            {
+                ex.SetCommandContext(commandContext);
+            }
+
             ExceptionDispatchInfo.Capture(ex).Throw();
 
             // code not reached but required to compile

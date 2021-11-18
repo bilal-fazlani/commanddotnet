@@ -68,7 +68,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     When = { Args = "NonEnum --value one:two:three" },
                     Then = { 
                         ExitCode = 1,
-                        Output = "Split can only be specified for IEnumerable<T> types. " +
+                        Output = "CommandDotNet.InvalidConfigurationException: Split can only be specified for IEnumerable<T> types. " +
                                  @"CommandDotNet.Tests.FeatureTests.Arguments.Option_Split_Tests+InvalidApp.NonEnum.value is type System.String"
                     }
                 });
