@@ -143,11 +143,11 @@ namespace CommandDotNet.ClassModeling.Definitions
             return optionAttr.NoLongName ? null : argumentDef.Name;
         }
 
-        internal static char? GetSplitChar(this IArgumentDef argumentDef, AppSettings appSettings)
+        internal static char? GetSplitChar(this IArgumentDef argumentDef)
         {
             OptionAttribute? optionAttr = argumentDef.GetCustomAttribute<OptionAttribute>();
             return optionAttr?.SplitAsNullable is null
-                ? appSettings.Arguments.DefaultOptionSplit
+                ? null
                 : argumentDef.Type.IsNonStringEnumerable()
                     ? optionAttr.SplitAsNullable
                     : throw new InvalidConfigurationException(

@@ -44,6 +44,22 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 });
         }
 
+
+        [Fact]
+        public void Split_can_be_overridden_with_directive()
+        {
+            new AppRunner<App>(new AppSettings { Arguments = { DefaultOptionSplit = ':' } })
+                .Verify(new Scenario
+                {
+                    When = { Args = "[split:,] Pipe --list one,two,three" },
+                    Then = { AssertContext = ctx =>
+                        {
+                            ctx.ParamValuesShouldBe(new []{ "one", "two", "three" }.AsEnumerable());
+                        }
+                    }
+                });
+        }
+
         [Fact]
         public void Split_on_OptionAttribute_overrides_default_from_AppSettings()
         {

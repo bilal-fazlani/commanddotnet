@@ -51,7 +51,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                          || parameterInfo.GetNullability() == NullabilityState.Nullable;
 
             BooleanMode = this.GetBooleanMode(appConfig.AppSettings.Arguments.BooleanMode);
-            Split = this.GetSplitChar(appConfig.AppSettings);
+            Split = this.GetSplitChar();
 
             ValueProxy = new ValueProxy(
                 () => parameterValues[parameterInfo.Position],
