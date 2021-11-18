@@ -17,8 +17,8 @@ namespace CommandDotNet.Example.Commands
             CancellationToken cancellationToken, 
             IConsole console,
             IEnvironment environment,
-            [Option('x', "exitAfterNRounds")] int exitAfterNRounds = -1,
-            [Option('c', "crashAfterNRounds")] int crashAfterNRounds = -1)
+            [Option('x')] int exitAfterNRounds = -1,
+            [Option('c')] int crashAfterNRounds = -1)
         {
             int counter = 0;
             while (!cancellationToken.IsCancellationRequested)

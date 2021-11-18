@@ -128,7 +128,9 @@ hide:
     - Multi-entry for collections
     - Auto prompt for missing arguments (optional)
 - [x] Default from EnvVar
+> values show as defaults in command help
 - [x] Default from AppSetting
+> values show as defaults in command help
 
 </div>
 
