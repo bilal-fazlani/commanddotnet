@@ -521,8 +521,6 @@ See [help docs](../Help/help.md#expandargumentsinusage) for more details.
 #### Setting parent commands
 Option & Operand & Command should now be created without a parent command. Parent will be assigned when added to a command.
 
-
-
 ## 3.0.1
 
 ### Feature
@@ -537,3 +535,5 @@ To show usage examples in a command description, extended help or overridden usa
 <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
 <PathMap>$(AppOutputBase)=CommandDotNet/</PathMap>
 ```
+## 3.0.0
+[Version 3 Change Summary](whats-new-in-v3.md)
