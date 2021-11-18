@@ -37,8 +37,7 @@ namespace CommandDotNet.Tests.CommandDotNet.Spectre
                 .RunInMem("Console lala");
 
             result.ExitCode.Should().Be(0);
-            result.Console.AllText().Should().Be(@"lala
-");
+            result.Console.AllText().Should().Be(@"lala");
             AnsiConsole.ExportText().Should().BeEmpty("lala");
         }
 

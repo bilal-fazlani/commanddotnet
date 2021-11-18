@@ -31,8 +31,7 @@ namespace CommandDotNet.Tests.FeatureTests
                     Output = @"Usage: testhost.dll Do <square>
 
 Arguments:
-  square
-"
+  square"
                 }
             });
         }
@@ -49,8 +48,7 @@ Arguments:
 
 Arguments:
 
-  square  <!!SQUARE!!>
-"
+  square  <!!SQUARE!!>"
                 }
             });
         }

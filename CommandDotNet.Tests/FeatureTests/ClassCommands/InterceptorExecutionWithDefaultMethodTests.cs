@@ -34,8 +34,7 @@ Commands:
 
   Do
 
-Use ""testhost.dll [command] --help"" for more information about a command.
-"
+Use ""testhost.dll [command] --help"" for more information about a command."
                     }
                 });
         }
@@ -53,8 +52,7 @@ Use ""testhost.dll [command] --help"" for more information about a command.
 
 Arguments:
 
-  arg1  <NUMBER>
-"
+  arg1  <NUMBER>"
                     }
                 });
         }
@@ -88,8 +86,7 @@ Commands:
 
   Do
 
-Use ""testhost.dll [command] --help"" for more information about a command.
-"
+Use ""testhost.dll [command] --help"" for more information about a command."
                     }
                 });
         }
@@ -111,8 +108,7 @@ Arguments:
 
 Options:
 
-  --stringOpt  <TEXT>
-"
+  --stringOpt  <TEXT>"
                     }
                 });
         }

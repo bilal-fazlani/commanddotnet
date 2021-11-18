@@ -33,8 +33,7 @@ Arguments:
   intOperand
 
 Options:
-  --stringOption
-"
+  --stringOption"
                     }
                 });
         }
@@ -56,8 +55,7 @@ Arguments:
 
 Options:
 
-  --stringOption  <TEXT>
-"
+  --stringOption  <TEXT>"
                     }
                 });
         }

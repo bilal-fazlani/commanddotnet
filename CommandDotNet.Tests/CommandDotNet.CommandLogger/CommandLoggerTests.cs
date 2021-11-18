@@ -53,8 +53,7 @@ options:
     value: *****
     inputs: ***** (from: --password *****)
     default:
-***************************************
-"
+***************************************"
                     }
                 });
         }
@@ -100,8 +99,7 @@ Tool version  = testhost.dll 1.1.1.1
 OS version    = {System.Runtime.InteropServices.RuntimeInformation.OSDescription.Trim()}
 Machine       = {Environment.MachineName}
 Username      = {Environment.UserDomainName}\{Environment.UserName}
-***************************************
-"
+***************************************"
                     }
                 });
         }
@@ -219,8 +217,7 @@ options:
     value:
     inputs:
     default:
-***************************************
-"
+***************************************"
                     }
                 });
         }
@@ -267,8 +264,7 @@ options:
 
 header1  = value1
 header2  = value2
-***************************************
-"
+***************************************"
                     }
                 });
         }

@@ -38,8 +38,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         ExitCode = 1,
                         Output = "Operand property must be attributed with OperandAttribute or " +
                                  "OrderByPositionInClassAttribute to guarantee consistent order. " +
-                                 "Property: CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedArgModel.Arg1" +
-                                 $"{NewLine}"
+                                 "Property: CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedArgModel.Arg1"
                     }
                 });
         }
@@ -120,8 +119,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         ExitCode = 1,
                         Output = "Operand property must be attributed with OperandAttribute or " +
                                  "OrderByPositionInClassAttribute to guarantee consistent order. " +
-                                 "Property: CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedArgModel.Arg1" +
-                                 $"{NewLine}"
+                                 "Property: CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedArgModel.Arg1"
                     }
                 });
         }
@@ -139,8 +137,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         Output = "Operand property must be attributed with OperandAttribute or " +
                                  "OrderByPositionInClassAttribute to guarantee consistent order. " +
                                  @"Properties:
-  CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedNestedModelAttributedArgModel.Model" +
-                                 $"{NewLine}"
+  CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedNestedModelAttributedArgModel.Model"
                     }
                 });
         }
@@ -157,8 +154,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                         ExitCode = 1,
                         Output = "Operand property must be attributed with OperandAttribute or " +
                                  "OrderByPositionInClassAttribute to guarantee consistent order. " +
-                                 "Property: CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedArgModel.Arg1" +
-                                 $"{NewLine}"
+                                 "Property: CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedArgModel.Arg1"
                     }
                 });
         }
@@ -177,8 +173,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                                  "OrderByPositionInClassAttribute to guarantee consistent order. " +
                                  @"Properties:
   CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+UnattributedNestedModelAttributedArgModel.Model
-  CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+DeepNestedUnattributedArgModels.Model" +
-                                 $"{NewLine}"
+  CommandDotNet.Tests.FeatureTests.Arguments.GuaranteeOperandOrderInArgModelTests+DeepNestedUnattributedArgModels.Model"
                     }
                 });
         }
