@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using CommandDotNet.Rendering;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;
@@ -15,7 +14,6 @@ namespace CommandDotNet.Example.Tests
         public void PipedInput_Should_UnionWithUserSuppliedValues()
         {
             var result = new AppRunner<App>()
-                .AppendPipedInputToOperandList()
                 .RunInMem("List aaa bbb", pipedInput: new[] { "ccc", "ddd" });
 
             result.ExitCode.Should().Be(0);
@@ -30,7 +28,6 @@ ddd
         public void PipedInput_Should_UnionWithUserSuppliedValues_BDD()
         {
             new AppRunner<App>()
-                .AppendPipedInputToOperandList()
                 .Verify(new Scenario
                 {
                     When=

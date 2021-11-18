@@ -8,7 +8,6 @@ using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Diagnostics;
 using CommandDotNet.Execution;
 using CommandDotNet.Localization;
-using CommandDotNet.Parsing;
 using CommandDotNet.Parsing.Typos;
 using CommandDotNet.Prompts;
 using CommandDotNet.Tokens;
@@ -32,7 +31,6 @@ namespace CommandDotNet
             bool excludeTimeDirective = false,
             bool excludeResponseFiles = false,
             bool excludeVersionMiddleware = false,
-            bool excludeAppendPipedInputToOperandList = false,
             bool excludeTypoSuggestions = false)
         {
             static void Register(bool exclude, string paramName, Action register)
@@ -67,10 +65,6 @@ namespace CommandDotNet
                 excludeVersionMiddleware, 
                 nameof(excludeVersionMiddleware),
                 ()=> appRunner.UseVersionMiddleware());
-            Register(
-                excludeAppendPipedInputToOperandList, 
-                nameof(excludeAppendPipedInputToOperandList),
-                ()=> appRunner.AppendPipedInputToOperandList());
             Register(
                 excludeTypoSuggestions, 
                 nameof(excludeTypoSuggestions),
@@ -126,12 +120,6 @@ namespace CommandDotNet
         public static AppRunner UseLocalizeDirective(this AppRunner appRunner)
         {
             return CultureDirective.UseCultureDirective(appRunner);
-        }
-
-        /// <summary>Piped input will be appended to an operand list if one exists for the command</summary>
-        public static AppRunner AppendPipedInputToOperandList(this AppRunner appRunner)
-        {
-            return PipedInputMiddleware.AppendPipedInputToOperandList(appRunner);
         }
 
         /// <summary>Use the <see cref="IDependencyResolver"/> to create the command classes.</summary>

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommandDotNet.Directives;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Logging;
-using CommandDotNet.Rendering;
 
 namespace CommandDotNet.Parsing
 {
@@ -13,7 +13,7 @@ namespace CommandDotNet.Parsing
     {
         private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
-        internal static AppRunner AppendPipedInputToOperandList(AppRunner appRunner)
+        internal static AppRunner AppendPipedInput(this AppRunner appRunner)
         {
             // -1 to ensure this middleware runs before any prompting so the value won't appear null
             return appRunner.Configure(c => 
@@ -24,39 +24,82 @@ namespace CommandDotNet.Parsing
         {
             if (ctx.Console.IsInputRedirected)
             {
-                // supporting only the list operand for a command gives us a few benefits
-                // 1. there can be only one list operand per command.
-                //    no need to enforce this only one argument has EnablePipedInput=true
-                // 2. no need to handle case where a single value operand has EnablePipedInput=true
-                //    otherwise we either drop all but the first value or throw an exception
-                //    both have pros & cons
-                // 3. List operands are specified and provided last, avoiding awkward cases
-                //    where piped input is provided for arguments positioned before others.
-                //    We'd need to inject additional middleware to inject tokens in this case.
-                // 4. piped values can be merged with args passed to the command.
-                //    this can become an option passed into appBuilder.EnablePipedInput(...)
-                //    if a need arises to throw instead of merge
-                var operand = ctx.ParseResult!.TargetCommand.Operands
-                    .FirstOrDefault(o => o.Arity.AllowsMany());
-
-                if (operand is null)
-                {
-                    Log.DebugFormat("No list operands found for {0}", ctx.ParseResult.TargetCommand.Name);
-                }
-                else
-                {
-                    Log.DebugFormat("Piping input to {0}.{1}", ctx.ParseResult.TargetCommand.Name, operand.Name);
-                    operand.InputValues.Add(new InputValue(Resources.A.Input_piped_lc, true, GetPipedInput(ctx.Console)));
-                }
+                AssignPipedInput(ctx);
             }
 
             return next(ctx);
         }
 
-        public static IEnumerable<string> GetPipedInput(IConsole console)
+        private static void AssignPipedInput(CommandContext ctx)
+        {
+            var pipeSymbol = ctx.Original.Tokens.TryGetDirective("pipeto", out var value)
+                ? value.Split(':').Last()
+                : ctx.AppConfig.AppSettings.Arguments.DefaultPipeTargetSymbol;
+
+            if (pipeSymbol is null)
+            {
+                return;
+            }
+
+            // default to operand list if pipe symbol not provided.
+            var command = ctx.ParseResult!.TargetCommand;
+            var pipeTarget = GetPipeTarget(command, pipeSymbol)
+                             ?? command.Operands.FirstOrDefault(o => o.Arity.AllowsMany());
+            
+            if (pipeTarget is null)
+            {
+                Log.DebugFormat("No list operands or pipe symbols found for {0}", ctx.ParseResult.TargetCommand.Name);
+            }
+            else
+            {
+                Log.DebugFormat("Piping input to {0}", pipeTarget.DefinitionSource);
+                pipeTarget.InputValues.Add(new InputValue(Resources.A.Input_piped_lc, true, GetPipedInput(pipeTarget, ctx.Console)));
+            }
+        }
+
+        private static IArgument? GetPipeTarget(Command command, string? pipeSymbol)
+        {
+            var args = command
+                .AllArguments(includeInterceptorOptions: true)
+                .Where(o => o.Arity.AllowsOneOrMore()
+                            && o.InputValues.Any(iv =>
+                                iv.Source == Resources.A.Common_argument_lc
+                                && (iv.Values?.Any(v => v == pipeSymbol) ?? false)))
+                .ToList();
+
+            if (args.Count > 1)
+            {
+                var argumentNames = args.Select(a => a.Name).ToCsv(", ");
+                throw new AppRunnerException(Resources.A.Input_Piped_targetted_multiple_arguments(argumentNames));
+            }
+
+            if (args.Count == 0)
+            {
+                return null;
+            }
+
+            var pipeTarget = args.Single();
+
+            var inputValue = pipeTarget.InputValues
+                .First(iv => iv.Source == Resources.A.Common_argument_lc);
+            if (inputValue.Values!.Count() == 1)
+            {
+                pipeTarget.InputValues.Remove(inputValue);
+            }
+            else
+            {
+                inputValue.Values = inputValue.Values?.Where(v => v != pipeSymbol).ToList();
+            }
+
+            return pipeTarget;
+        }
+
+        public static IEnumerable<string> GetPipedInput(IArgument pipeTarget, IConsole console)
         {
             Func<string?> readLine = console.In.ReadLine;
-            return readLine.EnumeratePipedInput();
+            return pipeTarget.Arity.Maximum < int.MaxValue
+                ? readLine.EnumeratePipedInput().Take(pipeTarget.Arity.Maximum)
+                : readLine.EnumeratePipedInput();
         }
     }
 }

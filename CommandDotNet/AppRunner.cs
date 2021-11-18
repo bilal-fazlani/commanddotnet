@@ -139,7 +139,8 @@ namespace CommandDotNet
                 .UseMiddleware(CommandParser.ParseInputMiddleware, MiddlewareSteps.ParseInput);
 
             this.UseClassDefMiddleware(RootCommandType)
-                .UseHelpMiddleware();
+                .UseHelpMiddleware()
+                .AppendPipedInput();
 
             // TODO: add middleware between stages to validate CommandContext is exiting a stage with required data populated
             //       i.e. ParseResult should be fully populated after Parse stage

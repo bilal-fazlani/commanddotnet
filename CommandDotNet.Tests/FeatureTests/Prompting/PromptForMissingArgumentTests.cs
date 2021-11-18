@@ -240,7 +240,7 @@ password (Text):
         public void WhenExplicitBoolOptionMissing_Prompts()
         {
 
-            new AppRunner<App>(new AppSettings {.Arguments.BooleanMode = BooleanMode.Explicit })
+            new AppRunner<App>(new AppSettings {Arguments = {BooleanMode = BooleanMode.Explicit }})
                 .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
@@ -326,7 +326,6 @@ lala (Text): fishies
             var pipedInput = new[] { "a", "b", "c" };
             new AppRunner<App>()
                 .UseArgumentPrompter()
-                .AppendPipedInputToOperandList()
                 .Verify(new Scenario
                 {
                     When =

@@ -63,7 +63,6 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         {
             new AppRunner<App>()
                 .UseParseDirective()
-                .AppendPipedInputToOperandList()
                 .Verify(new Scenario
                 {
                     When =
@@ -89,7 +88,6 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         {
             new AppRunner<App>()
                 .UseParseDirective()
-                .AppendPipedInputToOperandList()
                 .Verify(new Scenario
                 {
                     When =

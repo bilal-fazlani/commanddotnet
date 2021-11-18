@@ -1,5 +1,6 @@
 ﻿// ReSharper disable CheckNamespace
 
+using System.Collections.Generic;
 using static System.Environment;
 
 namespace CommandDotNet
@@ -46,5 +47,8 @@ namespace CommandDotNet
             $"Unrecognized {Common_command_lc} or {Common_argument_lc} '{token}'";
         public virtual string Parse_Unrecognized_option(string optionName) =>
             $"Unrecognized {Common_option_lc} '{optionName}'";
+
+        public virtual string Input_Piped_targetted_multiple_arguments(string argumentNames) =>
+            $"Piped input can only target a single argument, but the following were targeted: {argumentNames}";
     }
 }
