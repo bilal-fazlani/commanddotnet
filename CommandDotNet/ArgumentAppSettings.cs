@@ -27,6 +27,14 @@ namespace CommandDotNet
         /// </summary>
         public char? DefaultOptionSplit { get; set; }
 
+        /// <summary>
+        /// Symbol used to indicate piped content should be directed to a specific argument.
+        /// If not specified when executing a command, piped input will be directed to
+        /// the final operand if it is a list.
+        /// </summary>
+        public string? DefaultPipeTargetSymbol { get; set; } = "$*";
+
+
         public override string ToString()
         {
             return ToString(new Indent());

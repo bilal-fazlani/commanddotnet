@@ -12,9 +12,9 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public abstract class AppendPipedInputToOperandListTestsBase
+    public abstract class AppendPipedInputTestsBase
     {
-        protected AppendPipedInputToOperandListTestsBase(ITestOutputHelper output)
+        protected AppendPipedInputTestsBase(ITestOutputHelper output)
         {
             Ambient.Output = output;
         }

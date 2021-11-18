@@ -84,7 +84,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
                 var argumentMode = isMiddleware
                     ? ArgumentMode.Option
-                    : _appConfig.AppSettings.DefaultArgumentMode;
+                    : _appConfig.AppSettings.Arguments.DefaultArgumentMode;
 
                 Values = new object[Parameters.Length];
 

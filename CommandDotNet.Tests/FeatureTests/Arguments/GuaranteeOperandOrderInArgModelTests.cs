@@ -7,8 +7,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class GuaranteeOperandOrderInArgModelTests
     {
-        private static readonly AppSettings OperandModeWithGuarantee = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Operand);
-        private static readonly AppSettings OptionModeWithGuarantee = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Option);
+        private static readonly AppSettings OperandModeWithGuarantee = TestAppSettings.BasicHelp.Clone(a => a.Arguments.DefaultArgumentMode = ArgumentMode.Operand);
+        private static readonly AppSettings OptionModeWithGuarantee = TestAppSettings.BasicHelp.Clone(a => a.Arguments.DefaultArgumentMode = ArgumentMode.Option);
         
         public GuaranteeOperandOrderInArgModelTests(ITestOutputHelper output)
         {
