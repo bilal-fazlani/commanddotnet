@@ -55,8 +55,7 @@ token transformations:
   Argument : -u
   Argument : me
   Argument : -p
-  Argument : super-secret
-"
+  Argument : super-secret"
                     }
                 });
         }
@@ -99,8 +98,7 @@ token transformations:
   Argument : -u
   Argument : me
   Argument : -p
-  Argument : super-secret
-"
+  Argument : super-secret"
                     }
                 });
         }
@@ -134,8 +132,7 @@ token transformations:
 
 >>> from shell
   Directive: [parse:t]
-  Argument : PromptSecure
-"
+  Argument : PromptSecure"
                     }
                 });
         }
@@ -176,8 +173,7 @@ token transformations:
   Directive: [parse:t]
   Argument : Secure
   Argument : -u
-  Argument : me
-"
+  Argument : me"
                     }
                 });
         }

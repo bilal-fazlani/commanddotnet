@@ -46,8 +46,7 @@ Options:
 
   --email      <TEXT>
 
-  --role       <TEXT>
-"
+  --role       <TEXT>"
                     }
                 });
         }
@@ -67,8 +66,7 @@ Options:
                         Output = @"'role' must be a string or array type with a maximum length of '5'.
 'Id' is required.
 'Name' is required.
-'email' is not a valid e-mail address.
-"
+'email' is not a valid e-mail address."
                     }
                 });
         }
@@ -86,8 +84,7 @@ Options:
                     {
                         ExitCode = 2,
                         Output = @"'note' is required.
-'y' must be between 1 and 5.
-"
+'y' must be between 1 and 5."
                     }
                 });
         }
@@ -149,8 +146,7 @@ Usage: testhost.dll Save [options] <Id> <Name>"
                     Then =
                     {
                         ExitCode = 2,
-                        Output = @"'nick-name' must be a string or array type with a maximum length of '5'.
-"
+                        Output = @"'nick-name' must be a string or array type with a maximum length of '5'."
                     }
                 });
         }
@@ -166,8 +162,7 @@ Usage: testhost.dll Save [options] <Id> <Name>"
                     Then =
                     {
                         ExitCode = 2,
-                        Output = @"Name and nick-name cannot have the same value.
-"
+                        Output = @"Name and nick-name cannot have the same value."
                     }
                 });
         }

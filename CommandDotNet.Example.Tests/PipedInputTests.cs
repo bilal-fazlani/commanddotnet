@@ -20,8 +20,7 @@ namespace CommandDotNet.Example.Tests
             result.Console.AllText().Should().Be(@"aaa
 bbb
 ccc
-ddd
-");
+ddd");
         }
 
         [Test]
@@ -40,8 +39,7 @@ ddd
                         Output = @"aaa
 bbb
 ccc
-ddd
-"
+ddd"
                     }
                 });
         }

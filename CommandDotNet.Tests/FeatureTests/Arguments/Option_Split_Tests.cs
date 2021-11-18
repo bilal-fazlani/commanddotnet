@@ -69,8 +69,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then = { 
                         ExitCode = 1,
                         Output = "Split can only be specified for IEnumerable<T> types. " +
-                                 @"CommandDotNet.Tests.FeatureTests.Arguments.Option_Split_Tests+InvalidApp.NonEnum.value is type System.String
-"
+                                 @"CommandDotNet.Tests.FeatureTests.Arguments.Option_Split_Tests+InvalidApp.NonEnum.value is type System.String"
                     }
                 });
         }

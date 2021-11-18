@@ -25,8 +25,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
 Options:
 
-  --flag
-"
+  --flag"
                 }
             });
         }

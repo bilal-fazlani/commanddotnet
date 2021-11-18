@@ -60,8 +60,7 @@ Commands:
   Do1
   Second
 
-Use ""testhost.dll [command] --help"" for more information about a command.
-"
+Use ""testhost.dll [command] --help"" for more information about a command."
                     }
                 });
         }
@@ -83,8 +82,7 @@ Commands:
   Do1
   Second
 
-Use ""testhost.dll [command] --help"" for more information about a command.
-"
+Use ""testhost.dll [command] --help"" for more information about a command."
                     }
                 });
         }
@@ -106,8 +104,7 @@ Commands:
   Do2
   Third
 
-Use ""testhost.dll Second [command] --help"" for more information about a command.
-"
+Use ""testhost.dll Second [command] --help"" for more information about a command."
                     }
                 });
         }
@@ -128,8 +125,7 @@ Commands:
 
   Do3
 
-Use ""testhost.dll Second Third [command] --help"" for more information about a command.
-"
+Use ""testhost.dll Second Third [command] --help"" for more information about a command."
                     }
                 });
         }

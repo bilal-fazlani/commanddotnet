@@ -15,7 +15,7 @@ namespace CommandDotNet.Spectre.Testing
         internal SpectreTestConsole SpectreTestConsole { get; }
         private readonly AnsiConsoleForwardingConsole _forwardingConsole;
 
-        public AnsiTestConsole()
+        public AnsiTestConsole() : base()
         {
             SpectreTestConsole = new SpectreTestConsole();
             _forwardingConsole = new AnsiConsoleForwardingConsole(SpectreTestConsole);

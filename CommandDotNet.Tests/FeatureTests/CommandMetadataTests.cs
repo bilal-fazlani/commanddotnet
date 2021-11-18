@@ -32,8 +32,7 @@ Commands:
 
 Use ""testhost.dll [command] --help"" for more information about a command.
 
-app extended help
-"
+app extended help"
                 }
             });
         }
@@ -57,8 +56,7 @@ Commands:
 
 Use ""testhost.dll [command] --help"" for more information about a command.
 
-app extended help
-"
+app extended help"
                 }
             });
         }
@@ -80,8 +78,7 @@ Commands:
 
 Use ""testhost.dll SubApp [command] --help"" for more information about a command.
 
-sub-app extended help
-"
+sub-app extended help"
                 }
             });
         }
@@ -104,8 +101,7 @@ Commands:
 
 Use ""testhost.dll SubApp [command] --help"" for more information about a command.
 
-sub-app extended help
-"
+sub-app extended help"
                 }
             });
         }
@@ -125,8 +121,7 @@ Usage: testhost.dll somecommand <value>
 Arguments:
   value
 
-cmd extended help
-"
+cmd extended help"
                 }
             });
         }
@@ -147,8 +142,7 @@ Arguments:
 
   value  <NUMBER>
 
-cmd extended help
-"
+cmd extended help"
                 }
             });
         }

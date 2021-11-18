@@ -117,8 +117,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                     Then =
                     {
                         ExitCode = 1,
-                        Output = @"Piped input can only target a single argument, but the following were targeted: operandList, optionList
-"
+                        Output = "Piped input can only target a single argument, but the following were targeted: operandList, optionList"
                     }
                 });
         }
