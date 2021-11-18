@@ -25,7 +25,7 @@ namespace CommandDotNet.Parsing
             //       DO NOT enumerate values here as it could be a stream.
             var listInstance = _type.IsArray
                 ? new ArrayList()
-                : _type.IsCollection()
+                : values is ICollection<string> || _type.IsCollection()
                     ? CreateGenericList()
                     : null;
 
