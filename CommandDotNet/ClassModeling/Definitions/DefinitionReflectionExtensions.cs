@@ -18,14 +18,14 @@ namespace CommandDotNet.ClassModeling.Definitions
             return BuildName(parameterInfo, parameterInfo.Name, commandNodeType, appConfig);
         }
 
-        internal static string BuildName(this MemberInfo memberInfo, CommandNodeType commandNodeType, AppConfig appConfig)
+        internal static string BuildName(this MemberInfo memberInfo, CommandNodeType commandNodeType, AppConfig appConfig, string? overrideName = null)
         {
-            return BuildName(memberInfo, memberInfo.Name, commandNodeType, appConfig);
+            return BuildName(memberInfo, memberInfo.Name, commandNodeType, appConfig, overrideName);
         }
 
-        private static string BuildName(ICustomAttributeProvider attributes, string memberName, CommandNodeType commandNodeType, AppConfig appConfig)
+        private static string BuildName(ICustomAttributeProvider attributes, string memberName, CommandNodeType commandNodeType, AppConfig appConfig, string? overrideName = null)
         {
-            var overrideName = attributes.GetCustomAttributes(true).OfType<INameAndDescription>().FirstOrDefault()?.Name;
+            overrideName ??= attributes.GetCustomAttributes(true).OfType<INameAndDescription>().FirstOrDefault()?.Name;
             return appConfig.NameTransformation(attributes, memberName, overrideName, commandNodeType);
         }
 

@@ -67,6 +67,21 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
         }
 
         [Theory]
+        [InlineData(Case.DontChange, "RenamedCommand", "SendNotification")]
+        [InlineData(Case.CamelCase, "renamedCommand", "sendNotification")]
+        [InlineData(Case.PascalCase, "RenamedCommand", "SendNotification")]
+        [InlineData(Case.KebabCase, "renamed-command", "send-notification")]
+        [InlineData(Case.LowerCase, "renamedcommand", "sendnotification")]
+        public void CanHonorRenamedSubCommandCase(Case @case, string commandName, string notificationCommandName)
+        {
+            var result = new AppRunner<App>()
+                .UseNameCasing(@case, applyToNameOverrides: true)
+                .RunInMem(new[] { commandName, notificationCommandName });
+
+            result.ExitCode.Should().Be(10);
+        }
+
+        [Theory]
         [InlineData(Case.DontChange, false, "camelCase", "kebab-case", "lowercase", "NoOverride", "PascalCase")]
         [InlineData(Case.CamelCase, false, "camelCase", "kebab-case", "lowercase", "noOverride", "PascalCase")]
         [InlineData(Case.KebabCase, false, "camelCase", "kebab-case", "lowercase", "no-override", "PascalCase")]
@@ -135,6 +150,15 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
 
             [Subcommand]
             public class SubCommand
+            {
+                public int SendNotification()
+                {
+                    return 10;
+                }
+            }
+
+            [Subcommand(RenameAs = "RenamedCommand")]
+            public class OtherSubCommand
             {
                 public int SendNotification()
                 {
