@@ -6,8 +6,9 @@ namespace CommandDotNet
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class CommandAttribute : Attribute, INameAndDescription
     {
+        [Obsolete("Use constructor parameter instead")]
         public string? Name { get; set; }
-        
+
         public string? Description { get; set; }
 
         public string? Usage { get; set; }
@@ -37,5 +38,16 @@ namespace CommandDotNet
         }
 
         internal ArgumentSeparatorStrategy? ArgumentSeparatorStrategyAsNullable { get; private set; }
-}
+
+        /// <summary>Indicates the class is a command. The name will be derived from the class name.</summary>
+        public CommandAttribute()
+        {
+        }
+
+        /// <summary>Indicates the class is a command with the given name</summary>
+        public CommandAttribute(string? name)
+        {
+            Name = name;
+        }
+    }
 }
