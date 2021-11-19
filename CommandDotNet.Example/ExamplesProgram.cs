@@ -1,8 +1,11 @@
 ﻿using System.Collections.Specialized;
+using System.Linq;
 using CommandDotNet.Diagnostics;
+using CommandDotNet.Example.DocExamples;
 using CommandDotNet.FluentValidation;
 using CommandDotNet.NameCasing;
 using CommandDotNet.Spectre;
+using Humanizer;
 
 namespace CommandDotNet.Example
 {
@@ -14,23 +17,32 @@ namespace CommandDotNet.Example
 
             var appConfigSettings = new NameValueCollection {{"notify.--retry-count", "2"}};
 
-            return GetAppRunner(appConfigSettings, null).Run(args);
+            return GetAppRunner(appConfigSettings, null, args).Run(args);
         }
 
-        public static AppRunner GetAppRunner(NameValueCollection? appConfigSettings = null, string? appNameForTests = "example_app")
+        public static AppRunner GetAppRunner(NameValueCollection? appConfigSettings = null, string? appNameForTests = "example_app", string[]? args = null)
         {
+
             appConfigSettings ??= new NameValueCollection();
-            return new AppRunner<Examples>(appNameForTests is null ? null : new AppSettings{Help = {UsageAppName = appNameForTests}})
+            var runner = new AppRunner<Examples>(appNameForTests is null ? null : new AppSettings{Help = {UsageAppName = appNameForTests}})
                 .UseDefaultMiddleware()
                 .UsePrompter()
                 .UseSpectreAnsiConsole()
                 .UseSpectreArgumentPrompter()
                 .UseLocalizeDirective()
                 .UseLog2ConsoleDirective()
-                .UseNameCasing(Case.KebabCase)
                 .UseFluentValidation()
                 .UseInteractiveMode("Example")
                 .UseDefaultsFromAppSetting(appConfigSettings, includeNamingConventions: true);
+
+            bool isForTheDocs = args is not null && args.Contains(nameof(FromTheDocs));
+
+            if (!isForTheDocs)
+            {
+                runner.UseNameCasing(Case.KebabCase);
+            }
+
+            return runner;
         }
     }
 }

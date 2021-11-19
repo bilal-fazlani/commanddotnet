@@ -2,7 +2,7 @@
 
 namespace CommandDotNet.Example.DocExamples
 {
-    [Command("git", Description = "Fake git application")]
+    [Command(Name = "git", Description = "Fake git application")]
     public class Git
     {
         [Command(Description = "Commits all staged changes")]

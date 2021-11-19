@@ -38,44 +38,34 @@ CommandDotNet can be installed from [nuget.org](https://www.nuget.org/packages/C
     ```
     Install-Package CommandDotNet
     ```
-    
+
 ## Let's build a calculator
 
-Let's say you want to create a calculator console application which can perform 2 operations:
+Let's say you want to create a calculator console application which can perform 2 operations: Addition & Subtraction
 
-1. Addition
-2. Subtraction
-
-It prints the results on console.
-
-Let's begin with creating the class
+Begin by creating the commands:
 <!-- snippet: getting_started_calculator -->
 <a id='snippet-getting_started_calculator'></a>
 ```c#
 public class Program
 {
-    static int Main(string[] args)
-    {
-        return new AppRunner<Program>().Run(args);
-    }
-    
-    public void Add(int value1, int value2)
-    {
-        Console.WriteLine(value1 + value2);
-    }
+    static int Main(string[] args) => 
+        new AppRunner<Program>().Run(args);
 
-    public void Subtract(int value1, int value2)
-    {
-        Console.WriteLine(value1 + value2);
-    }
+    public void Add(int x, int y) => 
+        Console.WriteLine(x + y);
+
+    public void Subtract(int x, int y) => 
+        Console.WriteLine(x + y);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/GettingStarted/Example1/Program.cs#L5-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/GettingStarted/Eg1_Minumum/Program.cs#L5-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-Now that we have our calculator ready, let's see about how we can call it from command line.
+That's it. You now have an applciation with two commands. Let's see about how we can call it from command line.
 
-Assuming our application's name is `calculator.dll`, let's run this app from command line using dotnet
+Assuming our application's name is `calculator.dll`, let's run this app from command line using dotnet.
+First we'll check out the auto-generated help.
 
 ```bash
 ~
@@ -88,14 +78,34 @@ Commands:
   Subtract
 
 Use "dotnet calculator.dll [command] --help" for more information about a command.
-
 ```
 
-Voila!
+```bash
+~
+$ dotnet calculator.dll Add --help
+Usage: dotnet calculator.dll Add <x> <y>
 
-So, as you might have already guessed, it is generating commands from the methods of the calculator class. 
+Arguments:
 
-How about adding some helpful description.
+  x  <NUMBER>
+
+  y  <NUMBER>
+```
+
+Let's try it out by adding two numbers
+
+```bash
+~
+$ dotnet example.dll Add 40 20
+60
+```
+
+!!! Note
+    CommandDotNet also supports running your application as an .exe and as a dotnet tool.
+
+## Let's improve the help
+
+The help could be more helpful. We can add descriptions.
 
 <!-- snippet: getting_started_calculator_with_descriptions -->
 <a id='snippet-getting_started_calculator_with_descriptions'></a>
@@ -103,28 +113,24 @@ How about adding some helpful description.
 [Command(Description = "Performs mathematical calculations")]
 public class Program
 {
-    static int Main(string[] args)
-    {
-        return new AppRunner<Program>().Run(args);
-    }
+    static int Main(string[] args) => 
+        new AppRunner<Program>().Run(args);
 
-    [Command(Description = "Adds two numbers")]
-    public void Add(IConsole console, int value1, int value2)
-    {
-        console.WriteLine(value1 + value2);
-    }
+    [Command("Sum", Description = "Adds two numbers")]
+    public void Add(int x, int y) => 
+        Console.WriteLine(x + y);
 
     [Command(Description = "Subtracts two numbers")]
-    public void Subtract(IConsole console, int value1, int value2)
-    {
-        console.WriteLine(value1 - value2);
-    }
+    public void Subtract(int x, int y) => 
+        Console.WriteLine(x - y);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/GettingStarted/Example2/Program.cs#L6-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_with_descriptions' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/GettingStarted/Eg2_Descriptions/Program.cs#L5-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_with_descriptions' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-This should do it.
+Descriptions can also be added to the arguments and extended help can be added for commands to appear below all other help.
+
+Notice we also changed the name of the Add command to Sum.
 
 Let's see how the help appears now.
 
@@ -137,8 +143,8 @@ Usage: dotnet example.dll [command]
 
 Commands:
 
-  Add       Adds two numbers
   Subtract  Subtracts two numbers
+  Sum       Adds two numbers
 
 Use "dotnet example.dll [command] --help" for more information about a command.
 
@@ -153,7 +159,7 @@ Now let's see help for the _Add_ command.
 $ dotnet example.dll Add --help
 Adds two numbers
 
-Usage: dotnet example.dll Add [arguments]
+Usage: dotnet example.dll Add Sum <x> <y>
 
 Arguments:
 
@@ -164,95 +170,108 @@ Arguments:
 
 Here we see arguments for addition and their type.  See the [Arguments](Arguments/arguments.md) section for more options to configure arguments.
 
-Let's add two numbers.
-
-```bash
-~
-$ dotnet example.dll Add 40 20
-Answer: 60
-```
 
 ## Let's add some tests
 
-=== "Standard"
+One of the problems with writing console apps is being able to automate the testing.
+CommandDotNet solves this with our [Test Tools](TestTools/overview.md).
 
-    <!-- snippet: getting_started_calculator_add_command_tests -->
-    <a id='snippet-getting_started_calculator_add_command_tests'></a>
-    ```c#
-    [Test]
-    public void Given2Numbers_Should_OutputSum()
+We make it easy to test your app as if you're entering the commands in the console.
+
+We support two different patterns:
+
+### Standard
+
+<!-- snippet: getting_started_calculator_add_command_tests -->
+<a id='snippet-getting_started_calculator_add_command_tests'></a>
+```c#
+[Test]
+public void Given2Numbers_Should_OutputSum()
+{
+    // lala
+    var result = Program.AppRunner.RunInMem("Add 40 20");
+    result.ExitCode.Should().Be(0);
+    result.Console.OutText().Should().Be("60");
+}
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example.Tests/DocExamples/GettingStarted/AddCommandTests.cs#L11-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_add_command_tests' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+### BDD Style
+
+<!-- snippet: getting_started_calculator_add_command_tests_bdd -->
+<a id='snippet-getting_started_calculator_add_command_tests_bdd'></a>
+```c#
+[Test]
+public void Given2Numbers_Should_OutputSum() =>
+    Program.AppRunner.Verify(new Scenario
     {
-        var result = new AppRunner<Program>()
-            .RunInMem("Add 40 20");
-        result.ExitCode.Should().Be(0);
-        result.Console.OutText().Should().Be("60" + Environment.NewLine);
-    }
-    ```
-    <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example.Tests/DocExamples/GettingStarted/AddCommandTests.cs#L12-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_add_command_tests' title='Start of snippet'>anchor</a></sup>
-    <!-- endSnippet -->
+        When = { Args = "Add 40 20" },
+        Then = { Output = "60" }
+    });
 
-    _note: `Should()` is a feature of the [FluentAssertions](https://fluentassertions.com/) library and will be used in many examples._
-
-=== "BDD Style"
-
-    <!-- snippet: getting_started_calculator_add_command_tests_bdd -->
-    <a id='snippet-getting_started_calculator_add_command_tests_bdd'></a>
-    ```c#
-    [Test]
-    public void Given2Numbers_Should_OutputSum_BDD()
+[Test]
+public void GivenANonNumber_Should_OutputError() =>
+    Program.AppRunner.Verify(new Scenario
     {
-        new AppRunner<Program>().Verify(new Scenario
+        When = { Args = "Add a 20" },
+        Then =
         {
-            When = { Args = "Add 40 20" },
-            Then = { Output = "60" + Environment.NewLine }
-        });
-    }
-    ```
-    <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example.Tests/DocExamples/GettingStarted/AddCommandTests.cs#L23-L33' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_add_command_tests_bdd' title='Start of snippet'>anchor</a></sup>
-    <!-- endSnippet -->
+            ExitCode = 1,
+            Output = "'a' is not a valid Number"
+        }
+    });
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example.Tests/DocExamples/GettingStarted/AddCommandTests.cs#L25-L45' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_add_command_tests_bdd' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 See [Test Tools](TestTools/overview.md) in the Testing help section for more details 
 
 ## Opt-In to additional features
 
 In the `Program.Main`, we configured the app with the basic feature set.
-```c#
-    return new AppRunner<Calculator>().Run(args);
-```
 
-To take advantage of many more additional features, such as
+<!-- snippet: getting_started_calculator_humanized -->
+<a id='snippet-getting_started_calculator_humanized'></a>
+```c#
+new AppRunner<Program>()
+    .UseDefaultMiddleware()
+    .UseNameCasing(Case.LowerCase);
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/GettingStarted/Eg4_Humanized/Program.cs#L12-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_humanized' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+`UseDefaultMiddleware` to take advantage of many more additional features, such as
 [debug](Diagnostics/debug-directive.md) & [parse](Diagnostics/parse-directive) directives,
 [ctrl+c support](OtherFeatures/cancellation.md),
 [prompting](ArgumentValues/prompting.md),
 [piping](ArgumentValues/piped-arguments.md),
-[response files](ArgumentValues/response-files.md) and [typo suggestions](Help/typo-suggestions.md), add `UseDefaultMiddleware()`
+[response files](ArgumentValues/response-files.md) and [typo suggestions](Help/typo-suggestions.md)
 
-```c#
-    return new AppRunner<Calculator>()
-        .UseDefaultMiddleware()
-        .Run(args);
-```
+_see [Default Middleware](OtherFeatures/default-middleware.md) for more details and options for using default middleware._
 
-see [Default Middleware](OtherFeatures/default-middleware.md) for more details and options for using default middleware.
+`UseNameCasing` to enforce a consistent naming standard when generating names from your code.
+
+_see [Name Casing](OtherFeatures/name-casing.md) for more details._
 
 ## Next Steps
 
 You get the gist of this library now. This may be all you need to start your app.
 
-Check out the
+Check out more of our documentation
 
-* [Commands](Commands/commands.md) section for more about defining commands, subcommands and arguments.
+* [Commands](Commands/commands.md) defining commands, subcommands and arguments.
 
-* [Arguments](Arguments/arguments.md) section for more about defining arguments.
+* [Arguments](Arguments/arguments.md) defining arguments.
 
-* [Argument Values](ArgumentValues/argument-separator.md) section for more about providing values to arguments.
+* [Argument Values](ArgumentValues/argument-separator.md) providing values to arguments.
 
-* [Help](Help/help.md) section for options to modify help and other help features. 
+* [Help](Help/help.md) options to modify help and other help features. 
  
-* [Diagnostics](Diagnostics/app-version.md) section for a rich set of tools to simplify troubleshooting
+* [Diagnostics](Diagnostics/app-version.md) a rich set of tools to simplify troubleshooting
 
-* [Other Features](OtherFeatures/default-middleware.md) section to see the additional features available.
+* [Other Features](OtherFeatures/default-middleware.md) additional features available.
 
-* [Extensibility](Extensibility/directives.md) section if the framework is missing a feature you need and you're interested in adding it yourself. For questions, ping us on our [Discord channel](https://discord.gg/QFxKSeG) or create a [GitHub Issue](https://github.com/bilal-fazlani/commanddotnet/issues)
+* [Extensibility](Extensibility/directives.md) if the framework is missing a feature you need, you can likely add it yourself. For questions, ping us on our [Discord channel](https://discord.gg/QFxKSeG) or create a [GitHub Issue](https://github.com/bilal-fazlani/commanddotnet/issues)
 
-* [Test Tools](TestTools/overview.md) section for a test package to test console output with this framework. These tools enable you to provide end-to-end testing with the same experience as the console as well as testing middleware and other extensibility components. This package is used to test all of the CommandDotNet features.
+* [Test Tools](TestTools/overview.md) a test package to test console output with this framework. These tools enable you to provide end-to-end testing with the same experience as the console as well as testing middleware and other extensibility components. This package is used to test all of the CommandDotNet features.

@@ -26,6 +26,7 @@ hide:
     - Nested classes
     - Composed classes
     - Commands can define arguments that appear in all subcommands
+    - Reuse subcommands in multiple parents
 
 - [x] Command Interception
     - via interceptor methods (aka hooks)
