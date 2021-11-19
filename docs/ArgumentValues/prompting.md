@@ -84,6 +84,6 @@ argumentFilter: argument =>
 
 Use the [Password](../Arguments/passwords.md) type to hide all characters for an argument.
 
-```cs
+```c#
 public void Login(string username, Password password){...}
 ```
