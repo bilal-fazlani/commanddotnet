@@ -32,25 +32,25 @@ namespace CommandDotNet.Tests.FeatureTests
 
         private class App
         {
-            [Command(Description = "Invokes an async method and exits with return code 2", Name = "get2")]
+            [Command("get2", Description = "Invokes an async method and exits with return code 2")]
             public async Task<int> Get2Async()
             {
                 return await ExitCodes.ValidationError;
             }
 
-            [Command(Description = "Invokes an async method and exits with return code 0", Name = "get00")]
+            [Command("get00", Description = "Invokes an async method and exits with return code 0")]
             public async Task Get0Async()
             {
                 await Task.CompletedTask;
             }
 
-            [Command(Description = "Invokes an async method and exits with return code 3", Name = "get3")]
+            [Command("get3", Description = "Invokes an async method and exits with return code 3")]
             public Task<int> Get3Async()
             {
                 return Task.FromResult(3);
             }
 
-            [Command(Description = "Invokes an async method and exits with return code 0", Name = "get01")]
+            [Command("get01", Description = "Invokes an async method and exits with return code 0")]
             public Task GetAsync()
             {
                 return Task.CompletedTask;

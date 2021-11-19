@@ -25,4 +25,5 @@ find -type f -name "*.cs" -not -path '*/\.git/*' ! -path '*/obj/*' ! -path '*/bi
     sed -br -i 's/ShortName = "(.)"/'\''\1'\''/g' "$file"
     sed -br -i 's/LongName = "(.*)"/"\1"/g' "$file"
     sed -br -i 's/LongName = null/(string)null/g' "$file"
+    sed -br -i 's/\[(Command|Operand)\(Name = "(.*)"/\[\1\("\2"/g' "$file"
 done

@@ -101,16 +101,16 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
         {
             public void NoOverride() { }
 
-            [Command(Name = "camelCase")]
+            [Command("camelCase")]
             public void CamelCaseOverride() { }
 
-            [Command(Name = "kebab-case")]
+            [Command("kebab-case")]
             public void KebabCaseOverride() { }
 
-            [Command(Name = "lowercase")]
+            [Command("lowercase")]
             public void LowerCaseOverride() { }
 
-            [Command(Name = "PascalCase")]
+            [Command("PascalCase")]
             public void PascalCaseOverride() { }
         }
 
@@ -127,7 +127,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
                 return messageName == "m" && senderName == "s" && priority == 3 && c == 4 ? 10 : 1;
             }
 
-            [Command(Name = "wn")]
+            [Command("wn")]
             public int WithName()
             {
                 return 10;

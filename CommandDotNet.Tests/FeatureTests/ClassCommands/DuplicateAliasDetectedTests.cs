@@ -66,16 +66,16 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 
         class DuplicateCommandApp
         {
-            [Command(Name = "lala")]
+            [Command("lala")]
             public void Do1(string text) { }
-            [Command(Name = "lala")]
+            [Command("lala")]
             public void Do2(int number) { }
         }
 
         class DuplicateArgumentApp
         {
             public void Do(
-                [Operand(Name = "lala")] string operand,
+                [Operand("lala")] string operand,
                 [Option("lala")] string option)
             { }
         }
@@ -87,7 +87,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                 return next();
             }
 
-            [Command(Name = "lala")]
+            [Command("lala")]
             public void Do() { }
         }
 

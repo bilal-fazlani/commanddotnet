@@ -6,7 +6,7 @@ namespace CommandDotNet.Example.DocExamples
     public class RocketLauncher
     {
         public void LaunchRocket(
-            [Operand(Name = "planet", Description = "Name of the planet you wish the rocket to go")]
+            [Operand("planet", Description = "Name of the planet you wish the rocket to go")]
             string planetName,
             [Option('t', "turbo", Description = "Go faster")]
             bool turbo,

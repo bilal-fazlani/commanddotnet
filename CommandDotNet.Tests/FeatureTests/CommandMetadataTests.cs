@@ -168,16 +168,14 @@ cmd extended help"
         }
 
         // sanity check for ApplicationMetadata until it has been removed 
-        [Command(
+        [Command("SomeApp",
             Description = "app description",
             Usage = "some usage examples",
-            Name = "SomeApp",
             ExtendedHelpText = "app extended help")]
         private class App
         {
-            [Command(
+            [Command("somecommand",
                 Description = "cmd description",
-                Name = "somecommand",
                 ExtendedHelpText = "cmd extended help")]
             public int Do(int value)
             {
@@ -185,13 +183,12 @@ cmd extended help"
             }
 
             [SubCommand]
-            [Command(
+            [Command("SubApp",
                 Description = "sub-app description",
-                Name = "SubApp",
                 ExtendedHelpText = "sub-app extended help")]
             public class SubApp
             {
-                [Command(Name = "subdo")]
+                [Command("subdo")]
                 public int Do(int value)
                 {
                     return value;

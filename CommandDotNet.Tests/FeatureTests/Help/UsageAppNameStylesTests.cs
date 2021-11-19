@@ -56,7 +56,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             });
         }
 
-        [Command(Name = "AppName")]
+        [Command("AppName")]
         private class WithAppMetadataName
         {
 

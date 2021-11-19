@@ -21,9 +21,8 @@ namespace CommandDotNet.Example.Commands
             }
         }
         
-        [Command(Description = "Stashes all changes when executed without any arguments. " +
-                                           "See stash --help for further information",
-            Name = "stash")]
+        [Command("stash", Description = "Stashes all changes when executed without any arguments. " +
+                                           "See stash --help for further information")]
         [SubCommand]
         public class Stash
         {
@@ -33,20 +32,20 @@ namespace CommandDotNet.Example.Commands
                 Console.WriteLine("changes stashed");
             }
         
-            [Command(Name = "pop", Description = "Applies last stashed changes")]
+            [Command("pop", Description = "Applies last stashed changes")]
             public void Pop()
             {
                 Console.WriteLine("stash popped");
             }
 
-            [Command(Name = "list", Description = "Lists all saved stashed changes")]
+            [Command("list", Description = "Lists all saved stashed changes")]
             public void List()
             {
                 Console.WriteLine("here's the list of stash");
             }
         }
         
-        [Command(Name = "commit", Description = "Commits all staged changes")]
+        [Command("commit", Description = "Commits all staged changes")]
         public void Commit([Option('m')]string commitMessage)
         {
             Console.WriteLine("Commit successful");
