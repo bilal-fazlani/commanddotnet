@@ -138,12 +138,12 @@ namespace CommandDotNet.ClassModeling.Definitions
         private static IEnumerable<Type> GetNestedSubCommandTypes(Type classType)
         {
             IEnumerable<Type> propertySubmodules =
-                classType.GetDeclaredProperties<SubCommandAttribute>()
+                classType.GetDeclaredProperties<SubcommandAttribute>()
                     .Select(p => p.PropertyType);
 
             IEnumerable<Type> inlineClassSubmodules = classType
                 .GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
-                .Where(x => x.HasAttribute<SubCommandAttribute>())
+                .Where(x => x.HasAttribute<SubcommandAttribute>())
                 .Where(x => !x.IsCompilerGenerated())
                 .Where(x => !typeof(IAsyncStateMachine).IsAssignableFrom(x));
 

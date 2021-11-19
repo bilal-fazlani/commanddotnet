@@ -12,7 +12,7 @@ namespace CommandDotNet.Example.DocExamples
         }
 
         [Command(Description = "Stashes all changes when executed without any arguments")]
-        [SubCommand]
+        [Subcommand]
         public class Stash
         {
             [DefaultCommand]

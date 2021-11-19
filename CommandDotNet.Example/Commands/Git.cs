@@ -5,13 +5,13 @@ namespace CommandDotNet.Example.Commands
     [Command(Description = "Fake git application to demonstrate nested sub-commands. Does NOT interact with git.")]
     public class Git
     {
-        [SubCommand]
+        [Subcommand]
         public Submodule? SubmoduleProperty { get; set; }
 
-        [SubCommand]
+        [Subcommand]
         public class Remote
         {
-            [SubCommand]
+            [Subcommand]
             public class Origin
             {
                 public void Show()
@@ -23,7 +23,7 @@ namespace CommandDotNet.Example.Commands
         
         [Command("stash", Description = "Stashes all changes when executed without any arguments. " +
                                            "See stash --help for further information")]
-        [SubCommand]
+        [Subcommand]
         public class Stash
         {
             [DefaultCommand]

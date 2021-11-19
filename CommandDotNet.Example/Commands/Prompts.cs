@@ -14,7 +14,7 @@ namespace CommandDotNet.Example.Commands
         Usage = "prompts ")]
     public class Prompts
     {
-        [SubCommand]
+        [Subcommand]
         public class Secure
         {
             public Task<int> Intercept(InterceptorExecutionDelegate next,

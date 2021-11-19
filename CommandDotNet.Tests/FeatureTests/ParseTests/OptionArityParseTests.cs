@@ -60,7 +60,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
             {
             }
 
-            [SubCommand]
+            [Subcommand]
             public class Subby
             {
 

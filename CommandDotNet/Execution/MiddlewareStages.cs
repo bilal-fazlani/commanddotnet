@@ -53,7 +53,7 @@ namespace CommandDotNet.Execution
         /// <br/>Guarantees:<br/>
         /// - <see cref="InvocationStep.Instance"/> are set for the target command and its ancestral interceptor commands<br/>
         /// - <see cref="IInvocation.ParameterValues"/> are set<br/>
-        /// - Properties attributed with <see cref="SubCommandAttribute"/> are populated IF the subcommand is included in the user request and the property is settable.
+        /// - Properties attributed with <see cref="SubcommandAttribute"/> are populated IF the subcommand is included in the user request and the property is settable.
         /// </summary>
         BindValues,
         PostBindValuesPreInvoke,

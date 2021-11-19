@@ -100,7 +100,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 
             public void Do() { }
 
-            [SubCommand]
+            [Subcommand]
             public class SubApp
             {
                 public void SubDo(string lala) { }
@@ -116,7 +116,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 
             public void Do() { }
 
-            [SubCommand]
+            [Subcommand]
             public class SubApp
             {
                 public void SubDo(string lala) { }

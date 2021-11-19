@@ -182,7 +182,7 @@ cmd extended help"
                 return value;
             }
 
-            [SubCommand]
+            [Subcommand]
             [Command("SubApp",
                 Description = "sub-app description",
                 ExtendedHelpText = "sub-app extended help")]

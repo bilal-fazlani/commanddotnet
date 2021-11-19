@@ -80,9 +80,9 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 
         class Level1
         {
-            [SubCommand]
+            [Subcommand]
             public Level2 Level2 { get; set; } = null!;
-            [SubCommand]
+            [Subcommand]
             public Level3 Level3 { get; set; } = null!;
 
             public string Name { get; private set; } = null!;
@@ -108,7 +108,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
 
         class Level2
         {
-            [SubCommand]
+            [Subcommand]
             public Level3 MyChild { get; set; } = null!;
 
             public string? ParentName { get; set; }

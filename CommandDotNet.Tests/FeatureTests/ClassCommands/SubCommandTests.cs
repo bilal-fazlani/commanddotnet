@@ -177,7 +177,7 @@ Use ""testhost.dll Second Third [command] --help"" for more information about a 
 
         private class ThreeLevelsApp
         {
-            [SubCommand]
+            [Subcommand]
             public Second Second { get; set; } = null!;
 
             public void Do1(ArgModel1 model)
@@ -187,7 +187,7 @@ Use ""testhost.dll Second Third [command] --help"" for more information about a 
 
         private class Second
         {
-            [SubCommand]
+            [Subcommand]
             public Third Third { get; set; } = null!;
 
             public void Do2(ArgModel2 model)
@@ -208,14 +208,14 @@ Use ""testhost.dll Second Third [command] --help"" for more information about a 
             {
             }
 
-            [SubCommand]
+            [Subcommand]
             public class Second
             {
                 public void Do2(ArgModel2 model)
                 {
                 }
 
-                [SubCommand]
+                [Subcommand]
                 public class Third
                 {
                     public void Do3(ArgModel3 model)

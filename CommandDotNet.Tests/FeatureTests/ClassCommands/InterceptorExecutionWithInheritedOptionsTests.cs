@@ -178,7 +178,7 @@ Use ""testhost.dll ChildApp [command] --help"" for more information about a comm
 
         class App
         {
-            [SubCommand]
+            [Subcommand]
             public ChildApp ChildApp { get; set; } = null!;
 
             public Task<int> Intercept(InterceptorExecutionDelegate next,

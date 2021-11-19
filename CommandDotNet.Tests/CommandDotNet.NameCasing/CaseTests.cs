@@ -133,7 +133,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
                 return 10;
             }
 
-            [SubCommand]
+            [Subcommand]
             public class SubCommand
             {
                 public int SendNotification()

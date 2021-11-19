@@ -35,22 +35,22 @@ namespace CommandDotNet.Example
             }
         }
         
-        [SubCommand]
+        [Subcommand]
         public Git Git { get; set; } = null!;
 
-        [SubCommand]
+        [Subcommand]
         public Math Math { get; set; } = null!;
 
-        [SubCommand]
+        [Subcommand]
         public Models Models { get; set; } = null!;
 
-        [SubCommand]
+        [Subcommand]
         public Pipes Pipes { get; set; } = null!;
 
-        [SubCommand]
+        [Subcommand]
         public CancelMe CancelMe { get; set; } = null!;
 
-        [SubCommand]
+        [Subcommand]
         public Commands.Prompts Prompts { get; set; } = null!;
     }
 }
