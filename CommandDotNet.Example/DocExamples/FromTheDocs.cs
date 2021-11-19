@@ -7,12 +7,23 @@
         [Command]
         public class GettingStarted
         {
-            [Subcommand(RenameAs = "calc1")]
+            [Subcommand(RenameAs = nameof(Calc1))]
             public DocExamples.GettingStarted.Eg1_Minumum.Program Calc1 { get; set; } = null!;
-            [Subcommand(RenameAs = "calc2")]
+
+            [Subcommand(RenameAs = nameof(Calc2))]
             public DocExamples.GettingStarted.Eg2_Descriptions.Program Calc2 { get; set; } = null!;
-            [Subcommand(RenameAs = "calc3")]
+
+            [Subcommand(RenameAs = nameof(Calc3))]
             public DocExamples.GettingStarted.Eg3_Testable.Program Calc3 { get; set; } = null!;
+
+            [Subcommand(RenameAs = nameof(Calc4))]
+            public DocExamples.GettingStarted.Eg3_Testable.Program Calc4 { get; set; } = null!;
+
+            [Subcommand(RenameAs = nameof(Pipes))]
+            public DocExamples.GettingStarted.Eg5_Pipes.Program Pipes { get; set; } = null!;
+
+            [Subcommand(RenameAs = nameof(CtrlC))]
+            public DocExamples.GettingStarted.Eg6_CtrlC.Program CtrlC { get; set; } = null!;
         }
     }
 }

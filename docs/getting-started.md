@@ -170,7 +170,6 @@ Arguments:
 
 Here we see arguments for addition and their type.  See the [Arguments](Arguments/arguments.md) section for more options to configure arguments.
 
-
 ## Let's add some tests
 
 One of the problems with writing console apps is being able to automate the testing.
@@ -226,6 +225,102 @@ public void GivenANonNumber_Should_OutputError() =>
 <!-- endSnippet -->
 
 See [Test Tools](TestTools/overview.md) in the Testing help section for more details 
+
+## Let's calculate a sum from a stream of piped arguments
+
+<!-- snippet: getting_started_pipes -->
+<a id='snippet-getting_started_pipes'></a>
+```c#
+public class Program
+{
+    static int Main(string[] args) =>
+        new AppRunner<Program>().Run(args);
+
+    public void Range(int start, int count, int sleep = 0)
+    {
+        foreach (var i in Enumerable.Range(start, count))
+        {
+            Console.WriteLine(i);
+            if (sleep > 0)
+            {
+                Thread.Sleep(sleep);
+            }
+        }
+    }
+
+    public void Sum(IEnumerable<int> values)
+    {
+        int total = 0;
+        foreach (var value in values)
+        {
+            Console.WriteLine(total+=value);
+        }
+    }
+}
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/GettingStarted/Eg5_Pipes/Program.cs#L8-L35' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_pipes' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Here we've converted the arguments for Sum into an IEnumerable<int> and added a Range command.
+You've probably noticed these commands wrap LINQ methods of the same name. 
+We've added an optional sleep option to Range to better mimic a long running stream. 
+
+We could have used List<int>, int[], or any other collection type. 
+Using IEnumerable<T> allows the command to start processing before the stream has completed.
+
+Very few console frameworks make it this easy to write streaming console tools like this.
+
+Let's see it in action:
+
+```bash
+~
+$ dotnet example.dll Range 1 4 10000 | dotnet example.dll Sum
+1
+3
+6
+10
+```
+
+Range sleeps for 10 seconds after outputtting each value and Sum immediatly outputs the new sum.
+
+## Let's handle Ctrl+C
+
+The above command will take 40 seconds to execute. The way it's currently configured, we have no way to exit early.
+
+With console applications, the standard pattern is to exit the app when Ctrl+C is pressed.
+
+<!-- snippet: getting_started_ctrlc -->
+<a id='snippet-getting_started_ctrlc'></a>
+```c#
+public class Program
+{
+    static int Main(string[] args) =>
+        new AppRunner<Program>()
+            .UseCancellationHandlers()
+            .Run(args);
+
+    public void Range(CancellationToken ct, int start, int count, int sleep = 0)
+    {
+        foreach (var i in Enumerable.Range(start, count).UntilCancelled(ct, sleep))
+        {
+            Console.WriteLine(i);
+        }
+    }
+
+    public void Sum(CancellationToken ct, IEnumerable<int> values)
+    {
+        int total = 0;
+        foreach (var value in values.ThrowIfCancelled(ct))
+        {
+            Console.WriteLine(total+=value);
+        }
+    }
+}
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/GettingStarted/Eg6_CtrlC/Program.cs#L8-L33' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_ctrlc' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Again, CommandDotNet makes this very easy. Configure the app with `UseCancellationHandlers()` and a `CancellationToken` can be injected into your commands. Use either of the two handy extension methods `UntilCancelled` or `ThrowIfCancelled` to exit an enumeration early.
 
 ## Opt-In to additional features
 
