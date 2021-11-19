@@ -83,13 +83,6 @@ namespace CommandDotNet.Extensions
                        || IsCompilerGenerated(t.DeclaringType));
         }
 
-        internal static IEnumerable<PropertyInfo> GetDeclaredProperties<TAttribute>(this Type type) where TAttribute: Attribute
-        {
-            return type
-                .GetDeclaredProperties()
-                .Where(x => x.HasAttribute<TAttribute>());
-        }
-        
         internal static IEnumerable<PropertyInfo> GetDeclaredProperties(this Type type)
         {
             return type

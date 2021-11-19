@@ -21,14 +21,14 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         {
             var classNames = new AppRunner<ThreeLevelsApp>()
                 .GetCommandClassTypes()
-                .Select(t => t.Name)
+                .Select(t => t.type.Name)
                 .ToList();
             classNames.Count.Should().Be(3);
             classNames.Should().ContainEquivalentOf(nameof(ThreeLevelsApp), nameof(Second), nameof(Third));
 
             classNames = new AppRunner<NestedThreeLevelsApp>()
                 .GetCommandClassTypes()
-                .Select(t => t.Name)
+                .Select(t => t.type.Name)
                 .ToList();
             classNames.Count.Should().Be(3);
             classNames.Should().ContainEquivalentOf(nameof(NestedThreeLevelsApp), nameof(Second), nameof(Third));
@@ -173,6 +173,36 @@ Use ""testhost.dll Second Third [command] --help"" for more information about a 
                         AssertContext = ctx => ctx.ParamValuesShouldBe(new ArgModel3 {Opt3 = "1111", Arg3 = "somearg"})
                     }
                 });
+        }
+
+        [Fact]
+        public void Can_rename_subcommands()
+        {
+            new AppRunner<RenameApp>()
+                .Verify(new Scenario
+                {
+                    When = { Args = "-h" },
+                    Then =
+                    {
+                        OutputContainsTexts = { "Renamed1", "Renamed2" },
+                        OutputNotContainsTexts = { "Second", "Nested" }
+                    }
+                });
+        }
+
+        private class RenameApp
+        {
+            [Subcommand(RenameAs = "Renamed1")]
+            public Second Second { get; set; } = null!;
+
+            [Subcommand(RenameAs = "Renamed2")]
+            public class Nested
+            {
+                public void Do3(ArgModel3 model)
+                {
+                }
+            }
+
         }
 
         private class ThreeLevelsApp

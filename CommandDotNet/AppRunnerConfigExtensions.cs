@@ -269,7 +269,7 @@ namespace CommandDotNet
         /// Returns the list of all possible types that could be instantiated to execute commands.<br/>
         /// Use get the list of types to register in your DI container.
         /// </summary>
-        public static IEnumerable<Type> GetCommandClassTypes(this AppRunner appRunner) =>
+        public static IEnumerable<(Type type, SubcommandAttribute? subcommandAttr)> GetCommandClassTypes(this AppRunner appRunner) =>
             ClassCommandDef.GetAllCommandClassTypes(appRunner.RootCommandType);
 
         private static void AssertDirectivesAreEnabled(AppRunner appRunner)
