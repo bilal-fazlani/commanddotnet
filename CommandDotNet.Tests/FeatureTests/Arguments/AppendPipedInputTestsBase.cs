@@ -198,6 +198,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             public List<string> StreamedInput { get; set; } = null!;
             public List<int> StreamedNumbers { get; set; } = null!;
 
+            public List<int> StreamedNumbers { get; set; } = null!;
+
             public void Stream(IEnumerable<string> input)
             {
                 StreamedInput = input.ToList();
