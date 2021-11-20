@@ -3,6 +3,7 @@
     [Command(nameof(FromTheDocs), Description = "examples used in documentation")]
     public class FromTheDocs
     {
+
         [Subcommand]
         [Command]
         public class GettingStarted
@@ -24,6 +25,17 @@
 
             [Subcommand(RenameAs = nameof(CtrlC))]
             public DocExamples.GettingStarted.Eg6_CtrlC.Program CtrlC { get; set; } = null!;
+        }
+
+        [Subcommand]
+        [Command]
+        public class Commands
+        {
+            [Subcommand]
+            public DocExamples.Commands.Eg1_Minimum.Calculator Calculator { get; set; } = null!;
+
+            [Subcommand]
+            public DocExamples.Commands.Eg1_Minimum.Git Git { get; set; } = null!;
         }
     }
 }

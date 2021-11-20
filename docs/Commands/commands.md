@@ -4,41 +4,35 @@ Commands are be defined by methods and classes.
 
 Using our calculator example...
 
+<!-- snippet: getting_started_calculator -->
+<a id='snippet-getting_started_calculator'></a>
 ```c#
-public class Calculator
+public class Program
 {
-    public void Add(int value1, int value2)
-    {
-        Console.WriteLine($"Answer:  {value1 + value2}");
-    }
+    static int Main(string[] args) => 
+        new AppRunner<Program>().Run(args);
 
-    public void Subtract(int value1, int value2)
-    {
-        Console.WriteLine($"Answer:  {value1 - value2}");
-    }
-}
+    public void Add(int x, int y) => 
+        Console.WriteLine(x + y);
 
-class Program
-{
-    static int Main(string[] args)
-    {
-        return new AppRunner<Calculator>().Run(args);
-    }
+    public void Subtract(int x, int y) => 
+        Console.WriteLine(x + y);
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/GettingStarted/Eg1_Minumum/Program.cs#L5-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
-__Calculator__ is the root command and is not directly referenced in the terminal.
+__Program__ is the root command and is not directly referenced in the terminal. The root command is the type specified in `AppRunner<TRootCommand>`
 
 __Add__ and __Subtract__ are the commands. 
 
 Command methods must:
 
-* be `public`
-* return `void`, `int`, `Task` or `Task<int>`
+- be `public`
+- return `void`, `int`, `Task` or `Task<int>`
+    - when the return type is `int` or `Task<int>` the value is used as the exit code.
 
 Command methods may be async.
-
-When the return type is `int` or `Task<int>` the value is used as the exit code.
 
 ## Command Attribute
 
@@ -46,112 +40,145 @@ Every public method will be interpreted as a command and the command name will b
 
 Use the `[Command]` attribute to change the command name, enhance help output and provide parser hints.
 
+<!-- snippet: commands_calculator -->
+<a id='snippet-commands_calculator'></a>
 ```c#
 public class Calculator
 {
-    [Command(Name="sum",
-        Usage="sum <int> <int>",
-        Description="sums two numbers",
-        ExtendedHelpText="more details and examples")]
-    public void Add(int value1, int value2)
-    {
-        Console.WriteLine($"Answer:  {value1 + value2}");
-    }
+    [Command("Sum",
+        Usage = "sum <int> <int>\nsum <int> <int> <int>\nsum <int> <int> <int> <int>",
+        Description = "sums all the numbers provided",
+        ExtendedHelpText = "more details and examples could be provided here")]
+    public void Add(IEnumerable<int> numbers) =>
+        Console.WriteLine(numbers.Sum());
+
+    public void Subtract(int x, int y) =>
+        Console.WriteLine(x + y);
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/Commands/Eg1_Minimum/Calculator.cs#L7-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_calculator' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 ```bash
 ~
-$ dotnet calculator.dll sum --help
+$ dotnet calculator.dll Sum --help
 
-dotnet calculator.dll sum -h
-sums two numbers
+dotnet calculator.dll Sum -h
+sums all the numbers provided
 
 Usage: sum <int> <int>
+sum <int> <int> <int>
+sum <int> <int> <int> <int>
 
 Arguments:
 
-  value1  <NUMBER>
+  numbers (Multiple)  <NUMBER>
 
-  value2  <NUMBER>
-
-more details and examples
+more details and examples could be provided here
 
 ```
 
 !!! Note
-    Use of `[Command]` attribute is optional and only required when you want to add any customizations. 
+    Use of `[Command]` attribute is optional and only required when you need to add customizations. 
 
 Use `IgnoreUnexpectedOperands` & `ArgumentSeparatorStrategy` to override argument parsing behavior for the command. See [Argument Separator](../ArgumentValues/argument-separator.md) for more details.
 
-Use `Description` & `ExtendedHelpText` to include those values in help output for the command.
+Use `Usage` to override the auto-generated usage section.
 
-Use `Usage` to override the auto-generated usage section in the help output for the command.
+Use `Description` & `ExtendedHelpText` to include additional information in help output.
+
+`ExtendedHelpText` on the root command is a good place to mention additional features, such as any directives the user could take advantage of
+
+<!-- snippet: extended_help_text -->
+<a id='snippet-extended_help_text'></a>
+```c#
+ExtendedHelpText = "Directives:\n" +
+                   "  [debug] to attach a debugger to the app\n" +
+                   "  [parse] to output how the inputs were tokenized\n" +
+                   "  [log] to output framework logs to the console\n" +
+                   "  [log:debug|info|warn|error|fatal] to output framework logs for the given level or above\n" +
+                   "\n" +
+                   "directives must be specified before any commands and arguments.\n" +
+                   "\n" +
+                   "Example: %AppName% [debug] [parse] [log:info] math")]
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/Examples.cs#L8-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-extended_help_text' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 !!! Note
-    If you're looking to change the app name, set `AppSettings.Help.UsageAppName` and use the `%AppName%` template variable mentioned below.
+    If you're looking to change the app name, set `AppSettings.Help.UsageAppName` and use the `%AppName%` template variable mentioned below. Learn more in [Help](../Help/help.md#usageappnamestyle)
 
 ### Template variables
 
 Two template variables are available for use in Usage, Description and ExtendedHelpText: `%AppName%` and `%CmdPath%`
 
+<!-- snippet: commands_git -->
+<a id='snippet-commands_git'></a>
+```c#
+public class Git
+{
+    [Subcommand]
+    public class Stash
+    {
+        [Command(Usage = "%AppName% %CmdPath%")]
+        public void Pop(){ }
+
+        [DefaultCommand]
+        public void StashChanges(){ }
+    }
+}
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/Commands/Eg1_Minimum/Git.cs#L3-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_git' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+help for Pop may have `Usage: dotnet examples.dll Git Stash Pop`
+
+- %AppName% = `dotnet examples.dll`
+- %CmdPath% = `Git Stash Pop`
+
 #### AppName
 
-Use `%AppName%` to include the name as calculated by CommandDotNet. This will use `AppSettings.Help.UsageAppName` if it's set.
-
-```c#
-[Command(Usage ="%AppName% sum <int> <int>")]
-public class Calculator{ ... }
-```
-results in help with `Usage: dotnet calculator.dll sum <int> <int>`
-
-See this line `"Example: %AppName% [debug] [parse] [log:info] cancel-me"` in the [Example app](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/Examples.cs#L14).
+Use `%AppName%` to include the name as calculated by CommandDotNet. This will use `AppSettings.Help.UsageAppName` if it's set. 
 
 #### CmdPath
 
 Use `%CmdPath%` to include the full path of commands. This is helpful when working with subcommands.
 
+## Default Command
+
+Let's assume we have a program with a single command defined, called `Process`. 
+
+<!-- snippet: commands_default_command -->
+<a id='snippet-commands_default_command'></a>
 ```c#
-[Command(Usage ="%CmdPath% <int> <int>")]
-public class Calculator{ ... }
-```
-results in help with `Usage: sum <int> <int>`
-
-## Default Method
-
-Let's refactor our calculator. Let's rename the application to Add with the single Add command.
-
-```c#
-public class Calculator
+public class Program
 {
-    public void Add(int value1, int value2)
-    {
-        Console.WriteLine($"Answer:  {value1 + value2}");
-    }
-}
-```
+    static int Main(string[] args) =>
+        new AppRunner<Program>().Run(args);
 
-Now executed as
-
-```bash
-dotnet add.dll Add 1 2
-```
-
-If the root command has only one command, you may want to exectute it by default without specifying any commands names. We can do this with the `[DefaultCommand]` attribute.
-
-```c#
-public class Calculator
-{
     [DefaultCommand]
-    public void Add(int value1, int value2)
+    public void Process()
     {
-        Console.WriteLine($"Answer:  {value1 + value2}");
+        // do very important stuff
     }
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/Commands/Eg1_Minimum/Process.cs#L3-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_default_command' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Because the Program is considered the RootCommand, you'll need to explicitely call the Process command. eg.
+
+```bash
+dotnet myapp.dll Process
+```
+
+If the root command has only one command, you may want to exectute it by default without specifying any commands names. 
+We can do this with the `[DefaultCommand]` attribute.
 
 Now executed as
 
 ```bash
-dotnet add.dll 1 2
+dotnet myapp.dll
 ```
+
+Default commands are also useful in cases like `Git Stash` above where a command can have subcommands, but can execute an action when no subcommand is specified.

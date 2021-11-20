@@ -23,8 +23,6 @@ The OperandAttribute has the following properties:
 * __Name__: Used in help documentation only. Defaults to the parameter or property name.
 * __Description__: Used in help documentation.
 
-The PositionalAttribute is a subclass of OperandAttribute
-
 ## Option Attribute
 
 The OptionAttribute has the following properties:
@@ -39,21 +37,32 @@ The OptionAttribute has the following properties:
     * _Implicit_ boolean options are also called __Flags__
 * __AssignToExecutableSubcommands__: only valid when used in [Interceptor](../Extensibility/interceptors.md) methods.
 
-The NamedAttribute is a subclass of OptionAttribute, provided for those who prefer 
+!!! Note
+    If you find the terms Named and Positional more intuitive than Option and Operand, 
+    you can use the `[Named]` and `[Positional]` attributes instead. They are subclassed
+    from `[Option]` and `[Operand]` respectively.
 
 ## Example
 
-``` c#
+```c#
 public void LaunchRocket(
-    [Operand(Name = "planet", 
-        Description = "Name of the planet you wish the rocket to go")] 
+    [Operand("planet", Description = "Name of the planet you wish the rocket to go")] 
     string planetName,
-    [Option(LongName = "turbo", ShortName = "t", 
-        Description = "Name of the planet you wish the rocket to go")] 
+    [Option('t', "turbo" Description = "Name of the planet you wish the rocket to go")] 
     bool turbo,
-    [Option(ShortName="a",
-         Description="Abort the launch before takeoff", 
-         BooleanMode=BooleanMode.Explicit)]
+    [Option('a', Description="Abort the launch before takeoff", BooleanMode=BooleanMode.Explicit)]
+    bool abort)
+```
+
+or
+
+```c#
+public void LaunchRocket(
+    [Positional("planet", Description = "Name of the planet you wish the rocket to go")] 
+    string planetName,
+    [Named('t', "turbo" Description = "Name of the planet you wish the rocket to go")] 
+    bool turbo,
+    [Named('a', Description="Abort the launch before takeoff", BooleanMode=BooleanMode.Explicit)]
     bool abort)
 ```
 
@@ -88,9 +97,6 @@ dotnet example.dll LaunchRocket mars --turbo -a true
 
 Options are not positional so they can appear in any order within the command.
 
-Configuring a ShortName nullifies the default long name 
-so LongName must also be configured if you need both.
-
 | Parameter name | Longname | Shortname | Generated template
 | --- | --- | --- | --- |
 | turbo |  |  | `--turbo` |
@@ -98,6 +104,9 @@ so LongName must also be configured if you need both.
 | turbo |  | t | `-t` |
 | turbo | turbo | t | `-t | --turbo` |
 | t |  |  | `-t` |
+
+!!! Tip
+    To configure an option to have only a short name, set the long name to null `[Option('a', null)]`
 
 ## Flags
 
