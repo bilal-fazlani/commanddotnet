@@ -32,13 +32,13 @@ namespace CommandDotNet.Example.Tests.DocExamples.GettingStarted
             });
 
         [Test]
-        public void GivenANonNumber_Should_OutputError() =>
+        public void GivenANonNumber_Should_OutputValidationError() =>
             Program.AppRunner.Verify(new Scenario
             {
                 When = { Args = "Add a 20" },
                 Then =
                 {
-                    ExitCode = 1,
+                    ExitCode = 2,
                     Output = "'a' is not a valid Number"
                 }
             });
