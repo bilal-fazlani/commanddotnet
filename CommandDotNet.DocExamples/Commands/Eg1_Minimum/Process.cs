@@ -1,4 +1,4 @@
-﻿namespace CommandDotNet.Example.DocExamples.Commands.Eg1_Minimum
+﻿namespace CommandDotNet.DocExamples.Commands.Eg1_Minimum
 {
     // begin-snippet: commands_default_command
     public class Program

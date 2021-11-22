@@ -4,22 +4,19 @@ Commands are be defined by methods and classes.
 
 Using our calculator example...
 
-<!-- snippet: getting_started_calculator -->
-<a id='snippet-getting_started_calculator'></a>
+<!-- snippet: getting_started_1_calculator -->
+<a id='snippet-getting_started_1_calculator'></a>
 ```c#
 public class Program
 {
-    static int Main(string[] args) => 
-        new AppRunner<Program>().Run(args);
+    static int Main(string[] args) => new AppRunner<Program>().Run(args);
 
-    public void Add(int x, int y) => 
-        Console.WriteLine(x + y);
+    public void Add(int x, int y) => Console.WriteLine(x + y);
 
-    public void Subtract(int x, int y) => 
-        Console.WriteLine(x + y);
+    public void Subtract(int x, int y) => Console.WriteLine(x - y);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/GettingStarted/Eg1_Minumum/Program.cs#L5-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_1_Calculator.cs#L11-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_1_calculator' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 __Program__ is the root command and is not directly referenced in the terminal. The root command is the type specified in `AppRunner<TRootCommand>`
@@ -40,43 +37,36 @@ Every public method will be interpreted as a command and the command name will b
 
 Use the `[Command]` attribute to change the command name, enhance help output and provide parser hints.
 
-<!-- snippet: commands_calculator -->
-<a id='snippet-commands_calculator'></a>
+<!-- snippet: commands_1_calculator -->
+<a id='snippet-commands_1_calculator'></a>
 ```c#
-public class Calculator
-{
-    [Command("Sum",
-        Usage = "sum <int> <int>\nsum <int> <int> <int>\nsum <int> <int> <int> <int>",
-        Description = "sums all the numbers provided",
-        ExtendedHelpText = "more details and examples could be provided here")]
-    public void Add(IEnumerable<int> numbers) =>
-        Console.WriteLine(numbers.Sum());
-
-    public void Subtract(int x, int y) =>
-        Console.WriteLine(x + y);
-}
+[Command("Sum",
+    Usage = "sum <int> [<int> ...]",
+    Description = "sums all the numbers provided",
+    ExtendedHelpText = "more details and examples could be provided here")]
+public void Add(IEnumerable<int> numbers) =>
+    Console.WriteLine(numbers.Sum());
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/Commands/Eg1_Minimum/Calculator.cs#L7-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_calculator' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Eg1_Minimum/Calculator.cs#L13-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_1_calculator' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
+<!-- snippet: commands_1_calculator_sum_help -->
+<a id='snippet-commands_1_calculator_sum_help'></a>
 ```bash
 ~
 $ dotnet calculator.dll Sum --help
-
-dotnet calculator.dll Sum -h
 sums all the numbers provided
 
-Usage: sum <int> <int>
-sum <int> <int> <int>
-sum <int> <int> <int> <int>
+Usage: sum <int> [<int> ...]
 
 Arguments:
 
   numbers (Multiple)  <NUMBER>
 
 more details and examples could be provided here
-
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/commands_1_calculator_sum_help.bash#L1-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_1_calculator_sum_help' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 !!! Note
     Use of `[Command]` attribute is optional and only required when you need to add customizations. 
@@ -102,7 +92,7 @@ ExtendedHelpText = "Directives:\n" +
                    "\n" +
                    "Example: %AppName% [debug] [parse] [log:info] math")]
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/Examples.cs#L8-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-extended_help_text' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/Examples.cs#L7-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-extended_help_text' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 !!! Note
@@ -128,7 +118,7 @@ public class Git
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/Commands/Eg1_Minimum/Git.cs#L3-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_git' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Eg1_Minimum/Git.cs#L3-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_git' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 help for Pop may have `Usage: dotnet examples.dll Git Stash Pop`
@@ -163,7 +153,7 @@ public class Program
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/Commands/Eg1_Minimum/Process.cs#L3-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_default_command' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Eg1_Minimum/Process.cs#L3-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_default_command' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Because the Program is considered the RootCommand, you'll need to explicitely call the Process command. eg.

@@ -8,17 +8,14 @@ namespace CommandDotNet.DocExamples.GettingStarted
     [TestFixture]
     public class GettingStarted_1_Calculator
     {
-        // begin-snippet: getting_started_calculator
+        // begin-snippet: getting_started_1_calculator
         public class Program
         {
-            static int Main(string[] args) =>
-                new AppRunner<Program>().Run(args);
+            static int Main(string[] args) => new AppRunner<Program>().Run(args);
 
-            public void Add(int x, int y) =>
-                Console.WriteLine(x + y);
+            public void Add(int x, int y) => Console.WriteLine(x + y);
 
-            public void Subtract(int x, int y) =>
-                Console.WriteLine(x - y);
+            public void Subtract(int x, int y) => Console.WriteLine(x - y);
         }
         // end-snippet
 
@@ -46,7 +43,7 @@ Arguments:
   y  <NUMBER>");
 
         public static BashSnippet Add = new("getting_started_1_calculator_add",
-            new AppRunner<Program>().InterceptingSystemConsoleWrites(),
+            new AppRunner<Program>().InterceptSystemConsoleWrites(),
             "dotnet calculator.dll", "Add 40 20", 0,
             @"60");
 
@@ -57,35 +54,13 @@ Arguments:
             @"'a' is not a valid Number");
 
         [Test]
-        public void Given2Numbers_Should_Add() =>
-            new AppRunner<Program>()
-                .InterceptingSystemConsoleWrites()
-                .Verify(new Scenario
-            {
-                When = { Args = Add.Args },
-                Then = { Output = Add.Output }
-            });
-
-        [Test]
         public void Given2Numbers_Should_Subtract() =>
             new AppRunner<Program>()
-                .InterceptingSystemConsoleWrites()
+                .InterceptSystemConsoleWrites()
                 .Verify(new Scenario
                 {
                     When = { Args = "Subtract 40 20" },
                     Then = { Output = "20" }
                 });
-
-        [Test]
-        public void GivenANonNumber_Should_OutputValidationError() =>
-            new AppRunner<Program>().Verify(new Scenario
-            {
-                When = { Args = Add_Invalid.Args },
-                Then =
-                {
-                    ExitCode = 2,
-                    Output = Add_Invalid.Output
-                }
-            });
     }
 }

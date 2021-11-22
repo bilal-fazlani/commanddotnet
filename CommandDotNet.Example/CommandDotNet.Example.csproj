@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
-    <StartupObject>CommandDotNet.Example.ExamplesProgram</StartupObject>
+    <StartupObject></StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommandDotNet.FluentValidation\CommandDotNet.FluentValidation.csproj" />

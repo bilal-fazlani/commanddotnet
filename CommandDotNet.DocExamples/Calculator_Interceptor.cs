@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace CommandDotNet.Example.DocExamples
+namespace CommandDotNet.DocExamples
 {
     public class Calculator_Interceptor
     {

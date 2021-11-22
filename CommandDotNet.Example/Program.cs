@@ -1,15 +1,12 @@
 ﻿using System.Collections.Specialized;
-using System.Linq;
 using CommandDotNet.Diagnostics;
-using CommandDotNet.Example.DocExamples;
 using CommandDotNet.FluentValidation;
 using CommandDotNet.NameCasing;
 using CommandDotNet.Spectre;
-using Humanizer;
 
 namespace CommandDotNet.Example
 {
-    public class ExamplesProgram
+    public class Program
     {
         static int Main(string[] args)
         {
@@ -24,8 +21,9 @@ namespace CommandDotNet.Example
         {
 
             appConfigSettings ??= new NameValueCollection();
-            var runner = new AppRunner<Examples>(appNameForTests is null ? null : new AppSettings{Help = {UsageAppName = appNameForTests}})
+            return new AppRunner<Examples>(appNameForTests is null ? null : new AppSettings{Help = {UsageAppName = appNameForTests}})
                 .UseDefaultMiddleware()
+                .UseNameCasing(Case.KebabCase)
                 .UsePrompter()
                 .UseSpectreAnsiConsole()
                 .UseSpectreArgumentPrompter()
@@ -34,15 +32,6 @@ namespace CommandDotNet.Example
                 .UseFluentValidation()
                 .UseInteractiveMode("Example")
                 .UseDefaultsFromAppSetting(appConfigSettings, includeNamingConventions: true);
-
-            bool isForTheDocs = args is not null && args.Contains(nameof(FromTheDocs));
-
-            if (!isForTheDocs)
-            {
-                runner.UseNameCasing(Case.KebabCase);
-            }
-
-            return runner;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace CommandDotNet.Example.DocExamples
+﻿namespace CommandDotNet.DocExamples
 {
     [Command(Description = "This is a crappy calculator", ExtendedHelpText = "Some more help text that appears at the bottom")]
     public class Calculator

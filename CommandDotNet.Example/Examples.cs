@@ -1,5 +1,4 @@
 ﻿using CommandDotNet.Example.Commands;
-using CommandDotNet.Example.DocExamples;
 using Git = CommandDotNet.Example.Commands.Git;
 
 namespace CommandDotNet.Example
@@ -38,9 +37,6 @@ namespace CommandDotNet.Example
                 context.ShowHelpOnExit = true;
             }
         }
-
-        [Subcommand]
-        public FromTheDocs FromTheDocs { get; set; } = null!;
 
         [Subcommand]
         public Git Git { get; set; } = null!;

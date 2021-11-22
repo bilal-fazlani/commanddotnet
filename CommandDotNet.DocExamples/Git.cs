@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CommandDotNet.Example.DocExamples
+namespace CommandDotNet.DocExamples
 {
     [Command(Name = "git", Description = "Fake git application")]
     public class Git

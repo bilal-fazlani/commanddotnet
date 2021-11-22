@@ -11,7 +11,7 @@ namespace CommandDotNet.Example.Tests
         {
             // Must convert NewLine to what was given
             // to the ExtendedHelpText property
-            ExamplesProgram.GetAppRunner()
+            Program.GetAppRunner()
                 .Verify(new Scenario
                 {
                     When = {Args = null},
@@ -38,7 +38,7 @@ Example: example_app [debug] [parse] [log:info] math".Replace("\r\n", "\n")
         public void Should_Include_Version_Option()
         {
             // The directives section from the command must match
-            ExamplesProgram.GetAppRunner()
+            Program.GetAppRunner()
                 .Verify(new Scenario
                 {
                     When = { Args = null },

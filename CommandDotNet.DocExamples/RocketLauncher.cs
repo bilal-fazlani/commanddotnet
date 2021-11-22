@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CommandDotNet.Example.DocExamples
+namespace CommandDotNet.DocExamples
 {
     public class RocketLauncher
     {
