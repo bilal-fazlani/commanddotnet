@@ -49,17 +49,17 @@ Begin by creating the commands:
 ```c#
 public class Program
 {
-    static int Main(string[] args) => 
+    static int Main(string[] args) =>
         new AppRunner<Program>().Run(args);
 
-    public void Add(int x, int y) => 
+    public void Add(int x, int y) =>
         Console.WriteLine(x + y);
 
-    public void Subtract(int x, int y) => 
-        Console.WriteLine(x + y);
+    public void Subtract(int x, int y) =>
+        Console.WriteLine(x - y);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/GettingStarted/Eg1_Minumum/Program.cs#L5-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_1_Calculator.cs#L11-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 That's it. You now have an applciation with two commands. Let's see about how we can call it from command line.
@@ -67,6 +67,8 @@ That's it. You now have an applciation with two commands. Let's see about how we
 Assuming our application's name is `calculator.dll`, let's run this app from command line using dotnet.
 First we'll check out the auto-generated help.
 
+<!-- snippet: getting_started_1_calculator_help -->
+<a id='snippet-getting_started_1_calculator_help'></a>
 ```bash
 ~
 $ dotnet calculator.dll --help
@@ -79,10 +81,17 @@ Commands:
 
 Use "dotnet calculator.dll [command] --help" for more information about a command.
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting_started_1_calculator_help.bash#L1-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_1_calculator_help' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
+From the root we can see the available commands. Instead of `--help` we could have used `-h` or `-?`. 
+We'll use `-h` to get help for the Add command.
+
+<!-- snippet: getting_started_1_calculator_add_help -->
+<a id='snippet-getting_started_1_calculator_add_help'></a>
 ```bash
 ~
-$ dotnet calculator.dll Add --help
+$ dotnet calculator.dll Add -h
 Usage: dotnet calculator.dll Add <x> <y>
 
 Arguments:
@@ -91,21 +100,39 @@ Arguments:
 
   y  <NUMBER>
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting_started_1_calculator_add_help.bash#L1-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_1_calculator_add_help' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 Let's try it out by adding two numbers
 
+<!-- snippet: getting_started_1_calculator_add -->
+<a id='snippet-getting_started_1_calculator_add'></a>
 ```bash
 ~
-$ dotnet example.dll Add 40 20
+$ dotnet calculator.dll Add 40 20
 60
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting_started_1_calculator_add.bash#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_1_calculator_add' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+CommandDotNet will validate if the arguments can be converted to the correct type.
+
+<!-- snippet: getting_started_1_calculator_add_invalid -->
+<a id='snippet-getting_started_1_calculator_add_invalid'></a>
+```bash
+~
+$ dotnet calculator.dll Add a 20
+'a' is not a valid Number
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting_started_1_calculator_add_invalid.bash#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_1_calculator_add_invalid' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 !!! Note
     CommandDotNet also supports running your application as an .exe and as a dotnet tool.
 
 ## Let's improve the help
 
-The help could be more helpful. We can add descriptions.
+The help could be more helpful. Let's add descriptions.
 
 <!-- snippet: getting_started_calculator_with_descriptions -->
 <a id='snippet-getting_started_calculator_with_descriptions'></a>
@@ -125,7 +152,7 @@ public class Program
         Console.WriteLine(x - y);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/GettingStarted/Eg2_Descriptions/Program.cs#L5-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_with_descriptions' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Eg2_Descriptions/Program.cs#L5-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_with_descriptions' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Descriptions can also be added to the arguments and extended help can be added for commands to appear below all other help.
@@ -177,7 +204,25 @@ CommandDotNet solves this with our [Test Tools](TestTools/overview.md).
 
 We make it easy to test your app as if you're entering the commands in the console.
 
-We support two different patterns:
+The first step is to get access to the AppRunner the program is using so your tests are testing the application as it is configured.
+
+Let's extract the configuration into a public static property
+
+<!-- snippet: getting_started_calculator_testable -->
+<a id='snippet-getting_started_calculator_testable'></a>
+```c#
+static int Main(string[] args) => AppRunner.Run(args);
+
+public static AppRunner<Program> AppRunner => new();
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_3_Testing.cs#L13-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_testable' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Now the tests can use `Program.AppRunner` for all tests. 
+!!! Note
+    You could make this a singleton if you were confident you weren't caching values that would cause errors and you weren't running the tests in parallel. Generally, this won't be the source of slow runs. CommandDotNet caches the reflection results used to generate commands so tests will only incur the reflection penalty once.
+
+CommandDotNet supports two different test patterns:
 
 ### Standard
 
@@ -187,13 +232,12 @@ We support two different patterns:
 [Test]
 public void Given2Numbers_Should_OutputSum()
 {
-    // lala
     var result = Program.AppRunner.RunInMem("Add 40 20");
     result.ExitCode.Should().Be(0);
     result.Console.OutText().Should().Be("60");
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example.Tests/DocExamples/GettingStarted/AddCommandTests.cs#L11-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_add_command_tests' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_3_Testing.cs#L39-L47' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_add_command_tests' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ### BDD Style
@@ -210,18 +254,18 @@ public void Given2Numbers_Should_OutputSum() =>
     });
 
 [Test]
-public void GivenANonNumber_Should_OutputError() =>
+public void GivenANonNumber_Should_OutputValidationError() =>
     Program.AppRunner.Verify(new Scenario
     {
         When = { Args = "Add a 20" },
         Then =
         {
-            ExitCode = 1,
+            ExitCode = 2, // validations exit code = 2
             Output = "'a' is not a valid Number"
         }
     });
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example.Tests/DocExamples/GettingStarted/AddCommandTests.cs#L25-L45' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_add_command_tests_bdd' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_3_Testing.cs#L53-L73' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_add_command_tests_bdd' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 See [Test Tools](TestTools/overview.md) in the Testing help section for more details 
@@ -258,7 +302,7 @@ public class Program
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/GettingStarted/Eg5_Pipes/Program.cs#L8-L35' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_pipes' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Eg5_Pipes/Program.cs#L8-L35' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_pipes' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Here we've converted the arguments for Sum into an IEnumerable<int> and added a Range command.
@@ -317,7 +361,7 @@ public class Program
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/GettingStarted/Eg6_CtrlC/Program.cs#L8-L33' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_ctrlc' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Eg6_CtrlC/Program.cs#L8-L33' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_ctrlc' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Again, CommandDotNet makes this very easy. Configure the app with `UseCancellationHandlers()` and a `CancellationToken` can be injected into your commands. Use either of the two handy extension methods `UntilCancelled` or `ThrowIfCancelled` to exit an enumeration early.
@@ -333,7 +377,7 @@ new AppRunner<Program>()
     .UseDefaultMiddleware()
     .UseNameCasing(Case.LowerCase);
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/DocExamples/GettingStarted/Eg4_Humanized/Program.cs#L12-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_humanized' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Eg4_Humanized/Program.cs#L12-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_calculator_humanized' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 `UseDefaultMiddleware` to take advantage of many more additional features, such as

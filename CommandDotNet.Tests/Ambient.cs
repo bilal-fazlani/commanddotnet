@@ -1,17 +1,15 @@
 using System;
-using System.Threading;
+using CommandDotNet.TestTools;
 using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests
 {
     public static class Ambient
     {
-        private static readonly AsyncLocal<ITestOutputHelper> TestOutputHelper = new();
-
         public static ITestOutputHelper? Output
         {
-            get => TestOutputHelper.Value;
-            set => TestOutputHelper.Value = value ?? throw new ArgumentNullException(nameof(value));
+            get => Ambient<ITestOutputHelper>.Instance;
+            set => Ambient<ITestOutputHelper>.Instance = value;
         }
 
         public static Action<string?> WriteLine

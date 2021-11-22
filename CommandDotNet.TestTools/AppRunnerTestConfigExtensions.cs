@@ -41,7 +41,6 @@ namespace CommandDotNet.TestTools
             {
                 throw new InvalidOperationException("System.Console is already being intercepted. Interception does not currently support parellel executions.");
             }
-
             var @out = new DuplexTextWriter(Console.Out, context.Console.Out);
             var error = new DuplexTextWriter(Console.Error, context.Console.Error);
             try
