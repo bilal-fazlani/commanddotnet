@@ -1,4 +1,4 @@
-// begin-snippet: getting-started-2-calculator-help
+// begin-snippet: getting-started-300-calculator-help
 ~
 $ dotnet calculator.dll --help
 Performs mathematical calculations

@@ -3,8 +3,8 @@
 Let's create a calculator console application which can perform 2 operations: Addition & Subtraction
 
 Begin by creating the commands:
-<!-- snippet: getting-started-1-calculator -->
-<a id='snippet-getting-started-1-calculator'></a>
+<!-- snippet: getting-started-100-calculator -->
+<a id='snippet-getting-started-100-calculator'></a>
 ```c#
 public class Program
 {
@@ -22,7 +22,7 @@ public class Program
     public void Subtract(int x, int y) => Console.WriteLine(x - y);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_1_Calculator.cs#L11-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-1-calculator' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_100_Calculator.cs#L11-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-100-calculator' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 That's it. You now have an applciation with two commands. Let's see about how we can call it from command line.
@@ -30,8 +30,8 @@ That's it. You now have an applciation with two commands. Let's see about how we
 Assuming our application's name is `calculator.dll`, let's run this app from command line using dotnet.
 First we'll check out the auto-generated help.
 
-<!-- snippet: getting-started-1-calculator-help -->
-<a id='snippet-getting-started-1-calculator-help'></a>
+<!-- snippet: getting-started-100-calculator-help -->
+<a id='snippet-getting-started-100-calculator-help'></a>
 ```bash
 ~
 $ dotnet calculator.dll --help
@@ -44,14 +44,14 @@ Commands:
 
 Use "dotnet calculator.dll [command] --help" for more information about a command.
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-1-calculator-help.bash#L1-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-1-calculator-help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-100-calculator-help.bash#L1-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-100-calculator-help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 From the root we can see the available commands. Instead of `--help` we could have used `-h` or `-?`. 
 We'll use `-h` to get help for the _Add_ command.
 
-<!-- snippet: getting-started-1-calculator-add-help -->
-<a id='snippet-getting-started-1-calculator-add-help'></a>
+<!-- snippet: getting-started-100-calculator-add-help -->
+<a id='snippet-getting-started-100-calculator-add-help'></a>
 ```bash
 ~
 $ dotnet calculator.dll Add -h
@@ -63,31 +63,31 @@ Arguments:
 
   y  <NUMBER>
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-1-calculator-add-help.bash#L1-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-1-calculator-add-help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-100-calculator-add-help.bash#L1-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-100-calculator-add-help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Let's try it out by adding two numbers
 
-<!-- snippet: getting-started-1-calculator-add -->
-<a id='snippet-getting-started-1-calculator-add'></a>
+<!-- snippet: getting-started-100-calculator-add -->
+<a id='snippet-getting-started-100-calculator-add'></a>
 ```bash
 ~
 $ dotnet calculator.dll Add 40 20
 60
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-1-calculator-add.bash#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-1-calculator-add' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-100-calculator-add.bash#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-100-calculator-add' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 CommandDotNet will validate if the arguments can be converted to the correct type.
 
-<!-- snippet: getting-started-1-calculator-add-invalid -->
-<a id='snippet-getting-started-1-calculator-add-invalid'></a>
+<!-- snippet: getting-started-100-calculator-add-invalid -->
+<a id='snippet-getting-started-100-calculator-add-invalid'></a>
 ```bash
 ~
 $ dotnet calculator.dll Add a 20
 'a' is not a valid Number
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-1-calculator-add-invalid.bash#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-1-calculator-add-invalid' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-100-calculator-add-invalid.bash#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-100-calculator-add-invalid' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 !!! Note

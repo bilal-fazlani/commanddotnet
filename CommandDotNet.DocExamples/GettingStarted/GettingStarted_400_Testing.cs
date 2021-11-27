@@ -6,11 +6,11 @@ using NUnit.Framework;
 namespace CommandDotNet.DocExamples.GettingStarted
 {
     [TestFixture]
-    public class GettingStarted_3_Testing
+    public class GettingStarted_400_Testing
     {
         public class Program
         {
-            // begin-snippet: getting-started-calculator-testable
+            // begin-snippet: getting-started-400-calculator
             static int Main(string[] args) => AppRunner.Run(args);
 
             public static AppRunner AppRunner => new AppRunner<Program>();
@@ -24,7 +24,7 @@ namespace CommandDotNet.DocExamples.GettingStarted
         [TestFixture]
         public class AddCommandTests
         {
-            // begin-snippet: getting-started-calculator-add-command-tests
+            // begin-snippet: getting-started-400-calculator-add-command-tests
             [Test]
             public void Given2Numbers_Should_OutputSum()
             {
@@ -38,7 +38,7 @@ namespace CommandDotNet.DocExamples.GettingStarted
         [TestFixture]
         public class AddCommandTestsBDD
         {
-            // begin-snippet: getting-started-calculator-add-command-tests-bdd
+            // begin-snippet: getting-started-400-calculator-add-command-tests-bdd
             [Test]
             public void Given2Numbers_Should_OutputSum() =>
                 Program.AppRunner.Verify(new Scenario

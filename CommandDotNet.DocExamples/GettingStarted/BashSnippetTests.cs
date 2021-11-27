@@ -11,14 +11,13 @@ namespace CommandDotNet.DocExamples.GettingStarted
     [TestFixture]
     public class BashSnippetTests
     {
-        public static List<(FieldInfo field, BashSnippet snippet)> Snippets { get; } = Assembly.GetExecutingAssembly().ExportedTypes
-            .SelectMany(t => t.GetFields(BindingFlags.Static | BindingFlags.Public))
-            .Where(f => f.FieldType == typeof(BashSnippet))
-            .Select(field => (field, (BashSnippet)field.GetValue(null)!))
+        public static List<BashSnippet> Snippets { get; } = Assembly.GetExecutingAssembly()
+            .ExportedTypes
+            .SelectMany(t => t.GetSnippets())
             .ToList();
 
         public static List<TestCaseData> SnippetCaseData { get; } = Snippets
-            .Select(s => new TestCaseData(s.snippet) { TestName = s.snippet.Name })
+            .Select(s => new TestCaseData(s) { TestName = s.MemberName })
             .ToList();
 
         [Test]
@@ -26,10 +25,10 @@ namespace CommandDotNet.DocExamples.GettingStarted
         {
             var dupes = string.Join(Environment.NewLine,
                 Snippets
-                    .GroupBy(s => s.snippet.Name)
+                    .GroupBy(s => s.Name)
                     .Where(g => g.Count() > 1)
                     .Select(g =>
-                        $"{g} {string.Join(",", g.Select(g => $"{g.field.DeclaringType!.Name}.{g.field.Name}"))}"));
+                        $"{g} {string.Join(",", g.Select(s => s.MemberName))}"));
 
             dupes.Should().BeNullOrEmpty("snippet names are duplicated");
         }
@@ -58,7 +57,7 @@ namespace CommandDotNet.DocExamples.GettingStarted
                        && file.GetText() == bashSnippet.FileText;
             }
 
-            foreach (var snippet in Snippets.Select(s => s.snippet))
+            foreach (var snippet in Snippets)
             {
                 if (MatchesFileContents(snippet))
                 {

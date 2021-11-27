@@ -4,8 +4,8 @@ Commands are be defined by methods and classes.
 
 Using our calculator example...
 
-<!-- snippet: getting-started-1-calculator -->
-<a id='snippet-getting-started-1-calculator'></a>
+<!-- snippet: getting-started-100-calculator -->
+<a id='snippet-getting-started-100-calculator'></a>
 ```c#
 public class Program
 {
@@ -23,7 +23,7 @@ public class Program
     public void Subtract(int x, int y) => Console.WriteLine(x - y);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_1_Calculator.cs#L11-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-1-calculator' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_100_Calculator.cs#L11-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-100-calculator' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 __Program__ is the root command and is not directly referenced in the terminal. The root command is the type specified in `AppRunner<TRootCommand>`

@@ -1,4 +1,4 @@
-// begin-snippet: getting_started_5_pipes_range
+// begin-snippet: getting-started-700-pipes_range
 ~
 $ dotnet linq.dll Range 1 4
 1

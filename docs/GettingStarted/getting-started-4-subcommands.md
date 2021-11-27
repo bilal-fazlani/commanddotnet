@@ -4,8 +4,8 @@ CommandDotNet has packages to utilize the [DataAnnotations](../Arguments/data-an
 
 Let's set the support for DataAnnotations and how you can use [Argument Models](../Arguments/argument-models.md) to reuse argument definitions and validations.
 
-<!-- snippet: dataannotations_1_table -->
-<a id='snippet-dataannotations_1_table'></a>
+<!-- snippet: dataannotations-1-table -->
+<a id='snippet-dataannotations-1-table'></a>
 ```c#
 public class Program
 {
@@ -54,7 +54,7 @@ public class Verbosity : IArgumentModel, IValidatableObject
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/DataAnnotations/DataAnnotations_1_Table.cs#L13-L60' title='Snippet source file'>snippet source</a> | <a href='#snippet-dataannotations_1_table' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/DataAnnotations/DataAnnotations_1_Table.cs#L13-L60' title='Snippet source file'>snippet source</a> | <a href='#snippet-dataannotations-1-table' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 There's a lot more going on here. so let's break it down. 
@@ -78,8 +78,8 @@ ArgumentModels can contain other ArgumentModels and validation will be run at al
 
 Here is the help for this command. We haven't defined any descriptions or such. Notice validation logic is not shown in the help. This is something you could add with additional middleware. We also accept feature contributions :).
 
-<!-- snippet: dataannotations_1_table_create_help -->
-<a id='snippet-dataannotations_1_table_create_help'></a>
+<!-- snippet: dataannotations-1-table-create-help -->
+<a id='snippet-dataannotations-1-table-create-help'></a>
 ```bash
 ~
 $ dotnet table.dll create --help
@@ -99,13 +99,13 @@ Options:
 
   -v | --verbose
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/DataAnnotations_1_table_create_help.bash#L1-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-dataannotations_1_table_create_help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/DataAnnotations-1-table-create-help.bash#L1-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-dataannotations-1-table-create-help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 When the command is run with invalid arguments, you get the resulting error messages. Notice we were able to club (aka bundle) the `Silent` and `Verbose` shortnames `-sv`. 
 
-<!-- snippet: dataannotations_1_table_create -->
-<a id='snippet-dataannotations_1_table_create'></a>
+<!-- snippet: dataannotations-1-table-create -->
+<a id='snippet-dataannotations-1-table-create'></a>
 ```bash
 ~
 $ dotnet hr.dll create TooLongTableName --server bossman --owner abc -sv
@@ -114,5 +114,5 @@ silent and verbose are mutually exclusive. There can be only one!
 'name' must be a string or array type with a maximum length of '10'.
 'owner' is not a valid e-mail address.
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/DataAnnotations_1_table_create.bash#L1-L8' title='Snippet source file'>snippet source</a> | <a href='#snippet-dataannotations_1_table_create' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/DataAnnotations-1-table-create.bash#L1-L8' title='Snippet source file'>snippet source</a> | <a href='#snippet-dataannotations-1-table-create' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->

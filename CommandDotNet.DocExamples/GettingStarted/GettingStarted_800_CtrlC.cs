@@ -6,31 +6,29 @@ using NUnit.Framework;
 namespace CommandDotNet.DocExamples.GettingStarted
 {
     [TestFixture]
-    public class GettingStarted_5_Pipes
+    public class GettingStarted_800_CtrlC
     {
-        // begin-snippet: getting_started_5_pipes
+        // begin-snippet: getting-started-800-ctrlc
         public class Program
         {
             static int Main(string[] args) => AppRunner.Run(args);
 
-            public static AppRunner AppRunner => new AppRunner<Program>();
+            public static AppRunner AppRunner => 
+                new AppRunner<Program>()
+                    .UseCancellationHandlers();
 
-            public void Range(IConsole console, int start, int count, int sleep = 0)
+            public void Range(IConsole console, CancellationToken ct, int start, int count, int sleep = 0)
             {
-                foreach (var i in Enumerable.Range(start, count))
+                foreach (var i in Enumerable.Range(start, count).UntilCancelled(ct, sleep))
                 {
                     console.WriteLine(i);
-                    if (sleep > 0)
-                    {
-                        Thread.Sleep(sleep);
-                    }
                 }
             }
 
-            public void Sum(IConsole console, IEnumerable<int> values)
+            public void Sum(IConsole console, CancellationToken ct, IEnumerable<int> values)
             {
                 int total = 0;
-                foreach (var value in values)
+                foreach (var value in values.ThrowIfCancelled(ct))
                 {
                     console.WriteLine(total += value);
                 }
@@ -38,7 +36,7 @@ namespace CommandDotNet.DocExamples.GettingStarted
         }
         // end-snippet
 
-        public static BashSnippet Range = new("getting_started_5_pipes_range",
+        public static BashSnippet Range = new("getting-started-800-ctrlc_range",
             Program.AppRunner,
             "dotnet linq.dll", "Range 1 4", 0,
             @"1
@@ -46,7 +44,7 @@ namespace CommandDotNet.DocExamples.GettingStarted
 3
 4");
 
-        public static BashSnippet Sum = new("getting_started_5_pipes_sum",
+        public static BashSnippet Sum = new("getting-started-800-ctrlc_sum",
             Program.AppRunner,
             "dotnet linq.dll", "Sum 1 2 3 4", 0,
             @"1

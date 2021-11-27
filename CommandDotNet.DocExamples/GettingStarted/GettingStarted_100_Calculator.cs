@@ -6,9 +6,9 @@ using NUnit.Framework;
 namespace CommandDotNet.DocExamples.GettingStarted
 {
     [TestFixture]
-    public class GettingStarted_1_Calculator
+    public class GettingStarted_100_Calculator
     {
-        // begin-snippet: getting-started-1-calculator
+        // begin-snippet: getting-started-100-calculator
         public class Program
         {
             // this is the entry point of your application
@@ -26,7 +26,7 @@ namespace CommandDotNet.DocExamples.GettingStarted
         }
         // end-snippet
 
-        public static BashSnippet Help = new("getting-started-1-calculator-help",
+        public static BashSnippet Help = new("getting-started-100-calculator-help",
             new AppRunner<Program>(),
             "dotnet calculator.dll", "--help", 0,
             @"Usage: {0} [command]
@@ -38,7 +38,7 @@ Commands:
 
 Use ""{0} [command] --help"" for more information about a command.");
 
-        public static BashSnippet Help_Add = new("getting-started-1-calculator-add-help",
+        public static BashSnippet Help_Add = new("getting-started-100-calculator-add-help",
             new AppRunner<Program>(),
             "dotnet calculator.dll", "Add -h", 0,
             @"Usage: {0} Add <x> <y>
@@ -49,13 +49,13 @@ Arguments:
 
   y  <NUMBER>");
 
-        public static BashSnippet Add = new("getting-started-1-calculator-add",
+        public static BashSnippet Add = new("getting-started-100-calculator-add",
             new AppRunner<Program>().InterceptSystemConsoleWrites(),
             "dotnet calculator.dll", "Add 40 20", 0,
             @"60");
 
 
-        public static BashSnippet Add_Invalid = new("getting-started-1-calculator-add-invalid",
+        public static BashSnippet Add_Invalid = new("getting-started-100-calculator-add-invalid",
             new AppRunner<Program>(),
             "dotnet calculator.dll", "Add a 20", 2,
             @"'a' is not a valid Number");

@@ -1,12 +1,7 @@
-// begin-snippet: getting_started_other_features_help
+// begin-snippet: getting-started-100-calculator-help
 ~
 $ dotnet calculator.dll --help
-Usage: dotnet calculator.dll [command] [options]
-
-Options:
-
-  -v | --version
-  Show version information
+Usage: dotnet calculator.dll [command]
 
 Commands:
 

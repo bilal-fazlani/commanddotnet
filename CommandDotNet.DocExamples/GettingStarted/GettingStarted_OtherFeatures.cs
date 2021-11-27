@@ -7,7 +7,7 @@
             static int Main(string[] args) => AppRunner.Run(args);
 
             public static AppRunner AppRunner =>
-                // begin-snippet: getting_started_other_features
+                // begin-snippet: getting-started-other-features
                 new AppRunner<Program>()
                     .UseDefaultMiddleware();
             // end-snippet
@@ -18,7 +18,7 @@
         }
 
 
-        public static BashSnippet Help = new("getting_started_other_features_help",
+        public static BashSnippet Help = new("getting-started-other-features_help",
             Program.AppRunner,
             "dotnet calculator.dll", "--help", 0,
             @"Usage: {0} [command] [options]

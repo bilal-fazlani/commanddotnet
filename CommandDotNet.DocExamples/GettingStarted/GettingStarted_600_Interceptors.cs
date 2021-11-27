@@ -7,9 +7,9 @@ using NUnit.Framework;
 namespace CommandDotNet.DocExamples.GettingStarted
 {
     [TestFixture]
-    public class GettingStarted_5_Interceptors
+    public class GettingStarted_600_Interceptors
     {
-        // begin-snippet: getting-started-4-interceptors
+        // begin-snippet: getting-started-600-interceptors
         public class Program
         {
             static int Main(string[] args) => AppRunner.Run(args);
@@ -50,7 +50,7 @@ namespace CommandDotNet.DocExamples.GettingStarted
         [TestFixture]
         public class AddCommandTests
         {
-            // begin-snippet: getting-started-calculator-add-command-tests
+            // begin-snippet: getting-started-400-calculator-add-command-tests
             [Test]
             public void Given2Numbers_Should_OutputSum()
             {
@@ -64,7 +64,7 @@ namespace CommandDotNet.DocExamples.GettingStarted
         [TestFixture]
         public class AddCommandTestsBDD
         {
-            // begin-snippet: getting-started-calculator-add-command-tests-bdd
+            // begin-snippet: getting-started-400-calculator-add-command-tests-bdd
             [Test]
             public void Given2Numbers_Should_OutputSum() =>
                 Program.AppRunner.Verify(new Scenario

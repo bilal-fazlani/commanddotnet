@@ -7,9 +7,9 @@ using NUnit.Framework;
 namespace CommandDotNet.DocExamples.GettingStarted
 {
     [TestFixture]
-    public class GettingStarted_2_Help
+    public class GettingStarted_300_Help
     {
-        // begin-snippet: getting-started-2-calculator
+        // begin-snippet: getting-started-300-calculator
         [Command(
             Description = "Performs mathematical calculations",
             ExtendedHelpTextLines = new []
@@ -39,7 +39,7 @@ namespace CommandDotNet.DocExamples.GettingStarted
         }
         // end-snippet
      
-        public static BashSnippet Help = new("getting-started-2-calculator-help",
+        public static BashSnippet Help = new("getting-started-300-calculator-help",
             new AppRunner<Program>(),
             "dotnet calculator.dll", "--help", 0,
             @"Performs mathematical calculations
@@ -56,7 +56,7 @@ Use ""{0} [command] --help"" for more information about a command.
 Include multiple lines of text
 Extended help of the root command is a good place to describe directives for the app");
 
-        public static BashSnippet Help_Add = new("getting-started-2-calculator-add-help",
+        public static BashSnippet Help_Add = new("getting-started-300-calculator-add-help",
             new AppRunner<Program>(),
             "dotnet calculator.dll", "Add -h", 0,
             @"Adds two numbers
@@ -74,7 +74,7 @@ Arguments:
 
 single line of extended help here");
 
-        public static BashSnippet Basic_Help_Add = new("getting-started-2-calculator-add-basic-help",
+        public static BashSnippet Basic_Help_Add = new("getting-started-300-calculator-add-basic-help",
             new AppRunner<Program>(new AppSettings{Help = {TextStyle = HelpTextStyle.Basic}}),
             "dotnet calculator.dll", "Add -h", 0,
             @"Adds two numbers
@@ -90,7 +90,7 @@ single line of extended help here");
 
         [Test]
         public void Given2Numbers_Should_Subtract() =>
-            new AppRunner<GettingStarted_1_Calculator.Program>()
+            new AppRunner<GettingStarted_100_Calculator.Program>()
                 .InterceptSystemConsoleWrites()
                 .Verify(new Scenario
                 {

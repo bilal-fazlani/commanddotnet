@@ -1,4 +1,7 @@
-﻿namespace CommandDotNet.DocExamples
+﻿using System.Reflection;
+using NuGet.Frameworks;
+
+namespace CommandDotNet.DocExamples
 {
     public class BashSnippet
     {
@@ -10,6 +13,9 @@
 
         public string Output { get; }
         public string FileText { get; }
+
+        public MemberInfo? Member { get; set; }
+        public string? MemberName => Member is null ? null : $"{Member.DeclaringType!.Name}.{Member.Name}";
 
         public BashSnippet(string name, AppRunner runner, string appName, string args, int exitCode, string output)
         {

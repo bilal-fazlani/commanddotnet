@@ -4,8 +4,8 @@ The above command will take 40 seconds to execute. The way it's currently config
 
 With console applications, the standard pattern is to exit the app when Ctrl+C is pressed.  Here's how we support that pattern with CommandDotNet.
 
-<!-- snippet: getting_started_6_ctrlc -->
-<a id='snippet-getting_started_6_ctrlc'></a>
+<!-- snippet: getting-started-800-ctrlc -->
+<a id='snippet-getting-started-800-ctrlc'></a>
 ```c#
 public class Program
 {
@@ -33,7 +33,7 @@ public class Program
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_6_CtrlC.cs#L11-L37' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_6_ctrlc' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_800_CtrlC.cs#L11-L37' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-800-ctrlc' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Again, CommandDotNet makes this very easy. Configure the app with `UseCancellationHandlers()` and a `CancellationToken` can be injected into your commands. 

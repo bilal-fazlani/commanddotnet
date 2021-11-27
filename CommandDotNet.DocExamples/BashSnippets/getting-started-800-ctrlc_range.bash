@@ -1,4 +1,4 @@
-// begin-snippet: getting_started_6_ctrlc_range
+// begin-snippet: getting-started-800-ctrlc_range
 ~
 $ dotnet linq.dll Range 1 4
 1

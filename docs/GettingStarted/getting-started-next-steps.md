@@ -2,13 +2,13 @@
 
 In the `Program.Main`, we configured the app with the basic feature set.
 
-<!-- snippet: getting_started_other_features -->
-<a id='snippet-getting_started_other_features'></a>
+<!-- snippet: getting-started-other-features -->
+<a id='snippet-getting-started-other-features'></a>
 ```c#
 new AppRunner<Program>()
     .UseDefaultMiddleware();
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_OtherFeatures.cs#L10-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_other_features' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_OtherFeatures.cs#L10-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-other-features' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 `UseDefaultMiddleware` to take advantage of many more additional features, such as
