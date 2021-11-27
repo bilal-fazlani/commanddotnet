@@ -1,5 +1,9 @@
 # CommandDotNet.Spectre.Testing
 
+## 2.0.2
+
+option to trim ending whitespace when getting test console output
+
 ## 2.0.1
 
 remove nuget package refs no longer required after move to net5.0

@@ -4,19 +4,43 @@
 
 Back with some more goodness. This fix focuses on improvements for developers and some features to support advanced use cases.
 
-### Highlights
+### Improvements
 
-#### Terser definition of argument names
+#### Terser definition of command and argument names
 
 We've simplified how you can define short names and override long names. 
 
-Until now, it worked like `[Option(ShortName="f", LongName="file")]` and `[Operand(Name = "file")]`
+Until now, it worked like `[Option(ShortName="f", LongName="file")]`, `[Operand(Name = "file")]`, and `[Command(Name = "move")]`
 
-Now available: `[Option('f', "file")]` and `[Operand("file")]`
+Now available: `[Option('f', "file")]`, `[Operand("file")]`, and `[Command("move")]`
 
-You can run this script in git bash in the folder containing your commmand definitions to update usages.
+`[SubCommand]` has also been deprecated and replaced by `[Subcommand]`
 
-The old pattern has been deprecated but is still supported.
+The old patterns have been deprecated but is still supported for this version.
+
+You can run [this script](https://github.com/bilal-fazlani/commanddotnet/tree/master/scripts/v6-upgrade-attrs.sh) in git bash in the folder containing your commmand definitions to update usages for these attributes. It assumes:
+
+- The names are on the same line as the attribute
+- The names are the first properties specified after the attribute
+
+#### IConsole moved
+
+IConsole has been moved to the root CommandDotNet namespace. While tis is a breaking change, most files where you're using IConsole probably already reference CommandDotNet which means you're likely to have unused usings than build failures.
+
+#### Error handling
+
+The CommandDotNet exceptions have been consolidated into two types 
+
+- Dev errors (InvalidConfigurationException)
+- User errors (ValueParsingException)
+
+These errors are intercepted and displayed to the user before the registered error handler is called. This ensures your error handler can focus on exceptions from your app. We've also ensured stack traces will not be shown for these exceptions
+
+### Bug Fixes
+
+* fixed bug where streaming into an IEnumerable<T> where T is not a string would crash
+
+### New Features
 
 #### IEnvironment
 
@@ -42,14 +66,18 @@ A global default can be set using AppSettings.Arguments.DefaultOptionSplit
 
 The user can also override by using the `[split:-]` directive for `--name=jack-jill`.
 
-#### Error handling improvements
+#### Subcommand rename
 
-The CommandDotNet exceptions have been consolidated into two types 
+One of the non-obvious but powerful features of CommandDotNet is that a command can be reused as a subcommand for several commands. It's likely the desired to reuse the same name for consistency, but there could be exceptions.
 
-- Dev errors (InvalidConfigurationException)
-- User errors (ValueParsingException)
+The subcommand attribute now contains a `RenameAs` property. When used, the command will use that name instead of the name defined in the `CommandAttribute` or derived from the class name.
 
-These errors are intercepted and displayed to the user before the registered error handler is called. This ensures your error handler can focus on exceptions from your app. We've also ensured stack traces will not be shown for these exceptions
+#### EnumerableCancellationExtensions
+
+Added to new extensions for enumerable to make it easier to exit commands when Ctrl+C is pressed. 
+
+- `items.UntilCancelled(cancellationToken)`
+- `items.ThrowIfCancelled(cancellationToken)`
 
 ## 5.0.1
 
