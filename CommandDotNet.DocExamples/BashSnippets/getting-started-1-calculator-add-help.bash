@@ -1,4 +1,4 @@
-// begin-snippet: getting_started_1_calculator_add_help
+// begin-snippet: getting-started-1-calculator-add-help
 ~
 $ dotnet calculator.dll Add -h
 Usage: dotnet calculator.dll Add <x> <y>

@@ -4,19 +4,26 @@ Commands are be defined by methods and classes.
 
 Using our calculator example...
 
-<!-- snippet: getting_started_1_calculator -->
-<a id='snippet-getting_started_1_calculator'></a>
+<!-- snippet: getting-started-1-calculator -->
+<a id='snippet-getting-started-1-calculator'></a>
 ```c#
 public class Program
 {
-    static int Main(string[] args) => new AppRunner<Program>().Run(args);
+    // this is the entry point of your application
+    static int Main(string[] args)
+    {
+        // AppRunner<T> where T is the class defining your commands
+        return new AppRunner<Program>().Run(args);
+    }
 
+    // Add command with two positional arguments
     public void Add(int x, int y) => Console.WriteLine(x + y);
 
+    // Subtract command with two positional arguments
     public void Subtract(int x, int y) => Console.WriteLine(x - y);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_1_Calculator.cs#L11-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting_started_1_calculator' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_1_Calculator.cs#L11-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-1-calculator' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 __Program__ is the root command and is not directly referenced in the terminal. The root command is the type specified in `AppRunner<TRootCommand>`
@@ -37,8 +44,8 @@ Every public method will be interpreted as a command and the command name will b
 
 Use the `[Command]` attribute to change the command name, enhance help output and provide parser hints.
 
-<!-- snippet: commands_1_calculator -->
-<a id='snippet-commands_1_calculator'></a>
+<!-- snippet: commands-1-calculator -->
+<a id='snippet-commands-1-calculator'></a>
 ```c#
 [Command("Sum",
     Usage = "sum <int> [<int> ...]",
@@ -47,11 +54,11 @@ Use the `[Command]` attribute to change the command name, enhance help output an
 public void Add(IEnumerable<int> numbers) =>
     Console.WriteLine(numbers.Sum());
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Eg1_Minimum/Calculator.cs#L13-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_1_calculator' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands_1_Calculator.cs#L13-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands-1-calculator' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-<!-- snippet: commands_1_calculator_sum_help -->
-<a id='snippet-commands_1_calculator_sum_help'></a>
+<!-- snippet: commands-1-calculator-sum-help -->
+<a id='snippet-commands-1-calculator-sum-help'></a>
 ```bash
 ~
 $ dotnet calculator.dll Sum --help
@@ -65,7 +72,7 @@ Arguments:
 
 more details and examples could be provided here
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/commands_1_calculator_sum_help.bash#L1-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_1_calculator_sum_help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/commands-1-calculator-sum-help.bash#L1-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands-1-calculator-sum-help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 !!! Note
@@ -102,29 +109,34 @@ ExtendedHelpText = "Directives:\n" +
 
 Two template variables are available for use in Usage, Description and ExtendedHelpText: `%AppName%` and `%CmdPath%`
 
-<!-- snippet: commands_git -->
-<a id='snippet-commands_git'></a>
+<!-- snippet: commands-2-git -->
+<a id='snippet-commands-2-git'></a>
 ```c#
-public class Git
+public class Program
 {
+    static int Main(string[] args) => AppRunner.Run(args);
+    public static AppRunner AppRunner => new AppRunner<Program>().UseNameCasing(Case.KebabCase);
+
     [Subcommand]
     public class Stash
     {
-        [Command(Usage = "%AppName% %CmdPath%")]
-        public void Pop(){ }
-
         [DefaultCommand]
-        public void StashChanges(){ }
+        public void StashImpl(IConsole console) => console.WriteLine("stash");
+
+        [Command(Usage = "%AppName% %CmdPath%")]
+        public void Pop(IConsole console) => console.WriteLine("pop");
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Eg1_Minimum/Git.cs#L3-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_git' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands_2_Git.cs#L8-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands-2-git' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-help for Pop may have `Usage: dotnet examples.dll Git Stash Pop`
+help for Pop may have `Usage: git Stash Pop`
 
-- %AppName% = `dotnet examples.dll`
+- %AppName% = `git`
 - %CmdPath% = `Git Stash Pop`
+
+This is useful when you want to override the Usage example and still want to include how the command would be called.
 
 #### AppName
 
@@ -138,13 +150,13 @@ Use `%CmdPath%` to include the full path of commands. This is helpful when worki
 
 Let's assume we have a program with a single command defined, called `Process`. 
 
-<!-- snippet: commands_default_command -->
-<a id='snippet-commands_default_command'></a>
+<!-- snippet: commands-3-default-command -->
+<a id='snippet-commands-3-default-command'></a>
 ```c#
 public class Program
 {
-    static int Main(string[] args) =>
-        new AppRunner<Program>().Run(args);
+    static int Main(string[] args) => AppRunner.Run(args);
+    public static AppRunner AppRunner => new AppRunner<Program>();
 
     [DefaultCommand]
     public void Process()
@@ -153,7 +165,7 @@ public class Program
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Eg1_Minimum/Process.cs#L3-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_default_command' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Cmomands_3_DefaultCommand.cs#L7-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands-3-default-command' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Because the Program is considered the RootCommand, you'll need to explicitely call the Process command. eg.

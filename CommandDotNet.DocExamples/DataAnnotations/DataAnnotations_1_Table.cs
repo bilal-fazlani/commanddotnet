@@ -10,7 +10,7 @@ namespace CommandDotNet.DocExamples.DataAnnotations
     [TestFixture]
     public class DataAnnotations_1_Table
     {
-        // begin-snippet: dataannotations_1_table
+        // begin-snippet: dataannotations-1-table
         public class Program
         {
             static int Main(string[] args) => AppRunner.Run(args);
@@ -19,7 +19,7 @@ namespace CommandDotNet.DocExamples.DataAnnotations
                 new AppRunner<Program>()
                     .UseNameCasing(Case.LowerCase)
                     .UseDataAnnotationValidations();
-
+            
             public Task<int> Interceptor(InterceptorExecutionDelegate next, Verbosity verbosity)
             {
                 // pre-execution logic here
@@ -59,7 +59,7 @@ namespace CommandDotNet.DocExamples.DataAnnotations
         }
         // end-snippet
 
-        public static BashSnippet Help = new("DataAnnotations_1_table_create_help",
+        public static BashSnippet Help = new("DataAnnotations-1-table-create-help",
             Program.AppRunner,
             "dotnet table.dll", "create --help", 0,
             @"Usage: {0} create [options] <name>
@@ -78,7 +78,7 @@ Options:
 
   -v | --verbose");
 
-        public static BashSnippet Hire = new("DataAnnotations_1_table_create",
+        public static BashSnippet Hire = new("DataAnnotations-1-table-create",
             Program.AppRunner,
             "dotnet hr.dll", "create TooLongTableName --server bossman --owner abc -sv", 2,
             @"silent and verbose are mutually exclusive. There can be only one!

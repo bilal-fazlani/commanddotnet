@@ -1,4 +1,4 @@
-// begin-snippet: getting_started_1_calculator_add
+// begin-snippet: getting-started-1-calculator-add
 ~
 $ dotnet calculator.dll Add 40 20
 60

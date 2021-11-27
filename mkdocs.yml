@@ -8,7 +8,15 @@ strict: true
 nav:
     - Home: index.md
     - Documentation:
-      - getting-started.md
+      - Getting Started:
+        - GettingStarted/getting-started-0.md
+        - GettingStarted/getting-started-1-calculator.md
+        - GettingStarted/getting-started-2-help.md
+        - GettingStarted/getting-started-3-tests.md
+        - GettingStarted/getting-started-4-validation.md
+        - GettingStarted/getting-started-5-pipes.md
+        - GettingStarted/getting-started-6-ctrlc.md
+        - GettingStarted/getting-started-next-steps.md
       - argument-terminology.md
       - Commands:
         - Commands/commands.md

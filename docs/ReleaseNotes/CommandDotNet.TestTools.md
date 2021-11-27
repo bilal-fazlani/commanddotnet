@@ -13,7 +13,6 @@ Intercepts Console.Out and Console.Error. Text is still written to those writers
 
 This is not currently suitable for tests run in parallel, but we accept PRs if you'd like to see this functionality in CommandDotNet.
 
-
 ## 4.0.1
 
 remove nuget package refs no longer required after move to net5.0

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 
-namespace CommandDotNet.DocExamples.Commands.Eg1_Minimum
+namespace CommandDotNet.DocExamples.Commands
 {
     [TestFixture]
     public class Commands_1_Calculator
     {
         public class Program
         {
-            // begin-snippet: commands_1_calculator
+            // begin-snippet: commands-1-calculator
             [Command("Sum",
                 Usage = "sum <int> [<int> ...]",
                 Description = "sums all the numbers provided",
@@ -23,7 +23,7 @@ namespace CommandDotNet.DocExamples.Commands.Eg1_Minimum
                 Console.WriteLine(x + y);
         }
 
-        public static BashSnippet Help = new("commands_1_calculator_sum_help",
+        public static BashSnippet Help = new("commands-1-calculator-sum-help",
             new AppRunner<Program>(), "dotnet calculator.dll", "Sum --help", 0,
             @"sums all the numbers provided
 
