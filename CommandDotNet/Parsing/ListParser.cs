@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using CommandDotNet.Extensions;
 using CommandDotNet.TypeDescriptors;
 
@@ -31,7 +32,17 @@ namespace CommandDotNet.Parsing
 
             if (listInstance == null)
             {
-                return values;
+                if (_underlyingType == typeof(string))
+                {
+                    return values;
+                }
+
+                // must create delegate of correct type to invoke command method
+                // while casting only as the stream is consumed
+                Func<IEnumerable, object> f = Enumerable.Cast<object>;
+                var cast = f.Method.GetGenericMethodDefinition().MakeGenericMethod(_underlyingType);
+                var enumerable = values.Select(v => _argumentTypeDescriptor.ParseString(argument, v));
+                return cast.Invoke(null, new[] { enumerable });
             }
 
             foreach (string stringValue in values)
