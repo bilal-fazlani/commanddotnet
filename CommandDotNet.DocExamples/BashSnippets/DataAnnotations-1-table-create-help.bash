@@ -1,4 +1,4 @@
-// begin-snippet: DataAnnotations_1_table_create_help
+// begin-snippet: DataAnnotations-1-table-create-help
 ~
 $ dotnet table.dll create --help
 Usage: dotnet table.dll create [options] <name>

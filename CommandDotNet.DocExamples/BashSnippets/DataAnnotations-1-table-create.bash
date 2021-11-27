@@ -1,4 +1,4 @@
-// begin-snippet: DataAnnotations_1_table_create
+// begin-snippet: DataAnnotations-1-table-create
 ~
 $ dotnet hr.dll create TooLongTableName --server bossman --owner abc -sv
 silent and verbose are mutually exclusive. There can be only one!
