@@ -29,6 +29,23 @@ namespace CommandDotNet.Diagnostics
                    ?? ex.InnerException?.GetCommandContext();
         }
 
+        public static bool IsFor<TEx>(this Exception exception, out TEx? ex)
+        {
+            if (exception is TEx tex)
+            {
+                ex = tex;
+                return true;
+            }
+
+            if (exception.InnerException is null)
+            {
+                ex = default(TEx);
+                return false;
+            }
+
+            return exception.InnerException.IsFor(out ex);
+        }
+
         public static string Print(this Exception ex, Indent? indent = null,
             bool includeProperties = false, bool includeData = false, bool includeStackTrace = false,
             bool excludeTypeName = false)

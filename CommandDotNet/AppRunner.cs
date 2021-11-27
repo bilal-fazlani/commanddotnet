@@ -162,14 +162,14 @@ namespace CommandDotNet
 
             var console = commandContext?.Console ?? AppConfig?.Console ?? new SystemConsole();
 
-            if (ex is ValueParsingException)
+            if (ex.IsFor<ValueParsingException>(out var vpe))
             {
-                console.Error.WriteLine(ex.Print(excludeTypeName: true));
+                console.Error.WriteLine(vpe!.Print(excludeTypeName: true));
                 return ExitCodes.Error.Result;
             }
-            if (ex is InvalidConfigurationException)
+            if (ex.IsFor<InvalidConfigurationException>(out var ice))
             {
-                console.Error.WriteLine(ex.Print());
+                console.Error.WriteLine(ice!.Print());
                 return ExitCodes.Error.Result;
             }
             if (_handleErrorDelegate != null)
