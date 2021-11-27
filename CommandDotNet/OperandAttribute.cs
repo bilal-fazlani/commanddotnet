@@ -14,8 +14,12 @@ namespace CommandDotNet
     {
         [Obsolete("Use constructor instead of setting this property")]
         public string? Name { get; set; }
-
+        
+        /// <summary>The description to show in the help</summary>
         public string? Description { get; set; }
+
+        /// <summary>The multiline description to show in the help</summary>
+        public string[]? DescriptionLines { get; set; }
 
         public int CallerLineNumber { get; }
 

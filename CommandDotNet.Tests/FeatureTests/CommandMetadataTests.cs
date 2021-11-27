@@ -27,6 +27,8 @@ namespace CommandDotNet.Tests.FeatureTests
 Usage: some usage examples
 
 Commands:
+  Multiline    descr1
+descr2
   somecommand  cmd description
   SubApp       sub-app description
 
@@ -51,6 +53,8 @@ Usage: some usage examples
 
 Commands:
 
+  Multiline    descr1
+descr2
   somecommand  cmd description
   SubApp       sub-app description
 
@@ -167,6 +171,100 @@ cmd extended help"
             });
         }
 
+        [Fact]
+        public void Multiline_BasicHelp_DisplaysCommandAttrData()
+        {
+            new AppRunner<App>(BasicHelp).Verify(new Scenario
+            {
+                When = { Args = "Multiline -h" },
+                Then =
+                {
+                    Output = @"descr1
+descr2
+
+Usage: usage1
+usage2
+
+exthelp1
+exthelp2"
+                }
+            });
+        }
+
+        [Fact]
+        public void Multiline_DetailedHelp_DisplaysCommandAttrData()
+        {
+            new AppRunner<App>(DetailedHelp).Verify(new Scenario
+            {
+                When = { Args = "Multiline -h" },
+                Then =
+                {
+                    Output = @"descr1
+descr2
+
+Usage: usage1
+usage2
+
+exthelp1
+exthelp2"
+                }
+            });
+        }
+
+        [Fact]
+        public void Errors_when_duplicate_description_properties_are_used()
+        {
+            new AppRunner<DupeDescriptions>().Verify(new Scenario
+            {
+                When = { Args = "" },
+                Then =
+                {
+                    ExitCode = 1,
+                    Output = "CommandDotNet.InvalidConfigurationException: Both Description and DescriptionLines were set for " +
+                             "CommandDotNet.Tests.FeatureTests.CommandMetadataTests+DupeDescriptions. Only one can be set."
+                }
+            });
+        }
+
+        [Fact]
+        public void Errors_when_duplicate_usage_properties_are_used()
+        {
+            new AppRunner<DupeUsages>().Verify(new Scenario
+            {
+                When = { Args = "" },
+                Then =
+                {
+                    ExitCode = 1,
+                    Output = "CommandDotNet.InvalidConfigurationException: Both Usage and UsageLines were set for " +
+                             "CommandDotNet.Tests.FeatureTests.CommandMetadataTests+DupeUsages. Only one can be set."
+                }
+            });
+        }
+
+        [Fact]
+        public void Errors_when_duplicate_extendedhelp_properties_are_used()
+        {
+            new AppRunner<DupeExtendendHelps>().Verify(new Scenario
+            {
+                When = { Args = "" },
+                Then =
+                {
+                    ExitCode = 1,
+                    Output = "CommandDotNet.InvalidConfigurationException: Both ExtendedHelpText and ExtendedHelpTextLines were set for " +
+                             "CommandDotNet.Tests.FeatureTests.CommandMetadataTests+DupeExtendendHelps. Only one can be set."
+                }
+            });
+        }
+
+        [Command(Description = "", DescriptionLines = new[] { "" })]
+        private class DupeDescriptions { }
+
+        [Command(Usage = "", UsageLines = new[] { "" })]
+        private class DupeUsages { }
+
+        [Command(ExtendedHelpText = "", ExtendedHelpTextLines = new[] { "" })]
+        private class DupeExtendendHelps { }
+
         // sanity check for ApplicationMetadata until it has been removed 
         [Command("SomeApp",
             Description = "app description",
@@ -193,6 +291,15 @@ cmd extended help"
                 {
                     return value;
                 }
+            }
+
+            [Command(
+                DescriptionLines = new[] { "descr1", "descr2" },
+                UsageLines = new[] { "usage1", "usage2" },
+                ExtendedHelpTextLines = new[] { "exthelp1", "exthelp2" })]
+            public void Multiline()
+            {
+
             }
         }
     }

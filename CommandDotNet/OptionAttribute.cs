@@ -44,8 +44,12 @@ namespace CommandDotNet
         public bool NoLongName { get; private set; }
         
         string? INameAndDescription.Name => _longName;
-
+        
+        /// <summary>The description to show in the help</summary>
         public string? Description { get; set; }
+
+        /// <summary>The multiline description to show in the help</summary>
+        public string[]? DescriptionLines { get; set; }
 
         /// <summary>
         /// When Explicit, boolean options require a 'true' or 'false' value be specified.<br/>

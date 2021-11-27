@@ -23,9 +23,9 @@ namespace CommandDotNet.ClassModeling.Definitions
             var commandAttribute = commandDef.GetCustomAttribute<CommandAttribute>();
             if (commandAttribute != null)
             {
-                command.Description = commandAttribute.Description;
-                command.Usage = commandAttribute.Usage;
-                command.ExtendedHelpText = commandAttribute.ExtendedHelpText;
+                command.Description = JoinFromAttribute(commandDef, nameof(commandAttribute.Description), commandAttribute.Description, commandAttribute.DescriptionLines);
+                command.Usage = JoinFromAttribute(commandDef, nameof(commandAttribute.Usage), commandAttribute.Usage, commandAttribute.UsageLines);
+                command.ExtendedHelpText = JoinFromAttribute(commandDef, nameof(commandAttribute.ExtendedHelpText), commandAttribute.ExtendedHelpText, commandAttribute.ExtendedHelpTextLines);
             }
 
             var appSettings = commandContext.AppConfig.AppSettings;
@@ -96,7 +96,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                     customAttributes: argumentDef.CustomAttributes,
                     argumentDef.ValueProxy)
                 {
-                    Description = operandAttr?.Description,
+                    Description = JoinFromAttribute(argumentDef, nameof(operandAttr.Description), operandAttr?.Description, operandAttr?.DescriptionLines),
                     Default = argumentDefault
                 };
             }
@@ -119,13 +119,24 @@ namespace CommandDotNet.ClassModeling.Definitions
                     assignToExecutableSubcommands: assignOnlyToExecutableSubcommands,
                     valueProxy: argumentDef.ValueProxy)
                 {
-                    Description = optionAttr?.Description,
+                    Description = JoinFromAttribute(argumentDef, nameof(optionAttr.Description), optionAttr?.Description, optionAttr?.DescriptionLines),
                     Split = argumentDef.Split,
                     Default = argumentDefault
                 };
             }
 
             throw new ArgumentOutOfRangeException($"Unknown argument type: {argumentDef.CommandNodeType}");
+        }
+
+        private static string? JoinFromAttribute(ISourceDef sourceDef, string propertyName, string? singleline, string[]? multiline)
+        {
+            if (singleline is not null && multiline is not null)
+            {
+                throw new InvalidConfigurationException(
+                    $"Both {propertyName} and {propertyName}Lines were set for {sourceDef.SourcePath}. Only one can be set.");
+            }
+
+            return singleline ?? multiline?.ToCsv(Environment.NewLine);
         }
 
         private static string? ParseLongName(IArgumentDef argumentDef, OptionAttribute? optionAttr)

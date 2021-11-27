@@ -9,11 +9,23 @@ namespace CommandDotNet
         [Obsolete("Use constructor parameter instead")]
         public string? Name { get; set; }
 
+        /// <summary>The description to show in the help</summary>
         public string? Description { get; set; }
 
+        /// <summary>The multiline description to show in the help</summary>
+        public string[]? DescriptionLines { get; set; }
+
+        /// <summary>The example of how to use this command</summary>
         public string? Usage { get; set; }
 
+        /// <summary>The multiline example of how to use this command</summary>
+        public string[]? UsageLines { get; set; }
+
+        /// <summary>Additional help to show at the end of the help</summary>
         public string? ExtendedHelpText { get; set; }
+
+        /// <summary>Additional multiline help to show at the end of the help</summary>
+        public string[]? ExtendedHelpTextLines { get; set; }
 
         /// <summary>
         /// Overrides <see cref="AppSettings.IgnoreUnexpectedOperands"/><br/>
@@ -44,7 +56,11 @@ namespace CommandDotNet
         {
         }
 
-        /// <summary>Indicates the class is a command with the given name</summary>
+        /// <summary>
+        /// Indicates the class is a command with the given name.<br/>
+        /// This is not required unless you plan to override a default property of the command.<br/>
+        /// All public methods will be interpreted as commands.
+        /// </summary>
         public CommandAttribute(string? name)
         {
             Name = name;
