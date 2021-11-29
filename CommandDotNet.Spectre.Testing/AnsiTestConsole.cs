@@ -18,7 +18,9 @@ namespace CommandDotNet.Spectre.Testing
         public AnsiTestConsole(bool trimEnd = true) : base(trimEnd)
         {
             SpectreTestConsole = new SpectreTestConsole();
-            _forwardingConsole = new AnsiConsoleForwardingConsole(SpectreTestConsole);
+
+            // capture Spectre output to TestConsoleWriter
+            _forwardingConsole = new AnsiConsoleForwardingConsole(SpectreTestConsole, base.Out);
         }
 
         #region Implementation of ITestConsole
@@ -26,11 +28,23 @@ namespace CommandDotNet.Spectre.Testing
         // the SpectreTestConsole converts line endings to \n which can break assertions against literal strings in tests.
         // convert them back to Environment.NewLine
 
-        public override string AllText() => SpectreTestConsole.Output.Replace("\n", Environment.NewLine);
+        public override string? AllText()
+        {
+            var spectre = SpectreTestConsole.Output.Replace("\n", Environment.NewLine);
+            var nonSpectre = base.AllText();
+            return nonSpectre is null 
+                ? spectre 
+                : spectre + nonSpectre;
+        }
 
-        public override string OutText() => SpectreTestConsole.Output.Replace("\n", Environment.NewLine);
-
-        public override string ErrorText() => SpectreTestConsole.Output.Replace("\n", Environment.NewLine);
+        public override string? OutText()
+        {
+            var spectre = SpectreTestConsole.Output.Replace("\n", Environment.NewLine);
+            var nonSpectre = base.OutText();
+            return nonSpectre is null
+                ? spectre
+                : spectre + nonSpectre;
+        }
         
         public override ITestConsole Mock(Func<ITestConsole, ConsoleKeyInfo>? onReadKey, bool overwrite = false)
         {
@@ -75,8 +89,6 @@ namespace CommandDotNet.Spectre.Testing
         #region AnsiConsoleForwardingConsole members
 
         public override TextWriter Out => _forwardingConsole.Out;
-
-        public override TextWriter Error => _forwardingConsole.Error;
 
         public override ConsoleKeyInfo? ReadKey(bool intercept = false)
         {

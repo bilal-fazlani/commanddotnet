@@ -1,9 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using CommandDotNet.Rendering;
 using Spectre.Console;
+
+[assembly: InternalsVisibleTo("CommandDotNet.Spectre.Testing")]
 
 namespace CommandDotNet.Spectre
 {
@@ -15,6 +18,12 @@ namespace CommandDotNet.Spectre
         {
             _ansiConsole = ansiConsole;
             Out = new ForwardingTextWriter(ansiConsole.Write!);
+        }
+
+        internal AnsiConsoleForwardingConsole(IAnsiConsole ansiConsole, TextWriter additionalWriter)
+        {
+            _ansiConsole = ansiConsole;
+            Out = new DuplexTextWriter(new ForwardingTextWriter(ansiConsole.Write!), additionalWriter);
         }
 
         public override Encoding OutputEncoding
