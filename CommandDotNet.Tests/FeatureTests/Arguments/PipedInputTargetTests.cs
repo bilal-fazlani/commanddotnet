@@ -124,11 +124,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         private class App
         {
-            public void Singles([Option('o')] string option, [Operand] string operand)
+            public void Singles([Option('o')] string? option, [Operand] string? operand)
             {
             }
 
-            public void Lists([Option('o')] List<string> optionList, [Operand] List<string> operandList)
+            public void Lists([Option('o')] List<string>? optionList, [Operand] List<string>? operandList)
             {
             }
         }

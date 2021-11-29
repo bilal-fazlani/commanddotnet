@@ -141,6 +141,7 @@ namespace CommandDotNet
 
             this.UseClassDefMiddleware(RootCommandType)
                 .UseHelpMiddleware()
+                .UseArityValidation()
                 .AppendPipedInput();
 
             // TODO: add middleware between stages to validate CommandContext is exiting a stage with required data populated

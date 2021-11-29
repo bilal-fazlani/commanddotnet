@@ -4,6 +4,6 @@ namespace CommandDotNet.FluentValidation
 {
     public static class MiddlewareSteps
     {
-        public static MiddlewareStep FluentValidation { get; set; } = new(MiddlewareStages.PostBindValuesPreInvoke);
+        public static MiddlewareStep FluentValidation { get; set; } = Execution.MiddlewareSteps.ValidateArity-1000;
     }
 }

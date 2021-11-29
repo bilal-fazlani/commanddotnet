@@ -162,7 +162,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
 
         public class Math
         {
-            public void Concat(IConsole console, string x, string y)
+            public void Concat(IConsole console, string? x, string? y)
             {
                 console.Write(x + y);
             }

@@ -1,9 +1,9 @@
-using System.IO;
+﻿using System.IO;
 using System.Text;
 
-namespace CommandDotNet.TestTools
+namespace CommandDotNet.Rendering
 {
-    internal class DuplexTextWriter : TextWriter
+    public class DuplexTextWriter : TextWriter
     {
         public TextWriter Original { get; }
         public TextWriter Listener { get; }

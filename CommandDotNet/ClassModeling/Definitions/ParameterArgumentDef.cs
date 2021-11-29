@@ -46,9 +46,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             CommandNodeType = commandNodeType;
             Name = parameterInfo.BuildName(commandNodeType, appConfig);
 
-            IsOptional = _parameterInfo.IsOptional
-                         || _parameterInfo.ParameterType.IsNullableType()
-                         || parameterInfo.GetNullability() == NullabilityState.Nullable;
+            IsOptional = _parameterInfo.IsOptional || _parameterInfo.IsNullableParameter();
 
             BooleanMode = this.GetBooleanMode(appConfig.AppSettings.Arguments.BooleanMode);
             Split = this.GetSplitChar();

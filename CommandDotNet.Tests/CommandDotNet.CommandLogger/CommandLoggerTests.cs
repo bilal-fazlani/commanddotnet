@@ -2,7 +2,6 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
-using CommandDotNet.Extensions;
 using Diag=CommandDotNet.Diagnostics;
 using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;
@@ -382,14 +381,14 @@ options:
 
         private class App
         {
-            public Task<int> Intercept(InterceptorExecutionDelegate next, Password password)
+            public Task<int> Intercept(InterceptorExecutionDelegate next, Password? password)
             {
                 return next();
             }
 
             public void Do(
-                [Option] string textOption,
-                [Operand] string textOperand)
+                [Option] string? textOption,
+                [Operand] string? textOperand)
             {
             }
         }

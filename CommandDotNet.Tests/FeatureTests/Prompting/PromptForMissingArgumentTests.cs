@@ -308,7 +308,9 @@ lala (Text): fishies"
                     Then =
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe(null, "something"),
-                        Output = @"arg1 (Text): something"
+                        ExitCode = 2,
+                        Output = @"arg1 (Text): something
+opt1 is required"
                     }
                 });
         }

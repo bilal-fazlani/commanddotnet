@@ -121,10 +121,10 @@ Options:
             new AppRunner<App>(ImplicitBasicHelp).Verify(new Scenario
             {
                 // bool value 'false' is operand
-                When = {Args = "Do --option false"},
+                When = {Args = "Do --option true"},
                 Then =
                 {
-                    AssertContext = ctx => ctx.ParamValuesShouldBe(true, false)
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(true, true)
                 }
             });
         }

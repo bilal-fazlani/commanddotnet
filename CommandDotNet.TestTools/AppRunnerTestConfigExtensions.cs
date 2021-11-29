@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
+using CommandDotNet.Rendering;
 
 namespace CommandDotNet.TestTools
 {

@@ -173,7 +173,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
         private class App
         {
-            public void Do([Option] string opt1, string arg1)
+            public void Do([Option] string? opt1, string? arg1)
             {
             }
         }
