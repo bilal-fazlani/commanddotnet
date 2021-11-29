@@ -502,6 +502,11 @@ If you intended to use the '{1}' command, try again with the following
     <comment>Parse_Unrecognized_option: </comment>
   </data>
 
+  <data name="Piped input can only target a single argument, but the following were targeted: {0}" xml:space="preserve">
+    <value>Piped input can only target a single argument, but the following were targeted: {0}</value>
+    <comment>Input_Piped_targetted_multiple_arguments: </comment>
+  </data>
+
   <data name="File not found: {0}" xml:space="preserve">
     <value>File not found: {0}</value>
     <comment>Error_File_not_found: </comment>

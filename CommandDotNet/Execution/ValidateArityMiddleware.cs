@@ -48,7 +48,6 @@ namespace CommandDotNet.Execution
             }
             
             // TODO: if min/max arity defined, require ICollection type because we cannot validate for a stream
-            // TODO: localize these errors
             // TODO: create a PipedInputStream class for easy checking and ability to peek to validate at least one value
 
             // Piped input stream cannot define arity limits so this cannot be a stream now.
@@ -57,7 +56,7 @@ namespace CommandDotNet.Execution
             if (value is null)
             {
                 return arity.RequiresAtLeastOne() 
-                    ? $"{argument.Name} is required" 
+                    ? Resources.A.Arity_is_required(argument.Name) 
                     : null;
             }
 
@@ -66,7 +65,7 @@ namespace CommandDotNet.Execution
             if (valueCount == 0)
             {
                 return arity.RequiresAtLeastOne()
-                    ? $"{argument.Name} is required"
+                    ? Resources.A.Arity_is_required(argument.Name)
                     : null;
             }
 
@@ -76,21 +75,14 @@ namespace CommandDotNet.Execution
                 return null;
             }
 
-            if (arity.RequiresExactlyOne())
-            {
-                return valueCount > 1
-                    ? $"{argument.Name} can only have {arity.Minimum} value"
-                    : null;
-            }
-
             if (valueCount < arity.Minimum)
             {
-                return $"{argument.Name} requires at least {arity.Minimum} values but {valueCount} were provided.";
+                return Resources.A.Arity_min_not_reached(argument.Name, arity.Minimum.ToString(), valueCount.ToString());
             }
 
             if (valueCount > arity.Maximum)
             {
-                return $"{argument.Name} can have no more than {arity.Maximum} values but {valueCount} were provided.";
+                return Resources.A.Arity_max_exceeded(argument.Name, arity.Maximum.ToString(), valueCount.ToString());
             }
 
             return null;

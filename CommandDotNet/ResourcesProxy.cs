@@ -206,6 +206,15 @@ namespace CommandDotNet
         public override string Debugger_Attach_debugger(string processId, string processName) =>
             _localize(base.Debugger_Attach_debugger("{0}", "{1}"))
             ?? base.Debugger_Attach_debugger(processId, processName);
+        public override string Arity_is_required(string argumentName) =>
+            _localize(base.Arity_is_required("{0}"))
+            ?? base.Arity_is_required(argumentName);
+        public override string Arity_min_not_reached(string argumentName, string expected, string actual) =>
+            _localize(base.Arity_min_not_reached("{0}", "{1}", "{2}"))
+            ?? base.Arity_min_not_reached(argumentName, expected, actual);
+        public override string Arity_max_exceeded(string argumentName, string expected, string actual) =>
+            _localize(base.Arity_max_exceeded("{0}", "{1}", "{2}"))
+            ?? base.Arity_max_exceeded(argumentName, expected, actual);
         public override string Parse_ArgumentArity_Expected_single_value(string argumentName) =>
             _localize(base.Parse_ArgumentArity_Expected_single_value("{0}"))
             ?? base.Parse_ArgumentArity_Expected_single_value(argumentName);
