@@ -108,12 +108,12 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         class App
         {
             public void Do(
-                [Option] string defaultName,
-                [Option("longName1")] string longNameOverride,
-                [Option('a')] string shortNameOverride,
-                [Option('b', "longName2")] string shortAndLongNameOverride,
-                [Option('c', (string)null)] string longNameNull,
-                [Option('d', "")] string longNameEmpty)
+                [Option] string? defaultName,
+                [Option("longName1")] string? longNameOverride,
+                [Option('a')] string? shortNameOverride,
+                [Option('b', "longName2")] string? shortAndLongNameOverride,
+                [Option('c', (string)null)] string? longNameNull,
+                [Option('d', "")] string? longNameEmpty)
             {
             }
         }

@@ -187,16 +187,23 @@ Options:
         }
 
         [Fact]
-        public void SampleTypes_Exec_OperandsNotRequired()
+        public void SampleTypes_Exec_RequiredOperandsAreRequired()
         {
-            new AppRunner<OptionsNoDefaults>().Verify(new Scenario
-            {
-                When = {Args = "ArgsNoDefault"},
-                Then =
+            new AppRunner<OptionsNoDefaults>()
+                .Verify(new Scenario
                 {
-                    AssertContext = ctx => ctx.ParamValuesShouldBe(null, null, null, null, null, null, null)
-                }
-            });
+                    When = { Args = "ArgsNoDefault" },
+                    Then =
+                    {
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(null, null, null, null, null, null, null),
+                        ExitCode = 2,
+                        Output = @"stringArg is required
+structArg is required
+enumArg is required
+objectArg is required
+stringListArg is required"
+                    }
+                });
         }
 
         [Fact]

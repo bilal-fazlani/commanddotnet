@@ -116,17 +116,17 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         private class App
         {
             public void Do(
-                [Option('a')] bool optionA,
-                [Option('b')] bool optionB,
-                [Option('x')] string optionX,
-                [Option('y')] string optionY)
+                [Option('a')] bool? optionA,
+                [Option('b')] bool? optionB,
+                [Option('x')] string? optionX,
+                [Option('y')] string? optionY)
             {
             }
 
             public void NeverDoThis(
-                [Option('a')] bool optionA,
-                [Option('b')] bool optionB,
-                [Option] bool ab)
+                [Option('a')] bool? optionA,
+                [Option('b')] bool? optionB,
+                [Option] bool? ab)
             {
 
             }

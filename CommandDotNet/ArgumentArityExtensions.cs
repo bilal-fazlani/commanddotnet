@@ -25,5 +25,11 @@
         /// e.g. <see cref="ArgumentArity.Zero"/>, <see cref="ArgumentArity.ZeroOrOne"/>, <see cref="ArgumentArity.ZeroOrMore"/>
         /// </summary>
         public static bool AllowsNone(this IArgumentArity arity) => arity.Minimum == 0;
+
+        /// <summary>
+        /// <see cref="IArgumentArity.Maximum"/> == <see cref="ArgumentArity.Unlimited"/> (<see cref="int.MaxValue"/>).
+        /// e.g. <see cref="ArgumentArity.ZeroOrMore"/>, <see cref="ArgumentArity.OneOrMore"/>
+        /// </summary>
+        public static bool AllowsUnlimited(this IArgumentArity arity) => arity.Maximum == ArgumentArity.Unlimited;
     }
 }

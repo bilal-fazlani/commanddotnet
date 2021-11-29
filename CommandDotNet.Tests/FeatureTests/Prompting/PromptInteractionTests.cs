@@ -75,8 +75,11 @@ opt1 (Text): simple"
                     },
                     Then =
                     {
+                        ExitCode = 2,
                         Output = @"arg1 (Text): 
-opt1 (Text):"
+opt1 (Text): 
+opt1 is required
+arg1 is required"
                     }
                 });
         }

@@ -74,6 +74,9 @@
         /// <summary>Runs after the <see cref="BindValues"/> step</summary>
         public static MiddlewareStep ResolveCommandClasses { get; } = BindValues + 1000;
 
+        public static MiddlewareStep ValidateArity { get; } =
+            new(MiddlewareStages.PostBindValuesPreInvoke, 0);
+
         public static MiddlewareStep CommandLogger { get; } = new(MiddlewareStages.Invoke, 0);
 
         /// <summary>Runs last in the <see cref="MiddlewareStages.Invoke"/> stage</summary>

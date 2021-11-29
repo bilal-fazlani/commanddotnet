@@ -56,7 +56,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
 
         private class App
         {
-            public void Options([Option] string opt1, [Option] string opt2)
+            public void Options([Option] string? opt1, [Option] string? opt2)
             {
             }
 

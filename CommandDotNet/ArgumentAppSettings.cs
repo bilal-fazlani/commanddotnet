@@ -34,6 +34,13 @@ namespace CommandDotNet
         /// </summary>
         public string? DefaultPipeTargetSymbol { get; set; } = "$*";
 
+        /// <summary>
+        /// When true, arity is not validated.
+        /// Arity validation will also be skipped if the application does not support
+        /// <see href="https://docs.microsoft.com/en-us/dotnet/csharp/nullable-references">NRTs</see>.
+        /// </summary>
+        public bool SkipArityValidation { get; set; }
+
 
         public override string ToString()
         {

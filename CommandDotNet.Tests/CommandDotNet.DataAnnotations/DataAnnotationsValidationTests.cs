@@ -199,7 +199,7 @@ Usage: testhost.dll Save [options] <Id> <Name>"
             public string Name { get; set; } = null!;
 
             [Option("nick-name"), MaxLength(5), Display(Name="MyFriendsCallMe")]
-            public string NickName { get; set; } = null!;
+            public string? NickName { get; set; } = null!;
 
             [OrderByPositionInClass]
             public ContactInfo ContactInfo { get; set; } = new();

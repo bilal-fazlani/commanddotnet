@@ -18,6 +18,14 @@ namespace CommandDotNet.Extensions
 
         internal static bool IsNullableType(this Type type) => Nullable.GetUnderlyingType(type) != null;
 
+        internal static bool IsNullableProperty(this PropertyInfo propertyInfo) =>
+            propertyInfo.PropertyType.IsNullableType()
+            || (NullabilityInfoContext.IsSupported && propertyInfo.GetNullability() == NullabilityState.Nullable);
+
+        internal static bool IsNullableParameter(this ParameterInfo parameterInfo) => 
+            parameterInfo.ParameterType.IsNullableType() 
+            || (NullabilityInfoContext.IsSupported && parameterInfo.GetNullability() == NullabilityState.Nullable);
+
         internal static Type GetUnderlyingType(this Type type)
         {
             return Nullable.GetUnderlyingType(type)
@@ -43,6 +51,9 @@ namespace CommandDotNet.Extensions
                 .Concat(type.ToEnumerable())
                 .Any(x => x == typeof(IEnumerable));
         }
+
+        internal static bool IsNonStringCollection(this Type type) =>
+            type != typeof(string) && type.IsCollection();
 
         internal static bool IsCollection(this Type type)
         {
