@@ -9,6 +9,7 @@ using CommandDotNet.Extensions;
 using CommandDotNet.Help;
 using CommandDotNet.Logging;
 using CommandDotNet.Parsing;
+using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
 
 [assembly: InternalsVisibleTo("CommandDotNet.Tests")]
@@ -36,8 +37,9 @@ namespace CommandDotNet
     public class AppRunner : IIndentableToString
     {
         private readonly AppConfigBuilder _appConfigBuilder;
-        private AppConfig? _appConfig;
         private HandleErrorDelegate? _handleErrorDelegate;
+        
+        internal AppConfig? AppConfig { get; private set; }
 
         public AppSettings AppSettings { get; }
         public Type RootCommandType { get; }
@@ -125,7 +127,7 @@ namespace CommandDotNet
         private CommandContext BuildCommandContext(string[] args)
         {
             var tokens = args.Tokenize(includeDirectives: !AppSettings.DisableDirectives);
-            var appConfig = _appConfig ??= _appConfigBuilder.Build();
+            var appConfig = AppConfig ??= _appConfigBuilder.Build();
             var commandContext = new CommandContext(args, tokens, appConfig);
             return commandContext;
         }
@@ -138,7 +140,9 @@ namespace CommandDotNet
                 .UseMiddleware(CommandParser.ParseInputMiddleware, MiddlewareSteps.ParseInput);
 
             this.UseClassDefMiddleware(RootCommandType)
-                .UseHelpMiddleware();
+                .UseHelpMiddleware()
+                .UseArityValidation()
+                .AppendPipedInput();
 
             // TODO: add middleware between stages to validate CommandContext is exiting a stage with required data populated
             //       i.e. ParseResult should be fully populated after Parse stage
@@ -156,17 +160,28 @@ namespace CommandDotNet
         private int HandleException(Exception ex, CommandContext? commandContext)
         {
             ex = ex.EscapeWrappers();
-            if (commandContext is { })
+
+            var console = commandContext?.Console ?? AppConfig?.Console ?? new SystemConsole();
+
+            if (ex.IsFor<ValueParsingException>(out var vpe))
             {
-                ex.SetCommandContext(commandContext);
+                console.Error.WriteLine(vpe!.Print(excludeTypeName: true));
+                return ExitCodes.Error.Result;
+            }
+            if (ex.IsFor<InvalidConfigurationException>(out var ice))
+            {
+                console.Error.WriteLine(ice!.Print());
+                return ExitCodes.Error.Result;
             }
             if (_handleErrorDelegate != null)
             {
-                var context = ex.GetCommandContext();
-                ex.RemoveCommandContext();
-                return _handleErrorDelegate(context, ex);
+                return _handleErrorDelegate(commandContext, ex);
             }
-            
+            if (commandContext is not null)
+            {
+                ex.SetCommandContext(commandContext);
+            }
+
             ExceptionDispatchInfo.Capture(ex).Throw();
 
             // code not reached but required to compile
@@ -181,9 +196,9 @@ namespace CommandDotNet
 
         public string ToString(Indent indent)
         {
-            return _appConfig == null
+            return AppConfig == null
                 ? $"{indent}{nameof(AppRunner)}<{RootCommandType.Name}>"
-                : $"{indent}{nameof(AppRunner)}<{RootCommandType.Name}>:{Environment.NewLine}{indent.Increment()}{_appConfig.ToString(indent.Increment())}";
+                : $"{indent}{nameof(AppRunner)}<{RootCommandType.Name}>:{Environment.NewLine}{indent.Increment()}{AppConfig.ToString(indent.Increment())}";
         }
     }
 }

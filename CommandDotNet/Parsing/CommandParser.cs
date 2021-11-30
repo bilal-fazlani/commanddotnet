@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CommandDotNet.Directives;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Tokens;
@@ -12,7 +13,10 @@ namespace CommandDotNet.Parsing
     {
         internal static Task<int> ParseInputMiddleware(CommandContext commandContext, ExecutionDelegate next)
         {
-            var parseContext = new ParseContext(commandContext, new Queue<Token>(commandContext.Tokens.Arguments));
+            char? separator = commandContext.Original.Tokens.TryGetDirective("split", out var value)
+                ? value!.Last()
+                : null;
+            var parseContext = new ParseContext(commandContext, new Queue<Token>(commandContext.Tokens.Arguments), separator);
             ParseCommand(commandContext, parseContext);
             if (parseContext.ParserError is { })
             {
@@ -28,7 +32,7 @@ namespace CommandDotNet.Parsing
                 switch (token.TokenType)
                 {
                     case TokenType.Argument:
-                        if (parseContext.ExpectedOption is { })
+                        if (parseContext.ExpectedOption is not null)
                         {
                             ParseOptionValue(parseContext, token);
                         }
@@ -357,7 +361,20 @@ namespace CommandDotNet.Parsing
             values ??= option.GetAlreadyParsedValues();
             value ??= valueToken!.Value; //valueToken is not null when value is null
 
-            values.Add(new ValueFromToken(value, valueToken, optionToken));
+            var optionSplit = parseContext.SeparatorFromDirective
+                              ?? option.Split
+                              ?? parseContext.AppSettings.Arguments.DefaultOptionSplit;
+
+            if (optionSplit.HasValue)
+            {
+                var parts = value.Split(optionSplit.Value, StringSplitOptions.RemoveEmptyEntries);
+                parts.ForEach(p => values.Add(new ValueFromToken(p, valueToken, optionToken)));
+            }
+            else
+            {
+                values.Add(new ValueFromToken(value, valueToken, optionToken));
+            }
+
             parseContext.ClearOption();
         }
 

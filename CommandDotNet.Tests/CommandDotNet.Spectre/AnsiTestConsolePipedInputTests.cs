@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.CommandDotNet.Spectre
 {
-    public class AnsiTestConsolePipedInputTests : AppendPipedInputToOperandListTestsBase
+    public class AnsiTestConsolePipedInputTests : AppendPipedInputTestsBase
     {
         // If these work, then onReadLine works as well because PipedInput uses onReadLine
 
@@ -18,8 +18,7 @@ namespace CommandDotNet.Tests.CommandDotNet.Spectre
 
         protected override AppRunner AppRunner<T>() where T : class =>
             new AppRunner<T>()
-                .UseSpectreAnsiConsole(new AnsiTestConsole())
-                .AppendPipedInputToOperandList();
+                .UseSpectreAnsiConsole(new AnsiTestConsole());
 
 
         [Fact]

@@ -12,7 +12,7 @@ namespace CommandDotNet
         internal static bool IsNullOrWhitespace(this string? value) => 
             string.IsNullOrWhiteSpace(value);
 
-        internal static string? UnlessNullOrWhitespace(this string? value, Func<string, string>? map = null) =>
+        internal static string? UnlessNullOrWhitespace(this string? value, Func<string, string?>? map = null) =>
             value.IsNullOrWhitespace()
                 ? null
                 : map == null

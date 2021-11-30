@@ -36,11 +36,11 @@ namespace CommandDotNet.TestTools
             public static int BufferHeight { get; set; } = WindowHeight;
         }
 
-        public TestConsole()
+        public TestConsole(bool trimEnd = true)
         {
-            _allOutput = new TestConsoleWriter();
-            Out = new TestConsoleWriter(_allOutput);
-            Error = new TestConsoleWriter(_allOutput);
+            _allOutput = new TestConsoleWriter(trimEnd: trimEnd);
+            Out = new TestConsoleWriter(_allOutput, trimEnd);
+            Error = new TestConsoleWriter(_allOutput, trimEnd);
             In = new TestConsoleReader(this);
         }
 

@@ -35,8 +35,7 @@ Arguments:
   structNArg
   enumArg
   objectArg
-  stringListArg
-"
+  stringListArg"
                 }
             });
         }
@@ -67,8 +66,7 @@ Arguments:
 
   objectArg                 <URI>
 
-  stringListArg (Multiple)  <TEXT>
-"
+  stringListArg (Multiple)  <TEXT>"
                 }
             });
         }
@@ -84,8 +82,7 @@ Arguments:
                     Output = @"Usage: testhost.dll StructListNoDefault <structListArg>
 
 Arguments:
-  structListArg
-"
+  structListArg"
                 }
             });
         }
@@ -102,8 +99,7 @@ Arguments:
 
 Arguments:
 
-  structListArg (Multiple)  <NUMBER>
-"
+  structListArg (Multiple)  <NUMBER>"
                 }
             });
         }
@@ -119,8 +115,7 @@ Arguments:
                     Output = @"Usage: testhost.dll EnumListNoDefault <enumListArg>
 
 Arguments:
-  enumListArg
-"
+  enumListArg"
                 }
             });
         }
@@ -138,8 +133,7 @@ Arguments:
 Arguments:
 
   enumListArg (Multiple)  <DAYOFWEEK>
-  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
-"
+  Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday"
                 }
             });
         }
@@ -155,8 +149,7 @@ Arguments:
                     Output = @"Usage: testhost.dll ObjectListNoDefault <objectListArg>
 
 Arguments:
-  objectListArg
-"
+  objectListArg"
                 }
             });
         }
@@ -173,8 +166,7 @@ Arguments:
 
 Arguments:
 
-  objectListArg (Multiple)  <URI>
-"
+  objectListArg (Multiple)  <URI>"
                 }
             });
         }
@@ -195,16 +187,24 @@ Arguments:
         }
 
         [Fact]
-        public void SampleTypes_Exec_OperandsNotRequired()
+        public void SampleTypes_Exec_RequiredOperandsAreRequired()
         {
-            new AppRunner<OperandsNoDefaults>().Verify(new Scenario
-            {
-                When = {Args = "ArgsNoDefault"},
-                Then =
+            new AppRunner<OperandsNoDefaults>()
+                .Verify(new Scenario
                 {
-                    AssertContext = ctx => ctx.ParamValuesShouldBe(null, null, null, null, null, null, null)
-                }
-            });
+                    When = { Args = "ArgsNoDefault" },
+                    Then =
+                    {
+                        AssertContext = ctx => ctx.ParamValuesShouldBe(null, null, null, null, null, null, null),
+                        ExitCode = 2,
+                        Output = @"boolArg is required
+stringArg is required
+structArg is required
+enumArg is required
+objectArg is required
+stringListArg is required"
+                    }
+                });
         }
 
         [Fact]

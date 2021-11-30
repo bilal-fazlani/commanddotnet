@@ -1,5 +1,13 @@
 # CommandDotNet.Spectre
 
+## 2.0.3
+
+minor change to capture more output from IAnsiConsole.Out in tests
+
+## 2.0.2
+
+remove nuget package refs no longer required after move to net5.0
+
 ## 2.0.1
 
 remove nuget package refs no longer required after move to net5.0

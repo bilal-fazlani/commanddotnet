@@ -24,7 +24,7 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
             return next(context);
         }
 
-        public void Do([Option(ShortName = "i")] bool expectFromInterceptor)
+        public void Do([Option('i')] bool expectFromInterceptor)
         {
             if(FromCtor == null)
                 throw new Exception("SomeService was not injected via ctor");

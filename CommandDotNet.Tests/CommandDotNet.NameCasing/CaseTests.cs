@@ -67,6 +67,21 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
         }
 
         [Theory]
+        [InlineData(Case.DontChange, "RenamedCommand", "SendNotification")]
+        [InlineData(Case.CamelCase, "renamedCommand", "sendNotification")]
+        [InlineData(Case.PascalCase, "RenamedCommand", "SendNotification")]
+        [InlineData(Case.KebabCase, "renamed-command", "send-notification")]
+        [InlineData(Case.LowerCase, "renamedcommand", "sendnotification")]
+        public void CanHonorRenamedSubCommandCase(Case @case, string commandName, string notificationCommandName)
+        {
+            var result = new AppRunner<App>()
+                .UseNameCasing(@case, applyToNameOverrides: true)
+                .RunInMem(new[] { commandName, notificationCommandName });
+
+            result.ExitCode.Should().Be(10);
+        }
+
+        [Theory]
         [InlineData(Case.DontChange, false, "camelCase", "kebab-case", "lowercase", "NoOverride", "PascalCase")]
         [InlineData(Case.CamelCase, false, "camelCase", "kebab-case", "lowercase", "noOverride", "PascalCase")]
         [InlineData(Case.KebabCase, false, "camelCase", "kebab-case", "lowercase", "no-override", "PascalCase")]
@@ -101,16 +116,16 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
         {
             public void NoOverride() { }
 
-            [Command(Name = "camelCase")]
+            [Command("camelCase")]
             public void CamelCaseOverride() { }
 
-            [Command(Name = "kebab-case")]
+            [Command("kebab-case")]
             public void KebabCaseOverride() { }
 
-            [Command(Name = "lowercase")]
+            [Command("lowercase")]
             public void LowerCaseOverride() { }
 
-            [Command(Name = "PascalCase")]
+            [Command("PascalCase")]
             public void PascalCaseOverride() { }
         }
 
@@ -121,20 +136,29 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
                 return 10;
             }
 
-            public int Send([Option] string messageName, [Option(LongName = "Sender")] string senderName,
-                [Option(ShortName = "P")] int priority, [Option]int c)
+            public int Send([Option] string messageName, [Option("Sender")] string senderName,
+                [Option('P')] int priority, [Option]int c)
             {
                 return messageName == "m" && senderName == "s" && priority == 3 && c == 4 ? 10 : 1;
             }
 
-            [Command(Name = "wn")]
+            [Command("wn")]
             public int WithName()
             {
                 return 10;
             }
 
-            [SubCommand]
+            [Subcommand]
             public class SubCommand
+            {
+                public int SendNotification()
+                {
+                    return 10;
+                }
+            }
+
+            [Subcommand(RenameAs = "RenamedCommand")]
+            public class OtherSubCommand
             {
                 public int SendNotification()
                 {

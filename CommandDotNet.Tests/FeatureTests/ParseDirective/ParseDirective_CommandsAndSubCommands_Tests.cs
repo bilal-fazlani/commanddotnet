@@ -150,7 +150,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         {
             public void Cmd() { }
 
-            [SubCommand]
+            [Subcommand]
             public class Nested
             {
                 public void Cmd() { }
@@ -164,7 +164,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             [DefaultCommand]
             public void DefaultCmd() { }
 
-            [SubCommand]
+            [Subcommand]
             public class Nested
             {
                 [DefaultCommand]

@@ -13,5 +13,6 @@ namespace CommandDotNet.ClassModeling.Definitions
         bool IsOptional { get; }
         BooleanMode? BooleanMode { get; }
         IArgumentArity Arity { get; }
+        char? Split { get; set; }
     }
 }

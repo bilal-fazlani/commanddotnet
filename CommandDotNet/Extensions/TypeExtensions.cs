@@ -18,6 +18,14 @@ namespace CommandDotNet.Extensions
 
         internal static bool IsNullableType(this Type type) => Nullable.GetUnderlyingType(type) != null;
 
+        internal static bool IsNullableProperty(this PropertyInfo propertyInfo) =>
+            propertyInfo.PropertyType.IsNullableType()
+            || (NullabilityInfoContext.IsSupported && propertyInfo.GetNullability() == NullabilityState.Nullable);
+
+        internal static bool IsNullableParameter(this ParameterInfo parameterInfo) => 
+            parameterInfo.ParameterType.IsNullableType() 
+            || (NullabilityInfoContext.IsSupported && parameterInfo.GetNullability() == NullabilityState.Nullable);
+
         internal static Type GetUnderlyingType(this Type type)
         {
             return Nullable.GetUnderlyingType(type)
@@ -34,12 +42,18 @@ namespace CommandDotNet.Extensions
                     : null;
         }
 
+        internal static bool IsNonStringEnumerable(this Type type) => 
+            type != typeof(string) && type.IsEnumerable();
+
         internal static bool IsEnumerable(this Type type)
         {
             return type.GetInterfaces()
                 .Concat(type.ToEnumerable())
                 .Any(x => x == typeof(IEnumerable));
         }
+
+        internal static bool IsNonStringCollection(this Type type) =>
+            type != typeof(string) && type.IsCollection();
 
         internal static bool IsCollection(this Type type)
         {
@@ -80,13 +94,6 @@ namespace CommandDotNet.Extensions
                        || IsCompilerGenerated(t.DeclaringType));
         }
 
-        internal static IEnumerable<PropertyInfo> GetDeclaredProperties<TAttribute>(this Type type) where TAttribute: Attribute
-        {
-            return type
-                .GetDeclaredProperties()
-                .Where(x => x.HasAttribute<TAttribute>());
-        }
-        
         internal static IEnumerable<PropertyInfo> GetDeclaredProperties(this Type type)
         {
             return type

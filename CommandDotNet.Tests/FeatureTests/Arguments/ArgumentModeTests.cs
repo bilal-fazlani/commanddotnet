@@ -8,8 +8,8 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class ArgumentModeTests
     {
-        private static readonly AppSettings OperandMode = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Operand);
-        private static readonly AppSettings OptionMode = TestAppSettings.BasicHelp.Clone(a => a.DefaultArgumentMode = ArgumentMode.Option);
+        private static readonly AppSettings OperandMode = TestAppSettings.BasicHelp.Clone(a => a.Arguments.DefaultArgumentMode = ArgumentMode.Operand);
+        private static readonly AppSettings OptionMode = TestAppSettings.BasicHelp.Clone(a => a.Arguments.DefaultArgumentMode = ArgumentMode.Option);
 
         public ArgumentModeTests(ITestOutputHelper output)
         {

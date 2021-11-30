@@ -63,10 +63,10 @@ namespace CommandDotNet.Tests.FeatureTests.Help
 
         private class TemplateApp
         {
-            [SubCommand]
+            [Subcommand]
             public class L1
             {
-                [SubCommand]
+                [Subcommand]
                 public class L2
                 {
 

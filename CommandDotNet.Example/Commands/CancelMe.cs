@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using CommandDotNet.Rendering;
 
 namespace CommandDotNet.Example.Commands
 {
@@ -17,8 +16,9 @@ namespace CommandDotNet.Example.Commands
         public void Default(
             CancellationToken cancellationToken, 
             IConsole console,
-            [Option(ShortName = "x", LongName = "exitAfterNRounds")] int exitAfterNRounds = -1,
-            [Option(ShortName = "c", LongName = "crashAfterNRounds")] int crashAfterNRounds = -1)
+            IEnvironment environment,
+            [Option('x')] int exitAfterNRounds = -1,
+            [Option('c')] int crashAfterNRounds = -1)
         {
             int counter = 0;
             while (!cancellationToken.IsCancellationRequested)
@@ -30,7 +30,7 @@ namespace CommandDotNet.Example.Commands
                 if (counter == exitAfterNRounds)
                 {
                     console.Out.WriteLine("exiting app in new thread");
-                    new Thread(() => Environment.Exit(0)).Start();
+                    new Thread(() => environment.Exit(0)).Start();
                 }
                 if(counter == crashAfterNRounds)
                 {

@@ -8,7 +8,6 @@ using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Diagnostics;
 using CommandDotNet.Execution;
 using CommandDotNet.Localization;
-using CommandDotNet.Parsing;
 using CommandDotNet.Parsing.Typos;
 using CommandDotNet.Prompts;
 using CommandDotNet.Tokens;
@@ -32,7 +31,6 @@ namespace CommandDotNet
             bool excludeTimeDirective = false,
             bool excludeResponseFiles = false,
             bool excludeVersionMiddleware = false,
-            bool excludeAppendPipedInputToOperandList = false,
             bool excludeTypoSuggestions = false)
         {
             static void Register(bool exclude, string paramName, Action register)
@@ -67,10 +65,6 @@ namespace CommandDotNet
                 excludeVersionMiddleware, 
                 nameof(excludeVersionMiddleware),
                 ()=> appRunner.UseVersionMiddleware());
-            Register(
-                excludeAppendPipedInputToOperandList, 
-                nameof(excludeAppendPipedInputToOperandList),
-                ()=> appRunner.AppendPipedInputToOperandList());
             Register(
                 excludeTypoSuggestions, 
                 nameof(excludeTypoSuggestions),
@@ -126,12 +120,6 @@ namespace CommandDotNet
         public static AppRunner UseLocalizeDirective(this AppRunner appRunner)
         {
             return CultureDirective.UseCultureDirective(appRunner);
-        }
-
-        /// <summary>Piped input will be appended to an operand list if one exists for the command</summary>
-        public static AppRunner AppendPipedInputToOperandList(this AppRunner appRunner)
-        {
-            return PipedInputMiddleware.AppendPipedInputToOperandList(appRunner);
         }
 
         /// <summary>Use the <see cref="IDependencyResolver"/> to create the command classes.</summary>
@@ -245,12 +233,12 @@ namespace CommandDotNet
 
         /// <summary>
         /// When <see cref="EnvVarAttribute"/> is present, looks for the key in the provided envVars config.<br/>
-        /// If envVars is not provided the default <see cref="Environment.GetEnvironmentVariables()"/>
+        /// If envVars is not provided the default <see cref="IEnvironment.GetEnvironmentVariables()"/>
         /// </summary>
         public static AppRunner UseDefaultsFromEnvVar(this AppRunner appRunner, IDictionary? envVars = null)
         {
             return appRunner.UseDefaultsFromConfig(
-                DefaultSources.EnvVar.GetDefaultValue(envVars, DefaultSources.EnvVar.GetKeyFromAttribute));
+                DefaultSources.EnvVar.GetDefaultValue(appRunner, envVars, DefaultSources.EnvVar.GetKeyFromAttribute));
         }
 
         /// <summary>Provide your own strategies for setting argument defaults from a configuration source</summary>
@@ -281,7 +269,7 @@ namespace CommandDotNet
         /// Returns the list of all possible types that could be instantiated to execute commands.<br/>
         /// Use get the list of types to register in your DI container.
         /// </summary>
-        public static IEnumerable<Type> GetCommandClassTypes(this AppRunner appRunner) =>
+        public static IEnumerable<(Type type, SubcommandAttribute? subcommandAttr)> GetCommandClassTypes(this AppRunner appRunner) =>
             ClassCommandDef.GetAllCommandClassTypes(appRunner.RootCommandType);
 
         private static void AssertDirectivesAreEnabled(AppRunner appRunner)

@@ -29,8 +29,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     },
                     Then =
                     {
-                        Output = @"arg1 (Text): part
-"
+                        Output = @"arg1 (Text): part"
                     }
                 });
         }
@@ -55,8 +54,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("simple", "take2"),
                         Output = @"arg1 (Text): take2
-opt1 (Text): simple
-"
+opt1 (Text): simple"
                     }
                 });
         }
@@ -77,9 +75,11 @@ opt1 (Text): simple
                     },
                     Then =
                     {
+                        ExitCode = 2,
                         Output = @"arg1 (Text): 
 opt1 (Text): 
-"
+opt1 is required
+arg1 is required"
                     }
                 });
         }
@@ -100,8 +100,7 @@ opt1 (Text):
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("maybe", "maybe"),
                         Output = @"arg1 (Text): maybe
-opt1 (Text): maybe
-"
+opt1 (Text): maybe"
                     }
                 });
         }

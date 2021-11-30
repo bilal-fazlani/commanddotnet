@@ -60,9 +60,8 @@ namespace CommandDotNet.Prompts
                 // avoid: System.InvalidOperationException: Cannot read keys when either application does not have a console or when console input has been redirected. Try Console.Read.
                 return next(commandContext);
             }
-
-            // TODO: add IEnvironment.UserInteractive for testing purposes
-            if (!Environment.UserInteractive)
+            
+            if (!commandContext.Environment.UserInteractive)
             {
                 Log.Debug("Skipping prompts. Environment.UserInteractive is false.");
                 return next(commandContext);

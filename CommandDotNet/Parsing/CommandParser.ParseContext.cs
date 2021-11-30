@@ -12,6 +12,7 @@ namespace CommandDotNet.Parsing
             private Command _command;
 
             public CommandContext CommandContext { get; }
+            public char? SeparatorFromDirective { get; }
             public AppSettings AppSettings => CommandContext.AppConfig.AppSettings;
             public ParseAppSettings ParseSettings => AppSettings.Parser;
 
@@ -43,12 +44,13 @@ namespace CommandDotNet.Parsing
 
             public IParseError? ParserError { get; set; }
 
-            public ParseContext(CommandContext commandContext, Queue<Token> tokens)
+            public ParseContext(CommandContext commandContext, Queue<Token> tokens, char? separatorFromDirective)
             {
                 CommandContext = commandContext ?? throw new ArgumentNullException(nameof(commandContext));
                 _command = commandContext.RootCommand ?? throw new ArgumentNullException(nameof(commandContext.RootCommand));
                 Operands = new OperandQueue(_command.Operands);
                 Tokens = _tokens = tokens;
+                SeparatorFromDirective = separatorFromDirective;
             }
 
             public void ExpectOption(Option option, Token token)

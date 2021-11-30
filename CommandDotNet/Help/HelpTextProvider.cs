@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CommandDotNet.Extensions;
+using static System.Environment;
 
 namespace CommandDotNet.Help
 {
@@ -10,11 +11,13 @@ namespace CommandDotNet.Help
     {
         private readonly AppHelpSettings _appHelpSettings;
         private string? _appName;
+        private readonly Func<string, string?> _localize;
 
         public HelpTextProvider(AppSettings appSettings, string? appName = null)
         {
             _appName = appName;
             _appHelpSettings = appSettings.Help;
+            _localize = appSettings.Localize ?? (s => s);
         }
         
         public virtual string GetHelpText(Command command) =>
@@ -30,7 +33,7 @@ namespace CommandDotNet.Help
         /// <summary>returns the body of the usage section</summary>
         protected virtual string? SectionUsage(Command command)
         {
-            var usage = PadFront(command.Usage)
+            var usage = PadFront(command.Usage.UnlessNullOrWhitespace(_localize))
                            ?? $"{PadFront(AppName(command))}{PadFront(CommandPath(command))}"
                            + $"{PadFront(UsageSubcommand(command))}{PadFront(UsageOption(command))}{PadFront(UsageOperand(command))}"
                            + (command.ArgumentSeparatorStrategy == ArgumentSeparatorStrategy.PassThru ? $" [[--] <{Resources.A.Help_arg}>...]" : null);
@@ -95,7 +98,7 @@ namespace CommandDotNet.Help
                 : null;
 
         protected virtual string? ExtendedHelpText(Command command) => 
-            CommandReplacements(command, command.ExtendedHelpText);
+            CommandReplacements(command, command.ExtendedHelpText.UnlessNullOrWhitespace(_localize));
 
         /// <summary>returns the body of the options section</summary> 
         protected virtual string? SectionOptions(Command command, bool includeInterceptorOptionsForExecutableCommands)
@@ -191,7 +194,7 @@ namespace CommandDotNet.Help
         protected virtual string CommandName(Command command) => command.Name;
 
         protected virtual string? CommandDescription(Command command) =>
-            CommandReplacements(command, command.Description.UnlessNullOrWhitespace());
+            CommandReplacements(command, command.Description.UnlessNullOrWhitespace(_localize));
 
         protected virtual string? ArgumentName<T>(T argument) where T : IArgument =>
             argument.SwitchFunc(
@@ -202,7 +205,7 @@ namespace CommandDotNet.Help
             argument.TypeInfo.DisplayName.UnlessNullOrWhitespace(n => $"<{n.ToUpperInvariant()}>");
 
         protected virtual string? ArgumentDescription<T>(T argument) where T : IArgument => 
-            argument.Description.UnlessNullOrWhitespace();
+            argument.Description.UnlessNullOrWhitespace(_localize);
 
         protected virtual string? ArgumentArity<T>(T argument) where T : IArgument => 
             (argument.Arity.AllowsMany() ? $" ({Resources.A.Help_Multiple})" : "");
@@ -235,14 +238,14 @@ namespace CommandDotNet.Help
         protected virtual string? FormatSectionHeader(string header)
             => Resources.A.Help_usage_lc.Equals(header, StringComparison.OrdinalIgnoreCase)
                     ? $"{header}:"
-                    : $"{header}:{Environment.NewLine}{Environment.NewLine}";
+                    : $"{header}:{NewLine}{NewLine}";
 
         /// <summary>Joins the content into a single string, with headers and sections</summary>
         protected virtual string JoinSections(params (string? header, string? body)[] sections) =>
             sections
                 .Where(s => !s.body.IsNullOrWhitespace())
                 .Select(s => $"{(s.header.IsNullOrWhitespace() ? null : FormatSectionHeader(s.header!))}{s.body!.Trim('\n', '\r')}")
-                .ToCsv($"{Environment.NewLine}{Environment.NewLine}");
+                .ToCsv($"{NewLine}{NewLine}");
 
         protected static string? PadFront(string? value) =>
             value.IsNullOrWhitespace() ? null : " " + value;

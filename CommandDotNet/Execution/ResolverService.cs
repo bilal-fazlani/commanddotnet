@@ -94,7 +94,7 @@ namespace CommandDotNet.Execution
 
             if (resolveStrategy == ResolveStrategy.ResolveOrThrow)
             {
-                throw new ResolverReturnedNullException(type);
+                throw new InvalidConfigurationException($"The resolver returned null for type '{type}'. The type may not be registered.");
             }
             return false;
         }

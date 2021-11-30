@@ -68,7 +68,7 @@ namespace CommandDotNet
         {
             bool isRequired = !(isOptional || hasDefaultValue);
 
-            if (type != typeof(string) && type.IsEnumerable())
+            if (type.IsNonStringEnumerable())
             {
                 return isRequired ? OneOrMore : ZeroOrMore;
             }

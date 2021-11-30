@@ -80,7 +80,7 @@ namespace CommandDotNet.Execution
                 value = factory();
                 if (value == null)
                 {
-                    throw new AppRunnerException($"'{factory}' returned null");
+                    throw new InvalidConfigurationException($"'{factory}' returned null");
                 }
                 Add(type, value);
             }

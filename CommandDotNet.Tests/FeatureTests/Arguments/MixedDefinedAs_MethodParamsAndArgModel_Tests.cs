@@ -36,8 +36,7 @@ Options:
   --ModelOption
   --ModelOptionList
   --paramOption
-  --paramOptionList
-"
+  --paramOptionList"
                 }
             });
         }
@@ -66,8 +65,7 @@ Options:
 
   --paramOption                 <TEXT>
 
-  --paramOptionList (Multiple)  <TEXT>
-" }
+  --paramOptionList (Multiple)  <TEXT>" }
             });
         }
 
@@ -120,8 +118,8 @@ Options:
         {
             public void Do(
                 Model model,
-                [Operand] string paramArg,
-                [Option] string paramOption,
+                [Operand] string? paramArg,
+                [Option] string? paramOption,
                 [Option] List<string> paramOptionList,
                 [Operand] List<string> paramArgList)
             {
@@ -132,13 +130,13 @@ Options:
         private class Model : IArgumentModel
         {
             [Operand]
-            public string ModelArg { get; set; } = null!;
+            public string? ModelArg { get; set; } = null!;
 
             [Option]
-            public string ModelOption { get; set; } = null!;
+            public string? ModelOption { get; set; } = null!;
 
             [Option]
-            public List<string> ModelOptionList { get; set; } = null!;
+            public List<string>? ModelOptionList { get; set; } = null!;
         }
     }
 }

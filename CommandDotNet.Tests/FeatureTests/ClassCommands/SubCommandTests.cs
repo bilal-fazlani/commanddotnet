@@ -21,14 +21,14 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         {
             var classNames = new AppRunner<ThreeLevelsApp>()
                 .GetCommandClassTypes()
-                .Select(t => t.Name)
+                .Select(t => t.type.Name)
                 .ToList();
             classNames.Count.Should().Be(3);
             classNames.Should().ContainEquivalentOf(nameof(ThreeLevelsApp), nameof(Second), nameof(Third));
 
             classNames = new AppRunner<NestedThreeLevelsApp>()
                 .GetCommandClassTypes()
-                .Select(t => t.Name)
+                .Select(t => t.type.Name)
                 .ToList();
             classNames.Count.Should().Be(3);
             classNames.Should().ContainEquivalentOf(nameof(NestedThreeLevelsApp), nameof(Second), nameof(Third));
@@ -60,8 +60,7 @@ Commands:
   Do1
   Second
 
-Use ""testhost.dll [command] --help"" for more information about a command.
-"
+Use ""testhost.dll [command] --help"" for more information about a command."
                     }
                 });
         }
@@ -83,8 +82,7 @@ Commands:
   Do1
   Second
 
-Use ""testhost.dll [command] --help"" for more information about a command.
-"
+Use ""testhost.dll [command] --help"" for more information about a command."
                     }
                 });
         }
@@ -106,8 +104,7 @@ Commands:
   Do2
   Third
 
-Use ""testhost.dll Second [command] --help"" for more information about a command.
-"
+Use ""testhost.dll Second [command] --help"" for more information about a command."
                     }
                 });
         }
@@ -128,8 +125,7 @@ Commands:
 
   Do3
 
-Use ""testhost.dll Second Third [command] --help"" for more information about a command.
-"
+Use ""testhost.dll Second Third [command] --help"" for more information about a command."
                     }
                 });
         }
@@ -179,9 +175,39 @@ Use ""testhost.dll Second Third [command] --help"" for more information about a 
                 });
         }
 
+        [Fact]
+        public void Can_rename_subcommands()
+        {
+            new AppRunner<RenameApp>()
+                .Verify(new Scenario
+                {
+                    When = { Args = "-h" },
+                    Then =
+                    {
+                        OutputContainsTexts = { "Renamed1", "Renamed2" },
+                        OutputNotContainsTexts = { "Second", "Nested" }
+                    }
+                });
+        }
+
+        private class RenameApp
+        {
+            [Subcommand(RenameAs = "Renamed1")]
+            public Second Second { get; set; } = null!;
+
+            [Subcommand(RenameAs = "Renamed2")]
+            public class Nested
+            {
+                public void Do3(ArgModel3 model)
+                {
+                }
+            }
+
+        }
+
         private class ThreeLevelsApp
         {
-            [SubCommand]
+            [Subcommand]
             public Second Second { get; set; } = null!;
 
             public void Do1(ArgModel1 model)
@@ -191,7 +217,7 @@ Use ""testhost.dll Second Third [command] --help"" for more information about a 
 
         private class Second
         {
-            [SubCommand]
+            [Subcommand]
             public Third Third { get; set; } = null!;
 
             public void Do2(ArgModel2 model)
@@ -212,14 +238,14 @@ Use ""testhost.dll Second Third [command] --help"" for more information about a 
             {
             }
 
-            [SubCommand]
+            [Subcommand]
             public class Second
             {
                 public void Do2(ArgModel2 model)
                 {
                 }
 
-                [SubCommand]
+                [Subcommand]
                 public class Third
                 {
                     public void Do3(ArgModel3 model)

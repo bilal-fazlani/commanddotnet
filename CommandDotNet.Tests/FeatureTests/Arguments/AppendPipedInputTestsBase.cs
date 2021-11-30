@@ -12,9 +12,9 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
-    public abstract class AppendPipedInputToOperandListTestsBase
+    public abstract class AppendPipedInputTestsBase
     {
-        protected AppendPipedInputToOperandListTestsBase(ITestOutputHelper output)
+        protected AppendPipedInputTestsBase(ITestOutputHelper output)
         {
             Ambient.Output = output;
         }
@@ -121,6 +121,34 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 });
         }
 
+        [Fact]
+        public void GivenStreamingApp_PipedInput_ConvertsType_And_IsOnlyEnumeratedWithinTheCommandMethod()
+        {
+            var stream = new PipedInputStream("1", "2");
+            AppRunner<StreamingApp>()
+                .Configure(c =>
+                    c.UseMiddleware((context, next) =>
+                        {
+                            stream.EnumerationIsPremature = false;
+                            return next(context);
+                        },
+                        MiddlewareStages.Invoke, -1))
+                .Verify(new Scenario
+                {
+                    When =
+                    {
+                        Args = $"{nameof(StreamingApp.StreamNumbers)}",
+                        PipedInput = stream
+                    },
+                    Then =
+                    {
+                        // stream is read-once so we can't evaluate it with a second time with ParamValuesShouldBe
+                        AssertContext = ctx => ctx.GetCommandInvocationInfo<StreamingApp>()
+                            .Instance!.StreamedNumbers.Should().BeEquivalentTo(new List<int> {1,2})
+                    }
+                });
+        }
+
         private class PipedInputStream : IEnumerable<string>
         {
             private readonly Queue<string> _queue;
@@ -168,10 +196,16 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         private class StreamingApp
         {
             public List<string> StreamedInput { get; set; } = null!;
+            public List<int> StreamedNumbers { get; set; } = null!;
 
             public void Stream(IEnumerable<string> input)
             {
                 StreamedInput = input.ToList();
+            }
+
+            public void StreamNumbers(IEnumerable<int> input)
+            {
+                StreamedNumbers = input.ToList();
             }
         }
     }

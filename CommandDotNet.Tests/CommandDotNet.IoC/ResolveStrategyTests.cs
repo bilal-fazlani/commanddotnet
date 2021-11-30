@@ -17,11 +17,11 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         [Fact]
         public void CommandClass_DefaultUses_Resolve()
         {
-            Assert.Throws<Exception>(() => new AppRunner<App>()
-                    .UseDependencyResolver(new TestDependencyResolver())
-                    .Run("Do"))
-                .Message.Should().Contain(
-                    "Dependency not registered: CommandDotNet.Tests.CommandDotNet.IoC.ResolveStrategyTests+App");
+            new AppRunner<App>()
+                .UseDependencyResolver(new TestDependencyResolver())
+                .Expect<Exception>(ex =>
+                    ex.Message.Should().Be("Dependency not registered: CommandDotNet.Tests.CommandDotNet.IoC.ResolveStrategyTests+App"))
+                .RunInMem("Do");
         }
 
         [Fact]
@@ -36,11 +36,11 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         [Fact]
         public void CommandClass_CanConfigureToUse_ResolveOrThrow()
         {
-            Assert.Throws<ResolverReturnedNullException>(() => new AppRunner<App>()
-                .UseDependencyResolver(new TestDependencyResolver {(App?) null},
+            new AppRunner<App>()
+                .UseDependencyResolver(new TestDependencyResolver { (App?)null },
                     commandClassResolveStrategy: ResolveStrategy.ResolveOrThrow)
                 .RunInMem("Do")
-            ).Message.Should().Contain("The resolver returned null for type 'CommandDotNet.Tests.CommandDotNet.IoC.ResolveStrategyTests+App'");
+                .Console.ErrorText().Should().Contain("The resolver returned null for type 'CommandDotNet.Tests.CommandDotNet.IoC.ResolveStrategyTests+App'");
         }
 
         [Fact]
@@ -55,20 +55,21 @@ namespace CommandDotNet.Tests.CommandDotNet.IoC
         [Fact]
         public void ArgumentModel_CanConfigureToUse_Resolve()
         {
-            Assert.Throws<Exception>(() => new AppRunner<App>()
-                    .UseDependencyResolver(new TestDependencyResolver { new App() }, argumentModelResolveStrategy: ResolveStrategy.Resolve)
-                    .Run("Do"))
-                .Message.Should().Contain(
-                    "Dependency not registered: CommandDotNet.Tests.CommandDotNet.IoC.ResolveStrategyTests+ArgModel");
+            new AppRunner<App>()
+                .UseDependencyResolver(new TestDependencyResolver { new App() },
+                    argumentModelResolveStrategy: ResolveStrategy.Resolve)
+                .Expect<Exception>(ex => 
+                    ex.Message.Should().Be("Dependency not registered: CommandDotNet.Tests.CommandDotNet.IoC.ResolveStrategyTests+ArgModel"))
+                .RunInMem("Do");
         }
 
         [Fact]
         public void ArgumentModel_CanConfigureToUse_ResolveOrThrow()
         {
-            Assert.Throws<ResolverReturnedNullException>(() => new AppRunner<App>()
-                    .UseDependencyResolver(new TestDependencyResolver { new App(), (ArgModel?)null }, argumentModelResolveStrategy: ResolveStrategy.ResolveOrThrow)
-                    .Run("Do")
-            ).Message.Should().Contain("The resolver returned null for type 'CommandDotNet.Tests.CommandDotNet.IoC.ResolveStrategyTests+ArgModel'");
+            new AppRunner<App>()
+                .UseDependencyResolver(new TestDependencyResolver { new App(), (ArgModel?)null }, argumentModelResolveStrategy: ResolveStrategy.ResolveOrThrow)
+                .RunInMem("Do")
+                .Console.ErrorText().Should().Contain("The resolver returned null for type 'CommandDotNet.Tests.CommandDotNet.IoC.ResolveStrategyTests+ArgModel'");
         }
 
         class App

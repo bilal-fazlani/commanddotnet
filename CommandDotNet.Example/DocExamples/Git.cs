@@ -2,17 +2,17 @@
 
 namespace CommandDotNet.Example.DocExamples
 {
-    [Command(Name = "git", Description = "Fake git application")]
+    [Command("git", Description = "Fake git application")]
     public class Git
     {
         [Command(Description = "Commits all staged changes")]
-        public void Commit([Option(ShortName = "m")]string commitMessage)
+        public void Commit([Option('m')]string commitMessage)
         {
             Console.WriteLine("Commit successful");
         }
 
         [Command(Description = "Stashes all changes when executed without any arguments")]
-        [SubCommand]
+        [Subcommand]
         public class Stash
         {
             [DefaultCommand]

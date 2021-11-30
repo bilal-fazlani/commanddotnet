@@ -33,8 +33,7 @@ Arguments:
   intOperand
 
 Options:
-  --stringOption
-"
+  --stringOption"
                     }
                 });
         }
@@ -56,8 +55,7 @@ Arguments:
 
 Options:
 
-  --stringOption  <TEXT>
-"
+  --stringOption  <TEXT>"
                     }
                 });
         }
@@ -139,7 +137,7 @@ Options:
 
         public class SomeServiceApp
         {
-            public void Do(SomeService someService, [Operand] int intOperand, [Option] string? stringOption = null)
+            public void Do(SomeService someService, [Operand] int? intOperand, [Option] string? stringOption = null)
             {
             }
         }

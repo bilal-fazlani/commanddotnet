@@ -20,7 +20,7 @@ namespace CommandDotNet.Example
         public void StartSession(
             CommandContext context,
             InteractiveSession interactiveSession, 
-            [Option(ShortName = "i")] bool interactive)
+            [Option('i')] bool interactive)
         {
             if (interactive && !_inSession)
             {
@@ -35,22 +35,22 @@ namespace CommandDotNet.Example
             }
         }
         
-        [SubCommand]
+        [Subcommand]
         public Git Git { get; set; } = null!;
 
-        [SubCommand]
+        [Subcommand]
         public Math Math { get; set; } = null!;
 
-        [SubCommand]
+        [Subcommand]
         public Models Models { get; set; } = null!;
 
-        [SubCommand]
+        [Subcommand]
         public Pipes Pipes { get; set; } = null!;
 
-        [SubCommand]
+        [Subcommand]
         public CancelMe CancelMe { get; set; } = null!;
 
-        [SubCommand]
+        [Subcommand]
         public Commands.Prompts Prompts { get; set; } = null!;
     }
 }

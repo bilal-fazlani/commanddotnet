@@ -68,7 +68,7 @@ namespace CommandDotNet.ClassModeling
                 .Where(p =>
                     p.CanWrite
                     && p.PropertyType == classType
-                    && p.HasAttribute<SubCommandAttribute>()
+                    && p.HasAttribute<SubcommandAttribute>()
                     && p.GetValue(parent) == null)
                 .ForEach(p => p.SetValue(parent, instance));
         }

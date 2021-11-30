@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 
 namespace CommandDotNet.TestTools
@@ -7,11 +8,13 @@ namespace CommandDotNet.TestTools
     {
         internal TextWriter? Replaced { get; set; }
         private readonly TestConsoleWriter? _inner;
+        private readonly bool _trimEnd;
         private readonly StringBuilder _stringBuilder = new();
 
-        public TestConsoleWriter(TestConsoleWriter? inner = null)
+        public TestConsoleWriter(TestConsoleWriter? inner = null, bool trimEnd = false)
         {
             _inner = inner;
+            _trimEnd = trimEnd;
         }
 
         public override void Write(char value)
@@ -30,6 +33,9 @@ namespace CommandDotNet.TestTools
 
         public override Encoding Encoding { get; } = Encoding.Unicode;
 
-        public override string ToString() => _stringBuilder.ToString();
+        public override string ToString() => 
+            _trimEnd 
+            ? _stringBuilder.ToString().TrimEnd()
+            : _stringBuilder.ToString();
     }
 }

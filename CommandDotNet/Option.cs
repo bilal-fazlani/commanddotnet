@@ -116,6 +116,9 @@ namespace CommandDotNet
         /// <summary>The default value for this argument</summary>
         public ArgumentDefault? Default { get; set; }
 
+        /// <summary>Split the option values into substrings based on this character.</summary>
+        public char? Split { get; set; }
+
         /// <summary>
         /// The allowed values for this argument, as defined by an <see cref="IAllowedValuesTypeDescriptor"/> for this type.
         /// i.e. enum arguments will list all values in the enum.

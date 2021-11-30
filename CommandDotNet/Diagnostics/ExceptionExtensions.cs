@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using CommandDotNet.Extensions;
-using CommandDotNet.Rendering;
+using static System.Environment;
 
 namespace CommandDotNet.Diagnostics
 {
@@ -29,26 +29,46 @@ namespace CommandDotNet.Diagnostics
                    ?? ex.InnerException?.GetCommandContext();
         }
 
+        public static bool IsFor<TEx>(this Exception exception, out TEx? ex)
+        {
+            if (exception is TEx tex)
+            {
+                ex = tex;
+                return true;
+            }
+
+            if (exception.InnerException is null)
+            {
+                ex = default(TEx);
+                return false;
+            }
+
+            return exception.InnerException.IsFor(out ex);
+        }
+
         public static string Print(this Exception ex, Indent? indent = null,
-            bool includeProperties = false, bool includeData = false, bool includeStackTrace = false)
+            bool includeProperties = false, bool includeData = false, bool includeStackTrace = false,
+            bool excludeTypeName = false)
         {
             var sb = new StringBuilder();
             ex.Print(line => sb.AppendLine(line), 
-                indent, includeProperties, includeData, includeStackTrace);
+                indent, includeProperties, includeData, includeStackTrace, excludeTypeName);
             // trim trailing new line
-            sb.Length = sb.Length - Environment.NewLine.Length;
+            sb.Length = sb.Length - NewLine.Length;
             return sb.ToString();
         }
 
         public static void Print(this Exception ex, IConsole console, Indent? indent = null,
-            bool includeProperties = false, bool includeData = false, bool includeStackTrace = false)
+            bool includeProperties = false, bool includeData = false, bool includeStackTrace = false,
+            bool excludeTypeName = false)
         {
             ex.Print(line => console.Error.WriteLine(line), 
-                indent, includeProperties, includeData, includeStackTrace);
+                indent, includeProperties, includeData, includeStackTrace, excludeTypeName);
         }
         
         public static void Print(this Exception ex, Action<string?> writeLine, Indent? indent = null, 
-            bool includeProperties = false, bool includeData = false, bool includeStackTrace = false)
+            bool includeProperties = false, bool includeData = false, bool includeStackTrace = false,
+            bool excludeTypeName = false)
         {
             if (ex is null)
             {
@@ -56,8 +76,11 @@ namespace CommandDotNet.Diagnostics
             }
 
             indent ??= new Indent();
-            writeLine($"{indent}{ex.GetType().FullName}: {ex.Message}");
-            
+
+            writeLine(excludeTypeName
+                ? $"{indent}{ex.Message}"
+                : $"{indent}{ex.GetType().FullName}: {ex.Message}");
+
             if (includeProperties)
             {
                 var properties = ex.GetType()
@@ -97,8 +120,8 @@ namespace CommandDotNet.Diagnostics
                 indent = indent.Increment();
                 // replace default indents
                 var stack = ex.StackTrace.Replace(
-                    $"{Environment.NewLine}   {Resources.A.Exceptions_StackTrace_at} ", 
-                    $"{Environment.NewLine}{indent}{Resources.A.Exceptions_StackTrace_at} ");
+                    $"{NewLine}   {Resources.A.Exceptions_StackTrace_at} ", 
+                    $"{NewLine}{indent}{Resources.A.Exceptions_StackTrace_at} ");
                 writeLine($"{indent}{stack.Remove(0,3)}");
                 indent.Decrement();
             }

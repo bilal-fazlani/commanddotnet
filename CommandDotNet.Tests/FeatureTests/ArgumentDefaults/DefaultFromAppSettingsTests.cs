@@ -263,19 +263,19 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
         private class App
         {
             public void ByConvention(
-                [Option(LongName = "option1", ShortName = "o")] string option1,
+                [Option('o', "option1")] string option1,
                 [Operand] string operand1,
-                [Option(LongName = "option2", ShortName = "t")] string option2 = "lala",
+                [Option('t', "option2")] string option2 = "lala",
                 [Operand] string operand2 = "fishies")
             {
 
             }
 
             public void ByAttribute(
-                [AppSetting("opt1")] [Option(LongName = "option1", ShortName = "o")]
+                [AppSetting("opt1")] [Option('o', "option1")]
                 string option1,
                 [AppSetting("oper1")] [Operand] string operand1,
-                [AppSetting("opt2")] [Option(LongName = "option2", ShortName = "t")]
+                [AppSetting("opt2")] [Option('t', "option2")]
                 string option2 = "lala",
                 [AppSetting("oper2")] [Operand] string operand2 = "fishies"
             )

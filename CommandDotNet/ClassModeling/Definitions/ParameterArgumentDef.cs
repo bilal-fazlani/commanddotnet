@@ -29,6 +29,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         public bool IsOptional { get; }
         public BooleanMode? BooleanMode { get; }
         public IArgumentArity Arity { get; }
+        public char? Split { get; set; }
 
         public ParameterArgumentDef(
             ParameterInfo parameterInfo,
@@ -45,11 +46,11 @@ namespace CommandDotNet.ClassModeling.Definitions
             CommandNodeType = commandNodeType;
             Name = parameterInfo.BuildName(commandNodeType, appConfig);
 
-            IsOptional = _parameterInfo.IsOptional
-                         || _parameterInfo.ParameterType.IsNullableType()
-                         || parameterInfo.GetNullability() == NullabilityState.Nullable;
+            IsOptional = _parameterInfo.IsOptional || _parameterInfo.IsNullableParameter();
 
-            BooleanMode = this.GetBooleanMode(appConfig.AppSettings.BooleanMode);
+            BooleanMode = this.GetBooleanMode(appConfig.AppSettings.Arguments.BooleanMode);
+            Split = this.GetSplitChar();
+
             ValueProxy = new ValueProxy(
                 () => parameterValues[parameterInfo.Position],
 

@@ -7,11 +7,11 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 {
     public class AppsSettingsBoolModeTests
     {
-        private static readonly AppSettings ImplicitBasicHelp = TestAppSettings.BasicHelp.Clone(a => a.BooleanMode = BooleanMode.Implicit);
-        private static readonly AppSettings ImplicitDetailedHelp = TestAppSettings.DetailedHelp.Clone(a => a.BooleanMode = BooleanMode.Implicit);
+        private static readonly AppSettings ImplicitBasicHelp = TestAppSettings.BasicHelp.Clone(a => a.Arguments.BooleanMode = BooleanMode.Implicit);
+        private static readonly AppSettings ImplicitDetailedHelp = TestAppSettings.DetailedHelp.Clone(a => a.Arguments.BooleanMode = BooleanMode.Implicit);
 
-        private static readonly AppSettings ExplicitBasicHelp = TestAppSettings.BasicHelp.Clone(a => a.BooleanMode = BooleanMode.Explicit);
-        private static readonly AppSettings ExplicitDetailedHelp = TestAppSettings.DetailedHelp.Clone(a => a.BooleanMode = BooleanMode.Explicit);
+        private static readonly AppSettings ExplicitBasicHelp = TestAppSettings.BasicHelp.Clone(a => a.Arguments.BooleanMode = BooleanMode.Explicit);
+        private static readonly AppSettings ExplicitDetailedHelp = TestAppSettings.DetailedHelp.Clone(a => a.Arguments.BooleanMode = BooleanMode.Explicit);
 
         public AppsSettingsBoolModeTests(ITestOutputHelper output)
         {
@@ -32,8 +32,7 @@ Arguments:
   operand
 
 Options:
-  --option
-"
+  --option"
                 }
             });
         }
@@ -56,8 +55,7 @@ Arguments:
 Options:
 
   --option  <BOOLEAN>
-  Allowed values: true, false
-"
+  Allowed values: true, false"
                 }
             });
         }
@@ -76,8 +74,7 @@ Arguments:
   operand
 
 Options:
-  --option
-"
+  --option"
                 }
             });
         }
@@ -99,8 +96,7 @@ Arguments:
 
 Options:
 
-  --option
-"
+  --option"
                 }
             });
         }
@@ -125,10 +121,10 @@ Options:
             new AppRunner<App>(ImplicitBasicHelp).Verify(new Scenario
             {
                 // bool value 'false' is operand
-                When = {Args = "Do --option false"},
+                When = {Args = "Do --option true"},
                 Then =
                 {
-                    AssertContext = ctx => ctx.ParamValuesShouldBe(true, false)
+                    AssertContext = ctx => ctx.ParamValuesShouldBe(true, true)
                 }
             });
         }

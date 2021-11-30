@@ -55,8 +55,7 @@ token transformations:
   Argument : -u
   Argument : me
   Argument : -p
-  Argument : super-secret
-"
+  Argument : super-secret"
                     }
                 });
         }
@@ -99,8 +98,7 @@ token transformations:
   Argument : -u
   Argument : me
   Argument : -p
-  Argument : super-secret
-"
+  Argument : super-secret"
                     }
                 });
         }
@@ -134,8 +132,7 @@ token transformations:
 
 >>> from shell
   Directive: [parse:t]
-  Argument : PromptSecure
-"
+  Argument : PromptSecure"
                     }
                 });
         }
@@ -176,8 +173,7 @@ token transformations:
   Directive: [parse:t]
   Argument : Secure
   Argument : -u
-  Argument : me
-"
+  Argument : me"
                     }
                 });
         }
@@ -196,10 +192,10 @@ token transformations:
 
         class Args : IArgumentModel
         {
-            [Option(ShortName = "u", LongName = "username")]
+            [Option('u', "username")]
             public string? Username { get; set; }
 
-            [Option(ShortName = "p", LongName = "password")]
+            [Option('p', "password")]
             public Password Password { get; set; } = new("default-secret");
 
         }

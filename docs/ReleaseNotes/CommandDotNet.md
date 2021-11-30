@@ -1,5 +1,94 @@
 # CommandDotNet
 
+## 6.0.0
+
+Back with some more goodness. This fix focuses on improvements for developers and some features to support advanced use cases.
+
+### Improvements
+
+#### Terser definition of command and argument names
+
+We've simplified how you can define short names and override long names. 
+
+Until now, it worked like `[Option(ShortName="f", LongName="file")]`, `[Operand(Name = "file")]`, and `[Command(Name = "move")]`
+
+Now available: `[Option('f', "file")]`, `[Operand("file")]`, and `[Command("move")]`
+
+`[SubCommand]` has also been deprecated and replaced by `[Subcommand]`
+
+The old patterns have been deprecated but is still supported for this version.
+
+You can run [this script](https://github.com/bilal-fazlani/commanddotnet/tree/master/scripts/v6-upgrade-attrs.sh) in git bash in the folder containing your commmand definitions to update usages for these attributes. It assumes:
+
+- The names are on the same line as the attribute
+- The names are the first properties specified after the attribute
+
+#### Arity Validation
+
+Now that we have support for NRTs we can determine if an argument is required or not based on whether it's an NRT, Nullable<T> or optional parameter. 
+
+If it is required and no value is provided via configs or the cli, the command will fail. Since this is a breaking change in behavior, it can be disabled by setting `AppSettings.Arguments.SkipArityValidation = true`.
+
+#### Localizable Descriptions, Usage & ExtendedHelpText
+
+If you've set the AppSettings.Localize func, the HelpTextProvider will pass Usage, ExtendedHelpText, and Description (for commands and arguments) through the func.
+
+#### IConsole moved
+
+IConsole has been moved to the root CommandDotNet namespace. While tis is a breaking change, most files where you're using IConsole probably already reference CommandDotNet which means you're likely to have unused usings than build failures.
+
+#### Error handling
+
+The CommandDotNet exceptions have been consolidated into two types 
+
+- Dev errors (InvalidConfigurationException)
+- User errors (ValueParsingException)
+
+These errors are intercepted and displayed to the user before the registered error handler is called. This ensures your error handler can focus on exceptions from your app. We've also ensured stack traces will not be shown for these exceptions
+
+### Bug Fixes
+
+* fixed bug where streaming into an IEnumerable<T> where T is not a string would crash
+
+### New Features
+
+#### IEnvironment
+
+Added IEnvironment for testability. Covers most of System.Environment
+
+IEnvironment can be injected into command methods.  eg `Move(IConsole console, IEnvironment env, string file)`
+
+#### Piped Input targeting
+
+Piped input can now target any argument. By default, piped input will be unioned into inputs for any type of IEnumerable<T> Operand if it exists.
+
+Using `$*` as a value for an argument will union the piped input to that argument instead.  i.e. `find ... | move --files $* ~/tmp/` will move the files into the users tmp directory.
+
+`$*` can be overridden using AppSettings.Arguments.DefaultPipeTargetSymbol. It can also be overridden using the `[pipeto:...]` directive to avoid conflicts in scripts.
+
+#### Splitting multi-value options
+
+To provide multiple values for an option, you've had to repeat the option name each time, eg. `--name jack --name jill`
+
+Now you can define a separator character to use to split a string. `[Optiom(Split=",")]` and then `--name=jack,jill`
+
+A global default can be set using AppSettings.Arguments.DefaultOptionSplit
+
+The user can also override by using the `[split:-]` directive for `--name=jack-jill`.
+
+#### Subcommand rename
+
+One of the non-obvious but powerful features of CommandDotNet is that a command can be reused as a subcommand for several commands. It's likely the desired to reuse the same name for consistency, but there could be exceptions.
+
+The subcommand attribute now contains a `RenameAs` property. When used, the command will use that name instead of the name defined in the `CommandAttribute` or derived from the class name.
+
+#### EnumerableCancellationExtensions
+
+Added to new extensions for enumerable to make it easier to exit commands when Ctrl+C is pressed. 
+
+- `items.UntilCancelled(cancellationToken)`
+- `items.ThrowIfCancelled(cancellationToken)`
+
 ## 5.0.1
 
 remove nuget package refs no longer required after move to net5.0
@@ -520,6 +609,8 @@ See [help docs](../Help/help.md#expandargumentsinusage) for more details.
 
 #### Setting parent commands
 Option & Operand & Command should now be created without a parent command. Parent will be assigned when added to a command.
+
+
 
 ## 3.0.1
 

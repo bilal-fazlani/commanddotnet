@@ -82,20 +82,7 @@ namespace CommandDotNet.Tests.UnitTests
                     "CommandDotNet.Diagnostics.VersionMiddleware.DisplayVersionIfSpecified", 
                     "excludeVersionMiddleware"));
         }
-        
-        [Fact]
-        public void AppendPipedInputToOperandList_GivesInformativeError()
-        {
-            Assert.Throws<InvalidConfigurationException>(() => 
-                    new AppRunner<AppConfigBuilder_UseMiddleware_Tests>()
-                        .UseDefaultMiddleware()
-                        .AppendPipedInputToOperandList())
-                .Message.Should().Be(MsgFor(
-                    "middleware", 
-                    "CommandDotNet.Parsing.PipedInputMiddleware.InjectPipedInputToOperandList", 
-                    "excludeAppendPipedInputToOperandList"));
-        }
-        
+
         [Fact]
         public void UseTypoSuggestions_GivesInformativeError()
         {

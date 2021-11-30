@@ -1,5 +1,9 @@
 # CommandDotNet.DataAnnotations
 
+## 2.0.3
+
+Ensure DataAnnotations will run before arity is validated. DataAnnotations could be more specific.
+
 ## 2.0.2
 
 remove nuget package refs no longer required after move to net5.0

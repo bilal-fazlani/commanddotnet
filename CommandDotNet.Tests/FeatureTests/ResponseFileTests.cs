@@ -94,7 +94,7 @@ namespace CommandDotNet.Tests.FeatureTests
         [Fact]
         public void Operand_ValueBeginningWithAmpersand_CanBeEscapedWith_EndOfOptions_ArgumentSeparator()
         {
-            var endOfOptions = new AppSettings {DefaultArgumentSeparatorStrategy = ArgumentSeparatorStrategy.EndOfOptions};
+            var endOfOptions = new AppSettings { Parser = {DefaultArgumentSeparatorStrategy = ArgumentSeparatorStrategy.EndOfOptions }};
             new AppRunner<App>(endOfOptions)
                 .UseResponseFiles()
                 .Verify(new Scenario
@@ -173,7 +173,7 @@ namespace CommandDotNet.Tests.FeatureTests
 
         private class App
         {
-            public void Do([Option] string opt1, string arg1)
+            public void Do([Option] string? opt1, string? arg1)
             {
             }
         }

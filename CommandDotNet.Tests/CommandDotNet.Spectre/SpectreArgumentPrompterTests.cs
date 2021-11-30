@@ -284,7 +284,7 @@ password (Text) *******
             testConsole.Input.PushTextWithEnter("y"); 
             testConsole.Input.PushTextWithEnter("y");
 
-            new AppRunner<App>(new AppSettings { BooleanMode = BooleanMode.Explicit })
+            new AppRunner<App>(new AppSettings {Arguments = {BooleanMode = BooleanMode.Explicit }})
                 .UseSpectreAnsiConsole(testConsole)
                 .UseSpectreArgumentPrompter()
                 .Verify(new Scenario
@@ -365,8 +365,9 @@ lala (Text) fishies
                     Then =
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe(null, "something"),
+                        ExitCode = 2,
                         Output = @"arg1 (Text) something
-"
+opt1 is required"
                     }
                 });
         }
@@ -378,7 +379,6 @@ lala (Text) fishies
             new AppRunner<App>()
                 .UseSpectreAnsiConsole()
                 .UseSpectreArgumentPrompter()
-                .AppendPipedInputToOperandList()
                 .Verify(new Scenario
                 {
                     When =
@@ -406,8 +406,8 @@ lala (Text) fishies
             }
 
             public void Flags(
-                [Option(ShortName = "a", LongName = null)] bool flagA,
-                [Option(ShortName = "b", LongName = null)] bool flagB)
+                [Option('a', (string)null)] bool flagA,
+                [Option('b', (string)null)] bool flagB)
             {
             }
 

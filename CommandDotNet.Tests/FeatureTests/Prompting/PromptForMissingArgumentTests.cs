@@ -2,6 +2,7 @@
 using System.Linq;
 using CommandDotNet.Prompts;
 using CommandDotNet.Tests.Utils;
+using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Prompts;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
@@ -54,8 +55,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     Then =
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("simple", "something"),
-                        Output = @"opt1 (Text): simple
-"
+                        Output = @"opt1 (Text): simple"
                     }
                 });
         }
@@ -75,8 +75,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     Then =
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("simple", "something"),
-                        Output = @"arg1 (Text): something
-"
+                        Output = @"arg1 (Text): something"
                     }
                 });
         }
@@ -100,8 +99,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("simple", "something"),
                         Output = @"arg1 (Text): something
-opt1 (Text): simple
-"
+opt1 (Text): simple"
                     }
                 });
         }
@@ -147,7 +145,7 @@ simple
 
 "
                     }
-                });
+                }, config: TestConfig.Default.Where(c => c.SkipTrimEndOfConsoleOutputs = true));
         }
 
         [Fact]
@@ -188,8 +186,7 @@ simple
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("lala", new Password("fishies")),
                         Output = @"user (Text): lala
-password (Text): 
-"
+password (Text):"
                     }
                 });
         }
@@ -214,8 +211,7 @@ password (Text):
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("lala", new Password("new")),
                         Output = @"user (Text): lala
-password (Text): 
-"
+password (Text):"
                     }
                 });
         }
@@ -240,7 +236,7 @@ password (Text):
         public void WhenExplicitBoolOptionMissing_Prompts()
         {
 
-            new AppRunner<App>(new AppSettings { BooleanMode = BooleanMode.Explicit })
+            new AppRunner<App>(new AppSettings {Arguments = {BooleanMode = BooleanMode.Explicit }})
                 .UseArgumentPrompter()
                 .Verify(new Scenario
                 {
@@ -271,8 +267,7 @@ password (Text):
                     Then =
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe(true),
-                        Output = @"operand1 (Boolean): true
-"
+                        Output = @"operand1 (Boolean): true"
                     }
                 });
         }
@@ -293,8 +288,7 @@ password (Text):
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("fishies", "fishies"),
                         Output = @"lala (Text): fishies
-lala (Text): fishies
-"
+lala (Text): fishies"
                     }
                 });
         }
@@ -314,8 +308,9 @@ lala (Text): fishies
                     Then =
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe(null, "something"),
+                        ExitCode = 2,
                         Output = @"arg1 (Text): something
-"
+opt1 is required"
                     }
                 });
         }
@@ -326,7 +321,6 @@ lala (Text): fishies
             var pipedInput = new[] { "a", "b", "c" };
             new AppRunner<App>()
                 .UseArgumentPrompter()
-                .AppendPipedInputToOperandList()
                 .Verify(new Scenario
                 {
                     When =
@@ -354,8 +348,8 @@ lala (Text): fishies
             }
 
             public void Flags(
-                [Option(ShortName = "a", LongName = null)] bool flagA,
-                [Option(ShortName = "b", LongName = null)] bool flagB)
+                [Option('a', (string)null)] bool flagA,
+                [Option('b', (string)null)] bool flagB)
             {
             }
 

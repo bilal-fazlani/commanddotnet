@@ -5,13 +5,13 @@ namespace CommandDotNet.Example.Commands
     [Command(Description = "Fake git application to demonstrate nested sub-commands. Does NOT interact with git.")]
     public class Git
     {
-        [SubCommand]
+        [Subcommand]
         public Submodule? SubmoduleProperty { get; set; }
 
-        [SubCommand]
+        [Subcommand]
         public class Remote
         {
-            [SubCommand]
+            [Subcommand]
             public class Origin
             {
                 public void Show()
@@ -21,10 +21,9 @@ namespace CommandDotNet.Example.Commands
             }
         }
         
-        [Command(Description = "Stashes all changes when executed without any arguments. " +
-                                           "See stash --help for further information",
-            Name = "stash")]
-        [SubCommand]
+        [Command("stash", Description = "Stashes all changes when executed without any arguments. " +
+                                           "See stash --help for further information")]
+        [Subcommand]
         public class Stash
         {
             [DefaultCommand]
@@ -33,21 +32,21 @@ namespace CommandDotNet.Example.Commands
                 Console.WriteLine("changes stashed");
             }
         
-            [Command(Name = "pop", Description = "Applies last stashed changes")]
+            [Command("pop", Description = "Applies last stashed changes")]
             public void Pop()
             {
                 Console.WriteLine("stash popped");
             }
 
-            [Command(Name = "list", Description = "Lists all saved stashed changes")]
+            [Command("list", Description = "Lists all saved stashed changes")]
             public void List()
             {
                 Console.WriteLine("here's the list of stash");
             }
         }
         
-        [Command(Name = "commit", Description = "Commits all staged changes")]
-        public void Commit([Option(ShortName = "m")]string commitMessage)
+        [Command("commit", Description = "Commits all staged changes")]
+        public void Commit([Option('m')]string commitMessage)
         {
             Console.WriteLine("Commit successful");
         }

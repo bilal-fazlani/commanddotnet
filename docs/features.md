@@ -57,7 +57,7 @@ hide:
 
 <div markdown="1" class="feature">
 
-## Help
+## Help	
 - [x] Typo suggestions
 - [x] Auto generated help
 > Aliases: -? -h --help
@@ -142,14 +142,17 @@ hide:
 
 - [x] Response Files
 - [x] Piped Input with streaming
+    - user can pipe to specific arguments
 - [x] Negative numbers and other values starting with `-`
 > Most frameworks treat these as options. We've got you covered.
+- [x] split multi-value arguments by char
 - [x] Prompts
     - Hide passwords
     - Multi-entry for collections
     - Auto prompt for missing arguments (optional)
     - Spectre AnsiConsole integration for alternate prompting experience
 - [x] Default from EnvVar
+> values show as defaults in command help
 - [x] Default from AppSetting
     - using [AppSetting] attribute
     - using naming conventions
@@ -177,6 +180,7 @@ hide:
 - [x] IConsole and SystemConsole covering most members of System.Console
     - TestConsole to capture output and mock piped and user input
     - Spectre AnsiConsole support also with AnsiTestConsole
+- [x] IEnvironment and SystemEnvironment covering most members of System.Environment
 - [x] TestDependencyResolver
 > `new TestDependencyResolver{ dbSvc, httpSvc }`
 - [x] TempFiles helper

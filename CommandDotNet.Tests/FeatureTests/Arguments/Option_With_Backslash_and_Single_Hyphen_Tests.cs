@@ -36,8 +36,7 @@ Options:
 
   -v | --value  <TEXT>
 
-  -o | --other  <TEXT>
-" }
+  -o | --other  <TEXT>" }
                 });
         }
 
@@ -66,9 +65,9 @@ Options:
         private class App
         {
             public void Do(
-                [Option(ShortName = "f")] bool flag,
-                [Option(ShortName = "v")] string value,
-                [Option(ShortName = "o")] string other)
+                [Option('f')] bool flag,
+                [Option('v')] string value,
+                [Option('o')] string other)
             {
             }
         }

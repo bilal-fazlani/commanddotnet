@@ -15,10 +15,9 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
         [Fact]
         public void VoidInterceptorThrowsDescriptiveException()
         {
-            void Run() => new AppRunner<VoidInterceptor>().RunInMem("Do");
-
-            Assert.Throws<InvalidConfigurationException>(Run)
-                .Message.Should().Contain(
+            new AppRunner<VoidInterceptor>().RunInMem("Do")
+                .Console.ErrorText().Should()
+                .Contain(
                     "`CommandDotNet.Tests.FeatureTests.ClassCommands.InvalidInterceptorSignatureTests+VoidInterceptor.Intercept` " +
                     "must return type of System.Threading.Tasks.Task`1[System.Int32]");
         }

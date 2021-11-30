@@ -49,7 +49,7 @@ namespace CommandDotNet.Example.Commands
         public class DryRunArgs : IArgumentModel
         {
             [Option(
-                LongName = "dryrun",
+                "dryrun",
                 Description = "middleware could abort a UnitOfWork or DbTransaction")]
             public bool IsDryRun { get; set; } = false;
         }
@@ -57,11 +57,11 @@ namespace CommandDotNet.Example.Commands
         [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
         public class VerbosityArgs : IArgumentModel
         {
-            [Option(LongName = "verbose", ShortName = "v",
+            [Option('v', "verbose",
                 Description = "middleware could enable console logging at trace level")]
             public bool Verbose { get; set; }
 
-            [Option(LongName = "quiet", ShortName = "q", Description = "middleware could disable console logging")]
+            [Option('q', "quiet", Description = "middleware could disable console logging")]
             public bool Quite { get; set; }
         }
 

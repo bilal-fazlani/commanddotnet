@@ -7,6 +7,46 @@ using Xunit.Abstractions;
 
 namespace CommandDotNet.Tests.FeatureTests.ParseDirective
 {
+    public class ParseReporter_SplitValues_Tests
+    {
+        public ParseReporter_SplitValues_Tests(ITestOutputHelper output)
+        {
+            Ambient.Output = output;
+        }
+
+        [Fact]
+        public void Split_values_can_be_traced_to_source()
+        {
+            new AppRunner<App>()
+                .UseParseDirective()
+                .Verify(new Scenario
+                {
+                    When = { Args = "[parse] Colon --list one:two:three" },
+                    Then = { Output = @"command: Colon
+
+options:
+
+  list <Text>
+    value: one, two, three
+    inputs: one (from: --list one:two:three), two (from: --list one:two:three), three (from: --list one:two:three)
+    default:
+
+Parse usage: [parse:t:raw] to include token transformations.
+ 't' to include token transformations.
+ 'raw' to include command line as passed to this process."
+                    }
+                });
+        }
+
+
+        private class App
+        {
+            public void Colon([Option(Split = ':')] IEnumerable<string> list)
+            {
+            }
+        }
+    }
+
     public class ParseReporter_DefaultValues_Tests
     {
         public ParseReporter_DefaultValues_Tests(ITestOutputHelper output)
@@ -66,8 +106,7 @@ options:
 
 Parse usage: [parse:t:raw] to include token transformations.
  't' to include token transformations.
- 'raw' to include command line as passed to this process.
-"
+ 'raw' to include command line as passed to this process."
                     }
                 });
         }
@@ -110,8 +149,7 @@ options:
 
 Parse usage: [parse:t:raw] to include token transformations.
  't' to include token transformations.
- 'raw' to include command line as passed to this process.
-"
+ 'raw' to include command line as passed to this process."
                     }
                 });
         }
@@ -135,7 +173,7 @@ Parse usage: [parse:t:raw] to include token transformations.
             public List<string>? opdList { get; set; } = new() { "one", "two", "three" };
 
             [EnvVar("optList")]
-            [Option(ShortName = "l")]
+            [Option('l')]
             public List<string>? optList { get; set; } = new() { "one", "two", "three" };
         }
     }

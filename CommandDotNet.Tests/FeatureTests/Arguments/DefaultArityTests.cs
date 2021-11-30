@@ -19,10 +19,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         private static readonly ArgumentArity ZeroToMany = new(0, int.MaxValue);
         private static readonly ArgumentArity OneToMany = new(1, int.MaxValue);
 
-        public DefaultArityTests(ITestOutputHelper output)
-        {
-            Ambient.Output = output;
-        }
+        public DefaultArityTests(ITestOutputHelper output) => Ambient.Output = output;
 
         [Fact]
         public void MethodParameters_WithoutDefaults_AreRequired_UnlessNullable()

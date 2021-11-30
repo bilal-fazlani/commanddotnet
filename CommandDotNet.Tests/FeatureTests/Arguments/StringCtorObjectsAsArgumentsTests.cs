@@ -29,8 +29,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
 Arguments:
   ctorArg
-  parseArg
-"
+  parseArg"
                 }
             });
         }
@@ -47,8 +46,7 @@ Arguments:
 
 Options:
   -c | --ctorArgs
-  -p | --parseArgs
-"
+  -p | --parseArgs"
                 }
             });
         }
@@ -67,8 +65,7 @@ Arguments:
 
   ctorArg   <FILENAME>
 
-  parseArg  <DIRNAME>
-"
+  parseArg  <DIRNAME>"
                 }
             });
         }
@@ -87,8 +84,7 @@ Options:
 
   -c | --ctorArgs (Multiple)   <FILENAME>
 
-  -p | --parseArgs (Multiple)  <DIRNAME>
-"
+  -p | --parseArgs (Multiple)  <DIRNAME>"
                 }
             });
         }
@@ -137,8 +133,8 @@ Options:
             }
 
             public void DoList(
-                [Option(ShortName = "c")] List<StringCtorObject> ctorArgs,
-                [Option(ShortName = "p")] List<StaticParseObject> parseArgs)
+                [Option('c')] List<StringCtorObject> ctorArgs,
+                [Option('p')] List<StaticParseObject> parseArgs)
             {
             }
         }

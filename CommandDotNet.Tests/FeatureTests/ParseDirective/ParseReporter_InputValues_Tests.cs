@@ -63,7 +63,6 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         {
             new AppRunner<App>()
                 .UseParseDirective()
-                .AppendPipedInputToOperandList()
                 .Verify(new Scenario
                 {
                     When =
@@ -89,7 +88,6 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
         {
             new AppRunner<App>()
                 .UseParseDirective()
-                .AppendPipedInputToOperandList()
                 .Verify(new Scenario
                 {
                     When =
@@ -162,8 +160,7 @@ options:
 
 Parse usage: [parse:t:raw] to include token transformations.
  't' to include token transformations.
- 'raw' to include command line as passed to this process.
-"
+ 'raw' to include command line as passed to this process."
                     }
                 });
 
@@ -175,10 +172,10 @@ Parse usage: [parse:t:raw] to include token transformations.
                 IConsole console,
                 [Operand] string opd,
                 [Operand] List<string> opdList,
-                [Option(ShortName = "a", LongName = null)] bool optA = false,
-                [Option(ShortName = "b", LongName = null)] bool optB = false,
+                [Option('a', (string)null)] bool optA = false,
+                [Option('b', (string)null)] bool optB = false,
                 [Option] string? lala = null,
-                [Option(ShortName = "l")] List<string>? optList = null)
+                [Option('l')] List<string>? optList = null)
             {
                 console.Out.WriteLine(new
                 {

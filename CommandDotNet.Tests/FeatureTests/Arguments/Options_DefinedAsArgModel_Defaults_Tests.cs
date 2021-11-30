@@ -38,8 +38,7 @@ Options:
   --StringListArg
   --StructListArg
   --EnumListArg
-  --ObjectListArg
-"
+  --ObjectListArg"
                 }
             });
         }
@@ -76,8 +75,7 @@ Options:
   --EnumListArg (Multiple)    <DAYOFWEEK>  [Monday, Tuesday]
   Allowed values: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
-  --ObjectListArg (Multiple)  <URI>        [http://google.com/, http://github.com/]
-"
+  --ObjectListArg (Multiple)  <URI>        [http://google.com/, http://github.com/]"
                 }
             });
         }

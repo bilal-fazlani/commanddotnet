@@ -113,18 +113,18 @@ Do" }
         private class DefaultApp
         {
             public Task<int> Interceptor(InterceptorExecutionDelegate next, 
-                [Option] string localIOption,
-                [Option(AssignToExecutableSubcommands = true)] string inheritedIOption)
+                [Option] string? localIOption,
+                [Option(AssignToExecutableSubcommands = true)] string? inheritedIOption)
             {
                 return next();
             }
 
             [DefaultCommand]
-            public void Default(string opd1, string opd2, [Option] string opt1, [Option] string opt2)
+            public void Default(string? opd1, string? opd2, [Option] string? opt1, [Option] string? opt2)
             {
             }
 
-            public void Do(string opd1, string opd2, [Option] string opt1, [Option] string opt2)
+            public void Do(string? opd1, string? opd2, [Option] string? opt1, [Option] string? opt2)
             {
             }
         }

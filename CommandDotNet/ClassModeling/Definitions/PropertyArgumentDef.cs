@@ -30,6 +30,7 @@ namespace CommandDotNet.ClassModeling.Definitions
         public bool IsOptional { get; }
         public BooleanMode? BooleanMode { get; }
         public IArgumentArity Arity { get; }
+        public char? Split { get; set; }
 
         public PropertyArgumentDef(
             PropertyInfo propertyInfo,
@@ -46,9 +47,11 @@ namespace CommandDotNet.ClassModeling.Definitions
 
             CommandNodeType = commandNodeType;
             Name = propertyInfo.BuildName(commandNodeType, appConfig);
-            IsOptional = propertyInfo.PropertyType.IsNullableType()
-                         || propertyInfo.GetNullability() == NullabilityState.Nullable;
-            BooleanMode = this.GetBooleanMode(appConfig.AppSettings.BooleanMode);
+            IsOptional = propertyInfo.IsNullableProperty();
+
+            BooleanMode = this.GetBooleanMode(appConfig.AppSettings.Arguments.BooleanMode);
+            Split = this.GetSplitChar();
+
             ValueProxy = new ValueProxy(
                 () => _propertyInfo.GetValue(modelInstance),
 

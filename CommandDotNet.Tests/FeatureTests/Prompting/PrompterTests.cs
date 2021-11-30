@@ -29,8 +29,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     Then =
                     {
                         Output = @"knock knock: who's there
-who's there
-"
+who's there"
                     }
                 });
         }

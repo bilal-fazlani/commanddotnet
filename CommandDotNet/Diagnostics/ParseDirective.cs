@@ -71,7 +71,7 @@ namespace CommandDotNet.Diagnostics
                     }
                     if (parseContext.IncludeRawCommandLine)
                     {
-                        WriteLine(Environment.CommandLine);
+                        WriteLine(commandContext.Environment.CommandLine);
                     }
                 }
                 else

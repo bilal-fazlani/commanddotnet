@@ -11,12 +11,12 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
     {
         private readonly AppSettings _endOfOptionsSettings = new()
         {
-            DefaultArgumentSeparatorStrategy = ArgumentSeparatorStrategy.EndOfOptions
+            Parser = { DefaultArgumentSeparatorStrategy = ArgumentSeparatorStrategy.EndOfOptions }
         };
 
         private readonly AppSettings _passThruSettings = new()
         {
-            DefaultArgumentSeparatorStrategy = ArgumentSeparatorStrategy.PassThru
+            Parser = { DefaultArgumentSeparatorStrategy = ArgumentSeparatorStrategy.PassThru }
         };
 
         public ArgumentSeparatorTests(ITestOutputHelper output)
@@ -34,7 +34,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
         public void ArgumentSeparatorStrategy_UseCommandAttribute_DefaultFromAppSettings(
             ArgumentSeparatorStrategy appSettingsStrategy, string command, ArgumentSeparatorStrategy expectedStrategy)
         {
-            var appSettings = new AppSettings {DefaultArgumentSeparatorStrategy = appSettingsStrategy};
+            var appSettings = new AppSettings {Parser = {DefaultArgumentSeparatorStrategy = appSettingsStrategy}};
             new AppRunner<SettingsApp>(appSettings)
                 .StopAfter(MiddlewareStages.ParseInput)
                 .RunInMem(command)
@@ -162,7 +162,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
 
         public class Math
         {
-            public void Concat(IConsole console, string x, string y)
+            public void Concat(IConsole console, string? x, string? y)
             {
                 console.Write(x + y);
             }

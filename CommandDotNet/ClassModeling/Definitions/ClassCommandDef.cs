@@ -5,11 +5,14 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
+using CommandDotNet.Logging;
 
 namespace CommandDotNet.ClassModeling.Definitions
 {
     internal class ClassCommandDef : ICommandDef
     {
+        private static ILog Log = LogProvider.GetCurrentClassLogger();
+
         private readonly CommandContext _commandContext;
         private readonly ICommandDef? _defaultCommandDef;
         private readonly Lazy<List<ICommandDef>> _subCommands;
@@ -33,26 +36,30 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public static Command CreateRootCommand(Type rootAppType, CommandContext commandContext)
         {
-            return new ClassCommandDef(rootAppType, commandContext)
+            Log.Debug("begin {0}: rootAppType={1}", nameof(CreateRootCommand), rootAppType);
+            var rootCommand = new ClassCommandDef(rootAppType, commandContext)
                 .ToCommand(null, commandContext)
                 .Command;
+            Log.Debug("end {0}");
+            return rootCommand;
         }
 
-        public static IEnumerable<Type> GetAllCommandClassTypes(Type rootAppType)
+        public static IEnumerable<(Type type, SubcommandAttribute? subcommandAttr)> GetAllCommandClassTypes(
+            Type rootAppType, SubcommandAttribute? subcommandAttr = null)
         {
             var childTypes = GetNestedSubCommandTypes(rootAppType)
-                .SelectMany(GetAllCommandClassTypes);
-            return rootAppType
+                .SelectMany(x => GetAllCommandClassTypes(x.type, x.subcommandAttr));
+            return (rootAppType, subcommandAttribute: subcommandAttr)
                 .ToEnumerable()
                 .Union(childTypes);
         }
 
-        private ClassCommandDef(Type classType, CommandContext commandContext)
+        private ClassCommandDef(Type classType, CommandContext commandContext, SubcommandAttribute? subcommandAttr = null)
         {
             CommandHostClassType = classType ?? throw new ArgumentNullException(nameof(classType));
             _commandContext = commandContext ?? throw new ArgumentNullException(nameof(commandContext));
 
-            Name = classType.BuildName(CommandNodeType.Command, commandContext.AppConfig);
+            Name = classType.BuildName(CommandNodeType.Command, commandContext.AppConfig, subcommandAttr?.RenameAs);
 
             var (interceptorMethod, defaultCommand, localCommands) = ParseMethods(commandContext.AppConfig);
 
@@ -126,26 +133,34 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         }
 
-        private List<ICommandDef> GetSubCommands(IEnumerable<ICommandDef> localSubCommands) => 
-            localSubCommands.Union(GetNestedSubCommands()).ToList();
+        private List<ICommandDef> GetSubCommands(ICollection<ICommandDef> localSubcommands)
+        {
+            var allSubcommands = localSubcommands.Union(GetNestedSubCommands()).ToList();
+            Log.Debug("begin {0}: type={1} local={2} nested={3}", nameof(GetSubCommands), this.CommandHostClassType,
+                localSubcommands.Count, 
+                allSubcommands.Count-localSubcommands.Count);
+            return allSubcommands;
+        }
 
         private IEnumerable<ICommandDef> GetNestedSubCommands()
         {
             return GetNestedSubCommandTypes(CommandHostClassType)
-                .Select(t => new ClassCommandDef(t, _commandContext));
+                .Select(t => new ClassCommandDef(t.type, _commandContext, t.subcommandAttr));
         }
 
-        private static IEnumerable<Type> GetNestedSubCommandTypes(Type classType)
+        private static IEnumerable<(Type type, SubcommandAttribute subcommandAttr)> GetNestedSubCommandTypes(Type classType)
         {
-            IEnumerable<Type> propertySubmodules =
-                classType.GetDeclaredProperties<SubCommandAttribute>()
-                    .Select(p => p.PropertyType);
+            IEnumerable<(Type, SubcommandAttribute)> propertySubmodules =
+                classType
+                    .GetDeclaredProperties()
+                    .Where(x => x.HasAttribute<SubcommandAttribute>())
+                    .Select(p => (t: p.PropertyType, a: p.GetCustomAttribute<SubcommandAttribute>()))!;
 
-            IEnumerable<Type> inlineClassSubmodules = classType
+            IEnumerable<(Type, SubcommandAttribute)> inlineClassSubmodules = classType
                 .GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly)
-                .Where(x => x.HasAttribute<SubCommandAttribute>())
-                .Where(x => !x.IsCompilerGenerated())
-                .Where(x => !typeof(IAsyncStateMachine).IsAssignableFrom(x));
+                .Where(t => t.HasAttribute<SubcommandAttribute>())
+                .Where(t => !t.IsCompilerGenerated() && !t.IsAssignableTo(typeof(IAsyncStateMachine)))
+                .Select(t => (t, a: t.GetCustomAttribute<SubcommandAttribute>()))!;
 
             return propertySubmodules
                 .Union(inlineClassSubmodules);
