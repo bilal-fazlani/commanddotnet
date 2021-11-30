@@ -51,6 +51,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
             }
 
             new AppRunner<App>(new AppSettings { Localize = loc })
+                .AfterRun(r => Resources.A = new Resources())
                 .Verify(new Scenario
                 {
                     When = { Args = "Do --help" },

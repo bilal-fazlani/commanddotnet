@@ -40,12 +40,21 @@ namespace CommandDotNet.TestTools
             return result;
         }
 
+        internal static AppRunner AfterRun(this AppRunner appRunner, Action<AppRunnerResult> action)
+        {
+            return appRunner.Configure(cfg =>
+            {
+                var postRunActions = cfg.Services.GetOrAdd(() => new List<Action<AppRunnerResult>>());
+                postRunActions.Add(action);
+            });
+        }
+
         internal static AppRunner AssertAfterRun(this AppRunner appRunner, Action<AppRunnerResult> assert)
         {
             return appRunner.Configure(cfg =>
             {
-                var assertions = cfg.Services.GetOrAdd(() => new List<Action<AppRunnerResult>>());
-                assertions.Add(assert);
+                var postRunActions = cfg.Services.GetOrAdd(() => new List<Action<AppRunnerResult>>());
+                postRunActions.Add(assert);
             });
         }
 
