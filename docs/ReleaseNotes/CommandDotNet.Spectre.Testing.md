@@ -1,4 +1,5 @@
 # CommandDotNet.Spectre.Testing
+
 ## 2.0.2
 
 option to trim ending whitespace when getting test console output
