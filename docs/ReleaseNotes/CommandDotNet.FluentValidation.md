@@ -1,5 +1,9 @@
 # CommandDotNet.FluentValidation
 
+## 5.0.1
+
+Ensure FluentValidation will run before arity is validated. FluentValidation could be more specific.
+
 ## 5.0.0
 
 remove nuget package refs no longer required after move to net5.0

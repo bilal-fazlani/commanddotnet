@@ -1,8 +1,12 @@
 # CommandDotNet.Spectre.Testing
-
 ## 2.0.2
 
 option to trim ending whitespace when getting test console output
+
+Fix bug where Error output was not being reported by AnsiTestConsole. 
+This has a change in behavior from the CommandDotNet TestConsole. All Error output will appear after all Out output.
+The Spectre TestConsole captures only Output and not through a path we can intercept. 
+This prevents us from determining the order in which Error and Out were entered in relation to each other.
 
 ## 2.0.1
 

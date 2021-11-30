@@ -23,6 +23,16 @@ You can run [this script](https://github.com/bilal-fazlani/commanddotnet/tree/ma
 - The names are on the same line as the attribute
 - The names are the first properties specified after the attribute
 
+#### Arity Validation
+
+Now that we have support for NRTs we can determine if an argument is required or not based on whether it's an NRT, Nullable<T> or optional parameter. 
+
+If it is required and no value is provided via configs or the cli, the command will fail. Since this is a breaking change in behavior, it can be disabled by setting `AppSettings.Arguments.SkipArityValidation = true`.
+
+#### Localizable Descriptions, Usage & ExtendedHelpText
+
+If you've set the AppSettings.Localize func, the HelpTextProvider will pass Usage, ExtendedHelpText, and Description (for commands and arguments) through the func.
+
 #### IConsole moved
 
 IConsole has been moved to the root CommandDotNet namespace. While tis is a breaking change, most files where you're using IConsole probably already reference CommandDotNet which means you're likely to have unused usings than build failures.
