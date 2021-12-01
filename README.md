@@ -4,10 +4,10 @@
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/CommandDotNet.svg?style=for-the-badge)](https://www.nuget.org/packages/CommandDotNet)
 [![NuGet](https://img.shields.io/nuget/dt/CommandDotNet.svg?style=for-the-badge)](https://www.nuget.org/packages/CommandDotNet)
 [![GitHub](https://img.shields.io/github/license/bilal-fazlani/commanddotnet?style=for-the-badge)](https://github.com/bilal-fazlani/commanddotnet/blob/master/LICENSE)
-![Netlify](https://img.shields.io/netlify/ce6331f7-bbfb-4a8a-ba7c-705b2902c4f5?label=Netlify%20Build&style=for-the-badge)
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/bilal-fazlani/CommandDotNet.svg?style=for-the-badge)]()
-![Travis (.com) branch](https://img.shields.io/travis/com/bilal-fazlani/commanddotnet/master?label=TRAVIS%20BUILD&style=for-the-badge)
+![Netlify](https://img.shields.io/netlify/ce6331f7-bbfb-4a8a-ba7c-705b2902c4f5?label=Netlify%20Build&style=for-the-badge)
+[![Build](https://img.shields.io/github/workflow/status/bilal-fazlani/commanddotnet/Test/master?style=for-the-badge)](https://github.com/bilal-fazlani/commanddotnet/actions/workflows/test.yml)
 
 [![Gitter](https://img.shields.io/gitter/room/badges/shields.svg?style=for-the-badge)](https://gitter.im/CommandDotNet/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Discord](https://img.shields.io/discord/678568687556493322?label=Discord%20Chat&style=for-the-badge)](https://discord.gg/QFxKSeG)
