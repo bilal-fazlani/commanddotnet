@@ -163,7 +163,7 @@ extra:
   analytics:
     provider: google
     property: UA-39358317-3
-  version: '4'
+  version: '6'
   legacy: false
   social:
     - icon: fontawesome/brands/github
