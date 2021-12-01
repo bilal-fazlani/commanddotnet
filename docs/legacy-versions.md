@@ -6,6 +6,11 @@ hide:
 
 # Legacy versions
 
+### Version 5
+
+[:material-book: Documentation](https://v5.commanddotnet.bilal-fazlani.com/){ .md-button .md-button--primary }
+[:material-github: Code](https://github.com/bilal-fazlani/commanddotnet/tree/v5){ .md-button .md-button }
+
 ### Version 4
 
 [:material-book: Documentation](https://v4.commanddotnet.bilal-fazlani.com/){ .md-button .md-button--primary }
