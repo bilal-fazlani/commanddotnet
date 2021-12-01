@@ -76,22 +76,8 @@ nav:
         - TipsFaqs/nullable-reference-types.md
         - TipsFaqs/developing-middleware.md
     - Features: 
-      - features.md  
-    - Release Notes:
-      - ReleaseNotes/CommandDotNet.md
-      - ReleaseNotes/CommandDotNet.DataAnnotations.md
-      - ReleaseNotes/CommandDotNet.FluentValidation.md
-      - ReleaseNotes/CommandDotNet.IoC.Autofac.md
-      - ReleaseNotes/CommandDotNet.IoC.MicrosoftDependencyInjection.md
-      - ReleaseNotes/CommandDotNet.IoC.SimpleInjector.md
-      - ReleaseNotes/CommandDotNet.NameCasing.md
-      - ReleaseNotes/CommandDotNet.NewerReleasesAlerts.md
-      - ReleaseNotes/CommandDotNet.Spectre.md
-      - ReleaseNotes/CommandDotNet.Spectre.Testing.md
-      - ReleaseNotes/CommandDotNet.TestTools.md
-    - Legacy Versions:
-      - legacy-versions.md
-      - ReleaseNotes/whats-new-in-v3.md
+      - features.md
+
 theme:
   features:
     - navigation.tabs
@@ -161,8 +147,8 @@ extra:
   analytics:
     provider: google
     property: UA-39358317-3
-  version: '4'
-  legacy: false
+  version: '5'
+  legacy: true
   social:
     - icon: fontawesome/brands/github
       link: 'https://github.com/bilal-fazlani'
