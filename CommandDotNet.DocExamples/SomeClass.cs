@@ -1,4 +1,4 @@
-﻿namespace CommandDotNet.Example.DocExamples
+﻿namespace CommandDotNet.DocExamples
 {
     public class SomeClass
     {

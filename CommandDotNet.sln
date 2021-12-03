@@ -45,6 +45,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandDotNet.Spectre", "Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandDotNet.Spectre.Testing", "CommandDotNet.Spectre.Testing\CommandDotNet.Spectre.Testing.csproj", "{1452576F-513A-493E-B871-3D9B40118B45}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandDotNet.DocExamples", "CommandDotNet.DocExamples\CommandDotNet.DocExamples.csproj", "{0DB6792E-908B-48B0-B228-11958AB50803}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,10 @@ Global
 		{1452576F-513A-493E-B871-3D9B40118B45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1452576F-513A-493E-B871-3D9B40118B45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1452576F-513A-493E-B871-3D9B40118B45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DB6792E-908B-48B0-B228-11958AB50803}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DB6792E-908B-48B0-B228-11958AB50803}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DB6792E-908B-48B0-B228-11958AB50803}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DB6792E-908B-48B0-B228-11958AB50803}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

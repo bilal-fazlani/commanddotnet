@@ -50,6 +50,10 @@ These errors are intercepted and displayed to the user before the registered err
 
 * fixed bug where streaming into an IEnumerable<T> where T is not a string would crash
 
+### Bug Fixes
+
+* fixed bug where streaming into an IEnumerable<T> where T is not a string would crash
+
 ### New Features
 
 #### IEnvironment

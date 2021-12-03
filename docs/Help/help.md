@@ -97,7 +97,7 @@ When `Adaptive`, if the file name ends with ".exe", then uses `Executable` else 
 
 ### UsageAppName
 
-When specified, this value will be used {application} in `Usage: {application}`.  `UsageAppNameStyle` will be ignored.
+When specified, this value will be used in `Usage: {application}`.  `UsageAppNameStyle` will be ignored.
 
 ### Template variables
 

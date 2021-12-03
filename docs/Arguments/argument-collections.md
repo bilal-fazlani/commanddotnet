@@ -50,7 +50,29 @@ Operand collections must the be the last operand specified.
 
 ## Option Collections
 
-Since options are named, you can have multiple option collections. Specify the option name for each entry as shown in the example above.
+Since options are named, you can have multiple option collections. 
+
+There are two ways to assign values to option collections.
+
+The first is to specify the option multple times.
+
+```bash
+dotnet myapp.dll --name Beatrix --name Hadley 
+```
+
+The second is to define a split character for the option `[Option(Split=",")]` and then you can
+
+```bash
+dotnet myapp.dll --name Beatrix,Hadley 
+```
+
+Split can also be defined at a global level setting `AppSettings.Arguments.DefaultOptionSplit`.
+
+In cases where the user cannot use the provided split character (perhaps the script language does not support the character), the user can override it using the `[split]` directive.  For example, if the user would prefer a hyphen, they can use
+
+```bash
+dotnet myapp.dll [split:-] --name Beatrix-Hadley 
+```
 
 ## Piping
 

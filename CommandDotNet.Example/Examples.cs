@@ -1,8 +1,10 @@
 ﻿using CommandDotNet.Example.Commands;
+using Git = CommandDotNet.Example.Commands.Git;
 
 namespace CommandDotNet.Example
 {
     [Command(
+        // begin-snippet: extended_help_text
         ExtendedHelpText = "Directives:\n" +
                            "  [debug] to attach a debugger to the app\n" +
                            "  [parse] to output how the inputs were tokenized\n" +
@@ -11,7 +13,8 @@ namespace CommandDotNet.Example
                            "\n" +
                            "directives must be specified before any commands and arguments.\n" +
                            "\n" +
-                           "Example: %AppName% [debug] [parse] [log:info] cancel-me")]
+                           "Example: %AppName% [debug] [parse] [log:info] math")]
+        // end-snippet
     internal class Examples
     {
         private static bool _inSession;
@@ -34,7 +37,7 @@ namespace CommandDotNet.Example
                 context.ShowHelpOnExit = true;
             }
         }
-        
+
         [Subcommand]
         public Git Git { get; set; } = null!;
 

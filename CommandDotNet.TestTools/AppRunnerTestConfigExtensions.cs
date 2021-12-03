@@ -19,6 +19,7 @@ namespace CommandDotNet.TestTools
             context.InvocationPipeline.All.ForEach(step => step.Invocation = new TrackingInvocation(step.Invocation));
             return next(context);
         }
+        
         /// <summary>
         /// Intercepts <see cref="Console.Out"/> and <see cref="Console.Error"/>.
         /// Text is still written to those writers, but also to IConsole.<br/>
@@ -41,7 +42,7 @@ namespace CommandDotNet.TestTools
             {
                 throw new InvalidOperationException("System.Console is already being intercepted. Interception does not currently support parellel executions.");
             }
-
+            
             var @out = new DuplexTextWriter(Console.Out, context.Console.Out);
             var error = new DuplexTextWriter(Console.Error, context.Console.Error);
             try
