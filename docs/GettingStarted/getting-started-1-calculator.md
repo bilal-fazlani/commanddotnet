@@ -1,6 +1,11 @@
 # Your first console app
 
-Let's create a calculator console application which can perform 2 operations: Addition & Subtraction
+!!! Note
+    We're in the progress of updating our Getting Started guide and documentation. All content is Getting Started works for v6. We'll continue to make incremental updates over the next few weeks.
+
+Let's create a calculator console application with Add & Subtract operations.
+
+Your first step is to create a console application.
 
 Begin by creating the commands:
 <!-- snippet: getting-started-100-calculator -->
@@ -36,7 +41,7 @@ First we'll check out the auto-generated help.
 ~
 $ dotnet calculator.dll --help
 Usage: dotnet calculator.dll [command]
-
+don
 Commands:
 
   Add
