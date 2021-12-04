@@ -34,7 +34,7 @@ For bugs, [create an issue](https://github.com/bilal-fazlani/commanddotnet/issue
 
 For questions and feature requests, start [a discussion](https://github.com/bilal-fazlani/commanddotnet/discussions)
 
-For a quick walkthrough of features, see our [Getting Started guides](https://commanddotnet.bilal-fazlani.com/gettingstarted/)
+For a quick walkthrough of features, see our [Getting Started guides](https://commanddotnet.bilal-fazlani.com/gettingstarted/getting-started-0/)
 
 Here's a starter:
 
@@ -130,7 +130,7 @@ $ dotnet calculator.dll Add a 20
 
 Check out the docs for more examples
 
-See our [Getting Started guides](https://commanddotnet.bilal-fazlani.com/gettingstarted/) to see how to improve the help documentation, test the application and utilize the many other features of CommandDotNet.
+See our [Getting Started guides](https://commanddotnet.bilal-fazlani.com/gettingstarted/getting-started-0/) to see how to improve the help documentation, test the application and utilize the many other features of CommandDotNet.
 
 ## Credits 🎉
 
