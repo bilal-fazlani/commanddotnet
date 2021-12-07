@@ -53,7 +53,9 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                     Then =
                     {
                         ExitCode = ExitCodes.Error.Result,
-                        Output = @"Usage: testhost.dll [command]
+                        Output = @"Required command was not provided
+
+Usage: testhost.dll [command]
 
 Commands:
 

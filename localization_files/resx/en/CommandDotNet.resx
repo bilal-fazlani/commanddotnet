@@ -441,6 +441,21 @@
     <comment>Debugger_Attach_debugger: </comment>
   </data>
 
+  <data name="{0} is required" xml:space="preserve">
+    <value>{0} is required</value>
+    <comment>Arity_is_required: </comment>
+  </data>
+
+  <data name="{0} requires at least {1} values but {2} were provided." xml:space="preserve">
+    <value>{0} requires at least {1} values but {2} were provided.</value>
+    <comment>Arity_min_not_reached: </comment>
+  </data>
+
+  <data name="{0} can have no more than {1} values but {2} were provided." xml:space="preserve">
+    <value>{0} can have no more than {1} values but {2} were provided.</value>
+    <comment>Arity_max_exceeded: </comment>
+  </data>
+
   <data name="{0} accepts only a single value but multiple values were provided" xml:space="preserve">
     <value>{0} accepts only a single value but multiple values were provided</value>
     <comment>Parse_ArgumentArity_Expected_single_value: </comment>

@@ -12,6 +12,9 @@ namespace CommandDotNet
         public virtual string Input_piped_lc => "piped";
         public virtual string Input_prompt_lc => "prompt";
 
+        public virtual string Parse_Required_command_was_not_provided =>
+            $"Required {Common_command_lc} was not provided";
+
         public virtual string Parse_ArgumentArity_Expected_single_value(string argumentName) =>
             $"{argumentName} accepts only a single value but multiple values were provided";
 
