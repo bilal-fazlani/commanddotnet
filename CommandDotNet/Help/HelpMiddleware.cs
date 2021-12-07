@@ -61,6 +61,9 @@ namespace CommandDotNet.Help
 
             if (!targetCommand.IsExecutable)
             {
+                var console = ctx.Console;
+                console.Error.WriteLine(Resources.A.Parse_Required_command_was_not_provided);
+                console.Error.WriteLine();
                 ctx.ShowHelpOnExit = true;
                 return ExitCodes.Error;
             }

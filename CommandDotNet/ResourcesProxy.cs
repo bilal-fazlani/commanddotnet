@@ -130,6 +130,9 @@ namespace CommandDotNet
         public override string Input_prompt_lc =>
             _localize(base.Input_prompt_lc)
             ?? base.Input_prompt_lc;
+        public override string Parse_Required_command_was_not_provided =>
+            _localize(base.Parse_Required_command_was_not_provided)
+            ?? base.Parse_Required_command_was_not_provided;
         public override string Parse_Did_you_mean =>
             _localize(base.Parse_Did_you_mean)
             ?? base.Parse_Did_you_mean;
