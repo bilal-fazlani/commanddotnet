@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using CommandDotNet.Help;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace CommandDotNet.DocExamples.GettingStarted
 {
     [TestFixture]
-    public class GettingStarted_300_Help
+    public class Getting_Started_300_Help
     {
         // begin-snippet: getting-started-300-calculator
         [Command(
@@ -90,7 +90,7 @@ single line of extended help here");
 
         [Test]
         public void Given2Numbers_Should_Subtract() =>
-            new AppRunner<GettingStarted_100_Calculator.Program>()
+            new AppRunner<Getting_Started_1_Calculator.Program>()
                 .InterceptSystemConsoleWrites()
                 .Verify(new Scenario
                 {

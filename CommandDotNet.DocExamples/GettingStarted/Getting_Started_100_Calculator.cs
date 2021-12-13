@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace CommandDotNet.DocExamples.GettingStarted
 {
     [TestFixture]
-    public class GettingStarted_100_Calculator
+    public class Getting_Started_100_Calculator
     {
         // begin-snippet: getting-started-100-calculator
         public class Program

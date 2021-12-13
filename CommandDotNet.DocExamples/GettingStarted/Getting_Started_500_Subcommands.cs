@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace CommandDotNet.DocExamples.GettingStarted
 {
     [TestFixture]
-    public class GettingStarted_500_Subcommands
+    public class Getting_Started_500_Subcommands
     {
         // begin-snippet: getting-started-600-interceptors
         public class Program

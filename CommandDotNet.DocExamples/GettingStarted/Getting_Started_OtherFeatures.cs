@@ -1,6 +1,6 @@
 ﻿namespace CommandDotNet.DocExamples.GettingStarted
 {
-    public class GettingStarted_OtherFeatures
+    public class Getting_Started_OtherFeatures
     {
         public class Program
         {
