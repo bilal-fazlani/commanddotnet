@@ -37,28 +37,6 @@ public void Given2Numbers_Should_OutputSum()
 }
 ```
 <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_400_Testing.cs#L27-L35' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-add-command-tests' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-getting-started-400-calculator-add-command-tests-1'></a>
-```c#
-[Test]
-public void Given2Numbers_Should_OutputSum()
-{
-    var result = Program.AppRunner.RunInMem("Add 40 20");
-    result.ExitCode.Should().Be(0);
-    result.Console.OutText().Should().Be("60");
-}
-```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_500_Subcommands.cs#L53-L61' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-add-command-tests-1' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-getting-started-400-calculator-add-command-tests-2'></a>
-```c#
-[Test]
-public void Given2Numbers_Should_OutputSum()
-{
-    var result = Program.AppRunner.RunInMem("Add 40 20");
-    result.ExitCode.Should().Be(0);
-    result.Console.OutText().Should().Be("60");
-}
-```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_600_Interceptors.cs#L53-L61' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-add-command-tests-2' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ### BDD Style
@@ -87,52 +65,6 @@ public void GivenANonNumber_Should_OutputValidationError() =>
     });
 ```
 <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_400_Testing.cs#L41-L61' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-add-command-tests-bdd' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-getting-started-400-calculator-add-command-tests-bdd-1'></a>
-```c#
-[Test]
-public void Given2Numbers_Should_OutputSum() =>
-    Program.AppRunner.Verify(new Scenario
-    {
-        When = { Args = "Add 40 20" },
-        Then = { Output = "60" }
-    });
-
-[Test]
-public void GivenANonNumber_Should_OutputValidationError() =>
-    Program.AppRunner.Verify(new Scenario
-    {
-        When = { Args = "Add a 20" },
-        Then =
-        {
-            ExitCode = 2, // validations exit code = 2
-            Output = "'a' is not a valid Number"
-        }
-    });
-```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_500_Subcommands.cs#L67-L87' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-add-command-tests-bdd-1' title='Start of snippet'>anchor</a></sup>
-<a id='snippet-getting-started-400-calculator-add-command-tests-bdd-2'></a>
-```c#
-[Test]
-public void Given2Numbers_Should_OutputSum() =>
-    Program.AppRunner.Verify(new Scenario
-    {
-        When = { Args = "Add 40 20" },
-        Then = { Output = "60" }
-    });
-
-[Test]
-public void GivenANonNumber_Should_OutputValidationError() =>
-    Program.AppRunner.Verify(new Scenario
-    {
-        When = { Args = "Add a 20" },
-        Then =
-        {
-            ExitCode = 2, // validations exit code = 2
-            Output = "'a' is not a valid Number"
-        }
-    });
-```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_600_Interceptors.cs#L67-L87' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-add-command-tests-bdd-2' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 See [Test Tools](../TestTools/overview.md) in the Testing help section for more, such as testing prompts and piped input. 
