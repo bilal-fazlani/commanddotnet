@@ -10,12 +10,12 @@ nav:
     - Documentation:
       - Getting Started:
         - GettingStarted/getting-started-0.md
-        - GettingStarted/getting-started-1-calculator.md
-        - GettingStarted/getting-started-2-help.md
-        - GettingStarted/getting-started-3-tests.md
-        - GettingStarted/getting-started-4-validation.md
-        - GettingStarted/getting-started-5-pipes.md
-        - GettingStarted/getting-started-6-ctrlc.md
+        - GettingStarted/getting-started-100-calculator.md
+        - GettingStarted/getting-started-300-help.md
+        - GettingStarted/getting-started-400-tests.md
+        - GettingStarted/getting-started-600-validation.md
+        - GettingStarted/getting-started-700-pipes.md
+        - GettingStarted/getting-started-800-ctrlc.md
         - GettingStarted/getting-started-next-steps.md
       - argument-terminology.md
       - Commands:

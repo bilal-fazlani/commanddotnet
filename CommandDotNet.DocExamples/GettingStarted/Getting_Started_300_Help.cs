@@ -90,7 +90,7 @@ single line of extended help here");
 
         [Test]
         public void Given2Numbers_Should_Subtract() =>
-            new AppRunner<Getting_Started_1_Calculator.Program>()
+            new AppRunner<Getting_Started_100_Calculator.Program>()
                 .InterceptSystemConsoleWrites()
                 .Verify(new Scenario
                 {
