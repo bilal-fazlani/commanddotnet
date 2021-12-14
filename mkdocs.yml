@@ -11,6 +11,8 @@ nav:
       - Getting Started:
         - GettingStarted/getting-started-0.md
         - GettingStarted/getting-started-100-calculator.md
+        - GettingStarted/getting-started-120-subcommands.md
+        - GettingStarted/getting-started-140-default-commands.md
         - GettingStarted/getting-started-300-help.md
         - GettingStarted/getting-started-400-tests.md
         - GettingStarted/getting-started-600-validation.md

@@ -15,6 +15,7 @@ namespace CommandDotNet.DocExamples.GettingStarted
             static int Main(string[] args)
             {
                 // AppRunner<T> where T is the class defining your commands
+                // You can use Program or create commands in another class
                 return new AppRunner<Program>().Run(args);
             }
 
@@ -60,8 +61,9 @@ Arguments:
             "dotnet calculator.dll", "Add a 20", 2,
             @"'a' is not a valid Number");
 
+        // Test commands not testing via BashSnippet
         [Test]
-        public void Given2Numbers_Should_Subtract() =>
+        public void Subtract_works() =>
             new AppRunner<Program>()
                 .InterceptSystemConsoleWrites()
                 .Verify(new Scenario
