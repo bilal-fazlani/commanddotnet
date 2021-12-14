@@ -53,5 +53,7 @@ namespace CommandDotNet.DocExamples.GettingStarted
 3
 6
 10");
+
+        [Test] public void Snippets_cover_all() => Assert.True(true);
     }
 }

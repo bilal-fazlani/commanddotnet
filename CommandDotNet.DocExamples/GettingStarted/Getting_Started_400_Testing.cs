@@ -15,10 +15,21 @@ namespace CommandDotNet.DocExamples.GettingStarted
 
             public static AppRunner AppRunner => new AppRunner<Program>();
             // end-snippet
-            
+
+            // begin-snippet: getting-started-400-calculator-console
             public void Add(IConsole console, int x, int y) => console.WriteLine(x + y);
             
             public void Subtract(IConsole console, int x, int y) => console.WriteLine(x - y);
+            // end-snippet
+        }
+
+        public class ConsoleInterception
+        {
+            // begin-snippet: getting-started-400-calculator-console-intercept
+            public static AppRunner AppRunner =>
+                new AppRunner<Program>()
+                    .InterceptSystemConsoleWrites();
+            // end-snippet
         }
 
         [TestFixture]

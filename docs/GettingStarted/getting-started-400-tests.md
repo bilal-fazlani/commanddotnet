@@ -21,6 +21,32 @@ public static AppRunner AppRunner => new AppRunner<Program>();
 
 Now the tests can use `Program.AppRunner` for all tests.
 
+The second step is to use `IConsole` to capture the output for assertions in tests
+
+<!-- snippet: getting-started-400-calculator-console -->
+<a id='snippet-getting-started-400-calculator-console'></a>
+```c#
+public void Add(IConsole console, int x, int y) => console.WriteLine(x + y);
+
+public void Subtract(IConsole console, int x, int y) => console.WriteLine(x - y);
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_400_Testing.cs#L19-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-console' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Alternatively, or if there is code writing to System.Console that you cannot migrate to IConsole, configure the AppRunner with `InterceptSystemConsoleWrites()`
+
+<!-- snippet: getting-started-400-calculator-console-intercept -->
+<a id='snippet-getting-started-400-calculator-console-intercept'></a>
+```c#
+public static AppRunner AppRunner =>
+    new AppRunner<Program>()
+        .InterceptSystemConsoleWrites();
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_400_Testing.cs#L28-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-console-intercept' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+## Testing
+
 CommandDotNet supports two different test patterns:
 
 ### Standard
@@ -36,10 +62,12 @@ public void Given2Numbers_Should_OutputSum()
     result.Console.OutText().Should().Be("60");
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_400_Testing.cs#L27-L35' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-add-command-tests' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_400_Testing.cs#L38-L46' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-add-command-tests' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ### BDD Style
+
+BDD follows the Given / When / Then style. Configuration of the AppRunner is the _given_, and the framework handles the _when_ and _then_.
 
 <!-- snippet: getting-started-400-calculator-add-command-tests-bdd -->
 <a id='snippet-getting-started-400-calculator-add-command-tests-bdd'></a>
@@ -64,7 +92,7 @@ public void GivenANonNumber_Should_OutputValidationError() =>
         }
     });
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_400_Testing.cs#L41-L61' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-add-command-tests-bdd' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_400_Testing.cs#L52-L72' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-add-command-tests-bdd' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 See [Test Tools](../TestTools/overview.md) in the Testing help section for more, such as testing prompts and piped input. 

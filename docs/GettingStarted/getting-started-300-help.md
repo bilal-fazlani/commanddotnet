@@ -1,6 +1,6 @@
 # Improving the Help
 
-The help you saw on the previous page is what can be inferred from the code. 
+The help you've seen so far is what can be inferred from the code. 
 Let's make it more useful by adding descriptions, usage examples and extended help text.
 
 <!-- snippet: getting-started-300-calculator -->

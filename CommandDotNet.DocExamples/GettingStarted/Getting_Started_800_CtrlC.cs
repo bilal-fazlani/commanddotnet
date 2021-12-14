@@ -17,6 +17,8 @@ namespace CommandDotNet.DocExamples.GettingStarted
                 new AppRunner<Program>()
                     .UseCancellationHandlers();
 
+            // could also use .UseDefaultMiddleware()
+
             public void Range(IConsole console, CancellationToken ct, int start, int count, int sleep = 0)
             {
                 foreach (var i in Enumerable.Range(start, count).UntilCancelled(ct, sleep))
@@ -51,5 +53,7 @@ namespace CommandDotNet.DocExamples.GettingStarted
 3
 6
 10");
+
+        [Test] public void Snippets_cover_all() => Assert.True(true);
     }
 }
