@@ -1,4 +1,4 @@
-## Let's add some validation rules.
+# Validation
 
 CommandDotNet has packages to utilize the [DataAnnotations](../Arguments/data-annotations-validation.md) and [FluentValidation](../Arguments/fluent-validation-for-argument-models.md) frameworks.
 

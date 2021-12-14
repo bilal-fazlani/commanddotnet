@@ -1,4 +1,4 @@
-## Opt-In to additional features
+# Opt-In to additional features
 
 In the `Program.Main`, we configured the app with the basic feature set.
 
@@ -8,7 +8,7 @@ In the `Program.Main`, we configured the app with the basic feature set.
 new AppRunner<Program>()
     .UseDefaultMiddleware();
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_OtherFeatures.cs#L10-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-other-features' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_OtherFeatures.cs#L10-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-other-features' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 `UseDefaultMiddleware` to take advantage of many more additional features, such as

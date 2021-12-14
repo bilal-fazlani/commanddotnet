@@ -1,4 +1,4 @@
-## Let's handle Ctrl+C
+# Ctrl+C
 
 The above command will take 40 seconds to execute. The way it's currently configured, we have no way to exit early.
 
@@ -33,7 +33,7 @@ public class Program
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_800_CtrlC.cs#L11-L37' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-800-ctrlc' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_800_CtrlC.cs#L11-L37' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-800-ctrlc' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Again, CommandDotNet makes this very easy. Configure the app with `UseCancellationHandlers()` and a `CancellationToken` can be injected into your commands. 
