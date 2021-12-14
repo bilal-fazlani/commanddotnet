@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace CommandDotNet.DocExamples.GettingStarted
 {
     [TestFixture]
-    public class GettingStarted_800_CtrlC
+    public class Getting_Started_800_CtrlC
     {
         // begin-snippet: getting-started-800-ctrlc
         public class Program

@@ -34,7 +34,7 @@ public class Program
     public void Subtract(int x, int y) => Console.WriteLine(x - y);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_300_Help.cs#L12-L40' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-300-calculator' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_300_Help.cs#L12-L40' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-300-calculator' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 For commands, there are three elements we can provide to enhance help; Description, Usage and ExtendedHelpText.

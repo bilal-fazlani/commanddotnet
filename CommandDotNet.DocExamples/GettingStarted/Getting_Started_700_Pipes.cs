@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace CommandDotNet.DocExamples.GettingStarted
 {
     [TestFixture]
-    public class GettingStarted_700_Pipes
+    public class Getting_Started_700_Pipes
     {
         // begin-snippet: getting-started-700-pipes
         public class Program

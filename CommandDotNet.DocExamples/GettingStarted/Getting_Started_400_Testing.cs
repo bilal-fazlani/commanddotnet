@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using CommandDotNet.TestTools;
+﻿using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 using FluentAssertions;
 using NUnit.Framework;
@@ -7,49 +6,25 @@ using NUnit.Framework;
 namespace CommandDotNet.DocExamples.GettingStarted
 {
     [TestFixture]
-    public class GettingStarted_600_Interceptors
+    public class Getting_Started_400_Testing
     {
-        // begin-snippet: getting-started-600-interceptors
         public class Program
         {
+            // begin-snippet: getting-started-400-calculator
             static int Main(string[] args) => AppRunner.Run(args);
-            public static AppRunner AppRunner => new AppRunner<Calculator>();
+
+            public static AppRunner AppRunner => new AppRunner<Program>();
+            // end-snippet
+            
+            public void Add(IConsole console, int x, int y) => console.WriteLine(x + y);
+            
+            public void Subtract(IConsole console, int x, int y) => console.WriteLine(x - y);
         }
-
-        public class Calculator
-        {
-            private readonly IConsole _console;
-
-            public Calculator(IConsole console)
-            {
-                _console = console;
-            }
-
-            public Task<int> Interceptor(InterceptorExecutionDelegate next, CommandContext ctx)
-            {
-                // access to AppConfig and AppSettings
-                var settings = ctx.AppConfig.AppSettings;
-                // access to parse results, including remaining and separated arguments 
-                var parseResult = ctx.ParseResult;
-                // access to command method and object, and all parent interceptor method and objects
-                var pipeline = ctx.InvocationPipeline;
-
-                // pre-execution logic here
-
-                return next(); // Add and Subtract methods are executed within this delegate
-
-                // post-execution logic here
-            }
-
-            public void Add(int x, int y) => _console.WriteLine(x + y);
-
-            public void Subtract(int x, int y) => _console.WriteLine(x - y);
-        }
-        // end-snippet
 
         [TestFixture]
         public class AddCommandTests
         {
+            // begin-snippet: getting-started-400-calculator-add-command-tests
             [Test]
             public void Given2Numbers_Should_OutputSum()
             {
@@ -57,11 +32,13 @@ namespace CommandDotNet.DocExamples.GettingStarted
                 result.ExitCode.Should().Be(0);
                 result.Console.OutText().Should().Be("60");
             }
+            // end-snippet
         }
 
         [TestFixture]
         public class AddCommandTestsBDD
         {
+            // begin-snippet: getting-started-400-calculator-add-command-tests-bdd
             [Test]
             public void Given2Numbers_Should_OutputSum() =>
                 Program.AppRunner.Verify(new Scenario
@@ -81,6 +58,7 @@ namespace CommandDotNet.DocExamples.GettingStarted
                         Output = "'a' is not a valid Number"
                     }
                 });
+            // end-snippet
         }
     }
 }

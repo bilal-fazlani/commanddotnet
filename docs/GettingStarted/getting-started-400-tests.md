@@ -16,7 +16,7 @@ static int Main(string[] args) => AppRunner.Run(args);
 
 public static AppRunner AppRunner => new AppRunner<Program>();
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_400_Testing.cs#L13-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_400_Testing.cs#L13-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Now the tests can use `Program.AppRunner` for all tests.
@@ -36,7 +36,7 @@ public void Given2Numbers_Should_OutputSum()
     result.Console.OutText().Should().Be("60");
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_400_Testing.cs#L27-L35' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-add-command-tests' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_400_Testing.cs#L27-L35' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-add-command-tests' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ### BDD Style
@@ -64,7 +64,7 @@ public void GivenANonNumber_Should_OutputValidationError() =>
         }
     });
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/GettingStarted_400_Testing.cs#L41-L61' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-add-command-tests-bdd' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_400_Testing.cs#L41-L61' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-add-command-tests-bdd' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 See [Test Tools](../TestTools/overview.md) in the Testing help section for more, such as testing prompts and piped input. 
