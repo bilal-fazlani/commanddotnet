@@ -13,6 +13,8 @@ namespace CommandDotNet.Execution
     /// <summary>The application configuration</summary>
     public class AppConfig : IIndentableToString
     {
+        // begin-snippet: AppConfig-properties
+
         /// <summary>The application settings</summary>
         public AppSettings AppSettings { get; }
 
@@ -56,6 +58,8 @@ namespace CommandDotNet.Execution
         internal Dictionary<Type, Func<CommandContext, object>> ParameterResolversByType { get; }
         internal NameTransformation NameTransformation { get; }
         internal ResolverService ResolverService { get; }
+
+        // end-snippet
 
         public AppConfig(AppSettings appSettings, IConsole console,
             IEnvironment environment,

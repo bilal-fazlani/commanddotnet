@@ -1,5 +1,4 @@
-// begin-snippet: commands-1-calculator-sum-help
-~
+// begin-snippet: commands_calculator_sum_help
 $ dotnet calculator.dll Sum --help
 sums all the numbers provided
 

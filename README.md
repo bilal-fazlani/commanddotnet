@@ -72,7 +72,6 @@ First we'll check out the auto-generated help.
 <!-- snippet: getting-started-100-calculator-help -->
 <a id='snippet-getting-started-100-calculator-help'></a>
 ```bash
-~
 $ dotnet calculator.dll --help
 Usage: dotnet calculator.dll [command]
 
@@ -83,7 +82,7 @@ Commands:
 
 Use "dotnet calculator.dll [command] --help" for more information about a command.
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-100-calculator-help.bash#L1-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-100-calculator-help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-100-calculator-help.bash#L1-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-100-calculator-help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 From the root we can see the available commands. Instead of `--help` we could have used `-h` or `-?`. 
@@ -92,7 +91,6 @@ We'll use `-h` to get help for the _Add_ command.
 <!-- snippet: getting-started-100-calculator-add-help -->
 <a id='snippet-getting-started-100-calculator-add-help'></a>
 ```bash
-~
 $ dotnet calculator.dll Add -h
 Usage: dotnet calculator.dll Add <x> <y>
 
@@ -102,7 +100,7 @@ Arguments:
 
   y  <NUMBER>
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-100-calculator-add-help.bash#L1-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-100-calculator-add-help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-100-calculator-add-help.bash#L1-L10' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-100-calculator-add-help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Let's try it out by adding two numbers
@@ -110,11 +108,10 @@ Let's try it out by adding two numbers
 <!-- snippet: getting-started-100-calculator-add -->
 <a id='snippet-getting-started-100-calculator-add'></a>
 ```bash
-~
 $ dotnet calculator.dll Add 40 20
 60
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-100-calculator-add.bash#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-100-calculator-add' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-100-calculator-add.bash#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-100-calculator-add' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 CommandDotNet will validate if the arguments can be converted to the correct type.
@@ -122,11 +119,10 @@ CommandDotNet will validate if the arguments can be converted to the correct typ
 <!-- snippet: getting-started-100-calculator-add-invalid -->
 <a id='snippet-getting-started-100-calculator-add-invalid'></a>
 ```bash
-~
 $ dotnet calculator.dll Add a 20
 'a' is not a valid Number
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-100-calculator-add-invalid.bash#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-100-calculator-add-invalid' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-100-calculator-add-invalid.bash#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-100-calculator-add-invalid' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Check out the docs for more examples

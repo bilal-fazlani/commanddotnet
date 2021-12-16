@@ -85,5 +85,7 @@ Options:
 'server' is not a valid fully-qualified http, https, or ftp URL.
 'name' must be a string or array type with a maximum length of '10'.
 'owner' is not a valid e-mail address.");
+
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
     }
 }

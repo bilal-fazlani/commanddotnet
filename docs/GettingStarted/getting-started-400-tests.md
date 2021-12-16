@@ -21,7 +21,7 @@ public static AppRunner AppRunner => new AppRunner<Program>();
 
 Now the tests can use `Program.AppRunner` for all tests.
 
-The second step is to use `IConsole` to capture the output for assertions in tests
+The second step is to use `IConsole` to capture the output for assertions in tests.
 
 <!-- snippet: getting-started-400-calculator-console -->
 <a id='snippet-getting-started-400-calculator-console'></a>
@@ -32,6 +32,8 @@ public void Subtract(IConsole console, int x, int y) => console.WriteLine(x - y)
 ```
 <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_400_Testing.cs#L19-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-console' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
+
+`IConsole` is one of the default types that can be injected into command methods. Read more about the other available types in [here](../Extensibility/parameter-resolvers.md)
 
 Alternatively, or if there is code writing to System.Console that you cannot migrate to IConsole, configure the AppRunner with `InterceptSystemConsoleWrites()`
 

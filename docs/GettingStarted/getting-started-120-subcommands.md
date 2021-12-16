@@ -76,7 +76,6 @@ Here is the help for the calculator showing the new Algo and Trig commands.
 <!-- snippet: getting-started-120-subcommands-help -->
 <a id='snippet-getting-started-120-subcommands-help'></a>
 ```bash
-~
 $ dotnet calculator.dll --help
 Usage: dotnet calculator.dll [command]
 
@@ -89,7 +88,7 @@ Commands:
 
 Use "dotnet calculator.dll [command] --help" for more information about a command.
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-120-subcommands-help.bash#L1-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-120-subcommands-help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-120-subcommands-help.bash#L1-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-120-subcommands-help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 And here is the help for the Trig command to show the Sine and Cosine commands within.
@@ -97,7 +96,6 @@ And here is the help for the Trig command to show the Sine and Cosine commands w
 <!-- snippet: getting-started-120-subcommands-trig-help -->
 <a id='snippet-getting-started-120-subcommands-trig-help'></a>
 ```bash
-~
 $ dotnet calculator.dll Trig --help
 Usage: dotnet calculator.dll Trig [command]
 
@@ -108,7 +106,7 @@ Commands:
 
 Use "dotnet calculator.dll Trig [command] --help" for more information about a command.
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-120-subcommands-trig-help.bash#L1-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-120-subcommands-trig-help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-120-subcommands-trig-help.bash#L1-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-120-subcommands-trig-help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Notice the Trig command is included in the usage examples.

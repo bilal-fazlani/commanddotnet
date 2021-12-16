@@ -26,7 +26,6 @@ namespace CommandDotNet.DocExamples
             ExitCode = exitCode;
             Output = string.Format(output, appName, args);
             FileText = $@"// begin-snippet: {name}
-~
 $ {appName} {args}
 {Output}
 // end-snippet";

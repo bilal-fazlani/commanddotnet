@@ -18,81 +18,107 @@ The Positional and Named attributes are provided for those who prefer that termi
 
 ## Operand Attribute
 
-The OperandAttribute has the following properties:
+If preferred, you can use `[Named]` instead of `[Operand]` with the same properties
+
+### Properties
 
 * __Name__: Used in help documentation only. Defaults to the parameter or property name.
 * __Description__: Used in help documentation.
 
 ## Option Attribute
 
+If preferred, you can use `[Positional]` instead of `[Option]` with the same properties
+
+### Names
+The option long name is defaulted from the property or parameter name that defines them. 
+The case can be changed using the [name-casing](../OtherFeatures/name-casing.md) middleware.
+
+The long name can be overridden using the attribut constructor `[Option("new-name")]`
+
+A short name can be added using the attribute constructor `[Option('a')]`
+
+Both can be supplied using `[Option('n', "new-name")]`
+
+To force only a short name for the option, set the long name to null: `[Option('n', null)]`
+
+### Properties
 The OptionAttribute has the following properties:
 
-* __LongName__: Used in help documentation and on the command line. Defaults to the parameter or property name. 
-    * Set to `null` to remove the default long name and have only a short name.
-* __ShortName__: Used in help documentation and on the command line. Defaults to null.
 * __Description__: Used in help documentation.
+* __DescriptionLines__: Used in help documentation, and honors the host systems newline characters.
 * __BooleanMode__: When the option is a `bool`, this determines if the presence of the option 
   indicates `true` (_Implicit_) or if the user must specify `true` or `false` (_Explicit_). 
-    * The default is _Implicit_ and can be changed with `#!c# AppSettings.BooleanMode = BooleanMode.Explicit`
+    * The default is _Implicit_ and can be changed with `#!c# AppSettings.Arguments.BooleanMode = BooleanMode.Explicit`
     * _Implicit_ boolean options are also called __Flags__
+* __Split__: use with list options to specify the character used to split multiple values
+    * If not set, AppSettings.Arguments.DefaultOptionSplit is used if set
+    * in the example `--names alex,amy,joe`, the comma is the split character
 * __AssignToExecutableSubcommands__: only valid when used in [Interceptor](../Extensibility/interceptors.md) methods.
-
-!!! Note
-    If you find the terms Named and Positional more intuitive than Option and Operand, 
-    you can use the `[Named]` and `[Positional]` attributes instead. They are subclassed
-    from `[Option]` and `[Operand]` respectively.
 
 ## Example
 
+<!-- snippet: arguments_attributes -->
+<a id='snippet-arguments_attributes'></a>
 ```c#
 public void LaunchRocket(
-    [Operand("planet", Description = "Name of the planet you wish the rocket to go")] 
+    [Operand("planet", Description = "Name of the planet you wish the rocket to go")]
     string planetName,
-    [Option('t', "turbo" Description = "Name of the planet you wish the rocket to go")] 
+    [Option('t', "turbo", Description = "Name of the planet you wish the rocket to go")]
     bool turbo,
-    [Option('a', Description="Abort the launch before takeoff", BooleanMode=BooleanMode.Explicit)]
+    [Option('a', Description = "Abort the launch before takeoff", BooleanMode = BooleanMode.Explicit)]
     bool abort)
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L10-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_attributes' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 or
 
+<!-- snippet: arguments_attributes_alt -->
+<a id='snippet-arguments_attributes_alt'></a>
 ```c#
 public void LaunchRocket(
-    [Positional("planet", Description = "Name of the planet you wish the rocket to go")] 
-    string planetName,
-    [Named('t', "turbo" Description = "Name of the planet you wish the rocket to go")] 
-    bool turbo,
-    [Named('a', Description="Abort the launch before takeoff", BooleanMode=BooleanMode.Explicit)]
-    bool abort)
+        [Positional("planet", Description = "Name of the planet you wish the rocket to go")]
+        string planetName,
+        [Named('t', "turbo", Description = "Name of the planet you wish the rocket to go")]
+        bool turbo,
+        [Named('a', Description = "Abort the launch before takeoff", BooleanMode = BooleanMode.Explicit)]
+        bool abort)
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L23-L31' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_attributes_alt' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 and help looks like:
 
+<!-- snippet: arguments_attributes_help -->
+<a id='snippet-arguments_attributes_help'></a>
 ```bash
-Usage: dotnet CommandDotNet.Example.dll launch-rocket [options] [arguments]  
-                                                                             
-Arguments:                                                                   
-                                                                             
-  planet  <TEXT>                                                             
-  Name of the planet you wish the rocket to go                               
-                                                                             
-Options:                                                                     
-                                                                             
-  -t | --turbo                                                               
-  Name of the planet you wish the rocket to go                               
-                                                                             
-  -a      <BOOLEAN>                                                    
-  Abort the launch before takeoff                                            
-  Allowed values: true, false                                                
+$ mission-control.exe LaunchRocket --help
+Usage: mission-control.exe LaunchRocket [options] <planet>
+
+Arguments:
+
+  planet  <TEXT>
+  Name of the planet you wish the rocket to go
+
+Options:
+
+  -t | --turbo
+  Name of the planet you wish the rocket to go
+
+  -a | --abort  <BOOLEAN>
+  Abort the launch before takeoff
+  Allowed values: true, false
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/arguments_attributes_help.bash#L1-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_attributes_help' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 and called any of these ways:
 
 ```bash
-dotnet example.dll LaunchRocket -t -a true mars
-dotnet example.dll LaunchRocket --turbo -a true mars
-dotnet example.dll LaunchRocket mars -t -a true
-dotnet example.dll LaunchRocket mars --turbo -a true
+mission-control.exe LaunchRocket -t -a true mars
+mission-control.exe LaunchRocket --turbo -a true mars
+mission-control.exe LaunchRocket mars -t -a true
+mission-control.exe LaunchRocket mars --turbo -a true
 ```
 
 Options are not positional so they can appear in any order within the command.
@@ -129,3 +155,11 @@ When assigning option values, the following are the same
 * `--time tomorrow`
 * `--time=tomorrow`
 * `--time:tomorrow`
+
+When assigning multiple values, by default each value will need to be proceeded by the option name
+
+`--days Monday --days Tuesday`
+
+To let the user use a delimiter such as `--days Monday,Tuesday`, you must specify the split character to use.
+The split character can be set globally for use by all multi-value options using `AppSettings.Arguments.DefaultOptionSplit`
+The split character can also be set per option using `[Option(Split=',')]`. The value set for an option will override the default.

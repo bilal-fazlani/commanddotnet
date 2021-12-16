@@ -15,6 +15,7 @@ nav:
         - GettingStarted/getting-started-140-default-commands.md
         - GettingStarted/getting-started-300-help.md
         - GettingStarted/getting-started-400-tests.md
+        - GettingStarted/getting-started-500-interceptors.md
         - GettingStarted/getting-started-600-validation.md
         - GettingStarted/getting-started-700-pipes.md
         - GettingStarted/getting-started-800-ctrlc.md

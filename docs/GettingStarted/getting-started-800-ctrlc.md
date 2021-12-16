@@ -49,6 +49,6 @@ public class Program
 <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_800_CtrlC.cs#L11-L39' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-800-ctrlc' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-Again, CommandDotNet makes this very easy. Configure the app with `UseCancellationHandlers()` and a `CancellationToken` can be injected into your commands. 
+Again, CommandDotNet makes this very easy. Configure the app with `appRunner.UseCancellationHandlers()` which configures a `CancellationToken` that can be injected into your command and interceptor methods. 
 
 Use either of the two handy extension methods `UntilCancelled` or `ThrowIfCancelled` to exit an enumeration early when cancellation has been requested.

@@ -1,5 +1,4 @@
 // begin-snippet: getting-started-300-calculator-add-help
-~
 $ dotnet calculator.dll Add -h
 Adds two numbers
 

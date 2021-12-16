@@ -81,7 +81,6 @@ Here is the help for this command. We haven't defined any descriptions or such. 
 <!-- snippet: dataannotations-1-table-create-help -->
 <a id='snippet-dataannotations-1-table-create-help'></a>
 ```bash
-~
 $ dotnet table.dll create --help
 Usage: dotnet table.dll create [options] <name>
 
@@ -99,7 +98,7 @@ Options:
 
   -v | --verbose
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/DataAnnotations-1-table-create-help.bash#L1-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-dataannotations-1-table-create-help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/DataAnnotations-1-table-create-help.bash#L1-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-dataannotations-1-table-create-help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 When the command is run with invalid arguments, you get the resulting error messages. Notice we were able to club (aka bundle) the `Silent` and `Verbose` shortnames `-sv`. 
@@ -107,12 +106,11 @@ When the command is run with invalid arguments, you get the resulting error mess
 <!-- snippet: dataannotations-1-table-create -->
 <a id='snippet-dataannotations-1-table-create'></a>
 ```bash
-~
 $ dotnet hr.dll create TooLongTableName --server bossman --owner abc -sv
 silent and verbose are mutually exclusive. There can be only one!
 'server' is not a valid fully-qualified http, https, or ftp URL.
 'name' must be a string or array type with a maximum length of '10'.
 'owner' is not a valid e-mail address.
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/DataAnnotations-1-table-create.bash#L1-L8' title='Snippet source file'>snippet source</a> | <a href='#snippet-dataannotations-1-table-create' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/DataAnnotations-1-table-create.bash#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-dataannotations-1-table-create' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->

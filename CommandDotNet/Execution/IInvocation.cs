@@ -5,6 +5,8 @@ namespace CommandDotNet.Execution
 {
     public interface IInvocation
     {
+        // begin-snippet: IInvocation-properties
+
         /// <summary>
         /// The arguments associated with the invocation delegate.<br/>
         /// There can be multiple arguments per parameter
@@ -43,6 +45,8 @@ namespace CommandDotNet.Execution
         /// get all the models.
         /// </summary>
         IReadOnlyCollection<IArgumentModel> FlattenedArgumentModels { get; }
+
+        // end-snippet
 
         /// <summary>Invokes the instance</summary>
         object? Invoke(CommandContext commandContext, object instance, ExecutionDelegate next);

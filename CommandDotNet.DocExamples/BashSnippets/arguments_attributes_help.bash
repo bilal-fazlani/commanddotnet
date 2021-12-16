@@ -1,0 +1,18 @@
+// begin-snippet: arguments_attributes_help
+$ mission-control.exe LaunchRocket --help
+Usage: mission-control.exe LaunchRocket [options] <planet>
+
+Arguments:
+
+  planet  <TEXT>
+  Name of the planet you wish the rocket to go
+
+Options:
+
+  -t | --turbo
+  Name of the planet you wish the rocket to go
+
+  -a | --abort  <BOOLEAN>
+  Abort the launch before takeoff
+  Allowed values: true, false
+// end-snippet

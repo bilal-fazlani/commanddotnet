@@ -1,5 +1,4 @@
 // begin-snippet: getting-started-140-default-commands-help-command-per-class
-~
 $ dotnet calculator.dll --help
 Usage: dotnet calculator.dll [command]
 

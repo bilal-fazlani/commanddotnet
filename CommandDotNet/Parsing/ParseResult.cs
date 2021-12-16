@@ -9,6 +9,8 @@ namespace CommandDotNet.Parsing
 {
     public class ParseResult : IIndentableToString
     {
+        // begin-snippet: ParseResult-properties
+
         /// <summary>The command that addressed by the command line arguments</summary>
         public Command TargetCommand { get; }
 
@@ -36,6 +38,8 @@ namespace CommandDotNet.Parsing
         /// </summary>
         public bool HelpWasRequested() =>
             TargetCommand.GetParentCommands(includeCurrent: true).Any(c => c.HelpWasRequested());
+
+        // end-snippet
 
         public ParseResult(Command command,
             IReadOnlyCollection<Token> remainingOperands,
