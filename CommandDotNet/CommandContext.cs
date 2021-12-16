@@ -12,6 +12,8 @@ namespace CommandDotNet
 {
     public class CommandContext : IIndentableToString
     {
+        // begin-snippet: CommandContext-properties
+
         /// <summary>The original string array and first parse of tokens</summary>
         public OriginalInput Original { get; }
 
@@ -75,6 +77,8 @@ namespace CommandDotNet
         /// and reduce confusion with <see cref="Services"/>
         /// </remarks>
         public IDependencyResolver? DependencyResolver => AppConfig.DependencyResolver;
+
+        // end-snippet:
 
         public CommandContext(
             string[] originalArgs, 

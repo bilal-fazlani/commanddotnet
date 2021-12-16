@@ -6,6 +6,10 @@ namespace CommandDotNet.Execution
 {
     public class InvocationStep : IIndentableToString
     {
+        private IInvocation _invocation;
+
+        // begin-snippet: InvocationStep-properties
+
         /// <summary>
         /// The instance of the class containing the invocation method.<br/>
         /// Populated during <see cref="MiddlewareStages.BindValues"/>
@@ -18,8 +22,6 @@ namespace CommandDotNet.Execution
         /// </summary>
         public Command Command { get; }
 
-        private IInvocation _invocation;
-
         /// <summary>
         /// The <see cref="IInvocation"/> to be invoked for the command<br/>
         /// Populated during <see cref="MiddlewareStages.ParseInput"/>
@@ -29,6 +31,8 @@ namespace CommandDotNet.Execution
             get => _invocation;
             set => _invocation = value ?? throw new ArgumentNullException(nameof(value));
         }
+        
+        // end-snippet
 
         public InvocationStep(Command command, IInvocation invocation)
         {

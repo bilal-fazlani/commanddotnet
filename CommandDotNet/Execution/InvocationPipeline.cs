@@ -12,6 +12,8 @@ namespace CommandDotNet.Execution
     {
         private ICollection<InvocationStep> _ancestorInterceptors = new List<InvocationStep>();
 
+        // begin-snippet: InvocationPipeline-properties
+
         /// <summary>
         /// The invocations for the interceptor methods of the ancestor commands of the <see cref="TargetCommand"/>.
         /// Order is top-most parent first.
@@ -32,6 +34,8 @@ namespace CommandDotNet.Execution
         public IEnumerable<InvocationStep> All => TargetCommand == null
             ? AncestorInterceptors
             : AncestorInterceptors.Concat(TargetCommand.ToEnumerable());
+
+        // end-properties
 
         public override string ToString()
         {
