@@ -54,11 +54,6 @@ namespace CommandDotNet.DocExamples.GettingStarted
                 // and all interceptor methods in the path to the target command.
                 var pipeline = ctx.InvocationPipeline;
 
-                var instanceOfClassHostingCommand = pipeline.TargetCommand.Instance;
-                var instanceOfClassHostingCommand = pipeline.TargetCommand.Invocation.MethodInfo;
-                var instanceOfClassHostingCommand = pipeline.TargetCommand.Invocation.ParameterValues;
-                var instanceOfClassHostingCommand = pipeline.TargetCommand.Invocation.Parameters;
-
                 // pre-execution logic here
 
                 // next() will execute the TargetCommand and all

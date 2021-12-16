@@ -49,7 +49,6 @@ Let's see how the help appears now.
 <!-- snippet: getting-started-300-calculator-help -->
 <a id='snippet-getting-started-300-calculator-help'></a>
 ```bash
-~
 $ dotnet calculator.dll --help
 Performs mathematical calculations
 
@@ -65,7 +64,7 @@ Use "dotnet calculator.dll [command] --help" for more information about a comman
 Include multiple lines of text
 Extended help of the root command is a good place to describe directives for the app
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-300-calculator-help.bash#L1-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-300-calculator-help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-300-calculator-help.bash#L1-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-300-calculator-help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Notice the description printed at the top and the extended help printed at the bottom.
@@ -75,7 +74,6 @@ Now let's see help for the _Add_ command.
 <!-- snippet: getting-started-300-calculator-add-help -->
 <a id='snippet-getting-started-300-calculator-add-help'></a>
 ```bash
-~
 $ dotnet calculator.dll Add -h
 Adds two numbers
 
@@ -92,7 +90,7 @@ Arguments:
 
 single line of extended help here
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-300-calculator-add-help.bash#L1-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-300-calculator-add-help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-300-calculator-add-help.bash#L1-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-300-calculator-add-help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Notice there are multiple lines of text in the Usage example. 
@@ -104,7 +102,6 @@ A more terse version of help for arguments can be used by setting `AppSettings.H
 <!-- snippet: getting-started-300-calculator-add-basic-help -->
 <a id='snippet-getting-started-300-calculator-add-basic-help'></a>
 ```bash
-~
 $ dotnet calculator.dll Add -h
 Adds two numbers
 
@@ -117,7 +114,7 @@ Arguments:
 
 single line of extended help here
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-300-calculator-add-basic-help.bash#L1-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-300-calculator-add-basic-help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-300-calculator-add-basic-help.bash#L1-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-300-calculator-add-basic-help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 See the [Commands](../Commands/commands.md) section for more options to configure arguments.

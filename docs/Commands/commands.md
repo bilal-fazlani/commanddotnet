@@ -61,7 +61,6 @@ public void Add(IEnumerable<int> numbers) =>
 <!-- snippet: commands-1-calculator-sum-help -->
 <a id='snippet-commands-1-calculator-sum-help'></a>
 ```bash
-~
 $ dotnet calculator.dll Sum --help
 sums all the numbers provided
 
@@ -73,7 +72,7 @@ Arguments:
 
 more details and examples could be provided here
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/commands-1-calculator-sum-help.bash#L1-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands-1-calculator-sum-help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/commands-1-calculator-sum-help.bash#L1-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands-1-calculator-sum-help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 !!! Note

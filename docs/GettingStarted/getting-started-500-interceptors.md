@@ -25,13 +25,15 @@ public class Curl
     private Password? _password;
     private bool? _verbose;
 
+    // Constructors can take any resolvable parameters. IConsole, CommandContext, 
+    // and CancellationToken when UseCancellationHandlers is configured.
     public Curl(IConsole console)
     {
         _console = console;
     }
 
-    // method name does not matter but must include an InterceptorExecutionDelegate parameter.
-    // all other parameters listed here are optional
+    // Method name does not matter but must include an InterceptorExecutionDelegate parameter.
+    // All other parameters listed here are optional.
     public Task<int> Interceptor(
         InterceptorExecutionDelegate next, 
         CommandContext ctx,
@@ -78,7 +80,7 @@ public class Curl
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_500_Interceptors.cs#L10-L76' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-500-interceptors' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_500_Interceptors.cs#L10-L78' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-500-interceptors' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 The interceptor method wraps the execution of the targetted command. 
@@ -96,7 +98,6 @@ There are three options defined in the interceptor method: username, password, a
 <!-- snippet: getting-started-500-interceptors-help -->
 <a id='snippet-getting-started-500-interceptors-help'></a>
 ```bash
-~
 $ dotnet curl.dll --help
 Usage: dotnet curl.dll [command] [options]
 
@@ -112,7 +113,7 @@ Commands:
 
 Use "dotnet curl.dll [command] --help" for more information about a command.
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-500-interceptors-help.bash#L1-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-500-interceptors-help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-500-interceptors-help.bash#L1-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-500-interceptors-help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Notice only two of the options are available at the root of the application: username and password. We can see verbose in the Get command because the option is configured with `AssignToExecutableSubcommands=true`.
@@ -120,7 +121,6 @@ Notice only two of the options are available at the root of the application: use
 <!-- snippet: getting-started-500-interceptors-get-help -->
 <a id='snippet-getting-started-500-interceptors-get-help'></a>
 ```bash
-~
 $ dotnet curl.dll Get -h
 Usage: dotnet curl.dll Get [options] <uri>
 
@@ -132,7 +132,7 @@ Options:
 
   -v | --verbose
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-500-interceptors-get-help.bash#L1-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-500-interceptors-get-help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-500-interceptors-get-help.bash#L1-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-500-interceptors-get-help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Let's look at how these options are used.
@@ -140,11 +140,10 @@ Let's look at how these options are used.
 <!-- snippet: getting-started-500-interceptors-get -->
 <a id='snippet-getting-started-500-interceptors-get'></a>
 ```bash
-~
 $ dotnet curl.dll -u me -p pwd Get http://mysite.com -v
 [GET] http://me:*****@mysite.com/ verbose=True
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-500-interceptors-get.bash#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-500-interceptors-get' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-500-interceptors-get.bash#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-500-interceptors-get' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Notice password and username must be provided before the Get command and verbose is provided with the Get command.  Using `AssignToExecutableSubcommands` may make the options more intuitive for the user but can increase the noise in the commands and increase opportunity for short name conflicts.

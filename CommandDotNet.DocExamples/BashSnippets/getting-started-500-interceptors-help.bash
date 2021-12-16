@@ -1,5 +1,4 @@
 // begin-snippet: getting-started-500-interceptors-help
-~
 $ dotnet curl.dll --help
 Usage: dotnet curl.dll [command] [options]
 

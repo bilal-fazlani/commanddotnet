@@ -30,7 +30,6 @@ public class Program
 <!-- snippet: getting-started-140-default-commands-help -->
 <a id='snippet-getting-started-140-default-commands-help'></a>
 ```bash
-~
 $ add.exe Add -h
 Usage: add.exe <x> <y>
 
@@ -40,17 +39,16 @@ Arguments:
 
   y  <NUMBER>
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-140-default-commands-help.bash#L1-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-140-default-commands-help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-140-default-commands-help.bash#L1-L10' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-140-default-commands-help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: getting-started-140-default-commands-add -->
 <a id='snippet-getting-started-140-default-commands-add'></a>
 ```bash
-~
 $ add.exe 40 20
 60
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-140-default-commands-add.bash#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-140-default-commands-add' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-140-default-commands-add.bash#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-140-default-commands-add' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## Command per class pattern
@@ -96,7 +94,6 @@ public class Subtract
 <!-- snippet: getting-started-140-default-commands-help-command-per-class -->
 <a id='snippet-getting-started-140-default-commands-help-command-per-class'></a>
 ```bash
-~
 $ dotnet calculator.dll --help
 Usage: dotnet calculator.dll [command]
 
@@ -107,5 +104,5 @@ Commands:
 
 Use "dotnet calculator.dll [command] --help" for more information about a command.
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-140-default-commands-help-command-per-class.bash#L1-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-140-default-commands-help-command-per-class' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/getting-started-140-default-commands-help-command-per-class.bash#L1-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-140-default-commands-help-command-per-class' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->

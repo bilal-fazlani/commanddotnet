@@ -1,5 +1,4 @@
 // begin-snippet: getting-started-120-subcommands-trig-help
-~
 $ dotnet calculator.dll Trig --help
 Usage: dotnet calculator.dll Trig [command]
 

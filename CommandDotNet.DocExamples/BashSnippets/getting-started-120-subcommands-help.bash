@@ -1,5 +1,4 @@
 // begin-snippet: getting-started-120-subcommands-help
-~
 $ dotnet calculator.dll --help
 Usage: dotnet calculator.dll [command]
 
