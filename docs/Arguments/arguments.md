@@ -51,7 +51,7 @@ The OptionAttribute has the following properties:
     * The default is _Implicit_ and can be changed with `#!c# AppSettings.Arguments.BooleanMode = BooleanMode.Explicit`
     * _Implicit_ boolean options are also called __Flags__
 * __Split__: use with list options to specify the character used to split multiple values
-    * If not specified, AppSettings.Arguments.DefaultOptionSplit is used
+    * If not set, AppSettings.Arguments.DefaultOptionSplit is used if set
     * in the example `--names alex,amy,joe`, the comma is the split character
 * __AssignToExecutableSubcommands__: only valid when used in [Interceptor](../Extensibility/interceptors.md) methods.
 
@@ -155,3 +155,11 @@ When assigning option values, the following are the same
 * `--time tomorrow`
 * `--time=tomorrow`
 * `--time:tomorrow`
+
+When assigning multiple values, by default each value will need to be proceeded by the option name
+
+`--days Monday --days Tuesday`
+
+To let the user use a delimiter such as `--days Monday,Tuesday`, you must specify the split character to use.
+The split character can be set globally for use by all multi-value options using `AppSettings.Arguments.DefaultOptionSplit`
+The split character can also be set per option using `[Option(Split=',')]`. The value set for an option will override the default.

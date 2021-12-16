@@ -14,32 +14,6 @@ When...
       * this applies to flags and [optional arguments](#optional-arguments)
   * _maximum_ > 1, multiple values can be provided
   * _maximum_ == int.MaxValue, an unlimited number of values can be provided
-
-!!! note
-    There is currently no default validation for arity and no way to set the arity via attributes
-    but is [on the roadmap](https://github.com/bilal-fazlani/commanddotnet/issues/195). 
-    
-    Until then, use [DataAnnotations](./data-annotations-validation.md) with `[Required]` and for collection, use `[MinLength()]` and `[MaxLength()]` for the count.
-
-`ArgumentArity` contains the following members to encapsulate the common use cases. 
-
-```c#
-public static readonly int Unlimited = int.MaxValue;
-
-public static IArgumentArity Zero => new ArgumentArity(0, 0);
-public static IArgumentArity ZeroOrOne => new ArgumentArity(0, 1);
-public static IArgumentArity ExactlyOne => new ArgumentArity(1, 1);
-public static IArgumentArity ZeroOrMore => new ArgumentArity(0, Unlimited);
-public static IArgumentArity OneOrMore => new ArgumentArity(1, Unlimited);
-
-public bool AllowsNone() => Maximum == 0;
-public bool AllowsMany() => Maximum > 1;
-public bool RequiresAtLeastOne() => Minimum > 0;
-public bool RequiresExactlyOne() => Minimum == 1 && Maximum == 1;
-```
-
-The static method `ArgumentArity.Default(type, ...)` will return one of these static values based on the type
-
 ### Possible Arities
 
 |            |none (flags)|optional|required     |
@@ -56,7 +30,7 @@ The static method `ArgumentArity.Default(type, ...)` will return one of these st
     * M(>0)..N(>=M) `OneOrMore` (required) N must be greater than or equal to M. 
         * If N equal M, the list must have exactly M values.
 
-## Optional Arguments 
+### Optional Arguments 
 
 An argument is considered optional when defined as...
 
@@ -65,7 +39,63 @@ An argument is considered optional when defined as...
 * an optional parameter
 * an `IArgumentModel` property with a default value where the default value != default(T)
     * the value must be set in the ctor or property assignment. This condition is evaluated immediately after instantiation.
-    * a null property can never be assumed to have a _minimum_ arity of 0. Reference type properties will always be considered required.
+
+## Static Helpers
+
+`ArgumentArity` contains the following members to encapsulate the common use cases. 
+
+<!-- snippet: known-arities -->
+<a id='snippet-known-arities'></a>
+```c#
+public static IArgumentArity Zero => new ArgumentArity(0, 0);
+public static IArgumentArity ZeroOrOne => new ArgumentArity(0, 1);
+public static IArgumentArity ExactlyOne => new ArgumentArity(1, 1);
+public static IArgumentArity ZeroOrMore => new ArgumentArity(0, Unlimited);
+public static IArgumentArity OneOrMore => new ArgumentArity(1, Unlimited);
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/ArgumentArity.cs#L37-L43' title='Snippet source file'>snippet source</a> | <a href='#snippet-known-arities' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+The static method `ArgumentArity.Default(IArgument argument)` will return one of these static values based on the type
+
+There are several extension methods that make it easier check conditions of a given arity.
+
+<!-- snippet: arity-extensions -->
+<a id='snippet-arity-extensions'></a>
+```c#
+/// <summary><see cref="IArgumentArity.Maximum"/> &gt; 1</summary>
+public static bool AllowsMany(this IArgumentArity arity) => arity.Maximum > 1;
+
+/// <summary><see cref="IArgumentArity.Maximum"/> &gt;= 1</summary>
+public static bool AllowsOneOrMore(this IArgumentArity arity) => arity.Maximum >= 1;
+
+/// <summary><see cref="IArgumentArity.Minimum"/> &gt; 0</summary>
+public static bool RequiresAtLeastOne(this IArgumentArity arity) => arity.Minimum > 0;
+
+/// <summary><see cref="IArgumentArity.Minimum"/> == 1 == <see cref="IArgumentArity.Maximum"/></summary>
+public static bool RequiresExactlyOne(this IArgumentArity arity) => arity.Minimum == 1 && arity.Maximum == 1;
+
+/// <summary>
+/// <see cref="IArgumentArity.Maximum"/> == 0.
+/// e.g. <see cref="ArgumentArity.Zero"/>
+/// </summary>
+public static bool RequiresNone(this IArgumentArity arity) => arity.Maximum == 0;
+
+/// <summary>
+/// <see cref="IArgumentArity.Minimum"/> == 0.
+/// e.g. <see cref="ArgumentArity.Zero"/>, <see cref="ArgumentArity.ZeroOrOne"/>, <see cref="ArgumentArity.ZeroOrMore"/>
+/// </summary>
+public static bool AllowsNone(this IArgumentArity arity) => arity.Minimum == 0;
+
+/// <summary>
+/// <see cref="IArgumentArity.Maximum"/> == <see cref="ArgumentArity.Unlimited"/> (<see cref="int.MaxValue"/>).
+/// e.g. <see cref="ArgumentArity.ZeroOrMore"/>, <see cref="ArgumentArity.OneOrMore"/>
+/// </summary>
+public static bool AllowsUnlimited(this IArgumentArity arity) => arity.Maximum == ArgumentArity.Unlimited;
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/ArgumentArityExtensions.cs#L5-L35' title='Snippet source file'>snippet source</a> | <a href='#snippet-arity-extensions' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
 
 ## Default Values
 

@@ -2,6 +2,7 @@
 {
     public static class ArgumentArityExtensions
     {
+        // begin-snippet: arity-extensions
         /// <summary><see cref="IArgumentArity.Maximum"/> &gt; 1</summary>
         public static bool AllowsMany(this IArgumentArity arity) => arity.Maximum > 1;
 
@@ -31,5 +32,6 @@
         /// e.g. <see cref="ArgumentArity.ZeroOrMore"/>, <see cref="ArgumentArity.OneOrMore"/>
         /// </summary>
         public static bool AllowsUnlimited(this IArgumentArity arity) => arity.Maximum == ArgumentArity.Unlimited;
+        // end-snippet
     }
 }

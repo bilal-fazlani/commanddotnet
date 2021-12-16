@@ -34,15 +34,13 @@ namespace CommandDotNet
         /// <summary>The maximum number of values the user must provide</summary>
         public int Maximum { get; }
 
+        // begin-snippet: known-arities
         public static IArgumentArity Zero => new ArgumentArity(0, 0);
-
         public static IArgumentArity ZeroOrOne => new ArgumentArity(0, 1);
-
         public static IArgumentArity ExactlyOne => new ArgumentArity(1, 1);
-
         public static IArgumentArity ZeroOrMore => new ArgumentArity(0, Unlimited);
-
         public static IArgumentArity OneOrMore => new ArgumentArity(1, Unlimited);
+        // end-snippet
 
         internal static IArgumentArity Default(IArgumentDef argumentDef)
         {
