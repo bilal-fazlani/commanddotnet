@@ -2,7 +2,7 @@ using System;
 using CommandDotNet.NameCasing;
 using NUnit.Framework;
 
-namespace CommandDotNet.DocExamples.Commands
+namespace CommandDotNet.DocExamples.Commands.Commands
 {
     public class Commands_Git
     {

@@ -52,10 +52,10 @@ Use the `[Command]` attribute to change the command name, enhance help output an
     Usage = "sum <int> [<int> ...]",
     Description = "sums all the numbers provided",
     ExtendedHelpText = "more details and examples could be provided here")]
-public void Add(IEnumerable<int> numbers) =>
-    Console.WriteLine(numbers.Sum());
+public void Add(IConsole console, IEnumerable<int> numbers) =>
+    console.WriteLine(numbers.Sum());
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands_Calculator.cs#L13-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_calculator' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands/Commands_Calculator.cs#L13-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_calculator' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: commands_calculator_sum_help -->
@@ -128,7 +128,7 @@ public class Program
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands_Git.cs#L8-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_git' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands/Commands_Git.cs#L9-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_git' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 help for Pop may have `Usage: git Stash Pop`
@@ -165,7 +165,7 @@ public class Program
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Cmomands_3_DefaultCommand.cs#L7-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_default_command' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands/Commands_DefaultCommand.cs#L5-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_default_command' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Because the Program is considered the RootCommand, you'll need to explicitely call the Process command. eg.

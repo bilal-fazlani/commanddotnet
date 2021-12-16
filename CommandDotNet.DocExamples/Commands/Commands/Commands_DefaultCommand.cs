@@ -1,4 +1,4 @@
-namespace CommandDotNet.DocExamples.Commands
+namespace CommandDotNet.DocExamples.Commands.Commands
 {
     public class Commands_DefaultCommand
     {

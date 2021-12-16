@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 
-namespace CommandDotNet.DocExamples.Commands
+namespace CommandDotNet.DocExamples.Commands.Commands
 {
     [TestFixture]
     public class Commands_Calculator
@@ -15,12 +15,12 @@ namespace CommandDotNet.DocExamples.Commands
                 Usage = "sum <int> [<int> ...]",
                 Description = "sums all the numbers provided",
                 ExtendedHelpText = "more details and examples could be provided here")]
-            public void Add(IEnumerable<int> numbers) =>
-                Console.WriteLine(numbers.Sum());
+            public void Add(IConsole console, IEnumerable<int> numbers) =>
+                console.WriteLine(numbers.Sum());
             // end-snippet
 
-            public void Subtract(int x, int y) =>
-                Console.WriteLine(x + y);
+            public void Subtract(IConsole console, int x, int y) =>
+                console.WriteLine(x + y);
         }
 
         public static BashSnippet Help = new("commands_calculator_sum_help",
