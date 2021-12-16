@@ -1,8 +1,6 @@
-﻿using CommandDotNet.NameCasing;
-
-namespace CommandDotNet.DocExamples.Commands
+﻿namespace CommandDotNet.DocExamples.Commands
 {
-    public class Cmomands_3_DefaultCommand
+    public class Commands_3_DefaultCommand
     {
         // begin-snippet: commands-3-default-command
         public class Program
