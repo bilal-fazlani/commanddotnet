@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using CommandDotNet.NameCasing;
+using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.Commands
 {
-    public class Commands_2_Git
+    public class Commands_Git
     {
-        // begin-snippet: commands-2-git
+        // begin-snippet: commands_git
         public class Program
         {
             static int Main(string[] args) => AppRunner.Run(args);
@@ -23,11 +24,13 @@ namespace CommandDotNet.DocExamples.Commands
         }
         // end-snippet
 
-        public static BashSnippet Stash = new ("commands-2-git-stash", 
+        public static BashSnippet Stash = new ("commands_2_git_stash", 
             Program.AppRunner, "git", "stash", 0, "stash");
 
-        public static BashSnippet Pop = new("commands-2-git-pop",
+        public static BashSnippet Pop = new("commands_2_git_pop",
             Program.AppRunner, "git", "stash pop", 0, "pop");
+
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
     }
 
 }

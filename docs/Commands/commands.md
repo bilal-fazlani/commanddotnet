@@ -45,8 +45,8 @@ Every public method will be interpreted as a command and the command name will b
 
 Use the `[Command]` attribute to change the command name, enhance help output and provide parser hints.
 
-<!-- snippet: commands-1-calculator -->
-<a id='snippet-commands-1-calculator'></a>
+<!-- snippet: commands_calculator -->
+<a id='snippet-commands_calculator'></a>
 ```c#
 [Command("Sum",
     Usage = "sum <int> [<int> ...]",
@@ -55,11 +55,11 @@ Use the `[Command]` attribute to change the command name, enhance help output an
 public void Add(IEnumerable<int> numbers) =>
     Console.WriteLine(numbers.Sum());
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands_1_Calculator.cs#L13-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands-1-calculator' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands_Calculator.cs#L13-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_calculator' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-<!-- snippet: commands-1-calculator-sum-help -->
-<a id='snippet-commands-1-calculator-sum-help'></a>
+<!-- snippet: commands_calculator_sum_help -->
+<a id='snippet-commands_calculator_sum_help'></a>
 ```bash
 $ dotnet calculator.dll Sum --help
 sums all the numbers provided
@@ -72,7 +72,7 @@ Arguments:
 
 more details and examples could be provided here
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/commands-1-calculator-sum-help.bash#L1-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands-1-calculator-sum-help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/commands_calculator_sum_help.bash#L1-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_calculator_sum_help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 !!! Note
@@ -109,8 +109,8 @@ ExtendedHelpText = "Directives:\n" +
 
 Two template variables are available for use in Usage, Description and ExtendedHelpText: `%AppName%` and `%CmdPath%`
 
-<!-- snippet: commands-2-git -->
-<a id='snippet-commands-2-git'></a>
+<!-- snippet: commands_git -->
+<a id='snippet-commands_git'></a>
 ```c#
 public class Program
 {
@@ -128,7 +128,7 @@ public class Program
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands_2_Git.cs#L8-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands-2-git' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands_Git.cs#L8-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_git' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 help for Pop may have `Usage: git Stash Pop`
@@ -150,8 +150,8 @@ Use `%CmdPath%` to include the full path of commands. This is helpful when worki
 
 Let's assume we have a program with a single command defined, called `Process`. 
 
-<!-- snippet: commands-3-default-command -->
-<a id='snippet-commands-3-default-command'></a>
+<!-- snippet: commands_default_command -->
+<a id='snippet-commands_default_command'></a>
 ```c#
 public class Program
 {
@@ -165,7 +165,7 @@ public class Program
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Cmomands_3_DefaultCommand.cs#L7-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands-3-default-command' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Cmomands_3_DefaultCommand.cs#L7-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_default_command' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Because the Program is considered the RootCommand, you'll need to explicitely call the Process command. eg.

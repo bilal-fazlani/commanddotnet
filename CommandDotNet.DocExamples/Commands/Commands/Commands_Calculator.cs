@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -6,11 +6,11 @@ using NUnit.Framework;
 namespace CommandDotNet.DocExamples.Commands
 {
     [TestFixture]
-    public class Commands_1_Calculator
+    public class Commands_Calculator
     {
         public class Program
         {
-            // begin-snippet: commands-1-calculator
+            // begin-snippet: commands_calculator
             [Command("Sum",
                 Usage = "sum <int> [<int> ...]",
                 Description = "sums all the numbers provided",
@@ -23,7 +23,7 @@ namespace CommandDotNet.DocExamples.Commands
                 Console.WriteLine(x + y);
         }
 
-        public static BashSnippet Help = new("commands-1-calculator-sum-help",
+        public static BashSnippet Help = new("commands_calculator_sum_help",
             new AppRunner<Program>(), "dotnet calculator.dll", "Sum --help", 0,
             @"sums all the numbers provided
 
@@ -34,5 +34,7 @@ Arguments:
   numbers (Multiple)  <NUMBER>
 
 more details and examples could be provided here");
+
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
     }
 }

@@ -1,8 +1,8 @@
-﻿namespace CommandDotNet.DocExamples.Commands
+namespace CommandDotNet.DocExamples.Commands
 {
-    public class Commands_3_DefaultCommand
+    public class Commands_DefaultCommand
     {
-        // begin-snippet: commands-3-default-command
+        // begin-snippet: commands_default_command
         public class Program
         {
             static int Main(string[] args) => AppRunner.Run(args);
@@ -16,7 +16,7 @@
         }
         // end-snippet
 
-        public static BashSnippet Stash = new("commands-3-default-command-process",
+        public static BashSnippet Stash = new("commands_default_command_process",
             Program.AppRunner, "dotnet myapp.dll", "", 0, "");
     }
 }
