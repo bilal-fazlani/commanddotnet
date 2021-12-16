@@ -111,5 +111,7 @@ Options:
             Program.AppRunner,
             "dotnet curl.dll", "-u me -p pwd Get http://mysite.com -v", 0,
             @"[GET] http://me:*****@mysite.com/ verbose=True");
+
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
     }
 }
