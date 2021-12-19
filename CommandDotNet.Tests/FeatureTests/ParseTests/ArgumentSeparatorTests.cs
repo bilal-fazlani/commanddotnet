@@ -57,7 +57,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseTests
         }
 
         [Fact]
-        public void Given_EndOfOptions_When_OperandValueWithDash_FailsWithUnrecognizedOption()
+        public void Given_EndOfOptions_When_NoSeparator_OperandValueWithDash_FailsWithUnrecognizedOption()
         {
             new AppRunner<Math>(_endOfOptionsSettings)
                 .Verify(new Scenario

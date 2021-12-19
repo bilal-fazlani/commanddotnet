@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using NuGet.Frameworks;
 
 namespace CommandDotNet.DocExamples
@@ -17,15 +18,20 @@ namespace CommandDotNet.DocExamples
         public MemberInfo? Member { get; set; }
         public string? MemberName => Member is null ? null : $"{Member.DeclaringType!.Name}.{Member.Name}";
 
-        public BashSnippet(string name, AppRunner runner, string appName, string args, int exitCode, string output)
+        public BashSnippet(string name, AppRunner runner, string appName, string args, int exitCode, string output, bool argsOnlySnippet = false)
         {
+            const string beginSnippet = "begin-snippet";
             Name = name;
             Runner = runner;
             AppName = appName;
             Args = args;
             ExitCode = exitCode;
             Output = string.Format(output, appName, args);
-            FileText = $@"// begin-snippet: {name}
+            FileText = argsOnlySnippet 
+                ? $@"// {beginSnippet}: {name}
+$ {appName} {args}
+// end-snippet" 
+                : $@"// {beginSnippet}: {name}
 $ {appName} {args}
 {Output}
 // end-snippet";
