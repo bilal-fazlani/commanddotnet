@@ -6,9 +6,13 @@ namespace CommandDotNet
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class CommandAttribute : Attribute, INameAndDescription
     {
+        internal bool? IgnoreUnexpectedOperandsAsNullable { get; private set; }
+        internal ArgumentSeparatorStrategy? ArgumentSeparatorStrategyAsNullable { get; private set; }
+
         [Obsolete("Use constructor parameter instead")]
         public string? Name { get; set; }
 
+        // begin-snippet: CommandAttribute-properties
         /// <summary>The description to show in the help</summary>
         public string? Description { get; set; }
 
@@ -38,8 +42,6 @@ namespace CommandDotNet
             set => IgnoreUnexpectedOperandsAsNullable = value;
         }
 
-        internal bool? IgnoreUnexpectedOperandsAsNullable { get; private set; }
-
         /// <summary>
         /// The <see cref="ArgumentSeparatorStrategy"/> for the <see cref="Command"/>
         /// </summary>
@@ -48,8 +50,6 @@ namespace CommandDotNet
             get => ArgumentSeparatorStrategyAsNullable.GetValueOrDefault();
             set => ArgumentSeparatorStrategyAsNullable = value;
         }
-
-        internal ArgumentSeparatorStrategy? ArgumentSeparatorStrategyAsNullable { get; private set; }
 
         /// <summary>Indicates the class is a command. The name will be derived from the class name.</summary>
         public CommandAttribute()
@@ -65,5 +65,6 @@ namespace CommandDotNet
         {
             Name = name;
         }
+        // end-snippet
     }
 }
