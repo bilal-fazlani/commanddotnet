@@ -24,6 +24,7 @@ nav:
       - Commands:
         - Commands/commands.md
         - Commands/subcommands.md
+        - Commands/command-attribute.md
       - Arguments:
         - Arguments/arguments.md
         - Collections: Arguments/argument-collections.md
