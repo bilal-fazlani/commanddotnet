@@ -222,46 +222,6 @@ Arguments:
         }
 
         [Fact]
-        public void SampleTypes_Exec_OperandsNotRequired()
-        {
-            new AppRunner<OperandsNoDefaults>().Verify(new Scenario
-            {
-                When = {Args = nameof(OperandsNoDefaults.ArgsNoDefault)},
-                Then =
-                {
-                    ExitCode = 2,
-                    Output = @"StringArg is required
-ObjectArg is required
-StringListArg is required",
-                    AssertContext = ctx => ctx.ParamValuesShouldBe(
-                        new OperandsNoDefaultsSampleTypesModel
-                        {
-                            StructArg = default,
-                            EnumArg = default,
-                        })
-                }
-            });
-        }
-
-        [Fact]
-        public void SampleTypes_Exec_OptionalOperandsNotRequired()
-        {
-            new AppRunner<OperandsNoDefaults>().Verify(new Scenario
-            {
-                When = { Args = nameof(OperandsNoDefaults.NrtArgsNoDefault) },
-                Then =
-                {
-                    AssertContext = ctx => ctx.ParamValuesShouldBe(
-                        new OperandsNoDefaultsSampleTypesModel
-                        {
-                            StructArg = default,
-                            EnumArg = default,
-                        })
-                }
-            });
-        }
-
-        [Fact]
         public void StructList_Exec_Positional()
         {
             new AppRunner<OperandsNoDefaults>().Verify(new Scenario
