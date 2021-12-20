@@ -11,7 +11,7 @@ public void LaunchRocket(IConsole console,
         IEnumerable<string> planets,
         [Option('c', "crew")] string[] crew)
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Collections.cs#L12-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_collections' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Collections.cs#L11-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_collections' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Help looks like...
@@ -65,7 +65,7 @@ crew: aaron,alex
 
 Operands is similar to the c# `params` modifier. There can only be one operand collection and it must be the last operand defined. Otherwise it would be impossible to determine when the collection stopped and the next operand was provided.
 
-When the [ArgumentSeparatorStrategy](/ArgumentValues/argument-separator/) is `PassThru`, arguments passed after the `--` are not included in the operand collection.
+When the [ArgumentSeparatorStrategy](../ArgumentValues/argument-separator.md) is `PassThru`, arguments passed after the `--` are not included in the operand collection.
 
 <!-- snippet: arguments_collections_exe_argument_separator_passthru -->
 <a id='snippet-arguments_collections_exe_argument_separator_passthru'></a>
@@ -99,7 +99,7 @@ $ mission-control.exe LaunchRocket mars earth jupiter -c aaron,alex
 
 Split can also be defined at a global level by setting `AppSettings.Arguments.DefaultOptionSplit`.  The default is null.
 
-In cases where the user cannot use the provided split character (perhaps the script language does not support the character), the user can override it using the `[split]` directive.  For example, if the user would prefer a hyphen, they can use
+In cases where the user cannot use the provided split character (perhaps the script language does not support the character), the user can override it using the `[split]` directive.  For example, if the user would prefer a hyphen, they can use the directive where the last character is the delimiter to use, like this...
 
 <!-- snippet: arguments_collections_exe_split_directive_args_only -->
 <a id='snippet-arguments_collections_exe_split_directive_args_only'></a>
