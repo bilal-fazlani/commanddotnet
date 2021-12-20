@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using CommandDotNet.Builders.ArgumentDefaults;
 using CommandDotNet.Extensions;
 
 namespace CommandDotNet.Execution
@@ -73,6 +74,16 @@ namespace CommandDotNet.Execution
             {
                 // flags are assigned true or false.
                 return null;
+            }
+
+            // non-nullable value type properties
+            var valueType = value.GetType();
+            var wasInput = argument.InputValues.Any();
+            if (!wasInput && !valueType.IsClass && value.IsDefaultFor(valueType))
+            {
+                return arity.RequiresAtLeastOne()
+                    ? Resources.A.Arity_is_required(argument.Name)
+                    : null;
             }
 
             if (valueCount < arity.Minimum)

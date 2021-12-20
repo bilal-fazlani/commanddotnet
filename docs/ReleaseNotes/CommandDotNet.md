@@ -1,5 +1,13 @@
 # CommandDotNet
 
+## 6.0.2
+
+Fix bug in arity validation where validation was skipped non-nullable value types with default values on argument models
+
+## 6.0.1
+
+Add message "Required command was not provided" when non-executable command was submitted without a help option like `--help`
+
 ## 6.0.0
 
 Back with some more goodness. This fix focuses on improvements for developers and some features to support advanced use cases.

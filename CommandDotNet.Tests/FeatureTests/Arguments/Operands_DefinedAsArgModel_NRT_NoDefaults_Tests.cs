@@ -222,24 +222,6 @@ Arguments:
         }
 
         [Fact]
-        public void SampleTypes_Exec_OperandsNotRequired()
-        {
-            new AppRunner<OperandsNoDefaults>().Verify(new Scenario
-            {
-                When = { Args = nameof(OperandsNoDefaults.ArgsNoDefault) },
-                Then =
-                {
-                    AssertContext = ctx => ctx.ParamValuesShouldBe(
-                        new NrtOperandsNoDefaultsSampleTypesModel
-                        {
-                            StructArg = default,
-                            EnumArg = default,
-                        })
-                }
-            });
-        }
-
-        [Fact]
         public void StructList_Exec_Positional()
         {
             new AppRunner<OperandsNoDefaults>().Verify(new Scenario

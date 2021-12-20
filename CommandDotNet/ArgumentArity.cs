@@ -44,17 +44,19 @@ namespace CommandDotNet
 
         internal static IArgumentArity Default(IArgumentDef argumentDef)
         {
-            var type = argumentDef.Type;
-            var defaultValue = argumentDef.DefaultValue;
-            var hasDefaultValue = !defaultValue.IsNullValue() && !defaultValue!.IsDefaultFor(type);
-            return Default(type, argumentDef.IsOptional, hasDefaultValue, argumentDef.BooleanMode);
+            return Default(
+                argumentDef.Type, 
+                argumentDef.IsOptional, 
+                argumentDef.HasDefaultValue, 
+                argumentDef.BooleanMode);
         }
 
         public static IArgumentArity Default(IArgument argument)
         {
             var type = argument.TypeInfo.Type;
             var defaultValue = argument.Default?.Value;
-            var hasDefaultValue = !defaultValue.IsNullValue() && !defaultValue!.IsDefaultFor(type);
+            var hasDefaultValue = argument.Services.GetOrDefault<IArgumentDef>()?.HasDefaultValue 
+                                  ?? !defaultValue.IsNullValue() && !defaultValue!.IsDefaultFor(type);
             var isOptional = argument.Services.GetOrDefault<IArgumentDef>()?.IsOptional 
                              ?? argument.Arity.AllowsNone();
             return Default(type, isOptional, hasDefaultValue, argument.BooleanMode);

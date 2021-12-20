@@ -114,19 +114,6 @@ Options:
             });
         }
 
-        [Fact]
-        public void SampleTypes_Exec_OptionsNotRequired()
-        {
-            new AppRunner<OptionsNoDefaults>().Verify(new Scenario
-            {
-                When = {Args = "ArgsDefaults"},
-                Then =
-                {
-                    AssertContext = ctx => ctx.ParamValuesShouldBe(new OptionsNoDefaultsSampleTypesModel())
-                }
-            });
-        }
-
         private class OptionsNoDefaults
         {
             public void ArgsDefaults(OptionsNoDefaultsSampleTypesModel model)
