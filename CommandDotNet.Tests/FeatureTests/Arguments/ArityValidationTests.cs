@@ -74,6 +74,16 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         }
 
         [Fact]
+        public void Input_matches_default_of_required_single_ValueType()
+        {
+            AppRunner.Verify(new Scenario
+            {
+                When = { Args = "Int --requiredInt 0" },
+                Then = { ExitCode = 0, Output = "" }
+            });
+        }
+
+        [Fact]
         public void Missing_required_single_ReferenceType_fails_with_error()
         {
             AppRunner.Verify(new Scenario
@@ -92,6 +102,57 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 Then = { Output = "" }
             });
         }
+
+        [Fact]
+        public void Model_Missing_required_single_ValueType_fails_with_error()
+        {
+            AppRunner.Verify(new Scenario
+            {
+                When = { Args = "IntModel" },
+                Then = { ExitCode = 2, Output = "RequiredInt is required" }
+            });
+        }
+
+        [Fact]
+        public void Model_Providing_required_single_ValueType_succeeds()
+        {
+            AppRunner.Verify(new Scenario
+            {
+                When = { Args = "IntModel --RequiredInt 1" },
+                Then = { Output = "" }
+            });
+        }
+
+        [Fact]
+        public void Model_input_matches_default_of_required_single_ValueType()
+        {
+            AppRunner.Verify(new Scenario
+            {
+                When = { Args = "IntModel --RequiredInt 0" },
+                Then = { ExitCode = 0, Output = "" }
+            });
+        }
+
+        [Fact]
+        public void Model_Missing_required_single_ReferenceType_fails_with_error()
+        {
+            AppRunner.Verify(new Scenario
+            {
+                When = { Args = "UriModel" },
+                Then = { ExitCode = 2, Output = "RequiredUri is required" }
+            });
+        }
+
+        [Fact]
+        public void Model_Providing_required_single_ReferenceType_succeeds()
+        {
+            AppRunner.Verify(new Scenario
+            {
+                When = { Args = "UriModel --RequiredUri abc.com" },
+                Then = { Output = "" }
+            });
+        }
+
 
         [Fact]
         public void Missing_required_multi_ValueType_fails_with_error()
@@ -138,8 +199,25 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
             public void Int(int requiredInt, int? nullableInt, int optionalInt = default!){ }
             public void Uri(Uri requiredUri, Uri? nullableUri, Uri optionalUri = default!) { }
 
+            public void IntModel(ModelOfInts modelOfInts) { }
+            public void UriModel(ModelOfUris modelOfUris) { }
+
             public void IntList(List<int> requiredInt, List<int>? nullableInt, List<int> optionalInt = default!) { }
             public void UriList(List<Uri> requiredUri, List<Uri>? nullableUri, List<Uri> optionalUri = default!) { }
+
+            public class ModelOfInts : IArgumentModel
+            {
+                public int RequiredInt { get; set; }
+                public int? NullableInt { get; set; }
+                public int DefaultInt { get; set; } = 1;
+            }
+
+            public class ModelOfUris : IArgumentModel
+            {
+                public Uri RequiredUri { get; set; }
+                public Uri? NullableUri { get; set; }
+                public Uri DefaultUri { get; set; } = new("http://google.com");
+            }
         }
     }
 }
