@@ -14,6 +14,7 @@ When...
       * this applies to flags and [optional arguments](#optional-arguments)
   * _maximum_ > 1, multiple values can be provided
   * _maximum_ == int.MaxValue, an unlimited number of values can be provided
+
 ### Possible Arities
 
 |            |none (flags)|optional|required     |
@@ -30,6 +31,8 @@ When...
     * M(>0)..N(>=M) `OneOrMore` (required) N must be greater than or equal to M. 
         * If N equal M, the list must have exactly M values.
 
+Currently, the only way to set the arity for an argument to something other than one of the above is to get the instance of the argument from the `CommandContext` and assign a new `ArgumentArity` to the `IArgument.Arity`. This can be done via [middleware](../Extensibility/middleware.md) or [interceptor methods](../Extensibility/interceptors.md). We've captured [the work here](https://github.com/bilal-fazlani/commanddotnet/issues/409) but it hasn't been a priority for us. This would be an easy feature to contribute to.
+
 ### Optional Arguments 
 
 An argument is considered optional when defined as...
@@ -39,6 +42,138 @@ An argument is considered optional when defined as...
 * an optional parameter
 * an `IArgumentModel` property with a default value where the default value != default(T)
     * the value must be set in the ctor or property assignment. This condition is evaluated immediately after instantiation.
+
+### Validation
+
+CommandDotNet will check if the minimum or maximum arity has been exceeded and raise an error.  Here's examples of how arity works.
+
+#### Single value types
+
+<!-- snippet: arguments_arity -->
+<a id='snippet-arguments_arity'></a>
+```c#
+public void DefaultCommand(Model model,
+        bool requiredBool, Uri requiredRefType, 
+        bool? nullableBool, Uri? nullableRefType,
+        bool optionalBool = false, Uri optionalRefType = null)
+{}
+
+public class Model : IArgumentModel
+{
+    [Operand] public bool RequiredBool { get; set; }
+    [Operand] public bool DefaultBool { get; set; } = true;
+    [Operand] public Uri RequiredRefType { get; set; }
+    [Operand] public Uri DefaultRefType { get; set; } = new ("http://apple.com");
+}
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Arity.cs#L12-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+<!-- snippet: arguments_arity_help -->
+<a id='snippet-arguments_arity_help'></a>
+```bash
+$ app.exe --help
+Usage: app.exe <RequiredBool> <DefaultBool> <RequiredRefType> <DefaultRefType> <requiredBool> <requiredRefType> [<nullableBool> <nullableRefType> <optionalBool> <optionalRefType>]
+
+Arguments:
+
+  RequiredBool     <BOOLEAN>
+  Allowed values: true, false
+
+  DefaultBool      <BOOLEAN>  [True]
+  Allowed values: true, false
+
+  RequiredRefType  <URI>
+
+  DefaultRefType   <URI>      [http://apple.com/]
+
+  requiredBool     <BOOLEAN>
+  Allowed values: true, false
+
+  requiredRefType  <URI>
+
+  nullableBool     <BOOLEAN>
+  Allowed values: true, false
+
+  nullableRefType  <URI>
+
+  optionalBool     <BOOLEAN>  [False]
+  Allowed values: true, false
+
+  optionalRefType  <URI>
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/arguments_arity_help.bash#L1-L31' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity_help' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Here are the errors when required arguments are missing
+
+<!-- snippet: arguments_arity_missing_args -->
+<a id='snippet-arguments_arity_missing_args'></a>
+```bash
+$ app.exe 
+RequiredBool is required
+RequiredRefType is required
+requiredBool is required
+requiredRefType is required
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/arguments_arity_missing_args.bash#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity_missing_args' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+!!! Notice 
+    there are only 4 operands listed as missing but there are 6 operands listed as required in the usage section. This is because operands are positional so even though the DefaultBool and DafaultRefType are not required based on property definition, they are effectively required because values must be provided for them before the required operands positioned after them. Keep this in mind when designing your commands.  Always position optional operands after required operands. 
+
+#### Collection types
+
+We'll use options for these because we can have only one collection operand per command.
+
+<!-- snippet: arguments_arity_collection -->
+<a id='snippet-arguments_arity_collection'></a>
+```c#
+public void DefaultCommand(
+        [Option('b')] bool[] requiredBool, [Option('u')] Uri[] requiredRefType,
+        [Option] bool[]? nullableBool, [Option] Uri[]? nullableRefType,
+        [Option] bool[] optionalBool = null, [Option] Uri[] optionalRefType = null)
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Arity.cs#L88-L93' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity_collection' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+<!-- snippet: arguments_arity_collection_help -->
+<a id='snippet-arguments_arity_collection_help'></a>
+```bash
+$ app.exe --help
+Usage: app.exe [options]
+
+Options:
+
+  -b | --requiredBool (Multiple)     <BOOLEAN>
+  Allowed values: true, false
+
+  -u | --requiredRefType (Multiple)  <URI>
+
+  --nullableBool (Multiple)          <BOOLEAN>
+  Allowed values: true, false
+
+  --nullableRefType (Multiple)       <URI>
+
+  --optionalBool (Multiple)          <BOOLEAN>
+  Allowed values: true, false
+
+  --optionalRefType (Multiple)       <URI>
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/arguments_arity_collection_help.bash#L1-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity_collection_help' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+We receive the same errors when required arguments are missing
+
+<!-- snippet: arguments_arity_collection_missing_args -->
+<a id='snippet-arguments_arity_collection_missing_args'></a>
+```bash
+$ app.exe 
+requiredBool is required
+requiredRefType is required
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/arguments_arity_collection_missing_args.bash#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity_collection_missing_args' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 ## Static Helpers
 
