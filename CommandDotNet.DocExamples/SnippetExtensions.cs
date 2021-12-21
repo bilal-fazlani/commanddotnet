@@ -26,7 +26,7 @@ namespace CommandDotNet.DocExamples
                 .Configure(c => c.AppSettings.Help.UsageAppName = snippet.AppName)
                 .Verify(new Scenario
             {
-                When = { Args = snippet.Args },
+                When = { Args = snippet.Args, PipedInput = snippet.PipedInput },
                 Then =
                 {
                     ExitCode = snippet.ExitCode,
