@@ -27,14 +27,15 @@ nav:
         - Commands/command-attribute.md
       - Arguments:
         - Arguments/arguments.md
-        - Collections: Arguments/argument-collections.md
-        - Data Types: Arguments/argument-types.md
+        - Arguments/argument-collections.md
+        - Arguments/argument-types.md
         - Arguments/passwords.md 
-        - Argument Models: Arguments/argument-models.md
+        - Arguments/argument-models.md
         - Arguments/argument-arity.md
         - Arguments/option-or-operand.md
-        - Arguments/fluent-validation-for-argument-models.md
-        - Arguments/data-annotations-validation.md
+      - Argument Validation:
+        - ArgumentValidation/data-annotations-validation.md
+        - ArgumentValidation/fluent-validation-for-argument-models.md
       - Argument Values:
         - ArgumentValues/argument-separator.md
         - ArgumentValues/piped-arguments.md

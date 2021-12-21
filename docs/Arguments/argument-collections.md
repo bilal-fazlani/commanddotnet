@@ -1,4 +1,4 @@
-# Argument Collections
+# Collections
 
 With CommandDotNet, you can define a single Operand collection and many Option collections.
 

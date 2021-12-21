@@ -4,7 +4,7 @@ It is not always clear when to use an option vs operand. Below are a couple of s
 
 ## Every argument an option. 
 
-Set `AppSettings.DefaultArgumentMode` to `ArgumentMode.Option` and treat every argument as an option. 
+Set `AppSettings.Arguments.DefaultArgumentMode` to `ArgumentMode.Option` and treat every argument as an option. 
 
 Advantages
 
