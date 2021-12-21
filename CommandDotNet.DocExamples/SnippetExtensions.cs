@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using CommandDotNet.TestTools.Prompts;
 using CommandDotNet.TestTools.Scenarios;
 
 namespace CommandDotNet.DocExamples
@@ -26,7 +27,10 @@ namespace CommandDotNet.DocExamples
                 .Configure(c => c.AppSettings.Help.UsageAppName = snippet.AppName)
                 .Verify(new Scenario
             {
-                When = { Args = snippet.Args, PipedInput = snippet.PipedInput },
+                When = { 
+                    Args = snippet.Args, 
+                    PipedInput = snippet.PipedInput, 
+                    OnPrompt = snippet.PromptAnswers is null ? null : new PromptResponder(snippet.PromptAnswers)},
                 Then =
                 {
                     ExitCode = snippet.ExitCode,

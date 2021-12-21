@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
+using CommandDotNet.TestTools.Prompts;
 using NuGet.Frameworks;
 
 namespace CommandDotNet.DocExamples
@@ -11,6 +12,7 @@ namespace CommandDotNet.DocExamples
         public string AppName { get; }
         public string Args { get; }
         public int ExitCode { get; }
+        public IAnswer[]? PromptAnswers { get; }
 
         public string Output { get; }
         public string FileText { get; }
@@ -22,8 +24,9 @@ namespace CommandDotNet.DocExamples
 
         public BashSnippet(string name, AppRunner runner, 
             string appName, string args, int exitCode, string output, 
-            bool argsOnlySnippet = false, 
-            (string source, string[] inputs)? pipedInput = null)
+            bool argsOnlySnippet = false,
+            (string source, string[] inputs)? pipedInput = null,
+            IAnswer[]? promptAnswers = null)
         {
             const string beginSnippet = "begin-snippet";
 
@@ -32,6 +35,7 @@ namespace CommandDotNet.DocExamples
             AppName = appName;
             Args = args;
             ExitCode = exitCode;
+            PromptAnswers = promptAnswers;
             Output = string.Format(output, appName, args);
 
             if (pipedInput is not null)

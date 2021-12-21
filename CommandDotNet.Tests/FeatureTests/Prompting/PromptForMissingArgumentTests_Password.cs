@@ -37,7 +37,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("lala", new Password("fishies")),
                         Output = @"user (Text): lala
-password (Text):"
+password (password):"
                     }
                 });
         }
@@ -62,7 +62,7 @@ password (Text):"
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("lala", new Password("new")),
                         Output = @"user (Text): lala
-password (Text):"
+password (password):"
                     }
                 });
         }

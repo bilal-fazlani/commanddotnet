@@ -17,16 +17,22 @@ namespace CommandDotNet.TypeDescriptors
             {
                 new BoolTypeDescriptor(),
                 new EnumTypeDescriptor(),
-
+                
+                // begin-snippet: type_descriptors_string
                 new DelegatedTypeDescriptor<string>(Resources.A.Type_Text, v => v),
-                new DelegatedTypeDescriptor<Password>(Resources.A.Type_Text, v => new Password(v)),
-                new DelegatedTypeDescriptor<char>(Resources.A.Type_Character, v => char.Parse(v)),
+                // end-snippet
 
+                new DelegatedTypeDescriptor<char>(Resources.A.Type_Character, v => char.Parse(v)),
+                
                 new DelegatedTypeDescriptor<long>(Resources.A.Type_Number, v => long.Parse(v, CultureInfo.InvariantCulture)),
                 new DelegatedTypeDescriptor<int>(Resources.A.Type_Number, v => int.Parse(v, CultureInfo.InvariantCulture)),
                 new DelegatedTypeDescriptor<short>(Resources.A.Type_Number, v => short.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<ulong>(Resources.A.Type_Number, v => long.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<uint>(Resources.A.Type_Number, v => int.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<ushort>(Resources.A.Type_Number, v => short.Parse(v, CultureInfo.InvariantCulture)),
                 new DelegatedTypeDescriptor<decimal>(Resources.A.Type_Decimal, v => decimal.Parse(v, CultureInfo.InvariantCulture)),
-                new DelegatedTypeDescriptor<double>(Resources.A.Type_Double, v => double.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<double>(Resources.A.Type_Decimal, v => double.Parse(v, CultureInfo.InvariantCulture)),
+                new DelegatedTypeDescriptor<float>(Resources.A.Type_Decimal, v => float.Parse(v, CultureInfo.InvariantCulture)),
 
                 new ComponentModelTypeDescriptor(),
                 new StringCtorTypeDescriptor()
