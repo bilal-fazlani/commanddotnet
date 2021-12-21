@@ -105,7 +105,7 @@ Options:
 
   -u | --username  <TEXT>
 
-  -p | --password  <TEXT>
+  -p | --password  <PASSWORD>
 
 Commands:
 

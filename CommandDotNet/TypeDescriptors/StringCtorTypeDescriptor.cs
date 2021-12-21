@@ -36,7 +36,7 @@ namespace CommandDotNet.TypeDescriptors
 
         private static Converter GetConverter(Type type)
         {
-            static bool HasSingleStringArgument(MethodBase method)
+            static bool HasSingleRequiredStringArgument(MethodBase method)
             {
                 var parameterInfos = method.GetParameters();
                 return parameterInfos.Count(p => p.ParameterType == typeof(string) && !p.IsOptional) == 1;
@@ -45,7 +45,7 @@ namespace CommandDotNet.TypeDescriptors
             return Cache.GetOrAdd(type, t =>
             {
                 var stringCtor = t.GetConstructors()
-                    .FirstOrDefault(HasSingleStringArgument);
+                    .FirstOrDefault(HasSingleRequiredStringArgument);
 
                 if (stringCtor is { })
                 {
@@ -57,7 +57,7 @@ namespace CommandDotNet.TypeDescriptors
                     .GetMethods(BindingFlags.Public | BindingFlags.Static)
                     .FirstOrDefault(c =>
                         c.Name == "Parse"
-                        && HasSingleStringArgument(c));
+                        && HasSingleRequiredStringArgument(c));
 
                 return new Converter{ParseMethod = parseMethod};
             });

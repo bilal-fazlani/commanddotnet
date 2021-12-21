@@ -13,24 +13,12 @@ namespace CommandDotNet.TypeDescriptors
             _parseValueDelegate = parseValueDelegate ?? throw new ArgumentNullException(nameof(parseValueDelegate));
         }
 
-        public bool CanSupport(Type type)
-        {
-            return type == typeof(T);
-        }
+        public bool CanSupport(Type type) => type == typeof(T);
 
-        public string GetDisplayName(IArgument argument)
-        {
-            return _displayName;
-        }
+        public string GetDisplayName(IArgument argument) => _displayName;
 
-        public object? ParseString(IArgument argument, string value)
-        {
-            return _parseValueDelegate(value);
-        }
+        public object? ParseString(IArgument argument, string value) => _parseValueDelegate(value);
 
-        public override string ToString()
-        {
-            return $"DelegatedTypeDescriptor<{typeof(T).Name}>: '{_displayName}'";
-        }
+        public override string ToString() => $"DelegatedTypeDescriptor<{typeof(T).Name}>: '{_displayName}'";
     }
 }

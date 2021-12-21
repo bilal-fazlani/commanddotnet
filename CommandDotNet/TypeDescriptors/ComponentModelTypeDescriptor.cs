@@ -3,6 +3,7 @@ using System.ComponentModel;
 
 namespace CommandDotNet.TypeDescriptors
 {
+    // begin-snippet: type_descriptors_type_convertor
     public class ComponentModelTypeDescriptor : IArgumentTypeDescriptor
     {
         public bool CanSupport(Type type)
@@ -23,5 +24,6 @@ namespace CommandDotNet.TypeDescriptors
                 : TypeDescriptor.GetConverter(argument.TypeInfo.Type);
             return typeConverter.ConvertFrom(value)!;
         }
+        // end-snippet
     }
 }

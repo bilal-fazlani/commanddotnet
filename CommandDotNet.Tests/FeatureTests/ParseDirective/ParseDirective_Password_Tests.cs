@@ -42,7 +42,7 @@ options:
     inputs: me (from: -u me)
     default:
 
-  password <Text>
+  password <password>
     value: *****
     inputs: ***** (from: -p *****)
     default: *****
@@ -81,7 +81,7 @@ options:
     inputs: me (from: @{tempFile} -> -u me)
     default:
 
-  password <Text>
+  password <password>
     value: *****
     inputs: ***** (from: @{tempFile} -> -p *****)
     default: *****
@@ -118,12 +118,12 @@ token transformations:
                     },
                     Then =
                     {
-                        Output = @"password (Text): 
+                        Output = @"password (password): 
 command: PromptSecure
 
 arguments:
 
-  password <Text>
+  password <password>
     value: *****
     inputs: [prompt] *****
     default:
@@ -162,7 +162,7 @@ options:
     inputs: me (from: -u me)
     default:
 
-  password <Text>
+  password <password>
     value: *****
     inputs:
     default: source=AppSetting key=--password: *****

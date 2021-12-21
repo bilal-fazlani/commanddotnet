@@ -252,7 +252,7 @@ opt1 (Text) simple
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("lala", new Password("fishies")),
                         Output = @"user (Text) lala
-password (Text) *******
+password (password) *******
 "
                     }
                 });
