@@ -23,7 +23,7 @@ public class Username
     public static Username Parse(string value, DateTime? validUntil = null) => new(value, validUntil);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Types.cs#L20-L31' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_types_username' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Types.cs#L19-L30' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_types_username' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Any of those constructors or Parse methods will allow conversion from string input, as shown in this example
@@ -36,7 +36,7 @@ public void Login(IConsole console, Username username, Password password)
     console.WriteLine($"u:{username.Value} p:{password}");
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Types.cs#L12-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_types' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Types.cs#L11-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_types' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: argument_types_login -->
