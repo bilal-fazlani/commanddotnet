@@ -15,18 +15,31 @@ namespace CommandDotNet.DocExamples
         public string Output { get; }
         public string FileText { get; }
 
+        public string[] PipedInput { get; }
+
         public MemberInfo? Member { get; set; }
         public string? MemberName => Member is null ? null : $"{Member.DeclaringType!.Name}.{Member.Name}";
 
-        public BashSnippet(string name, AppRunner runner, string appName, string args, int exitCode, string output, bool argsOnlySnippet = false)
+        public BashSnippet(string name, AppRunner runner, 
+            string appName, string args, int exitCode, string output, 
+            bool argsOnlySnippet = false, 
+            (string source, string[] inputs)? pipedInput = null)
         {
             const string beginSnippet = "begin-snippet";
+
             Name = name;
             Runner = runner;
             AppName = appName;
             Args = args;
             ExitCode = exitCode;
             Output = string.Format(output, appName, args);
+
+            if (pipedInput is not null)
+            {
+                appName = $"{pipedInput.Value.source} | {appName}";
+                PipedInput = pipedInput.Value.inputs;
+            }
+
             FileText = argsOnlySnippet 
                 ? $@"// {beginSnippet}: {name}
 $ {appName} {args}
