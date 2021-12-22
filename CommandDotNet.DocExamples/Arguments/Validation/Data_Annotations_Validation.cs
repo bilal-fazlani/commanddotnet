@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using CommandDotNet.DataAnnotations;
 using CommandDotNet.NameCasing;
 using NUnit.Framework;

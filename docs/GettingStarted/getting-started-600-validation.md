@@ -1,6 +1,6 @@
 # Validation
 
-CommandDotNet has packages to utilize the [DataAnnotations](../ArgumentValidation/data-annotations-validation.md) and [FluentValidation](../ArgumentValidation/fluent-validation-for-argument-models.md) frameworks.
+CommandDotNet has packages to utilize the [DataAnnotations](../ArgumentValidation/data-annotations-validation.md) and [FluentValidation](../ArgumentValidation/fluent-validation.md) frameworks.
 
 Let's set the support for DataAnnotations and how you can use [Argument Models](../Arguments/argument-models.md) to reuse argument definitions and validations.
 
