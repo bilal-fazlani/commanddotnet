@@ -336,7 +336,7 @@ Version 4 is removing obsolete members and changing default behaviors made possi
     * arguments are expanded in the usage section of help.
         * old: `add [options] [arguments]`
         * new: `add [options] <x> <y>`
-* default `AppSettings.DefaultArgumentSeparatorStrategy` to `EndOfOptions`. See [Argument Separator](../ArgumentValues/argument-separator.md) for details.
+* default `AppSettings.Parser.DefaultArgumentSeparatorStrategy` to `EndOfOptions`. See [Argument Separator](../ArgumentValues/argument-separator.md) for details.
     * Help will append ` [[--] <arg>...]` to the usage example when `DefaultArgumentSeparatorStrategy=PassThru`
 * make `AppSettings.LongNameAlwaysDefaultsToSymbolName` the only behavior and remove the setting. `LongName` can be removed with `[Option(LongName=null)]`.
     * Look for places in your apps where `[Option(ShortName="a")]` with setting a LongName. If you don't want a LongName then add `LongName=null` otherwise the long name will default from the parameter or property name.
@@ -471,7 +471,7 @@ Use the `GetCommandContext()` extension method to get it and then PrintHelp or P
 The followingw were added to the CommandAttribute to override AppSettings for the given command.
 
 * `IgnoreUnexpectedArguments` to override `AppSettings.IgnoreUnexpectedArguments`
-* `ArgumentSeparatorStrategy` to override `AppSettings.DefaultArgumentSeparatorStrategy`
+* `ArgumentSeparatorStrategy` to override `AppSettings.Parser.DefaultArgumentSeparatorStrategy`
 
 #### Console Write___ extension methods
 

@@ -170,4 +170,4 @@ new AppRunner<MyApp>
 
 !!! Note
     If the config value returns null, it is assumed no default value was found for the argument and it is skipped.
-    Returning null will __not__ clear default values.
+    Returning null will __not__ clear already defined default values.

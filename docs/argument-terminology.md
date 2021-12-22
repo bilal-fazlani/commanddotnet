@@ -70,4 +70,4 @@ The developer of middleware components: often need to operate across all command
         * parameters: of a command method
         * properties: of an `IArgumentModel`
 
-Flags are defined as Options with BooleanMode = Implicit.  This is the default for Options of type bool and can be changed using `AppSettings.DefaultBooleanMode` or `OptionAttribute.BooleanMode`.
+Flags are defined as Options with BooleanMode = Implicit.  This is the default for Options of type bool and can be changed using `AppSettings.Arguments.DefaultBooleanMode` or `OptionAttribute.BooleanMode`.

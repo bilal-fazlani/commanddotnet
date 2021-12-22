@@ -138,7 +138,7 @@ Options are not positional so they can appear in any order within the command.
 
 Flags are boolean options with a default value of false. The presence of the flag indicates true. This simplifies the user experience by allowing them to specifiy `-b` instead of `-b true`.  This also enables clubbing.
 
-Define them as Options with BooleanMode = BooleanMode.Implicit. Implicit is the default defined for `AppSettings.DefaultBooleanMode` or `OptionAttribute.BooleanMode`.
+Define them as Options with BooleanMode = BooleanMode.Implicit. Implicit is the default defined for `AppSettings.Arguments.DefaultBooleanMode` or `OptionAttribute.BooleanMode`.
 
 ## Flag Clubbing
 
