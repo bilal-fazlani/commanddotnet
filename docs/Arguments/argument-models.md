@@ -1,85 +1,264 @@
 # Argument Models
-Argument models provide a way to define arguments in a class.
 
-This command to send an e-mail...
+Argument models provide a way to define arguments in a class, allowing arguments to be reused and more easily passed to other methods.
 
+Let's consider this notify command.
+
+<!-- snippet: argument_models_notify_without_model -->
+<a id='snippet-argument_models_notify_without_model'></a>
+```c#
+public void Notify(string message, List<string> recipients,
+    [Option] bool dryrun, [Option('v')] bool verbose, [Option('q')] bool quiet)
+{
+    // send notification
+}
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L14-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_without_model' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+<!-- snippet: argument_models_notify_without_model_help -->
+<a id='snippet-argument_models_notify_without_model_help'></a>
 ```bash
-send --subject hi -a "myFile.txt" --body "just wanted you to review these files" bilal@bilal.com john@john.com
+$ myapp.exe Notify --help
+Usage: myapp.exe Notify [options] <message> <recipients>
+
+Arguments:
+
+  message                <TEXT>
+
+  recipients (Multiple)  <TEXT>
+
+Options:
+
+  --dryrun
+
+  -v | --verbose
+
+  -q | --quiet
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/argument_models_notify_without_model_help.bash#L1-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_without_model_help' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
-can be defined with a method as ...
+In some cases, `dryrun`, `verbose`, and `quite` will be infrastructure concerns. For example...
 
+* A UnitOfWork middleware could commit or abort a transaction based on the `dryrun` value. 
+* A Logging middleware could set the log level based on the `verbose` and `quiet` values. 
+* We may want to assert `verbose` and `quiet` are mutually exclusive.
+
+If we have multiple commands that use these same values, it's possible for them to be configured differently across commands. Take `dryrun` for example. Ask 5 different developers to add a dryrun option and you'll end up with 5 different casings for it. dryrun, dry-run, DryRun, Dryrun, ....
+
+Use argument models to more easily reuse arguments, enforce consistency and make arguments easier to access from middleware.
+
+Here's how they're configured
+
+<!-- snippet: argument_models_notify_with_model -->
+<a id='snippet-argument_models_notify_with_model'></a>
 ```c#
-public void SendEmail(
-    [Option]string subject, 
-    [Option]string body, 
-    [Operand]string from, 
-    [Operand]string to)
+public void Notify(
+    NotificationArgs notificationArgs,
+    DryRunOptions dryRunOptions, 
+    VerbosityOptions verbosityOptions)
 {
+    // send notification
+}
 
+public class NotificationArgs : IArgumentModel
+{
+    [Operand]
+    public string Message { get; set; } = null!;
+
+    [Operand]
+    public List<string> Recipients { get; set; } = null!;
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L25-L42' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_model' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
-or with an argument model as ...
-
+<!-- snippet: argument_models_dry_run_and_verbosity -->
+<a id='snippet-argument_models_dry_run_and_verbosity'></a>
 ```c#
-public class Email : IArgumentModel
+public class DryRunOptions : IArgumentModel
 {
-    [Option]
-    public string Subject { get; set; }
-    
-    [Option]
-    public string Body { get; set; }
-    
-    [Operand]
-    public string From { get; set; }
-    
-    [Operand]
-    public string To { get; set; }
+    [Option("dryrun")]
+    public bool IsDryRun { get; set; } = false;
 }
 
-public void SendEmail(Email email)
+public class VerbosityOptions : IArgumentModel, IValidatableObject
 {
+    [Option('v')]
+    public bool Verbose { get; set; }
 
+    [Option('q')]
+    public bool Quite { get; set; }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        // use the CommandDotNet.DataAnnotations package to run this validation
+        if (Verbose && Quite)
+            yield return new ValidationResult("Verbose and Quiet are mutually exclusive. Choose one or the other.");
+    }
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L165-L187' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_dry_run_and_verbosity' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+<!-- snippet: argument_models_notify_with_model_help -->
+<a id='snippet-argument_models_notify_with_model_help'></a>
+```bash
+$ myapp.exe Notify --help
+Usage: myapp.exe Notify [options] <Message> <Recipients>
+
+Arguments:
+
+  Message                <TEXT>
+
+  Recipients (Multiple)  <TEXT>
+
+Options:
+
+  --dryrun
+
+  -v | --Verbose
+
+  -q | --Quite
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/argument_models_notify_with_model_help.bash#L1-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_model_help' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Notice the help output is the same, except for the casing of the names derived from the properties. The casing can be fixed by providing a name in the Operand and Option attributes, using lowercase property names, or using the [NameCasing](../OtherFeatures/name-casing.md) package to convert all command and argument names to the same case.
+
+!!! Tip
+    See [Nullable Reference Types](../TipsFaqs/nullable-reference-types.md) for avoiding  "Non-nullable property is uninitialized" warnings in your argument models
 
 ## Composition
 
 An `IArgumentModel` can be composed from other `IArgumentModel`s allowing easy reuse of common arguments.
 
+Using same example from above, we configure the arguments into a single model like this...
+
+<!-- snippet: argument_models_notify_with_model_composed -->
+<a id='snippet-argument_models_notify_with_model_composed'></a>
 ```c#
-public class DryRun : IArgumentModel
-{    
-    [Option(LongName="dryrun")]
-    public bool IsDryRun { get; set; }
-}
-
-public class SendEmailArgs : IArgumentModel
-{    
-    public DryRun DryRun { get; set; }
-    
-    public Email Email { get; set; }
-}
-
-public void SendEmail(SendEmailArgs args)
+public void Notify(NotificationArgs notificationArgs)
 {
+    // send notification
+}
 
+public class NotificationArgs : IArgumentModel
+{
+    [Operand]
+    public string Message { get; set; } = null!;
+
+    [Operand]
+    public List<string> Recipients { get; set; } = null!;
+
+    public DryRunOptions DryRunOptions { get; set; } = null!;
+
+    public VerbosityOptions VerbosityOptions { get; set; } = null!;
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L47-L65' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_model_composed' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
-## Benefits of argument models
+<!-- snippet: argument_models_notify_with_model_composed -->
+<a id='snippet-argument_models_notify_with_model_composed'></a>
+```c#
+public void Notify(NotificationArgs notificationArgs)
+{
+    // send notification
+}
 
-* Common arguments can be extracted to models to enforce behaviors across commands. This ensures the same short name, long name, description, etc are consistent across all commands using this model.
-* A [middleware](../Extensibility/middleware.md) could be created to cancel a UnitOfWork when a dry-run is requested.
-* [FluentValidation](../Arguments/fluent-validation-for-argument-models.md) framework can be used to validate the model.
+public class NotificationArgs : IArgumentModel
+{
+    [Operand]
+    public string Message { get; set; } = null!;
 
-Take `DryRun` for example. Ask 5 different developers to add a dryrun option and you'll end up with 5 different casings for it. Add it to an IArgumentModel and everyone can use and the commands will have a consistent argument.  
+    [Operand]
+    public List<string> Recipients { get; set; } = null!;
 
-When you have the same model, you can add middleware that can check for the existing of that model and perform logic based on that.  Using the `DryRun` example, a UnitOfWork middleware could determine whether to commit or abort a transaction based on the value of the model.
+    public DryRunOptions DryRunOptions { get; set; } = null!;
 
-!!! Tip
-    See [Nullable Reference Types](../TipsFaqs/nullable-reference-types.md) for avoiding  "Non-nullable property is uninitialized" warnings in your argument models
+    public VerbosityOptions VerbosityOptions { get; set; } = null!;
+}
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L47-L65' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_model_composed' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+## Accessing from interceptors and middleware
+
+Instead of defining the model in each command method, the model could be defined in an interceptor of the root command and be available for all commands.
+
+<!-- snippet: argument_models_notify_with_interceptor -->
+<a id='snippet-argument_models_notify_with_interceptor'></a>
+```c#
+public Task<int> Interceptor(InterceptorExecutionDelegate next, CommandContext ctx,
+    DryRunOptions dryRunOptions, VerbosityOptions verbosityOptions)
+{
+    IEnumerable<IArgumentModel> models = ctx.InvocationPipeline.All
+        .SelectMany(s => s.Invocation.FlattenedArgumentModels);
+    return next();
+}
+
+public void Notify(NotificationArgs notificationArgs)
+{
+    // send notification
+}
+
+public class NotificationArgs : IArgumentModel
+{
+    [Operand]
+    public string Message { get; set; } = null!;
+
+    [Operand]
+    public List<string> Recipients { get; set; } = null!;
+}
+
+public class DryRunOptions : IArgumentModel
+{
+    [Option("dryrun", AssignToExecutableSubcommands = true)]
+    public bool IsDryRun { get; set; } = false;
+}
+
+public class VerbosityOptions : IArgumentModel
+{
+    [Option('v', AssignToExecutableSubcommands = true)]
+    public bool Verbose { get; set; }
+
+    [Option('q', AssignToExecutableSubcommands = true)]
+    public bool Quite { get; set; }
+}
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L70-L109' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_interceptor' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+<!-- snippet: argument_models_notify_with_interceptor_help -->
+<a id='snippet-argument_models_notify_with_interceptor_help'></a>
+```bash
+$ myapp.exe Notify --help
+Usage: myapp.exe Notify [options] <Message> <Recipients>
+
+Arguments:
+
+  Message                <TEXT>
+
+  Recipients (Multiple)  <TEXT>
+
+Options:
+
+  --dryrun
+
+  -v | --Verbose
+
+  -q | --Quite
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/argument_models_notify_with_interceptor_help.bash#L1-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_interceptor_help' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+Notice the use of `AssignToExecutableSubcommands=true` in the Option attributes. 
+This configures the option as if defined in the command methods. 
+Without this setting, the user would provide the options in the command hosting the interceptor method.
+
+Notice in the interceptor method how the list of all argument models can be retrieved from the pipeline of the targetted command. Middleware can use this to fetch an argument model.
 
 ## Guaranteeing the order of arguments
 
@@ -89,7 +268,7 @@ Prior to version 4, argument position is not guaranteed to be consistent because
 
 For `Operands`, which are positional arguments, this can result in commands with operands in a non-deterministic order.
 
-This is less of an issue with `Option` because options are named, not positional. Only the order options appear in help is affected.
+This is not reliability issue with `Option` because options are named, not positional. The only impact is the order options appear in help.
 
 As of version 4, CommandDotNet can guarantee all arguments will maintain their position as defined within a class as long as the properties are decorated with `OperandAttribute`, `OptionAtribute` or `OrderByPositionInClassAttribute`.
 
@@ -97,27 +276,53 @@ As of version 4, CommandDotNet can guarantee all arguments will maintain their p
 
 The `OperandAttribute` and `OptionAtribute` define an optional constructor parameter called `__callerLineNumber`. This uses the [CallerLineNumberAttribute](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.callerlinenumberattribute?view=netframework-4.8) to auto-assign the line number in the class. **Do Not** provide a value for this parameter.
 
-CommandDotNet will raise an exception when the order cannot be determined.
+CommandDotNet will raise an exception when the order cannot be determined, which occurs when either
 
-Order cannot be determined when
-
-1. `AppSettings.DefaultArgumentMode == ArgumentMode.Operand` (the default) and the property is not attributed with `[Operand]`
+1. `AppSettings.Arguments.DefaultArgumentMode == ArgumentMode.Operand` (the default) and the property is not attributed
 1. When a nested argument model containing an operand is not decorated with `[OrderByPositionInClass]`
 
-When the guarantee is enabled, our SendEmail example above will fail with 
-  > `Operand property must be attributed with OperandAttribute or OrderByPositionInClassAttribute to guarantee consistent order. Property: ExampleApp.SendEmailArgs.Email`
+An example of invalidly nesting an IArgumentModel that contains operands
 
-We can fix by attributing the `Email` property like so...
-
+<!-- snippet: argument_models_notify_with_invalid_nested_operands_model -->
+<a id='snippet-argument_models_notify_with_invalid_nested_operands_model'></a>
 ```c#
-public class SendEmailArgs : IArgumentModel
-{    
-    public DryRun DryRun { get; set; }
-    
-    [OrderByPositionInClass]
-    public Email Email { get; set; }
+public class NotifyModel : IArgumentModel
+{
+    public NotificationArgs NotificationArgs { get; set; }
+    public DryRunOptions DryRunOptions { get; set; }
+    public VerbosityOptions VerbosityOptions { get; set; }
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L146-L153' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_invalid_nested_operands_model' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+And the error received because NotificationArgs contains operands
+
+<!-- snippet: argument_models_notify_with_invalid_nested_operands_help -->
+<a id='snippet-argument_models_notify_with_invalid_nested_operands_help'></a>
+```bash
+$ myapp.exe Notify --help
+CommandDotNet.InvalidConfigurationException: Operand property must be attributed with OperandAttribute or OrderByPositionInClassAttribute to guarantee consistent order. Properties:
+  CommandDotNet.DocExamples.Arguments.Arguments.Argument_Models+Program_WithInvalidhNestedOperands+NotifyModel.NotificationArgs
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/argument_models_notify_with_invalid_nested_operands_help.bash#L1-L5' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_invalid_nested_operands_help' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+This is the correct way to nest a model with operands
+
+<!-- snippet: argument_models_notify_with_nested_operands_model -->
+<a id='snippet-argument_models_notify_with_nested_operands_model'></a>
+```c#
+public class NotifyModel : IArgumentModel
+{
+    [OrderByPositionInClass]
+    public NotificationArgs NotificationArgs { get; set; }
+    public DryRunOptions DryRunOptions { get; set; }
+    public VerbosityOptions VerbosityOptions { get; set; }
+}
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L119-L127' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_nested_operands_model' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
  
 ### Recommendation 
 * When possible, do not define operands in nested argument models.

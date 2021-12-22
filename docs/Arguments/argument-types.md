@@ -1,4 +1,4 @@
-# Supported Argument Types
+# Data Types
 
 Arguments can be defined with any type that...
 

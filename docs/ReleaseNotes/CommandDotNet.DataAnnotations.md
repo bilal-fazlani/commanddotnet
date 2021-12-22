@@ -26,4 +26,4 @@ This version will validate all arguments from a model within the context of the 
 
 ## 1.0.0
 
-Introduced DataAnnotations for validation. See [DataAnnotations](../Arguments/data-annotations-validation.md)
+Introduced DataAnnotations for validation. See [DataAnnotations](../ArgumentValidation/data-annotations-validation.md)
