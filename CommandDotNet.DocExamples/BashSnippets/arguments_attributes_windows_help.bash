@@ -1,4 +1,4 @@
-// begin-snippet: arguments_attributes_help
+// begin-snippet: arguments_attributes_windows_help
 $ mission-control.exe LaunchRocket --help
 Usage: mission-control.exe LaunchRocket [options] <planet>
 

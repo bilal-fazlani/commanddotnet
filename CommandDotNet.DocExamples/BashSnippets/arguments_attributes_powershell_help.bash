@@ -1,4 +1,4 @@
-// begin-snippet: arguments_attributes_help
+// begin-snippet: arguments_attributes_powershell_help
 $ mission-control.exe LaunchRocket --help
 Usage: mission-control.exe LaunchRocket [options] <planet>
 
