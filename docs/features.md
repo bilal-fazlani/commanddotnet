@@ -18,20 +18,25 @@ hide:
 
 ## Commands
 
-- [x] Define commands as methods
-- [x] Parameter Resolvers
-> Inject console and other contexts as a parameter: IConsole, CommandContext, CancellationToken & IPrompter by default.
+- [x] Define commands as methods and/or classes ([docs](Commands/commands.md))
+    - supports the pattern you prefer: 
+        - class per command
+        - logically grouped commands as methods
+        > similar to ASP.NET endpoints
 
-- [x] Infinite nesting of subcommands
+- [x] Parameter Resolvers ([docs](Extensibility/parameter-resolvers.md))
+> Inject console and other services as parameter to the command methods: IConsole, CommandContext, CancellationToken & IPrompter by default.
+
+- [x] Infinite nesting of subcommands ([docs](Commands/subcommands.md))
     - Nested classes
     - Composed classes
-    - Commands can define arguments that appear in all subcommands
-    - Reuse subcommands in multiple parents
+    > reuse subcommands in multiple parents
+    - Commands define arguments for their subcommands
 
 - [x] Command Interception
-    - via interceptor methods (aka hooks)
+    - via interceptor methods (aka hooks) ([docs](Extensibility/interceptors.md))
     > allows logic before and after a command or subcommands run
-    - via middleware
+    - via middleware ([docs](Extensibility/middleware.md))
 
 - [x] Method Interception
 > CommandContext.InvocationPipeline to access method and params
@@ -40,17 +45,23 @@ hide:
 
 <div markdown="1" class="feature">
 
-## Data Types
+## Data Types 
+[docs](Arguments/argument-types.md)
 
 - [x] Primitives, Enums, Nullable&lt;T&gt; & [Nullable Reference Types](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/nullable-reference-types)
+
 - [x] Lists, Arrays and IEnumberable&lt;T&gt; for streaming
-- [x] Password: mask value in logs and output with `*****`
+
+- [x] Password: mask value in logs and output with `*****` ([docs](Arguments/passwords.md))
+
 - [x] Any type with a
     - [x] string constructor
     - [x] static Parse(string) method
     - [x] TypeConverter
+
 - [x] Custom Type Descriptors
 > Customize parsing and the type name shown in help and
+
 - [x] Define allowed values by type
 > Allowed values are shown in help and typo suggestions
 
@@ -59,21 +70,24 @@ hide:
 <div markdown="1" class="feature">
 
 ## Help	
-- [x] Typo suggestions
-- [x] Auto generated help
+- [x] Typo suggestions ([docs](Help/typo-suggestions.md))
+
+- [x] Auto generated help ([docs](Help/help.md))
 > Aliases: -? -h --help
-- [x] Custom help generators
+
+- [x] Custom help generators ([docs](Help/help.md#custom-help-provider))
 
 </div>
 
 <div markdown="1" class="feature">
 
-## Dependency Injection
+## Dependency Injection 
+[docs](OtherFeatures/dependency-injection.md)
 
 - [x] MicrosoftDependencyInjection
 - [x] Autofac
 - [x] SimpleInjector
-- [x] Test injector
+- [x] Test resolver ([docs](TestTools/overview.md#testdependencyresolver))
 - [x] Custom
 
 </div>
@@ -82,14 +96,20 @@ hide:
 
 ## Localization
 
+[docs](Localization/overview.md)
+
 - [x] supports `IStringLocalizer`
+
 - [x] resx translation files available
 > currently english only. PRs accepted
+
 - [x] json translation files available
 > currently english only. PRs accepted
-- [x] `[culture]` directive 
+
+- [x] `[culture]` directive ([docs](Localization/culture-directive.md))
 > set the culture for a command for manual verification
-- [x] Test support
+
+- [x] Test support ([docs](Localization/testing.md))
 
 </div>
 
@@ -97,10 +117,10 @@ hide:
 
 ## Extensibility
 
-- [x] Custom middleware
-- [x] Custom directives
-- [x] Custom token transformations
-- [x] Custom parameter resolvers
+- [x] Custom middleware ([docs](Extensibility/middleware.md))
+- [x] Custom directives ([docs](Extensibility/directives.md))
+- [x] Custom token transformations ([docs](Extensibility/token-transformations.md))
+- [x] Custom parameter resolvers ([docs](Extensibility/parameter-resolvers.md))
 
 </div>
 
@@ -109,10 +129,12 @@ hide:
 
 ## Other
 
-- [x] ++ctrl+c++
-- [x] Name casing
+- [x] ++ctrl+c++ ([docs](OtherFeatures/cancellation.md))
+
+- [x] Name casing ([docs](OtherFeatures/name-casing.md))
 > consistent name casing via Humanizer
-- [x] Spectre AnsiConsole
+
+- [x] Spectre AnsiConsole ([docs](OtherFeatures/spectre.md))
 > ansi, colors, markup syntax, prompting, progress bars, tables. live displays, test capture, and much more
 
 </div>
@@ -122,6 +144,8 @@ hide:
 <div markdown="1" class="feature">
 
 ## Arguments
+
+[docs](Arguments/arguments.md)
 
 - [x] Positional (operands)
 - [x] Named (options)
@@ -141,22 +165,29 @@ hide:
 
 ## Argument Values
 
-- [x] Response Files
-- [x] Piped Input with streaming
+- [x] Response Files ([docs](ArgumentValues/response-files.md))
+
+- [x] Piped Input with streaming ([docs](ArgumentValues/piped-arguments.md))
     - user can pipe to specific arguments
+
 - [x] Negative numbers and other values starting with `-`
 > Most frameworks treat these as options. We've got you covered.
-- [x] split multi-value arguments by char
-- [x] Prompts
+
+- [x] split multi-value options by char ([docs](Arguments/argument-collections.md#option-collections))
+
+- [x] Prompts ([docs](ArgumentValues/prompting.md))
     - Hide passwords
     - Multi-entry for collections
     - Auto prompt for missing arguments (optional)
     - Spectre AnsiConsole integration for alternate prompting experience
-- [x] Default from EnvVar
+
+- [x] Default from EnvVar ([docs](ArgumentValues/default-values-from-config.md##environment-variables))
 > values show as defaults in command help
-- [x] Default from AppSetting
+
+- [x] Default from AppSetting ([docs](ArgumentValues/default-values-from-config.md#appsettings))
     - using [AppSetting] attribute
     - using naming conventions
+    > use command and arguments names as keys. eg. `"--verbose": "true"`
     - using IArgumentModel as configuration object
 
 </div>
@@ -165,8 +196,9 @@ hide:
 
 ## Validation	
    
-- [x] FluentValidation for argument models 
-- [x] DataAnnotations
+- [x] Arity based on property and parameter definitions ([docs](Arguments/argument-arity.md#validation))
+- [x] FluentValidation ([docs](ArgumentValidation/fluent-validation.md))
+- [x] DataAnnotations ([docs](ArgumentValidation/data-annotations-validation.md))
 
 </div>
 
@@ -174,19 +206,26 @@ hide:
 
 ## Testing
 
-- [x] BDD Framework
+- [x] BDD Framework ([docs](TestTools/Harness/bdd.md))
 > Test an app as if run from the console
+
 - [x] Supports parallel test
 > the whole framework avoids static state to support parallel test runs
-- [x] IConsole and SystemConsole covering most members of System.Console
+
+- [x] Test prompts ([docs](TestTools/Tools/testing-prompts.md))
+
+- [x] IConsole and SystemConsole covering most members of System.Console ([docs](OtherFeatures/iconsole.md))
     - TestConsole to capture output and mock piped and user input
     - Spectre AnsiConsole support also with AnsiTestConsole
 - [x] IEnvironment and SystemEnvironment covering most members of System.Environment
-- [x] TestDependencyResolver
+
+- [x] TestDependencyResolver ([docs](TestTools/overview.md#testdependencyresolver))
 > `new TestDependencyResolver{ dbSvc, httpSvc }`
-- [x] TempFiles helper
+
+- [x] TempFiles helper ([docs](TestTools/overview.md#tempfiles))
 > create and cleanup files used for tests
-- [x] Capture State
+
+- [x] Capture State  ([docs](TestTools/overview.md#capturestate))
 > Capture state within a run to help test custom middleware components
 
 </div>
@@ -195,20 +234,26 @@ hide:
 
 ## Diagnostics	
 
-- [x] App Version
+- [x] App Version ([docs](Diagnostics/app-version.md))
 > `-v` or `--version`
-- [x] `[debug]` directive
+
+- [x] `[debug]` directive ([docs](Diagnostics/debug-directive.md))
 > step into debugger
-- [x] `[time]` directive
+
+- [x] `[time]` directive ([docs](Diagnostics/time-directive.md))
 > outputs the execution time of a command
-- [x] `[parse]` directive
+
+- [x] `[parse]` directive ([docs](Diagnostics/parse-directive.md))
     - show final values
     - show inputs and source
       > original source of value, including > response file paths
     - show defaults and source
       > including key if from EnvVar or AppSetting
-- [x] Command logging
+
+- [x] Command logging ([docs](Diagnostics/command-logger.md))
 > show parse output and optionally system info and app config
+
+- [x] Custom error handling ([docs](Diagnostics/exceptions.md))
 
 </div>
 

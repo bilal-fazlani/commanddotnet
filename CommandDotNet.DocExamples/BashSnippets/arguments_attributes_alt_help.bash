@@ -10,7 +10,7 @@ Arguments:
 Options:
 
   -t | --turbo
-  Name of the planet you wish the rocket to go
+  Do you want to go fast?
 
   -a | --abort  <BOOLEAN>
   Abort the launch before takeoff

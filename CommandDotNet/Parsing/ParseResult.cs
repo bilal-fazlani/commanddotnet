@@ -15,7 +15,7 @@ namespace CommandDotNet.Parsing
         public Command TargetCommand { get; }
 
         /// <summary>
-        /// If extra operands were provided and <see cref="AppSettings.IgnoreUnexpectedOperands"/> is true,
+        /// If extra operands were provided and <see cref="ParseAppSettings.IgnoreUnexpectedOperands"/> is true,
         /// The extra operands will be stored in the <see cref="RemainingOperands"/> collection.
         /// </summary>
         public IReadOnlyCollection<string> RemainingOperands { get; }

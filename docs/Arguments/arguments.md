@@ -63,12 +63,12 @@ The OptionAttribute has the following properties:
 public void LaunchRocket(
     [Operand("planet", Description = "Name of the planet you wish the rocket to go")]
     string planetName,
-    [Option('t', "turbo", Description = "Name of the planet you wish the rocket to go")]
+    [Option('t', "turbo", Description = "Do you want to go fast?")]
     bool turbo,
     [Option('a', Description = "Abort the launch before takeoff", BooleanMode = BooleanMode.Explicit)]
     bool abort)
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L10-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_attributes' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L12-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_attributes' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 or
@@ -79,12 +79,12 @@ or
 public void LaunchRocket(
         [Positional("planet", Description = "Name of the planet you wish the rocket to go")]
         string planetName,
-        [Named('t', "turbo", Description = "Name of the planet you wish the rocket to go")]
+        [Named('t', "turbo", Description = "Do you want to go fast?")]
         bool turbo,
         [Named('a', Description = "Abort the launch before takeoff", BooleanMode = BooleanMode.Explicit)]
         bool abort)
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L23-L31' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_attributes_alt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L26-L34' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_attributes_alt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 and help looks like:
@@ -103,7 +103,7 @@ Arguments:
 Options:
 
   -t | --turbo
-  Name of the planet you wish the rocket to go
+  Do you want to go fast?
 
   -a | --abort  <BOOLEAN>
   Abort the launch before takeoff
@@ -138,7 +138,7 @@ Options are not positional so they can appear in any order within the command.
 
 Flags are boolean options with a default value of false. The presence of the flag indicates true. This simplifies the user experience by allowing them to specifiy `-b` instead of `-b true`.  This also enables clubbing.
 
-Define them as Options with BooleanMode = BooleanMode.Implicit. Implicit is the default defined for `AppSettings.DefaultBooleanMode` or `OptionAttribute.BooleanMode`.
+Define them as Options with BooleanMode = BooleanMode.Implicit. Implicit is the default defined for `AppSettings.Arguments.DefaultBooleanMode` or `OptionAttribute.BooleanMode`.
 
 ## Flag Clubbing
 
@@ -163,3 +163,55 @@ When assigning multiple values, by default each value will need to be proceeded 
 To let the user use a delimiter such as `--days Monday,Tuesday`, you must specify the split character to use.
 The split character can be set globally for use by all multi-value options using `AppSettings.Arguments.DefaultOptionSplit`
 The split character can also be set per option using `[Option(Split=',')]`. The value set for an option will override the default.
+
+## Support for Windows and Powershell option prefixes
+
+By default CommandDotNet follows POSIX conventions and uses `-` to indicate an option short name and `--` to indicate an option long name.
+
+While this convention has been adopted by many programs that run in Windows, the legacy convention is to use only `\` for both short and long names.
+
+The Powershell convention is to use `-` for both short and long names.
+
+With version 5, CommandDotNet supports both conventions. 
+
+The existing POSIX conventions are still the default and what appear in help. 
+
+Support for the Windows and Powershell conventions is intented to provide backwards compatibility for existing applications being ported to CommandDotNet where scripts and tooling expects the other conventions.
+
+How to enable and use with Windows
+
+<!-- snippet: AppSettings_for_windows -->
+<a id='snippet-appsettings_for_windows'></a>
+```c#
+new AppSettings { Parser = { AllowBackslashOptionPrefix = true } };
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L61-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-appsettings_for_windows' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+<!-- snippet: arguments_attributes_windows_exe -->
+<a id='snippet-arguments_attributes_windows_exe'></a>
+```bash
+$ mission-control.exe LaunchRocket /turbo /a true mars
+planet=mars turbo=True abort=True
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/arguments_attributes_windows_exe.bash#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_attributes_windows_exe' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+How to enable and use with Powershell
+
+<!-- snippet: AppSettings_for_powershell -->
+<a id='snippet-appsettings_for_powershell'></a>
+```c#
+new AppSettings { Parser = { AllowSingleHyphenForLongNames = true } };
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L76-L78' title='Snippet source file'>snippet source</a> | <a href='#snippet-appsettings_for_powershell' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+<!-- snippet: arguments_attributes_powershell_exe -->
+<a id='snippet-arguments_attributes_powershell_exe'></a>
+```bash
+$ mission-control.exe LaunchRocket -turbo -a true mars
+planet=mars turbo=True abort=True
+```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/arguments_attributes_powershell_exe.bash#L1-L4' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_attributes_powershell_exe' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->

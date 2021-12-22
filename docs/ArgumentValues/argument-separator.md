@@ -2,7 +2,7 @@
 
 The argument separater `--` has been adopted by various tools to serve two different strategies: [end-of-options indicator](#end-of-options-indicator) and [pass-thru arguments](#pass-thru-arguments).
 
-Use `AppSettings.DefaultArgumentSeparatorStrategy` to specify the which strategy to use.
+Use `AppSettings.Parser.DefaultArgumentSeparatorStrategy` to specify the which strategy to use.
 
 The default is `EndOfOptions` so that by default users have it as a fallback to enter any value as an operand.
 
@@ -40,7 +40,7 @@ All operands after the first ` -- ` will be stored in `CommandContext.ParseResul
 
 ## Unexpected Operands
 
-Unexpected operands occur when there are no longer operands to assign values to. This will result in a parsing exception unless `AppSettings.IgnoreUnexpectedOperands` is true, and then they will be stored in `CommandContext.ParseResult.RemainingOperands`.
+Unexpected operands occur when there are no longer operands to assign values to. This will result in a parsing exception unless `AppSettings.Parser.IgnoreUnexpectedOperands` is true, and then they will be stored in `CommandContext.ParseResult.RemainingOperands`.
 
 ```bash
 ~

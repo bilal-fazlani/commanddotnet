@@ -26,7 +26,7 @@ public string? ExtendedHelpText { get; set; }
 public string[]? ExtendedHelpTextLines { get; set; }
 
 /// <summary>
-/// Overrides <see cref="AppSettings.IgnoreUnexpectedOperands"/><br/>
+/// Overrides <see cref="ParseAppSettings.IgnoreUnexpectedOperands"/><br/>
 /// When false, unexpected operands will generate a parse failure.<br/>
 /// When true, unexpected arguments will be ignored and added to <see cref="ParseResult.RemainingOperands"/><br/>
 /// </summary>
