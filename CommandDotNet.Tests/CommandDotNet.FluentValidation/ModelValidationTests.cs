@@ -201,6 +201,24 @@ Usage: testhost.dll Save <Id> <Name> <Email>"
                 });
         }
 
+        [Fact]
+        public void Exec_WithValidData_And_NestedArgModel_And_NoValidatorForHostArgModel_Then_ValidatorIsUsedForNestedArgModel()
+        {
+            new AppRunner<App>()
+                .UseFluentValidation()
+                .Verify(new Scenario
+                {
+                    When = { Args = "SaveEmp" },
+                    Then =
+                    {
+                        ExitCode = 2,
+                        Output = @"Id is required
+Name is required
+Email is required"
+                    }
+                });
+        }
+
         private class App
         {
             public void Save(Person person)
@@ -210,6 +228,10 @@ Usage: testhost.dll Save <Id> <Name> <Email>"
             public void InvalidSave(InvalidPerson person)
             {
             }
+
+            public void SaveEmp(Employee employee)
+            {
+            }
         }
         
         public class Person : IArgumentModel
@@ -217,6 +239,15 @@ Usage: testhost.dll Save <Id> <Name> <Email>"
             [Operand] public int Id { get; set; }
             [Operand] public string Name { get; set; } = null!;
             [Operand] public string Email { get; set; } = null!;
+        }
+
+        public class Employee : IArgumentModel
+        {
+            [OrderByPositionInClass]
+            public Person Person { get; set; }
+
+            [Operand]
+            public string? Position { get; set; } = null!;
         }
 
         public class PersonValidator : AbstractValidator<Person>
