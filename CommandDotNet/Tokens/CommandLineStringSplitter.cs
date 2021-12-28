@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace CommandDotNet.Tokens
 {
@@ -15,6 +16,8 @@ namespace CommandDotNet.Tokens
             WordEnd,
             QuoteEnd
         }
+
+        public string[] SplitToArray(string commandLine) => Split(commandLine).ToArray();
 
         public IEnumerable<string> Split(string commandLine)
         {

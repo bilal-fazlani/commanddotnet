@@ -15,22 +15,26 @@ namespace CommandDotNet.Diagnostics
             return context.Services.GetOrDefault<CommandLoggerHasLoggedMarker>() != null;
         }
 
-        public static void Log(
-            CommandContext context,
+        public static void Log(CommandContext context,
             Action<string?>? writer = null,
             bool includeSystemInfo = true,
-            bool includeAppConfig = false)
+            bool includeAppConfig = false,
+            bool includeMachineAndUser = false,
+            Func<CommandContext, IEnumerable<(string key, string value)>?>? additionalHeadersCallback = null)
         {
-            var config = context.AppConfig.Services.GetOrDefault<CommandLoggerConfig>();
-            if (config == null)
-            {
-                throw new InvalidConfigurationException(
-                    $"{nameof(CommandLoggerMiddleware)} has not been registered. " +
-                    $"Try `appRunner.{nameof(AppRunnerConfigExtensions.UseCommandLogger)}()`");
-            }
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
+            }
+
+            if (writer is null || additionalHeadersCallback is null)
+            {
+                var config = context.AppConfig.Services.GetOrDefault<CommandLoggerConfig>();
+                if (config is not null)
+                {
+                    writer ??= config.WriterFactory?.Invoke(context);
+                    additionalHeadersCallback ??= config.AdditionalHeadersCallback;
+                }
             }
 
             context.Services.AddOrUpdate(new CommandLoggerHasLoggedMarker());
@@ -47,8 +51,8 @@ namespace CommandDotNet.Diagnostics
             var indent = new Indent();
             ParseReporter.Report(context, writeln: s => sb.AppendLine(s), indent: indent);
 
-            var additionalHeaders = config.AdditionalHeadersCallback?.Invoke(context);
-            var otherConfigEntries = GetOtherConfigInfo(context.Environment, includeSystemInfo, additionalHeaders).ToList();
+            var additionalHeaders = additionalHeadersCallback?.Invoke(context);
+            var otherConfigEntries = GetOtherConfigInfo(context.Environment, includeSystemInfo, includeMachineAndUser, additionalHeaders).ToList();
             if (!otherConfigEntries.IsNullOrEmpty())
             {
                 sb.AppendLine();
@@ -85,6 +89,7 @@ namespace CommandDotNet.Diagnostics
 
         private static IEnumerable<(string name, string text)> GetOtherConfigInfo(IEnvironment env,
             bool includeSystemInfo,
+            bool includeMachineAndUser,
             IEnumerable<(string key, string value)>? additionalHeaders)
         {
             if (includeSystemInfo)
@@ -99,11 +104,15 @@ namespace CommandDotNet.Diagnostics
                 yield return (
                     Resources.A.CommandLogger_OS_version, 
                     env.OSDescription);
+            }
+
+            if (includeMachineAndUser)
+            {
                 yield return (
                     Resources.A.CommandLogger_Machine,
                     env.MachineName);
                 yield return (
-                    Resources.A.CommandLogger_Username, 
+                    Resources.A.CommandLogger_Username,
                     $"{env.UserDomainName}\\{env.UserName}");
             }
 

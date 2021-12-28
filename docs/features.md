@@ -148,17 +148,29 @@ hide:
 [docs](Arguments/arguments.md)
 
 - [x] Positional (operands)
+
 - [x] Named (options)
     - Short and long names
     - Flags
     - bundling aka clubbing
+
 - [x] Define arguments as parameters in methods
+
 - [x] Define arguments as properties in POCOs
     - POCOs can be nested for easier reuse of infrastructural arguments, i.e. dryrun, verbosity, etc.
+
 - [x] Option prefixes
     - Posix (default): `-` for short names and `--` for long names
     - Windows (optional): `/` for both short and long names
     - Powershell (optional): `-` for long names
+
+- [x] Argument separator `--` 
+    - as "end of options" indicator ([docs](ArgumentValues/argument-separator.md#end-of-options-indicator))
+    - or for pass-thru arguments ([docs](ArgumentValues/argument-separator.md#pass-thru-arguments))
+    - configure globally and per command
+
+- [x] Capture unexpected arguments or throw exception ([docs](ArgumentValues/argument-separator.md#unexpected-operands))
+    - configure globally and per command
 </div>
 
 <div markdown="1" class="feature">
@@ -174,6 +186,7 @@ hide:
 > Most frameworks treat these as options. We've got you covered.
 
 - [x] split multi-value options by char ([docs](Arguments/argument-collections.md#option-collections))
+    - configure char globally and per option
 
 - [x] Prompts ([docs](ArgumentValues/prompting.md))
     - Hide passwords
@@ -197,8 +210,8 @@ hide:
 ## Validation	
    
 - [x] Arity based on property and parameter definitions ([docs](Arguments/argument-arity.md#validation))
-- [x] FluentValidation ([docs](ArgumentValidation/fluent-validation.md))
 - [x] DataAnnotations ([docs](ArgumentValidation/data-annotations-validation.md))
+- [x] FluentValidation ([docs](ArgumentValidation/fluent-validation.md))
 
 </div>
 
@@ -216,8 +229,10 @@ hide:
 
 - [x] IConsole and SystemConsole covering most members of System.Console ([docs](OtherFeatures/iconsole.md))
     - TestConsole to capture output and mock piped and user input
+    - Intercept Console.Out and Console.Error
     - Spectre AnsiConsole support also with AnsiTestConsole
 - [x] IEnvironment and SystemEnvironment covering most members of System.Environment
+    - TestEnvironment and .UseTestEnv extension for tests
 
 - [x] TestDependencyResolver ([docs](TestTools/overview.md#testdependencyresolver))
 > `new TestDependencyResolver{ dbSvc, httpSvc }`

@@ -212,9 +212,10 @@ Usage: testhost.dll Save <Id> <Name> <Email>"
                     Then =
                     {
                         ExitCode = 2,
-                        Output = @"Id is required
-Name is required
-Email is required"
+                        Output = @"'Person' is invalid
+  'Id' must be greater than '0'.
+  'Name' must not be empty.
+  'Email' must not be empty."
                     }
                 });
         }

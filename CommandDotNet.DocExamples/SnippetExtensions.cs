@@ -26,17 +26,19 @@ namespace CommandDotNet.DocExamples
             var result = snippet.Runner
                 .Configure(c => c.AppSettings.Help.UsageAppName = snippet.AppName)
                 .Verify(new Scenario
-            {
-                When = { 
-                    Args = snippet.Args, 
-                    PipedInput = snippet.PipedInput, 
-                    OnPrompt = snippet.PromptAnswers is null ? null : new PromptResponder(snippet.PromptAnswers)},
-                Then =
                 {
-                    ExitCode = snippet.ExitCode,
-                    Output = snippet.Output
-                }
-            });
+                    When =
+                    {
+                        Args = snippet.Args,
+                        PipedInput = snippet.PipedInput,
+                        OnPrompt = snippet.PromptAnswers is null ? null : new PromptResponder(snippet.PromptAnswers)
+                    },
+                    Then =
+                    {
+                        ExitCode = snippet.ExitCode,
+                        Output = snippet.Output
+                    }
+                });
         }
     }
 }

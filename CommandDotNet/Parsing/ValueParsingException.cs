@@ -2,9 +2,7 @@
 
 namespace CommandDotNet.Parsing
 {
-    /// <summary>
-    /// <see cref="ValueParsingException"/> indicates user error.
-    /// </summary>
+    /// <summary><see cref="ValueParsingException"/> indicates user error.</summary>
     public class ValueParsingException : Exception
     {
         public ValueParsingException(string message) : base(message)

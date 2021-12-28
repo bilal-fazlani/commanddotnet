@@ -70,7 +70,7 @@ namespace CommandDotNet.FluentValidation
             {
                 var paramValues = ctx.InvocationPipeline
                     .All
-                    .SelectMany(i => i.Invocation.ParameterValues.OfType<IArgumentModel>());
+                    .SelectMany(i => i.Invocation.FlattenedArgumentModels);
 
                 var failureResults = paramValues
                     .Select(model => new { model, result = Validate(model) })

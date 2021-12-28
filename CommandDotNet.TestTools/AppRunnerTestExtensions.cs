@@ -30,6 +30,9 @@ namespace CommandDotNet.TestTools
             }, middlewareStage, orderWithinStage));
         }
 
+        public static AppRunner UseTestEnv(this AppRunner runner, TestEnvironment environment) =>
+            runner.Configure(b => b.Environment = environment);
+
         /// <summary>
         /// Convenience wrapper for <see cref="CaptureState"/> to capture state from the <see cref="CommandContext"/>
         /// </summary>
