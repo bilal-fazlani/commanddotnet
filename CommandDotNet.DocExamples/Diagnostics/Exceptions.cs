@@ -227,7 +227,7 @@ Arguments:
         {
             var (exitCode, output) = typeof(Program_UseErrorHandler_Delegate.Program).InvokeMainMethod("Throw yikes");
             Assert.AreEqual(1, exitCode);
-            Assert.AreEqual("yikes (Parameter 'message')\r\n", output);
+            Assert.AreEqual($"yikes (Parameter 'message'){Environment.NewLine}", output);
         }
 
         [Test] 
@@ -235,7 +235,7 @@ Arguments:
         {
             var (exitCode, output) = typeof(Program_TryCatch.Program).InvokeMainMethod("Throw yikes");
             Assert.AreEqual(1, exitCode);
-            Assert.AreEqual("yikes (Parameter 'message')\r\n", output);
+            Assert.AreEqual($"yikes (Parameter 'message'){Environment.NewLine}", output);
         }
     }
 }
