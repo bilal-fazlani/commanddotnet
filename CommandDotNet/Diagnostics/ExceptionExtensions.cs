@@ -67,8 +67,13 @@ namespace CommandDotNet.Diagnostics
         }
         
         public static void Print(this Exception ex, Action<string?> writeLine, Indent? indent = null, 
-            bool includeProperties = false, bool includeData = false, bool includeStackTrace = false,
-            bool excludeTypeName = false)
+            // begin-snippet: exception_print_parameters
+            bool includeProperties = false,  // print exception properties
+            bool includeData = false,        // print values from ex.Data dictionary
+            bool includeStackTrace = false,  // print stack trace
+            bool excludeTypeName = false     // do not print exception type name
+            // end-snippet
+            )
         {
             if (ex is null)
             {
