@@ -43,12 +43,12 @@ By default, the case is only applied where the name has not been overridden in a
 ```c#
 public class App
 {
-    [Command(Name="migrateUser")]
-    public void MigrateUser([Option(LongName="DryRun")]bool dryRun){...}
+    [Command("migrateUser")]
+    public void MigrateUser([Option("DryRun")]bool dryRun){...}
 }
 ```
 
-the command is executed as `MigrateUser --DryRun`.
+the command is executed as `migrateUser --DryRun`.
 
 Use the `applyToNameOverrides` option to apply case conversion to migrateUser and DryRun. 
 
@@ -61,14 +61,25 @@ Use the `applyToNameOverrides` option to apply case conversion to migrateUser an
 
 ## Custom Name Transforamtions
 
-use `appRunner.Configure(c => c.NameTransformation = ...)` to apply custom name transformations.
+use `appRunner.Configure(b => b.NameTransformation = ...)` to apply custom name transformations.
 
 Example: [Humanizer middleare](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.NameCasing/HumanizerAppRunnerExtensions.cs)
 
-This example will lowercase all names
-
+<!-- snippet: name_casing_transformation -->
+<a id='snippet-name_casing_transformation'></a>
 ```c#
-appRunner.Configure.NameTransformation = 
-    (attributes, memberName, nameOverride, commandNodeType) 
-        => (nameOverride ?? memberName).ToLower()`
+/// <summary>Change the case of argument and command names to match the given cases</summary>
+/// <param name="appRunner"></param>
+/// <param name="case">The case to apply</param>
+/// <param name="applyToNameOverrides">Case should be applied to names overridden in attributes.</param>
+public static AppRunner UseNameCasing(this AppRunner appRunner, Case @case, bool applyToNameOverrides = false)
+{
+    return applyToNameOverrides
+        ? appRunner.Configure(b => b.NameTransformation = (_, memberName, nameOverride, _) =>
+            (nameOverride ?? memberName).ChangeCase(@case))
+        : appRunner.Configure(b => b.NameTransformation = (_, memberName, nameOverride, _) =>
+            nameOverride ?? memberName.ChangeCase(@case));
+}
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.NameCasing/HumanizerAppRunnerExtensions.cs#L7-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-name_casing_transformation' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
