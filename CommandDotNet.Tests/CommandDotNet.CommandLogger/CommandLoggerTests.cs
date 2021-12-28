@@ -96,8 +96,6 @@ options:
 Tool version  = testhost.dll 1.1.1.1
 .Net version  = {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription.Trim()}
 OS version    = {System.Runtime.InteropServices.RuntimeInformation.OSDescription.Trim()}
-Machine       = {Environment.MachineName}
-Username      = {Environment.UserDomainName}\{Environment.UserName}
 ***************************************"
                     }
                 });
@@ -177,6 +175,52 @@ AppConfig:
                             "  MiddlewarePipeline:",
                             "  ParameterResolvers:"
                         }
+                    }
+                });
+        }
+
+        [Fact]
+        public void MachineAndUser_CanBe_Shown()
+        {
+            new AppRunner<App>()
+                .UseCommandLogger(includeMachineAndUser: true)
+                .Verify(new Scenario
+                {
+                    When = { Args = "[cmdlog] Do" },
+                    Then =
+                    {
+                        Output = $@"
+***************************************
+Original input:
+  [cmdlog] Do
+
+command: Do
+
+arguments:
+
+  textOperand <Text>
+    value:
+    inputs:
+    default:
+
+options:
+
+  textOption <Text>
+    value:
+    inputs:
+    default:
+
+  password <password>
+    value:
+    inputs:
+    default:
+
+Tool version  = testhost.dll 1.1.1.1
+.Net version  = {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription.Trim()}
+OS version    = {System.Runtime.InteropServices.RuntimeInformation.OSDescription.Trim()}
+Machine       = {Environment.MachineName}
+Username      = {Environment.UserDomainName}\{Environment.UserName}
+***************************************"
                     }
                 });
         }

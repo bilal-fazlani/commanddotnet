@@ -11,7 +11,8 @@ namespace CommandDotNet.Diagnostics
         internal static AppRunner UseCommandLogger(AppRunner appRunner,
             Func<CommandContext, Action<string?>?>? writerFactory,
             bool includeSystemInfo,
-            bool includeAppConfig,
+            bool includeAppConfig, 
+            bool includeMachineAndUser,
             Func<CommandContext, IEnumerable<(string key, string value)>?>? additionalInfoCallback)
         {
             return appRunner.Configure(c =>
@@ -21,7 +22,7 @@ namespace CommandDotNet.Diagnostics
                     writerFactory,
                     includeSystemInfo,
                     includeAppConfig,
-                    additionalInfoCallback));
+                    includeMachineAndUser, additionalInfoCallback));
             });
         }
 
@@ -42,7 +43,9 @@ namespace CommandDotNet.Diagnostics
                     commandContext, 
                     writer, 
                     config.IncludeSystemInfo, 
-                    config.IncludeAppConfig);
+                    config.IncludeAppConfig,
+                    config.IncludeMachineAndUser,
+                    config.AdditionalHeadersCallback);
             }
 
             return next(commandContext);
