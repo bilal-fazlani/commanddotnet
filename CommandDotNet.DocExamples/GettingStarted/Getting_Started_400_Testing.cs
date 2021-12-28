@@ -5,7 +5,6 @@ using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.GettingStarted
 {
-    [TestFixture]
     public class Getting_Started_400_Testing
     {
         public class Program
