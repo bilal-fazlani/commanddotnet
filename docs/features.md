@@ -232,6 +232,7 @@ hide:
     - Intercept Console.Out and Console.Error
     - Spectre AnsiConsole support also with AnsiTestConsole
 - [x] IEnvironment and SystemEnvironment covering most members of System.Environment
+    - TestEnvironment and .UseTestEnv extension for tests
 
 - [x] TestDependencyResolver ([docs](TestTools/overview.md#testdependencyresolver))
 > `new TestDependencyResolver{ dbSvc, httpSvc }`

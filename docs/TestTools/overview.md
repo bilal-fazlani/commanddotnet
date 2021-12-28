@@ -173,8 +173,10 @@ The framework includes the following tools that can be used independently of the
 * handle ReadLine and ReadKey
 * covers most members of System.Console
 
-!!! Note
-    If you're using [CommandDotNet.Spectre](../OtherFeatures/spectre.md) use the `AnsiTestConsole` from the `CommandDotNet.Spectre.Testing`package to test the IAnsiConsole features work as expected.
+### [TestEnvironment](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/TestEnvironment.cs)
+
+* mock values for IEnvironment, an interface for System.Environment and System.Runtime.InteropServices.RuntimeInformation
+* make tests more reliable across machines and operating systems
 
 ### [TempFiles](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/TempFiles.cs)
 
