@@ -36,7 +36,7 @@ namespace CommandDotNet.DocExamples.Arguments.Arguments
             Program.AppRunner, "myapp.exe", "Prompt roy", 0,
             @"password: 
 u:roy p:rogers",
-            promptAnswers: new IAnswer[]{ new TextAnswer("rogers") });
+            promptAnswers: new IAnswer[]{ new Answer("rogers") });
 
         [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
     }
