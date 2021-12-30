@@ -48,7 +48,7 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                         Args = $"{nameof(App.Do)}",
                         OnPrompt = Respond.With(
                             new Answer(arg1Answer, prompt => prompt.StartsWith("arg1")),
-                            new TextAnswer("simple", prompt => prompt.StartsWith("opt1")))
+                            new Answer("simple", prompt => prompt.StartsWith("opt1")))
                     },
                     Then =
                     {
@@ -71,7 +71,7 @@ opt1 (Text): simple"
                         Args = $"{nameof(App.Do)}",
                         OnPrompt = Respond.With(
                             new Answer("take1".ToConsoleKeyInfos().AppendEscapeKey().AppendEscapeKey(), prompt => prompt.StartsWith("arg1")),
-                            new TextAnswer("not-used", prompt => prompt.StartsWith("arg1")))
+                            new Answer("not-used", prompt => prompt.StartsWith("arg1")))
                     },
                     Then =
                     {

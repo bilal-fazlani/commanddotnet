@@ -30,8 +30,8 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     {
                         Args = $"{nameof(App.Secure)}",
                         OnPrompt = Respond.With(
-                            new TextAnswer("lala", prompt => prompt.StartsWith("user")),
-                            new TextAnswer("fishies", prompt => prompt.StartsWith("password")))
+                            new Answer("lala", prompt => prompt.StartsWith("user")),
+                            new Answer("fishies", prompt => prompt.StartsWith("password")))
                     },
                     Then =
                     {
@@ -55,8 +55,8 @@ password (password):"
                     {
                         Args = $"{nameof(App.Secure)}",
                         OnPrompt = Respond.With(
-                            new TextAnswer("lala", prompt => prompt.StartsWith("user")),
-                            new TextAnswer("fishies\b\b\b\b\b\b\bnew", prompt => prompt.StartsWith("password")))
+                            new Answer("lala", prompt => prompt.StartsWith("user")),
+                            new Answer("fishies\b\b\b\b\b\b\bnew", prompt => prompt.StartsWith("password")))
                     },
                     Then =
                     {

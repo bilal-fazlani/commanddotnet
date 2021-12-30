@@ -2,6 +2,7 @@ using System;
 
 namespace CommandDotNet.TestTools.Prompts
 {
+    [Obsolete("Use Answer instead")]
     public class TextAnswer : Answer
     {
         /// <summary>Constructs a response for prompt of a single value</summary>

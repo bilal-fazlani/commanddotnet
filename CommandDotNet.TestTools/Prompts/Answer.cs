@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CommandDotNet.Extensions;
 using CommandDotNet.Prompts;
 
@@ -16,7 +17,28 @@ namespace CommandDotNet.TestTools.Prompts
         public Predicate<string>? PromptFilter { get; }
         public bool ShouldFail => false;
 
-        /// <summary>Constructs a response for prompt of a list of values</summary>
+        /// <summary>Constructs a response for prompt</summary>
+        /// <param name="text">The text that represent the console input.</param>
+        /// <param name="promptFilter">Applied to the prompt text. Use this to ensure the answer is for the correct prompt.</param>
+        /// <param name="reuse">When false, this answer is discarded after use.</param>
+        public Answer(string text, Predicate<string>? promptFilter = null, bool reuse = false)
+            : this(text.ToConsoleKeyInfos(), promptFilter, reuse)
+        {
+        }
+
+        /// <summary>Constructs a response for prompt</summary>
+        /// <param name="valueList">
+        /// The response values. Converted to an enumerable of
+        /// <see cref="ConsoleKeyInfo"/> delimited by <see cref="ConsoleKey.Enter"/>.
+        /// </param>
+        /// <param name="promptFilter">Applied to the prompt text. Use this to ensure the answer is for the correct prompt.</param>
+        /// <param name="reuse">When false, this answer is discarded after use.</param>
+        public Answer(IEnumerable<string> valueList, Predicate<string>? promptFilter = null, bool reuse = false)
+        : this(valueList.SelectMany(v => v.ToConsoleKeyInfos().AppendEnterKey()), promptFilter, reuse)
+        {
+        }
+
+        /// <summary>Constructs a response for prompt</summary>
         /// <param name="consoleKeys">The <see cref="ConsoleKeyInfo"/> that represent the console input.</param>
         /// <param name="promptFilter">Applied to the prompt text. Use this to ensure the answer is for the correct prompt.</param>
         /// <param name="reuse">When false, this answer is discarded after use.</param>

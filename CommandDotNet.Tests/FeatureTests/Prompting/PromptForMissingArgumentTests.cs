@@ -91,8 +91,8 @@ namespace CommandDotNet.Tests.FeatureTests.Prompting
                     {
                         Args = $"{nameof(App.Do)}",
                         OnPrompt = Respond.With(
-                            new TextAnswer("something", prompt => prompt.StartsWith("arg1")),
-                            new TextAnswer("simple", prompt => prompt.StartsWith("opt1"))
+                            new Answer("something", prompt => prompt.StartsWith("arg1")),
+                            new Answer("simple", prompt => prompt.StartsWith("opt1"))
                         )
                     },
                     Then =
@@ -179,8 +179,8 @@ simple
                     {
                         Args = $"{nameof(App.Secure)}",
                         OnPrompt = Respond.With(
-                            new TextAnswer("lala", prompt => prompt.StartsWith("user")),
-                            new TextAnswer("fishies", prompt => prompt.StartsWith("password")))
+                            new Answer("lala", prompt => prompt.StartsWith("user")),
+                            new Answer("fishies", prompt => prompt.StartsWith("password")))
                     },
                     Then =
                     {
@@ -204,8 +204,8 @@ password (password):"
                     {
                         Args = $"{nameof(App.Secure)}",
                         OnPrompt = Respond.With(
-                            new TextAnswer("lala", prompt => prompt.StartsWith("user")),
-                            new TextAnswer("fishies\b\b\b\b\b\b\bnew", prompt => prompt.StartsWith("password")))
+                            new Answer("lala", prompt => prompt.StartsWith("user")),
+                            new Answer("fishies\b\b\b\b\b\b\bnew", prompt => prompt.StartsWith("password")))
                     },
                     Then =
                     {
@@ -244,8 +244,8 @@ password (password):"
                     {
                         Args = $"{nameof(App.Flags)}",
                         OnPrompt = Respond.With(
-                            new TextAnswer("true", prompt => prompt.StartsWith("a ")),
-                            new TextAnswer("false", prompt => prompt.StartsWith("b "))
+                            new Answer("true", prompt => prompt.StartsWith("a ")),
+                            new Answer("false", prompt => prompt.StartsWith("b "))
                         )
                     },
                     Then = {AssertContext = ctx => ctx.ParamValuesShouldBe(true, false)}

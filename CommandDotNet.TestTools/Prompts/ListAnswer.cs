@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace CommandDotNet.TestTools.Prompts
 {
+    [Obsolete("Use Answer instead")]
     public class ListAnswer : Answer
     {
         /// <summary>Constructs a response for prompt of a list of values</summary>
