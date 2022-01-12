@@ -48,7 +48,7 @@ options:
     inputs:
     default:
 
-  password <password>
+  password <Text>
     value: *****
     inputs: ***** (from: --password *****)
     default:
@@ -88,7 +88,7 @@ options:
     inputs:
     default:
 
-  password <password>
+  password <Text>
     value:
     inputs:
     default:
@@ -210,7 +210,7 @@ options:
     inputs:
     default:
 
-  password <password>
+  password <Text>
     value:
     inputs:
     default:
@@ -256,7 +256,7 @@ options:
     inputs:
     default:
 
-  password <password>
+  password <Text>
     value:
     inputs:
     default:
@@ -300,7 +300,7 @@ options:
     inputs:
     default:
 
-  password <password>
+  password <Text>
     value:
     inputs:
     default:
@@ -364,7 +364,7 @@ options:
     inputs:
     default:
 
-  password <password>
+  password <Text>
     value:
     inputs:
     default:

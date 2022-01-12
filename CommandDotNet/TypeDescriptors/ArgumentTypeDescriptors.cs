@@ -21,7 +21,8 @@ namespace CommandDotNet.TypeDescriptors
                 // begin-snippet: type_descriptors_string
                 new DelegatedTypeDescriptor<string>(Resources.A.Type_Text, v => v),
                 // end-snippet
-
+                
+                new DelegatedTypeDescriptor<Password>(Resources.A.Type_Text, v => new Password(v)),
                 new DelegatedTypeDescriptor<char>(Resources.A.Type_Character, v => char.Parse(v)),
                 
                 new DelegatedTypeDescriptor<long>(Resources.A.Type_Number, v => long.Parse(v, CultureInfo.InvariantCulture)),

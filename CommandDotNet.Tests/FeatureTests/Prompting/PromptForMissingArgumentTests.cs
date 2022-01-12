@@ -186,7 +186,7 @@ simple
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("lala", new Password("fishies")),
                         Output = @"user (Text): lala
-password (password):"
+password (Text):"
                     }
                 });
         }
@@ -211,7 +211,7 @@ password (password):"
                     {
                         AssertContext = ctx => ctx.ParamValuesShouldBe("lala", new Password("new")),
                         Output = @"user (Text): lala
-password (password):"
+password (Text):"
                     }
                 });
         }

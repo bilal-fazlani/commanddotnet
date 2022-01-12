@@ -6,7 +6,7 @@ Options:
 
   -u | --username  <TEXT>
 
-  -p | --password  <PASSWORD>
+  -p | --password  <TEXT>
 
 Commands:
 

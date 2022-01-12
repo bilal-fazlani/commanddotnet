@@ -83,7 +83,7 @@ namespace CommandDotNet.Tests.FeatureTests.ArgumentDefaults
                     When = {Args = "Secure -h"},
                     Then =
                     {
-                        OutputContainsTexts = {"pwd  <PASSWORD>  [*****]"},
+                        OutputContainsTexts = {"pwd  <TEXT>  [*****]"},
                         OutputNotContainsTexts = {"secret"}
                     }
                 });
