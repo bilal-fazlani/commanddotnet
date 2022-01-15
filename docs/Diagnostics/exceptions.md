@@ -165,8 +165,6 @@ private static int ErrorHandler(CommandContext? ctx, Exception exception)
             includeMachineAndUser: true,
             includeAppConfig: false
         );
-
-        errorWriter.WriteLine();
     }
 
     // print help for the target command or root command
@@ -184,10 +182,7 @@ public void Throw(string message)
     };
 }
 ```
-
-And when an error occurs...
-
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Exceptions.cs#L118-L160' title='Snippet source file'>snippet source</a> | <a href='#snippet-exceptions_cmdlog_error_handler' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Exceptions.cs#L118-L158' title='Snippet source file'>snippet source</a> | <a href='#snippet-exceptions_cmdlog_error_handler' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: exceptions_throw_cmdlog -->

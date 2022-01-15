@@ -246,19 +246,27 @@ namespace CommandDotNet
             params Func<IArgument, ArgumentDefault?>[] getDefaultValueCallbacks)
             => SetArgumentDefaultsMiddleware.SetArgumentDefaultsFrom(appRunner, getDefaultValueCallbacks);
 
-        /// <summary></summary>
+        // begin-snippet: UseCommandLogger-parameters
+        /// <summary>Enable the command logger middleware</summary>
         /// <param name="appRunner">The <see cref="AppRunner"/></param>
-        /// <param name="writerFactory">If null, `cmdlog` directive is enabled with Console.Out as the target</param>
+        /// <param name="writerFactory">
+        /// Provide an action to capture the command logger output.
+        /// When the action is null,
+        /// the command will not be logged
+        /// When the parameter is null,
+        /// the `[cmdlog]` directive is enabled with Console.Out as the target
+        /// </param>
         /// <param name="excludeSystemInfo">Exclude OS, .net version and tool version</param>
         /// <param name="includeAppConfig">Prints the entire app configuration</param>
-        /// <param name="additionalInfoCallback">Additional information to include.</param>
         /// <param name="includeMachineAndUser">Include machine name, username</param>
+        /// <param name="additionalInfoCallback">Additional information to include.</param>
         public static AppRunner UseCommandLogger(this AppRunner appRunner,
             Func<CommandContext, Action<string?>?>? writerFactory = null,
             bool excludeSystemInfo = false,
             bool includeAppConfig = false,
-            Func<CommandContext, IEnumerable<(string key, string value)>?>? additionalInfoCallback = null,
-            bool includeMachineAndUser = false)
+            bool includeMachineAndUser = false,
+            Func<CommandContext, IEnumerable<(string key, string value)>?>? additionalInfoCallback = null)
+            // end-snippet
         {
             return CommandLoggerMiddleware.UseCommandLogger(appRunner, 
                 writerFactory, 

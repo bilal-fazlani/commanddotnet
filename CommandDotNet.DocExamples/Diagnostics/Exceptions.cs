@@ -139,8 +139,6 @@ namespace CommandDotNet.DocExamples.Diagnostics
                             includeMachineAndUser: true,
                             includeAppConfig: false
                         );
-
-                        errorWriter.WriteLine();
                     }
 
                     // print help for the target command or root command

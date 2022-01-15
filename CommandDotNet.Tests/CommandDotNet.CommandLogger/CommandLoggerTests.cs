@@ -333,7 +333,7 @@ header2  = value2
             var sb = new StringBuilder();
 
             new AppRunner<App>()
-                .UseCommandLogger(excludeSystemInfo: true, writerFactory: _ => text => sb.AppendLine(text))
+                .UseCommandLogger(excludeSystemInfo: true, writerFactory: _ => text => sb.Append(text))
                 .Verify(new Scenario
                 {
                     When = {Args = "Do"},

@@ -28,9 +28,11 @@ namespace CommandDotNet.Diagnostics
 
         private static Action<string?>? DefaultIfDirectiveRequest(CommandContext ctx)
         {
+            // begin-snippet: command_logger_directive
             return ctx.Tokens.TryGetDirective("cmdlog", out _) 
-                ? s => ctx.Console.Out.WriteLine(s)
+                ? s => ctx.Console.Out.Write(s)
                 : null;
+            // end-snippet
         }
 
         private static Task<int> CommandLogger(CommandContext commandContext, ExecutionDelegate next)
