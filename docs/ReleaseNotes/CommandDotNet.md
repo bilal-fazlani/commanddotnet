@@ -1,5 +1,16 @@
 # CommandDotNet
 
+## 6.0.3
+
+### Improvements
+
+* CommandLogger no longer prints Machine and User info by default. They can be enabled via `UseCommandLogger(includeMachineAndUser: true)`
+* Change type display name for doubles and floats to Decimal.  Size does not matter, just as it didn't with Number. This gives us two numeric descriptions: Number and Decimal.
+
+### Bug fixes
+
+* Fixed [bug](https://github.com/bilal-fazlani/commanddotnet/issues/418) where version option did not work when the program was published as a single executable file
+
 ## 6.0.2
 
 Fix bug in arity validation where validation was skipped non-nullable value types with default values on argument models
