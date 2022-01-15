@@ -70,7 +70,7 @@ namespace CommandDotNet.Diagnostics
                 sb.AppendLine(context.AppConfig.ToString(indent.Increment()));
             }
 
-            sb.Append("***************************************");
+            sb.AppendLine("***************************************");
             writer ??= context.Console.Out.Write;
             writer(sb.ToString());
         }
