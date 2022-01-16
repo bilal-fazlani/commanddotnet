@@ -17,18 +17,30 @@ namespace CommandDotNet.Example.Commands
         public void Echo(
             IConsole console,
             CancellationToken cancellationToken,
-            [Operand] IEnumerable<string> inputs, 
+            [Operand] IEnumerable<string>? inputs,
+            [Option('j', Description = "Use $* to direct piped input to this option")] IEnumerable<string>? hijack,
             [Option] int times = 1, 
             [Option(Description = "sleep N seconds between each echo")] int sleep = 0)
         {
-            foreach (var input in inputs)
+            if (hijack is not null)
             {
-                for (int i = 0; i < times; i++)
+                console.WriteLine("piped input directed to the hijack option");
+                foreach (var s in hijack)
                 {
-                    console.Out.WriteLine(input);
-                    if (sleep > 0)
+                    console.WriteLine(s);
+                }
+            }
+            else
+            {
+                foreach (var input in inputs)
+                {
+                    for (int i = 0; i < times; i++)
                     {
-                        cancellationToken.WaitHandle.WaitOne(TimeSpan.FromSeconds(sleep));
+                        console.WriteLine(input);
+                        if (sleep > 0)
+                        {
+                            cancellationToken.WaitHandle.WaitOne(TimeSpan.FromSeconds(sleep));
+                        }
                     }
                 }
             }

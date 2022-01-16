@@ -21,10 +21,10 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 {
                     When =
                     {
-                        Args = "Lists -o $*",
+                        Args = "Lists -o ^",
                         PipedInput = new[] { "aaa", "bbb" }
                     },
-                    Then = { AssertContext = ctx => ctx.ParamValuesShouldBe(new[] { "$*" }, null) }
+                    Then = { AssertContext = ctx => ctx.ParamValuesShouldBe(new[] { "^" }, null) }
                 });
         }
 
@@ -51,7 +51,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 {
                     When =
                     {
-                        Args = "Lists -o $*",
+                        Args = "Lists -o ^",
                         PipedInput = new[] { "aaa", "bbb" }
                     },
                     Then = { AssertContext = ctx => ctx.ParamValuesShouldBe(new[] { "aaa", "bbb" }, null) }
@@ -66,7 +66,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 {
                     When =
                     {
-                        Args = "Lists $*",
+                        Args = "Lists ^",
                         PipedInput = new[] { "aaa", "bbb" }
                     },
                     Then = { AssertContext = ctx => ctx.ParamValuesShouldBe(null, new[] { "aaa", "bbb" }) }
@@ -81,7 +81,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 {
                     When =
                     {
-                        Args = "Singles -o $*",
+                        Args = "Singles -o ^",
                         PipedInput = new[] { "aaa", "bbb" }
                     },
                     Then = { AssertContext = ctx => ctx.ParamValuesShouldBe("aaa", null) }
@@ -96,7 +96,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 {
                     When =
                     {
-                        Args = "Singles $*",
+                        Args = "Singles ^",
                         PipedInput = new[] { "aaa", "bbb" }
                     },
                     Then = { AssertContext = ctx => ctx.ParamValuesShouldBe(null, "aaa") }
@@ -111,7 +111,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
                 {
                     When =
                     {
-                        Args = "Lists -o $* $*",
+                        Args = "Lists -o ^ ^",
                         PipedInput = new[] { "aaa", "bbb" }
                     },
                     Then =

@@ -119,7 +119,7 @@ disabled b1 Beatrix (inactive)",
                 Program.userSvc.GetUsers().Select(u => u.Id).Where(id => id != "c3").ToArray()));
 
         public static BashSnippet UserWelcome = new("piped_arguments_options_notify",
-            new AppRunner<Program_Options>(), "users.exe", "Welcome c3 --notify $*", 0,
+            new AppRunner<Program_Options>(), "users.exe", "Welcome c3 --notify ^", 0,
             @"welcome Cris
 notify: a1 Avery (active)
 notify: b1 Beatrix (active)",

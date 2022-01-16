@@ -32,7 +32,7 @@ namespace CommandDotNet
         /// If not specified when executing a command, piped input will be directed to
         /// the final operand if it is a list.
         /// </summary>
-        public string? DefaultPipeTargetSymbol { get; set; } = "$*";
+        public string? DefaultPipeTargetSymbol { get; set; } = "^";
 
         /// <summary>
         /// When true, arity is not validated.
