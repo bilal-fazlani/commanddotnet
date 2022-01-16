@@ -1,5 +1,11 @@
 # CommandDotNet.TestTools
 
+## 5.0.1
+
+Added [TestEnvironment](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/TestEnvironment.cs) and `.UseTestEnv(...)` registration method for tests.
+
+Obsoleted ListAnswer and TextAnswer with by adding the constructors to Answer, improving discoverability.
+
 ## 5.0.0
 
 Changing default behavior of TestConsole to trim whitespace from the end of the output. This removes the trailing newlines, making the test ssertions cleaner and more what you'd expect.
