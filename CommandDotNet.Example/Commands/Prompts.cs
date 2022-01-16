@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Prompts;
-using CommandDotNet.Rendering;
 using Spectre.Console;
 
 namespace CommandDotNet.Example.Commands

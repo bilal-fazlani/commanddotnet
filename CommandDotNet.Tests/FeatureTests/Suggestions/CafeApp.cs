@@ -1,5 +1,3 @@
-using CommandDotNet.Rendering;
-
 namespace CommandDotNet.Tests.FeatureTests.Suggestions
 {
     // example borrowed from

@@ -1,6 +1,5 @@
 ﻿using System;
 using CommandDotNet.Prompts;
-using CommandDotNet.Rendering;
 using Spectre.Console;
 
 namespace CommandDotNet.Spectre

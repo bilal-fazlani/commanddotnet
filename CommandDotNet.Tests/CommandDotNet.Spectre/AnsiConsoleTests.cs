@@ -1,4 +1,3 @@
-using CommandDotNet.Rendering;
 using CommandDotNet.Spectre;
 using FluentAssertions;
 using Spectre.Console;
