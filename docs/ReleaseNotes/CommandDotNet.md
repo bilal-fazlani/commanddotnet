@@ -1,5 +1,9 @@
 # CommandDotNet
 
+## 6.0.4
+
+Changed default pipe target from `$*` to `^`.  The `$` wasn't working well from bash prompts.
+
 ## 6.0.3
 
 ### Improvements

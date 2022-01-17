@@ -120,7 +120,7 @@ And let's welcome Cris and send a notification to the other users
 <!-- snippet: piped_arguments_options_notify -->
 <a id='snippet-piped_arguments_options_notify'></a>
 ```bash
-$ users.exe list -i | users.exe Welcome c3 --notify $*
+$ users.exe list -i | users.exe Welcome c3 --notify ^
 welcome Cris
 notify: a1 Avery (active)
 notify: b1 Beatrix (active)

@@ -187,7 +187,7 @@ AppConfig:
         BooleanMode: Implicit
         DefaultArgumentMode: Operand
         DefaultOptionSplit: 
-        DefaultPipeTargetSymbol: $*
+        DefaultPipeTargetSymbol: ^
         SkipArityValidation: False
       ArgumentTypeDescriptors: ArgumentTypeDescriptors:
         ErrorReportingDescriptor > CommandDotNet.TypeDescriptors.BoolTypeDescriptor
