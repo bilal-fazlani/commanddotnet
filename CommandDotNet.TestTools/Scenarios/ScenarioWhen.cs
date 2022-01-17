@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using CommandDotNet.Rendering;
 using CommandDotNet.TestTools.Prompts;
 
 namespace CommandDotNet.TestTools.Scenarios

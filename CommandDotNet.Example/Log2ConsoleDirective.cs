@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using CommandDotNet.Directives;
 using CommandDotNet.Execution;
 using CommandDotNet.Logging;
-using CommandDotNet.Rendering;
 
 namespace CommandDotNet.Example
 {

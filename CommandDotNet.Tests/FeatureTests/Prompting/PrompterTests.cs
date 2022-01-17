@@ -1,5 +1,4 @@
 ﻿using CommandDotNet.Prompts;
-using CommandDotNet.Rendering;
 using CommandDotNet.TestTools.Prompts;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;

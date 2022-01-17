@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using CommandDotNet.Extensions;
 using CommandDotNet.Logging;
-using CommandDotNet.Rendering;
 
 namespace CommandDotNet.Prompts
 {

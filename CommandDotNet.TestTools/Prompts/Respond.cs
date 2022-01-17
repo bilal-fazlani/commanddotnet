@@ -1,7 +1,6 @@
 using System;
 using CommandDotNet.Extensions;
 using CommandDotNet.Prompts;
-using CommandDotNet.Rendering;
 
 namespace CommandDotNet.TestTools.Prompts
 {

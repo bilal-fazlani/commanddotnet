@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using CommandDotNet.Rendering;
 
 namespace CommandDotNet.Example.Commands
 {

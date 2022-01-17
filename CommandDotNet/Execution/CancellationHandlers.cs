@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using CommandDotNet.Extensions;
-using CommandDotNet.Rendering;
 
 namespace CommandDotNet.Execution
 {

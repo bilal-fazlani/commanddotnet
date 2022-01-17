@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using CommandDotNet.Builders;
 using CommandDotNet.Execution;
-using CommandDotNet.Rendering;
 
 namespace CommandDotNet.Diagnostics
 {
