@@ -175,6 +175,8 @@ AppConfig:
         ErrorReportingDescriptor > DelegatedTypeDescriptor<Single>: 'Decimal'
         ErrorReportingDescriptor > CommandDotNet.TypeDescriptors.ComponentModelTypeDescriptor
         ErrorReportingDescriptor > CommandDotNet.TypeDescriptors.StringCtorTypeDescriptor
+      Commands:         CommandAppSettings:
+        InheritCommandsFromBaseClasses: False
       DisableDirectives: False
       Help:         AppHelpSettings:
         ExpandArgumentsInUsage: True

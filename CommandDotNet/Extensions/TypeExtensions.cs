@@ -9,9 +9,13 @@ namespace CommandDotNet.Extensions
 {
     internal static class TypeExtensions
     {
-        internal static IEnumerable<MethodInfo> GetDeclaredMethods(this Type type)
+        internal static IEnumerable<MethodInfo> GetCommandMethods(this Type type, bool includeFromBaseClasses)
         {
-            return type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+            var bindingFlags = includeFromBaseClasses
+                ? BindingFlags.Public | BindingFlags.Instance
+                : BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+
+            return type.GetMethods(bindingFlags)
                 .Where(m => !m.IsSpecialName)
                 .Where(m => !typeof(IDisposable).IsAssignableFrom(type) || m.Name != nameof(IDisposable.Dispose));
         }

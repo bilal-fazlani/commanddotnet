@@ -77,7 +77,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             MethodInfo? defaultCommandMethodInfo = null;
             List<MethodInfo> localCommandMethodInfos = new();
 
-            foreach (var method in CommandHostClassType.GetDeclaredMethods())
+            foreach (var method in CommandHostClassType.GetCommandMethods(appConfig.AppSettings.Commands.InheritCommandsFromBaseClasses))
             {
                 if (MethodDef.IsInterceptorMethod(method))
                 {
