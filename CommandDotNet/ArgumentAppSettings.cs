@@ -3,7 +3,7 @@ using CommandDotNet.Extensions;
 
 namespace CommandDotNet
 {
-    public class ArgumentAppSettings :IIndentableToString
+    public class ArgumentAppSettings : IIndentableToString
     {
         /// <summary>
         /// When Explicit, boolean options require a 'true' or 'false' value be specified.<br/>
@@ -11,7 +11,7 @@ namespace CommandDotNet
         /// and the next argument will be considered a new argument.
         /// </summary>
         public BooleanMode BooleanMode { get; set; } = BooleanMode.Implicit;
-        
+
         /// <summary>
         /// When arguments are not decorated with <see cref="OperandAttribute"/> or <see cref="OptionAttribute"/>
         /// DefaultArgumentMode is used to determine which type of argument to assign.
@@ -40,7 +40,6 @@ namespace CommandDotNet
         /// <see href="https://docs.microsoft.com/en-us/dotnet/csharp/nullable-references">NRTs</see>.
         /// </summary>
         public bool SkipArityValidation { get; set; }
-
 
         public override string ToString()
         {

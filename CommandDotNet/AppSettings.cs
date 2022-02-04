@@ -44,6 +44,9 @@ namespace CommandDotNet
         /// </summary>
         public bool DisableDirectives { get; set; }
 
+        /// <summary>Settings specific to commands</summary>
+        public CommandAppSettings Commands { get; set; } = new();
+
         /// <summary>Settings specific to arguments</summary>
         public ArgumentAppSettings Arguments { get; set; } = new();
 
