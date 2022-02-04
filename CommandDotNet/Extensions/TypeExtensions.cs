@@ -17,6 +17,7 @@ namespace CommandDotNet.Extensions
 
             return type.GetMethods(bindingFlags)
                 .Where(m => !m.IsSpecialName)
+                .Where(m => m.DeclaringType != typeof(object))
                 .Where(m => !typeof(IDisposable).IsAssignableFrom(type) || m.Name != nameof(IDisposable.Dispose));
         }
 

@@ -1,5 +1,10 @@
 # CommandDotNet
 
+## 6.0.5
+
+Public methods from base classes can be commands. Set `AppSettings.Commands.InheritCommandsFromBaseClasses = true` to include public methods from base classes.
+Methods from `System.Object` and `IDisposable` are not included.
+
 ## 6.0.4
 
 Changed default pipe target from `$*` to `^`.  The `$` wasn't working well from bash prompts.

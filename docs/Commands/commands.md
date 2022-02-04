@@ -1,6 +1,6 @@
 # Commands
 
-Commands are be defined by methods and classes.
+Commands are defined by methods and classes.
 
 Using our calculator example...
 
@@ -38,6 +38,10 @@ Command methods must:
     - when the return type is `int` or `Task<int>` the value is used as the exit code.
 
 Command methods may be async.
+
+Only public methods defined within the class will be commands. Methods from base classes are not included. 
+Set `AppSettings.Commands.InheritCommandsFromBaseClasses = true` to include public methods from base classes. 
+Methods from `System.Object` and `IDisposable` are not included.
 
 ## Command Attribute
 
