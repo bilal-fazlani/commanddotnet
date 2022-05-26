@@ -171,8 +171,8 @@ Parse usage: [parse:t:raw] to include token transformations.
                 IConsole console,
                 [Operand] string opd,
                 [Operand] List<string> opdList,
-                [Option('a', (string)null)] bool optA = false,
-                [Option('b', (string)null)] bool optB = false,
+                [Option('a', (string?)null)] bool optA = false,
+                [Option('b', (string?)null)] bool optB = false,
                 [Option] string? lala = null,
                 [Option('l')] List<string>? optList = null)
             {

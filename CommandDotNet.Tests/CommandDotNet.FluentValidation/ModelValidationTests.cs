@@ -246,7 +246,7 @@ Usage: testhost.dll Save <Id> <Name> <Email>"
         public class Employee : IArgumentModel
         {
             [OrderByPositionInClass]
-            public Person Person { get; set; }
+            public Person Person { get; set; } = null!;
 
             [Operand]
             public string? Position { get; set; } = null!;

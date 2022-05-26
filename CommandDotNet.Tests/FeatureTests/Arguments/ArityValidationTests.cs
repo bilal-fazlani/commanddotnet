@@ -207,7 +207,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
             public class ModelOfUris : IArgumentModel
             {
-                public Uri RequiredUri { get; set; }
+                public Uri RequiredUri { get; set; } = null!;
                 public Uri? NullableUri { get; set; }
                 public Uri DefaultUri { get; set; } = new("http://google.com");
             }
