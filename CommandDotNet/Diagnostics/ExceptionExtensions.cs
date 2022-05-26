@@ -148,7 +148,7 @@ namespace CommandDotNet.Diagnostics
 
             if (exception is TargetInvocationException { InnerException: { } } tie)
             {
-                exception = EscapeWrappers(tie.InnerException).WithDataFrom(tie);
+                exception = EscapeWrappers(tie.InnerException!).WithDataFrom(tie);
             }
 
             return exception;
