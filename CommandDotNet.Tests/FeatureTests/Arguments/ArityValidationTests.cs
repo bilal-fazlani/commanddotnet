@@ -17,13 +17,6 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
 
         public ArityValidationTests(ITestOutputHelper output) => Ambient.Output = output;
 
-        [Fact]
-        public void NullabilityInfoContext_IsSupported_by_test_project()
-        {
-            NullabilityInfoContext.IsSupported.Should().BeTrue();
-            // "System.Reflection.NullabilityInfoContext.IsSupported"
-        }
-
         [Fact(Skip = "Has to be run by itself to work. Only good for manual testing.")]
         //[Fact]
         public void Missing_required_single_ValueType_does_not_fail_when_NullabilityInfoContext_is_disabled()

@@ -170,8 +170,9 @@ Arguments:
                             "Please ensure it's injected via IoC or has a default constructor.",
                             "This exception could also occur if default constructor threw an exception",
                             // assert stack trace is printed
-                            " ---> System.MissingMethodException: No parameterless constructor defined for type " +
-                            "'CommandDotNet.Tests.CommandDotNet.FluentValidation.ModelValidationTests+InvalidPersonValidator'"
+                            " ---> System.MissingMethodException: Cannot dynamically create an instance of type " +
+                            "'CommandDotNet.Tests.CommandDotNet.FluentValidation.ModelValidationTests+InvalidPersonValidator'. " +
+                            "Reason: No parameterless constructor defined."
                         }
                     }
                 });
