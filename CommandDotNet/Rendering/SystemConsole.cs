@@ -11,6 +11,10 @@ using SysConsole=System.Console;
 
 namespace CommandDotNet.Rendering
 {
+   // [CA1416] This call site is reachable on all platforms.
+   // the warning does not seem to distinguish between getters and setters
+   #pragma warning disable CA1416
+   
     public class SystemConsole : IConsole
     {
         private const string Windows = "windows";
