@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace CommandDotNet.Parsing
@@ -15,7 +16,7 @@ namespace CommandDotNet.Parsing
                 _operands = new Queue<Operand>(operands);
             }
 
-            public bool TryDequeue(out Operand? operand)
+            public bool TryDequeue([NotNullWhen(true)] out Operand? operand)
             {
                 operand = Dequeue();
                 return operand is { };

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using CommandDotNet.Builders;
 using SimpleInjector;
 
@@ -18,7 +19,7 @@ namespace CommandDotNet.IoC.SimpleInjector
             return _container.GetInstance(type);
         }
 
-        public bool TryResolve(Type type, out object? item)
+        public bool TryResolve(Type type, [NotNullWhen(true)] out object? item)
         {
             // SimpleInjector's GetInstance will throw an exception if type is not registered.
             // Converting to IServiceProvider will return null if not registered.
