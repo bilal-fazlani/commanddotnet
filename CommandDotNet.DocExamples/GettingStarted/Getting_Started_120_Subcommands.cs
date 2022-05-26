@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.GettingStarted
 {
+#pragma warning disable CS8618
     [TestFixture]
     public class Getting_Started_120_Subcommands
     {

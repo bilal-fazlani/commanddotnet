@@ -62,7 +62,7 @@ namespace CommandDotNet.DocExamples.Diagnostics
                         })
                         .UseErrorHandler((ctx, ex) =>
                         {
-                            ctx.Console.Error.WriteLine(ex.Message);
+                            (ctx?.Console.Error ?? Console.Error).WriteLine(ex.Message);
                             return ExitCodes.Error.Result;
                         })
                         .Run(args);

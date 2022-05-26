@@ -2,7 +2,12 @@ using System;
 using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.Arguments.Arguments
-{
+{ 
+// Cannot convert null literal to non-nullable reference type.
+// These are intentional for the examples for cases where NRTs are not enabled.
+#pragma warning disable CS8625
+#pragma warning disable CS8618
+    
     [TestFixture]
     public class Arguments_Arity
     {

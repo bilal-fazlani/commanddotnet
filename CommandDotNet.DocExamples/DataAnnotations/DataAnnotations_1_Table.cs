@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.DataAnnotations
 {
+#pragma warning disable CS8618
     [TestFixture]
     public class DataAnnotations_1_Table
     {

@@ -17,7 +17,7 @@ namespace CommandDotNet.DocExamples
         public string Output { get; }
         public string FileText { get; }
 
-        public string[] PipedInput { get; }
+        public string[]? PipedInput { get; }
 
         public MemberInfo? Member { get; set; }
         public string? MemberName => Member is null ? null : $"{Member.DeclaringType!.Name}.{Member.Name}";
