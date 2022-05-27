@@ -60,7 +60,7 @@ public CommandAttribute(string? name)
     Name = name;
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/CommandAttribute.cs#L15-L68' title='Snippet source file'>snippet source</a> | <a href='#snippet-commandattribute-properties' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/CommandAttribute.cs#L14-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-commandattribute-properties' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 `IgnoreUnexpectedOperands` and `ArgumentSeparatorStrategy` delegate to another member. C# does not support nullable property types so this is how CommandDotNet knows the value was explicitly set by the developer.

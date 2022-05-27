@@ -62,7 +62,7 @@ public class Algorithms
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_120_Subcommands.cs#L11-L58' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-120-subcommands' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_120_Subcommands.cs#L12-L59' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-120-subcommands' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Notice the use of `[Subcommand]` on either a nested class (Trigonometry) or a property of the type of the class (Algorithms). 

@@ -66,7 +66,7 @@ public class Model : IArgumentModel
     [Operand] public Uri DefaultRefType { get; set; } = new ("http://apple.com");
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Arity.cs#L12-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Arity.cs#L17-L31' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: arguments_arity_help -->
@@ -134,7 +134,7 @@ public void DefaultCommand(
         [Option] bool[]? nullableBool, [Option] Uri[]? nullableRefType,
         [Option] bool[] optionalBool = null, [Option] Uri[] optionalRefType = null)
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Arity.cs#L88-L93' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity_collection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Arity.cs#L93-L98' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity_collection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: arguments_arity_collection_help -->
