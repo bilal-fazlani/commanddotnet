@@ -90,7 +90,7 @@ Data:
   non-serializable-key: non-serializable-value
 StackTrace:
   at CommandDotNet.Tests.UnitTests.Extensions.TestException.ThrowEx() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 46
-  at CommandDotNet.Tests.UnitTests.Extensions.TestException.Build() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line 31");
+  at CommandDotNet.Tests.UnitTests.Extensions.TestException.Build() in CommandDotNet.Tests/UnitTests/Extensions/TestException.cs:line");
             }
         }
     }
