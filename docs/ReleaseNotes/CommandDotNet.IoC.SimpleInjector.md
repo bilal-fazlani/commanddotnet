@@ -1,5 +1,10 @@
 # CommandDotNet.IoC.SimpleInjector
 
+## 5.0.1
+
+* update to dotnet 6
+* use `NotNullWhen(true)` on TryResolve to inform compiler the value is null when the method returns false.
+
 ## 4.0.1
 
 remove nuget package refs no longer required after move to net5.0

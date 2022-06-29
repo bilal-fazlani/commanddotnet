@@ -1,5 +1,11 @@
 # CommandDotNet.TestTools
 
+## 6.0.1
+
+* update to dotnet 6
+*  use `NotNullWhen(true)` on TestDependencyResolver.TryResolve to inform compiler the value is null when the method returns false.
+* update ResourcesDef.GenerateProxyClass to specify nullable parameters
+
 ## 5.0.1
 
 Added [TestEnvironment](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/TestEnvironment.cs) and `.UseTestEnv(...)` registration method for tests.

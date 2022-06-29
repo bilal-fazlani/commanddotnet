@@ -1,5 +1,9 @@
 # CommandDotNet.DataAnnotations
 
+## 3.0.1
+
+* update to dotnet 6
+
 ## 2.0.3
 
 Ensure DataAnnotations will run before arity is validated. DataAnnotations could be more specific.

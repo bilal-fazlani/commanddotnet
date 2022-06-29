@@ -1,5 +1,9 @@
 # CommandDotNet.FluentValidation
 
+## 7.0.1
+
+* update to dotnet 6
+
 ## 5.0.1
 
 Ensure FluentValidation will run before arity is validated. FluentValidation could be more specific.

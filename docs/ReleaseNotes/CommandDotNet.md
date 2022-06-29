@@ -1,5 +1,16 @@
 # CommandDotNet
 
+## 7.0.1
+
+* update to dotnet 6
+  * able to assume NRTs are enabled by default
+* use `NotNullWhen(true)` on IDependencyResolver.TryResolve to inform compiler the value is null when the method returns false.
+  * also for TryGetDirective middleware extension method
+
+### Remove previously obsoleted code
+
+* setter for CommandAttribute.Name, Operand.Name, OptionAttribute.ShortName and OptionAttribute.LongName.
+
 ## 6.0.5
 
 Public methods from base classes can be commands. Set `AppSettings.Commands.InheritCommandsFromBaseClasses = true` to include public methods from base classes.

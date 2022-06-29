@@ -1,5 +1,9 @@
 # CommandDotNet.NewerReleasesAlerts
 
+## 4.0.1
+
+* update to dotnet 6
+
 ## 3.0.1
 
 remove nuget package refs no longer required after move to net5.0

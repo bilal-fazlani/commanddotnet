@@ -1,5 +1,9 @@
 # CommandDotNet.Spectre
 
+## 3.0.1
+
+* update to dotnet 6
+
 ## 2.0.2
 
 minor change to capture more output from IAnsiConsole.Out in tests
