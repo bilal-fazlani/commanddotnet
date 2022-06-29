@@ -29,7 +29,7 @@ namespace CommandDotNet.Example.Commands
                     console.WriteLine(s);
                 }
             }
-            else
+            else if (inputs is not null)
             {
                 foreach (var input in inputs)
                 {

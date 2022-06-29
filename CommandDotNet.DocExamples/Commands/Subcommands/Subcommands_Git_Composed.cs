@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.Commands.Subcommands
 {
+#pragma warning disable CS8618
     public class Subcommands_Git_Composed
     {
         // begin-snippet: subcommands_git_composed

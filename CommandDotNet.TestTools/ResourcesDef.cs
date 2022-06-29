@@ -110,7 +110,7 @@ namespace CommandDotNet.TestTools
             foreach (var method in Methods)
             {
                 var parameters = method.GetParameters();
-                var paramDef = parameters.Select(p => $"string {p.Name}").ToCsv(", ");
+                var paramDef = parameters.Select(p => $"string{(p.IsNullable() ? "?" : "")} {p.Name}").ToCsv(", ");
                 var paramPlaceHolders = parameters.Select((_, i) => $"\"{{{i}}}\"").ToCsv(", ");
                 var paramPassThrus = parameters.Select(p => $"{p.Name}").ToCsv(", ");
 

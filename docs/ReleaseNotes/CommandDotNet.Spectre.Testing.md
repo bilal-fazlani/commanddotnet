@@ -1,5 +1,9 @@
 # CommandDotNet.Spectre.Testing
 
+## 3.0.1
+
+* update to dotnet 6
+
 ## 2.0.2
 
 option to trim ending whitespace when getting test console output

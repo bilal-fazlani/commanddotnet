@@ -1,11 +1,14 @@
-﻿namespace CommandDotNet.Builders
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace CommandDotNet.Builders
 {
     public static class DependencyResolverExtensions
     {
         public static T? Resolve<T>(this IDependencyResolver resolver) where T : class 
             => (T?)resolver.Resolve(typeof(T));
 
-        public static bool TryResolve<T>(this IDependencyResolver resolver, out T? item)
+        public static bool TryResolve<T>(this IDependencyResolver resolver, 
+            [NotNullWhen(true)] out T? item)
             where T : class
         {
             var result = resolver.TryResolve(typeof(T), out var localItem);

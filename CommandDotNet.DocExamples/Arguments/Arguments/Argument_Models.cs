@@ -6,6 +6,8 @@ using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.Arguments.Arguments
 {
+#pragma warning disable CS8618
+    
     [TestFixture]
     public class Argument_Models
     {

@@ -12,30 +12,16 @@ namespace CommandDotNet
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property)]
     public class OptionAttribute : Attribute, INameAndDescription
     {
-        private char? _shortName;
-
-        private string? _longName;
-
         /// <summary>
         /// The single character short name for the option.
         /// </summary>
-        [Obsolete("Use constructors instead of setting this property")]
-        public char? ShortName
-        {
-            get => _shortName;
-            set => _shortName = value;
-        }
+        public char? ShortName { get; }
 
         /// <summary>
         /// The long name for the option. Defaults to the parameter or property name.<br/>
         /// Set to null to prevent the option from having a long name.
         /// </summary>
-        [Obsolete("Use constructors instead of setting this property")]
-        public string? LongName
-        {
-            get => _longName;
-            set => SetLongName(value);
-        }
+        public string? LongName { get; private set; }
 
         /// <summary>
         /// True when <see cref="LongName"/> is explicitly set to null.<br/>
@@ -43,7 +29,7 @@ namespace CommandDotNet
         /// </summary>
         public bool NoLongName { get; private set; }
         
-        string? INameAndDescription.Name => _longName;
+        string? INameAndDescription.Name => LongName;
         
         /// <summary>The description to show in the help</summary>
         public string? Description { get; set; }
@@ -110,7 +96,7 @@ namespace CommandDotNet
         /// </param>
         public OptionAttribute(char shortName, [CallerLineNumber] int __callerLineNumber = 0)
         {
-            _shortName = shortName;
+            ShortName = shortName;
             CallerLineNumber = __callerLineNumber;
         }
 
@@ -148,7 +134,7 @@ namespace CommandDotNet
         public OptionAttribute(char shortName, string? longName, [CallerLineNumber] int __callerLineNumber = 0)
         {
             SetLongName(longName);
-            _shortName = shortName;
+            ShortName = shortName;
             CallerLineNumber = __callerLineNumber;
         }
 
@@ -167,7 +153,7 @@ namespace CommandDotNet
             }
 
             NoLongName = longName == null;
-            _longName = longName;
+            LongName = longName;
         }
     }
 }

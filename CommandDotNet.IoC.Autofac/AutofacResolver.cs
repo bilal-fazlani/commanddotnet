@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Autofac;
 using CommandDotNet.Builders;
 
@@ -18,7 +19,7 @@ namespace CommandDotNet.IoC.Autofac
             return _container.Resolve(type);
         }
 
-        public bool TryResolve(Type type, out object? item)
+        public bool TryResolve(Type type, [NotNullWhen(true)] out object? item)
         {
             return _container.TryResolve(type, out item);
         }

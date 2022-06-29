@@ -13,10 +13,7 @@ namespace CommandDotNet.Execution
         internal static AppRunner UseArityValidation(this AppRunner appRunner) =>
             appRunner.Configure(c =>
                 {
-                    if (NullabilityInfoContext.IsSupported)
-                    {
-                        c.UseMiddleware(ValidateArity, MiddlewareSteps.ValidateArity);
-                    }
+                    c.UseMiddleware(ValidateArity, MiddlewareSteps.ValidateArity);
                 });
 
         private static Task<int> ValidateArity(CommandContext ctx, ExecutionDelegate next)

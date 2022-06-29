@@ -6,6 +6,8 @@ using CommandDotNet.Tokens;
 
 namespace CommandDotNet.TestTools
 {
+#pragma warning disable CS8618
+    
     public class TestEnvironment : IEnvironment
     {
         public string[]? CommandLineArgs;

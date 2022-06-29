@@ -12,8 +12,7 @@ namespace CommandDotNet
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property)]
     public class OperandAttribute : Attribute, INameAndDescription
     {
-        [Obsolete("Use constructor instead of setting this property")]
-        public string? Name { get; set; }
+        public string? Name { get; }
         
         /// <summary>The description to show in the help</summary>
         public string? Description { get; set; }
@@ -40,6 +39,7 @@ namespace CommandDotNet
         /// <summary>
         /// Identifies a property or parameter as an <see cref="Operand"/>, aka positional argument.
         /// </summary>
+        /// <param name="name">the name of the operand</param>
         /// <param name="__callerLineNumber">
         /// DO NOT USE. Populated by <see cref="CallerLineNumberAttribute"/>.<br/>
         /// This value is used to ensure operands defined in an <see cref="IArgumentModel"/>

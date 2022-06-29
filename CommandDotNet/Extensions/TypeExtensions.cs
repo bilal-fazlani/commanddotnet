@@ -25,11 +25,11 @@ namespace CommandDotNet.Extensions
 
         internal static bool IsNullableProperty(this PropertyInfo propertyInfo) =>
             propertyInfo.PropertyType.IsNullableType()
-            || (NullabilityInfoContext.IsSupported && propertyInfo.GetNullability() == NullabilityState.Nullable);
+            || (propertyInfo.GetNullability() == NullabilityState.Nullable);
 
         internal static bool IsNullableParameter(this ParameterInfo parameterInfo) => 
             parameterInfo.ParameterType.IsNullableType() 
-            || (NullabilityInfoContext.IsSupported && parameterInfo.GetNullability() == NullabilityState.Nullable);
+            || (parameterInfo.GetNullability() == NullabilityState.Nullable);
 
         internal static Type GetUnderlyingType(this Type type)
         {

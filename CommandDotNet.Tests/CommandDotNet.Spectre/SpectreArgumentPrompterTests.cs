@@ -406,8 +406,8 @@ opt1 is required"
             }
 
             public void Flags(
-                [Option('a', (string)null)] bool flagA,
-                [Option('b', (string)null)] bool flagB)
+                [Option('a', (string?)null)] bool flagA,
+                [Option('b', (string?)null)] bool flagB)
             {
             }
 

@@ -312,6 +312,11 @@
     <comment>Input_prompt_lc: </comment>
   </data>
 
+  <data name="Required command was not provided" xml:space="preserve">
+    <value>Required command was not provided</value>
+    <comment>Parse_Required_command_was_not_provided: </comment>
+  </data>
+
   <data name="Did you mean ..." xml:space="preserve">
     <value>Did you mean ...</value>
     <comment>Parse_Did_you_mean: </comment>

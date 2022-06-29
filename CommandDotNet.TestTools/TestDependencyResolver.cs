@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CommandDotNet.Builders;
 
 namespace CommandDotNet.TestTools
@@ -21,7 +22,7 @@ namespace CommandDotNet.TestTools
             return _services[type];
         }
 
-        public bool TryResolve(Type type, out object? item)
+        public bool TryResolve(Type type, [NotNullWhen(true)] out object? item)
         {
             return _services.TryGetValue(type, out item);
         }

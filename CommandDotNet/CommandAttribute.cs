@@ -9,8 +9,7 @@ namespace CommandDotNet
         internal bool? IgnoreUnexpectedOperandsAsNullable { get; private set; }
         internal ArgumentSeparatorStrategy? ArgumentSeparatorStrategyAsNullable { get; private set; }
 
-        [Obsolete("Use constructor parameter instead")]
-        public string? Name { get; set; }
+        public string? Name { get; }
 
         // begin-snippet: CommandAttribute-properties
         /// <summary>The description to show in the help</summary>

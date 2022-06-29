@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.Arguments.Validation
 {
+#pragma warning disable CS8618
     [TestFixture]
     public class Data_Annotations_Validation
     {
