@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security;
 using System.Text;
 
 namespace CommandDotNet.Tests.UnitTests.Localization
@@ -13,7 +14,11 @@ namespace CommandDotNet.Tests.UnitTests.Localization
             {
                 var key = valueAsKey ? t.value : t.memberName;
                 var comment = valueAsKey ? $"{t.memberName}: {t.comments}" : t.comments;
-                sb.AppendLine(string.Format(DataTemplate, key, t.value, comment));
+                sb.AppendLine(string.Format(
+                    comment.IsNullOrEmpty() ? DataTemplate : DataTemplateWithComment, 
+                    key,
+                    SecurityElement.Escape(t.value), 
+                    SecurityElement.Escape(comment)));
             });
             sb.AppendLine(End);
             return sb.ToString();
@@ -22,9 +27,14 @@ namespace CommandDotNet.Tests.UnitTests.Localization
         private const string DataTemplate = @"
   <data name=""{0}"" xml:space=""preserve"">
     <value>{1}</value>
-    <comment>{2}</comment>
   </data>";
         
+        private const string DataTemplateWithComment = @"
+  <data name=""{0}"" xml:space=""preserve"">
+    <value>{1}</value>
+    <comment>{2}</comment>
+  </data>";
+
         private const string Beginning = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <root>
   <!-- 

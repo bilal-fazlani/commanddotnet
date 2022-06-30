@@ -26,8 +26,8 @@ namespace CommandDotNet.Tests.UnitTests.Localization
         // resx with IStringLocalizer is problematic because the keys are case-insensitive in the format so we 
         // cannot have "arguments" and "Arguments", though we need both.
 
-        [Fact(Skip = "run to regenerate the ResourceProxy classes")]
-        //[Fact]
+        //[Fact(Skip = "run to regenerate the ResourceProxy classes")]
+        [Fact]
         public void RegenerateAll()
         {
             RegenerateProxyClasses();
@@ -45,7 +45,8 @@ namespace CommandDotNet.Tests.UnitTests.Localization
         private void RegenerateResxFiles(List<ResourcesDef> proxies)
         {
             RegenerateFiles(proxies, "resx", "resx",
-                (proxy, parts) => ResxBuilder.Build(parts, true));
+                (proxy, parts) => 
+                    ResxBuilder.Build(parts, false));
         }
 
         private void RegenerateSimpleJsonFiles(List<ResourcesDef> proxies)
@@ -76,8 +77,7 @@ namespace CommandDotNet.Tests.UnitTests.Localization
             sources.ForEach(s =>
             {
                 //File.Exists(path).Should().BeTrue("class should exist: {0}", path);
-                var proxyClass = s.GenerateProxyClass();
-                
+                var proxyClass = s.GenerateProxyClass("ResourcesProxy", true);
                 var path = Path.Combine(SolutionRoot, s.Type.Namespace!, "ResourcesProxy.cs");
                 File.WriteAllText(path, $"{header}{proxyClass}");
             });

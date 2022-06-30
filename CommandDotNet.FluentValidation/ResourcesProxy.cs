@@ -8,17 +8,29 @@ namespace CommandDotNet.FluentValidation
     public class ResourcesProxy : Resources
     {
         private readonly Func<string, string?> _localize;
+        private readonly bool _memberNameAsKey;
 
-        public ResourcesProxy(Func<string, string?> localize)
+        public ResourcesProxy(Func<string, string?> localize, bool memberNameAsKey = false)
         {
             _localize = localize ?? throw new ArgumentNullException(nameof(localize));
+            _memberNameAsKey = memberNameAsKey;
         }
 
+        private static string? Format(string? value, params object?[] args) =>
+            value is null ? null : string.Format(value, args);
+
         public override string Error_Argument_model_is_invalid(string modelName) =>
-            _localize(base.Error_Argument_model_is_invalid("{0}"))
+            Format(_localize(_memberNameAsKey 
+                ? "Error_Argument_model_is_invalid"
+                : base.Error_Argument_model_is_invalid("{0}")),
+                modelName)
             ?? base.Error_Argument_model_is_invalid(modelName);
+
         public override string Error_Could_not_create_instance_of(string name) =>
-            _localize(base.Error_Could_not_create_instance_of("{0}"))
+            Format(_localize(_memberNameAsKey 
+                ? "Error_Could_not_create_instance_of"
+                : base.Error_Could_not_create_instance_of("{0}")),
+                name)
             ?? base.Error_Could_not_create_instance_of(name);
 
     }

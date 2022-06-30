@@ -8,14 +8,21 @@ namespace CommandDotNet.DataAnnotations
     public class ResourcesProxy : Resources
     {
         private readonly Func<string, string?> _localize;
+        private readonly bool _memberNameAsKey;
 
-        public ResourcesProxy(Func<string, string?> localize)
+        public ResourcesProxy(Func<string, string?> localize, bool memberNameAsKey = false)
         {
             _localize = localize ?? throw new ArgumentNullException(nameof(localize));
+            _memberNameAsKey = memberNameAsKey;
         }
 
+        private static string? Format(string? value, params object?[] args) =>
+            value is null ? null : string.Format(value, args);
+
         public override string Error_DataAnnotation_phrases_to_replace_with_argument_name() =>
-            _localize(base.Error_DataAnnotation_phrases_to_replace_with_argument_name())
+            _localize(_memberNameAsKey 
+                ? "Error_DataAnnotation_phrases_to_replace_with_argument_name"
+                : base.Error_DataAnnotation_phrases_to_replace_with_argument_name())
             ?? base.Error_DataAnnotation_phrases_to_replace_with_argument_name();
 
     }

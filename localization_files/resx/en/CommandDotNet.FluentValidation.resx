@@ -117,16 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="'{0}' is invalid" xml:space="preserve">
-    <value>'{0}' is invalid</value>
-    <comment>Error_Argument_model_is_invalid: </comment>
+  <data name="Error_Argument_model_is_invalid" xml:space="preserve">
+    <value>&apos;{0}&apos; is invalid</value>
   </data>
 
-  <data name="Could not create instance of {0}. Please ensure it's injected via IoC or has a default constructor.
-This exception could also occur if default constructor threw an exception" xml:space="preserve">
-    <value>Could not create instance of {0}. Please ensure it's injected via IoC or has a default constructor.
+  <data name="Error_Could_not_create_instance_of" xml:space="preserve">
+    <value>Could not create instance of {0}. Please ensure it&apos;s injected via IoC or has a default constructor.
 This exception could also occur if default constructor threw an exception</value>
-    <comment>Error_Could_not_create_instance_of: </comment>
   </data>
 
 </root>

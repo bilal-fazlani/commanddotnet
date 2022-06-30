@@ -117,14 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="[grey](Move up and down to reveal more {0})[/]" xml:space="preserve">
+  <data name="Selection_paging_instructions" xml:space="preserve">
     <value>[grey](Move up and down to reveal more {0})[/]</value>
-    <comment>Selection_paging_instructions: </comment>
   </data>
 
-  <data name="[grey](Press [blue]<space>[/] to toggle the {0}, [green]<enter>[/] to accept)[/]" xml:space="preserve">
-    <value>[grey](Press [blue]<space>[/] to toggle the {0}, [green]<enter>[/] to accept)[/]</value>
-    <comment>MultiSelection_selection_instructions: </comment>
+  <data name="MultiSelection_selection_instructions" xml:space="preserve">
+    <value>[grey](Press [blue]&lt;space&gt;[/] to toggle the {0}, [green]&lt;enter&gt;[/] to accept)[/]</value>
   </data>
 
 </root>
