@@ -107,6 +107,7 @@ namespace CommandDotNet.Tests.UnitTests.Localization
 
         public static List<(string memberName, string value, string comments)> GetLocalizationParts(this ResourcesDef proxy)
         {
+            // TODO: include parameter names and xml comments, mapped to the placeholder number.
             return PartsByProxy!.GetOrAdd(proxy.Type.FullName, k => proxy.GetMembersWithDefaults()
                 .Select(mwd => (mwd.member.Name, mwd.value, mwd.member.GetXmlDocsSummary()))
                 .ToList());

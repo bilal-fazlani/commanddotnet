@@ -81,12 +81,15 @@ namespace CommandDotNet.Spectre
 
         private static void EnsureResourcesAreSet(AppRunner appRunner, AppConfigBuilder c)
         {
-            if (appRunner.AppSettings.Localize != null)
+            var localizationAppSettings = appRunner.AppSettings.Localization;
+            if (localizationAppSettings.Localize != null)
             {
                 var config = c.Services.GetOrCreate<SpectreAppConfig>();
                 if (!config.ResourcesSet)
                 {
-                    Resources.A = new ResourcesProxy(appRunner.AppSettings.Localize);
+                    Resources.A = new ResourcesProxy(
+                        localizationAppSettings.Localize, 
+                        localizationAppSettings.UseMemberNamesAsKeys);
                     config.ResourcesSet = true;
                 }
             }
