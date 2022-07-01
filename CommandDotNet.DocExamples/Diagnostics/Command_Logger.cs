@@ -184,7 +184,9 @@ AppConfig:
         TextStyle: Detailed
         UsageAppName: example.exe
         UsageAppNameStyle: Adaptive
-      Localize: 
+      Localization:         LocalizationAppSettings:
+        Localize: 
+        UseMemberNamesAsKeys: False
       Parser:         ParseAppSettings:
         AllowBackslashOptionPrefix: False
         AllowSingleHyphenForLongNames: False
