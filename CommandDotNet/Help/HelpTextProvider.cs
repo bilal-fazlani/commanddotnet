@@ -17,7 +17,7 @@ namespace CommandDotNet.Help
         {
             _appName = appName;
             _appHelpSettings = appSettings.Help;
-            _localize = appSettings.Localize ?? (s => s);
+            _localize = appSettings.Localization.Localize ?? (s => s);
         }
         
         public virtual string GetHelpText(Command command) =>
