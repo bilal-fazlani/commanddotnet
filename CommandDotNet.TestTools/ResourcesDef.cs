@@ -99,16 +99,16 @@ namespace CommandDotNet.TestTools
         {
             var proxyCode = new StringBuilder();
 
-            foreach (var property in Properties)
+            foreach (var property in Properties.Select(p => p.Name))
             {
                 var localize = "_localize(_memberNameAsKey " + NewLine +
-                               $"                ? \"{property.Name}\"" + NewLine +
-                               $"                : base.{property.Name})";
+                               $"                ? \"{property}\"" + NewLine +
+                               $"                : base.{property})";
 
                 proxyCode.AppendLine(NewLine +
-                    $"        public override string {property.Name} =>{NewLine}" +
+                    $"        public override string {property} =>{NewLine}" +
                     $"            {localize}{NewLine}" +
-                    $"            ?? base.{property.Name};");
+                    $"            ?? base.{property};");
             }
 
             foreach (var method in Methods)
