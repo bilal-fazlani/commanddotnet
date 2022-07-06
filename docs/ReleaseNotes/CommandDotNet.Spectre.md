@@ -1,5 +1,10 @@
 # CommandDotNet.Spectre
 
+## 3.0.2
+
+* support move of AppSettings.Localize to AppSettings.Localization
+* ResourceProxy with memberNameAsKey, to better support resx files.
+
 ## 3.0.1
 
 * update to dotnet 6
