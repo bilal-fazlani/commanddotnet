@@ -57,24 +57,29 @@ When a resolver is registered, it will be used to resolve instances for
 * command classes using `IDependencyResolver.Resolve` 
 * `IArgumentModel` classes using `IDependencyResolver.TryResolve`.
 
-DI containers have different behaviors for `Resolve` and `TryResolve`. In most cases, `Resolve` will throw an exception if an instance isn't registered. Some containers, like MicrosoftDependencyInjection, will return null instead. When `TryResolve` is used or `Resolve` returns null, CommandDotNet will attempt to instantiate an instance.
+DI containers have different behaviors for `Resolve` and `TryResolve`. 
+In most cases, `Resolve` will throw an exception if an instance isn't registered. 
+Some containers, like MicrosoftDependencyInjection, will return null instead. 
 
-`UseDependencyResolver` contains the following configuraion parameters:
+When an IDependencyResolver is registered, CommandDotNet will use that 
+to resolve command classes and argument models. When `TryResolve` returns 
+false or `Resolve` returns null, CommandDotNet will attempt to instantiate 
+the instance using `System.Activator`.
+
+`UseDependencyResolver` contains the following configuration parameters:
 
 ```c#
 public static AppRunner UseDependencyResolver(
     ...
     Func<CommandContext, IDisposable> runInScope = null,
     ResolveStrategy argumentModelResolveStrategy = ResolveStrategy.TryResolve,
-    ResolveStrategy commandClassResolveStrategy = ResolveStrategy.Resolve,
-    bool useLegacyInjectDependenciesAttribute = false
+    ResolveStrategy commandClassResolveStrategy = ResolveStrategy.Resolve
 }
 ```
 
 * __runInScope__: if provided, the scope will be created at the beginning of the run and disposed at the end
 * __argumentModelResolveStrategy__: the `ResolveStrategy` used to resolve `IArgumentModel` classes.
 * __commandClassResolveStrategy__: the `ResolveStrategy` used to resolve command classes.
-* __useLegacyInjectDependenciesAttribute__: when true, resolve instances for command class properties marked with `[InjectProperty]`. This feature is deprecated and may be removed with next major release.
 
 These parameters also exist for the AutoFac, MicrosoftDependencyInjection and SimpleInjector packages
 
