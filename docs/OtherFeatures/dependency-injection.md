@@ -93,8 +93,15 @@ To implement your own custom resolver, implement the `IDependencyResolver`. See 
 
 Use `appRunner.GetCommandClassTypes()` to get all the command class types that could be instantiated from the AppRunner.
 
+This provided several benefits over assembly scanning
+
+* [Command] is not required so there is no guaranteed way to determine a class is a command
+* Middleware can dynamically add and remove commands
+* There's no need to determine which assemblies to scan, in cases where commands are included from multiple assemblies
+* Ignores command classes that are in dev or are temporarily excluded by removing them as subcommands.
+
 ```c#
-private static void RegisterSimpleInjector(AppRunner appRunner)
+private static void RegisterSimpleInjector(this AppRunner appRunner)
 {
     var container = new SimpleInjector.Container();
     foreach(Type type in appRunner.GetCommandClassTypes())
