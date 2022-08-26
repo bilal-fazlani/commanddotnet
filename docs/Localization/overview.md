@@ -15,7 +15,7 @@ Every package that supports localization will detect this during registration.
 static int Main(string[] args)
 {
     IStringLocalizer localizer = ConfigureLocalizer();
-    var settings = new AppSettings{ Localization = t => localizer[t] };
+    var settings = new AppSettings{Localization = {Localize = t => localizer[t]}};
     return new AppRunner<ValidationApp>(settings).Run(args);
 }
 ```
@@ -28,7 +28,6 @@ To use a different `Func<string,string?>` per package, supply the appropriate `R
 static int Main(string[] args)
 {
     IDictionary<string,IStringLocalizer> localizers = ConfigureLocalizers();
-    var proxy = new ResourcesProxy{ Localization = t => localizers["core"][t] };
     return new AppRunner<ValidationApp>(settings, 
             new ResourcesProxy{ Localization = t => localizers["core"][t] })
         .UseDataAnnotationValidations(args, 
@@ -50,6 +49,21 @@ static int Main(string[] args)
     return new AppRunner<ValidationApp>(settings, new MyResources()).Run(args);
 }
 ```
+### Resx files & UseMemberNamesAsKeys
+
+By default, the keys passed to the `AppSettings.Localization.Localize` delegate
+are the values define in the Resources class.<br/>
+
+Setting this to true will use the property or method names instead of the values.
+
+Example: for property - `Common_argument_lc => "argument"` the default key is "argument"
+
+When `AppSettings.Localization.UseMemberNamesAsKeys` is set to true, "Common_argument_lc" is the key.
+
+Given localization values may differ only by case, for example "argument" vs "Argument", 
+the VS resx editor will encounter errors if the resx file uses the values for keys.
+We recommend using the member names as keys instead, as demonstrated in these 
+auto-generated [resx localization files](https://github.com/bilal-fazlani/commanddotnet/tree/master/localization_files/resx/en).
 
 ## Implementation
 
@@ -84,6 +98,6 @@ There are examples in [ResourceGenerators](https://github.com/bilal-fazlani/comm
 Basic resx and json translations files can be found in the [localization_files](https://github.com/bilal-fazlani/commanddotnet/tree/master/localization_files) folder. 
 
 !!! Warning
-    Some keys differ only in case, eg. `Arguments` & `arguments`, which is not supported by the VS resx editor. The ResourceManager [should honor case by default](https://docs.microsoft.com/en-us/dotnet/api/system.resources.resourcemanager.ignorecase?view=net-5.0#remarks).
+    Some keys differ only in case, eg. `Arguments` & `arguments`, which is not supported by some tools, such as the VS resx editor. This is why we use `AppSettings.Localization.UseMemberNamesAsKeys=true` for resx files.
 
 If you'd like to see another format supported, submit a PR generating the file in `ResourceGenerators` and it will be updated when new keys are added.

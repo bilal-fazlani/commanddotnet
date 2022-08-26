@@ -30,13 +30,16 @@ namespace CommandDotNet.FluentValidation
         {
             return appRunner.Configure(c =>
             {
+                var localizationAppSettings = appRunner.AppSettings.Localization;
                 if (resourcesOverride != null)
                 {
                     Resources.A = resourcesOverride;
                 }
-                else if (appRunner.AppSettings.Localize != null)
+                else if (localizationAppSettings.Localize != null)
                 {
-                    Resources.A = new ResourcesProxy(appRunner.AppSettings.Localize);
+                    Resources.A = new ResourcesProxy(
+                        localizationAppSettings.Localize, 
+                        localizationAppSettings.UseMemberNamesAsKeys);
                 }
                 c.UseMiddleware(FluentValidationForModels, MiddlewareSteps.FluentValidation);
                 c.Services.Add(new Config(showHelpOnError, validatorFactory));

@@ -50,7 +50,7 @@ namespace CommandDotNet.Tests.FeatureTests.Help
                 }
             }
 
-            new AppRunner<App>(new AppSettings { Localize = loc })
+            new AppRunner<App>(new AppSettings {Localization = { Localize = loc }})
                 .AfterRun(r => Resources.A = new Resources())
                 .Verify(new Scenario
                 {

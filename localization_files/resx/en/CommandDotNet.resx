@@ -117,429 +117,341 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EnvVar" xml:space="preserve">
+  <data name="ValueSource_EnvVar" xml:space="preserve">
     <value>EnvVar</value>
-    <comment>ValueSource_EnvVar: </comment>
   </data>
 
-  <data name="AppSetting" xml:space="preserve">
+  <data name="ValueSource_AppSetting" xml:space="preserve">
     <value>AppSetting</value>
-    <comment>ValueSource_AppSetting: </comment>
   </data>
 
-  <data name="version" xml:space="preserve">
+  <data name="Command_version" xml:space="preserve">
     <value>version</value>
-    <comment>Command_version: </comment>
   </data>
 
-  <data name="Show version information" xml:space="preserve">
+  <data name="Command_version_description" xml:space="preserve">
     <value>Show version information</value>
-    <comment>Command_version_description: </comment>
   </data>
 
-  <data name="Original input" xml:space="preserve">
+  <data name="CommandLogger_Original_input" xml:space="preserve">
     <value>Original input</value>
-    <comment>CommandLogger_Original_input: </comment>
   </data>
 
-  <data name="Tool version" xml:space="preserve">
+  <data name="CommandLogger_Tool_version" xml:space="preserve">
     <value>Tool version</value>
-    <comment>CommandLogger_Tool_version: </comment>
   </data>
 
-  <data name=".Net version" xml:space="preserve">
+  <data name="CommandLogger_DotNet_version" xml:space="preserve">
     <value>.Net version</value>
-    <comment>CommandLogger_DotNet_version: </comment>
   </data>
 
-  <data name="OS version" xml:space="preserve">
+  <data name="CommandLogger_OS_version" xml:space="preserve">
     <value>OS version</value>
-    <comment>CommandLogger_OS_version: </comment>
   </data>
 
-  <data name="Machine" xml:space="preserve">
+  <data name="CommandLogger_Machine" xml:space="preserve">
     <value>Machine</value>
-    <comment>CommandLogger_Machine: </comment>
   </data>
 
-  <data name="Username" xml:space="preserve">
+  <data name="CommandLogger_Username" xml:space="preserve">
     <value>Username</value>
-    <comment>CommandLogger_Username: </comment>
   </data>
 
-  <data name="Data" xml:space="preserve">
+  <data name="Exceptions_Data" xml:space="preserve">
     <value>Data</value>
-    <comment>Exceptions_Data: </comment>
   </data>
 
-  <data name="Properties" xml:space="preserve">
+  <data name="Exceptions_Properties" xml:space="preserve">
     <value>Properties</value>
-    <comment>Exceptions_Properties: </comment>
   </data>
 
-  <data name="StackTrace" xml:space="preserve">
+  <data name="Exceptions_StackTrace" xml:space="preserve">
     <value>StackTrace</value>
-    <comment>Exceptions_StackTrace: </comment>
   </data>
 
-  <data name="at" xml:space="preserve">
+  <data name="Exceptions_StackTrace_at" xml:space="preserve">
     <value>at</value>
-    <comment>Exceptions_StackTrace_at: </comment>
   </data>
 
-  <data name="root" xml:space="preserve">
+  <data name="ParseReport_root_lc" xml:space="preserve">
     <value>root</value>
-    <comment>ParseReport_root_lc: </comment>
   </data>
 
-  <data name="Help requested. Only token transformations are available." xml:space="preserve">
+  <data name="ParseDirective_Help_was_requested" xml:space="preserve">
     <value>Help requested. Only token transformations are available.</value>
-    <comment>ParseDirective_Help_was_requested: </comment>
   </data>
 
-  <data name="Unable to map tokens to arguments. Falling back to token transformations." xml:space="preserve">
+  <data name="ParseDirective_Unable_to_map_tokens_to_arguments" xml:space="preserve">
     <value>Unable to map tokens to arguments. Falling back to token transformations.</value>
-    <comment>ParseDirective_Unable_to_map_tokens_to_arguments: </comment>
   </data>
 
-  <data name="parse" xml:space="preserve">
+  <data name="ParseDirective_parse_lc" xml:space="preserve">
     <value>parse</value>
-    <comment>ParseDirective_parse_lc: </comment>
   </data>
 
-  <data name="token transformations" xml:space="preserve">
+  <data name="ParseDirective_token_transformations_lc" xml:space="preserve">
     <value>token transformations</value>
-    <comment>ParseDirective_token_transformations_lc: </comment>
   </data>
 
-  <data name="from shell" xml:space="preserve">
+  <data name="ParseDirective_from_shell_lc" xml:space="preserve">
     <value>from shell</value>
-    <comment>ParseDirective_from_shell_lc: </comment>
   </data>
 
-  <data name="debug" xml:space="preserve">
+  <data name="Debugger_debug_lc" xml:space="preserve">
     <value>debug</value>
-    <comment>Debugger_debug_lc: </comment>
   </data>
 
-  <data name="time" xml:space="preserve">
+  <data name="Time_time" xml:space="preserve">
     <value>time</value>
-    <comment>Time_time: </comment>
   </data>
 
-  <data name="help" xml:space="preserve">
+  <data name="Command_help" xml:space="preserve">
     <value>help</value>
-    <comment>Command_help: </comment>
   </data>
 
-  <data name="Show help information" xml:space="preserve">
+  <data name="Command_help_description" xml:space="preserve">
     <value>Show help information</value>
-    <comment>Command_help_description: </comment>
   </data>
 
-  <data name="Allowed values" xml:space="preserve">
+  <data name="Help_Allowed_values" xml:space="preserve">
     <value>Allowed values</value>
-    <comment>Help_Allowed_values: </comment>
   </data>
 
-  <data name="arg" xml:space="preserve">
+  <data name="Help_arg" xml:space="preserve">
     <value>arg</value>
-    <comment>Help_arg: </comment>
   </data>
 
-  <data name="Arguments" xml:space="preserve">
+  <data name="Help_Arguments" xml:space="preserve">
     <value>Arguments</value>
-    <comment>Help_Arguments: </comment>
   </data>
 
-  <data name="Commands" xml:space="preserve">
+  <data name="Help_Commands" xml:space="preserve">
     <value>Commands</value>
-    <comment>Help_Commands: </comment>
   </data>
 
-  <data name="for more information about a command" xml:space="preserve">
+  <data name="Help_for_more_information_about_a_command" xml:space="preserve">
     <value>for more information about a command</value>
-    <comment>Help_for_more_information_about_a_command: </comment>
   </data>
 
-  <data name="Multiple" xml:space="preserve">
+  <data name="Help_Multiple" xml:space="preserve">
     <value>Multiple</value>
-    <comment>Help_Multiple: </comment>
   </data>
 
-  <data name="Options" xml:space="preserve">
+  <data name="Help_Options" xml:space="preserve">
     <value>Options</value>
-    <comment>Help_Options: </comment>
   </data>
 
-  <data name="Options also available for subcommands" xml:space="preserve">
+  <data name="Help_Options_also_available_for_subcommands" xml:space="preserve">
     <value>Options also available for subcommands</value>
-    <comment>Help_Options_also_available_for_subcommands: </comment>
   </data>
 
-  <data name="Usage" xml:space="preserve">
+  <data name="Help_Usage" xml:space="preserve">
     <value>Usage</value>
-    <comment>Help_Usage: </comment>
   </data>
 
-  <data name="usage" xml:space="preserve">
+  <data name="Help_usage_lc" xml:space="preserve">
     <value>usage</value>
-    <comment>Help_usage_lc: </comment>
   </data>
 
-  <data name="Use" xml:space="preserve">
+  <data name="Help_Use" xml:space="preserve">
     <value>Use</value>
-    <comment>Help_Use: </comment>
   </data>
 
-  <data name="inputs" xml:space="preserve">
+  <data name="Input_inputs_lc" xml:space="preserve">
     <value>inputs</value>
-    <comment>Input_inputs_lc: </comment>
   </data>
 
-  <data name="stream" xml:space="preserve">
+  <data name="Input_stream_lc" xml:space="preserve">
     <value>stream</value>
-    <comment>Input_stream_lc: </comment>
   </data>
 
-  <data name="piped" xml:space="preserve">
+  <data name="Input_piped_lc" xml:space="preserve">
     <value>piped</value>
-    <comment>Input_piped_lc: </comment>
   </data>
 
-  <data name="prompt" xml:space="preserve">
+  <data name="Input_prompt_lc" xml:space="preserve">
     <value>prompt</value>
-    <comment>Input_prompt_lc: </comment>
   </data>
 
-  <data name="Required command was not provided" xml:space="preserve">
+  <data name="Parse_Required_command_was_not_provided" xml:space="preserve">
     <value>Required command was not provided</value>
-    <comment>Parse_Required_command_was_not_provided: </comment>
   </data>
 
-  <data name="Did you mean ..." xml:space="preserve">
+  <data name="Parse_Did_you_mean" xml:space="preserve">
     <value>Did you mean ...</value>
-    <comment>Parse_Did_you_mean: </comment>
   </data>
 
-  <data name="[<enter> once to begin new value. <enter> twice to finish]" xml:space="preserve">
-    <value>[<enter> once to begin new value. <enter> twice to finish]</value>
-    <comment>Prompt_Enter_once_for_new_value_twice_to_finish: </comment>
+  <data name="Prompt_Enter_once_for_new_value_twice_to_finish" xml:space="preserve">
+    <value>[&lt;enter&gt; once to begin new value. &lt;enter&gt; twice to finish]</value>
   </data>
 
-  <data name="default" xml:space="preserve">
+  <data name="Common_default_lc" xml:space="preserve">
     <value>default</value>
-    <comment>Common_default_lc: </comment>
   </data>
 
-  <data name="from" xml:space="preserve">
+  <data name="Common_from_lc" xml:space="preserve">
     <value>from</value>
-    <comment>Common_from_lc: </comment>
   </data>
 
-  <data name="key" xml:space="preserve">
+  <data name="Common_key_lc" xml:space="preserve">
     <value>key</value>
-    <comment>Common_key_lc: </comment>
   </data>
 
-  <data name="value" xml:space="preserve">
+  <data name="Common_value_lc" xml:space="preserve">
     <value>value</value>
-    <comment>Common_value_lc: </comment>
   </data>
 
-  <data name="source" xml:space="preserve">
+  <data name="Common_source_lc" xml:space="preserve">
     <value>source</value>
-    <comment>Common_source_lc: </comment>
   </data>
 
-  <data name="command" xml:space="preserve">
+  <data name="Common_command_lc" xml:space="preserve">
     <value>command</value>
-    <comment>Common_command_lc: </comment>
   </data>
 
-  <data name="argument" xml:space="preserve">
+  <data name="Common_argument_lc" xml:space="preserve">
     <value>argument</value>
-    <comment>Common_argument_lc: </comment>
   </data>
 
-  <data name="option" xml:space="preserve">
+  <data name="Common_option_lc" xml:space="preserve">
     <value>option</value>
-    <comment>Common_option_lc: </comment>
   </data>
 
-  <data name="flag" xml:space="preserve">
+  <data name="Common_Flag" xml:space="preserve">
     <value>flag</value>
-    <comment>Common_Flag: </comment>
   </data>
 
-  <data name="commands" xml:space="preserve">
+  <data name="Common_commands_lc" xml:space="preserve">
     <value>commands</value>
-    <comment>Common_commands_lc: </comment>
   </data>
 
-  <data name="arguments" xml:space="preserve">
+  <data name="Common_arguments_lc" xml:space="preserve">
     <value>arguments</value>
-    <comment>Common_arguments_lc: </comment>
   </data>
 
-  <data name="options" xml:space="preserve">
+  <data name="Common_options_lc" xml:space="preserve">
     <value>options</value>
-    <comment>Common_options_lc: </comment>
   </data>
 
-  <data name="Boolean" xml:space="preserve">
+  <data name="Type_Boolean" xml:space="preserve">
     <value>Boolean</value>
-    <comment>Type_Boolean: </comment>
   </data>
 
-  <data name="Character" xml:space="preserve">
+  <data name="Type_Character" xml:space="preserve">
     <value>Character</value>
-    <comment>Type_Character: </comment>
   </data>
 
-  <data name="Decimal" xml:space="preserve">
+  <data name="Type_Decimal" xml:space="preserve">
     <value>Decimal</value>
-    <comment>Type_Decimal: </comment>
   </data>
 
-  <data name="Double" xml:space="preserve">
+  <data name="Type_Double" xml:space="preserve">
     <value>Double</value>
-    <comment>Type_Double: </comment>
   </data>
 
-  <data name="Number" xml:space="preserve">
+  <data name="Type_Number" xml:space="preserve">
     <value>Number</value>
-    <comment>Type_Number: </comment>
   </data>
 
-  <data name="Text" xml:space="preserve">
+  <data name="Type_Text" xml:space="preserve">
     <value>Text</value>
-    <comment>Type_Text: </comment>
   </data>
 
-  <data name="raw command line:{0}" xml:space="preserve">
+  <data name="ParseReport_Raw_command_line" xml:space="preserve">
     <value>raw command line:{0}</value>
-    <comment>ParseReport_Raw_command_line: </comment>
   </data>
 
-  <data name="Parse usage: [parse:{0}:{1}] to include token transformations.
- '{0}' to include token transformations.
- '{1}' to include command line as passed to this process." xml:space="preserve">
+  <data name="ParseDirective_Usage" xml:space="preserve">
     <value>Parse usage: [parse:{0}:{1}] to include token transformations.
- '{0}' to include token transformations.
- '{1}' to include command line as passed to this process.</value>
-    <comment>ParseDirective_Usage: </comment>
+ &apos;{0}&apos; to include token transformations.
+ &apos;{1}&apos; to include command line as passed to this process.</value>
   </data>
 
-  <data name="after: {0}" xml:space="preserve">
+  <data name="ParseDirective_after" xml:space="preserve">
     <value>after: {0}</value>
-    <comment>ParseDirective_after: </comment>
   </data>
 
-  <data name="after: {0} (no changes)" xml:space="preserve">
+  <data name="ParseDirective_after_no_changes" xml:space="preserve">
     <value>after: {0} (no changes)</value>
-    <comment>ParseDirective_after_no_changes: </comment>
   </data>
 
-  <data name="Attach your debugger to process {0} ({1})." xml:space="preserve">
+  <data name="Debugger_Attach_debugger" xml:space="preserve">
     <value>Attach your debugger to process {0} ({1}).</value>
-    <comment>Debugger_Attach_debugger: </comment>
   </data>
 
-  <data name="{0} is required" xml:space="preserve">
+  <data name="Arity_is_required" xml:space="preserve">
     <value>{0} is required</value>
-    <comment>Arity_is_required: </comment>
   </data>
 
-  <data name="{0} requires at least {1} values but {2} were provided." xml:space="preserve">
+  <data name="Arity_min_not_reached" xml:space="preserve">
     <value>{0} requires at least {1} values but {2} were provided.</value>
-    <comment>Arity_min_not_reached: </comment>
   </data>
 
-  <data name="{0} can have no more than {1} values but {2} were provided." xml:space="preserve">
+  <data name="Arity_max_exceeded" xml:space="preserve">
     <value>{0} can have no more than {1} values but {2} were provided.</value>
-    <comment>Arity_max_exceeded: </comment>
   </data>
 
-  <data name="{0} accepts only a single value but multiple values were provided" xml:space="preserve">
+  <data name="Parse_ArgumentArity_Expected_single_value" xml:space="preserve">
     <value>{0} accepts only a single value but multiple values were provided</value>
-    <comment>Parse_ArgumentArity_Expected_single_value: </comment>
   </data>
 
-  <data name="Failure assigning value to {0}. Value={1}" xml:space="preserve">
+  <data name="Parse_Assigning_value_to_argument" xml:space="preserve">
     <value>Failure assigning value to {0}. Value={1}</value>
-    <comment>Parse_Assigning_value_to_argument: </comment>
   </data>
 
-  <data name="See '{0} --{1}'" xml:space="preserve">
-    <value>See '{0} --{1}'</value>
-    <comment>Parse_See_usage: </comment>
+  <data name="Parse_See_usage" xml:space="preserve">
+    <value>See &apos;{0} --{1}&apos;</value>
   </data>
 
-  <data name="is not a valid {0}" xml:space="preserve">
+  <data name="Parse_Is_not_a_valid" xml:space="preserve">
     <value>is not a valid {0}</value>
-    <comment>Parse_Is_not_a_valid: </comment>
   </data>
 
-  <data name="Missing value for option '{0}'" xml:space="preserve">
-    <value>Missing value for option '{0}'</value>
-    <comment>Parse_Missing_value_for_option: </comment>
+  <data name="Parse_Missing_value_for_option" xml:space="preserve">
+    <value>Missing value for option &apos;{0}&apos;</value>
   </data>
 
-  <data name="Unrecognized value '{0}' for {1}: {2}" xml:space="preserve">
-    <value>Unrecognized value '{0}' for {1}: {2}</value>
-    <comment>Parse_Unrecognized_value_for: </comment>
+  <data name="Parse_Unrecognized_value_for" xml:space="preserve">
+    <value>Unrecognized value &apos;{0}&apos; for {1}: {2}</value>
   </data>
 
-  <data name="Unexpected value '{0}' for option '{1}'" xml:space="preserve">
-    <value>Unexpected value '{0}' for option '{1}'</value>
-    <comment>Parse_Unexpected_value_for_option: </comment>
+  <data name="Parse_Unexpected_value_for_option" xml:space="preserve">
+    <value>Unexpected value &apos;{0}&apos; for option &apos;{1}&apos;</value>
   </data>
 
-  <data name="Unrecognized option '{0}'
-If you intended to use the '{1}' command, try again with the following
-
-{2}" xml:space="preserve">
-    <value>Unrecognized option '{0}'
-If you intended to use the '{1}' command, try again with the following
+  <data name="Parse_Intended_command_instead_of_option" xml:space="preserve">
+    <value>Unrecognized option &apos;{0}&apos;
+If you intended to use the &apos;{1}&apos; command, try again with the following
 
 {2}</value>
-    <comment>Parse_Intended_command_instead_of_option: </comment>
   </data>
 
-  <data name="'{0}' expects a value so it must be the last option specified in '{1}'" xml:space="preserve">
-    <value>'{0}' expects a value so it must be the last option specified in '{1}'</value>
-    <comment>Parse_Clubbed_options_with_values_must_be_last_option: </comment>
+  <data name="Parse_Clubbed_options_with_values_must_be_last_option" xml:space="preserve">
+    <value>&apos;{0}&apos; expects a value so it must be the last option specified in &apos;{1}&apos;</value>
   </data>
 
-  <data name="Unrecognized command or argument '{0}'" xml:space="preserve">
-    <value>Unrecognized command or argument '{0}'</value>
-    <comment>Parse_Unrecognized_command_or_argument: </comment>
+  <data name="Parse_Unrecognized_command_or_argument" xml:space="preserve">
+    <value>Unrecognized command or argument &apos;{0}&apos;</value>
   </data>
 
-  <data name="Unrecognized option '{0}'" xml:space="preserve">
-    <value>Unrecognized option '{0}'</value>
-    <comment>Parse_Unrecognized_option: </comment>
+  <data name="Parse_Unrecognized_option" xml:space="preserve">
+    <value>Unrecognized option &apos;{0}&apos;</value>
   </data>
 
-  <data name="Piped input can only target a single argument, but the following were targeted: {0}" xml:space="preserve">
+  <data name="Input_Piped_targetted_multiple_arguments" xml:space="preserve">
     <value>Piped input can only target a single argument, but the following were targeted: {0}</value>
-    <comment>Input_Piped_targetted_multiple_arguments: </comment>
   </data>
 
-  <data name="File not found: {0}" xml:space="preserve">
+  <data name="Error_File_not_found" xml:space="preserve">
     <value>File not found: {0}</value>
-    <comment>Error_File_not_found: </comment>
   </data>
 
-  <data name="'{0}' is not a valid {1}" xml:space="preserve">
-    <value>'{0}' is not a valid {1}</value>
-    <comment>Error_Value_is_not_valid_for_type: </comment>
+  <data name="Error_Value_is_not_valid_for_type" xml:space="preserve">
+    <value>&apos;{0}&apos; is not a valid {1}</value>
   </data>
 
-  <data name="failed parsing '{0}' for {1}" xml:space="preserve">
-    <value>failed parsing '{0}' for {1}</value>
-    <comment>Error_Failed_parsing_value_for_type: </comment>
+  <data name="Error_Failed_parsing_value_for_type" xml:space="preserve">
+    <value>failed parsing &apos;{0}&apos; for {1}</value>
   </data>
 
 </root>

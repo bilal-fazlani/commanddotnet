@@ -1,5 +1,12 @@
 # CommandDotNet
 
+## 7.0.2
+
+* add optional ResourceProxy to AppRunner<T> constructor.
+* ResourceProxy with memberNameAsKey, to better support resx files.
+* added AppSettings.Localization with memberNameAsKey option.
+  * deprecate AppSettings.Localize for AppSettings.Localization
+
 ## 7.0.1
 
 * update to dotnet 6

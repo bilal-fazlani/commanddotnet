@@ -26,7 +26,10 @@ namespace CommandDotNet
     /// <typeparam name="TRootCommandType">Type of the application</typeparam>
     public class AppRunner<TRootCommandType> : AppRunner where TRootCommandType : class
     {
-        public AppRunner(AppSettings? settings = null) : base(typeof(TRootCommandType), settings) { }
+        public AppRunner(
+            AppSettings? settings = null, 
+            Resources? resourcesOverride = null) 
+            : base(typeof(TRootCommandType), settings, resourcesOverride) { }
     }
 
     /// <summary>
@@ -55,13 +58,16 @@ namespace CommandDotNet
             RootCommandType = rootCommandType ?? throw new ArgumentNullException(nameof(rootCommandType));
             AppSettings = settings ?? new AppSettings();
             
+            var localizationAppSettings = AppSettings.Localization;
             if (resourcesOverride != null)
             {
                 Resources.A = resourcesOverride;
             }
-            else if (AppSettings.Localize != null)
+            else if (localizationAppSettings.Localize != null)
             {
-                Resources.A = new ResourcesProxy(AppSettings.Localize);
+                Resources.A = new ResourcesProxy(
+                    localizationAppSettings.Localize, 
+                    localizationAppSettings.UseMemberNamesAsKeys);
             }
             
             _appConfigBuilder = new AppConfigBuilder(AppSettings);

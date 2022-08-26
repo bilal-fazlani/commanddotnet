@@ -57,7 +57,14 @@ namespace CommandDotNet
         public AppHelpSettings Help { get; set; } = new();
 
         /// <summary>When specified, this function will be used to localize user output from the framework</summary>
-        public Func<string,string?>? Localize { get; set; }
+        [Obsolete("Use Localization.Localize")]
+        public Func<string, string?>? Localize
+        {
+            get => Localization.Localize; 
+            set => Localization.Localize = value;
+        }
+
+        public LocalizationAppSettings Localization { get; set; } = new();
  
         /// <summary>
         /// The collection of <see cref="IArgumentTypeDescriptor"/>'s use to convert arguments

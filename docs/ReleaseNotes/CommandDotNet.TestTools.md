@@ -1,5 +1,9 @@
 # CommandDotNet.TestTools
 
+## 6.0.2
+
+* support ResourceProxy classes with memberNameAsKey, to better support resx files.
+
 ## 6.0.1
 
 * update to dotnet 6
