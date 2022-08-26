@@ -11,6 +11,7 @@ namespace CommandDotNet.NameCasing
         /// <param name="applyToNameOverrides">Case should be applied to names overridden in attributes.</param>
         public static AppRunner UseNameCasing(this AppRunner appRunner, Case @case, bool applyToNameOverrides = false)
         {
+            appRunner.Configure(b => b.Services.Add(new CaseChanger(s => ChangeCase(s, @case))));
             return applyToNameOverrides
                 ? appRunner.Configure(b => b.NameTransformation = (_, memberName, nameOverride, _) =>
                     (nameOverride ?? memberName).ChangeCase(@case))
@@ -33,6 +34,8 @@ namespace CommandDotNet.NameCasing
                     return value.Kebaberize();
                 case Case.LowerCase:
                     return value.ToLowerInvariant();
+                case Case.SnakeCase:
+                    return value.Underscore();
                 default:
                     return value;
             }

@@ -146,6 +146,12 @@ namespace CommandDotNet.ClassModeling.Definitions
                     return Enumerable.Empty<IArgumentDef>();
                 }
 
+                if (_appConfig.DependencyResolver?.TryResolve(parameterInfo.ParameterType, out var diResolve) ?? false)
+                {
+                    _resolvers.Add(context => Values[parameterInfo.Position] = diResolve);
+                    return Enumerable.Empty<IArgumentDef>();
+                }
+
                 if (IsExecutionDelegate(parameterInfo))
                 {
                     _nextParameterInfo = parameterInfo;
