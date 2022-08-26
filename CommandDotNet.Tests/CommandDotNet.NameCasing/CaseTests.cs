@@ -19,11 +19,13 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
         [InlineData(Case.CamelCase, "processRequest")]
         [InlineData(Case.PascalCase, "ProcessRequest")]
         [InlineData(Case.KebabCase, "process-request")]
+        [InlineData(Case.SnakeCase, "process_request")]
         [InlineData(Case.LowerCase, "processrequest")]
         [InlineData(Case.DontChange, "wn")]
         [InlineData(Case.CamelCase, "wn")]
         [InlineData(Case.PascalCase, "wn")]
         [InlineData(Case.KebabCase, "wn")]
+        [InlineData(Case.SnakeCase, "wn")]
         [InlineData(Case.LowerCase, "wn")]
         public void CanHonorCommandCase(Case @case, string commandName)
         {
@@ -39,6 +41,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
         [InlineData(Case.CamelCase, "send", "--messageName", "--Sender", "-P", "-c")]
         [InlineData(Case.PascalCase, "Send", "--MessageName", "--Sender", "-P", "-C")]
         [InlineData(Case.KebabCase, "send", "--message-name", "--Sender", "-P", "-c")]
+        [InlineData(Case.SnakeCase, "send", "--message_name", "--Sender", "-P", "-c")]
         [InlineData(Case.LowerCase, "send", "--messagename", "--Sender", "-P", "-c")]
         public void CanHonorOptionCase(Case @case, string commandName, string messageName, 
             string senderName, string priorotyName, string cName)
@@ -56,6 +59,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
         [InlineData(Case.CamelCase, "subCommand", "sendNotification")]
         [InlineData(Case.PascalCase,"SubCommand", "SendNotification")]
         [InlineData(Case.KebabCase, "sub-command", "send-notification")]
+        [InlineData(Case.SnakeCase, "sub_command", "send_notification")]
         [InlineData(Case.LowerCase, "subcommand", "sendnotification")]
         public void CanHonorSubCommandCase(Case @case, string commandName, string notificationCommandName)
         {
@@ -71,6 +75,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
         [InlineData(Case.CamelCase, "renamedCommand", "sendNotification")]
         [InlineData(Case.PascalCase, "RenamedCommand", "SendNotification")]
         [InlineData(Case.KebabCase, "renamed-command", "send-notification")]
+        [InlineData(Case.SnakeCase, "renamed_command", "send_notification")]
         [InlineData(Case.LowerCase, "renamedcommand", "sendnotification")]
         public void CanHonorRenamedSubCommandCase(Case @case, string commandName, string notificationCommandName)
         {
@@ -82,16 +87,18 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
         }
 
         [Theory]
-        [InlineData(Case.DontChange, false, "camelCase", "kebab-case", "lowercase", "NoOverride", "PascalCase")]
-        [InlineData(Case.CamelCase, false, "camelCase", "kebab-case", "lowercase", "noOverride", "PascalCase")]
-        [InlineData(Case.KebabCase, false, "camelCase", "kebab-case", "lowercase", "no-override", "PascalCase")]
-        [InlineData(Case.LowerCase, false, "camelCase", "kebab-case", "lowercase", "nooverride", "PascalCase")]
-        [InlineData(Case.PascalCase, false, "camelCase", "kebab-case", "lowercase", "NoOverride", "PascalCase")]
-        [InlineData(Case.DontChange, true, "camelCase", "kebab-case", "lowercase", "NoOverride", "PascalCase")]
-        [InlineData(Case.CamelCase, true, "camelCase", "kebab-case", "lowercase", "noOverride", "pascalCase")]
-        [InlineData(Case.KebabCase, true, "camel-case", "kebab-case", "lowercase", "no-override", "pascal-case")]
-        [InlineData(Case.LowerCase, true, "camelcase", "kebab-case", "lowercase", "nooverride", "pascalcase")]
-        [InlineData(Case.PascalCase, true, "CamelCase", "KebabCase", "Lowercase", "NoOverride", "PascalCase")]
+        [InlineData(Case.DontChange, false, "camelCase", "kebab-case", "snake_case", "lowercase", "NoOverride", "PascalCase")]
+        [InlineData(Case.CamelCase, false, "camelCase", "kebab-case", "snake_case", "lowercase", "noOverride", "PascalCase")]
+        [InlineData(Case.KebabCase, false, "camelCase", "kebab-case", "snake_case", "lowercase", "no-override", "PascalCase")]
+        [InlineData(Case.SnakeCase, false, "camelCase", "kebab-case", "snake_case", "lowercase", "no_override", "PascalCase")]
+        [InlineData(Case.LowerCase, false, "camelCase", "kebab-case", "snake_case", "lowercase", "nooverride", "PascalCase")]
+        [InlineData(Case.PascalCase, false, "camelCase", "kebab-case", "snake_case", "lowercase", "NoOverride", "PascalCase")]
+        [InlineData(Case.DontChange, true, "camelCase", "kebab-case", "snake_case", "lowercase", "NoOverride", "PascalCase")]
+        [InlineData(Case.CamelCase, true, "camelCase", "kebab-case", "snakeCase", "lowercase", "noOverride", "pascalCase")]
+        [InlineData(Case.KebabCase, true, "camel-case", "kebab-case", "snake-case", "lowercase", "no-override", "pascal-case")]
+        [InlineData(Case.SnakeCase, true, "camel_case", "kebab_case", "snake_case", "lowercase", "no_override", "pascal_case")]
+        [InlineData(Case.LowerCase, true, "camelcase", "kebab-case", "snake_case", "lowercase", "nooverride", "pascalcase")]
+        [InlineData(Case.PascalCase, true, "CamelCase", "KebabCase", "SnakeCase", "Lowercase", "NoOverride", "PascalCase")]
         public void CanChangeCaseOfOverride(Case @case, bool applyToNameOverrides, params string[] commandNames)
         {
             // Important things to know
@@ -122,6 +129,9 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
             [Command("kebab-case")]
             public void KebabCaseOverride() { }
 
+            [Command("snake_case")]
+            public void SnakeCaseOverride() { }
+
             [Command("lowercase")]
             public void LowerCaseOverride() { }
 
@@ -131,16 +141,11 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
 
         class App
         {
-            public int ProcessRequest()
-            {
-                return 10;
-            }
+            public int ProcessRequest() => 10;
 
             public int Send([Option] string messageName, [Option("Sender")] string senderName,
-                [Option('P')] int priority, [Option]int c)
-            {
-                return messageName == "m" && senderName == "s" && priority == 3 && c == 4 ? 10 : 1;
-            }
+                [Option('P')] int priority, [Option]int c) =>
+                messageName == "m" && senderName == "s" && priority == 3 && c == 4 ? 10 : 1;
 
             [Command("wn")]
             public int WithName()
@@ -151,19 +156,13 @@ namespace CommandDotNet.Tests.CommandDotNet.NameCasing
             [Subcommand]
             public class SubCommand
             {
-                public int SendNotification()
-                {
-                    return 10;
-                }
+                public int SendNotification() => 10;
             }
 
             [Subcommand(RenameAs = "RenamedCommand")]
             public class OtherSubCommand
             {
-                public int SendNotification()
-                {
-                    return 10;
-                }
+                public int SendNotification() => 10;
             }
         }
     }

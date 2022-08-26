@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using CommandDotNet.DataAnnotations;
+using CommandDotNet.NameCasing;
 using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
@@ -43,6 +44,8 @@ Arguments:
 Options:
 
   --nick-name  <TEXT>
+
+  --BirthYear  <NUMBER>
 
   --email      <TEXT>
 
@@ -152,6 +155,23 @@ Usage: testhost.dll Save [options] <Id> <Name>"
         }
 
         [Fact]
+        public void Exec_CanReplace_DisplayAttributeName_WithArgumentName_UsingNameCasing()
+        {
+            new AppRunner<App>()
+                .UseNameCasing(Case.SnakeCase)
+                .UseDataAnnotationValidations()
+                .Verify(new Scenario
+                {
+                    When = { Args = "save 1 john --birth_year 1700" },
+                    Then =
+                    {
+                        ExitCode = 2,
+                        Output = @"'birth_year' must be between 1900 and 2100."
+                    }
+                });
+        }
+
+        [Fact]
         public void Exec_IValidatableObject_IsValidated()
         {
             new AppRunner<App>()
@@ -200,6 +220,9 @@ Usage: testhost.dll Save [options] <Id> <Name>"
 
             [Option("nick-name"), MaxLength(5), Display(Name="MyFriendsCallMe")]
             public string? NickName { get; set; } = null!;
+
+            [Option, Range(1900,2100)]
+            public int? BirthYear { get; set; } = null!;
 
             [OrderByPositionInClass]
             public ContactInfo ContactInfo { get; set; } = new();

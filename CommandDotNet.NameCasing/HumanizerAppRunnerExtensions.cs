@@ -33,6 +33,8 @@ namespace CommandDotNet.NameCasing
                     return value.Kebaberize();
                 case Case.LowerCase:
                     return value.ToLowerInvariant();
+                case Case.SnakeCase:
+                    return value.Underscore();
                 default:
                     return value;
             }

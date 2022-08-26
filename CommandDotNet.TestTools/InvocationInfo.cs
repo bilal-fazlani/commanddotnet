@@ -74,9 +74,14 @@ namespace CommandDotNet.TestTools
 
         private static bool IsArgumentParameter(ParameterInfo info, CommandContext ctx)
         {
+            bool IsDiService() =>
+                ctx.AppConfig.DependencyResolver?.TryResolve(info.ParameterType, out _)
+                ?? false;
+
             return info.ParameterType != typeof(InterceptorExecutionDelegate)
                    && info.ParameterType != typeof(ExecutionDelegate)
-                   && !ctx.AppConfig.ParameterResolversByType.ContainsKey(info.ParameterType);
+                   && !ctx.AppConfig.ParameterResolversByType.ContainsKey(info.ParameterType)
+                   && !IsDiService();
         }
 
         private static TInvocation? CastInvocation<TInvocation>(IInvocation? invocation, CommandContext ctx) 

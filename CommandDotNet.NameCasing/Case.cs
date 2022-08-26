@@ -6,6 +6,7 @@
         LowerCase = 1,
         CamelCase = 2,
         KebabCase = 3,
-        PascalCase = 4
+        PascalCase = 4,
+        SnakeCase = 5
     }
 }
