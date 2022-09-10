@@ -28,6 +28,11 @@ Modify and extend the functionality of the framework through configuration and m
 
 ### Documentation 👉 https://commanddotnet.bilal-fazlani.com
 
+## Project Status
+
+This project is stable. Lack of new features are a result of the maturity of the library, not an indication of the liveliness of this project. 
+We are available to fix bugs and answer questions and remain fairly responsive. There are PRs and issues in the backlog for new features that are currently low priority for the maintainers.  We will accept PRs.  If you haven't discussed them with us first and the change is significant, please consider the submission the beginning of a design discussion.
+
 ## Support
 
 For bugs, [create an issue](https://github.com/bilal-fazlani/commanddotnet/issues/new)
