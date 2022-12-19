@@ -33,7 +33,7 @@ namespace CommandDotNet
         {
             [typeof(CommandContext)] = ctx => ctx,
             [typeof(IConsole)] = ctx => ctx.Console,
-            [typeof(IEnvironment)] = ctx => ctx.Console,
+            [typeof(IEnvironment)] = ctx => ctx.Environment,
             [typeof(CancellationToken)] = ctx => ctx.CancellationToken
         };
 
