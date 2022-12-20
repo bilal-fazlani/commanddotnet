@@ -21,7 +21,7 @@ namespace CommandDotNet.Extensions
                 .Where(m => !typeof(IDisposable).IsAssignableFrom(type) || m.Name != nameof(IDisposable.Dispose));
         }
 
-        internal static bool IsNullableType(this Type type) => Nullable.GetUnderlyingType(type) != null;
+        private static bool IsNullableType(this Type type) => Nullable.GetUnderlyingType(type) != null;
 
         internal static bool IsNullableProperty(this PropertyInfo propertyInfo) =>
             propertyInfo.PropertyType.IsNullableType()
@@ -31,84 +31,63 @@ namespace CommandDotNet.Extensions
             parameterInfo.ParameterType.IsNullableType() 
             || (parameterInfo.GetNullability() == NullabilityState.Nullable);
 
-        internal static Type GetUnderlyingType(this Type type)
-        {
-            return Nullable.GetUnderlyingType(type)
-                   ?? type.GetListUnderlyingType()
-                   ?? type;
-        }
+        internal static Type GetUnderlyingType(this Type type) =>
+            Nullable.GetUnderlyingType(type)
+            ?? type.GetListUnderlyingType()
+            ?? type;
 
-        internal static Type? GetListUnderlyingType(this Type type)
-        {
-            return type.IsArray
+        private static Type? GetListUnderlyingType(this Type type) =>
+            type.IsArray
                 ? type.GetElementType()
                 : typeof(IEnumerable).IsAssignableFrom(type) && type.IsGenericType
                     ? type.GetGenericArguments().FirstOrDefault()
                     : null;
-        }
 
         internal static bool IsNonStringEnumerable(this Type type) => 
             type != typeof(string) && type.IsEnumerable();
 
-        internal static bool IsEnumerable(this Type type)
-        {
-            return type.GetInterfaces()
+        private static bool IsEnumerable(this Type type) =>
+            type.GetInterfaces()
                 .Concat(type.ToEnumerable())
                 .Any(x => x == typeof(IEnumerable));
-        }
 
         internal static bool IsNonStringCollection(this Type type) =>
             type != typeof(string) && type.IsCollection();
 
-        internal static bool IsCollection(this Type type)
-        {
-            return type.GetInterfaces()
+        internal static bool IsCollection(this Type type) =>
+            type.GetInterfaces()
                 .Concat(type.ToEnumerable())
                 .Any(x => x.IsGenericType
                     ? x.GetGenericTypeDefinition() == typeof(ICollection<>)
                     : x == typeof(ICollection));
-        }
 
         internal static bool IsStaticClass(this Type type) => type.IsAbstract && type.IsSealed;
 
         private static readonly Dictionary<Type, MethodInfo> DefaultMethodByType = new();
 
-        internal static object? GetDefaultValue(this Type type)
-        {
-            return DefaultMethodByType.GetOrAdd(type, _ =>
+        private static object? GetDefaultValue(this Type type) =>
+            DefaultMethodByType.GetOrAdd(type, _ =>
             {
                 Func<object?> f = GetDefaultValue<object>;
                 return f.Method.GetGenericMethodDefinition().MakeGenericMethod(type);
             }).Invoke(null, null);
-        }
 
-        internal static bool IsDefaultFor(this object defaultValue, Type type)
-        {
-            return Equals(defaultValue, type.GetDefaultValue());
-        }
+        internal static bool IsDefaultFor(this object defaultValue, Type type) => 
+            Equals(defaultValue, type.GetDefaultValue());
 
-        private static T? GetDefaultValue<T>()
-        {
-            return Box<T>.CreateDefault().Value;
-        }
+        private static T? GetDefaultValue<T>() => default;
 
-        internal static bool IsCompilerGenerated(this Type? t)
-        {
-            return t is not null
-                   && (t.IsDefined(typeof(CompilerGeneratedAttribute), false)
-                       || IsCompilerGenerated(t.DeclaringType));
-        }
+        internal static bool IsCompilerGenerated(this Type? t) =>
+            t is not null
+            && (t.IsDefined(typeof(CompilerGeneratedAttribute), false)
+                || IsCompilerGenerated(t.DeclaringType));
 
-        internal static IEnumerable<PropertyInfo> GetDeclaredProperties(this Type type)
-        {
-            return type
+        internal static IEnumerable<PropertyInfo> GetDeclaredProperties(this Type type) =>
+            type
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => !x.PropertyType.IsCompilerGenerated());
-        }
 
-        internal static bool InheritsFrom<T>(this Type type)
-        {
-            return typeof(T).IsAssignableFrom(type);
-        }
+        internal static bool InheritsFrom<T>(this Type type) => 
+            typeof(T).IsAssignableFrom(type);
     }
 }

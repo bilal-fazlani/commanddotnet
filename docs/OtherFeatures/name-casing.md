@@ -36,6 +36,8 @@ With `Case.KebabCase`, the command is executed as `migrate-user --dry-run`
 
 With `Case.LowerCase`, the command is executed as `migrateuser --dryrun`
 
+With `Case.SnakeCase`, the command is executed as `migrate_user --dry_run`
+
 ## Overridden names
 
 By default, the case is only applied where the name has not been overridden in an attribute.

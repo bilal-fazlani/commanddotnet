@@ -1,5 +1,9 @@
 # CommandDotNet.NewerReleasesAlerts
 
+## 4.0.2
+
+* support dotnet 7
+
 ## 4.0.1
 
 * update to dotnet 6

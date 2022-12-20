@@ -2,6 +2,7 @@
 
 ## 6.0.2
 
+* support dotnet 7
 * support move of AppSettings.Localize to AppSettings.Localization
 * ResourceProxy with memberNameAsKey, to better support resx files.
 
