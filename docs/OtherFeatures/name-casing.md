@@ -76,6 +76,7 @@ Example: [Humanizer middleare](https://github.com/bilal-fazlani/commanddotnet/bl
 /// <param name="applyToNameOverrides">Case should be applied to names overridden in attributes.</param>
 public static AppRunner UseNameCasing(this AppRunner appRunner, Case @case, bool applyToNameOverrides = false)
 {
+    appRunner.Configure(b => b.Services.Add(new CaseChanger(s => ChangeCase(s, @case))));
     return applyToNameOverrides
         ? appRunner.Configure(b => b.NameTransformation = (_, memberName, nameOverride, _) =>
             (nameOverride ?? memberName).ChangeCase(@case))
@@ -83,5 +84,5 @@ public static AppRunner UseNameCasing(this AppRunner appRunner, Case @case, bool
             nameOverride ?? memberName.ChangeCase(@case));
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.NameCasing/HumanizerAppRunnerExtensions.cs#L7-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-name_casing_transformation' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.NameCasing/HumanizerAppRunnerExtensions.cs#L7-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-name_casing_transformation' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->

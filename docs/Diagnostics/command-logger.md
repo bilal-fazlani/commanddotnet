@@ -215,7 +215,9 @@ AppConfig:
         TextStyle: Detailed
         UsageAppName: example.exe
         UsageAppNameStyle: Adaptive
-      Localize: 
+      Localization:         LocalizationAppSettings:
+        Localize: 
+        UseMemberNamesAsKeys: False
       Parser:         ParseAppSettings:
         AllowBackslashOptionPrefix: False
         AllowSingleHyphenForLongNames: False
@@ -248,7 +250,7 @@ AppConfig:
 ***************************************
 2
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/command_logger_appconfig_exe.bash#L1-L92' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_appconfig_exe' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/command_logger_appconfig_exe.bash#L1-L94' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_appconfig_exe' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## Recipes for writerFactory
@@ -291,7 +293,7 @@ public class Program
 
 public class LogCommandAttribute : Attribute { }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L222-L240' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_custom_attribute' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L224-L242' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_custom_attribute' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Notice Add will always log for the command and Subtract never will. 
@@ -386,7 +388,7 @@ public class Program
     public void Subtract(IConsole console, int x, int y) => console.WriteLine(x - y);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L278-L301' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_root_option' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L280-L303' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_root_option' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: command_logger_root_option_exe -->
