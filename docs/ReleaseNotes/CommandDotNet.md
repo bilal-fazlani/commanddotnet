@@ -2,10 +2,22 @@
 
 ## 7.0.2
 
+### Localization enhancements
+
 * add optional ResourceProxy to AppRunner<T> constructor.
-* ResourceProxy with memberNameAsKey, to better support resx files.
+* [ResourceProxy with memberNameAsKey](../Localization/overview.md#resx-files-usemembernamesaskeys) to better support resx files.
 * added AppSettings.Localization with memberNameAsKey option.
   * deprecate AppSettings.Localize for AppSettings.Localization
+
+### Name casing
+
+* [Name casing](../OtherFeatures/name-casing.md) now supports `snake_case` for command and argument names
+* The `CaseChanger` service has been added to enable middleware and commands to use the configured case, as displayed in [this test](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Tests/CommandDotNet.NameCasing/CaseChangerTests.cs)
+
+### Bug fixes
+
+* [#464](https://github.com/bilal-fazlani/commanddotnet/issues/464) parameter resolver for `IEnvironment` was assigned an `IConsole`
+
 
 ## 7.0.1
 
