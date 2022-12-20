@@ -2,6 +2,7 @@
 
 ## 6.0.2
 
+* support dotnet 7
 * support ResourceProxy classes with memberNameAsKey, to better support resx files.
 
 ## 6.0.1

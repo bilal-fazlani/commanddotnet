@@ -1,5 +1,9 @@
 # CommandDotNet.IoC.MicrosoftDependencyInjection
 
+## 5.0.2
+
+* support dotnet 7
+
 ## 5.0.1
 
 * update to dotnet 6

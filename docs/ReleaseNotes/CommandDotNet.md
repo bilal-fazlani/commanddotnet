@@ -2,6 +2,8 @@
 
 ## 7.0.2
 
+support dotnet 7
+
 ### Localization enhancements
 
 * add optional ResourceProxy to AppRunner<T> constructor.

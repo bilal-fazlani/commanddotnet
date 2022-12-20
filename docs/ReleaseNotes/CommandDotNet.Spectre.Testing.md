@@ -1,5 +1,9 @@
 # CommandDotNet.Spectre.Testing
 
+## 3.0.2
+
+* support dotnet 7
+
 ## 3.0.1
 
 * update to dotnet 6
