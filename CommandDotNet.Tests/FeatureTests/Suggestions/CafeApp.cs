@@ -5,18 +5,16 @@ namespace CommandDotNet.Tests.FeatureTests.Suggestions
 
     public enum Fruit { Apple, Banana, Cherry }
     public enum Vegetable { Asparagus, Broccoli, Carrot }
+    public enum Main { Chicken, Steak, Fish, Veggie}
     public enum Meal { Breakfast, Lunch, Dinner }
 
     public class CafeApp
     {
-        public void Eat(IConsole console,
+        public void Eat(
             [Operand] Meal meal,
             [Option] Vegetable vegetable,
             [Option] Fruit fruit)
         {
-            console.Out.WriteLine($"{nameof(meal)}     :{meal}");
-            console.Out.WriteLine($"{nameof(fruit)}    :{fruit}");
-            console.Out.WriteLine($"{nameof(vegetable)}:{vegetable}");
         }
     }
 }

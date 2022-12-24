@@ -6,8 +6,10 @@ using CommandDotNet.Builders;
 using CommandDotNet.Builders.ArgumentDefaults;
 using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Diagnostics;
+using CommandDotNet.DotNetSuggest;
 using CommandDotNet.Execution;
 using CommandDotNet.Localization;
+using CommandDotNet.Parsing;
 using CommandDotNet.Parsing.Typos;
 using CommandDotNet.Prompts;
 using CommandDotNet.Tokens;
@@ -71,6 +73,9 @@ namespace CommandDotNet
                 ()=> appRunner.UseTypoSuggestions());
             return appRunner;
         }
+        
+        public static AppRunner UseAutoSuggest_Experimental(this AppRunner appRunner) => 
+            appRunner.UseSuggestDirective_Experimental();
 
         /// <summary>When an invalid arguments is entered, suggests context based alternatives</summary>
         public static AppRunner UseTypoSuggestions(this AppRunner appRunner, int maxSuggestionCount = 5)

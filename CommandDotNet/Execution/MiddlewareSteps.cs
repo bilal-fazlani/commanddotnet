@@ -37,12 +37,20 @@
         public static MiddlewareStep ParseInput { get; } =
             new(MiddlewareStages.ParseInput, 0);
 
+        public static class AutoSuggest
+        {
+            /// <summary>
+            /// Runs after <see cref="ParseInput"/> to suggest next possible argument or value
+            /// </summary>
+            public static MiddlewareStep Directive { get; } = ParseInput + 1000;
+        }
+        
         /// <summary>
         /// Runs after <see cref="ParseInput"/> to respond to parse errors
         /// </summary>
-        public static MiddlewareStep TypoSuggest { get; } = ParseInput + 1000;
+        public static MiddlewareStep TypoSuggest { get; } = AutoSuggest.Directive + 1000;
 
-        public static MiddlewareStep AssembleInvocationPipeline { get; } = ParseInput + 2000;
+        public static MiddlewareStep AssembleInvocationPipeline { get; } = TypoSuggest + 1000;
 
         /// <summary>Runs before <see cref="Help"/> to ensure default values are included in the help output</summary>
         public static MiddlewareStep Version { get; } = Help.CheckIfShouldShowHelp - 2000;

@@ -15,6 +15,23 @@ namespace CommandDotNet.Parsing
         public Command TargetCommand { get; }
 
         /// <summary>
+        /// The next operand that could receive a value.
+        /// If the operand is a list value, it may already have values assigned.
+        /// </summary>
+        public Operand? NextAvailableOperand { get; }
+
+        /// <summary>
+        /// The count of tokens evaluated.
+        /// If there was an error evaluating the token, it's count is included.
+        /// </summary>
+        public int TokensEvaluatedCount { get; }
+        
+        /// <summary>
+        /// True if a command was identified.  No subcommands could be targets at this point.
+        /// </summary>
+        public bool IsCommandIdentified { get; }
+
+        /// <summary>
         /// If extra operands were provided and <see cref="ParseAppSettings.IgnoreUnexpectedOperands"/> is true,
         /// The extra operands will be stored in the <see cref="RemainingOperands"/> collection.
         /// </summary>
@@ -43,16 +60,28 @@ namespace CommandDotNet.Parsing
 
         public ParseResult(Command command,
             IReadOnlyCollection<Token> remainingOperands,
-            IReadOnlyCollection<Token> separatedArguments)
+            IReadOnlyCollection<Token> separatedArguments,
+            Operand? nextAvailableOperand,
+            int tokensEvaluatedCount, 
+            bool isCommandIdentified)
         {
             TargetCommand = command ?? throw new ArgumentNullException(nameof(command));
             RemainingOperands = remainingOperands.ToArgsArray();
             SeparatedArguments = separatedArguments.ToArgsArray();
+            NextAvailableOperand = nextAvailableOperand;
+            TokensEvaluatedCount = tokensEvaluatedCount;
+            IsCommandIdentified = isCommandIdentified;
         }
 
-        public ParseResult(IParseError error)
+        public ParseResult(IParseError error, 
+            Operand? nextAvailableOperand,
+            int tokensEvaluatedCount, 
+            bool isCommandIdentified)
         {
             ParseError = error ?? throw new ArgumentNullException(nameof(error));
+            NextAvailableOperand = nextAvailableOperand;
+            TokensEvaluatedCount = tokensEvaluatedCount;
+            IsCommandIdentified = isCommandIdentified;
             TargetCommand = error.Command;
             RemainingOperands = Array.Empty<string>();
             SeparatedArguments = Array.Empty<string>();
@@ -69,7 +98,9 @@ namespace CommandDotNet.Parsing
                    $"{indent}{nameof(TargetCommand)}:{TargetCommand}{NewLine}" +
                    $"{indent}{nameof(RemainingOperands)}:{RemainingOperands.ToCsv()}{NewLine}" +
                    $"{indent}{nameof(SeparatedArguments)}:{SeparatedArguments.ToCsv()}{NewLine}" +
-                   $"{indent}{nameof(ParseError)}:{ParseError?.Message}";
+                   $"{indent}{nameof(NextAvailableOperand)}:{NextAvailableOperand}{NewLine}" +
+                   $"{indent}{nameof(ParseError)}:" + 
+                   (ParseError is null ? null : $"<{ParseError.GetType().Name}> {ParseError.Message}");
         }
     }
 }

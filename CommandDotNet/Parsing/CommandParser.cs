@@ -18,10 +18,7 @@ namespace CommandDotNet.Parsing
                 : null;
             var parseContext = new ParseContext(commandContext, new Queue<Token>(commandContext.Tokens.Arguments), separator);
             ParseCommand(commandContext, parseContext);
-            if (parseContext.ParserError is { })
-            {
-                commandContext.ParseResult = new ParseResult(parseContext.ParserError);
-            }
+            commandContext.ParseResult = parseContext.ToParseResult();
             return next(commandContext);
         }
 
@@ -29,6 +26,7 @@ namespace CommandDotNet.Parsing
         {
             foreach (var token in commandContext.Tokens.Arguments)
             {
+                parseContext.TokensEvaluated++;
                 switch (token.TokenType)
                 {
                     case TokenType.Argument:
@@ -68,11 +66,6 @@ namespace CommandDotNet.Parsing
                     .TakeWhile(_ => parseContext.ParserError is null)
                     .ForEach(t => ParseValue(parseContext, t, operandsOnly:true));
             }
-
-            commandContext.ParseResult = new ParseResult(
-                parseContext.Command,
-                parseContext.RemainingOperands.ToReadOnlyCollection(),
-                commandContext.Tokens.Separated);
         }
 
         private static void ParseValue(ParseContext parseContext, Token token, bool operandsOnly = false)
@@ -150,7 +143,8 @@ namespace CommandDotNet.Parsing
                 if (node is Command)
                 {
                     var suggestion = parseContext.CommandContext.Original.Args.ToCsv(" ").Replace(token.RawValue, optionName);
-                    parseContext.ParserError = new UnrecognizedArgumentParseError(parseContext.Command, token, optionPrefix,
+                    parseContext.ParserError = new UnrecognizedArgumentParseError(
+                        parseContext.Command, token, optionPrefix, null,
                         Resources.A.Parse_Intended_command_instead_of_option(token.RawValue, optionName, suggestion));
                     return true;
                 }
@@ -275,10 +269,11 @@ namespace CommandDotNet.Parsing
         {
             if (parseContext.Operands.TryDequeue(out var operand))
             {
-                var currentOperand = operand!;
-                if (ValueIsAllowed(parseContext, currentOperand, token))
+                // do not combine with the above if statement
+                // ValueIsAllowed will set the ParserError if the value is not allowed
+                if (ValueIsAllowed(parseContext, operand, token))
                 {
-                    currentOperand
+                    operand
                         .GetAlreadyParsedValues()
                         .Add(new ValueFromToken(token.Value, token, null));
                     parseContext.CommandArgumentParsed();
@@ -291,7 +286,8 @@ namespace CommandDotNet.Parsing
             }
             else
             {
-                parseContext.ParserError = new UnrecognizedArgumentParseError(parseContext.Command, token, null,
+                parseContext.ParserError = new UnrecognizedArgumentParseError(
+                    parseContext.Command, token, null, operand,
                     Resources.A.Parse_Unrecognized_command_or_argument(token.RawValue));
             }
         }

@@ -13,12 +13,15 @@ namespace CommandDotNet.Parsing
         public Command Command { get; }
         public Token Token { get; }
         public string? OptionPrefix { get; }
+        public Operand? NextOperand { get; }
 
-        public UnrecognizedArgumentParseError(Command command, Token token, string? optionPrefix, string message)
+        public UnrecognizedArgumentParseError(Command command, Token token, string? optionPrefix, Operand? nextOperand,
+            string message)
         {
             Command = command ?? throw new ArgumentNullException(nameof(command));
             Token = token ?? throw new ArgumentNullException(nameof(token));
             OptionPrefix = optionPrefix;
+            NextOperand = nextOperand;
             Message = message ?? throw new ArgumentNullException(nameof(message));
         }
     }

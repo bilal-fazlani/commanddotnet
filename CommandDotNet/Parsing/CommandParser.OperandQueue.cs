@@ -19,7 +19,7 @@ namespace CommandDotNet.Parsing
             public bool TryDequeue([NotNullWhen(true)] out Operand? operand)
             {
                 operand = Dequeue();
-                return operand is { };
+                return operand is not null;
             }
 
             public Operand? Dequeue()
