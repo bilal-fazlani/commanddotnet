@@ -90,6 +90,10 @@ namespace CommandDotNet.Builders
             // this could be dotnet.exe or {app_name}.exe if published as single executable
             var mainModule = Process.GetCurrentProcess().MainModule;
             var mainModuleFilePath = mainModule?.FileName;
+            
+            // TODO: warning IL3000: 'System.Reflection.Assembly.Location' always returns
+            // an empty string for assemblies embedded in a single-file app.
+            // If the path to the app directory is needed, consider calling 'System.AppContext.BaseDirectory'
             var entryAssemblyFilePath = entryAssembly.Location;
             
             Log.Debug($"{nameof(mainModuleFilePath)}: {mainModuleFilePath}");
@@ -98,7 +102,7 @@ namespace CommandDotNet.Builders
             var mainModuleFileName = Path.GetFileName(mainModuleFilePath);
             var entryAssemblyFileName = Path.GetFileName(entryAssemblyFilePath);
 
-            // this logic isn't not covered by unit tests.
+            // this logic is not covered by unit tests.
             // changing this logic requires manual testing of
             // - .dll files run in dotnet
             // - .exe console apps
