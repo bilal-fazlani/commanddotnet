@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using CommandDotNet.Extensions;
@@ -71,6 +72,7 @@ namespace CommandDotNet.Tests.UnitTests.Localization
 
         [Theory]
         [MemberData(nameof(ResourceDefsTestData))]
+        [SuppressMessage("Usage", "xUnit1026:Theory methods should use all of their parameters")]
         public void Assembly_contains_method_to_override_resources(ResourcesDef source, ResourcesDef proxy)
         {
             var assembly = source.Type.Assembly;

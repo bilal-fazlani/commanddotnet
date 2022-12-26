@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 using CommandDotNet.Prompts;
@@ -179,7 +180,11 @@ namespace CommandDotNet.TestTools
         public virtual bool NumberLock { get; set; }
         public virtual bool CapsLock { get; set; }
         public virtual bool TreatControlCAsInput { get; set; }
-        public virtual event ConsoleCancelEventHandler? CancelKeyPress;
+        
+        // CA1070:Do not declare event fields as virtual
+#pragma warning disable 67
+        public event ConsoleCancelEventHandler? CancelKeyPress;
+#pragma warning restore 67
 
         #endregion
 
