@@ -27,4 +27,7 @@
   <ItemGroup>
     <None Remove="CommandDotNet.csproj.DotSettings" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DotNetSuggest\System.CommandLine.Suggest" />
+  </ItemGroup>
 </Project>

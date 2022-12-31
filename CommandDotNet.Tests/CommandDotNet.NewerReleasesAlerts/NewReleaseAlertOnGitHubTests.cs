@@ -99,7 +99,7 @@ namespace CommandDotNet.Tests.CommandDotNet.NewerReleasesAlerts
         }
 
         private static AppInfo BuildAppInfo(string version) => new(
-            false, false, false,
+            false, false, false, false,
             typeof(NewReleaseAlertOnGitHubTests).Assembly, "blah", version);
 
         public static string BuildGitHubApiResponse(string version) =>

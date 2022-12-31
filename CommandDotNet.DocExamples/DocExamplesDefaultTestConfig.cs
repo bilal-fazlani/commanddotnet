@@ -8,7 +8,7 @@ namespace CommandDotNet.DocExamples
         public TestConfig Default => new()
         {
             AppInfoOverride = new AppInfo(
-                false, false, false, 
+                false, false, false, false, 
                 typeof(DocExamplesDefaultTestConfig).Assembly, 
                 "doc-examples.dll", "doc-examples.dll", "1.1.1.1")
         };
