@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Xunit;
 
 namespace CommandDotNet.Tests.FeatureTests.SuggestDirective;
@@ -16,7 +17,16 @@ public class DotNetSuggestSync
         var client = new HttpClient();
         await SyncFile(client, "DotnetProfileDirectory.cs");
         await SyncFile(client, "FileSuggestionRegistration.cs", 
-            f => f.Replace(" : ISuggestionRegistration", ""));
+            text =>
+            {
+                var fileField = "private readonly string _registrationConfigurationFilePath;";
+                text.Should().Contain(fileField);
+                text = text.Replace(fileField,
+                    $"{fileField}{Environment.NewLine}        " +
+                    "public string RegistrationConfigurationFilePath => _registrationConfigurationFilePath;");
+                text = text.Replace(" : ISuggestionRegistration", "");
+                return text;
+            });
         await SyncFile(client, "RegistrationPair.cs");
     }
 

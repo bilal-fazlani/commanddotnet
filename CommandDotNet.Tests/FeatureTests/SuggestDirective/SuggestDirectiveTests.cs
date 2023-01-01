@@ -1,9 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using CommandDotNet.DotNetSuggest;
-using CommandDotNet.Extensions;
-using CommandDotNet.Parsing;
 using CommandDotNet.Tests.FeatureTests.Suggestions;
 using CommandDotNet.TestTools.Scenarios;
 using Xunit;
@@ -14,11 +11,8 @@ namespace CommandDotNet.Tests.FeatureTests.SuggestDirective;
 
 public class SuggestDirectiveTests
 {
-    public SuggestDirectiveTests(ITestOutputHelper output)
-    {
-        Ambient.Output = output;
-    }
-    
+    public SuggestDirectiveTests(ITestOutputHelper output) => Ambient.Output = output;
+
     /* Test list:
      * - operands
      *   - extra operand
@@ -87,12 +81,12 @@ public class SuggestDirectiveTests
     {
         var expected = "--togo/n--version/nClosed/nOpened/nOrder/nReserve";
         new AppRunner<DinerApp>()
+            .UseSuggestDirective_Experimental()
             .UseDefaultMiddleware()
             .UseCommandLogger()
-            .UseSuggestDirective_Experimental()
             .Verify(new Scenario
             {
-                When = { Args = "[suggest]"},
+                When = {Args = "[suggest]"},
                 Then =
                 {
                     Output = NewLine == "/n" ? expected : expected.Replace("/n", NewLine)

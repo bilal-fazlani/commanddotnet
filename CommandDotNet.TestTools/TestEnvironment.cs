@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using CommandDotNet.Extensions;
 using CommandDotNet.Tokens;
 
 namespace CommandDotNet.TestTools
@@ -11,7 +12,7 @@ namespace CommandDotNet.TestTools
     public class TestEnvironment : IEnvironment
     {
         public string[]? CommandLineArgs;
-        public Dictionary<string, string?> EnvVar = new();
+        public Dictionary<EnvironmentVariableTarget, Dictionary<string, string?>> EnvVarByTarget = new();
         public Action<int>? OnExit;
         public Action<(string? message, Exception? exception)>? OnFailFast;
         public Func<string, string>? OnExpandEnvironmentVariables;
@@ -56,14 +57,24 @@ namespace CommandDotNet.TestTools
                 ? Environment.ExpandEnvironmentVariables(name)
                 : OnExpandEnvironmentVariables(name);
 
-        public string? GetEnvironmentVariable(string variable, EnvironmentVariableTarget? target = null) => 
-            EnvVar.GetValueOrDefault(variable);
+        public string? GetEnvironmentVariable(string variable, EnvironmentVariableTarget? target = null) =>
+            target is not null
+                ? EnvVarByTarget.GetValueOrDefault(target.Value)?.GetValueOrDefault(variable)
+                : (EnvVarByTarget.GetValueOrDefault(EnvironmentVariableTarget.Process)
+                   ?? EnvVarByTarget.GetValueOrDefault(EnvironmentVariableTarget.User)
+                   ?? EnvVarByTarget.GetValueOrDefault(EnvironmentVariableTarget.Machine))
+                ?.GetValueOrDefault(variable);
 
-        public IDictionary GetEnvironmentVariables() => EnvVar;
+        public IDictionary GetEnvironmentVariables() => EnvVarByTarget
+            .SelectMany(d => d.Value)
+            .ToDictionary(d => d.Key, d => d.Value);
 
         public void SetEnvironmentVariables(string variable, string? value, EnvironmentVariableTarget? target)
         {
-            EnvVar[variable] = value;
+            target ??= EnvironmentVariableTarget.Process;
+            var vars = EnvVarByTarget.GetOrAdd(target.Value, 
+                key => new Dictionary<string, string?>());
+            vars[variable] = value;
         }
     }
 }

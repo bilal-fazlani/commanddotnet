@@ -55,5 +55,8 @@ namespace CommandDotNet.Example
 
         [Subcommand]
         public Commands.Prompts Prompts { get; set; } = null!;
+        
+        [Subcommand]
+        public Commands.DotnetSuggest DotnetSuggest { get; set; } = null!;
     }
 }

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using CommandDotNet.DotnetSuggest;
 using CommandDotNet.Extensions;
 using CommandDotNet.Logging;
 
@@ -135,7 +136,7 @@ namespace CommandDotNet.Builders
                     isSelfContainedExe = isExe = mainModuleFileName.EndsWith($"{entryAssemblyFileNameWithoutExt}.exe");
                 }
 
-                var globalToolsDirectory = DotNetSuggest.DotNetTools.GlobalToolDirectory;
+                var globalToolsDirectory = DotnetTools.GlobalToolDirectory;
                 isGlobalTool = globalToolsDirectory is not null 
                                && mainModuleFilePath!.StartsWith(globalToolsDirectory);
             }

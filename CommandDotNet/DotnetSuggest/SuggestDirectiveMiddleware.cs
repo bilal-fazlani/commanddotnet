@@ -4,22 +4,51 @@ using System.Threading.Tasks;
 using CommandDotNet.Directives;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
+using CommandDotNet.Logging;
 using CommandDotNet.Parsing;
+using static System.Environment;
 
-namespace CommandDotNet.DotNetSuggest;
+namespace CommandDotNet.DotnetSuggest;
+
+public enum RegistrationStrategy
+{
+    None,
+    UseRegistrationDirective,
+    EnsureOnEveryRun
+}
 
 internal static class SuggestDirectiveMiddleware
 {
-    internal static AppRunner UseSuggestDirective_Experimental(this AppRunner appRunner)
+    internal static AppRunner UseSuggestDirective_Experimental(this AppRunner appRunner,
+        RegistrationStrategy registrationStrategy, string directiveName)
     {
-        return appRunner.Configure(c => 
-            c.UseMiddleware(SuggestDirective, MiddlewareSteps.AutoSuggest.Directive));
+        return appRunner.Configure(c =>
+        {
+            c.Services.Add(new Options(registrationStrategy, directiveName));
+            c.UseMiddleware(SuggestDirective, MiddlewareSteps.AutoSuggest.Directive);
+        });
     }
+
+    private record Options(RegistrationStrategy RegistrationStrategy, string DirectiveName);
 
     private static Task<int> SuggestDirective(CommandContext ctx, ExecutionDelegate next)
     {
-        if (!ctx.Tokens.TryGetDirective("suggest", out string? value))
+        var options = ctx.Services.GetOrThrow<Options>();
+        
+        if (options.RegistrationStrategy == RegistrationStrategy.UseRegistrationDirective 
+            && ctx.Tokens.TryGetDirective(options.DirectiveName, out var _))
         {
+            var success = TryRegister(ctx, true);
+            return success ? ExitCodes.Success : ExitCodes.Error;
+        }
+        
+        if (!ctx.Tokens.TryGetDirective("suggest", out var _))
+        {
+            // only ensure registration check registration when running 
+            if (options.RegistrationStrategy == RegistrationStrategy.EnsureOnEveryRun && ctx.Original.Args.IsEmpty())
+            {
+                TryRegister(ctx, false);
+            }
             return next(ctx);
         }
 
@@ -94,6 +123,25 @@ internal static class SuggestDirectiveMiddleware
         }
 
         return ExitCodes.Success;
+    }
+
+    private static bool TryRegister(CommandContext ctx, bool outputToConsole)
+    {
+        ILog log = LogProvider.GetCurrentClassLogger();
+        var success = DotnetTools.EnsureRegisteredWithDotnetSuggest(ctx.Environment, out var results, outputToConsole ? ctx.Console : null);
+        if (!success)
+        {
+            if (outputToConsole)
+            {
+                ctx.Console.WriteLine($"Failed to register with Dotnet Suggest.{NewLine}{results!.ToString(new Indent(depth: 1), skipOutputs: true)}");
+            }
+            else
+            {
+                log.Warn($"Failed to register with Dotnet Suggest.{NewLine}{results!.ToString(new Indent(depth: 1))}");
+            }
+        }
+
+        return success;
     }
 
     private static IEnumerable<string> ToSubcommandSuggestions(Command command,

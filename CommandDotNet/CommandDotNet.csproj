@@ -28,6 +28,6 @@
     <None Remove="CommandDotNet.csproj.DotSettings" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DotNetSuggest\System.CommandLine.Suggest" />
+    <Folder Include="DotnetSuggest\System.CommandLine.Suggest" />
   </ItemGroup>
 </Project>

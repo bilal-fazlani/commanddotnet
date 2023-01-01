@@ -22,6 +22,7 @@ namespace System.CommandLine.Suggest
         private const string RegistrationFileName = ".dotnet-suggest-registration.txt";
         private const string TestDirectoryOverride = "INTERNAL_TEST_DOTNET_SUGGEST_HOME";
         private readonly string _registrationConfigurationFilePath;
+        public string RegistrationConfigurationFilePath => _registrationConfigurationFilePath;
 
         public FileSuggestionRegistration(string registrationsConfigurationFilePath = null)
         {
