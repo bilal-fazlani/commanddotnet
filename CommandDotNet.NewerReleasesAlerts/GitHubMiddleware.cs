@@ -1,5 +1,6 @@
 ﻿using System;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace CommandDotNet.NewerReleasesAlerts
 {
@@ -40,9 +41,11 @@ namespace CommandDotNet.NewerReleasesAlerts
             {
                 return null;
             }
-            JObject o = JObject.Parse(response);
-            var ver = o.SelectToken("$.name")?.Value<string>();
-            return ver?.Replace("v", "");
+
+            var o = JsonSerializer.Deserialize<JsonObject>(response);
+            return o?.TryGetPropertyValue("tag_name", out var node) ?? false 
+                ? node.Deserialize<string>()?.Replace("v", "") 
+                : null;
         }
         
         private static string BuildLatestReleaseUrl(string organizationName, string repoName) => $"https://api.github.com/repos/{organizationName}/{repoName}/releases/latest";
