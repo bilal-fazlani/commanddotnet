@@ -13,3 +13,4 @@ Pipfile.lock
 /CommandDotNet.Example/CommandDotNet.Example.exe
 DevDefaultTestConfig.cs
 .DS_Store
+Pipfile

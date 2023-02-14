@@ -111,6 +111,8 @@ theme:
     - nagivation.instant
     - navigation.top
     - navigation.tracking
+    - navigation.footer
+    
   name: 'material'
   custom_dir: docs/overrides
   icon:
