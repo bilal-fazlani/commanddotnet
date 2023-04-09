@@ -178,7 +178,7 @@ plugins:
 extra:
   analytics:
     provider: google
-    property: UA-39358317-3
+    property: G-NDX1871EQJ
   version: "7"
   legacy: false
   social:
