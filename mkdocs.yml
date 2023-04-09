@@ -1,96 +1,97 @@
 site_name: CommandDotNet
 site_description: A modern framework for building modern CLI apps
-repo_name: 'bilal-fazlani/commanddotnet'
-repo_url: 'https://github.com/bilal-fazlani/commanddotnet'
+repo_name: "bilal-fazlani/commanddotnet"
+repo_url: "https://github.com/bilal-fazlani/commanddotnet"
+site_url: https://commanddotnet.bilal-fazlani.com
 
 strict: true
 
 nav:
-    - Home: index.md
-    - Documentation:
+  - Home: index.md
+  - Documentation:
       - Getting Started:
-        - GettingStarted/getting-started-0.md
-        - GettingStarted/getting-started-100-calculator.md
-        - GettingStarted/getting-started-120-subcommands.md
-        - GettingStarted/getting-started-140-default-commands.md
-        - GettingStarted/getting-started-300-help.md
-        - GettingStarted/getting-started-400-tests.md
-        - GettingStarted/getting-started-500-interceptors.md
-        - GettingStarted/getting-started-600-validation.md
-        - GettingStarted/getting-started-700-pipes.md
-        - GettingStarted/getting-started-800-ctrlc.md
-        - GettingStarted/getting-started-next-steps.md
+          - GettingStarted/getting-started-0.md
+          - GettingStarted/getting-started-100-calculator.md
+          - GettingStarted/getting-started-120-subcommands.md
+          - GettingStarted/getting-started-140-default-commands.md
+          - GettingStarted/getting-started-300-help.md
+          - GettingStarted/getting-started-400-tests.md
+          - GettingStarted/getting-started-500-interceptors.md
+          - GettingStarted/getting-started-600-validation.md
+          - GettingStarted/getting-started-700-pipes.md
+          - GettingStarted/getting-started-800-ctrlc.md
+          - GettingStarted/getting-started-next-steps.md
       - argument-terminology.md
       - Commands:
-        - Commands/commands.md
-        - Commands/subcommands.md
-        - Commands/command-attribute.md
+          - Commands/commands.md
+          - Commands/subcommands.md
+          - Commands/command-attribute.md
       - Arguments:
-        - Arguments/arguments.md
-        - Arguments/argument-collections.md
-        - Arguments/argument-types.md
-        - Arguments/passwords.md 
-        - Arguments/argument-models.md
-        - Arguments/argument-arity.md
-        - Arguments/option-or-operand.md
+          - Arguments/arguments.md
+          - Arguments/argument-collections.md
+          - Arguments/argument-types.md
+          - Arguments/passwords.md
+          - Arguments/argument-models.md
+          - Arguments/argument-arity.md
+          - Arguments/option-or-operand.md
       - Argument Validation:
-        - ArgumentValidation/data-annotations-validation.md
-        - ArgumentValidation/fluent-validation.md
+          - ArgumentValidation/data-annotations-validation.md
+          - ArgumentValidation/fluent-validation.md
       - Argument Values:
-        - ArgumentValues/argument-separator.md
-        - ArgumentValues/piped-arguments.md
-        - ArgumentValues/prompting.md
-        - ArgumentValues/response-files.md
-        - AppSettings and<br/>Environment Variables: ArgumentValues/default-values-from-config.md
+          - ArgumentValues/argument-separator.md
+          - ArgumentValues/piped-arguments.md
+          - ArgumentValues/prompting.md
+          - ArgumentValues/response-files.md
+          - AppSettings and<br/>Environment Variables: ArgumentValues/default-values-from-config.md
       - Help:
-        - Help/help.md
-        - Help/typo-suggestions.md
+          - Help/help.md
+          - Help/typo-suggestions.md
       - Diagnostics:
-        - Diagnostics/app-version.md
-        - Diagnostics/debug-directive.md
-        - Diagnostics/parse-directive.md
-        - Diagnostics/time-directive.md
-        - Diagnostics/command-logger.md
-        - Diagnostics/exceptions.md
+          - Diagnostics/app-version.md
+          - Diagnostics/debug-directive.md
+          - Diagnostics/parse-directive.md
+          - Diagnostics/time-directive.md
+          - Diagnostics/command-logger.md
+          - Diagnostics/exceptions.md
       - Localization:
-        - Localization/overview.md
-        - Localization/testing.md
-        - Localization/culture-directive.md
+          - Localization/overview.md
+          - Localization/testing.md
+          - Localization/culture-directive.md
       - Testing:
-        - TestTools/overview.md
-        - Harness:
-          - TestTools/Harness/run-in-mem.md
-          - TestTools/Harness/bdd.md
-          - TestTools/Harness/test-config.md
-          - TestTools/Harness/test-captures.md
-          - TestTools/Harness/tips-test-runners.md
-        - Tools:
-          - TestTools/Tools/testing-middleware.md
-          - TestTools/Tools/testing-piped-input.md
-          - TestTools/Tools/testing-prompts.md
-          - TestTools/Tools/deterministic-appinfo.md
+          - TestTools/overview.md
+          - Harness:
+              - TestTools/Harness/run-in-mem.md
+              - TestTools/Harness/bdd.md
+              - TestTools/Harness/test-config.md
+              - TestTools/Harness/test-captures.md
+              - TestTools/Harness/tips-test-runners.md
+          - Tools:
+              - TestTools/Tools/testing-middleware.md
+              - TestTools/Tools/testing-piped-input.md
+              - TestTools/Tools/testing-prompts.md
+              - TestTools/Tools/deterministic-appinfo.md
       - Other Features:
-        - OtherFeatures/iconsole.md
-        - OtherFeatures/default-middleware.md
-        - Ctrl+C and<br/>CancellationToken: OtherFeatures/cancellation.md
-        - OtherFeatures/dependency-injection.md
-        - OtherFeatures/name-casing.md
-        - OtherFeatures/spectre.md
-        - OtherFeatures/newer-release-alerts.md
+          - OtherFeatures/iconsole.md
+          - OtherFeatures/default-middleware.md
+          - Ctrl+C and<br/>CancellationToken: OtherFeatures/cancellation.md
+          - OtherFeatures/dependency-injection.md
+          - OtherFeatures/name-casing.md
+          - OtherFeatures/spectre.md
+          - OtherFeatures/newer-release-alerts.md
       - Extensibility:
-        - Extensibility/directives.md
-        - Extensibility/parameter-types.md
-        - Extensibility/parameter-resolvers.md
-        - Extensibility/middleware.md
-        - Extensibility/interceptors.md 
-        - Extensibility/token-transformations.md
+          - Extensibility/directives.md
+          - Extensibility/parameter-types.md
+          - Extensibility/parameter-resolvers.md
+          - Extensibility/middleware.md
+          - Extensibility/interceptors.md
+          - Extensibility/token-transformations.md
       - Tips & FAQs:
-        - TipsFaqs/cli-best-practices.md
-        - TipsFaqs/nullable-reference-types.md
-        - TipsFaqs/developing-middleware.md
-    - Features: 
-      - features.md  
-    - Release Notes:
+          - TipsFaqs/cli-best-practices.md
+          - TipsFaqs/nullable-reference-types.md
+          - TipsFaqs/developing-middleware.md
+  - Features:
+      - features.md
+  - Release Notes:
       - ReleaseNotes/CommandDotNet.md
       - ReleaseNotes/CommandDotNet.DataAnnotations.md
       - ReleaseNotes/CommandDotNet.FluentValidation.md
@@ -102,7 +103,7 @@ nav:
       - ReleaseNotes/CommandDotNet.Spectre.md
       - ReleaseNotes/CommandDotNet.Spectre.Testing.md
       - ReleaseNotes/CommandDotNet.TestTools.md
-    - Legacy Versions:
+  - Legacy Versions:
       - legacy-versions.md
       - ReleaseNotes/whats-new-in-v3.md
 theme:
@@ -112,31 +113,31 @@ theme:
     - navigation.top
     - navigation.tracking
     - navigation.footer
-    
-  name: 'material'
+
+  name: "material"
   custom_dir: docs/overrides
   icon:
     repo: fontawesome/brands/github
-  favicon: 'img/favicon.ico'
+  favicon: "img/favicon.ico"
   palette:
-    - media: "(prefers-color-scheme: light)" 
+    - media: "(prefers-color-scheme: light)"
       scheme: light
-      primary: 'black'
-      accent: 'teal'  
+      primary: "black"
+      accent: "teal"
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: 'black'
-      accent: 'teal'  
+      primary: "black"
+      accent: "teal"
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
-  logo: 'img/small-logo.svg'
+  logo: "img/small-logo.svg"
 
 extra_css:
-  - stylesheets/extra.css  
+  - stylesheets/extra.css
 
 markdown_extensions:
   - md_in_html
@@ -148,7 +149,7 @@ markdown_extensions:
       smart_enable: all
   - pymdownx.caret
   - pymdownx.mark
-  - pymdownx.tilde  
+  - pymdownx.tilde
   - pymdownx.keys
   - pymdownx.critic
   - pymdownx.details
@@ -157,7 +158,7 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.escapeall:
       nbsp: true
-  - pymdownx.magiclink  
+  - pymdownx.magiclink
   - pymdownx.smartsymbols
   - pymdownx.highlight
   - pymdownx.inlinehilite
@@ -168,7 +169,7 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - toc:
-      permalink: "#"   
+      permalink: "#"
 
 plugins:
   - search
@@ -178,12 +179,12 @@ extra:
   analytics:
     provider: google
     property: UA-39358317-3
-  version: '7'
+  version: "7"
   legacy: false
   social:
     - icon: fontawesome/brands/github
-      link: 'https://github.com/bilal-fazlani'
+      link: "https://github.com/bilal-fazlani"
     - icon: fontawesome/brands/twitter
-      link: 'https://twitter.com/bilal_fazlani'
+      link: "https://twitter.com/bilal_fazlani"
     - icon: fontawesome/brands/linkedin
-      link: 'https://www.linkedin.com/in/bilal-fazlani/'
+      link: "https://www.linkedin.com/in/bilal-fazlani/"
