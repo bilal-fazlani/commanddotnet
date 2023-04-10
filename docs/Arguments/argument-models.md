@@ -160,29 +160,6 @@ public class NotificationArgs : IArgumentModel
 <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L49-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_model_composed' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-<!-- snippet: argument_models_notify_with_model_composed -->
-<a id='snippet-argument_models_notify_with_model_composed'></a>
-```c#
-public void Notify(NotificationArgs notificationArgs)
-{
-    // send notification
-}
-
-public class NotificationArgs : IArgumentModel
-{
-    [Operand]
-    public string Message { get; set; } = null!;
-
-    [Operand]
-    public List<string> Recipients { get; set; } = null!;
-
-    public DryRunOptions DryRunOptions { get; set; } = null!;
-
-    public VerbosityOptions VerbosityOptions { get; set; } = null!;
-}
-```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L49-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_model_composed' title='Start of snippet'>anchor</a></sup>
-<!-- endSnippet -->
 
 ## Accessing from interceptors and middleware
 
