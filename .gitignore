@@ -11,3 +11,4 @@ site/
 *.user
 /CommandDotNet.Example/CommandDotNet.Example.exe
 DevDefaultTestConfig.cs
+Pipfile
