@@ -18,6 +18,10 @@
   <meta name="twitter:title" content="{{ title }}">
   <meta name="twitter:description" content="{{ config.site_description }}">
   <meta name="twitter:image" content="{{ image }}">
+  {% if config.extra.legacy %}
+    <meta name="robots" content="noindex">
+    <meta name="googlebot" content="noindex">
+  {% endif %}
 {% endblock %}
 
 {% block announce %}
