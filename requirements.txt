@@ -1,4 +1,5 @@
 # Direct dependencies
+jinja2==3.0.0
 mkdocs==1.1
 mkdocs-material==5.1.1
 Pygments==2.6.1

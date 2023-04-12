@@ -12,3 +12,4 @@ site/
 /CommandDotNet.Example/CommandDotNet.Example.exe
 DevDefaultTestConfig.cs
 Pipfile
+Pipfile.lock
