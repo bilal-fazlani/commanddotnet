@@ -1,70 +1,70 @@
 site_name: CommandDotNet
 site_description: Model your command line application interface in a class
-repo_name: 'bilal-fazlani/commanddotnet'
-repo_url: 'https://github.com/bilal-fazlani/commanddotnet'
-edit_uri: 'edit/v3/docs/'
+repo_name: "bilal-fazlani/commanddotnet"
+repo_url: "https://github.com/bilal-fazlani/commanddotnet"
+edit_uri: "edit/v3/docs/"
 
 strict: true
 
 nav:
-    - Documentation:
+  - Documentation:
       - Introduction: index.md
       - features.md
       - getting-started.md
       - argument-terminology.md
       - Commands:
-        - Commands/commands.md
-        - Commands/subcommands.md
+          - Commands/commands.md
+          - Commands/subcommands.md
       - Arguments:
-        - Arguments/arguments.md
-        - Collections: Arguments/argument-collections.md
-        - Data Types: Arguments/argument-types.md
-        - Arguments/passwords.md 
-        - Argument Models: Arguments/argument-models.md
-        - Arguments/argument-arity.md
-        - Arguments/option-or-operand.md
-        - Arguments/fluent-validation-for-argument-models.md
+          - Arguments/arguments.md
+          - Collections: Arguments/argument-collections.md
+          - Data Types: Arguments/argument-types.md
+          - Arguments/passwords.md
+          - Argument Models: Arguments/argument-models.md
+          - Arguments/argument-arity.md
+          - Arguments/option-or-operand.md
+          - Arguments/fluent-validation-for-argument-models.md
       - Argument Values:
-        - ArgumentValues/argument-separator.md
-        - ArgumentValues/piped-arguments.md
-        - ArgumentValues/prompting.md
-        - ArgumentValues/response-files.md
-        - AppSettings and<br/>Environment Variables: ArgumentValues/default-values-from-config.md
+          - ArgumentValues/argument-separator.md
+          - ArgumentValues/piped-arguments.md
+          - ArgumentValues/prompting.md
+          - ArgumentValues/response-files.md
+          - AppSettings and<br/>Environment Variables: ArgumentValues/default-values-from-config.md
       - Help:
-        - Help/help.md
-        - Help/typo-suggestions.md
+          - Help/help.md
+          - Help/typo-suggestions.md
       - Diagnostics:
-        - Diagnostics/app-version.md
-        - Diagnostics/debug-directive.md
-        - Diagnostics/parse-directive.md
-        - Diagnostics/command-logger.md
-        - Diagnostics/exceptions.md
+          - Diagnostics/app-version.md
+          - Diagnostics/debug-directive.md
+          - Diagnostics/parse-directive.md
+          - Diagnostics/command-logger.md
+          - Diagnostics/exceptions.md
       - Testing:
-        - TestTools/overview.md
-        - Harness:
-          - TestTools/Harness/run-in-mem.md
-          - TestTools/Harness/bdd.md
-          - TestTools/Harness/test-config.md
-          - TestTools/Harness/test-captures.md
-          - TestTools/Harness/tips-test-runners.md
-        - Tools:
-          - TestTools/Tools/testing-middleware.md
-          - TestTools/Tools/testing-piped-input.md
-          - TestTools/Tools/testing-prompts.md
+          - TestTools/overview.md
+          - Harness:
+              - TestTools/Harness/run-in-mem.md
+              - TestTools/Harness/bdd.md
+              - TestTools/Harness/test-config.md
+              - TestTools/Harness/test-captures.md
+              - TestTools/Harness/tips-test-runners.md
+          - Tools:
+              - TestTools/Tools/testing-middleware.md
+              - TestTools/Tools/testing-piped-input.md
+              - TestTools/Tools/testing-prompts.md
       - Other Features:
-        - OtherFeatures/default-middleware.md
-        - Ctrl+C and<br/>CancellationToken: OtherFeatures/cancellation.md
-        - OtherFeatures/dependency-injection.md
-        - OtherFeatures/name-casing.md
-        - OtherFeatures/newer-release-alerts.md
+          - OtherFeatures/default-middleware.md
+          - Ctrl+C and<br/>CancellationToken: OtherFeatures/cancellation.md
+          - OtherFeatures/dependency-injection.md
+          - OtherFeatures/name-casing.md
+          - OtherFeatures/newer-release-alerts.md
       - Extensibility:
-        - Extensibility/directives.md
-        - Extensibility/parameter-types.md
-        - Extensibility/parameter-resolvers.md
-        - Extensibility/middleware.md
-        - Extensibility/interceptors.md 
-        - Extensibility/token-transformations.md
-    - Release Notes:
+          - Extensibility/directives.md
+          - Extensibility/parameter-types.md
+          - Extensibility/parameter-resolvers.md
+          - Extensibility/middleware.md
+          - Extensibility/interceptors.md
+          - Extensibility/token-transformations.md
+  - Release Notes:
       - ReleaseNotes/whats-new-in-v3.md
       - ReleaseNotes/CommandDotNet.md
       - ReleaseNotes/CommandDotNet.FluentValidation.md
@@ -77,19 +77,15 @@ theme:
   features:
     - tabs
     - instant
-  name: 'material'
+  name: "material"
   custom_dir: overrides
   icon:
     repo: fontawesome/brands/github
-  favicon: 'img/favicon.ico'
+  favicon: "img/favicon.ico"
   palette:
-    primary: 'black'
-    accent: 'red'  
-  logo: 'img/small-logo.svg'
-
-google_analytics:
-  - 'UA-39358317-3'
-  - 'auto'
+    primary: "black"
+    accent: "red"
+  logo: "img/small-logo.svg"
 
 markdown_extensions:
   - admonition
@@ -116,7 +112,7 @@ markdown_extensions:
       custom_checkbox: true
   - pymdownx.tilde
   - toc:
-     permalink: "#"   
+      permalink: "#"
 
 plugins:
   - search
@@ -124,11 +120,15 @@ plugins:
 
 # Customization
 extra:
-  version: '3'
+  analytics:
+    provider: google
+    property: UA-39358317-3
+  version: "3"
+  legacy: true
   social:
     - icon: fontawesome/brands/github
-      link: 'https://github.com/bilal-fazlani'
+      link: "https://github.com/bilal-fazlani"
     - icon: fontawesome/brands/twitter
-      link: 'https://twitter.com/bilal_fazlani'
+      link: "https://twitter.com/bilal_fazlani"
     - icon: fontawesome/brands/linkedin
-      link: 'https://www.linkedin.com/in/bilal-fazlani/'
+      link: "https://www.linkedin.com/in/bilal-fazlani/"
