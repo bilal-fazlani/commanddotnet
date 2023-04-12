@@ -31,15 +31,12 @@ theme:
   feature:
     tabs: false
   name: 'material'
+  custom_dir: docs/overrides
   favicon: 'img/favicon.ico'
   palette:
     primary: 'indigo'
     accent: 'red'  
   logo: 'img/small-logo.svg'
-
-google_analytics:
-  - 'UA-39358317-3'
-  - 'auto'
 
 markdown_extensions:
   - admonition
@@ -71,6 +68,11 @@ plugins:
 
 # Customization
 extra:
+  analytics:
+    provider: google
+    property: UA-39358317-3
+  version: "2"
+  legacy: true
   social:
     - type: 'github'
       link: 'https://github.com/bilal-fazlani'

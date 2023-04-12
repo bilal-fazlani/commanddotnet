@@ -8,3 +8,5 @@ CommandDotNet.sln.DotSettings.user
 *.ncrunchsolution.user
 public
 site/
+Pipfile
+Pipfile.lock
