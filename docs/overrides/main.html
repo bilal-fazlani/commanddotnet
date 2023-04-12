@@ -7,3 +7,14 @@
     <meta name="googlebot" content="noindex">
   {% endif %}
 {% endblock %}
+
+{% block announce %}
+  {% if config.extra.legacy %}
+    <style>.md-banner a,.md-banner a:focus,.md-banner a:hover{color:currentColor}.md-banner strong{white-space:nowrap}.md-banner{background-color: rgb(147, 19, 19) ;}</style>
+    <a href="https://commanddotnet.bilal-fazlani.com">
+      This documentation is for legacy version {{ config.extra.version }} of CommandDotNet. Click here to visit latest documentation website
+    </a>
+  {% else %}
+  <style>.md-banner {display: none;}</style>
+  {% endif %}  
+{% endblock %}

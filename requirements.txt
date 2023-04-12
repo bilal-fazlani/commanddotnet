@@ -2,4 +2,3 @@
 jinja2==3.0.0
 mkdocs-material==7.3.6
 mkdocs-autolinks-plugin==0.2.0
-mkdocs-git-revision-date-localized-plugin==0.4.6

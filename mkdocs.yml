@@ -1,42 +1,45 @@
 site_name: CommandDotNet
 site_description: Model your command line application interface in a class
-repo_name: 'bilal-fazlani/commanddotnet'
-repo_url: 'https://github.com/bilal-fazlani/commanddotnet'
-edit_uri: 'edit/v2/docs/'
+repo_name: "bilal-fazlani/commanddotnet"
+repo_url: "https://github.com/bilal-fazlani/commanddotnet"
+edit_uri: "edit/v2/docs/"
 
 nav:
   - Introduction: index.md
   - Quick Start: quick-start.md
   - Defining Commands:
-    - Parameters: parameters.md
-    - Attributes: attributes.md
-    - Constructors: constructors.md
-    - Default method: default-method.md
-    - Default values: default-values.md
-    - Collections: collections.md
-    - Argument Models: argument-models.md
-    - Async methods: async-methods.md
-    - Custom return codes: custom-return-codes.md
-    - Nesting commands: nesting-commands.md
-    - Exceptions: exceptions.md
+      - Parameters: parameters.md
+      - Attributes: attributes.md
+      - Constructors: constructors.md
+      - Default method: default-method.md
+      - Default values: default-values.md
+      - Collections: collections.md
+      - Argument Models: argument-models.md
+      - Async methods: async-methods.md
+      - Custom return codes: custom-return-codes.md
+      - Nesting commands: nesting-commands.md
+      - Exceptions: exceptions.md
   - Extras:
-    - directives.md
-    - Fluent validation for parameters: fluent-validation-for-argument-models.md
-    - Settings: settings.md
+      - directives.md
+      - Fluent validation for parameters: fluent-validation-for-argument-models.md
+      - Settings: settings.md
   - Extensibility:
       - Dependency Injection: dependency-injection.md
       - Parameter types: parameter-types.md
       - Custom interceptors: custom-interceptors.md
+
 theme:
-  feature:
-    tabs: false
-  name: 'material'
+  name: "material"
   custom_dir: docs/overrides
-  favicon: 'img/favicon.ico'
+  icon:
+    repo: fontawesome/brands/github
+  favicon: "img/favicon.ico"
   palette:
-    primary: 'indigo'
-    accent: 'red'  
-  logo: 'img/small-logo.svg'
+    primary: "indigo"
+    accent: "red"
+  logo: "img/small-logo.svg"
+  features:
+    - tabs
 
 markdown_extensions:
   - admonition
@@ -51,20 +54,19 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.emoji:
       emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.escapeall:
+      nbsp: true
   - pymdownx.inlinehilite
   - pymdownx.magiclink
   - pymdownx.mark
   - pymdownx.smartsymbols
   - pymdownx.superfences
+  - pymdownx.tabbed
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.tilde
   - toc:
-     permalink: "#"   
-
-plugins:
-  - search
-  - git-revision-date-localized
+      permalink: "#"
 
 # Customization
 extra:
@@ -74,9 +76,9 @@ extra:
   version: "2"
   legacy: true
   social:
-    - type: 'github'
-      link: 'https://github.com/bilal-fazlani'
-    - type: 'twitter'
-      link: 'https://twitter.com/bilal_fazlani'
-    - type: 'linkedin'
-      link: 'https://www.linkedin.com/in/bilal-fazlani/'
+    - icon: fontawesome/brands/github
+      link: "https://github.com/bilal-fazlani"
+    - icon: fontawesome/brands/twitter
+      link: "https://twitter.com/bilal_fazlani"
+    - icon: fontawesome/brands/linkedin
+      link: "https://www.linkedin.com/in/bilal-fazlani/"
