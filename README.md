@@ -1,7 +1,5 @@
 <img src="./images/logo.png" width="250px" />
 
-![Nuget](https://img.shields.io/nuget/v/commanddotnet?style=for-the-badge)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/CommandDotNet.svg?style=for-the-badge)](https://www.nuget.org/packages/CommandDotNet)
 [![NuGet](https://img.shields.io/nuget/dt/CommandDotNet.svg?style=for-the-badge)](https://www.nuget.org/packages/CommandDotNet)
 [![GitHub](https://img.shields.io/github/license/bilal-fazlani/commanddotnet?style=for-the-badge)](https://github.com/bilal-fazlani/commanddotnet/blob/master/LICENSE)
 
