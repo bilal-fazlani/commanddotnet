@@ -15,7 +15,7 @@ Use [Humanizer](https://github.com/Humanizr/Humanizer) with CommandDotNet to con
     ```
     Install-Package CommandDotNet.NameCasing
     ```
-Enable the feature with `appRunner.NameCasing(...)`
+Enable the feature with `appRunner.UseNameCasing(...)`
 
 ## Case options
 
