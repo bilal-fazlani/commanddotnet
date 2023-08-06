@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using CommandDotNet.Extensions;
 using FluentValidation;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace CommandDotNet.Example.Commands
 {
@@ -28,11 +27,6 @@ namespace CommandDotNet.Example.Commands
                 console.Out.WriteLine($"preparing notification for {notification.Email}");
             }
 
-            var content = JsonConvert.SerializeObject(notification, Formatting.Indented, new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            });
-
             if (dryRunArgs.IsDryRun || verbosityArgs.Quite)
             {
                 return;
@@ -41,7 +35,7 @@ namespace CommandDotNet.Example.Commands
             console.Out.WriteLine($"sending notification to {notification.Email}");
             if (verbosityArgs.Verbose)
             {
-                console.Out.WriteLine(content);
+                console.Out.WriteLine(notification.Email!.ToStringFromPublicProperties());
             }
         }
 
