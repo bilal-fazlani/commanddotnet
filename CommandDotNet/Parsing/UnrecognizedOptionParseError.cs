@@ -9,7 +9,7 @@ namespace CommandDotNet.Parsing
     public class UnrecognizedOptionParseError : UnrecognizedArgumentParseError
     {
         public UnrecognizedOptionParseError(Command command, Token token, string optionPrefix, string? message = null)
-        : base(command, token, optionPrefix, message ?? Resources.A.Parse_Unrecognized_option(token.RawValue))
+        : base(command, token, optionPrefix, null, message ?? Resources.A.Parse_Unrecognized_option(token.RawValue))
         {
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CommandDotNet.Extensions;
 using CommandDotNet.Tokens;
 
 namespace CommandDotNet.Parsing
@@ -32,6 +33,7 @@ namespace CommandDotNet.Parsing
                 }
             }
 
+            public int TokensEvaluated { get; set; }
 
             public bool SubcommandsAreAllowed { get; private set; } = true;
 
@@ -70,6 +72,20 @@ namespace CommandDotNet.Parsing
             }
 
             public void CommandArgumentParsed() => SubcommandsAreAllowed = false;
+
+            public ParseResult ToParseResult() =>
+                ParserError is null
+                    ? new ParseResult(
+                        Command,
+                        RemainingOperands.ToReadOnlyCollection(),
+                        CommandContext.Tokens.Separated,
+                        Operands.Dequeue(), 
+                        TokensEvaluated,
+                        !SubcommandsAreAllowed)
+                    : new ParseResult(ParserError,
+                        Operands.Dequeue(),
+                        TokensEvaluated,
+                        !SubcommandsAreAllowed);
         }
     }
 }

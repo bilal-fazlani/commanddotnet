@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using CommandDotNet.DotnetSuggest;
 using CommandDotNet.Extensions;
 using CommandDotNet.Logging;
 
@@ -43,6 +44,9 @@ namespace CommandDotNet.Builders
         /// <summary>True if the application's filename ends with .exe</summary>
         public bool IsExe { get; }
 
+        /// <summary>True if the application is located in the global dotnet tool directory</summary>
+        public bool IsGlobalTool { get; }
+
         /// <summary>True if published as a self-contained single executable</summary>
         public bool IsSelfContainedExe { get; }
 
@@ -60,8 +64,21 @@ namespace CommandDotNet.Builders
 
         public string? Version => _version ??= GetVersion(Instance.EntryAssembly);
 
+        // second ctor to avoid breaking change
         public AppInfo(
             bool isExe, bool isSelfContainedExe, bool isRunViaDotNetExe, 
+            bool isGlobalTool,
+            Assembly entryAssembly,
+            string filePath, string fileName,
+            string? version = null)
+        : this(isExe, isSelfContainedExe, isRunViaDotNetExe, entryAssembly, filePath, fileName, version)
+        {
+            IsGlobalTool = isGlobalTool;
+        }
+
+        [Obsolete("Use ctor with isGlobalTool param")]
+        public AppInfo(
+            bool isExe, bool isSelfContainedExe, bool isRunViaDotNetExe,
             Assembly entryAssembly,
             string filePath, string fileName,
             string? version = null)
@@ -112,14 +129,20 @@ namespace CommandDotNet.Builders
             var isRunViaDotNetExe = false;
             var isSelfContainedExe = false;
             var isExe = false;
-            if (mainModuleFileName != null)
+            var isGlobalTool = false;
+            if (mainModuleFileName is not null)
             {
                 // osx uses 'dotnet' instead of 'dotnet.exe'
-                if (!(isRunViaDotNetExe = mainModuleFileName.Equals("dotnet.exe") || mainModuleFileName.Equals("dotnet")))
+                isRunViaDotNetExe = mainModuleFileName.Equals("dotnet.exe") || mainModuleFileName.Equals("dotnet");
+                if (!isRunViaDotNetExe)
                 {
                     var entryAssemblyFileNameWithoutExt = Path.GetFileNameWithoutExtension(entryAssemblyFileName);
                     isSelfContainedExe = isExe = mainModuleFileName.EndsWith($"{entryAssemblyFileNameWithoutExt}.exe");
                 }
+
+                var globalToolsDirectory = DotnetTools.GlobalToolDirectory;
+                isGlobalTool = globalToolsDirectory is not null 
+                               && mainModuleFilePath!.StartsWith(globalToolsDirectory);
             }
 
             isExe = isExe || entryAssemblyFileName.EndsWith("exe");
@@ -133,16 +156,17 @@ namespace CommandDotNet.Builders
             Log.Debug($"  {nameof(FileName)}={fileName} " +
                       $"{nameof(IsRunViaDotNetExe)}={isRunViaDotNetExe} " +
                       $"{nameof(IsSelfContainedExe)}={isSelfContainedExe} " +
+                      $"{nameof(IsGlobalTool)}={isGlobalTool} " +
                       $"{nameof(FilePath)}={filePath}");
 
-            return new AppInfo(isExe, isSelfContainedExe, isRunViaDotNetExe, entryAssembly, filePath!, fileName);
+            return new AppInfo(isExe, isSelfContainedExe, isRunViaDotNetExe, isGlobalTool, entryAssembly, filePath!, fileName);
         }
 
         private static string? GetVersion(Assembly hostAssembly) =>
             // thanks Spectre console for figuring this out https://github.com/spectreconsole/spectre.console/issues/242
             hostAssembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "?";
 
-        public object Clone() => new AppInfo(IsExe, IsSelfContainedExe, IsRunViaDotNetExe, EntryAssembly, FilePath, FileName, _version);
+        public object Clone() => new AppInfo(IsExe, IsSelfContainedExe, IsRunViaDotNetExe, IsGlobalTool, EntryAssembly, FilePath, FileName, _version);
 
         public override string ToString() => ToString(new Indent());
 

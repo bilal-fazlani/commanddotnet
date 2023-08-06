@@ -6,6 +6,7 @@ using CommandDotNet.Builders;
 using CommandDotNet.Builders.ArgumentDefaults;
 using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Diagnostics;
+using CommandDotNet.DotnetSuggest;
 using CommandDotNet.Execution;
 using CommandDotNet.Localization;
 using CommandDotNet.Parsing.Typos;
@@ -71,6 +72,19 @@ namespace CommandDotNet
                 ()=> appRunner.UseTypoSuggestions());
             return appRunner;
         }
+
+        /// <summary>
+        /// Registers the [suggest] directive, to use in conjunction with System.CommandLine's dotnet-suggest.
+        /// see https://learn.microsoft.com/en-us/dotnet/standard/commandline/tab-completion
+        /// </summary>
+        /// <param name="appRunner"></param>
+        /// <param name="registrationStrategy">the registration strategy to use</param>
+        /// <param name="directiveName">must be specified when using <see cref="RegistrationStrategy.UseRegistrationDirective"/></param>
+        /// <returns></returns>
+        public static AppRunner UseSuggestDirective_Experimental(this AppRunner appRunner,
+            RegistrationStrategy registrationStrategy = RegistrationStrategy.None,
+            string directiveName = "enable-tab-completion") => 
+            SuggestDirectiveMiddleware.UseSuggestDirective_Experimental(appRunner, registrationStrategy, directiveName);
 
         /// <summary>When an invalid arguments is entered, suggests context based alternatives</summary>
         public static AppRunner UseTypoSuggestions(this AppRunner appRunner, int maxSuggestionCount = 5)

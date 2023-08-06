@@ -23,6 +23,7 @@ namespace CommandDotNet.Example
             appConfigSettings ??= new NameValueCollection();
             return new AppRunner<Examples>(appNameForTests is null ? null : new AppSettings{Help = {UsageAppName = appNameForTests}})
                 .UseDefaultMiddleware()
+                .UseSuggestDirective_Experimental()
                 .UseCommandLogger()
                 .UseNameCasing(Case.KebabCase)
                 .UsePrompter()
