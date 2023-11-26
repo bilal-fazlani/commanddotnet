@@ -81,7 +81,9 @@ namespace CommandDotNet.TestTools.Scenarios
             AssertUnexpectedOutputTexts(scenario, result, sb);
             if (sb.Length > 0)
             {
-                throw new AssertFailedException(sb.ToString());
+                var newLine = Environment.NewLine;
+                throw new AssertFailedException(
+                    $"{sb}{newLine}Output:{newLine}{newLine}{result.Console.AllText()}");
             }
         }
 

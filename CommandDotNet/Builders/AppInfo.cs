@@ -138,9 +138,12 @@ namespace CommandDotNet.Builders
             return new AppInfo(isExe, isSelfContainedExe, isRunViaDotNetExe, entryAssembly, filePath!, fileName);
         }
 
-        private static string? GetVersion(Assembly hostAssembly) =>
+        private static string? GetVersion(Assembly hostAssembly)
+        {
             // thanks Spectre console for figuring this out https://github.com/spectreconsole/spectre.console/issues/242
-            hostAssembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "?";
+            var version = hostAssembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+            return version?.Substring(0, version.IndexOf('+'));
+        }
 
         public object Clone() => new AppInfo(IsExe, IsSelfContainedExe, IsRunViaDotNetExe, EntryAssembly, FilePath, FileName, _version);
 

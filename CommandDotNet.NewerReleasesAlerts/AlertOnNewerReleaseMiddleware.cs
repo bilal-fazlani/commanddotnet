@@ -102,7 +102,6 @@ namespace CommandDotNet.NewerReleasesAlerts
         private static bool TryGetCurrentVersion(out SemVersion semVersion)
         {
             return SemVersion.TryParse(AppInfo.Instance.Version, out semVersion);
-
         }
 
         private static bool TryGetLatestReleaseVersion(CommandContext context, NewerReleaseConfig config, out SemVersion? semVersion)
