@@ -10,7 +10,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionFolder", "{4CA1A4AA-7105-4FEC-B88B-3A4AD3BBD6EE}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		appveyor.yml = appveyor.yml
 		Directory.Build.props = Directory.Build.props
 		README.md = README.md
 	EndProjectSection
@@ -19,7 +18,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandDotNet.Example", "Co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{6296D4E9-7128-4CFA-BFB9-1DF6004B7626}"
 	ProjectSection(SolutionItems) = preProject
-		.travis.yml = .travis.yml
 		deploy.sh = deploy.sh
 	EndProjectSection
 EndProject

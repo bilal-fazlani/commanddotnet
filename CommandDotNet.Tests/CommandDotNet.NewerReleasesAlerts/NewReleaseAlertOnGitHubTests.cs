@@ -1,3 +1,5 @@
+using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using CommandDotNet.Builders;
 using CommandDotNet.NewerReleasesAlerts;
