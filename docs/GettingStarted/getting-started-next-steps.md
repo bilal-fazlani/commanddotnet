@@ -13,8 +13,8 @@ new AppRunner<Program>()
 
 `UseDefaultMiddleware` to take advantage of many more additional features, such as
 [debug](../Diagnostics/debug-directive.md) directive, 
-[parse](../Diagnostics/parse-directive) directive,
-[time](../Diagnostics/time-directive) directive,
+[parse](../Diagnostics/parse-directive.md) directive,
+[time](../Diagnostics/time-directive.md) directive,
 [ctrl+c support](../OtherFeatures/cancellation.md),
 [response files](../ArgumentValues/response-files.md),
 and [typo suggestions](../Help/typo-suggestions.md)
