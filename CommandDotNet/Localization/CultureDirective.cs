@@ -14,7 +14,7 @@ namespace CommandDotNet.Localization
             return appRunner.Configure(c => c.UseMiddleware(CheckCulture, MiddlewareSteps.DebugDirective + 1));
         }
 
-        private static Task<int> CheckCulture(CommandContext context, ExecutionDelegate next)
+        private static async Task<int> CheckCulture(CommandContext context, ExecutionDelegate next)
         {
             Action? revert = null;
 
@@ -36,7 +36,7 @@ namespace CommandDotNet.Localization
                 CultureInfo.CurrentUICulture = cultureInfo;
             }
 
-            var result = next(context);
+            var result = await next(context);
 
             // revert for tests and interactive repl sessions
             revert?.Invoke();

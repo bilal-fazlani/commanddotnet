@@ -36,7 +36,7 @@ namespace CommandDotNet.TestTools
                 middlewareStep ?? new MiddlewareStep(MiddlewareStages.Invoke, short.MinValue)));
         }
 
-        private static Task<int> InterceptingSystemConsoleWrites(CommandContext context, ExecutionDelegate next)
+        private static async Task<int> InterceptingSystemConsoleWrites(CommandContext context, ExecutionDelegate next)
         {
             if (Console.Out is DuplexTextWriter)
             {
@@ -49,7 +49,7 @@ namespace CommandDotNet.TestTools
             {
                 Console.SetOut(@out);
                 Console.SetError(error);
-                return next(context);
+                return await next(context);
             }
             finally
             {
