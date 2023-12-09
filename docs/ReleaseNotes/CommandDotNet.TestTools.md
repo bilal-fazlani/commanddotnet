@@ -1,5 +1,9 @@
 # CommandDotNet.TestTools
 
+## 6.0.3
+
+fix async support for `InterceptingSystemConsoleWrites`. It did not property await async command methods.
+
 ## 6.0.2
 
 * support dotnet 7

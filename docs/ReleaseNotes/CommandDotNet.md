@@ -1,5 +1,11 @@
 # CommandDotNet
 
+## 7.0.3
+
+fix async support for `OnRunCompleted` and the `[culture]` directive. They did not property await async command methods.
+
+Thanks to `@Sibusten` for reporting this.
+
 ## 7.0.2
 
 support dotnet 7
