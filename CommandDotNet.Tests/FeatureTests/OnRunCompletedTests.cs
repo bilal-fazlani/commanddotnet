@@ -32,9 +32,9 @@ namespace CommandDotNet.Tests.FeatureTests
         {
             public static bool Executed { get; set; }
 
-            public void Do()
+            public async Task Do()
             {
-                Task.Delay(1000);
+                await Task.Delay(1000);
                 Executed = true;
             }
         }
