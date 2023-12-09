@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
@@ -18,16 +19,24 @@ namespace CommandDotNet.Tests.FeatureTests
             new AppRunner<App>()
                 .Configure(b => b.OnRunCompleted += args =>
                 {
+                    // ensure OnRunCompleted waits for the pipeline to complete
+                    App.Executed.Should().BeTrue();
                     wasCalled = true;
                 })
-                .RunInMem("");
+                .RunInMem("Do");
 
             wasCalled.Should().BeTrue();
         }
 
         private class App
         {
-            public void Do() { }
+            public static bool Executed { get; set; }
+
+            public async Task Do()
+            {
+                await Task.Delay(1000);
+                Executed = true;
+            }
         }
     }
 }

@@ -156,9 +156,9 @@ namespace CommandDotNet
             //            (when ctor options are moved to a middleware method, invocation context should be populated in Parse stage)
         }
 
-        private Task<int> OnRunCompleted(CommandContext context, ExecutionDelegate next)
+        private async Task<int> OnRunCompleted(CommandContext context, ExecutionDelegate next)
         {
-            var result = next(context);
+            var result = await next(context);
             context.AppConfig.OnRunCompleted?.Invoke(new OnRunCompletedEventArgs(context));
             return result;
         }
