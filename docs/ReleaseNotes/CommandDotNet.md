@@ -1,5 +1,11 @@
 # CommandDotNet
 
+## 7.0.3
+
+fix async support for `OnRunCompleted` and the `[culture]` directive. They did not property await async command methods.
+
+Thanks to `@Sibusten` for reporting this.
+
 ## 7.0.2
 
 support dotnet 7
@@ -393,7 +399,7 @@ Version 4 is removing obsolete members and changing default behaviors made possi
 * make `AppSettings.LongNameAlwaysDefaultsToSymbolName` the only behavior and remove the setting. `LongName` can be removed with `[Option(LongName=null)]`.
     * Look for places in your apps where `[Option(ShortName="a")]` with setting a LongName. If you don't want a LongName then add `LongName=null` otherwise the long name will default from the parameter or property name.
 * make `AppSettings.GuaranteeOperandOrderInArgumentModels` the only behavior and remove the setting.
-    * see this [Argument Models section](../Arguments/argument-models/#guaranteeing-the-order-of-arguments) for details
+    * see this [Argument Models section](../Arguments/argument-models.md#guaranteeing-the-order-of-arguments) for details
 * enable [CommandLogger](../Diagnostics/command-logger.md) in `.UseDefaultMiddleware()` as `cmdlog` directive. This can be useful for diagnostics.
 * Command.FindOption will throw an exception if the alias is for an operand or subcommand instead of an option. Previously it would return null.
 
