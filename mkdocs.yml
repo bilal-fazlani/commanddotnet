@@ -176,12 +176,15 @@ plugins:
 
 # Customization
 extra:
+  generator: false
   analytics:
     provider: google
     property: G-NDX1871EQJ
   version: "7"
   legacy: false
   social:
+    - icon: material/web
+      link: "https://bilal-fazlani.com"
     - icon: fontawesome/brands/github
       link: "https://github.com/bilal-fazlani"
     - icon: fontawesome/brands/twitter

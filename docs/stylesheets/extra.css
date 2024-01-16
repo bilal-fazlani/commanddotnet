@@ -1,5 +1,15 @@
 [data-md-color-scheme=slate] {
-  --md-typeset-a-color: #3c8aff !important; 
+  --md-typeset-a-color: #3c8aff !important;
+}
+
+#features-link {
+  font-weight: bold;
+  color: #94fff0;
+  text-decoration: underline;
+}
+
+[data-md-color-scheme=slate] #features-link {
+  color: #00e2c3;
 }
 
 #features-page {
@@ -28,8 +38,7 @@
   background-color: rgb(163 163 163 / 5%);
 }
 
-.feature > h2 {
+.feature>h2 {
   margin: 0;
   text-align: center;
 }
-
