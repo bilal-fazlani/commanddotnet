@@ -18,14 +18,14 @@ namespace CommandDotNet.Builders
     {
         private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
 
-        private static AppInfo? sAppInfo;
-        private static Func<AppInfo>? sAppInfoResolver;
+        private static AppInfo? _appInfo;
+        private static Func<AppInfo>? _appInfoResolver;
 
         /// <summary>
         /// The instance of AppInfo used by all commands.
         /// Use <see cref="SetResolver"/> to override this for consistent tests.
         /// </summary>
-        public static AppInfo Instance => sAppInfoResolver?.Invoke() ?? (sAppInfo ??= BuildAppInfo());
+        public static AppInfo Instance => _appInfoResolver?.Invoke() ?? (_appInfo ??= BuildAppInfo());
 
         /// <summary>
         /// Use to override the AppInfo logic for consistent usage info in tests
@@ -34,8 +34,8 @@ namespace CommandDotNet.Builders
         /// </summary>
         public static IDisposable SetResolver(Func<AppInfo> appInfoResolver)
         {
-            sAppInfoResolver = appInfoResolver;
-            return new DisposableAction(() => sAppInfoResolver = null);
+            _appInfoResolver = appInfoResolver;
+            return new DisposableAction(() => _appInfoResolver = null);
         }
 
         private string? _version;
@@ -91,10 +91,20 @@ namespace CommandDotNet.Builders
             var mainModule = Process.GetCurrentProcess().MainModule;
             var mainModuleFilePath = mainModule?.FileName;
             
-            // TODO: warning IL3000: 'System.Reflection.Assembly.Location' always returns
+            // warning IL3000: 'System.Reflection.Assembly.Location' always returns
             // an empty string for assemblies embedded in a single-file app.
             // If the path to the app directory is needed, consider calling 'System.AppContext.BaseDirectory'
             var entryAssemblyFilePath = entryAssembly.Location;
+            if (entryAssemblyFilePath.IsNullOrEmpty())
+            {
+                // https://github.com/dotnet/corert/issues/5467#issuecomment-369202524
+                entryAssemblyFilePath = Path.Combine(AppContext.BaseDirectory, entryAssembly.ManifestModule.Name);
+                
+                // if this still fails for an app, specify for Assembly.Location to returns paths to (non-existent)
+                // files in AppContext.BaseDirectory using...
+                // AppContext.SetSwitch("Switch.System.Reflection.Assembly.SimulatedLocationInBaseDirectory", true);
+                // https://github.com/dotnet/corert/issues/5467#issuecomment-464611875
+            }
             
             Log.Debug($"{nameof(mainModuleFilePath)}: {mainModuleFilePath}");
             Log.Debug($"{nameof(entryAssemblyFilePath)}: {entryAssemblyFilePath}");
@@ -142,7 +152,12 @@ namespace CommandDotNet.Builders
         {
             // thanks Spectre console for figuring this out https://github.com/spectreconsole/spectre.console/issues/242
             var version = hostAssembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
-            return version?.Substring(0, version.IndexOf('+'));
+            if (version is null)
+            {
+                return null;
+            }
+            var indexOfBuildInfo = version.IndexOf('+');
+            return indexOfBuildInfo > 0 ? version[..indexOfBuildInfo] : version;
         }
 
         public object Clone() => new AppInfo(IsExe, IsSelfContainedExe, IsRunViaDotNetExe, EntryAssembly, FilePath, FileName, _version);
