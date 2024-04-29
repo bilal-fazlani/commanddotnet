@@ -1,10 +1,18 @@
 # CommandDotNet
 
+## 7.0.4
+
+### Bug fixes
+
+* [#494](https://github.com/bilal-fazlani/commanddotnet/issues/494) Version command fails when no build info is present. Thanks to `@diredev` for reporting this.
+
 ## 7.0.3
 
-fix async support for `OnRunCompleted` and the `[culture]` directive. They did not property await async command methods.
+support dotnet 8
 
-Thanks to `@Sibusten` for reporting this.
+### Bug fixes
+
+* [#488](https://github.com/bilal-fazlani/commanddotnet/issues/488) fix async support for `OnRunCompleted` and the `[culture]` directive. They did not property await async command methods. Thanks to `@Sibusten` for reporting this.
 
 ## 7.0.2
 
