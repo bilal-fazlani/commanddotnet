@@ -1,5 +1,9 @@
 # CommandDotNet.IoC.MicrosoftDependencyInjection
 
+## 6.0.0
+
+* upgrade to Microsoft.Extensions.DependencyInjection 8.0.0
+
 ## 5.0.2
 
 * support dotnet 7

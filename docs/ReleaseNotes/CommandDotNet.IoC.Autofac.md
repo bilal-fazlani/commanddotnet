@@ -1,5 +1,9 @@
 # CommandDotNet.IoC.AutoFac
 
+## 6.0.0
+
+* upgrade to Autofac 8.0.0
+
 ## 5.0.2
 
 * support dotnet 7
