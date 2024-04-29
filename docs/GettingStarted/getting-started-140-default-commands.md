@@ -54,7 +54,7 @@ $ add.exe 40 20
 ## Command per class pattern
 
 Many console frameworks are designed solely to support the pattern of defining a command with a class.
-With these frameowrks, the command class will contain an Execute method.
+With these frameworks, the command class will contain an Execute method.
 
 CommandDotNet does not force this pattern but can support it. Just create a class and decorate a method with `[DefaultCommand]`
 

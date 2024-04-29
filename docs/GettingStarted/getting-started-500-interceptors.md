@@ -2,7 +2,7 @@
 
 Interceptors are methods that wrap the execution of a command.
 
-An intercepter must define an InterceptorExecutionDelegate paramenter and can include options, 
+An intercepter must define an InterceptorExecutionDelegate parameter and can include options, 
 [argument models](../Arguments/argument-models.md) and [resolvable parameters](../Extensibility/parameter-resolvers.md)
 
 Defining options in interceptor options makes it easy to define options where they are used.

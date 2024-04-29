@@ -2,6 +2,13 @@
 
 ## 7.0.4
 
+### Maintenance
+
+* move to centralized package management
+* update nuget packages, except for 3rd party integrations without major updates.
+* remove obsolete ref to Microsoft.CSharp. Thanks to `@mur-dock` for reporting this.
+* fix typos in getting started docs. Thanks to `@AldeRoberge` for reporting these.
+
 ### Bug fixes
 
 * [#494](https://github.com/bilal-fazlani/commanddotnet/issues/494) Version command fails when no build info is present. Thanks to `@diredev` for reporting this.
