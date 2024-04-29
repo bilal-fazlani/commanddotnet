@@ -1,7 +1,5 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using CommandDotNet.TestTools.Prompts;
-using NuGet.Frameworks;
 
 namespace CommandDotNet.DocExamples
 {

@@ -1,6 +1,7 @@
 using System;
 using CommandDotNet.Prompts;
 using CommandDotNet.TestTools.Prompts;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.Arguments.Arguments
@@ -38,6 +39,6 @@ namespace CommandDotNet.DocExamples.Arguments.Arguments
 u:roy p:rogers",
             promptAnswers: new IAnswer[]{ new Answer("rogers") });
 
-        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
     }
 }

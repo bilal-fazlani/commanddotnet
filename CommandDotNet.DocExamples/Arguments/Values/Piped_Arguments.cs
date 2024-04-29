@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.Arguments.Values
@@ -132,6 +133,6 @@ notify: a1 Avery (active)
 notify: b1 Beatrix (active)",
             pipedInput: ("users.exe list -i", Program.userSvc.GetUsers().Select(u => u.Id).ToArray()));
 
-        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
     }
 }

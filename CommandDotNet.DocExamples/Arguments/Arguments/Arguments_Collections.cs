@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.Arguments.Arguments
@@ -77,6 +78,6 @@ planets: mars
 crew: alex
 separated: additional,args,here");
 
-        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
     }
 }

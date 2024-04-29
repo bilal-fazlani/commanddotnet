@@ -1,4 +1,5 @@
 using System;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.Arguments.Arguments
@@ -33,6 +34,6 @@ namespace CommandDotNet.DocExamples.Arguments.Arguments
             new AppRunner<Program>(), "myapp.exe", "Login roy rogers", 0,
             @"u:roy p:*****");
 
-        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
     }
 }

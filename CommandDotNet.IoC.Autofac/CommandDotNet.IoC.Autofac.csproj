@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyTitle>CommandDotNet.IoC.Autofac</AssemblyTitle>
@@ -16,7 +16,7 @@
     <None Remove="output\**" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.3.0" />
+    <PackageReference Include="Autofac" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommandDotNet\CommandDotNet.csproj" />

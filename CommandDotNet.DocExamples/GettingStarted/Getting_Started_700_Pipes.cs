@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.GettingStarted
@@ -54,6 +55,6 @@ namespace CommandDotNet.DocExamples.GettingStarted
 6
 10");
 
-        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
     }
 }

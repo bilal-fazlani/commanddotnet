@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using CommandDotNet.Diagnostics;
 using CommandDotNet.TestTools;
+using FluentAssertions;
 
 namespace CommandDotNet.DocExamples.Diagnostics
 {
@@ -224,16 +225,16 @@ Arguments:
         public void UseErrorHandler_Delegate_works()
         {
             var (exitCode, output) = typeof(Program_UseErrorHandler_Delegate.Program).InvokeMainMethod("Throw yikes");
-            Assert.AreEqual(1, exitCode);
-            Assert.AreEqual($"yikes (Parameter 'message'){Environment.NewLine}", output);
+            exitCode.Should().Be(1);
+            output.Should().Be($"yikes (Parameter 'message'){Environment.NewLine}");
         }
 
         [Test] 
         public void TryCatch_works()
         {
             var (exitCode, output) = typeof(Program_TryCatch.Program).InvokeMainMethod("Throw yikes");
-            Assert.AreEqual(1, exitCode);
-            Assert.AreEqual($"yikes (Parameter 'message'){Environment.NewLine}", output);
+            exitCode.Should().Be(1);
+            output.Should().Be($"yikes (Parameter 'message'){Environment.NewLine}");
         }
     }
 }

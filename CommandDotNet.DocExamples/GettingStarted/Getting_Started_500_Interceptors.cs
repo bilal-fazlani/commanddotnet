@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.GettingStarted
@@ -112,6 +113,6 @@ Options:
             "dotnet curl.dll", "-u me -p pwd Get http://mysite.com -v", 0,
             @"[GET] http://me:*****@mysite.com/ verbose=True");
 
-        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
     }
 }

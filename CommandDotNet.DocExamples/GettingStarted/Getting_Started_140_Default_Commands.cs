@@ -1,5 +1,6 @@
 using System;
 using CommandDotNet.TestTools;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.GettingStarted
@@ -99,6 +100,6 @@ Arguments:
             "dotnet calculator.dll", "Add 40 20", 0,
             @"60");
 
-        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
     }
 }

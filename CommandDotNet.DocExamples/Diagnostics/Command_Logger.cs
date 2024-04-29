@@ -4,6 +4,7 @@ using NUnit.Framework;
 using CommandDotNet.Diagnostics;
 using CommandDotNet.Extensions;
 using CommandDotNet.TestTools;
+using FluentAssertions;
 
 namespace CommandDotNet.DocExamples.Diagnostics
 {
@@ -338,6 +339,6 @@ OS version    = Microsoft Windows 10.0.12345
 ***************************************
 2");
 
-        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
     }
 }

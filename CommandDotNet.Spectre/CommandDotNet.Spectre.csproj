@@ -21,8 +21,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Spectre.Console" Version="0.42.0" />
-      <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+      <PackageReference Include="Spectre.Console" />
+      <PackageReference Include="System.ComponentModel.Annotations" />
     </ItemGroup>
 
 </Project>

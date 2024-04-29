@@ -1,4 +1,5 @@
 using System;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.Arguments.Arguments
@@ -132,6 +133,6 @@ requiredRefType is required");
             "app.exe", "-b true -b true -u http://google.com -u http://google.com", 0,
             "");
 
-        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
     }
 }
