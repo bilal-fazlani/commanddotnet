@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyTitle>CommandDotNet.NewerReleasesAlerts</AssemblyTitle>
     <Description>Print alerts if current version of the app is not the latest published version</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Semver" Version="2.0.6" />
+    <PackageReference Include="Semver" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="output\**" />

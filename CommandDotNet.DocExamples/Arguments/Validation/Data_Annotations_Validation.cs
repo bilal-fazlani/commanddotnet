@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using CommandDotNet.DataAnnotations;
 using CommandDotNet.NameCasing;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.Arguments.Validation
@@ -77,6 +78,6 @@ Options:
 'owner' is not a valid e-mail address.
 quiet and verbose are mutually exclusive. There can be only one!");
 
-        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
     }
 }

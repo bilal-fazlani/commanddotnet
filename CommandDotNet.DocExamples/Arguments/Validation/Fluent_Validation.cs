@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using CommandDotNet.FluentValidation;
 using CommandDotNet.NameCasing;
+using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
 using NUnit.Framework;
@@ -126,6 +127,6 @@ namespace CommandDotNet.DocExamples.Arguments.Validation
 'Verbosity' is invalid
   quiet and verbose are mutually exclusive. There can be only one!");
 
-        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
     }
 }

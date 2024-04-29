@@ -1,16 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyTitle>CommandDotNet</AssemblyTitle>
     <Description>Model your command line application interface in a class</Description>
     <ReleaseNotes>https://commanddotnet.bilal-fazlani.com/releasenotes/commanddotnet/</ReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="LibLog" Version="5.0.8">
+    <PackageReference Include="LibLog">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Nullability.Source" Version="2.0.0">
+    <PackageReference Include="Microsoft.CSharp" />
+    <PackageReference Include="Nullability.Source">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

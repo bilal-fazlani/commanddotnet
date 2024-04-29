@@ -1,5 +1,6 @@
 using System;
 using CommandDotNet.TestTools;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.Arguments.Arguments
@@ -87,6 +88,6 @@ Options:
             "mission-control.exe", "LaunchRocket -turbo -a true mars", 0,
             "planet=mars turbo=True abort=True");
 
-        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
     }
 }

@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using CommandDotNet.DataAnnotations;
 using CommandDotNet.NameCasing;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.DataAnnotations
@@ -87,6 +88,6 @@ Options:
 'name' must be a string or array type with a maximum length of '10'.
 'owner' is not a valid e-mail address.");
 
-        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
     }
 }

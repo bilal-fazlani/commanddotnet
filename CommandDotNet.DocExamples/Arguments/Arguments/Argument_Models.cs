@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.Arguments.Arguments
@@ -269,6 +270,6 @@ Options:
             @"CommandDotNet.InvalidConfigurationException: Operand property must be attributed with OperandAttribute or OrderByPositionInClassAttribute to guarantee consistent order. Properties:
   CommandDotNet.DocExamples.Arguments.Arguments.Argument_Models+Program_WithInvalidhNestedOperands+NotifyModel.NotificationArgs");
 
-        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
     }
 }

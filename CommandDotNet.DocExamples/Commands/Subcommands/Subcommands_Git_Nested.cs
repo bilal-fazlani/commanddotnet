@@ -1,5 +1,6 @@
 using System;
 using CommandDotNet.NameCasing;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.Commands.Subcommands
@@ -58,6 +59,6 @@ Commands:
 
 Use ""git.exe [command] --help"" for more information about a command.");
 
-        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
     }
 }

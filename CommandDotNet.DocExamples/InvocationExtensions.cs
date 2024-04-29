@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples
@@ -16,7 +17,7 @@ namespace CommandDotNet.DocExamples
         {
             string[] argsArray = new CommandLineStringSplitter().SplitToArray(args);
             var mainMethod = type.GetMethod("Main", BindingFlags.Static | BindingFlags.NonPublic);
-            Assert.IsNotNull(mainMethod);
+            mainMethod.Should().NotBeNull();
 
             return CaptureConsoleWrites(() => (int)mainMethod!.Invoke(null, new object[] { argsArray })!);
         }

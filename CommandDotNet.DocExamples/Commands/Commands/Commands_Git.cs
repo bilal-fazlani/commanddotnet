@@ -1,5 +1,6 @@
 using System;
 using CommandDotNet.NameCasing;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace CommandDotNet.DocExamples.Commands.Commands
@@ -30,7 +31,7 @@ namespace CommandDotNet.DocExamples.Commands.Commands
         public static BashSnippet Pop = new("commands_2_git_pop",
             Program.AppRunner, "git", "stash pop", 0, "pop");
 
-        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => Assert.True(true);
+        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
     }
 
 }
