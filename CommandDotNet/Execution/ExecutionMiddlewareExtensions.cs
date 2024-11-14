@@ -7,7 +7,7 @@ namespace CommandDotNet.Execution
 {
     internal static class ExecutionMiddlewareExtensions
     {
-        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.GetLogger(typeof(ExecutionMiddlewareExtensions));
 
         internal static Task<int> InvokePipeline(this IEnumerable<ExecutionMiddleware> pipeline, CommandContext commandContext)
         {

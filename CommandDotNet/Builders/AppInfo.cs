@@ -16,7 +16,7 @@ namespace CommandDotNet.Builders
     /// </summary>
     public class AppInfo : ICloneable, IIndentableToString
     {
-        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.GetLogger(typeof(AppInfo));
 
         private static AppInfo? _appInfo;
         private static Func<AppInfo>? _appInfoResolver;

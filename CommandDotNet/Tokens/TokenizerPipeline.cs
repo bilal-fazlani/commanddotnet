@@ -10,7 +10,7 @@ namespace CommandDotNet.Tokens
 {
     internal static class TokenizerPipeline
     {
-        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.GetLogger(typeof(TokenizerPipeline));
 
         public static Task<int> TokenizeInputMiddleware(CommandContext commandContext, ExecutionDelegate next)
         {

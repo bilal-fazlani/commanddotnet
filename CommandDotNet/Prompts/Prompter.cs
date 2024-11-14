@@ -10,7 +10,7 @@ namespace CommandDotNet.Prompts
 {
     public class Prompter : IPrompter
     {
-        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.GetLogger(typeof(Prompter));
 
         private readonly IConsole _console;
         

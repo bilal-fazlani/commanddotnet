@@ -11,7 +11,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 {
     internal class ClassCommandDef : ICommandDef
     {
-        private static ILog Log = LogProvider.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.GetLogger(typeof(ClassCommandDef));
 
         private readonly CommandContext _commandContext;
         private readonly ICommandDef? _defaultCommandDef;
