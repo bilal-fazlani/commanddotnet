@@ -1,5 +1,9 @@
 # CommandDotNet
 
+## 7.0.5
+
+* [#501](https://github.com/bilal-fazlani/commanddotnet/issues/501) replace LogProvider `GetCurrentClassLogger` usage with `GetLogger` to better support AOT apps.
+
 ## 7.0.4
 
 ### Maintenance
