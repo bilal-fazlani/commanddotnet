@@ -1,5 +1,9 @@
 # CommandDotNet.TestTools
 
+## 6.0.4
+
+* [#501](https://github.com/bilal-fazlani/commanddotnet/issues/501) replace LogProvider `GetCurrentClassLogger` usage with `GetLogger` to better support AOT apps.
+
 ## 6.0.3
 
 fix async support for `InterceptingSystemConsoleWrites`. It did not property await async command methods.
