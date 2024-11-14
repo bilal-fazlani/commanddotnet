@@ -9,7 +9,7 @@ namespace CommandDotNet.Prompts
 {
     internal static class ValuePromptMiddleware
     {
-        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.GetLogger(typeof(ValuePromptMiddleware));
 
         internal static AppRunner UseIPrompter(
             AppRunner appRunner,

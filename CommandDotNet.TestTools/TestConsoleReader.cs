@@ -9,7 +9,7 @@ namespace CommandDotNet.TestTools
 {
     internal class TestConsoleReader : TextReader
     {
-        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.GetLogger(typeof(TestConsoleReader));
 
         private readonly TestConsole _host;
         private readonly Queue<char> _currentLine = new();

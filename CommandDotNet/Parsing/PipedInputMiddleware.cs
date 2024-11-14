@@ -11,7 +11,7 @@ namespace CommandDotNet.Parsing
 {
     internal static class PipedInputMiddleware
     {
-        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.GetLogger(typeof(PipedInputMiddleware));
 
         internal static AppRunner AppendPipedInput(this AppRunner appRunner)
         {

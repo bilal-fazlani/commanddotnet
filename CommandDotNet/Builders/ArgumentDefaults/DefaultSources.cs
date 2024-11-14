@@ -10,7 +10,7 @@ namespace CommandDotNet.Builders.ArgumentDefaults
 {
     public static class DefaultSources
     {
-        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.GetLogger(typeof(DefaultSources));
 
         public static class EnvVar
         {

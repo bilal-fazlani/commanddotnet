@@ -8,7 +8,7 @@ namespace CommandDotNet.Parsing.Typos
 {
     internal static class SuggestionRankingExtensions
     {
-        private static readonly ILog Log = LogProvider.GetCurrentClassLogger();
+        private static readonly ILog Log = LogProvider.GetLogger(typeof(SuggestionRankingExtensions));
 
         internal static IEnumerable<string> RankAndTrimSuggestions(
             this IEnumerable<string> suggestions, string typo, int maxSuggestionCount)
