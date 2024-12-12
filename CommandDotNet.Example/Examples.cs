@@ -1,4 +1,5 @@
 ﻿using CommandDotNet.Example.Commands;
+using CommandDotNet.Repl;
 using Git = CommandDotNet.Example.Commands.Git;
 
 namespace CommandDotNet.Example
@@ -17,24 +18,28 @@ namespace CommandDotNet.Example
         // end-snippet
     internal class Examples
     {
-        private static bool _inSession;
-
-        [DefaultCommand]
-        public void StartSession(
-            CommandContext context,
-            InteractiveSession interactiveSession, 
-            [Option('i')] bool interactive)
+        [Subcommand]
+        public class Sessions
         {
-            if (interactive && !_inSession)
+            private static bool _inSession;
+
+            [DefaultCommand]
+            public void StartSession(
+                CommandContext context,
+                ReplSession replSession,
+                [Option('i')] bool interactive)
             {
-                context.Console.WriteLine("start session");
-                _inSession = true;
-                interactiveSession.Start();
-            }
-            else
-            {
-                context.Console.WriteLine($"no session {interactive} {_inSession}");
-                context.ShowHelpOnExit = true;
+                if (interactive && !_inSession)
+                {
+                    context.Console.WriteLine("start session");
+                    _inSession = true;
+                    replSession.Start();
+                }
+                else
+                {
+                    context.Console.WriteLine($"no session {interactive} {_inSession}");
+                    context.ShowHelpOnExit = true;
+                }
             }
         }
 
