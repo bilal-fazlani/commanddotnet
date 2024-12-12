@@ -82,7 +82,7 @@ namespace CommandDotNet.NewerReleasesAlerts
 
                 var shouldAlert = TryGetCurrentVersion(out var currentVersion)
                                   && TryGetLatestReleaseVersion(context, config, out latestReleaseVersion)
-                                  && currentVersion < latestReleaseVersion;
+                                  && SemVersion.CompareSortOrder(currentVersion, latestReleaseVersion) < 0;
                 if (shouldAlert)
                 {
                     var message = $"A newer release exists. Current:{currentVersion} Latest:{latestReleaseVersion}";

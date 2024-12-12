@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionF
 		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
 		README.md = README.md
+		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandDotNet.Example", "CommandDotNet.Example\CommandDotNet.Example.csproj", "{73A0E2B7-F205-47E2-A448-7E5CCD7FD6A5}"
