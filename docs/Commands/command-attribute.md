@@ -6,7 +6,7 @@ Here are the constructors and properties you can use:
 
 <!-- snippet: CommandAttribute-properties -->
 <a id='snippet-commandattribute-properties'></a>
-```c#
+```cs
 /// <summary>The description to show in the help</summary>
 public string? Description { get; set; }
 

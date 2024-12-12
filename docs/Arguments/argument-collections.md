@@ -6,12 +6,12 @@ Let's enhance our rocket launcher to visit multiple planets and specify a crew.
 
 <!-- snippet: arguments_collections -->
 <a id='snippet-arguments_collections'></a>
-```c#
+```cs
 public void LaunchRocket(IConsole console,
         IEnumerable<string> planets,
         [Option('c', "crew")] string[] crew)
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Collections.cs#L11-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_collections' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Collections.cs#L12-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_collections' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Help looks like...

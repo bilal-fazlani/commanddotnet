@@ -6,14 +6,14 @@ Let's consider this notify command.
 
 <!-- snippet: argument_models_notify_without_model -->
 <a id='snippet-argument_models_notify_without_model'></a>
-```c#
+```cs
 public void Notify(string message, List<string> recipients,
     [Option] bool dryrun, [Option('v')] bool verbose, [Option('q')] bool quiet)
 {
     // send notification
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L16-L22' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_without_model' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L17-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_without_model' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: argument_models_notify_without_model_help -->
@@ -53,7 +53,7 @@ Here's how they're configured
 
 <!-- snippet: argument_models_notify_with_model -->
 <a id='snippet-argument_models_notify_with_model'></a>
-```c#
+```cs
 public void Notify(
     NotificationArgs notificationArgs,
     DryRunOptions dryRunOptions, 
@@ -71,12 +71,12 @@ public class NotificationArgs : IArgumentModel
     public List<string> Recipients { get; set; } = null!;
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L27-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_model' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L28-L45' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_model' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: argument_models_dry_run_and_verbosity -->
 <a id='snippet-argument_models_dry_run_and_verbosity'></a>
-```c#
+```cs
 public class DryRunOptions : IArgumentModel
 {
     [Option("dryrun")]
@@ -99,7 +99,7 @@ public class VerbosityOptions : IArgumentModel, IValidatableObject
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L167-L189' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_dry_run_and_verbosity' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L168-L190' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_dry_run_and_verbosity' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: argument_models_notify_with_model_help -->
@@ -138,7 +138,7 @@ Using same example from above, we configure the arguments into a single model li
 
 <!-- snippet: argument_models_notify_with_model_composed -->
 <a id='snippet-argument_models_notify_with_model_composed'></a>
-```c#
+```cs
 public void Notify(NotificationArgs notificationArgs)
 {
     // send notification
@@ -157,7 +157,7 @@ public class NotificationArgs : IArgumentModel
     public VerbosityOptions VerbosityOptions { get; set; } = null!;
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L49-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_model_composed' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L50-L68' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_model_composed' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -167,7 +167,7 @@ Instead of defining the model in each command method, the model could be defined
 
 <!-- snippet: argument_models_notify_with_interceptor -->
 <a id='snippet-argument_models_notify_with_interceptor'></a>
-```c#
+```cs
 public Task<int> Interceptor(InterceptorExecutionDelegate next, CommandContext ctx,
     DryRunOptions dryRunOptions, VerbosityOptions verbosityOptions)
 {
@@ -205,7 +205,7 @@ public class VerbosityOptions : IArgumentModel
     public bool Quite { get; set; }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L72-L111' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_interceptor' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L73-L112' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_interceptor' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: argument_models_notify_with_interceptor_help -->
@@ -262,7 +262,7 @@ An example of invalidly nesting an IArgumentModel that contains operands
 
 <!-- snippet: argument_models_notify_with_invalid_nested_operands_model -->
 <a id='snippet-argument_models_notify_with_invalid_nested_operands_model'></a>
-```c#
+```cs
 public class NotifyModel : IArgumentModel
 {
     public NotificationArgs NotificationArgs { get; set; }
@@ -270,7 +270,7 @@ public class NotifyModel : IArgumentModel
     public VerbosityOptions VerbosityOptions { get; set; }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L148-L155' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_invalid_nested_operands_model' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L149-L156' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_invalid_nested_operands_model' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 And the error received because NotificationArgs contains operands
@@ -289,7 +289,7 @@ This is the correct way to nest a model with operands
 
 <!-- snippet: argument_models_notify_with_nested_operands_model -->
 <a id='snippet-argument_models_notify_with_nested_operands_model'></a>
-```c#
+```cs
 public class NotifyModel : IArgumentModel
 {
     [OrderByPositionInClass]
@@ -298,7 +298,7 @@ public class NotifyModel : IArgumentModel
     public VerbosityOptions VerbosityOptions { get; set; }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L121-L129' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_nested_operands_model' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L122-L130' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_nested_operands_model' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
  
 ### Recommendation 

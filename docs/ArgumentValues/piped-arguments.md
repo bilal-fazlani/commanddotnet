@@ -27,7 +27,7 @@ Every command is allowed a single operand collection. If one is defined and if p
 
 <!-- snippet: piped_arguments -->
 <a id='snippet-piped_arguments'></a>
-```c#
+```cs
 public void List(IConsole console,
     [Option('i')] bool idsOnly)
 {
@@ -46,7 +46,7 @@ public void Disable(IConsole console, IEnumerable<string> ids)
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Values/Piped_Arguments.cs#L14-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-piped_arguments' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Values/Piped_Arguments.cs#L15-L33' title='Snippet source file'>snippet source</a> | <a href='#snippet-piped_arguments' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 This app has two commands, one to list users and the other to disable them. The list command works like this...
@@ -100,7 +100,7 @@ Let's add a Welcome command to our example app.
 
 <!-- snippet: piped_arguments_options -->
 <a id='snippet-piped_arguments_options'></a>
-```c#
+```cs
 public void Welcome(IConsole console, string userId, [Option] ICollection<string> notify)
 {
     console.Out.WriteLine($"welcome {userSvc.Get(userId)?.Name}");
@@ -112,7 +112,7 @@ public void Welcome(IConsole console, string userId, [Option] ICollection<string
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Values/Piped_Arguments.cs#L45-L56' title='Snippet source file'>snippet source</a> | <a href='#snippet-piped_arguments_options' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Values/Piped_Arguments.cs#L46-L57' title='Snippet source file'>snippet source</a> | <a href='#snippet-piped_arguments_options' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 And let's welcome Cris and send a notification to the other users

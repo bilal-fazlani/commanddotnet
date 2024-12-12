@@ -69,7 +69,7 @@ Example: [Humanizer middleare](https://github.com/bilal-fazlani/commanddotnet/bl
 
 <!-- snippet: name_casing_transformation -->
 <a id='snippet-name_casing_transformation'></a>
-```c#
+```cs
 /// <summary>Change the case of argument and command names to match the given cases</summary>
 /// <param name="appRunner"></param>
 /// <param name="case">The case to apply</param>

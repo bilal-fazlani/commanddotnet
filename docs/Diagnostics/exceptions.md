@@ -13,7 +13,7 @@ CommandDotNet throws two types of exceptions
 
 <!-- snippet: exceptions_use_error_handler_delegate -->
 <a id='snippet-exceptions_use_error_handler_delegate'></a>
-```c#
+```cs
 static int Main(string[] args)
 {
     return new AppRunner<Program>()
@@ -30,7 +30,7 @@ static int Main(string[] args)
         .Run(args);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Exceptions.cs#L54-L70' title='Snippet source file'>snippet source</a> | <a href='#snippet-exceptions_use_error_handler_delegate' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Exceptions.cs#L55-L71' title='Snippet source file'>snippet source</a> | <a href='#snippet-exceptions_use_error_handler_delegate' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 This delegate will be used for any errors thrown within `AppRunner.Run` or `AppRunner.RunAsync`
@@ -49,7 +49,7 @@ Wrap the call to `appRunner.Run(args)` to handle global exceptions.
 
 <!-- snippet: exceptions_try_catch -->
 <a id='snippet-exceptions_try_catch'></a>
-```c#
+```cs
 static int Main(string[] args)
 {
     try
@@ -66,7 +66,7 @@ static int Main(string[] args)
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Exceptions.cs#L86-L102' title='Snippet source file'>snippet source</a> | <a href='#snippet-exceptions_try_catch' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Exceptions.cs#L87-L103' title='Snippet source file'>snippet source</a> | <a href='#snippet-exceptions_try_catch' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## Exit Codes
@@ -75,7 +75,7 @@ CommandDotnet has the following pre-defined exit codes
 
 <!-- snippet: ExitCodes_class -->
 <a id='snippet-exitcodes_class'></a>
-```c#
+```cs
 public static class ExitCodes
 {
     public static Task<int> Success => Task.FromResult(0);
@@ -110,7 +110,7 @@ Here are the core parameters
 
 <!-- snippet: exception_print_parameters -->
 <a id='snippet-exception_print_parameters'></a>
-```c#
+```cs
 bool includeProperties = false,  // print exception properties
 bool includeData = false,        // print values from ex.Data dictionary
 bool includeStackTrace = false,  // print stack trace
@@ -141,7 +141,7 @@ Here's an example using all the features from above, which is likely overkill fo
 
 <!-- snippet: exceptions_cmdlog_error_handler -->
 <a id='snippet-exceptions_cmdlog_error_handler'></a>
-```c#
+```cs
 static int Main(string[] args) => AppRunner.Run(args);
 
 public static AppRunner AppRunner =>
@@ -182,7 +182,7 @@ public void Throw(string message)
     };
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Exceptions.cs#L118-L158' title='Snippet source file'>snippet source</a> | <a href='#snippet-exceptions_cmdlog_error_handler' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Exceptions.cs#L119-L159' title='Snippet source file'>snippet source</a> | <a href='#snippet-exceptions_cmdlog_error_handler' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: exceptions_throw_cmdlog -->

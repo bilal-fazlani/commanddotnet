@@ -109,7 +109,7 @@ nav:
 theme:
   features:
     - navigation.tabs
-    - nagivation.instant
+    - navigation.instant
     - navigation.top
     - navigation.tracking
     - navigation.footer

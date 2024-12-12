@@ -5,7 +5,7 @@ Let's make it more useful by adding descriptions, usage examples and extended he
 
 <!-- snippet: getting-started-300-calculator -->
 <a id='snippet-getting-started-300-calculator'></a>
-```c#
+```cs
 [Command(
     Description = "Performs mathematical calculations",
     ExtendedHelpTextLines = new []

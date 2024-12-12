@@ -6,7 +6,7 @@ Using our calculator example...
 
 <!-- snippet: getting-started-100-calculator -->
 <a id='snippet-getting-started-100-calculator'></a>
-```c#
+```cs
 public class Program
 {
     // this is the entry point of your application
@@ -51,7 +51,7 @@ Use the `[Command]` attribute to change the command name, enhance help output an
 
 <!-- snippet: commands_calculator -->
 <a id='snippet-commands_calculator'></a>
-```c#
+```cs
 [Command("Sum",
     Usage = "sum <int> [<int> ...]",
     Description = "sums all the numbers provided",
@@ -59,7 +59,7 @@ Use the `[Command]` attribute to change the command name, enhance help output an
 public void Add(IConsole console, IEnumerable<int> numbers) =>
     console.WriteLine(numbers.Sum());
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands/Commands_Calculator.cs#L13-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_calculator' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands/Commands_Calculator.cs#L14-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_calculator' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: commands_calculator_sum_help -->
@@ -92,7 +92,7 @@ Use `Description` & `ExtendedHelpText` to include additional information in help
 
 <!-- snippet: extended_help_text -->
 <a id='snippet-extended_help_text'></a>
-```c#
+```cs
 ExtendedHelpText = "Directives:\n" +
                    "  [debug] to attach a debugger to the app\n" +
                    "  [parse] to output how the inputs were tokenized\n" +
@@ -115,7 +115,7 @@ Two template variables are available for use in Usage, Description and ExtendedH
 
 <!-- snippet: commands_git -->
 <a id='snippet-commands_git'></a>
-```c#
+```cs
 public class Program
 {
     static int Main(string[] args) => AppRunner.Run(args);
@@ -132,7 +132,7 @@ public class Program
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands/Commands_Git.cs#L9-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_git' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands/Commands_Git.cs#L10-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_git' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 help for Pop may have `Usage: git Stash Pop`
@@ -156,7 +156,7 @@ Let's assume we have a program with a single command defined, called `Process`.
 
 <!-- snippet: commands_default_command -->
 <a id='snippet-commands_default_command'></a>
-```c#
+```cs
 public class Program
 {
     static int Main(string[] args) => AppRunner.Run(args);

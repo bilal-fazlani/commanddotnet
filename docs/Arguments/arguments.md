@@ -59,7 +59,7 @@ The OptionAttribute has the following properties:
 
 <!-- snippet: arguments_attributes -->
 <a id='snippet-arguments_attributes'></a>
-```c#
+```cs
 public void LaunchRocket(
     [Operand("planet", Description = "Name of the planet you wish the rocket to go")]
     string planetName,
@@ -68,14 +68,14 @@ public void LaunchRocket(
     [Option('a', Description = "Abort the launch before takeoff", BooleanMode = BooleanMode.Explicit)]
     bool abort)
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L12-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_attributes' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L13-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_attributes' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 or
 
 <!-- snippet: arguments_attributes_alt -->
 <a id='snippet-arguments_attributes_alt'></a>
-```c#
+```cs
 public void LaunchRocket(
         [Positional("planet", Description = "Name of the planet you wish the rocket to go")]
         string planetName,
@@ -84,7 +84,7 @@ public void LaunchRocket(
         [Named('a', Description = "Abort the launch before takeoff", BooleanMode = BooleanMode.Explicit)]
         bool abort)
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L26-L34' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_attributes_alt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L27-L35' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_attributes_alt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 and help looks like:
@@ -182,10 +182,10 @@ How to enable and use with Windows
 
 <!-- snippet: AppSettings_for_windows -->
 <a id='snippet-appsettings_for_windows'></a>
-```c#
+```cs
 new AppSettings { Parser = { AllowBackslashOptionPrefix = true } };
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L61-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-appsettings_for_windows' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L62-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-appsettings_for_windows' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: arguments_attributes_windows_exe -->
@@ -201,10 +201,10 @@ How to enable and use with Powershell
 
 <!-- snippet: AppSettings_for_powershell -->
 <a id='snippet-appsettings_for_powershell'></a>
-```c#
+```cs
 new AppSettings { Parser = { AllowSingleHyphenForLongNames = true } };
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L76-L78' title='Snippet source file'>snippet source</a> | <a href='#snippet-appsettings_for_powershell' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L77-L79' title='Snippet source file'>snippet source</a> | <a href='#snippet-appsettings_for_powershell' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: arguments_attributes_powershell_exe -->

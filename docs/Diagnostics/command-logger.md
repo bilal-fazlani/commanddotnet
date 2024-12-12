@@ -15,7 +15,7 @@ Given a program with default configuration
 
 <!-- snippet: command_logger -->
 <a id='snippet-command_logger'></a>
-```c#
+```cs
 public class Program
 {
     static int Main(string[] args) => AppRunner.Run(args);
@@ -26,7 +26,7 @@ public class Program
     public void Add(IConsole console, int x, int y) => console.WriteLine(x + y);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L14-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L15-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 When the `[cmdlog]` directive is specified, the command logger middleware will output 
@@ -74,7 +74,7 @@ Here are the available parameters for configuration:
 
 <!-- snippet: UseCommandLogger-parameters -->
 <a id='snippet-usecommandlogger-parameters'></a>
-```c#
+```cs
 /// <summary>Enable the command logger middleware</summary>
 /// <param name="appRunner">The <see cref="AppRunner"/></param>
 /// <param name="writerFactory">
@@ -102,12 +102,12 @@ public static AppRunner UseCommandLogger(this AppRunner appRunner,
 
 <!-- snippet: command_logger_include_machine_and_user -->
 <a id='snippet-command_logger_include_machine_and_user'></a>
-```c#
+```cs
 .UseCommandLogger(
     excludeSystemInfo: true,
     includeMachineAndUser: true);
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L75-L79' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_include_machine_and_user' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L76-L80' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_include_machine_and_user' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: command_logger_include_machine_and_user_exe -->
@@ -148,10 +148,10 @@ Additional information can be provided by setting the `additionalInfoCallback` p
 
 <!-- snippet: command_logger_appconfig -->
 <a id='snippet-command_logger_appconfig'></a>
-```c#
+```cs
 .UseCommandLogger(includeAppConfig: true);
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L119-L121' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_appconfig' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L120-L122' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_appconfig' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: command_logger_appconfig_exe -->
@@ -274,7 +274,7 @@ Logs every command to logging framework. See [Enable via directive](#enable-via-
 
 <!-- snippet: command_logger_custom_attribute -->
 <a id='snippet-command_logger_custom_attribute'></a>
-```c#
+```cs
 public class Program
 {
     static int Main(string[] args) => AppRunner.Run(args);
@@ -293,7 +293,7 @@ public class Program
 
 public class LogCommandAttribute : Attribute { }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L224-L242' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_custom_attribute' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L225-L243' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_custom_attribute' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Notice Add will always log for the command and Subtract never will. 
@@ -347,7 +347,7 @@ Allow user to enable as a [directive](../Extensibility/directives.md)
 
 <!-- snippet: command_logger_directive -->
 <a id='snippet-command_logger_directive'></a>
-```c#
+```cs
 return ctx.Tokens.TryGetDirective("cmdlog", out _) 
     ? s => ctx.Console.Out.Write(s)
     : null;
@@ -364,7 +364,7 @@ Add an intercepor method to your root command with a `--logcmd` option. This als
 
 <!-- snippet: command_logger_root_option -->
 <a id='snippet-command_logger_root_option'></a>
-```c#
+```cs
 public class Program
 {
     static int Main(string[] args) => AppRunner.Run(args);
@@ -388,7 +388,7 @@ public class Program
     public void Subtract(IConsole console, int x, int y) => console.WriteLine(x - y);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L280-L303' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_root_option' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L281-L304' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_root_option' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: command_logger_root_option_exe -->
