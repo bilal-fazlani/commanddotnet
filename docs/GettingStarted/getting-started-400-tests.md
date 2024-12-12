@@ -11,7 +11,7 @@ Let's extract the configuration into a public static property
 
 <!-- snippet: getting-started-400-calculator -->
 <a id='snippet-getting-started-400-calculator'></a>
-```c#
+```cs
 static int Main(string[] args) => AppRunner.Run(args);
 
 public static AppRunner AppRunner => new AppRunner<Program>();
@@ -25,7 +25,7 @@ The second step is to use `IConsole` to capture the output for assertions in tes
 
 <!-- snippet: getting-started-400-calculator-console -->
 <a id='snippet-getting-started-400-calculator-console'></a>
-```c#
+```cs
 public void Add(IConsole console, int x, int y) => console.WriteLine(x + y);
 
 public void Subtract(IConsole console, int x, int y) => console.WriteLine(x - y);
@@ -39,7 +39,7 @@ Alternatively, or if there is code writing to System.Console that you cannot mig
 
 <!-- snippet: getting-started-400-calculator-console-intercept -->
 <a id='snippet-getting-started-400-calculator-console-intercept'></a>
-```c#
+```cs
 public static AppRunner AppRunner =>
     new AppRunner<Program>()
         .InterceptSystemConsoleWrites();
@@ -55,7 +55,7 @@ CommandDotNet supports two different test patterns:
 
 <!-- snippet: getting-started-400-calculator-add-command-tests -->
 <a id='snippet-getting-started-400-calculator-add-command-tests'></a>
-```c#
+```cs
 [Test]
 public void Given2Numbers_Should_OutputSum()
 {
@@ -73,7 +73,7 @@ BDD follows the Given / When / Then style. Configuration of the AppRunner is the
 
 <!-- snippet: getting-started-400-calculator-add-command-tests-bdd -->
 <a id='snippet-getting-started-400-calculator-add-command-tests-bdd'></a>
-```c#
+```cs
 [Test]
 public void Given2Numbers_Should_OutputSum() =>
     Program.AppRunner.Verify(new Scenario

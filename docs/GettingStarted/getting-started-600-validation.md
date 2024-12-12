@@ -6,7 +6,7 @@ Let's set the support for DataAnnotations and how you can use [Argument Models](
 
 <!-- snippet: dataannotations-1-table -->
 <a id='snippet-dataannotations-1-table'></a>
-```c#
+```cs
 public class Program
 {
     static int Main(string[] args) => AppRunner.Run(args);
@@ -54,7 +54,7 @@ public class Verbosity : IArgumentModel, IValidatableObject
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/DataAnnotations/DataAnnotations_1_Table.cs#L14-L61' title='Snippet source file'>snippet source</a> | <a href='#snippet-dataannotations-1-table' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/DataAnnotations/DataAnnotations_1_Table.cs#L15-L62' title='Snippet source file'>snippet source</a> | <a href='#snippet-dataannotations-1-table' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 There's a lot more going on here. so let's break it down. 

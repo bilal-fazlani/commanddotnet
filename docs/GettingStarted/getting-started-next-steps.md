@@ -4,7 +4,7 @@ In the `Program.Main`, we configured the app with the basic feature set.
 
 <!-- snippet: getting-started-other-features -->
 <a id='snippet-getting-started-other-features'></a>
-```c#
+```cs
 new AppRunner<Program>()
     .UseDefaultMiddleware();
 ```

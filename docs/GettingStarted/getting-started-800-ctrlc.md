@@ -17,7 +17,7 @@ With console applications, the standard pattern is to exit the app when Ctrl+C i
 
 <!-- snippet: getting-started-800-ctrlc -->
 <a id='snippet-getting-started-800-ctrlc'></a>
-```c#
+```cs
 public class Program
 {
     static int Main(string[] args) => AppRunner.Run(args);
@@ -46,7 +46,7 @@ public class Program
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_800_CtrlC.cs#L11-L39' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-800-ctrlc' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_800_CtrlC.cs#L12-L40' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-800-ctrlc' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Again, CommandDotNet makes this very easy. Configure the app with `appRunner.UseCancellationHandlers()` which configures a `CancellationToken` that can be injected into your command and interceptor methods. 

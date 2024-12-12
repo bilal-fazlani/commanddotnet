@@ -2,7 +2,7 @@
 
 <!-- snippet: getting-started-700-pipes -->
 <a id='snippet-getting-started-700-pipes'></a>
-```c#
+```cs
 public class Program
 {
     static int Main(string[] args) => AppRunner.Run(args);
@@ -31,7 +31,7 @@ public class Program
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_700_Pipes.cs#L11-L39' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-700-pipes' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_700_Pipes.cs#L12-L40' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-700-pipes' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Here we've converted the arguments for Sum into an IEnumerable<int> and added a Range command.

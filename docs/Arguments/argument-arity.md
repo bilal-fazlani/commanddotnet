@@ -51,7 +51,7 @@ CommandDotNet will check if the minimum or maximum arity has been exceeded and r
 
 <!-- snippet: arguments_arity -->
 <a id='snippet-arguments_arity'></a>
-```c#
+```cs
 public void DefaultCommand(Model model,
         bool requiredBool, Uri requiredRefType, 
         bool? nullableBool, Uri? nullableRefType,
@@ -66,7 +66,7 @@ public class Model : IArgumentModel
     [Operand] public Uri DefaultRefType { get; set; } = new ("http://apple.com");
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Arity.cs#L17-L31' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Arity.cs#L18-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: arguments_arity_help -->
@@ -128,13 +128,13 @@ We'll use options for these because we can have only one collection operand per 
 
 <!-- snippet: arguments_arity_collection -->
 <a id='snippet-arguments_arity_collection'></a>
-```c#
+```cs
 public void DefaultCommand(
         [Option('b')] bool[] requiredBool, [Option('u')] Uri[] requiredRefType,
         [Option] bool[]? nullableBool, [Option] Uri[]? nullableRefType,
         [Option] bool[] optionalBool = null, [Option] Uri[] optionalRefType = null)
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Arity.cs#L93-L98' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity_collection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Arity.cs#L94-L99' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity_collection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: arguments_arity_collection_help -->
@@ -181,7 +181,7 @@ requiredRefType is required
 
 <!-- snippet: known-arities -->
 <a id='snippet-known-arities'></a>
-```c#
+```cs
 public static IArgumentArity Zero => new ArgumentArity(0, 0);
 public static IArgumentArity ZeroOrOne => new ArgumentArity(0, 1);
 public static IArgumentArity ExactlyOne => new ArgumentArity(1, 1);
@@ -197,7 +197,7 @@ There are several extension methods that make it easier check conditions of a gi
 
 <!-- snippet: arity-extensions -->
 <a id='snippet-arity-extensions'></a>
-```c#
+```cs
 /// <summary><see cref="IArgumentArity.Maximum"/> &gt; 1</summary>
 public static bool AllowsMany(this IArgumentArity arity) => arity.Maximum > 1;
 

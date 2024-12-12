@@ -11,7 +11,7 @@ We'll use an example of a program used to query websites and may need basic auth
 
 <!-- snippet: getting-started-500-interceptors -->
 <a id='snippet-getting-started-500-interceptors'></a>
-```c#
+```cs
 public class Program
 {
     static int Main(string[] args) => AppRunner.Run(args);
@@ -80,7 +80,7 @@ public class Curl
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_500_Interceptors.cs#L10-L78' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-500-interceptors' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_500_Interceptors.cs#L11-L79' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-500-interceptors' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 The interceptor method wraps the execution of the targetted command. 

@@ -14,7 +14,7 @@ Let's enhance our calculator by adding additional Trigonometry operations and co
 
 <!-- snippet: getting-started-120-subcommands -->
 <a id='snippet-getting-started-120-subcommands'></a>
-```c#
+```cs
 public class Program
 {
     static int Main(string[] args)

@@ -7,7 +7,7 @@ Your first step is to create a console application.
 Begin by creating the commands:
 <!-- snippet: getting-started-100-calculator -->
 <a id='snippet-getting-started-100-calculator'></a>
-```c#
+```cs
 public class Program
 {
     // this is the entry point of your application

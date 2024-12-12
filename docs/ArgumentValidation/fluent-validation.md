@@ -22,7 +22,7 @@ Enable with `appRunner.UseFluentValidation()`, or `appRunner.UseFluentValidation
 
 <!-- snippet: fluent_validation -->
 <a id='snippet-fluent_validation'></a>
-```c#
+```cs
 public class Program
 {
     static int Main(string[] args) => AppRunner.Run(args);
@@ -92,7 +92,7 @@ public class VerbosityValidator : AbstractValidator<Verbosity>
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Validation/Fluent_Validation.cs#L15-L84' title='Snippet source file'>snippet source</a> | <a href='#snippet-fluent_validation' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Validation/Fluent_Validation.cs#L16-L85' title='Snippet source file'>snippet source</a> | <a href='#snippet-fluent_validation' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: fluent_validation_create_invalid -->
@@ -121,7 +121,7 @@ Register your validators with a container or provide a factory method.
 
 <!-- snippet: fluent_validation_factory -->
 <a id='snippet-fluent_validation_factory'></a>
-```c#
+```cs
 public static AppRunner AppRunner =>
     new AppRunner<Program>()
         .UseNameCasing(Case.LowerCase)
@@ -136,7 +136,7 @@ public static AppRunner AppRunner =>
             }
         });
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Validation/Fluent_Validation.cs#L90-L104' title='Snippet source file'>snippet source</a> | <a href='#snippet-fluent_validation_factory' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Validation/Fluent_Validation.cs#L91-L105' title='Snippet source file'>snippet source</a> | <a href='#snippet-fluent_validation_factory' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## vs. DataAnnotations
