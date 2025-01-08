@@ -202,7 +202,7 @@ Arguments:
             {
                 if (interceptOptions.skipCmd)
                 {
-                    return ExitCodes.Success;
+                    return ExitCodes.SuccessAsync;
                 }
 
                 var returnCode = next();

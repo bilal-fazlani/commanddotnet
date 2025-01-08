@@ -26,7 +26,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
         public IReadOnlyCollection<ParameterInfo> Parameters => GetResult().Parameters;
 
-        public object[] ParameterValues => GetResult().Values;
+        public object?[] ParameterValues => GetResult().Values;
 
         public IReadOnlyCollection<IArgumentModel> FlattenedArgumentModels => GetResult().ArgumentModels;
 
@@ -70,7 +70,7 @@ namespace CommandDotNet.ClassModeling.Definitions
             internal readonly IReadOnlyCollection<IArgumentDef> ArgumentDefs;
             internal readonly IReadOnlyCollection<IArgument> Arguments;
             internal readonly ParameterInfo[] Parameters;
-            internal readonly object[] Values;
+            internal readonly object?[] Values;
             internal readonly HashSet<IArgumentModel> ArgumentModels = new();
 
             public Result(MethodInfo methodInfo, AppConfig appConfig, bool isInterceptor)
@@ -86,7 +86,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                     ? ArgumentMode.Option
                     : _appConfig.AppSettings.Arguments.DefaultArgumentMode;
 
-                Values = new object[Parameters.Length];
+                Values = new object?[Parameters.Length];
 
                 var parametersByName = Parameters.ToDictionary(
                     p => p.Name!,
@@ -115,8 +115,7 @@ namespace CommandDotNet.ClassModeling.Definitions
 
                     if (_nextParameterInfo.ParameterType == InterceptorNextParameterType)
                     {
-                        var nextLite = new InterceptorExecutionDelegate(() => next(commandContext));
-                        Values[_nextParameterInfo.Position] = nextLite;
+                        Values[_nextParameterInfo.Position] = new InterceptorExecutionDelegate(() => next(commandContext));
                     }
                     else
                     {
@@ -143,13 +142,13 @@ namespace CommandDotNet.ClassModeling.Definitions
                 if (_appConfig.ParameterResolversByType.TryGetValue(parameterInfo.ParameterType, out var resolve))
                 {
                     _resolvers.Add(context => Values[parameterInfo.Position] = resolve(context));
-                    return Enumerable.Empty<IArgumentDef>();
+                    return [];
                 }
 
                 if (_appConfig.DependencyResolver?.TryResolve(parameterInfo.ParameterType, out var diResolve) ?? false)
                 {
                     _resolvers.Add(context => Values[parameterInfo.Position] = diResolve);
-                    return Enumerable.Empty<IArgumentDef>();
+                    return [];
                 }
 
                 if (IsExecutionDelegate(parameterInfo))

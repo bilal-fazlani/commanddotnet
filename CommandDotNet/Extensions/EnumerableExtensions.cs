@@ -74,7 +74,7 @@ namespace CommandDotNet.Extensions
             }
         }
         
-        internal static T? SingleOrDefaultOrThrow<T>(this IEnumerable<T?> source, Action throwEx) where T: class
+        internal static T? SingleOrDefaultOrThrow<T>(this IEnumerable<T?> source, Action throwEx) where T: class?
         {
             if (source == null)
             {
@@ -90,20 +90,20 @@ namespace CommandDotNet.Extensions
             {
                 switch (list.Count)
                 {
-                    case 0: return default;
+                    case 0: return null;
                     case 1: return list.First();
                 }
             }
             else
             {
                 using var e = source.GetEnumerator();
-                if (!e.MoveNext()) return default;
+                if (!e.MoveNext()) return null;
                 var result = e.Current;
                 if (!e.MoveNext()) return result;
             }
 
             throwEx();
-            return default;
+            return null;
         }
     }
 }

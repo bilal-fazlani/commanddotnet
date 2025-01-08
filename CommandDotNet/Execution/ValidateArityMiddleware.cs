@@ -29,7 +29,7 @@ namespace CommandDotNet.Execution
                 if (!errors.IsNullOrWhitespace())
                 {
                     ctx.Console.Error.WriteLine(errors);
-                    return ExitCodes.ValidationError;
+                    return ExitCodes.ValidationErrorAsync;
                 }
             }
 

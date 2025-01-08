@@ -172,12 +172,12 @@ namespace CommandDotNet
             if (ex.IsFor<ValueParsingException>(out var vpe))
             {
                 console.Error.WriteLine(vpe!.Print(excludeTypeName: true));
-                return ExitCodes.Error.Result;
+                return ExitCodes.ErrorAsync.Result;
             }
             if (ex.IsFor<InvalidConfigurationException>(out var ice))
             {
                 console.Error.WriteLine(ice!.Print());
-                return ExitCodes.Error.Result;
+                return ExitCodes.ErrorAsync.Result;
             }
             if (_handleErrorDelegate != null)
             {
@@ -192,7 +192,7 @@ namespace CommandDotNet
 
             // code not reached but required to compile
             // compiler does not realize previous line throws an exception
-            return ExitCodes.Error.Result;
+            return ExitCodes.ErrorAsync.Result;
         }
 
         public override string ToString()

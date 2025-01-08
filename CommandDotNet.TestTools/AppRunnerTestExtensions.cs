@@ -25,7 +25,7 @@ namespace CommandDotNet.TestTools
             {
                 capture(context);
                 return exitAfterCapture 
-                    ? ExitCodes.Success
+                    ? ExitCodes.SuccessAsync
                     : next(context);
             }, middlewareStage, orderWithinStage));
         }

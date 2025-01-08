@@ -22,8 +22,8 @@ namespace CommandDotNet.Tests.UnitTests.Extensions
         {
             Assert.Throws<ArgumentNullException>(() =>
                 ((IArgument) null!).SwitchAct(
-                    o => Assert.True(false, "operandAction should not be called for operand"),
-                    o => Assert.True(false, "optionAction should not be called for operand"))
+                    o => Assert.Fail("operandAction should not be called for operand"),
+                    o => Assert.Fail("optionAction should not be called for operand"))
             );
         }
 
@@ -34,7 +34,7 @@ namespace CommandDotNet.Tests.UnitTests.Extensions
 
             AnOperand.SwitchAct(
                 o => actionCalled = true,
-                o => Assert.True(false, "optionAction should not be called for operand"));
+                o => Assert.Fail("optionAction should not be called for operand"));
 
             actionCalled.Should().BeTrue();
         }
@@ -45,7 +45,7 @@ namespace CommandDotNet.Tests.UnitTests.Extensions
             bool actionCalled = false;
 
             AnOption.SwitchAct(
-                o => Assert.True(false, "operandAction should not be called for option"),
+                o => Assert.Fail("operandAction should not be called for option"),
                 o => actionCalled = true);
 
             actionCalled.Should().BeTrue();

@@ -105,7 +105,7 @@ namespace CommandDotNet.Diagnostics
                     includeRawCommandLine: parseContext.IncludeRawCommandLine,
                     writeln: s => commandContext.Console.Out.WriteLine(s));
                 parseContext.Reported = true;
-                return ExitCodes.Success;
+                return ExitCodes.SuccessAsync;
             }
 
             return next(commandContext);

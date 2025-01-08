@@ -52,7 +52,7 @@ namespace CommandDotNet.Tests.FeatureTests.ClassCommands
                     When = { Args = null },
                     Then =
                     {
-                        ExitCode = ExitCodes.Error.Result,
+                        ExitCode = ExitCodes.Error,
                         Output = @"Required command was not provided
 
 Usage: testhost.dll [command]

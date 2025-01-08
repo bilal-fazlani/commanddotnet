@@ -34,7 +34,7 @@ namespace CommandDotNet.DocExamples.Diagnostics
                     // if the exception occurred before a command could be parsed
                     ctx?.PrintHelp();
 
-                    return ExitCodes.Error.Result;
+                    return ExitCodes.ErrorAsync.Result;
                 }
 
                 public void Throw(string message)
@@ -64,7 +64,7 @@ namespace CommandDotNet.DocExamples.Diagnostics
                         .UseErrorHandler((ctx, ex) =>
                         {
                             (ctx?.Console.Error ?? Console.Error).WriteLine(ex.Message);
-                            return ExitCodes.Error.Result;
+                            return ExitCodes.ErrorAsync.Result;
                         })
                         .Run(args);
                 }
@@ -97,7 +97,7 @@ namespace CommandDotNet.DocExamples.Diagnostics
                     catch (Exception ex)
                     {
                         Console.Error.WriteLine(ex.Message);
-                        return ExitCodes.Error.Result;
+                        return ExitCodes.ErrorAsync.Result;
                     }
                 }
                 // end-snippet
@@ -146,7 +146,7 @@ namespace CommandDotNet.DocExamples.Diagnostics
                     // if the exception occurred before a command could be parsed
                     ctx?.PrintHelp();
 
-                    return ExitCodes.Error.Result;
+                    return ExitCodes.ErrorAsync.Result;
                 }
 
                 public void Throw(string message)

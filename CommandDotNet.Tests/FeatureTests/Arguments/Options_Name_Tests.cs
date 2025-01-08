@@ -56,7 +56,7 @@ namespace CommandDotNet.Tests.FeatureTests.Arguments
         [InlineData(LongNameNull, null)]
         [InlineData(LongNameEmpty, null)]
         [Theory]
-        public void LongNameShouldBe(string propertyName, string longName)
+        public void LongNameShouldBe(string propertyName, string? longName)
         {
             var option = _options[propertyName];
             option.LongName.Should().Be(longName);

@@ -93,7 +93,7 @@ namespace CommandDotNet.ClassModeling.Definitions
                                                                 $"{MethodDef.MiddlewareNextParameterType} or {MethodDef.InterceptorNextParameterType}.");
                     }
 
-                    var emDelegate = new ExecutionMiddleware((_, _) => ExitCodes.Error).Method;
+                    var emDelegate = new ExecutionMiddleware((_, _) => ExitCodes.ErrorAsync).Method;
                     if (method.ReturnType != emDelegate.ReturnType)
                     {
                         throw new InvalidConfigurationException($"`{CommandHostClassType}.{method.Name}` must return type of {emDelegate.ReturnType}.");

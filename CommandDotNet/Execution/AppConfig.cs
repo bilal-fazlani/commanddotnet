@@ -55,7 +55,7 @@ namespace CommandDotNet.Execution
         internal BuildEvents BuildEvents { get; }
         internal IReadOnlyCollection<ExecutionMiddleware> MiddlewarePipeline { get; set; }
         internal IReadOnlyCollection<TokenTransformation> TokenTransformations { get; set; }
-        internal Dictionary<Type, Func<CommandContext, object>> ParameterResolversByType { get; }
+        internal Dictionary<Type, Func<CommandContext, object?>> ParameterResolversByType { get; }
         internal NameTransformation NameTransformation { get; }
         internal ResolverService ResolverService { get; }
 
@@ -66,7 +66,7 @@ namespace CommandDotNet.Execution
             IDependencyResolver? dependencyResolver, IHelpProvider helpProvider,
             NameTransformation? nameTransformation, Action<OnRunCompletedEventArgs>? onRunCompleted,
             TokenizationEvents tokenizationEvents, BuildEvents buildEvents, IServices services,
-            Dictionary<Type, Func<CommandContext, object>> parameterResolversByType,
+            Dictionary<Type, Func<CommandContext, object?>> parameterResolversByType,
             ExecutionMiddleware[] middlewarePipeline, TokenTransformation[] tokenTransformations)
         {
             AppSettings = appSettings;

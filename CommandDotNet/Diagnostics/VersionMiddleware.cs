@@ -46,7 +46,7 @@ namespace CommandDotNet.Diagnostics
             if (commandContext.RootCommand!.HasInputValues(VersionOptionName))
             {
                 Print(commandContext.Console);
-                return ExitCodes.Success;
+                return ExitCodes.SuccessAsync;
             }
 
             return next(commandContext);

@@ -6,14 +6,11 @@ using CommandDotNet.Execution;
 
 namespace CommandDotNet.TestTools
 {
-    public class InvocationInfo<T> : InvocationInfo where T: class
+    public class InvocationInfo<T>(CommandContext commandContext, InvocationStep invocationStep)
+        : InvocationInfo(commandContext, invocationStep)
+        where T : class
     {
         public new T? Instance => (T?)base.Instance;
-
-        public InvocationInfo(CommandContext commandContext, InvocationStep invocationStep)
-            : base(commandContext, invocationStep)
-        {
-        }
     }
 
     public class InvocationInfo

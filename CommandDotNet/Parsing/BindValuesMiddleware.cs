@@ -19,7 +19,7 @@ namespace CommandDotNet.Parsing
 
             if (arguments.Any(a => !TryBindArgument(a, console, parserFactory)))
             {
-                return ExitCodes.ValidationError;
+                return ExitCodes.ValidationErrorAsync;
             }
 
             return next(commandContext);
