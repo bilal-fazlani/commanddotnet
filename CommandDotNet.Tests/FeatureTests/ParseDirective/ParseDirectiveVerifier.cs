@@ -67,7 +67,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
             if (exitBeforeBind)
             {
                 appRunner.Configure(c => 
-                    c.UseMiddleware((ctx, next) => ExitCodes.Success, 
+                    c.UseMiddleware((ctx, next) => ExitCodes.SuccessAsync, 
                         MiddlewareStages.PostParseInputPreBindValues));
             }
 
@@ -94,7 +94,7 @@ namespace CommandDotNet.Tests.FeatureTests.ParseDirective
 
             var result = appRunner
                 .UseParseDirective()
-                .UseErrorHandler((ctx, ex) => ExitCodes.Error.Result)
+                .UseErrorHandler((ctx, ex) => ExitCodes.ErrorAsync.Result)
                 .Verify(new Scenario
                 {
                     When = {Args = $"{parse} {args}"},

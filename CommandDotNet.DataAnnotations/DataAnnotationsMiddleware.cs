@@ -62,7 +62,7 @@ namespace CommandDotNet.DataAnnotations
                     console.Error.WriteLine();
                 }
 
-                return ExitCodes.ValidationError;
+                return ExitCodes.ValidationErrorAsync;
             }
             
             return next(ctx);

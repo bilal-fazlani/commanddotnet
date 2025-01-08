@@ -42,7 +42,7 @@ namespace CommandDotNet.Parsing.Typos
                         {
                             // in case help was requested by CommandParser
                             ctx.ShowHelpOnExit = false;
-                            return ExitCodes.Error;
+                            return ExitCodes.ErrorAsync;
                         }
                         break;
                     case NotAllowedValueParseError notAllowedValue:
@@ -50,7 +50,7 @@ namespace CommandDotNet.Parsing.Typos
                         {
                             // in case help was requested by CommandParser
                             ctx.ShowHelpOnExit = false;
-                            return ExitCodes.Error;
+                            return ExitCodes.ErrorAsync;
                         }
                         break;
                 }

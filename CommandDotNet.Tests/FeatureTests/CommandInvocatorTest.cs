@@ -24,8 +24,8 @@ namespace CommandDotNet.Tests.FeatureTests
             {
                 var values = context.InvocationPipeline.TargetCommand!.Invocation.ParameterValues;
                 values.Length.Should().Be(2);
-                var invokedCar = (Car) values[0];
-                var invokedOwner = (string)values[1];
+                var invokedCar = (Car) values[0]!;
+                var invokedOwner = (string)values[1]!;
 
                 invokedCar.Number.Should().Be(1);
                 invokedCar.Number = 2;

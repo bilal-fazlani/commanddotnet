@@ -19,7 +19,7 @@ namespace CommandDotNet.Execution
                             if (c.CancellationToken.IsCancellationRequested)
                             {
                                 Log.Info("Cancellation requested. Aborting execution pipeline");
-                                return ExitCodes.Success;
+                                return ExitCodes.SuccessAsync;
                             }
                             else
                             {
@@ -30,7 +30,7 @@ namespace CommandDotNet.Execution
                             }
                         }));
 
-            return middlewareChain(commandContext, _ => ExitCodes.Success);
+            return middlewareChain(commandContext, _ => ExitCodes.SuccessAsync);
         }
     }
 }

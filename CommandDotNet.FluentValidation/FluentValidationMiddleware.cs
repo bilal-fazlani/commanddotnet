@@ -99,13 +99,13 @@ namespace CommandDotNet.FluentValidation
                         console.Error.WriteLine();
                     }
 
-                    return ExitCodes.ValidationError;
+                    return ExitCodes.ValidationErrorAsync;
                 }
             }
             catch (InvalidValidatorException e)
             {
                 ctx.Console.Error.WriteLine(e.ToString());
-                return ExitCodes.Error;
+                return ExitCodes.ErrorAsync;
             }
 
             return next(ctx);

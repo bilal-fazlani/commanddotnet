@@ -35,7 +35,7 @@ namespace CommandDotNet.Tests.FeatureTests
             [Command("get2", Description = "Invokes an async method and exits with return code 2")]
             public async Task<int> Get2Async()
             {
-                return await ExitCodes.ValidationError;
+                return await ExitCodes.ValidationErrorAsync;
             }
 
             [Command("get00", Description = "Invokes an async method and exits with return code 0")]

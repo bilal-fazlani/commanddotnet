@@ -18,7 +18,7 @@ namespace CommandDotNet.Tokens
             
             if (!ApplyTokenTransformations(commandContext))
             {
-                return ExitCodes.Error;
+                return ExitCodes.ErrorAsync;
             }
             
             commandContext.AppConfig.TokenizationEvents.TokenizationCompleted(commandContext);

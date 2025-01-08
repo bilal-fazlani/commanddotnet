@@ -26,7 +26,7 @@ namespace CommandDotNet.Execution
         /// if defined as a parameter.<br/>
         /// Populated during <see cref="MiddlewareStages.BindValues"/>
         /// </summary>
-        object[] ParameterValues { get; }
+        object?[] ParameterValues { get; }
 
         /// <summary>The method signature of the delegate.</summary>
         /// <remarks>

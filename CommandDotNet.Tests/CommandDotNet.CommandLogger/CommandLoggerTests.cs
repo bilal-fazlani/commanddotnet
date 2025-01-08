@@ -410,7 +410,7 @@ options:
                 .Configure(c => c.UseMiddleware((context, next) =>
                 {
                     Diag.CommandLogger.Log(context, context.Console.Out.WriteLine);
-                    return ExitCodes.Success;
+                    return ExitCodes.SuccessAsync;
                 }, MiddlewareStages.PostTokenizePreParseInput))
                 .Verify(new Scenario
                 {

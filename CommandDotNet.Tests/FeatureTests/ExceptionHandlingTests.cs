@@ -51,7 +51,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 {
                     context = ctx;
                     exception = ex;
-                    return ExitCodes.Error.Result;
+                    return ExitCodes.ErrorAsync.Result;
                 })
                 .Run(args);
             exitCode.Should().Be(1);
@@ -69,7 +69,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 {
                     context = ctx;
                     exception = ex;
-                    return ExitCodes.Error.Result;
+                    return ExitCodes.ErrorAsync.Result;
                 })
                 .Run("Process");
 
@@ -86,7 +86,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .UseErrorHandler((ctx, ex) =>
                 {
                     exception = ex;
-                    return ExitCodes.Error.Result;
+                    return ExitCodes.ErrorAsync.Result;
                 })
                 .Run("Process -o");
 
@@ -102,7 +102,7 @@ namespace CommandDotNet.Tests.FeatureTests
                 .UseErrorHandler((ctx, ex) =>
                 {
                     exception = ex;
-                    return ExitCodes.Error.Result;
+                    return ExitCodes.ErrorAsync.Result;
                 })
                 .Run("Do");
 

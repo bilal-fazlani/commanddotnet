@@ -92,7 +92,7 @@ namespace CommandDotNet.Prompts
                 });
 
             return isCancellationRequested 
-                ? ExitCodes.Success 
+                ? ExitCodes.SuccessAsync 
                 : next(commandContext);
         }
 

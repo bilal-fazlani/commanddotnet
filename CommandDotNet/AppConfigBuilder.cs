@@ -29,7 +29,7 @@ namespace CommandDotNet
 
         private readonly SingleRegistrationGuard<Type> _parameterResolverSingleRegistrationGuard = 
             new("parameter resolver", type => type.FullName);
-        private readonly Dictionary<Type, Func<CommandContext, object>> _parameterResolversByType = new()
+        private readonly Dictionary<Type, Func<CommandContext, object?>> _parameterResolversByType = new()
         {
             [typeof(CommandContext)] = ctx => ctx,
             [typeof(IConsole)] = ctx => ctx.Console,
@@ -93,9 +93,9 @@ namespace CommandDotNet
         /// Types must be resolvable from the <see cref="CommandContext"/><br/>
         /// Default types: <see cref="CommandContext"/>, <see cref="IConsole"/>, <see cref="CancellationToken"/>
         /// </summary>
-        public AppConfigBuilder UseParameterResolver<T>(Func<CommandContext,T> resolver) where T: class
+        public AppConfigBuilder UseParameterResolver<T>(Func<CommandContext,T> resolver) where T: class?
         {
-            if (resolver == null) throw new ArgumentNullException(nameof(resolver));
+            ArgumentNullException.ThrowIfNull(resolver);
 
             _parameterResolverSingleRegistrationGuard.Register(typeof(T));
             _parameterResolversByType.Add(typeof(T), resolver);

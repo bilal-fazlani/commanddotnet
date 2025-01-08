@@ -50,13 +50,13 @@ namespace CommandDotNet.Help
                 console.Error.WriteLine(parseResult.ParseError.Message);
                 console.Error.WriteLine();
                 ctx.ShowHelpOnExit = true;
-                return ExitCodes.Error;
+                return ExitCodes.ErrorAsync;
             }
 
             if (parseResult.HelpWasRequested())
             {
                 ctx.ShowHelpOnExit = true;
-                return ExitCodes.Success;
+                return ExitCodes.SuccessAsync;
             }
 
             if (!targetCommand.IsExecutable)
@@ -65,7 +65,7 @@ namespace CommandDotNet.Help
                 console.Error.WriteLine(Resources.A.Parse_Required_command_was_not_provided);
                 console.Error.WriteLine();
                 ctx.ShowHelpOnExit = true;
-                return ExitCodes.Error;
+                return ExitCodes.ErrorAsync;
             }
 
             return next(ctx);
