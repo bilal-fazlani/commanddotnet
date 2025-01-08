@@ -9,7 +9,7 @@ CommandDotNet throws two types of exceptions
 
 ## Two patterns for handling exceptions
 
-### UseErrorHandler deletage
+### UseErrorHandler delegate
 
 <!-- snippet: exceptions_use_error_handler_delegate -->
 <a id='snippet-exceptions_use_error_handler_delegate'></a>
@@ -25,7 +25,7 @@ static int Main(string[] args)
         .UseErrorHandler((ctx, ex) =>
         {
             (ctx?.Console.Error ?? Console.Error).WriteLine(ex.Message);
-            return ExitCodes.Error.Result;
+            return ExitCodes.ErrorAsync.Result;
         })
         .Run(args);
 }
@@ -62,7 +62,7 @@ static int Main(string[] args)
     catch (Exception ex)
     {
         Console.Error.WriteLine(ex.Message);
-        return ExitCodes.Error.Result;
+        return ExitCodes.ErrorAsync.Result;
     }
 }
 ```
@@ -78,12 +78,16 @@ CommandDotnet has the following pre-defined exit codes
 ```cs
 public static class ExitCodes
 {
-    public static Task<int> Success => Task.FromResult(0);
-    public static Task<int> Error => Task.FromResult(1);
-    public static Task<int> ValidationError => Task.FromResult(2);
+    public static int Success => 0;
+    public static int Error => 1;
+    public static int ValidationError => 2;
+    
+    public static Task<int> SuccessAsync => Task.FromResult(Success);
+    public static Task<int> ErrorAsync => Task.FromResult(Error);
+    public static Task<int> ValidationErrorAsync => Task.FromResult(ValidationError);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/ExitCodes.cs#L5-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-exitcodes_class' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/ExitCodes.cs#L5-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-exitcodes_class' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 CommandDotNet internal errors are generally captured and return `ExitCodes.Error` (1).
@@ -129,7 +133,7 @@ Use this for user related errors where it could be helpful for them to see the h
 
 ### Printing config information
 
-Configuration can be printed with `appRunner.ToString()`.  See the [Command Logger > AppConfig](command-logger.md#appconfig) section for an example.
+Configuration can be printed with `appRunner.ToString()`.  See the [Command Logger > AppConfig](command-logger.md#include-appconfig) section for an example.
 
 Alternatively, `CommandLogger.Log(ctx)` can be used to output CommandLogger for exception handling.
 
@@ -171,7 +175,7 @@ private static int ErrorHandler(CommandContext? ctx, Exception exception)
     // if the exception occurred before a command could be parsed
     ctx?.PrintHelp();
 
-    return ExitCodes.Error.Result;
+    return ExitCodes.ErrorAsync.Result;
 }
 
 public void Throw(string message)
