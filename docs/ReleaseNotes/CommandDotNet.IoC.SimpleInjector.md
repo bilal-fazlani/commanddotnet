@@ -1,5 +1,10 @@
 # CommandDotNet.IoC.SimpleInjector
 
+## 6.0.0
+
+* add support for net9
+* drop support for net6 and net7
+
 ## 5.0.2
 
 * support dotnet 7

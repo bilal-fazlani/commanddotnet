@@ -1,5 +1,10 @@
 # CommandDotNet.IoC.MicrosoftDependencyInjection
 
+## 7.0.0
+
+* add support for net9
+* drop support for net6 and net7
+
 ## 6.0.0
 
 * upgrade to Microsoft.Extensions.DependencyInjection 8.0.0

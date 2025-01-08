@@ -4,6 +4,12 @@
 
 * add support for net9
 * drop support for net6 and net7
+* rename [ExitCodes properties](../Diagnostics/exceptions.md#exit-codes). Previous properties that returned `Task<int>` now return `int` and new properties added postfixed with `Async` to return `Task<int>`.  
+* support nullable objects in IInvocation, dependency resolvers and parameter resolvers.
+  * IInvocation.ParameterValues changed from `object[]` to `object?[]`
+  * Generic constraint changed from `class` to `class?` for
+    * IDependencyResolver { Resolve<T>(), ResolveOrDefault<T>() } extension methods
+    * AppConfigBuilder.UseParameterResolver, allowing a nullable type to be registered
 
 ## 7.0.5
 
@@ -338,7 +344,7 @@ Now it will suggest the correct syntax to the user.
 
 Expose DefaultSources.GetValueFunc for host apps to reuse logic for alternate configuration sources.
 
-See the new [.Net Core Config](../ArgumentValues/default-values-from-config.md#.net-core-config) section for an example.
+See the new [.Net Core Config](../ArgumentValues/default-values-from-config.md#net-core-config) section for an example.
 
 ## 4.1.7
 
@@ -710,8 +716,8 @@ Option & Operand & Command should now be created without a parent command. Paren
 
 ### Feature
 
-#### [%UsageAppName%](../Help/help.md#usageappname-tempate) 
-To show usage examples in a command description, extended help or overridden usage section, use %UsageAppName%. This text will be replaced usage app name from one of the options above. See [the help docs](../Help/help.md#usageappname-tempate) for more.
+#### [%UsageAppName%](../Help/help.md#template-variables) 
+To show usage examples in a command description, extended help or overridden usage section, use %AppName%. This text will be replaced usage app name from one of the options above. See [the help docs](../Help/help.md#template-variables) for more.
 
 ### API
 

@@ -1,5 +1,10 @@
 # CommandDotNet.IoC.AutoFac
 
+## 7.0.0
+
+* add support for net9
+* drop support for net6 and net7
+
 ## 6.0.0
 
 * upgrade to Autofac 8.0.0

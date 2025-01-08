@@ -194,7 +194,7 @@ hide:
     - Auto prompt for missing arguments (optional)
     - Spectre AnsiConsole integration for alternate prompting experience
 
-- [x] Default from EnvVar ([docs](ArgumentValues/default-values-from-config.md##environment-variables))
+- [x] Default from EnvVar ([docs](ArgumentValues/default-values-from-config.md#environment-variables))
 > values show as defaults in command help
 
 - [x] Default from AppSetting ([docs](ArgumentValues/default-values-from-config.md#appsettings))
