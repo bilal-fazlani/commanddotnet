@@ -38,7 +38,7 @@ public void EndOfOptions(IConsole console, CommandContext ctx, string? arg1)
     console.WriteLine($"remaining: {string.Join(',', ctx.ParseResult!.RemainingOperands)}");
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Values/Argument_Separator.cs#L21-L34' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_separator_end_of_options' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Values/Argument_Separator.cs#L19-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_separator_end_of_options' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 This command expects a single operand, but if the operand value looks like an option, the parser will throw an exception
@@ -142,7 +142,7 @@ public void PassThru(IConsole console, CommandContext ctx, string? arg1)
     console.WriteLine($"remaining: {string.Join(',', ctx.ParseResult!.RemainingOperands)}");
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Values/Argument_Separator.cs#L36-L50' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_separator_pass_thru' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Values/Argument_Separator.cs#L34-L48' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_separator_pass_thru' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Help will append ` [[--] <arg>...]` to the usage example when `ArgumentSeparatorStrategy.PassThru` is used.

@@ -89,13 +89,13 @@ Here are the available parameters for configuration:
 /// <param name="includeMachineAndUser">Include machine name, username</param>
 /// <param name="additionalInfoCallback">Additional information to include.</param>
 public static AppRunner UseCommandLogger(this AppRunner appRunner,
-    Func<CommandContext, Action<string?>?>? writerFactory = null,
-    bool excludeSystemInfo = false,
-    bool includeAppConfig = false,
-    bool includeMachineAndUser = false,
-    Func<CommandContext, IEnumerable<(string key, string value)>?>? additionalInfoCallback = null)
+        Func<CommandContext, Action<string?>?>? writerFactory = null,
+        bool excludeSystemInfo = false,
+        bool includeAppConfig = false,
+        bool includeMachineAndUser = false,
+        Func<CommandContext, IEnumerable<(string key, string value)>?>? additionalInfoCallback = null)
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/AppRunnerConfigExtensions.cs#L249-L269' title='Snippet source file'>snippet source</a> | <a href='#snippet-usecommandlogger-parameters' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/AppRunnerConfigExtensions.cs#L236-L256' title='Snippet source file'>snippet source</a> | <a href='#snippet-usecommandlogger-parameters' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## Include Machine and User
@@ -382,7 +382,7 @@ public class Program
         }
         return next();
     }
-    
+        
     public void Add(IConsole console, int x, int y) => console.WriteLine(x + y);
 
     public void Subtract(IConsole console, int x, int y) => console.WriteLine(x - y);

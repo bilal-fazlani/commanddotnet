@@ -46,21 +46,16 @@ public ArgumentSeparatorStrategy ArgumentSeparatorStrategy
 }
 
 /// <summary>Indicates the class is a command. The name will be derived from the class name.</summary>
-public CommandAttribute()
-{
-}
+public CommandAttribute() {}
 
 /// <summary>
 /// Indicates the class is a command with the given name.<br/>
 /// This is not required unless you plan to override a default property of the command.<br/>
 /// All public methods will be interpreted as commands.
 /// </summary>
-public CommandAttribute(string? name)
-{
-    Name = name;
-}
+public CommandAttribute(string? name) => Name = name;
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/CommandAttribute.cs#L14-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-commandattribute-properties' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/CommandAttribute.cs#L16-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-commandattribute-properties' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 `IgnoreUnexpectedOperands` and `ArgumentSeparatorStrategy` delegate to another member. C# does not support nullable property types so this is how CommandDotNet knows the value was explicitly set by the developer.

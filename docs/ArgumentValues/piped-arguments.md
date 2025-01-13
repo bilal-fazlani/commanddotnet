@@ -34,7 +34,7 @@ public void List(IConsole console,
     foreach (var user in userSvc.GetUsers())
         console.Out.WriteLine(idsOnly ? user.Id : user);
 }
-
+    
 public void Disable(IConsole console, IEnumerable<string> ids)
 {
     foreach (string id in ids)

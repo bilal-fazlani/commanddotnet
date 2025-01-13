@@ -27,7 +27,7 @@ The second step is to use `IConsole` to capture the output for assertions in tes
 <a id='snippet-getting-started-400-calculator-console'></a>
 ```cs
 public void Add(IConsole console, int x, int y) => console.WriteLine(x + y);
-
+    
 public void Subtract(IConsole console, int x, int y) => console.WriteLine(x - y);
 ```
 <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_400_Testing.cs#L18-L22' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-400-calculator-console' title='Start of snippet'>anchor</a></sup>

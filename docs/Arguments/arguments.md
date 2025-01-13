@@ -61,12 +61,12 @@ The OptionAttribute has the following properties:
 <a id='snippet-arguments_attributes'></a>
 ```cs
 public void LaunchRocket(
-    [Operand("planet", Description = "Name of the planet you wish the rocket to go")]
-    string planetName,
-    [Option('t', "turbo", Description = "Do you want to go fast?")]
-    bool turbo,
-    [Option('a', Description = "Abort the launch before takeoff", BooleanMode = BooleanMode.Explicit)]
-    bool abort)
+        [Operand("planet", Description = "Name of the planet you wish the rocket to go")]
+        string planetName,
+        [Option('t', "turbo", Description = "Do you want to go fast?")]
+        bool turbo,
+        [Option('a', Description = "Abort the launch before takeoff", BooleanMode = BooleanMode.Explicit)]
+        bool abort)
 ```
 <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L13-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_attributes' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->

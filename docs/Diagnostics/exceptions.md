@@ -81,7 +81,7 @@ public static class ExitCodes
     public static int Success => 0;
     public static int Error => 1;
     public static int ValidationError => 2;
-    
+        
     public static Task<int> SuccessAsync => Task.FromResult(Success);
     public static Task<int> ErrorAsync => Task.FromResult(Error);
     public static Task<int> ValidationErrorAsync => Task.FromResult(ValidationError);
@@ -120,7 +120,7 @@ bool includeData = false,        // print values from ex.Data dictionary
 bool includeStackTrace = false,  // print stack trace
 bool excludeTypeName = false     // do not print exception type name
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Diagnostics/ExceptionExtensions.cs#L70-L75' title='Snippet source file'>snippet source</a> | <a href='#snippet-exception_print_parameters' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/Diagnostics/ExceptionExtensions.cs#L81-L86' title='Snippet source file'>snippet source</a> | <a href='#snippet-exception_print_parameters' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ### Print command help

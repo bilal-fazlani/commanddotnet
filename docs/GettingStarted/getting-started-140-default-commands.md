@@ -24,7 +24,7 @@ public class Program
     public void Execute(int x, int y) => Console.WriteLine(x + y);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_140_Default_Commands.cs#L14-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-140-default-commands' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_140_Default_Commands.cs#L13-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-140-default-commands' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: getting-started-140-default-commands-help -->
@@ -88,7 +88,7 @@ public class Subtract
     public void Execute(int x, int y) => Console.WriteLine(x - y);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_140_Default_Commands.cs#L29-L55' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-140-default-commands-command-per-class' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/GettingStarted/Getting_Started_140_Default_Commands.cs#L28-L54' title='Snippet source file'>snippet source</a> | <a href='#snippet-getting-started-140-default-commands-command-per-class' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: getting-started-140-default-commands-help-command-per-class -->

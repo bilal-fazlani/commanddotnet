@@ -83,8 +83,7 @@ public class EnumTypeDescriptor :
     IArgumentTypeDescriptor,
     IAllowedValuesTypeDescriptor
 {
-    public bool CanSupport(Type type) => 
-        type.IsEnum;
+    public bool CanSupport(Type type) => type.IsEnum;
 
     public string GetDisplayName(IArgument argument) => 
         argument.TypeInfo.UnderlyingType.Name;
@@ -96,7 +95,7 @@ public class EnumTypeDescriptor :
         Enum.GetNames(argument.TypeInfo.UnderlyingType);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/TypeDescriptors/EnumTypeDescriptor.cs#L6-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-type_descriptors_enum' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/TypeDescriptors/EnumTypeDescriptor.cs#L8-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-type_descriptors_enum' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Use [DelegatedTypeDescriptor](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/TypeDescriptors/DelegatedTypeDescriptor.cs) just to override the display text or factory method for the type.
@@ -106,7 +105,7 @@ Use [DelegatedTypeDescriptor](https://github.com/bilal-fazlani/commanddotnet/blo
 ```cs
 new DelegatedTypeDescriptor<string>(Resources.A.Type_Text, v => v),
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/TypeDescriptors/ArgumentTypeDescriptors.cs#L21-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-type_descriptors_string' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/TypeDescriptors/ArgumentTypeDescriptors.cs#L23-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-type_descriptors_string' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 See [StringCtorTypeDescriptor](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/TypeDescriptors/StringCtorTypeDescriptor.cs) and [ComponentModelTypeDescriptor](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/TypeDescriptors/ComponentModelTypeDescriptor.cs) for examples to create your own.
@@ -116,18 +115,13 @@ See [StringCtorTypeDescriptor](https://github.com/bilal-fazlani/commanddotnet/bl
 ```cs
 public class ComponentModelTypeDescriptor : IArgumentTypeDescriptor
 {
-    public bool CanSupport(Type type)
-    {
-        var typeConverter = TypeDescriptor.GetConverter(type);
-        return typeConverter.CanConvertFrom(typeof(string));
-    }
+    public bool CanSupport(Type type) => 
+        TypeDescriptor.GetConverter(type).CanConvertFrom(typeof(string));
 
-    public string GetDisplayName(IArgument argument)
-    {
-        return argument.TypeInfo.UnderlyingType.Name;
-    }
+    public string GetDisplayName(IArgument argument) => 
+        argument.TypeInfo.UnderlyingType.Name;
 
-    public object? ParseString(IArgument argument, string value)
+    public object ParseString(IArgument argument, string value)
     {
         var typeConverter = argument.Arity.AllowsMany()
             ? TypeDescriptor.GetConverter(argument.TypeInfo.UnderlyingType)
@@ -135,5 +129,5 @@ public class ComponentModelTypeDescriptor : IArgumentTypeDescriptor
         return typeConverter.ConvertFrom(value)!;
     }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/TypeDescriptors/ComponentModelTypeDescriptor.cs#L6-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-type_descriptors_type_convertor' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/TypeDescriptors/ComponentModelTypeDescriptor.cs#L8-L24' title='Snippet source file'>snippet source</a> | <a href='#snippet-type_descriptors_type_convertor' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
