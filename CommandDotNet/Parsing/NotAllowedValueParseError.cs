@@ -1,24 +1,18 @@
-﻿using System;
+﻿using CommandDotNet.Extensions;
 using CommandDotNet.Tokens;
+using JetBrains.Annotations;
 
-namespace CommandDotNet.Parsing
+namespace CommandDotNet.Parsing;
+
+/// <summary>The value is not in <see cref="IArgument.AllowedValues"/></summary>
+[PublicAPI]
+public class NotAllowedValueParseError(Command command, IArgument argument, Token token) : IParseError
 {
-    /// <summary>The value is not in <see cref="IArgument.AllowedValues"/></summary>
-    public class NotAllowedValueParseError : IParseError
-    {
-        public string Message { get; }
-        public Command Command { get; }
-        public IArgument Argument { get; }
-        public Token Token { get; }
+    public string Message { get; } = Resources.A.Parse_Unrecognized_value_for(token.RawValue,
+        argument is Option ? Resources.A.Common_option_lc : Resources.A.Common_argument_lc,
+        argument.Name);
 
-        public NotAllowedValueParseError(Command command, IArgument argument, Token token)
-        {
-            Command = command ?? throw new ArgumentNullException(nameof(command));
-            Argument = argument ?? throw new ArgumentNullException(nameof(argument));
-            Token = token ?? throw new ArgumentNullException(nameof(token));
-            Message = Resources.A.Parse_Unrecognized_value_for(token.RawValue,
-                (argument is Option ? Resources.A.Common_option_lc : Resources.A.Common_argument_lc),
-                argument.Name);
-        }
-    }
+    public Command Command { get; } = command.ThrowIfNull();
+    public IArgument Argument { get; } = argument.ThrowIfNull();
+    public Token Token { get; } = token.ThrowIfNull();
 }

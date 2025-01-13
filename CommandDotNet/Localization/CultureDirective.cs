@@ -5,43 +5,42 @@ using System.Threading.Tasks;
 using CommandDotNet.Directives;
 using CommandDotNet.Execution;
 
-namespace CommandDotNet.Localization
+namespace CommandDotNet.Localization;
+
+internal static class CultureDirective
 {
-    internal static class CultureDirective
+    internal static AppRunner UseCultureDirective(AppRunner appRunner)
     {
-        internal static AppRunner UseCultureDirective(AppRunner appRunner)
-        {
-            return appRunner.Configure(c => c.UseMiddleware(CheckCulture, MiddlewareSteps.DebugDirective + 1));
-        }
+        return appRunner.Configure(c => c.UseMiddleware(CheckCulture, MiddlewareSteps.DebugDirective + 1));
+    }
 
-        private static async Task<int> CheckCulture(CommandContext context, ExecutionDelegate next)
-        {
-            Action? revert = null;
+    private static async Task<int> CheckCulture(CommandContext context, ExecutionDelegate next)
+    {
+        Action? revert = null;
 
-            if (context.Tokens.TryGetDirective("culture", out string? culture))
+        if (context.Tokens.TryGetDirective("culture", out var culture))
+        {
+            var name = culture.Split(':').Last();
+            var cultureInfo = CultureInfo.GetCultureInfo(name);
+
+            var previousCulture = CultureInfo.CurrentCulture;
+            var previousUiCulture = CultureInfo.CurrentUICulture;
+
+            revert = () =>
             {
-                var name = culture!.Split(':').Last();
-                var cultureInfo = CultureInfo.GetCultureInfo(name);
+                CultureInfo.CurrentCulture = previousCulture;
+                CultureInfo.CurrentUICulture = previousUiCulture;
+            };
 
-                var previousCulture = CultureInfo.CurrentCulture;
-                var previousUICulture = CultureInfo.CurrentUICulture;
-
-                revert = () =>
-                {
-                    CultureInfo.CurrentCulture = previousCulture;
-                    CultureInfo.CurrentUICulture = previousUICulture;
-                };
-
-                CultureInfo.CurrentCulture = cultureInfo;
-                CultureInfo.CurrentUICulture = cultureInfo;
-            }
-
-            var result = await next(context);
-
-            // revert for tests and interactive repl sessions
-            revert?.Invoke();
-
-            return result;
+            CultureInfo.CurrentCulture = cultureInfo;
+            CultureInfo.CurrentUICulture = cultureInfo;
         }
+
+        var result = await next(context);
+
+        // revert for tests and interactive repl sessions
+        revert?.Invoke();
+
+        return result;
     }
 }

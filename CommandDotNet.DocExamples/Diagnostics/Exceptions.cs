@@ -1,169 +1,169 @@
 using System;
-using NUnit.Framework;
 using CommandDotNet.Diagnostics;
 using CommandDotNet.TestTools;
 using FluentAssertions;
+using NUnit.Framework;
 
-namespace CommandDotNet.DocExamples.Diagnostics
+namespace CommandDotNet.DocExamples.Diagnostics;
+
+public class Exceptions
 {
-    public class Exceptions
+    public class Program_Simple
     {
-        public class Program_Simple
+        // begin-snippet: exceptions_simple
+        public class Program
         {
-            // begin-snippet: exceptions_simple
-            public class Program
+            static int Main(string[] args) => AppRunner.Run(args);
+
+            public static AppRunner AppRunner =>
+                new AppRunner<Program>()
+                    .UseErrorHandler(ErrorHandler);
+
+            private static int ErrorHandler(CommandContext? ctx, Exception exception)
             {
-                static int Main(string[] args) => AppRunner.Run(args);
+                var errorWriter = (ctx?.Console.Error ?? Console.Error);
 
-                public static AppRunner AppRunner =>
-                    new AppRunner<Program>()
-                        .UseErrorHandler(ErrorHandler);
+                exception.Print(errorWriter.WriteLine,
+                    includeProperties: true,
+                    includeData: true,
+                    includeStackTrace: false);
 
-                private static int ErrorHandler(CommandContext? ctx, Exception exception)
-                {
-                    var errorWriter = (ctx?.Console.Error ?? Console.Error);
+                errorWriter.WriteLine();
 
-                    exception.Print(errorWriter.WriteLine,
-                        includeProperties: true,
-                        includeData: true,
-                        includeStackTrace: false);
+                // print help for the target command or root command
+                // if the exception occurred before a command could be parsed
+                ctx?.PrintHelp();
 
-                    errorWriter.WriteLine();
-
-                    // print help for the target command or root command
-                    // if the exception occurred before a command could be parsed
-                    ctx?.PrintHelp();
-
-                    return ExitCodes.ErrorAsync.Result;
-                }
-
-                public void Throw(string message)
-                {
-                    throw new ArgumentException(message, nameof(message))
-                    {
-                        Data = { { "method", nameof(Exceptions.Throw) } }
-                    };
-                }
+                return ExitCodes.ErrorAsync.Result;
             }
-            // end-snippet
-        }
 
-        public class Program_UseErrorHandler_Delegate
-        {
-            public class Program
+            public void Throw(string message)
             {
-                // begin-snippet: exceptions_use_error_handler_delegate
-                static int Main(string[] args)
+                throw new ArgumentException(message, nameof(message))
                 {
-                    return new AppRunner<Program>()
-                        .Configure(b =>
-                        {
-                            // some other setup that could throw exceptions
-                            // i.e. configure containers, load configs, register custom middleware
-                        })
-                        .UseErrorHandler((ctx, ex) =>
-                        {
-                            (ctx?.Console.Error ?? Console.Error).WriteLine(ex.Message);
-                            return ExitCodes.ErrorAsync.Result;
-                        })
-                        .Run(args);
-                }
-                // end-snippet
-
-                public void Throw(string message)
-                {
-                    throw new ArgumentException(message, nameof(message))
-                    {
-                        Data = { { "method", nameof(Exceptions.Throw) } }
-                    };
-                }
+                    Data = { { "method", nameof(Exceptions.Throw) } }
+                };
             }
         }
+        // end-snippet
+    }
 
-        public class Program_TryCatch
+    public class Program_UseErrorHandler_Delegate
+    {
+        public class Program
         {
-            public class Program
+            // begin-snippet: exceptions_use_error_handler_delegate
+            static int Main(string[] args)
             {
-                // begin-snippet: exceptions_try_catch
-                static int Main(string[] args)
-                {
-                    try
+                return new AppRunner<Program>()
+                    .Configure(b =>
                     {
                         // some other setup that could throw exceptions
                         // i.e. configure containers, load configs, register custom middleware
-
-                        return new AppRunner<Program>().Run(args);
-                    }
-                    catch (Exception ex)
+                    })
+                    .UseErrorHandler((ctx, ex) =>
                     {
-                        Console.Error.WriteLine(ex.Message);
+                        (ctx?.Console.Error ?? Console.Error).WriteLine(ex.Message);
                         return ExitCodes.ErrorAsync.Result;
-                    }
-                }
-                // end-snippet
+                    })
+                    .Run(args);
+            }
+            // end-snippet
 
-                public void Throw(string message)
+            public void Throw(string message)
+            {
+                throw new ArgumentException(message, nameof(message))
                 {
-                    throw new ArgumentException(message, nameof(message))
-                    {
-                        Data = { { "method", nameof(Exceptions.Throw) } }
-                    };
-                }
+                    Data = { { "method", nameof(Exceptions.Throw) } }
+                };
             }
         }
+    }
 
-        public class Program_CommandLogger
+    public class Program_TryCatch
+    {
+        public class Program
         {
-            public class Program
+            // begin-snippet: exceptions_try_catch
+            static int Main(string[] args)
             {
-                // begin-snippet: exceptions_cmdlog_error_handler
-                static int Main(string[] args) => AppRunner.Run(args);
-
-                public static AppRunner AppRunner =>
-                    new AppRunner<Program>()
-                        .UseErrorHandler(ErrorHandler);
-
-                private static int ErrorHandler(CommandContext? ctx, Exception exception)
+                try
                 {
-                    var errorWriter = (ctx?.Console.Error ?? Console.Error);
-                    exception.Print(errorWriter.WriteLine,
-                        includeProperties: true,
-                        includeData: true,
-                        includeStackTrace: false);
+                    // some other setup that could throw exceptions
+                    // i.e. configure containers, load configs, register custom middleware
 
-                    // use CommandLogger if it has not already logged for this CommandContext
-                    if (ctx is not null && !CommandLogger.HasLoggedFor(ctx))
-                    {
-                        CommandLogger.Log(ctx,
-                            writer: errorWriter.WriteLine,
-                            includeSystemInfo: true,
-                            includeMachineAndUser: true,
-                            includeAppConfig: false
-                        );
-                    }
-
-                    // print help for the target command or root command
-                    // if the exception occurred before a command could be parsed
-                    ctx?.PrintHelp();
-
+                    return new AppRunner<Program>().Run(args);
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine(ex.Message);
                     return ExitCodes.ErrorAsync.Result;
                 }
+            }
+            // end-snippet
 
-                public void Throw(string message)
+            public void Throw(string message)
+            {
+                throw new ArgumentException(message, nameof(message))
                 {
-                    throw new ArgumentException(message, nameof(message))
-                    {
-                        Data = { { "method", nameof(Exceptions.Throw) } }
-                    };
-                }
-                // end-snippet
+                    Data = { { "method", nameof(Exceptions.Throw) } }
+                };
             }
         }
+    }
 
-        public static BashSnippet Throw = new ("exceptions_throw", 
-            Program_Simple.Program.AppRunner, 
-            "example.exe", "Throw yikes", 1, 
-            @"System.ArgumentException: yikes (Parameter 'message')
+    public class Program_CommandLogger
+    {
+        public class Program
+        {
+            // begin-snippet: exceptions_cmdlog_error_handler
+            static int Main(string[] args) => AppRunner.Run(args);
+
+            public static AppRunner AppRunner =>
+                new AppRunner<Program>()
+                    .UseErrorHandler(ErrorHandler);
+
+            private static int ErrorHandler(CommandContext? ctx, Exception exception)
+            {
+                var errorWriter = (ctx?.Console.Error ?? Console.Error);
+                exception.Print(errorWriter.WriteLine,
+                    includeProperties: true,
+                    includeData: true,
+                    includeStackTrace: false);
+
+                // use CommandLogger if it has not already logged for this CommandContext
+                if (ctx is not null && !CommandLogger.HasLoggedFor(ctx))
+                {
+                    CommandLogger.Log(ctx,
+                        writer: errorWriter.WriteLine,
+                        includeSystemInfo: true,
+                        includeMachineAndUser: true,
+                        includeAppConfig: false
+                    );
+                }
+
+                // print help for the target command or root command
+                // if the exception occurred before a command could be parsed
+                ctx?.PrintHelp();
+
+                return ExitCodes.ErrorAsync.Result;
+            }
+
+            public void Throw(string message)
+            {
+                throw new ArgumentException(message, nameof(message))
+                {
+                    Data = { { "method", nameof(Exceptions.Throw) } }
+                };
+            }
+            // end-snippet
+        }
+    }
+
+    public static BashSnippet Throw = new ("exceptions_throw", 
+        Program_Simple.Program.AppRunner, 
+        "example.exe", "Throw yikes", 1, 
+        @"System.ArgumentException: yikes (Parameter 'message')
 Properties:
   Message: yikes (Parameter 'message')
   ParamName: message
@@ -176,18 +176,18 @@ Arguments:
 
   message  <TEXT>");
 
-        private static TestEnvironment TestEnvironment = new()
-        {
-            FrameworkDescription = ".NET 5.0.13",
-            OSDescription = "Microsoft Windows 10.0.12345",
-            MachineName = "my-machine",
-            UserName = "my-machine\\username"
-        };
+    private static TestEnvironment TestEnvironment = new()
+    {
+        FrameworkDescription = ".NET 5.0.13",
+        OSDescription = "Microsoft Windows 10.0.12345",
+        MachineName = "my-machine",
+        UserName = "my-machine\\username"
+    };
 
-        public static BashSnippet Throw_CmdLog = new("exceptions_throw_cmdlog",
-            Program_CommandLogger.Program.AppRunner.UseTestEnv(TestEnvironment), 
-            "example.exe", "Throw yikes", 1,
-            @"System.ArgumentException: yikes (Parameter 'message')
+    public static BashSnippet Throw_CmdLog = new("exceptions_throw_cmdlog",
+        Program_CommandLogger.Program.AppRunner.UseTestEnv(TestEnvironment), 
+        "example.exe", "Throw yikes", 1,
+        @"System.ArgumentException: yikes (Parameter 'message')
 Properties:
   Message: yikes (Parameter 'message')
   ParamName: message
@@ -221,20 +221,19 @@ Arguments:
   message  <TEXT>");
 
 
-        [Test]
-        public void UseErrorHandler_Delegate_works()
-        {
-            var (exitCode, output) = typeof(Program_UseErrorHandler_Delegate.Program).InvokeMainMethod("Throw yikes");
-            exitCode.Should().Be(1);
-            output.Should().Be($"yikes (Parameter 'message'){Environment.NewLine}");
-        }
+    [Test]
+    public void UseErrorHandler_Delegate_works()
+    {
+        var (exitCode, output) = typeof(Program_UseErrorHandler_Delegate.Program).InvokeMainMethod("Throw yikes");
+        exitCode.Should().Be(1);
+        output.Should().Be($"yikes (Parameter 'message'){Environment.NewLine}");
+    }
 
-        [Test] 
-        public void TryCatch_works()
-        {
-            var (exitCode, output) = typeof(Program_TryCatch.Program).InvokeMainMethod("Throw yikes");
-            exitCode.Should().Be(1);
-            output.Should().Be($"yikes (Parameter 'message'){Environment.NewLine}");
-        }
+    [Test] 
+    public void TryCatch_works()
+    {
+        var (exitCode, output) = typeof(Program_TryCatch.Program).InvokeMainMethod("Throw yikes");
+        exitCode.Should().Be(1);
+        output.Should().Be($"yikes (Parameter 'message'){Environment.NewLine}");
     }
 }

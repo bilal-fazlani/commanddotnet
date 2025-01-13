@@ -5,60 +5,50 @@ using System.Linq;
 using CommandDotNet.Extensions;
 using CommandDotNet.TypeDescriptors;
 
-namespace CommandDotNet.Parsing
+namespace CommandDotNet.Parsing;
+
+internal class ListParser(Type type, Type underlyingType, 
+    IArgumentTypeDescriptor argumentTypeDescriptor)
+    : IParser
 {
-    internal class ListParser : IParser
+    public object? Parse(IArgument argument, IEnumerable<string> values)
     {
-        private readonly Type _type;
-        private readonly Type _underlyingType;
-        private readonly IArgumentTypeDescriptor _argumentTypeDescriptor;
+        // TODO: when _type & values is IEnumerable but not ICollection
+        //       DO NOT enumerate values here as it could be a stream.
+        var listInstance = type.IsArray
+            ? new ArrayList()
+            : values is ICollection<string> || type.IsCollection()
+                ? CreateGenericList()
+                : null;
 
-        public ListParser(Type type, Type underlyingType, IArgumentTypeDescriptor argumentTypeDescriptor)
+        if (listInstance == null)
         {
-            _type = type;
-            _underlyingType = underlyingType;
-            _argumentTypeDescriptor = argumentTypeDescriptor;
-        }
-
-        public object? Parse(IArgument argument, IEnumerable<string> values)
-        {
-            // TODO: when _type & values is IEnumerable but not ICollection
-            //       DO NOT enumerate values here as it could be a stream.
-            var listInstance = _type.IsArray
-                ? new ArrayList()
-                : values is ICollection<string> || _type.IsCollection()
-                    ? CreateGenericList()
-                    : null;
-
-            if (listInstance == null)
+            if (underlyingType == typeof(string))
             {
-                if (_underlyingType == typeof(string))
-                {
-                    return values;
-                }
-
-                // must create delegate of correct type to invoke command method
-                // while casting only as the stream is consumed
-                Func<IEnumerable, object> f = Enumerable.Cast<object>;
-                var cast = f.Method.GetGenericMethodDefinition().MakeGenericMethod(_underlyingType);
-                var enumerable = values.Select(v => _argumentTypeDescriptor.ParseString(argument, v));
-                return cast.Invoke(null, new[] { enumerable });
+                return values;
             }
 
-            foreach (string stringValue in values)
-            {
-                listInstance.Add(_argumentTypeDescriptor.ParseString(argument, stringValue));
-            }
-
-            return _type.IsArray 
-                ? ((ArrayList)listInstance).ToArray(_underlyingType)
-                : listInstance;
+            // must create delegate of correct type to invoke command method
+            // while casting only as the stream is consumed
+            Func<IEnumerable, object> f = Enumerable.Cast<object>;
+            var cast = f.Method.GetGenericMethodDefinition().MakeGenericMethod(underlyingType);
+            var enumerable = values.Select(v => argumentTypeDescriptor.ParseString(argument, v));
+            return cast.Invoke(null, [enumerable]);
         }
 
-        private IList CreateGenericList()
+        foreach (string stringValue in values)
         {
-            var listType = typeof(List<>).MakeGenericType(_underlyingType);
-            return (IList) Activator.CreateInstance(listType)!;
+            listInstance.Add(argumentTypeDescriptor.ParseString(argument, stringValue));
         }
+
+        return type.IsArray 
+            ? ((ArrayList)listInstance).ToArray(underlyingType)
+            : listInstance;
+    }
+
+    private IList CreateGenericList()
+    {
+        var listType = typeof(List<>).MakeGenericType(underlyingType);
+        return (IList) Activator.CreateInstance(listType)!;
     }
 }

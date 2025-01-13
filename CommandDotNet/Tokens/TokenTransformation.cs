@@ -1,23 +1,17 @@
 ﻿using System;
+using JetBrains.Annotations;
 
-namespace CommandDotNet.Tokens
+namespace CommandDotNet.Tokens;
+
+[PublicAPI]
+public class TokenTransformation(
+    string name,
+    int order,
+    Func<CommandContext, TokenCollection, TokenCollection> transformation)
 {
-    public class TokenTransformation
-    {
-        public string Name { get; }
-        public int Order { get; }
-        public Func<CommandContext, TokenCollection, TokenCollection> Transformation { get; }
+    public string Name { get; } = name;
+    public int Order { get; } = order;
+    public Func<CommandContext, TokenCollection, TokenCollection> Transformation { get; } = transformation;
 
-        public TokenTransformation(string name, int order, Func<CommandContext, TokenCollection, TokenCollection> transformation)
-        {
-            Name = name;
-            Order = order;
-            Transformation = transformation;
-        }
-
-        public override string ToString()
-        {
-            return $"{nameof(TokenTransformation)}: {Name} ({Order})";
-        }
-    }
+    public override string ToString() => $"{nameof(TokenTransformation)}: {Name} ({Order})";
 }

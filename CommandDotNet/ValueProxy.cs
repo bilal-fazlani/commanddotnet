@@ -1,19 +1,15 @@
 ﻿using System;
+using JetBrains.Annotations;
 
-namespace CommandDotNet
+namespace CommandDotNet;
+
+/// <summary>Proxy to get and set the value of an argument</summary>
+[PublicAPI]
+public class ValueProxy(Func<object?> getter, Action<object?> setter)
 {
-    /// <summary>Proxy to get and set the value of an argument</summary>
-    public class ValueProxy
-    {
-        /// <summary>The function to get the value</summary>
-        public Func<object?> Getter { get; }
-        /// <summary>The function to set the value</summary>
-        public Action<object?> Setter { get; }
+    /// <summary>The function to get the value</summary>
+    public Func<object?> Getter { get; } = getter;
 
-        public ValueProxy(Func<object?> getter, Action<object?> setter)
-        {
-            Getter = getter;
-            Setter = setter;
-        }
-    }
+    /// <summary>The function to set the value</summary>
+    public Action<object?> Setter { get; } = setter;
 }

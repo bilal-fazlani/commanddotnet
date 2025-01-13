@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace CommandDotNet.Rendering
+namespace CommandDotNet.Rendering;
+
+public interface IConsoleColor
 {
-    public interface IConsoleColor
-    {
-        ConsoleColor BackgroundColor { get; set; }
-        ConsoleColor ForegroundColor { get; set; }
-        void ResetColor();
-    }
+    ConsoleColor BackgroundColor { get; set; }
+    ConsoleColor ForegroundColor { get; set; }
+    void ResetColor();
 }

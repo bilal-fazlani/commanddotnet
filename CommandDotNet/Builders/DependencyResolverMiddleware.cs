@@ -2,49 +2,43 @@
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
 
-namespace CommandDotNet.Builders
+namespace CommandDotNet.Builders;
+
+internal static class DependencyResolverMiddleware
 {
-    internal static class DependencyResolverMiddleware
+    internal static AppRunner UseDependencyResolver(AppRunner appRunner, 
+        IDependencyResolver dependencyResolver,
+        Func<CommandContext, IDisposable>? runInScope,
+        ResolveStrategy argumentModelResolveStrategy,
+        ResolveStrategy commandClassResolveStrategy)
     {
-        internal static AppRunner UseDependencyResolver(AppRunner appRunner, 
-            IDependencyResolver dependencyResolver,
-            Func<CommandContext, IDisposable>? runInScope,
-            ResolveStrategy argumentModelResolveStrategy,
-            ResolveStrategy commandClassResolveStrategy)
+        return appRunner.Configure(c =>
         {
-            return appRunner.Configure(c =>
+            c.DependencyResolver = dependencyResolver;
+            c.Services.Add(new ResolverService
             {
-                c.DependencyResolver = dependencyResolver;
-                c.Services.Add(new ResolverService
-                {
-                    ArgumentModelResolveStrategy = argumentModelResolveStrategy,
-                    CommandClassResolveStrategy = commandClassResolveStrategy
-                });
-                if (runInScope != null)
-                {
-                    c.UseMiddleware(RunInScope, MiddlewareSteps.DependencyResolver.BeginScope);
-                    c.Services.Add(new Config(runInScope));
-                }
+                ArgumentModelResolveStrategy = argumentModelResolveStrategy,
+                CommandClassResolveStrategy = commandClassResolveStrategy
             });
-        }
-
-        private static Task<int> RunInScope(CommandContext context, ExecutionDelegate next)
-        {
-            var config = context.AppConfig.Services.GetOrThrow<Config>();
-            using (config.RunInScopeCallback(context))
+            if (runInScope != null)
             {
-                return next(context);
+                c.UseMiddleware(RunInScope, MiddlewareSteps.DependencyResolver.BeginScope);
+                c.Services.Add(new Config(runInScope));
             }
-        }
+        });
+    }
 
-        private class Config
+    private static Task<int> RunInScope(CommandContext context, ExecutionDelegate next)
+    {
+        var config = context.AppConfig.Services.GetOrThrow<Config>();
+        using (config.RunInScopeCallback(context))
         {
-            public readonly Func<CommandContext, IDisposable> RunInScopeCallback;
-
-            public Config(Func<CommandContext, IDisposable> runInScopeCallback)
-            {
-                RunInScopeCallback = runInScopeCallback ?? throw new ArgumentNullException(nameof(runInScopeCallback));
-            }
+            return next(context);
         }
+    }
+
+    private class Config(Func<CommandContext, IDisposable> runInScopeCallback)
+    {
+        public readonly Func<CommandContext, IDisposable> RunInScopeCallback = runInScopeCallback ?? throw new ArgumentNullException(nameof(runInScopeCallback));
     }
 }

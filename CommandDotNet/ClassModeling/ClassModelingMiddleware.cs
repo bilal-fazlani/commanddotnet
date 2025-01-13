@@ -6,81 +6,72 @@ using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Parsing;
 
-namespace CommandDotNet.ClassModeling
+namespace CommandDotNet.ClassModeling;
+
+internal static class ClassModelingMiddleware
 {
-    internal static class ClassModelingMiddleware
+    internal static AppRunner UseClassDefMiddleware(this AppRunner appRunner, Type rootCommandType)
     {
-        internal static AppRunner UseClassDefMiddleware(this AppRunner appRunner, Type rootCommandType)
+        return appRunner.Configure(c =>
         {
-            return appRunner.Configure(c =>
-            {
-                c.UseMiddleware(CreateRootCommand, MiddlewareSteps.CreateRootCommand);
-                c.UseMiddleware(AssembleInvocationPipelineMiddleware, MiddlewareSteps.AssembleInvocationPipeline);
-                c.UseMiddleware(BindValuesMiddleware.BindValues, MiddlewareSteps.BindValues);
-                c.UseMiddleware(ResolveCommandClassesMiddleware.ResolveCommandClassInstances, MiddlewareSteps.ResolveCommandClasses);
-                c.UseMiddleware(InvokeInvocationPipelineMiddleware, MiddlewareSteps.InvokeCommand);
-                c.Services.Add(new Config(rootCommandType));
-            });
-        }
+            c.UseMiddleware(CreateRootCommand, MiddlewareSteps.CreateRootCommand);
+            c.UseMiddleware(AssembleInvocationPipelineMiddleware, MiddlewareSteps.AssembleInvocationPipeline);
+            c.UseMiddleware(BindValuesMiddleware.BindValues, MiddlewareSteps.BindValues);
+            c.UseMiddleware(ResolveCommandClassesMiddleware.ResolveCommandClassInstances, MiddlewareSteps.ResolveCommandClasses);
+            c.UseMiddleware(InvokeInvocationPipelineMiddleware, MiddlewareSteps.InvokeCommand);
+            c.Services.Add(new Config(rootCommandType));
+        });
+    }
 
-        private class Config
+    private record Config(Type RootCommandType);
+
+    private static Task<int> CreateRootCommand(CommandContext commandContext, ExecutionDelegate next)
+    {
+        var config = commandContext.AppConfig.Services.GetOrThrow<Config>();
+        commandContext.RootCommand = ClassCommandDef.CreateRootCommand(config.RootCommandType, commandContext);
+        return next(commandContext);
+    }
+
+    private static Task<int> AssembleInvocationPipelineMiddleware(CommandContext commandContext, ExecutionDelegate next)
+    {
+        var command = commandContext.ParseResult!.TargetCommand;
+        var commandDef = command.GetCommandDef();
+        if (commandDef != null)
         {
-            public Type RootCommandType { get; }
-
-            public Config(Type rootCommandType)
-            {
-                RootCommandType = rootCommandType;
-            }
-        }
-
-        private static Task<int> CreateRootCommand(CommandContext commandContext, ExecutionDelegate next)
-        {
-            var config = commandContext.AppConfig.Services.GetOrThrow<Config>();
-            commandContext.RootCommand = ClassCommandDef.CreateRootCommand(config.RootCommandType, commandContext);
-            return next(commandContext);
-        }
-
-        private static Task<int> AssembleInvocationPipelineMiddleware(CommandContext commandContext, ExecutionDelegate next)
-        {
-            var command = commandContext.ParseResult!.TargetCommand;
-            var commandDef = command.GetCommandDef();
-            if (commandDef != null)
-            {
-                var pipeline = commandContext.InvocationPipeline;
-                if (commandDef.IsExecutable)
-                {
-                    pipeline.TargetCommand = new InvocationStep(command, commandDef.InvokeMethodDef!);
-                    command.GetParentCommands(includeCurrent: true)
-                        .Select(cmd => (cmd, def: cmd.GetCommandDef()))
-                        .Where(c => c.def is { HasInterceptor: true }) // in case command is defined by a different middleware
-                        .Reverse()
-                        .ForEach(c =>
-                        {
-                            pipeline.AncestorInterceptors.Add(
-                                new InvocationStep(c.cmd, c.def!.InterceptorMethodDef!));
-                        });
-                }
-            }
-
-            return next(commandContext);
-        }
-
-        private static Task<int> InvokeInvocationPipelineMiddleware(CommandContext commandContext, ExecutionDelegate _)
-        {
-            static Task<int> Invoke(InvocationStep step, CommandContext context, ExecutionDelegate next, bool isCommand)
-            {
-                var result = step.Invocation.Invoke(context, step.Instance!, next);
-                return isCommand
-                    ? result.GetResultCodeAsync()
-                    : result as Task<int> ?? Task.FromResult(0);
-            }
-
             var pipeline = commandContext.InvocationPipeline;
+            if (commandDef.IsExecutable)
+            {
+                pipeline.TargetCommand = new InvocationStep(command, commandDef.InvokeMethodDef!);
+                command.GetParentCommands(includeCurrent: true)
+                    .Select(cmd => (cmd, def: cmd.GetCommandDef()))
+                    .Where(c => c.def is { HasInterceptor: true }) // in case command is defined by a different middleware
+                    .Reverse()
+                    .ForEach(c =>
+                    {
+                        pipeline.AncestorInterceptors.Add(
+                            new InvocationStep(c.cmd, c.def!.InterceptorMethodDef!));
+                    });
+            }
+        }
 
-            return pipeline.AncestorInterceptors
-                .Select(i => new ExecutionMiddleware((ctx, next) => Invoke(i, ctx, next, false)))
-                .Concat(new ExecutionMiddleware((ctx, next) => Invoke(pipeline.TargetCommand!, ctx, next, true)).ToEnumerable())
-                .InvokePipeline(commandContext);
+        return next(commandContext);
+    }
+
+    private static Task<int> InvokeInvocationPipelineMiddleware(CommandContext commandContext, ExecutionDelegate _)
+    {
+        var pipeline = commandContext.InvocationPipeline;
+
+        return pipeline.AncestorInterceptors
+            .Select(i => new ExecutionMiddleware((ctx, next) => Invoke(i, ctx, next, false)))
+            .Concat(new ExecutionMiddleware((ctx, next) => Invoke(pipeline.TargetCommand!, ctx, next, true)).ToEnumerable())
+            .InvokePipeline(commandContext);
+
+        static Task<int> Invoke(InvocationStep step, CommandContext context, ExecutionDelegate next, bool isCommand)
+        {
+            var result = step.Invocation.Invoke(context, step.Instance!, next);
+            return isCommand
+                ? result.GetResultCodeAsync()
+                : result as Task<int> ?? Task.FromResult(0);
         }
     }
 }

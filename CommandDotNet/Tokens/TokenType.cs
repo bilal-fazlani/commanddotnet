@@ -1,9 +1,8 @@
-﻿namespace CommandDotNet.Tokens
+﻿namespace CommandDotNet.Tokens;
+
+public enum TokenType
 {
-    public enum TokenType
-    {
-        Directive = 0,
-        Argument = 1,
-        Separator = 2
-    }
+    Directive = 0,
+    Argument = 1,
+    Separator = 2
 }

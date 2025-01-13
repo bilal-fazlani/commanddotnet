@@ -1,8 +1,7 @@
-﻿namespace CommandDotNet.Builders
+﻿namespace CommandDotNet.Builders;
+
+public interface IServicesContainer
 {
-    public interface IServicesContainer
-    {
-        /// <summary>The services used by middleware and associated with this object</summary>
-        IServices Services { get; }
-    }
+    /// <summary>The services used by middleware and associated with this object</summary>
+    IServices Services { get; }
 }

@@ -2,29 +2,19 @@
 using CommandDotNet.Extensions;
 using CommandDotNet.TypeDescriptors;
 
-namespace CommandDotNet.Parsing
+namespace CommandDotNet.Parsing;
+
+internal class SingleValueParser(IArgumentTypeDescriptor argumentTypeDescriptor) : IParser
 {
-    internal class SingleValueParser : IParser
+    public object? Parse(IArgument argument, IEnumerable<string> values)
     {
-        private readonly IArgumentTypeDescriptor _argumentTypeDescriptor;
-
-        public SingleValueParser(IArgumentTypeDescriptor argumentTypeDescriptor)
-        {
-            _argumentTypeDescriptor = argumentTypeDescriptor;
-        }
-
-        public object? Parse(IArgument argument, IEnumerable<string> values)
-        {
-            var value = values.SingleOrDefaultOrThrow(() => ThrowMultiForSingleEx(argument));
-            return value is null
-                ? null
-                : _argumentTypeDescriptor.ParseString(argument, value);
-        }
-
-        private static void ThrowMultiForSingleEx(IArgument argument)
-        {
-            throw new ValueParsingException(
-                Resources.A.Parse_ArgumentArity_Expected_single_value(argument.Name));
-        }
+        var value = values.SingleOrDefaultOrThrow(() => ThrowMultiForSingleEx(argument));
+        return value is null
+            ? null
+            : argumentTypeDescriptor.ParseString(argument, value);
     }
+
+    private static void ThrowMultiForSingleEx(IArgument argument) =>
+        throw new ValueParsingException(
+            Resources.A.Parse_ArgumentArity_Expected_single_value(argument.Name));
 }

@@ -2,59 +2,50 @@
 using System.IO;
 using System.Linq;
 
-namespace CommandDotNet.Tokens
+namespace CommandDotNet.Tokens;
+
+internal static class ExpandResponseFilesTransformation
 {
-    internal static class ExpandResponseFilesTransformation
+    internal static AppRunner UseResponseFiles(AppRunner appRunner, int order = 1) => 
+        appRunner.Configure(c => c.UseTokenTransformation("expand-response-files", order, Transform));
+
+    private static TokenCollection Transform(CommandContext commandContext, TokenCollection tokenCollection) => 
+        tokenCollection.Transform(ExpandResponseFile, skipDirectives: true, skipSeparated: true);
+
+    private static IEnumerable<Token> ExpandResponseFile(Token token)
     {
-        internal static AppRunner UseResponseFiles(AppRunner appRunner, int order = 1)
+        var filePath = GetFilePath(token);
+        if (filePath == null)
         {
-            return appRunner.Configure(c => c.UseTokenTransformation("expand-response-files", order, Transform));
+            yield return token;
         }
-
-        private static TokenCollection Transform(CommandContext commandContext, TokenCollection tokenCollection)
+        else
         {
-            return tokenCollection.Transform(ExpandResponseFile, skipDirectives: true, skipSeparated: true);
-        }
-
-        private static IEnumerable<Token> ExpandResponseFile(Token token)
-        {
-            var filePath = GetFilePath(token);
-            if (filePath == null)
+            var fullPath = Path.GetFullPath(filePath);
+            if (!File.Exists(fullPath))
             {
-                yield return token;
+                throw new FileNotFoundException(Resources.A.Error_File_not_found(fullPath));
             }
-            else
+
+            var splitter = CommandLineStringSplitter.Instance;
+            var tokens = File
+                .ReadAllLines(filePath)
+                .Where(l => !l.IsCommentOrNullOrWhitespace())
+                .SelectMany(l => splitter.Split(l))
+                .Tokenize(includeDirectives: false);
+
+            foreach (var newToken in tokens)
             {
-                var fullPath = Path.GetFullPath(filePath);
-                if (!File.Exists(fullPath))
-                {
-                    throw new FileNotFoundException(Resources.A.Error_File_not_found(fullPath));
-                }
-
-                var splitter = CommandLineStringSplitter.Instance;
-                var tokens = File
-                    .ReadAllLines(filePath)
-                    .Where(l => !l.IsCommentOrNullOrWhitespace())
-                    .SelectMany(l => splitter.Split(l))
-                    .Tokenize(includeDirectives: false);
-
-                foreach (var newToken in tokens)
-                {
-                    yield return newToken;
-                }
+                yield return newToken;
             }
-        }
-
-        private static string? GetFilePath(Token token)
-        {
-            return token.TokenType == TokenType.Argument && token.Value.StartsWith("@") 
-                ? token.Value.Substring(1) 
-                : null;
-        }
-
-        private static bool IsCommentOrNullOrWhitespace(this string l)
-        {
-            return l.IsNullOrWhitespace() || l.StartsWith("#");
         }
     }
+
+    private static string? GetFilePath(Token token) =>
+        token.TokenType == TokenType.Argument && token.Value.StartsWith('@') 
+            ? token.Value[1..] 
+            : null;
+
+    private static bool IsCommentOrNullOrWhitespace(this string l) => 
+        l.IsNullOrWhitespace() || l.StartsWith('#');
 }

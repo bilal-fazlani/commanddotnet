@@ -8,139 +8,117 @@ using CommandDotNet.ClassModeling.Definitions;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.TypeDescriptors;
+using JetBrains.Annotations;
 
-namespace CommandDotNet
+namespace CommandDotNet;
+
+[PublicAPI]
+public sealed class Operand : IArgument
 {
-    public sealed class Operand : IArgument
+    private Command? _parent;
+    private object? _value;
+    private readonly ValueProxy _valueProxy;
+
+    public Operand(
+        string name,
+        TypeInfo typeInfo,
+        IArgumentArity arity,
+        BooleanMode? booleanMode = null,
+        string? definitionSource = null,
+        ICustomAttributeProvider? customAttributes = null,
+        ValueProxy? valueProxy = null)
     {
-        private Command? _parent;
-        private object? _value;
-        private readonly ValueProxy _valueProxy;
+        _valueProxy = valueProxy ?? new ValueProxy(() => _value, o => _value = o);
+        Name = name ?? throw new ArgumentNullException(nameof(name));
+        TypeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
+        Arity = arity ?? throw new ArgumentNullException(nameof(arity));
+        BooleanMode = booleanMode;
+        DefinitionSource = definitionSource;
+        Aliases = [name];
+        CustomAttributes = customAttributes ?? NullCustomAttributeProvider.Instance;
+    }
 
-        public Operand(
-            string name,
-            TypeInfo typeInfo,
-            IArgumentArity arity,
-            BooleanMode? booleanMode = null,
-            string? definitionSource = null,
-            ICustomAttributeProvider? customAttributes = null,
-            ValueProxy? valueProxy = null)
-        {
-            _valueProxy = valueProxy ?? new ValueProxy(() => _value, o => _value = o);
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            TypeInfo = typeInfo ?? throw new ArgumentNullException(nameof(typeInfo));
-            Arity = arity ?? throw new ArgumentNullException(nameof(arity));
-            BooleanMode = booleanMode;
-            DefinitionSource = definitionSource;
-            Aliases = new[] {name};
-            CustomAttributes = customAttributes ?? NullCustomAttributeProvider.Instance;
-        }
+    public string Name { get; }
+    public string? Description { get; set; }
 
-        public string Name { get; }
-        public string? Description { get; set; }
+    /// <summary>The <see cref="ITypeInfo"/> for this argument</summary>
+    public ITypeInfo TypeInfo { get; set; }
 
-        /// <summary>The <see cref="ITypeInfo"/> for this argument</summary>
-        public ITypeInfo TypeInfo { get; set; }
-
-        /// <summary>The <see cref="IArgumentArity"/> for this argument, describing how many values are allowed.</summary>
-        public IArgumentArity Arity { get; set; }
+    /// <summary>The <see cref="IArgumentArity"/> for this argument, describing how many values are allowed.</summary>
+    public IArgumentArity Arity { get; set; }
         
-        public BooleanMode? BooleanMode { get; set; }
+    public BooleanMode? BooleanMode { get; set; }
 
-        /// <summary>The default value for this argument</summary>
-        public ArgumentDefault? Default { get; set; }
+    /// <summary>The default value for this argument</summary>
+    public ArgumentDefault? Default { get; set; }
 
-        /// <summary>
-        /// The allowed values for this argument, as defined by an <see cref="IAllowedValuesTypeDescriptor"/> for this type.
-        /// i.e. enum arguments will list all values in the enum.
-        /// </summary>
-        public IReadOnlyCollection<string> AllowedValues { get; set; } = EmptyCollection<string>.Instance;
+    /// <summary>
+    /// The allowed values for this argument, as defined by an <see cref="IAllowedValuesTypeDescriptor"/> for this type.
+    /// i.e. enum arguments will list all values in the enum.
+    /// </summary>
+    public IReadOnlyCollection<string> AllowedValues { get; set; } = EmptyCollection<string>.Instance;
 
-        /// <summary>
-        /// The text values provided as input.
-        /// Will be empty if no values were provided.<br/>
-        /// Sources provided by this framework can be found at <see cref="Constants.InputValueSources"/>
-        /// </summary>
-        public ICollection<InputValue> InputValues { get; } = new List<InputValue>();
+    /// <summary>
+    /// The text values provided as input.
+    /// Will be empty if no values were provided.<br/>
+    /// Sources provided by this framework can be found in <see cref="Resources"/> where properties are prefixed as `Input_`
+    /// </summary>
+    public ICollection<InputValue> InputValues { get; } = new List<InputValue>();
 
-        /// <summary>The parsed and converted value for the argument to be passed to a method</summary>
-        public object? Value
+    /// <summary>The parsed and converted value for the argument to be passed to a method</summary>
+    public object? Value
+    {
+        get => _valueProxy.Getter();
+        set => _valueProxy.Setter(value);
+    }
+
+    /// <summary>The <see cref="Command"/> that hosts this <see cref="Operand"/></summary>
+    public Command? Parent
+    {
+        get => _parent;
+        set
         {
-            get => _valueProxy.Getter();
-            set => _valueProxy.Setter(value);
-        }
-
-        /// <summary>The <see cref="Command"/> that hosts this <see cref="Operand"/></summary>
-        public Command? Parent
-        {
-            get => _parent;
-            set
+            if (value is null)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException($"{nameof(Parent)} cannot be assigned to null");
-                }
-                if (_parent is null)
-                {
-                    _parent = value;
-                }
-                else if (_parent != value)
-                {
-                    throw new InvalidConfigurationException($"{nameof(Parent)} is already assigned for {this}.  Current={_parent} New={value}");
-                }
+                throw new ArgumentNullException($"{nameof(Parent)} cannot be assigned to null");
             }
-        }
-
-        /// <summary>The aliases defined for this argument</summary>
-        public IReadOnlyCollection<string> Aliases { get; }
-
-        /// <summary>The source that defined this argument</summary>
-        public string? DefinitionSource { get; }
-
-        /// <summary>The attributes defined on the parameter or property that define this argument</summary>
-        public ICustomAttributeProvider CustomAttributes { get; }
-
-        /// <summary>The services used by middleware and associated with this argument</summary>
-        public IServices Services { get; } = new Services();
-
-        public override string ToString()
-        {
-            return $"Operand: {Name} ({DefinitionSource})";
-        }
-        
-        // ReSharper disable once RedundantCast
-        public static bool operator ==(Operand x, Operand y) => (object)x == (object)y;
-
-        public static bool operator !=(Operand x, Operand y) => !(x == y);
-
-        private bool Equals(Operand other)
-        {
-            return string.Equals(Name, other.Name);
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is null)
+            if (_parent is null)
             {
-                return false;
+                _parent = value;
             }
-
-            if (ReferenceEquals(this, obj))
+            else if (_parent != value)
             {
-                return true;
+                throw new InvalidConfigurationException($"{nameof(Parent)} is already assigned for {this}.  Current={_parent} New={value}");
             }
-
-            if (obj.GetType() != this.GetType())
-            {
-                return false;
-            }
-
-            return Equals((Operand) obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return Name.GetHashCode();
         }
     }
+
+    /// <summary>The aliases defined for this argument</summary>
+    public IReadOnlyCollection<string> Aliases { get; }
+
+    /// <summary>The source that defined this argument</summary>
+    public string? DefinitionSource { get; }
+
+    /// <summary>The attributes defined on the parameter or property that define this argument</summary>
+    public ICustomAttributeProvider CustomAttributes { get; }
+
+    /// <summary>The services used by middleware and associated with this argument</summary>
+    public IServices Services { get; } = new Services();
+
+    public override string ToString() => $"Operand: {Name} ({DefinitionSource})";
+
+    // ReSharper disable once RedundantCast
+    public static bool operator ==(Operand x, Operand y) => (object)x == y;
+
+    public static bool operator !=(Operand x, Operand y) => !(x == y);
+
+    private bool Equals(Operand other) => string.Equals(Name, other.Name);
+
+    public override bool Equals(object? obj) =>
+        obj is not null
+        && (ReferenceEquals(this, obj)
+            || obj.GetType() == GetType()
+            && Equals((Operand) obj));
+
+    public override int GetHashCode() => Name.GetHashCode();
 }

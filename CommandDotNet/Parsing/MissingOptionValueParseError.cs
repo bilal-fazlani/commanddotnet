@@ -1,19 +1,13 @@
-﻿using System;
+﻿using CommandDotNet.Extensions;
+using JetBrains.Annotations;
 
-namespace CommandDotNet.Parsing
+namespace CommandDotNet.Parsing;
+
+/// <summary>An option was specified without a value</summary>
+[PublicAPI]
+public class MissingOptionValueParseError(Command command, Option option) : IParseError
 {
-    /// <summary>An option was specified without a value</summary>
-    public class MissingOptionValueParseError : IParseError
-    {
-        public string Message { get; }
-        public Command Command { get; }
-        public Option Option { get; }
-
-        public MissingOptionValueParseError(Command command, Option option)
-        {
-            Command = command ?? throw new ArgumentNullException(nameof(command));
-            Option = option ?? throw new ArgumentNullException(nameof(option));
-            Message = Resources.A.Parse_Missing_value_for_option(option.Name);
-        }
-    }
+    public string Message { get; } = Resources.A.Parse_Missing_value_for_option(option.Name);
+    public Command Command { get; } = command.ThrowIfNull();
+    public Option Option { get; } = option.ThrowIfNull();
 }

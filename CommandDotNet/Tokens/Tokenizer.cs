@@ -1,80 +1,77 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 
-namespace CommandDotNet.Tokens
+namespace CommandDotNet.Tokens;
+
+[PublicAPI]
+public static class Tokenizer
 {
-    public static class Tokenizer
+    internal static Token SeparatorToken { get; } = new("--", "--", TokenType.Separator);
+
+    public static TokenCollection Tokenize(this IEnumerable<string> args, bool includeDirectives = false, string sourceName = "args")
     {
-        internal static Token SeparatorToken { get; } = new("--", "--", TokenType.Separator);
+        return new TokenCollection(ParseTokens(args, includeDirectives, sourceName));
+    }
 
-        public static TokenCollection Tokenize(this IEnumerable<string> args, bool includeDirectives = false, string sourceName = "args")
+    public static Token Tokenize(string arg, bool includeDirectives = false, string sourceName = "args")
+    {
+        Token token = (includeDirectives && TryTokenizeDirective(arg, out Token? parsedToken))
+                      || TryTokenizeSeparator(arg, out parsedToken)
+            ? parsedToken!
+            : TokenizeValue(arg);
+        token.SourceName = sourceName;
+        return token;
+    }
+
+    public static bool TryTokenizeDirective(string arg, out Token? token)
+    {
+        if (arg.Length > 2 && arg[0] == '[' && arg[^1] == ']')
         {
-            return new TokenCollection(ParseTokens(args, includeDirectives, sourceName));
+            token = new Token(arg, arg.Substring(1, arg.Length - 2), TokenType.Directive);
+            return true;
         }
 
-        public static Token Tokenize(string arg, bool includeDirectives = false, string sourceName = "args")
+        token = null;
+        return false;
+    }
+
+    public static bool TryTokenizeSeparator(string arg, out Token? token)
+    {
+        if (arg == SeparatorToken.Value)
         {
-            Token token = (includeDirectives && TryTokenizeDirective(arg, out Token? parsedToken))
-                                || TryTokenizeSeparator(arg, out parsedToken)
-                ? parsedToken!
-                : TokenizeValue(arg);
-            token.SourceName = sourceName;
-            return token;
+            token = new Token(arg, arg, TokenType.Separator);
+            return true;
         }
 
-        public static bool TryTokenizeDirective(string arg, out Token? token)
+        token = null;
+        return false;
+    }
+
+    public static Token TokenizeValue(string argValue) => 
+        new(argValue, argValue, TokenType.Argument);
+
+    public static string[] ToArgsArray(this IEnumerable<Token> tokens) => 
+        tokens.Select(t => t.RawValue).ToArray();
+
+    private static IEnumerable<Token> ParseTokens(IEnumerable<string> args, bool includeDirectives, string sourceName)
+    {
+        bool foundSeparator = false;
+
+        foreach (var arg in args)
         {
-            if (arg.Length > 2 && arg[0] == '[' && arg[^1] == ']')
+            if (foundSeparator)
             {
-                token = new Token(arg, arg.Substring(1, arg.Length - 2), TokenType.Directive);
-                return true;
+                yield return new Token(arg, arg, TokenType.Argument){SourceName = sourceName};
             }
-
-            token = null;
-            return false;
-        }
-
-        public static bool TryTokenizeSeparator(string arg, out Token? token)
-        {
-            if (arg == SeparatorToken.Value)
+            else
             {
-                token = new Token(arg, arg, TokenType.Separator);
-                return true;
-            }
+                var token = Tokenize(arg, includeDirectives, sourceName);
 
-            token = null;
-            return false;
-        }
+                includeDirectives = includeDirectives && token.TokenType == TokenType.Directive;
+                foundSeparator = token.TokenType == TokenType.Separator;
 
-        public static Token TokenizeValue(string argValue)
-        {
-            return new Token(argValue, argValue, TokenType.Argument);
-        }
-
-        public static string[] ToArgsArray(this IEnumerable<Token> tokens)
-        {
-            return tokens.Select(t => t.RawValue).ToArray();
-        }
-
-        private static IEnumerable<Token> ParseTokens(IEnumerable<string> args, bool includeDirectives, string sourceName)
-        {
-            bool foundSeparator = false;
-
-            foreach (var arg in args)
-            {
-                if (foundSeparator)
-                {
-                    yield return new Token(arg, arg, TokenType.Argument){SourceName = sourceName};
-                }
-                else
-                {
-                    var token = Tokenize(arg, includeDirectives, sourceName);
-
-                    includeDirectives = includeDirectives && token.TokenType == TokenType.Directive;
-                    foundSeparator = token.TokenType == TokenType.Separator;
-
-                    yield return token;
-                }
+                yield return token;
             }
         }
     }

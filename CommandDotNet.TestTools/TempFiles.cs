@@ -1,98 +1,90 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using JetBrains.Annotations;
 
-namespace CommandDotNet.TestTools
+namespace CommandDotNet.TestTools;
+
+/// <summary>A utility to create and track files so they can be disposed at the end of a test run.</summary>
+[PublicAPI]
+public sealed class TempFiles(Action<string> logLine) : IDisposable
 {
-    /// <summary>A utility to create and track files so they can be disposed at the end of a test run.</summary>
-    public class TempFiles : IDisposable
+    private readonly List<string> _files = [];
+
+    /// <summary>
+    /// Creates a temp file with the given lines.<br/>
+    /// see <see cref="CreateOrClearTempFile"/> to understand how the file is created.
+    /// </summary>
+    public string CreateTempFile(params string[] lines)
     {
-        private readonly Action<string> _logLine;
-        private readonly List<string> _files = new();
+        var path = CreateOrClearTempFile();
+        File.WriteAllLines(path, lines);
+        return path;
+    }
 
-        public TempFiles(Action<string> logLine)
+    /// <summary>
+    /// Creates a temp file with the given lines. If the file exists, it is overwritten.<br/>
+    /// see <see cref="CreateOrClearTempFile"/> to understand how the file is created.
+    /// </summary>
+    public string CreateOrOverwriteTempFile(string fileName, params string[] lines)
+    {
+        var path = CreateOrClearTempFile(fileName);
+        File.WriteAllLines(path, lines);
+        return path;
+    }
+
+    /// <summary>
+    /// If no fileName is provided then one is randomly generated.<br/>
+    /// If the fileName is not rooted, it will be created in the users temp dir<br/>
+    /// If the file already exists, it will be overwritten with an empty file
+    /// </summary>
+    public string CreateOrClearTempFile(string? fileName = null)
+    {
+        string filePath;
+        if (fileName is null)
         {
-            _logLine = logLine;
+            // GetTempFileName creates the file
+            filePath = Path.GetTempFileName();
         }
-
-        /// <summary>
-        /// Creates a temp file with the given lines.<br/>
-        /// see <see cref="CreateOrClearTempFile"/> to understand how the file is created.
-        /// </summary>
-        public string CreateTempFile(params string[] lines)
+        else
         {
-            var path = CreateOrClearTempFile();
-            File.WriteAllLines(path, lines);
-            return path;
-        }
-
-        /// <summary>
-        /// Creates a temp file with the given lines. If the file exists, it is overwritten.<br/>
-        /// see <see cref="CreateOrClearTempFile"/> to understand how the file is created.
-        /// </summary>
-        public string CreateOrOverwriteTempFile(string fileName, params string[] lines)
-        {
-            var path = CreateOrClearTempFile(fileName);
-            File.WriteAllLines(path, lines);
-            return path;
-        }
-
-        /// <summary>
-        /// If no fileName is provided then one is randomly generated.<br/>
-        /// If the fileName is not rooted, it will be created in the users temp dir<br/>
-        /// If the file already exists, it will be overwritten with an empty file
-        /// </summary>
-        public string CreateOrClearTempFile(string? fileName = null)
-        {
-            string filePath;
-            if (fileName is null)
+            if (Path.IsPathRooted(fileName))
             {
-                // GetTempFileName creates the file
-                filePath = Path.GetTempFileName();
+                filePath = fileName;
             }
             else
             {
-                if (Path.IsPathRooted(fileName))
+                var uniqueRoot = Path.Combine(Path.GetTempPath(), "CommandDotNet.Tests");
+                if (!Directory.Exists(uniqueRoot))
                 {
-                    filePath = fileName;
+                    Directory.CreateDirectory(uniqueRoot);
                 }
-                else
-                {
-                    var uniqueRoot = Path.Combine(Path.GetTempPath(), "CommandDotNet.Tests");
-                    if (!Directory.Exists(uniqueRoot))
-                    {
-                        Directory.CreateDirectory(uniqueRoot);
-                    }
-                    filePath = Path.Combine(uniqueRoot, fileName);
-                }
-
-                // overwrite if the file exists so we start with clean slate
-                // in case a previous test run failed to cleanup properly
-                File.Create(filePath).Dispose();
+                filePath = Path.Combine(uniqueRoot, fileName);
             }
 
-            _logLine($"created temp file: {filePath}");
-            _files.Add(filePath);
-            return filePath;
+            // overwrite if the file exists so we start with clean slate
+            // in case a previous test run failed to cleanup properly
+            File.Create(filePath).Dispose();
         }
 
-        public void Dispose()
-        {
-            _files.ForEach(DeleteOrForget);
-        }
+        logLine($"created temp file: {filePath}");
+        _files.Add(filePath);
+        return filePath;
+    }
 
-        private void DeleteOrForget(string fileName)
+    public void Dispose() => _files.ForEach(DeleteOrForget);
+
+    private void DeleteOrForget(string fileName)
+    {
+        if (File.Exists(fileName))
         {
-            if (File.Exists(fileName))
+            try
             {
-                try
-                {
-                    File.Delete(fileName);
-                }
-                catch (Exception e)
-                {
-                    _logLine($"failed to delete temp file: {fileName}. {e.Message}");
-                }
+                File.Delete(fileName);
+            }
+            catch (Exception e)
+            {
+                logLine($"failed to delete temp file: {fileName}. {e.Message}");
             }
         }
     }

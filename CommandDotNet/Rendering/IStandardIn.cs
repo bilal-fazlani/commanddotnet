@@ -1,13 +1,12 @@
 ﻿using System.IO;
 
-namespace CommandDotNet.Rendering
-{
-    public interface IStandardIn
-    {
-        TextReader In { get; }
-        
-        void SetIn(TextReader newIn);
+namespace CommandDotNet.Rendering;
 
-        bool IsInputRedirected { get; }
-    }
+public interface IStandardIn
+{
+    TextReader In { get; }
+        
+    void SetIn(TextReader newIn);
+
+    bool IsInputRedirected { get; }
 }

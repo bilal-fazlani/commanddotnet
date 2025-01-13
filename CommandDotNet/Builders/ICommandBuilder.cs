@@ -1,9 +1,8 @@
-﻿namespace CommandDotNet.Builders
+﻿namespace CommandDotNet.Builders;
+
+public interface ICommandBuilder
 {
-    public interface ICommandBuilder
-    {
-        Command Command { get; }
-        void AddSubCommand(Command command);
-        void AddArgument(IArgument argument);
-    }
+    Command Command { get; }
+    void AddSubCommand(Command command);
+    void AddArgument(IArgument argument);
 }

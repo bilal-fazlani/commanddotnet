@@ -5,160 +5,159 @@ using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests.Arguments
+namespace CommandDotNet.Tests.FeatureTests.Arguments;
+
+public class StringCtorObjectsAsArgumentsTests
 {
-    public class StringCtorObjectsAsArgumentsTests
+    private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
+    private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
+
+    public StringCtorObjectsAsArgumentsTests(ITestOutputHelper output)
     {
-        private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
-        private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
+        Ambient.Output = output;
+    }
 
-        public StringCtorObjectsAsArgumentsTests(ITestOutputHelper output)
+    [Fact]
+    public void BasicHelp_Includes_StringCtorObjects()
+    {
+        new AppRunner<App>(BasicHelp).Verify(new Scenario
         {
-            Ambient.Output = output;
-        }
-
-        [Fact]
-        public void BasicHelp_Includes_StringCtorObjects()
-        {
-            new AppRunner<App>(BasicHelp).Verify(new Scenario
+            When = {Args = "Do -h"},
+            Then =
             {
-                When = {Args = "Do -h"},
-                Then =
-                {
-                    Output = @"Usage: testhost.dll Do <ctorArg> <parseArg>
+                Output = @"Usage: testhost.dll Do <ctorArg> <parseArg>
 
 Arguments:
   ctorArg
   parseArg"
-                }
-            });
-        }
+            }
+        });
+    }
 
-        [Fact]
-        public void BasicHelp_List_Includes_StringCtorObjects()
+    [Fact]
+    public void BasicHelp_List_Includes_StringCtorObjects()
+    {
+        new AppRunner<App>(BasicHelp).Verify(new Scenario
         {
-            new AppRunner<App>(BasicHelp).Verify(new Scenario
+            When = {Args = "DoList -h"},
+            Then =
             {
-                When = {Args = "DoList -h"},
-                Then =
-                {
-                    Output = @"Usage: testhost.dll DoList [options]
+                Output = @"Usage: testhost.dll DoList [options]
 
 Options:
   -c | --ctorArgs
   -p | --parseArgs"
-                }
-            });
-        }
+            }
+        });
+    }
 
-        [Fact]
-        public void DetailedHelp_Includes_StringCtorObjects()
+    [Fact]
+    public void DetailedHelp_Includes_StringCtorObjects()
+    {
+        new AppRunner<App>(DetailedHelp).Verify(new Scenario
         {
-            new AppRunner<App>(DetailedHelp).Verify(new Scenario
+            When = {Args = "Do -h"},
+            Then =
             {
-                When = {Args = "Do -h"},
-                Then =
-                {
-                    Output = @"Usage: testhost.dll Do <ctorArg> <parseArg>
+                Output = @"Usage: testhost.dll Do <ctorArg> <parseArg>
 
 Arguments:
 
   ctorArg   <FILENAME>
 
   parseArg  <DIRNAME>"
-                }
-            });
-        }
+            }
+        });
+    }
 
-        [Fact]
-        public void DetailedHelp_List_Includes_StringCtorObjects()
+    [Fact]
+    public void DetailedHelp_List_Includes_StringCtorObjects()
+    {
+        new AppRunner<App>(DetailedHelp).Verify(new Scenario
         {
-            new AppRunner<App>(DetailedHelp).Verify(new Scenario
+            When = {Args = "DoList -h"},
+            Then =
             {
-                When = {Args = "DoList -h"},
-                Then =
-                {
-                    Output = @"Usage: testhost.dll DoList [options]
+                Output = @"Usage: testhost.dll DoList [options]
 
 Options:
 
   -c | --ctorArgs (Multiple)   <FILENAME>
 
   -p | --parseArgs (Multiple)  <DIRNAME>"
-                }
-            });
-        }
-
-        [Fact]
-        public void Exec_ConvertsStringToObject()
-        {
-            new AppRunner<App>().Verify(new Scenario
-            {
-                When = {Args = "DoList -c file1 -c file2 -p dir1 -p dir2"},
-                Then =
-                {
-                    AssertContext = ctx => ctx.ParamValuesShouldBe(
-                        new List<StringCtorObject>
-                        {
-                            new("file1"),
-                            new("file2")
-                        },
-                        new List<StaticParseObject>
-                        {
-                            StaticParseObject.Parse("dir1"),
-                            StaticParseObject.Parse("dir2")
-                        })
-                }
-            });
-        }
-
-        [Fact]
-        public void Exec_List_ConvertsStringToObject()
-        {
-            new AppRunner<App>().Verify(new Scenario
-            {
-                When = {Args = "Do file1 dir1"},
-                Then =
-                {
-                    AssertContext = ctx => ctx.ParamValuesShouldBe(
-                        new StringCtorObject("file1"), StaticParseObject.Parse("dir1"))
-                }
-            });
-        }
-
-        private class App
-        {
-            public void Do(StringCtorObject ctorArg, StaticParseObject parseArg)
-            {
             }
+        });
+    }
 
-            public void DoList(
-                [Option('c')] List<StringCtorObject> ctorArgs,
-                [Option('p')] List<StaticParseObject> parseArgs)
+    [Fact]
+    public void Exec_ConvertsStringToObject()
+    {
+        new AppRunner<App>().Verify(new Scenario
+        {
+            When = {Args = "DoList -c file1 -c file2 -p dir1 -p dir2"},
+            Then =
             {
+                AssertContext = ctx => ctx.ParamValuesShouldBe(
+                    new List<StringCtorObject>
+                    {
+                        new("file1"),
+                        new("file2")
+                    },
+                    new List<StaticParseObject>
+                    {
+                        StaticParseObject.Parse("dir1"),
+                        StaticParseObject.Parse("dir2")
+                    })
             }
+        });
+    }
+
+    [Fact]
+    public void Exec_List_ConvertsStringToObject()
+    {
+        new AppRunner<App>().Verify(new Scenario
+        {
+            When = {Args = "Do file1 dir1"},
+            Then =
+            {
+                AssertContext = ctx => ctx.ParamValuesShouldBe(
+                    new StringCtorObject("file1"), StaticParseObject.Parse("dir1"))
+            }
+        });
+    }
+
+    private class App
+    {
+        public void Do(StringCtorObject ctorArg, StaticParseObject parseArg)
+        {
         }
 
-        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
-        private class StringCtorObject
+        public void DoList(
+            [Option('c')] List<StringCtorObject> ctorArgs,
+            [Option('p')] List<StaticParseObject> parseArgs)
         {
-            public string Filename { get; }
-
-            public StringCtorObject(string filename)
-            {
-                Filename = filename;
-            }
         }
+    }
 
-        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
-        private class StaticParseObject
+    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
+    private class StringCtorObject
+    {
+        public string Filename { get; }
+
+        public StringCtorObject(string filename)
         {
-            public string Dirname { get; private set; } = null!;
+            Filename = filename;
+        }
+    }
 
-            public static StaticParseObject Parse(string dirname)
-            {
-                return new StaticParseObject{Dirname = dirname};
-            }
+    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
+    private class StaticParseObject
+    {
+        public string Dirname { get; private set; } = null!;
+
+        public static StaticParseObject Parse(string dirname)
+        {
+            return new StaticParseObject{Dirname = dirname};
         }
     }
 }

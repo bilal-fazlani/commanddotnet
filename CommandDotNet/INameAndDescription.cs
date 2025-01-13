@@ -1,8 +1,7 @@
-﻿namespace CommandDotNet
+﻿namespace CommandDotNet;
+
+public interface INameAndDescription
 {
-    public interface INameAndDescription
-    {
-        string? Name { get; }
-        string? Description { get; }
-    }
+    string? Name { get; }
+    string? Description { get; }
 }

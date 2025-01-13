@@ -1,62 +1,34 @@
-﻿using System;
+﻿using CommandDotNet.Extensions;
+using JetBrains.Annotations;
 
-namespace CommandDotNet
+namespace CommandDotNet;
+
+/// <summary>
+/// <see cref="Password"/> will capture input and only make it
+/// available through a method to prevent displaying the data
+/// via logging tools that use <see cref="ToString"/> or
+/// reflect properties.<br/>
+/// <see cref="Password"/> indicates intent to middleware
+/// that may capture data, i.e. Prompting for missing arguments.
+/// </summary>
+[PublicAPI]
+public class Password(string password)
 {
-    /// <summary>
-    /// <see cref="Password"/> will capture input and only make it
-    /// available through a method to prevent displaying the data
-    /// via logging tools that use <see cref="ToString"/> or
-    /// reflect properties.<br/>
-    /// <see cref="Password"/> indicates intent to middleware
-    /// that may capture data, i.e. Prompting for missing arguments.
-    /// </summary>
-    public class Password
-    {
-        public static readonly string ValueReplacement = "*****";
+    public static readonly string ValueReplacement = "*****";
 
-        private readonly string _password;
+    private readonly string _password = password.ThrowIfNull();
 
-        public Password(string password)
-        {
-            _password = password ?? throw new ArgumentNullException(nameof(password));
-        }
+    public string GetPassword() => _password;
 
+    public override string ToString() => _password.IsNullOrEmpty() ? "" : ValueReplacement;
 
-        public string GetPassword() => _password;
+    protected bool Equals(Password other) => _password == other._password;
 
-        public override string ToString()
-        {
-            return _password.IsNullOrEmpty() ? "" : ValueReplacement;
-        }
+    public override bool Equals(object? obj) =>
+        obj is not null
+        && (ReferenceEquals(this, obj)
+            || obj.GetType() == GetType()
+            && Equals((Password) obj));
 
-        protected bool Equals(Password other)
-        {
-            return _password == other._password;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            if (obj.GetType() != this.GetType())
-            {
-                return false;
-            }
-
-            return Equals((Password) obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return _password.GetHashCode();
-        }
-    }
+    public override int GetHashCode() => _password.GetHashCode();
 }

@@ -1,14 +1,13 @@
-﻿namespace CommandDotNet.Example
+﻿namespace CommandDotNet.Example;
+
+public static class InteractiveMiddleware
 {
-    public static class InteractiveMiddleware
+    public static AppRunner UseInteractiveMode(this AppRunner appRunner, string appName)
     {
-        public static AppRunner UseInteractiveMode(this AppRunner appRunner, string appName)
+        return appRunner.Configure(c =>
         {
-            return appRunner.Configure(c =>
-            {
-                // use the existing appRunner to reuse the configuration.
-                c.UseParameterResolver(ctx => new InteractiveSession(appRunner, appName, ctx));
-            });
-        }
+            // use the existing appRunner to reuse the configuration.
+            c.UseParameterResolver(ctx => new InteractiveSession(appRunner, appName, ctx));
+        });
     }
 }

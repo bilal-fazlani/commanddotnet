@@ -4,57 +4,56 @@ using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests
+namespace CommandDotNet.Tests.FeatureTests;
+
+public class DebugDirectiveTests
 {
-    public class DebugDirectiveTests
+    public DebugDirectiveTests(ITestOutputHelper output)
     {
-        public DebugDirectiveTests(ITestOutputHelper output)
-        {
-            Ambient.Output = output;
-            // skip waiting for debugger to connect
-            DebugDirective.InTestHarness = true;
-        }
+        Ambient.Output = output;
+        // skip waiting for debugger to connect
+        DebugDirective.InTestHarness = true;
+    }
 
-        [Fact]
-        public void Directives_CanBeDisabled()
-        {
-            new AppRunner<App>(new AppSettings {DisableDirectives = true})
-                .Verify(
-                    new Scenario
+    [Fact]
+    public void Directives_CanBeDisabled()
+    {
+        new AppRunner<App>(new AppSettings {DisableDirectives = true})
+            .Verify(
+                new Scenario
+                {
+                    When = {Args = "[debug] Do"},
+                    Then =
                     {
-                        When = {Args = "[debug] Do"},
-                        Then =
-                        {
-                            ExitCode = 1, // method should have been called
-                            OutputContainsTexts = { "Unrecognized command or argument '[debug]'" }
-                        }
-                    });
-        }
+                        ExitCode = 1, // method should have been called
+                        OutputContainsTexts = { "Unrecognized command or argument '[debug]'" }
+                    }
+                });
+    }
 
-        [Fact]
-        public void DebugDirective_PrintsProcessId_And_WaitsForDebuggerToStart()
-        {
-            var processId = Process.GetCurrentProcess().Id;
-            new AppRunner<App>()
-                .UseDebugDirective()
-                .Verify(
-                    new Scenario
+    [Fact]
+    public void DebugDirective_PrintsProcessId_And_WaitsForDebuggerToStart()
+    {
+        var processId = Process.GetCurrentProcess().Id;
+        new AppRunner<App>()
+            .UseDebugDirective()
+            .Verify(
+                new Scenario
+                {
+                    When = {Args = "[debug] Do"},
+                    Then =
                     {
-                        When = {Args = "[debug] Do"},
-                        Then =
-                        {
-                            ExitCode = 5, // method should have been called
-                            OutputContainsTexts = {$"Attach your debugger to process {processId} ({Process.GetCurrentProcess().ProcessName})."}
-                        }
-                    });
-        }
+                        ExitCode = 5, // method should have been called
+                        OutputContainsTexts = {$"Attach your debugger to process {processId} ({Process.GetCurrentProcess().ProcessName})."}
+                    }
+                });
+    }
 
-        private class App
+    private class App
+    {
+        public int Do()
         {
-            public int Do()
-            {
-                return 5;
-            }
+            return 5;
         }
     }
 }

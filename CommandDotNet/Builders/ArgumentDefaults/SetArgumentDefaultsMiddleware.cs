@@ -3,68 +3,63 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
 
-namespace CommandDotNet.Builders.ArgumentDefaults
-{
-    internal static class SetArgumentDefaultsMiddleware
-    {
-        internal static AppRunner SetArgumentDefaultsFrom(AppRunner appRunner, 
-            Func<IArgument, ArgumentDefault?>[] getDefaultValueCallbacks)
-        {
-            if (getDefaultValueCallbacks == null)
-            {
-                throw new ArgumentNullException(nameof(getDefaultValueCallbacks));
-            }
+namespace CommandDotNet.Builders.ArgumentDefaults;
 
-            // run before help command so help will display the updated defaults
-            return appRunner.Configure(c =>
-            {
-                var config = c.Services.GetOrDefault<Config>();
-                if (config is null)
-                {
-                    // run before help so the default values can be displayed in the help text 
-                    c.UseMiddleware(SetDefaults, MiddlewareSteps.SetArgumentDefaults);
-                    c.Services.Add(new Config(getDefaultValueCallbacks));
-                }
-                else
-                {
-                    config.GetDefaultValueCallbacks =
-                        config.GetDefaultValueCallbacks.Concat(getDefaultValueCallbacks).ToArray();
-                }
-            });
+internal static class SetArgumentDefaultsMiddleware
+{
+    internal static AppRunner SetArgumentDefaultsFrom(AppRunner appRunner, 
+        Func<IArgument, ArgumentDefault?>[] getDefaultValueCallbacks)
+    {
+        if (getDefaultValueCallbacks == null)
+        {
+            throw new ArgumentNullException(nameof(getDefaultValueCallbacks));
         }
 
-        private static Task<int> SetDefaults(CommandContext context, ExecutionDelegate next)
+        // run before help command so help will display the updated defaults
+        return appRunner.Configure(c =>
         {
-            if (context.ParseResult!.ParseError != null)
+            var config = c.Services.GetOrDefault<Config>();
+            if (config is null)
             {
-                return next(context);
+                // run before help so the default values can be displayed in the help text 
+                c.UseMiddleware(SetDefaults, MiddlewareSteps.SetArgumentDefaults);
+                c.Services.Add(new Config(getDefaultValueCallbacks));
             }
-
-            var config = context.AppConfig.Services.GetOrThrow<Config>();
-            var command = context.ParseResult.TargetCommand;
-            
-            foreach (var argument in command.AllArguments(true))
+            else
             {
-                var value = config.GetDefaultValueCallbacks
-                    .Select(func => func(argument))
-                    .FirstOrDefault(v => v != null);
-                if (value != null)
-                {
-                    argument.Default = value;
-                }
+                config.GetDefaultValueCallbacks =
+                    config.GetDefaultValueCallbacks.Concat(getDefaultValueCallbacks).ToArray();
             }
+        });
+    }
 
+    private static Task<int> SetDefaults(CommandContext context, ExecutionDelegate next)
+    {
+        if (context.ParseResult!.ParseError != null)
+        {
             return next(context);
         }
 
-        private class Config
-        {
-            public Func<IArgument, ArgumentDefault?>[] GetDefaultValueCallbacks { get; set; }
+        var config = context.AppConfig.Services.GetOrThrow<Config>();
+        var command = context.ParseResult.TargetCommand;
             
-            public Config(Func<IArgument, ArgumentDefault?>[] getDefaultValueCallbacks)
+        foreach (var argument in command.AllArguments(true))
+        {
+            var value = config.GetDefaultValueCallbacks
+                .Select(func => func(argument))
+                .FirstOrDefault(v => v != null);
+            if (value != null)
             {
-                GetDefaultValueCallbacks = getDefaultValueCallbacks ?? throw new ArgumentNullException(nameof(getDefaultValueCallbacks));
+                argument.Default = value;
             }
         }
+
+        return next(context);
+    }
+
+    private class Config(Func<IArgument, ArgumentDefault?>[] getDefaultValueCallbacks)
+    {
+        public Func<IArgument, ArgumentDefault?>[] GetDefaultValueCallbacks { get; set; } = 
+            getDefaultValueCallbacks ?? throw new ArgumentNullException(nameof(getDefaultValueCallbacks));
     }
 }

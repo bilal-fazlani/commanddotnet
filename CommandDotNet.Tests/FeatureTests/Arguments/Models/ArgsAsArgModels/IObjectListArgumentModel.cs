@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels
+namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
+
+public interface IObjectListArgumentModel : IArgumentModel
 {
-    public interface IObjectListArgumentModel : IArgumentModel
-    {
-        List<Uri>? ObjectListArg { get; set; }
-    }
+    List<Uri>? ObjectListArg { get; set; }
 }

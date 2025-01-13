@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 
-namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels
+namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
+
+public class OperandsDefaultsStructListArgumentModel : IStructListArgumentModel
 {
-    public class OperandsDefaultsStructListArgumentModel : IStructListArgumentModel
-    {
-        [Operand]
-        public List<int>? StructListArg { get; set; } = new() { 3, 4 };
-    }
+    [Operand]
+    public List<int>? StructListArg { get; set; } = [3, 4];
 }

@@ -3,34 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CommandDotNet.Help
+namespace CommandDotNet.Help;
+
+internal class BasicHelpTextProvider(AppSettings appSettings) : HelpTextProvider(appSettings)
 {
-    internal class BasicHelpTextProvider : HelpTextProvider
+    protected override string FormatSectionHeader(string header)
+        => "usage".Equals(header, StringComparison.OrdinalIgnoreCase)
+            ? $"{header}:"
+            : $"{header}:{Environment.NewLine}";
+
+    protected override string SectionArguments<T>(Command command, ICollection<T> arguments)
     {
-        public BasicHelpTextProvider(AppSettings appSettings) : base(appSettings)
+        var nameMaxLength = arguments.Max(a => Name(a)?.Length) ?? 0;
+
+        var sb = new StringBuilder();
+        foreach (var argument in arguments)
         {
+            sb.AppendLine(Row((nameMaxLength, Name(argument)), (-1, argument.Description)));
         }
+        return sb.ToString();
 
-        protected override string FormatSectionHeader(string header)
-            => "usage".Equals(header, StringComparison.OrdinalIgnoreCase)
-                ? $"{header}:"
-                : $"{header}:{Environment.NewLine}";
-
-        protected override string? SectionArguments<T>(Command command, ICollection<T> arguments)
-        {
-            string? Name(IArgument arg)
-            {
-                return ArgumentName(arg);
-            }
-
-            var nameMaxLength = arguments.Max(a => Name(a)?.Length) ?? 0;
-
-            var sb = new StringBuilder();
-            foreach (var argument in arguments)
-            {
-                sb.AppendLine(Row((nameMaxLength, Name(argument)), (-1, argument.Description)));
-            }
-            return sb.ToString();
-        }
+        string? Name(IArgument arg) => ArgumentName(arg);
     }
 }

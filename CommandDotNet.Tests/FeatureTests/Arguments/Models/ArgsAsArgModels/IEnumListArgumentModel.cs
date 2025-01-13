@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels
+namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
+
+public interface IEnumListArgumentModel : IArgumentModel
 {
-    public interface IEnumListArgumentModel : IArgumentModel
-    {
-        List<DayOfWeek>? EnumListArg { get; set; }
-    }
+    List<DayOfWeek>? EnumListArg { get; set; }
 }

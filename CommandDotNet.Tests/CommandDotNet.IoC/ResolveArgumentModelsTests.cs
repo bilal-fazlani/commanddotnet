@@ -6,56 +6,55 @@ using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.CommandDotNet.IoC
+namespace CommandDotNet.Tests.CommandDotNet.IoC;
+
+public class ResolveArgumentModelsTests
 {
-    public class ResolveArgumentModelsTests
+    public ResolveArgumentModelsTests(ITestOutputHelper output)
     {
-        public ResolveArgumentModelsTests(ITestOutputHelper output)
-        {
-            Ambient.Output = output;
-        }
+        Ambient.Output = output;
+    }
 
-        [Fact]
-        public void ShouldUseModelFromDependencyResolver()
-        {
-            var argModel = new ArgModel {Text = "some default"};
-            var result = new AppRunner<App>()
-                .UseDependencyResolver(new TestDependencyResolver {new App(), argModel})
-                .Verify(new Scenario
-                {
-                    When = {Args = "Do lala"},
-                    Then =
-                    {
-                        AssertContext = ctx => 
-                            ctx.GetCommandInvocationInfo().ParameterValues!.First().Should().BeSameAs(argModel)
-                    }
-                });
-        }
-
-        [Fact]
-        public void HelpShouldDisplayDefaultFromResolvedModel()
-        {
-            new AppRunner<App>()
-                .UseDependencyResolver(new TestDependencyResolver { new ArgModel { Text = "default from resolver" } })
-                .Verify(new Scenario
-                {
-                    When = { Args = "Do -h" },
-                    Then = { OutputContainsTexts = { "default from resolver" } }
-                });
-        }
-
-        class App
-        {
-            public void Do(ArgModel argModel)
+    [Fact]
+    public void ShouldUseModelFromDependencyResolver()
+    {
+        var argModel = new ArgModel {Text = "some default"};
+        var result = new AppRunner<App>()
+            .UseDependencyResolver(new TestDependencyResolver {new App(), argModel})
+            .Verify(new Scenario
             {
-            }
-        }
+                When = {Args = "Do lala"},
+                Then =
+                {
+                    AssertContext = ctx => 
+                        ctx.GetCommandInvocationInfo().ParameterValues.First().Should().BeSameAs(argModel)
+                }
+            });
+    }
 
-        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
-        class ArgModel : IArgumentModel
+    [Fact]
+    public void HelpShouldDisplayDefaultFromResolvedModel()
+    {
+        new AppRunner<App>()
+            .UseDependencyResolver(new TestDependencyResolver { new ArgModel { Text = "default from resolver" } })
+            .Verify(new Scenario
+            {
+                When = { Args = "Do -h" },
+                Then = { OutputContainsTexts = { "default from resolver" } }
+            });
+    }
+
+    class App
+    {
+        public void Do(ArgModel argModel)
         {
-            [Operand]
-            public string Text { get; set; } = null!;
         }
+    }
+
+    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
+    class ArgModel : IArgumentModel
+    {
+        [Operand]
+        public string Text { get; set; } = null!;
     }
 }

@@ -6,50 +6,49 @@ using CommandDotNet.Extensions;
 using FluentAssertions;
 using Xunit;
 
-namespace CommandDotNet.Tests.UnitTests.Extensions
+namespace CommandDotNet.Tests.UnitTests.Extensions;
+
+public class CustomAttributeContainerExtensionsTests
 {
-    public class CustomAttributeContainerExtensionsTests
+    [Fact]
+    public void GetCustomAttributes_ShouldReturnAll()
     {
-        [Fact]
-        public void GetCustomAttributes_ShouldReturnAll()
+        var attrProvider = new AttrProvider();
+        attrProvider.CustomAttributes.Should().NotBeNull();
+        attrProvider.GetCustomAttributes<MyAttribute>().Count().Should().Be(2);
+    }
+
+    [Fact]
+    public void GetCustomAttribute_ShouldFail_WhenMoreThanOne_WithActionalError()
+    {
+        Assert.Throws<InvalidConfigurationException>(
+                () => new AttrProvider().GetCustomAttribute<MyAttribute>())
+            .Message.Should().Be("attempted to get a single MyAttribute from " +
+                                 "CommandDotNet.Tests.UnitTests.Extensions.CustomAttributeContainerExtensionsTests" +
+                                 "+AttrProvider but multiple exist");
+    }
+
+    private class AttrProvider : ICustomAttributesContainer
+    {
+        public ICustomAttributeProvider CustomAttributes { get; }
+
+        public AttrProvider()
         {
-            var attrProvider = new AttrProvider();
-            attrProvider.CustomAttributes.Should().NotBeNull();
-            attrProvider.GetCustomAttributes<MyAttribute>().Count().Should().Be(2);
+            CustomAttributes = GetType()
+                .GetMethod(nameof(MyMethod), BindingFlags.NonPublic | BindingFlags.Instance)
+                !.GetParameters().Single();
         }
 
-        [Fact]
-        public void GetCustomAttribute_ShouldFail_WhenMoreThanOne_WithActionalError()
-        {
-            Assert.Throws<InvalidConfigurationException>(
-                    () => new AttrProvider().GetCustomAttribute<MyAttribute>())
-                .Message.Should().Be("attempted to get a single MyAttribute from " +
-                                     "CommandDotNet.Tests.UnitTests.Extensions.CustomAttributeContainerExtensionsTests" +
-                                     "+AttrProvider but multiple exist");
-        }
-
-        private class AttrProvider : ICustomAttributesContainer
-        {
-            public ICustomAttributeProvider CustomAttributes { get; }
-
-            public AttrProvider()
-            {
-                CustomAttributes = GetType()
-                    .GetMethod(nameof(MyMethod), BindingFlags.NonPublic | BindingFlags.Instance)
-                    !.GetParameters().Single();
-            }
-
-            private void MyMethod([My] [My] string myParam)
-            {
-
-            }
-        }
-
-        [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]
-        private class MyAttribute : Attribute
+        private void MyMethod([My] [My] string myParam)
         {
 
         }
+    }
+
+    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]
+    private class MyAttribute : Attribute
+    {
 
     }
+
 }
