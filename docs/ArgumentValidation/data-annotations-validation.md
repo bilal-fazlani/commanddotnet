@@ -61,7 +61,7 @@ public class Verbosity : IArgumentModel, IValidatableObject
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Validation/Data_Annotations_Validation.cs#L14-L52' title='Snippet source file'>snippet source</a> | <a href='#snippet-data_annotations_validation' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Validation/Data_Annotations_Validation.cs#L13-L51' title='Snippet source file'>snippet source</a> | <a href='#snippet-data_annotations_validation' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 DataAnnotations can be defined on the method parameters and model properties. Notice 

@@ -15,7 +15,7 @@ public void Login(IConsole console, string username, Password password)
     console.WriteLine($"u:{username} p:{password}");
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Passwords.cs#L16-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-passwords_login' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Passwords.cs#L15-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-passwords_login' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: passwords_login_exe -->
@@ -40,7 +40,7 @@ public void Prompt(IConsole console, IPrompter prompter, string username)
     console.WriteLine($"u:{username} p:{password}");
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Passwords.cs#L23-L29' title='Snippet source file'>snippet source</a> | <a href='#snippet-passwords_prompt' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Passwords.cs#L22-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-passwords_prompt' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: passwords_prompt_exe -->

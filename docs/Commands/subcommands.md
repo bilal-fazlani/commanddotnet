@@ -52,7 +52,7 @@ public class Stash
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Subcommands/Subcommands_Git_Composed.cs#L12-L53' title='Snippet source file'>snippet source</a> | <a href='#snippet-subcommands_git_composed' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Subcommands/Subcommands_Git_Composed.cs#L10-L51' title='Snippet source file'>snippet source</a> | <a href='#snippet-subcommands_git_composed' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Notice the `Stash` property decorated with the `[SubCommand]` attribute.
@@ -172,5 +172,5 @@ public class Program
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Subcommands/Subcommands_Git_Nested.cs#L10-L48' title='Snippet source file'>snippet source</a> | <a href='#snippet-subcommands_git_nested' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Subcommands/Subcommands_Git_Nested.cs#L9-L47' title='Snippet source file'>snippet source</a> | <a href='#snippet-subcommands_git_nested' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->

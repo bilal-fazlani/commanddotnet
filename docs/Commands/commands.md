@@ -59,7 +59,7 @@ Use the `[Command]` attribute to change the command name, enhance help output an
 public void Add(IConsole console, IEnumerable<int> numbers) =>
     console.WriteLine(numbers.Sum());
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands/Commands_Calculator.cs#L14-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_calculator' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands/Commands_Calculator.cs#L13-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_calculator' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: commands_calculator_sum_help -->
@@ -132,7 +132,7 @@ public class Program
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands/Commands_Git.cs#L10-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_git' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands/Commands_Git.cs#L9-L25' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_git' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 help for Pop may have `Usage: git Stash Pop`

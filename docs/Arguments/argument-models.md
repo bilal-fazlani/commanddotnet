@@ -13,7 +13,7 @@ public void Notify(string message, List<string> recipients,
     // send notification
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L17-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_without_model' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L16-L22' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_without_model' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: argument_models_notify_without_model_help -->
@@ -71,7 +71,7 @@ public class NotificationArgs : IArgumentModel
     public List<string> Recipients { get; set; } = null!;
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L28-L45' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_model' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L27-L44' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_model' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: argument_models_dry_run_and_verbosity -->
@@ -82,7 +82,7 @@ public class DryRunOptions : IArgumentModel
     [Option("dryrun")]
     public bool IsDryRun { get; set; } = false;
 }
-
+    
 public class VerbosityOptions : IArgumentModel, IValidatableObject
 {
     [Option('v')]
@@ -99,7 +99,7 @@ public class VerbosityOptions : IArgumentModel, IValidatableObject
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L168-L190' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_dry_run_and_verbosity' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L165-L187' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_dry_run_and_verbosity' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: argument_models_notify_with_model_help -->
@@ -157,7 +157,7 @@ public class NotificationArgs : IArgumentModel
     public VerbosityOptions VerbosityOptions { get; set; } = null!;
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L50-L68' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_model_composed' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L49-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_model_composed' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -189,7 +189,7 @@ public class NotificationArgs : IArgumentModel
     [Operand]
     public List<string> Recipients { get; set; } = null!;
 }
-
+    
 public class DryRunOptions : IArgumentModel
 {
     [Option("dryrun", AssignToExecutableSubcommands = true)]
@@ -205,7 +205,7 @@ public class VerbosityOptions : IArgumentModel
     public bool Quite { get; set; }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L73-L112' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_interceptor' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L72-L109' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_interceptor' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: argument_models_notify_with_interceptor_help -->
@@ -270,7 +270,7 @@ public class NotifyModel : IArgumentModel
     public VerbosityOptions VerbosityOptions { get; set; }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L149-L156' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_invalid_nested_operands_model' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L146-L153' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_invalid_nested_operands_model' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 And the error received because NotificationArgs contains operands
@@ -298,7 +298,7 @@ public class NotifyModel : IArgumentModel
     public VerbosityOptions VerbosityOptions { get; set; }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L122-L130' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_nested_operands_model' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Argument_Models.cs#L119-L127' title='Snippet source file'>snippet source</a> | <a href='#snippet-argument_models_notify_with_nested_operands_model' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
  
 ### Recommendation 

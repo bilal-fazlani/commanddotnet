@@ -53,9 +53,9 @@ CommandDotNet will check if the minimum or maximum arity has been exceeded and r
 <a id='snippet-arguments_arity'></a>
 ```cs
 public void DefaultCommand(Model model,
-        bool requiredBool, Uri requiredRefType, 
-        bool? nullableBool, Uri? nullableRefType,
-        bool optionalBool = false, Uri optionalRefType = null)
+    bool requiredBool, Uri requiredRefType, 
+    bool? nullableBool, Uri? nullableRefType,
+    bool optionalBool = false, Uri optionalRefType = null)
 {}
 
 public class Model : IArgumentModel
@@ -66,7 +66,7 @@ public class Model : IArgumentModel
     [Operand] public Uri DefaultRefType { get; set; } = new ("http://apple.com");
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Arity.cs#L18-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Arity.cs#L17-L31' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: arguments_arity_help -->
@@ -134,7 +134,7 @@ public void DefaultCommand(
         [Option] bool[]? nullableBool, [Option] Uri[]? nullableRefType,
         [Option] bool[] optionalBool = null, [Option] Uri[] optionalRefType = null)
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Arity.cs#L94-L99' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity_collection' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Arity.cs#L93-L98' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity_collection' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: arguments_arity_collection_help -->
@@ -188,7 +188,7 @@ public static IArgumentArity ExactlyOne => new ArgumentArity(1, 1);
 public static IArgumentArity ZeroOrMore => new ArgumentArity(0, Unlimited);
 public static IArgumentArity OneOrMore => new ArgumentArity(1, Unlimited);
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/ArgumentArity.cs#L37-L43' title='Snippet source file'>snippet source</a> | <a href='#snippet-known-arities' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/ArgumentArity.cs#L39-L45' title='Snippet source file'>snippet source</a> | <a href='#snippet-known-arities' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 The static method `ArgumentArity.Default(IArgument argument)` will return one of these static values based on the type
@@ -228,7 +228,7 @@ public static bool AllowsNone(this IArgumentArity arity) => arity.Minimum == 0;
 /// </summary>
 public static bool AllowsUnlimited(this IArgumentArity arity) => arity.Maximum == ArgumentArity.Unlimited;
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/ArgumentArityExtensions.cs#L5-L35' title='Snippet source file'>snippet source</a> | <a href='#snippet-arity-extensions' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/ArgumentArityExtensions.cs#L8-L38' title='Snippet source file'>snippet source</a> | <a href='#snippet-arity-extensions' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

@@ -8,11 +8,11 @@ Let's make it more useful by adding descriptions, usage examples and extended he
 ```cs
 [Command(
     Description = "Performs mathematical calculations",
-    ExtendedHelpTextLines = new []
-    {
+    ExtendedHelpTextLines =
+    [
         "Include multiple lines of text",
         "Extended help of the root command is a good place to describe directives for the app"
-    })]
+    ])]
 public class Program
 {
     static int Main(string[] args) =>
@@ -20,11 +20,11 @@ public class Program
 
     [Command(
         Description = "Adds two numbers",
-        UsageLines = new []
-        {
+        UsageLines =
+        [
             "Add 1 2",
             "%AppName% %CmdPath% 1 2"
-        },
+        ],
         ExtendedHelpText = "single line of extended help here")]
     public void Add(
         [Operand(Description = "first value")] int x,

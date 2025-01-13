@@ -92,7 +92,7 @@ public class VerbosityValidator : AbstractValidator<Verbosity>
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Validation/Fluent_Validation.cs#L16-L85' title='Snippet source file'>snippet source</a> | <a href='#snippet-fluent_validation' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Validation/Fluent_Validation.cs#L13-L82' title='Snippet source file'>snippet source</a> | <a href='#snippet-fluent_validation' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: fluent_validation_create_invalid -->
@@ -127,16 +127,16 @@ public static AppRunner AppRunner =>
         .UseNameCasing(Case.LowerCase)
         .UseFluentValidation(validatorFactory: model =>
         {
-            switch (model)
+            return model switch
             {
-                case Host: return new HostValidator();
-                case Table: return new TableValidator();
-                case Verbosity: return new VerbosityValidator();
-                default: return null;
-            }
+                Host => new HostValidator(),
+                Table => new TableValidator(),
+                Verbosity => new VerbosityValidator(),
+                _ => null
+            };
         });
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Validation/Fluent_Validation.cs#L91-L105' title='Snippet source file'>snippet source</a> | <a href='#snippet-fluent_validation_factory' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Validation/Fluent_Validation.cs#L88-L102' title='Snippet source file'>snippet source</a> | <a href='#snippet-fluent_validation_factory' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## vs. DataAnnotations

@@ -70,13 +70,13 @@ public class Curl
     }
 
     public void Get(Uri uri) => _console.WriteLine($"[GET] {BuildBasicAuthUri(uri)} verbose={_verbose}");
-    
+        
     private string BuildBasicAuthUri(Uri uri)
     {
         var uriString = uri.ToString();
         return _username is null
             ? uriString
-            : $"{uri.Scheme}://{_username}:{_password}@" + uriString.Substring(uri.Scheme.Length + 3);
+            : $"{uri.Scheme}://{_username}:{_password}@" + uriString[(uri.Scheme.Length + 3)..];
     }
 }
 ```
