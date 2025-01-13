@@ -1,46 +1,34 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
-namespace CommandDotNet.Parsing
+namespace CommandDotNet.Parsing;
+
+internal partial class CommandParser
 {
-    internal partial class CommandParser
+    private class OperandQueue(IEnumerable<Operand> operands)
     {
-        private class OperandQueue
+        private readonly Queue<Operand> _operands = new(operands);
+        private Operand? _listOperand;
+
+        public bool TryDequeue([NotNullWhen(true)] out Operand? operand)
         {
-            private readonly Queue<Operand> _operands;
-            private Operand? _listOperand;
+            operand = Dequeue();
+            return operand is not null;
+        }
 
-            public OperandQueue(IEnumerable<Operand> operands)
+        private Operand? Dequeue()
+        {
+            // there can be only one list operand and it
+            // is always the last operand
+            if (_listOperand is not null) return _listOperand;
+            if (_operands.Count == 0) return null;
+                
+            var operand = _operands.Dequeue();
+            if (operand.Arity.AllowsMany())
             {
-                _operands = new Queue<Operand>(operands);
+                _listOperand = operand;
             }
-
-            public bool TryDequeue([NotNullWhen(true)] out Operand? operand)
-            {
-                operand = Dequeue();
-                return operand is { };
-            }
-
-            public Operand? Dequeue()
-            {
-                // there can be only one list operand and it
-                // is always the last operand
-                if (_listOperand is { })
-                {
-                    return _listOperand;
-                }
-                if (_operands.Any())
-                {
-                    var operand = _operands.Dequeue();
-                    if (operand.Arity.AllowsMany())
-                    {
-                        _listOperand = operand;
-                    }
-                    return operand;
-                }
-                return null;
-            }
+            return operand;
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using CommandDotNet.Execution;
 
-namespace CommandDotNet.FluentValidation
+namespace CommandDotNet.FluentValidation;
+
+public static class MiddlewareSteps
 {
-    public static class MiddlewareSteps
-    {
-        public static MiddlewareStep FluentValidation { get; set; } = Execution.MiddlewareSteps.ValidateArity-1000;
-    }
+    public static MiddlewareStep FluentValidation { get; set; } = Execution.MiddlewareSteps.ValidateArity-1000;
 }

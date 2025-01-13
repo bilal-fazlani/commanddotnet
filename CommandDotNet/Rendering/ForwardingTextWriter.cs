@@ -1,28 +1,16 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using JetBrains.Annotations;
 
-namespace CommandDotNet.Rendering
+namespace CommandDotNet.Rendering;
+
+[PublicAPI]
+public class ForwardingTextWriter(Action<string?> write) : TextWriter
 {
-    public class ForwardingTextWriter : TextWriter
-    {
-        private readonly Action<string?> _write;
+    public override Encoding Encoding { get; } = Encoding.Default;
 
-        public ForwardingTextWriter(Action<string?> write)
-        {
-            _write = write;
-        }
+    public override void Write(string? value) => write(value);
 
-        public override Encoding Encoding { get; } = Encoding.Default;
-
-        public override void Write(string? value)
-        {
-            _write(value);
-        }
-
-        public override void Write(char value)
-        {
-            _write(value.ToString());
-        }
-    }
+    public override void Write(char value) => write(value.ToString());
 }

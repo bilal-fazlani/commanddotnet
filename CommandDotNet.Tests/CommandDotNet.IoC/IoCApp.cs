@@ -2,34 +2,33 @@
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
 
-namespace CommandDotNet.Tests.CommandDotNet.IoC
+namespace CommandDotNet.Tests.CommandDotNet.IoC;
+
+public class SomeIoCService : ISomeIoCService { }
+
+public interface ISomeIoCService { }
+
+internal class IoCApp
 {
-    public class SomeIoCService : ISomeIoCService { }
+    public readonly ISomeIoCService FromCtor;
+    public ISomeIoCService? FromInterceptor;
 
-    public interface ISomeIoCService { }
-
-    internal class IoCApp
+    public IoCApp(ISomeIoCService fromCtor)
     {
-        public readonly ISomeIoCService FromCtor;
-        public ISomeIoCService? FromInterceptor;
+        FromCtor = fromCtor;
+    }
 
-        public IoCApp(ISomeIoCService fromCtor)
-        {
-            FromCtor = fromCtor;
-        }
+    public Task<int> Intercept(CommandContext context, ExecutionDelegate next)
+    {
+        FromInterceptor = (ISomeIoCService?) context.AppConfig.DependencyResolver?.Resolve(typeof(ISomeIoCService));
+        return next(context);
+    }
 
-        public Task<int> Intercept(CommandContext context, ExecutionDelegate next)
-        {
-            FromInterceptor = (ISomeIoCService?) context.AppConfig.DependencyResolver?.Resolve(typeof(ISomeIoCService));
-            return next(context);
-        }
-
-        public void Do([Option('i')] bool expectFromInterceptor)
-        {
-            if(FromCtor == null)
-                throw new Exception("SomeService was not injected via ctor");
-            if (FromInterceptor == null)
-                throw new Exception("SomeService was not resolved in Interceptor");
-        }
+    public void Do([Option('i')] bool expectFromInterceptor)
+    {
+        if(FromCtor == null)
+            throw new Exception("SomeService was not injected via ctor");
+        if (FromInterceptor == null)
+            throw new Exception("SomeService was not resolved in Interceptor");
     }
 }

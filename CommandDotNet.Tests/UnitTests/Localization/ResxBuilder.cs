@@ -2,40 +2,40 @@ using System.Collections.Generic;
 using System.Security;
 using System.Text;
 
-namespace CommandDotNet.Tests.UnitTests.Localization
-{
-    internal static class ResxBuilder
-    {
-        /// <summary>WARNING: some keys differ only in case and VS.NET will not open them.</summary>
-        public static string Build(List<(string memberName, string value, string comments)> templates, bool valueAsKey)
-        {
-            var sb = new StringBuilder(Beginning);
-            templates.ForEach(t =>
-            {
-                var key = valueAsKey ? t.value : t.memberName;
-                var comment = valueAsKey ? $"{t.memberName}: {t.comments}" : t.comments;
-                sb.AppendLine(string.Format(
-                    comment.IsNullOrEmpty() ? DataTemplate : DataTemplateWithComment, 
-                    key,
-                    SecurityElement.Escape(t.value), 
-                    SecurityElement.Escape(comment)));
-            });
-            sb.AppendLine(End);
-            return sb.ToString();
-        }
+namespace CommandDotNet.Tests.UnitTests.Localization;
 
-        private const string DataTemplate = @"
+internal static class ResxBuilder
+{
+    /// <summary>WARNING: some keys differ only in case and VS.NET will not open them.</summary>
+    public static string Build(List<(string memberName, string value, string comments)> templates, bool valueAsKey)
+    {
+        var sb = new StringBuilder(Beginning);
+        templates.ForEach(t =>
+        {
+            var key = valueAsKey ? t.value : t.memberName;
+            var comment = valueAsKey ? $"{t.memberName}: {t.comments}" : t.comments;
+            sb.AppendLine(string.Format(
+                comment.IsNullOrEmpty() ? DataTemplate : DataTemplateWithComment, 
+                key,
+                SecurityElement.Escape(t.value), 
+                SecurityElement.Escape(comment)));
+        });
+        sb.AppendLine(End);
+        return sb.ToString();
+    }
+
+    private const string DataTemplate = @"
   <data name=""{0}"" xml:space=""preserve"">
     <value>{1}</value>
   </data>";
         
-        private const string DataTemplateWithComment = @"
+    private const string DataTemplateWithComment = @"
   <data name=""{0}"" xml:space=""preserve"">
     <value>{1}</value>
     <comment>{2}</comment>
   </data>";
 
-        private const string Beginning = @"<?xml version=""1.0"" encoding=""utf-8""?>
+    private const string Beginning = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -155,7 +155,6 @@ namespace CommandDotNet.Tests.UnitTests.Localization
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>";
 
-        private const string End = @"
+    private const string End = @"
 </root>";
-    }
 }

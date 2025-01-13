@@ -1,10 +1,9 @@
-﻿namespace CommandDotNet.Rendering
+﻿namespace CommandDotNet.Rendering;
+
+public interface IConsoleBuffer
 {
-    public interface IConsoleBuffer
-    {
-        int BufferWidth { get; set; }
-        int BufferHeight { get; set; }
-        void SetBufferSize(int width, int height);
-        void Clear();
-    }
+    int BufferWidth { get; set; }
+    int BufferHeight { get; set; }
+    void SetBufferSize(int width, int height);
+    void Clear();
 }

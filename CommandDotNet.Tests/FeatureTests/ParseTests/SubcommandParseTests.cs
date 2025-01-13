@@ -6,127 +6,126 @@ using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests.ParseTests
+namespace CommandDotNet.Tests.FeatureTests.ParseTests;
+
+public class SubcommandParseTests
 {
-    public class SubcommandParseTests
+    public SubcommandParseTests(ITestOutputHelper output)
     {
-        public SubcommandParseTests(ITestOutputHelper output)
-        {
-            Ambient.Output = output;
-        }
+        Ambient.Output = output;
+    }
 
-        [Fact]
-        public void SubcommandsCannotFollowOperandsOfDefaultCommand()
-        {
-            var results = new AppRunner<DefaultApp>()
-                .Verify(new Scenario
-                {
-                    When = { Args = "1 Do" },
-                    Then =
-                    {
-                        AssertContext = ctx =>
-                        {
-                            var invocation = ctx.GetCommandInvocationInfo();
-                            invocation.MethodInfo!.Name.Should().Be("Default");
-                            ctx.ParamValuesShouldBe("1", "Do", null, null);
-                        }
-                    }
-                });
-        }
-
-        [Fact]
-        public void SubcommandsCannotFollowOptionsOfDefaultCommand()
-        {
-            var results = new AppRunner<DefaultApp>()
-                .Verify(new Scenario
-                {
-                    When = { Args = "--opt1 lala Do" },
-                    Then =
-                    {
-                        AssertContext = ctx =>
-                        {
-                            var invocation = ctx.GetCommandInvocationInfo();
-                            invocation.MethodInfo!.Name.Should().Be("Default");
-                            ctx.ParamValuesShouldBe("Do", null, "lala", null);
-                        }
-                    }
-                });
-        }
-
-        [Fact]
-        public void SubcommandsCanFollowInterceptorOptions()
-        {
-            var results = new AppRunner<DefaultApp>()
-                .Verify(new Scenario
-                {
-                    When = { Args = "--localIOption lala Do" },
-                    Then =
-                    {
-                        AssertContext = ctx =>
-                        {
-                            var invocation = ctx.GetCommandInvocationInfo();
-                            invocation.MethodInfo!.Name.Should().Be("Do");
-                            ctx.ParamValuesShouldBe(null, null, null, null);
-                            ctx.ParamValuesShouldBe<DefaultApp>("lala", null);
-                        }
-                    }
-                });
-        }
-
-        [Fact]
-        public void SubcommandsCannotFollowInheritedInterceptorOptions()
-        {
-            var results = new AppRunner<DefaultApp>()
-                .Verify(new Scenario
-                {
-                    When = { Args = "--inheritedIOption lala Do" },
-                    Then =
-                    {
-                        AssertContext = ctx =>
-                        {
-                            var invocation = ctx.GetCommandInvocationInfo();
-                            invocation.MethodInfo!.Name.Should().Be("Default");
-                            ctx.ParamValuesShouldBe("Do", null, null, null);
-                            ctx.ParamValuesShouldBe<DefaultApp>(null, "lala");
-                        }
-                    }
-                });
-        }
-
-        [Fact]
-        public void SubcommandsWithOptionPrefixGeneratesSuggestion()
-        {
-            new AppRunner<DefaultApp>().Verify(new Scenario
+    [Fact]
+    public void SubcommandsCannotFollowOperandsOfDefaultCommand()
+    {
+        var results = new AppRunner<DefaultApp>()
+            .Verify(new Scenario
             {
-                When = { Args = "--Do" },
+                When = { Args = "1 Do" },
                 Then =
                 {
-                    ExitCode = 1,
-                    OutputContainsTexts = { @"Unrecognized option '--Do'
+                    AssertContext = ctx =>
+                    {
+                        var invocation = ctx.GetCommandInvocationInfo();
+                        invocation.MethodInfo.Name.Should().Be("Default");
+                        ctx.ParamValuesShouldBe("1", "Do", null, null);
+                    }
+                }
+            });
+    }
+
+    [Fact]
+    public void SubcommandsCannotFollowOptionsOfDefaultCommand()
+    {
+        var results = new AppRunner<DefaultApp>()
+            .Verify(new Scenario
+            {
+                When = { Args = "--opt1 lala Do" },
+                Then =
+                {
+                    AssertContext = ctx =>
+                    {
+                        var invocation = ctx.GetCommandInvocationInfo();
+                        invocation.MethodInfo.Name.Should().Be("Default");
+                        ctx.ParamValuesShouldBe("Do", null, "lala", null);
+                    }
+                }
+            });
+    }
+
+    [Fact]
+    public void SubcommandsCanFollowInterceptorOptions()
+    {
+        var results = new AppRunner<DefaultApp>()
+            .Verify(new Scenario
+            {
+                When = { Args = "--localIOption lala Do" },
+                Then =
+                {
+                    AssertContext = ctx =>
+                    {
+                        var invocation = ctx.GetCommandInvocationInfo();
+                        invocation.MethodInfo.Name.Should().Be("Do");
+                        ctx.ParamValuesShouldBe(null, null, null, null);
+                        ctx.ParamValuesShouldBe<DefaultApp>("lala", null);
+                    }
+                }
+            });
+    }
+
+    [Fact]
+    public void SubcommandsCannotFollowInheritedInterceptorOptions()
+    {
+        var results = new AppRunner<DefaultApp>()
+            .Verify(new Scenario
+            {
+                When = { Args = "--inheritedIOption lala Do" },
+                Then =
+                {
+                    AssertContext = ctx =>
+                    {
+                        var invocation = ctx.GetCommandInvocationInfo();
+                        invocation.MethodInfo.Name.Should().Be("Default");
+                        ctx.ParamValuesShouldBe("Do", null, null, null);
+                        ctx.ParamValuesShouldBe<DefaultApp>(null, "lala");
+                    }
+                }
+            });
+    }
+
+    [Fact]
+    public void SubcommandsWithOptionPrefixGeneratesSuggestion()
+    {
+        new AppRunner<DefaultApp>().Verify(new Scenario
+        {
+            When = { Args = "--Do" },
+            Then =
+            {
+                ExitCode = 1,
+                OutputContainsTexts = { @"Unrecognized option '--Do'
 If you intended to use the 'Do' command, try again with the following
 
 Do" }
-                }
-            });
+            }
+        });
+    }
+
+    private class DefaultApp
+    {
+        public Task<int> Interceptor(InterceptorExecutionDelegate next, 
+            [Option] string? localIOption,
+            [Option(AssignToExecutableSubcommands = true)] string? inheritedIOption)
+        {
+            return next();
         }
 
-        private class DefaultApp
+        [DefaultCommand]
+        public void Default(string? opd1, string? opd2, [Option] string? opt1, [Option] string? opt2)
         {
-            public Task<int> Interceptor(InterceptorExecutionDelegate next, 
-                [Option] string? localIOption,
-                [Option(AssignToExecutableSubcommands = true)] string? inheritedIOption)
-            {
-                return next();
-            }
+        }
 
-            [DefaultCommand]
-            public void Default(string? opd1, string? opd2, [Option] string? opt1, [Option] string? opt2)
-            {
-            }
-
-            public void Do(string? opd1, string? opd2, [Option] string? opt1, [Option] string? opt2)
-            {
-            }
+        public void Do(string? opd1, string? opd2, [Option] string? opt1, [Option] string? opt2)
+        {
         }
     }
 }

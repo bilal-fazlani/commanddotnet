@@ -1,8 +1,7 @@
-﻿namespace CommandDotNet.Parsing
+﻿namespace CommandDotNet.Parsing;
+
+public interface IParseError
 {
-    public interface IParseError
-    {
-        public string Message { get; }
-        public Command Command { get; }
-    }
+    public string Message { get; }
+    public Command Command { get; }
 }

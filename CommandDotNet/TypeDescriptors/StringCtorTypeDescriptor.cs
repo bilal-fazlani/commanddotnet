@@ -3,74 +3,69 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using CommandDotNet.Extensions;
+using JetBrains.Annotations;
 
-namespace CommandDotNet.TypeDescriptors
-{    public class StringCtorTypeDescriptor : IArgumentTypeDescriptor
+namespace CommandDotNet.TypeDescriptors;
+
+[PublicAPI]
+public class StringCtorTypeDescriptor : IArgumentTypeDescriptor
+{
+    private static readonly Dictionary<Type, Converter> Cache = new();
+
+    public bool CanSupport(Type type) => 
+        GetConverter(type).MethodBase is not null;
+
+    public string GetDisplayName(IArgument argument) => 
+        GetConverter(argument).MethodBase!.GetParameters().Single().Name!;
+
+    public object? ParseString(IArgument argument, string value)
     {
-        private static readonly Dictionary<Type, Converter> Cache = new();
+        var converter = GetConverter(argument);
+        return converter.StringConstructor is not null 
+            ? converter.StringConstructor!.Invoke([value]) 
+            : converter.ParseMethod!.Invoke(null, [value]);
+    }
 
-        public bool CanSupport(Type type)
-        {
-            return GetConverter(type).MethodBase is { };
-        }
+    private static Converter GetConverter(IArgument argument) =>
+        argument.Arity.AllowsMany()
+            ? GetConverter(argument.TypeInfo.UnderlyingType)
+            : GetConverter(argument.TypeInfo.Type);
 
-        public string GetDisplayName(IArgument argument)
+    private static Converter GetConverter(Type type)
+    {
+        return Cache.GetOrAdd(type, t =>
         {
-            return GetConverter(argument).MethodBase!.GetParameters().Single().Name!;
-        }
+            var stringCtor = t.GetConstructors()
+                .FirstOrDefault(HasSingleRequiredStringArgument);
 
-        public object? ParseString(IArgument argument, string value)
-        {
-            var converter = GetConverter(argument);
-            return converter.StringConstructor is not null 
-                ? converter.StringConstructor!.Invoke(new object[] { value }) 
-                : converter.ParseMethod!.Invoke(null, new object[] { value });
-        }
-
-        private static Converter GetConverter(IArgument argument)
-        {
-            return argument.Arity.AllowsMany()
-                ? GetConverter(argument.TypeInfo.UnderlyingType)
-                : GetConverter(argument.TypeInfo.Type);
-        }
-
-        private static Converter GetConverter(Type type)
-        {
-            static bool HasSingleRequiredStringArgument(MethodBase method)
+            if (stringCtor is not null)
             {
-                var parameterInfos = method.GetParameters();
-                return parameterInfos.Count(p => p.ParameterType == typeof(string) && !p.IsOptional) == 1;
+                return new Converter{StringConstructor = stringCtor};
             }
-            
-            return Cache.GetOrAdd(type, t =>
-            {
-                var stringCtor = t.GetConstructors()
-                    .FirstOrDefault(HasSingleRequiredStringArgument);
 
-                if (stringCtor is { })
-                {
-                    return new Converter{StringConstructor = stringCtor};
-                }
+            // intentionally skipping TryParse because we want the error message if parse fails.
+            var parseMethod = t
+                .GetMethods(BindingFlags.Public | BindingFlags.Static)
+                .FirstOrDefault(c =>
+                    c.Name == "Parse"
+                    && HasSingleRequiredStringArgument(c));
 
-                // intentionally skipping TryParse because we want the error message if parse fails.
-                var parseMethod = t
-                    .GetMethods(BindingFlags.Public | BindingFlags.Static)
-                    .FirstOrDefault(c =>
-                        c.Name == "Parse"
-                        && HasSingleRequiredStringArgument(c));
+            return new Converter{ParseMethod = parseMethod};
+        });
 
-                return new Converter{ParseMethod = parseMethod};
-            });
-        }
-
-        private class Converter
+        static bool HasSingleRequiredStringArgument(MethodBase method)
         {
-            public MethodBase? MethodBase => (MethodBase?)StringConstructor ?? ParseMethod;
-            
-            public ConstructorInfo? StringConstructor { get; set; }
-            
-            public MethodInfo? ParseMethod { get; set; }
+            var parameterInfos = method.GetParameters();
+            return parameterInfos.Count(p => p.ParameterType == typeof(string) && !p.IsOptional) == 1;
         }
     }
 
+    private class Converter
+    {
+        public MethodBase? MethodBase => (MethodBase?)StringConstructor ?? ParseMethod;
+            
+        public ConstructorInfo? StringConstructor { get; set; }
+            
+        public MethodInfo? ParseMethod { get; set; }
+    }
 }

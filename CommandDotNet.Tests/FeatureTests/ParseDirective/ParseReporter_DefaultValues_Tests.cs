@@ -4,24 +4,24 @@ using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests.ParseDirective
-{
-    public class ParseReporter_SplitValues_Tests
-    {
-        public ParseReporter_SplitValues_Tests(ITestOutputHelper output)
-        {
-            Ambient.Output = output;
-        }
+namespace CommandDotNet.Tests.FeatureTests.ParseDirective;
 
-        [Fact]
-        public void Split_values_can_be_traced_to_source()
-        {
-            new AppRunner<App>()
-                .UseParseDirective()
-                .Verify(new Scenario
-                {
-                    When = { Args = "[parse] Colon --list one:two:three" },
-                    Then = { Output = @"command: Colon
+public class ParseReporter_SplitValues_Tests
+{
+    public ParseReporter_SplitValues_Tests(ITestOutputHelper output)
+    {
+        Ambient.Output = output;
+    }
+
+    [Fact]
+    public void Split_values_can_be_traced_to_source()
+    {
+        new AppRunner<App>()
+            .UseParseDirective()
+            .Verify(new Scenario
+            {
+                When = { Args = "[parse] Colon --list one:two:three" },
+                Then = { Output = @"command: Colon
 
 options:
 
@@ -33,51 +33,51 @@ options:
 Parse usage: [parse:t:raw] to include token transformations.
  't' to include token transformations.
  'raw' to include command line as passed to this process."
-                    }
-                });
-        }
-
-
-        private class App
-        {
-            public void Colon([Option(Split = ':')] IEnumerable<string> list)
-            {
-            }
-        }
+                }
+            });
     }
 
-    public class ParseReporter_DefaultValues_Tests
+
+    private class App
     {
-        public ParseReporter_DefaultValues_Tests(ITestOutputHelper output)
+        public void Colon([Option(Split = ':')] IEnumerable<string> list)
         {
-            Ambient.Output = output;
         }
+    }
+}
 
-        [Fact]
-        public void Defaults_FromExternalSources_IncludeSourceName()
+public class ParseReporter_DefaultValues_Tests
+{
+    public ParseReporter_DefaultValues_Tests(ITestOutputHelper output)
+    {
+        Ambient.Output = output;
+    }
+
+    [Fact]
+    public void Defaults_FromExternalSources_IncludeSourceName()
+    {
+        var appSettings = new NameValueCollection
         {
-            var appSettings = new NameValueCollection
-            {
-                { "opd", "woo" },
-                { "--opt", "hoo" }
-            };
+            { "opd", "woo" },
+            { "--opt", "hoo" }
+        };
 
-            var envVars = new Dictionary<string, string>
-            {
-                { "opdList", "a,b,c" },
-                { "optList", "four,five,six" }
-            };
+        var envVars = new Dictionary<string, string>
+        {
+            { "opdList", "a,b,c" },
+            { "optList", "four,five,six" }
+        };
 
-            new AppRunner<App>()
-                .UseDefaultsFromEnvVar(envVars)
-                .UseDefaultsFromAppSetting(appSettings, includeNamingConventions: true)
-                .UseParseDirective()
-                .Verify(new Scenario
+        new AppRunner<App>()
+            .UseDefaultsFromEnvVar(envVars)
+            .UseDefaultsFromAppSetting(appSettings, includeNamingConventions: true)
+            .UseParseDirective()
+            .Verify(new Scenario
+            {
+                When = {Args = "[parse] Do"},
+                Then =
                 {
-                    When = {Args = "[parse] Do"},
-                    Then =
-                    {
-                        Output = @"command: Do
+                    Output = @"command: Do
 
 arguments:
 
@@ -106,21 +106,21 @@ options:
 Parse usage: [parse:t:raw] to include token transformations.
  't' to include token transformations.
  'raw' to include command line as passed to this process."
-                    }
-                });
-        }
+                }
+            });
+    }
 
-        [Fact]
-        public void Defaults_AreShown_And_ListsAreCsvJoined()
-        {
-            new AppRunner<App>()
-                .UseParseDirective()
-                .Verify(new Scenario
+    [Fact]
+    public void Defaults_AreShown_And_ListsAreCsvJoined()
+    {
+        new AppRunner<App>()
+            .UseParseDirective()
+            .Verify(new Scenario
+            {
+                When = {Args = "[parse] Do"},
+                Then =
                 {
-                    When = {Args = "[parse] Do"},
-                    Then =
-                    {
-                        Output = @"command: Do
+                    Output = @"command: Do
 
 arguments:
 
@@ -149,31 +149,30 @@ options:
 Parse usage: [parse:t:raw] to include token transformations.
  't' to include token transformations.
  'raw' to include command line as passed to this process."
-                    }
-                });
-        }
+                }
+            });
+    }
 
-        private class App
+    private class App
+    {
+
+        public void Do(IConsole console,
+            [Operand] string opd = "lala",
+            [Option] string opt = "fishies",
+            ListsWithDefaults? listsWithDefaults = null)
         {
 
-            public void Do(IConsole console,
-                [Operand] string opd = "lala",
-                [Option] string opt = "fishies",
-                ListsWithDefaults? listsWithDefaults = null)
-            {
-
-            }
         }
+    }
 
-        public class ListsWithDefaults : IArgumentModel
-        {
-            [EnvVar("opdList")]
-            [Operand]
-            public List<string>? opdList { get; set; } = new() { "one", "two", "three" };
+    public class ListsWithDefaults : IArgumentModel
+    {
+        [EnvVar("opdList")]
+        [Operand]
+        public List<string>? opdList { get; set; } = ["one", "two", "three"];
 
-            [EnvVar("optList")]
-            [Option('l')]
-            public List<string>? optList { get; set; } = new() { "one", "two", "three" };
-        }
+        [EnvVar("optList")]
+        [Option('l')]
+        public List<string>? optList { get; set; } = ["one", "two", "three"];
     }
 }

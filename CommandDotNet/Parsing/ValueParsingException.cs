@@ -1,18 +1,17 @@
 ﻿using System;
+using JetBrains.Annotations;
 
-namespace CommandDotNet.Parsing
+namespace CommandDotNet.Parsing;
+
+/// <summary><see cref="ValueParsingException"/> indicates user error.</summary>
+[PublicAPI]
+public class ValueParsingException : Exception
 {
-    /// <summary><see cref="ValueParsingException"/> indicates user error.</summary>
-    public class ValueParsingException : Exception
+    public ValueParsingException(string message) : base(message)
     {
-        public ValueParsingException(string message) : base(message)
-        {
+    }
 
-        }
-
-        public ValueParsingException(string message, Exception innerException) : base(message, innerException)
-        {
-
-        }
+    public ValueParsingException(string message, Exception innerException) : base(message, innerException)
+    {
     }
 }

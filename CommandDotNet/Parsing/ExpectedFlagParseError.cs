@@ -1,23 +1,13 @@
 ﻿using CommandDotNet.Tokens;
+using JetBrains.Annotations;
 
-namespace CommandDotNet.Parsing
-{
-    public class ExpectedFlagParseError : IParseError
-    {
-        public string Message { get; }
-        public Command Command { get; }
-        public Token ClubbedToken { get; }
-        public string ShortName { get; }
-        public Option? Option { get; }
+namespace CommandDotNet.Parsing;
 
-        public ExpectedFlagParseError(Command command, Token clubbedToken, 
-            string shortName, Option? option, string message)
-        {
-            Message = message;
-            Command = command;
-            ClubbedToken = clubbedToken;
-            ShortName = shortName;
-            Option = option;
-        }
-    }
-}
+[PublicAPI]
+public record ExpectedFlagParseError(
+    Command Command,
+    Token ClubbedToken,
+    string ShortName,
+    Option? Option,
+    string Message)
+    : IParseError;

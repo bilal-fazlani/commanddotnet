@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace CommandDotNet.Builders
+namespace CommandDotNet.Builders;
+
+public interface IDependencyResolver
 {
-    public interface IDependencyResolver
-    {
-        object? Resolve(Type type);
-        bool TryResolve(Type type, [NotNullWhen(true)] out object? item);
-    }
+    object? Resolve(Type type);
+    bool TryResolve(Type type, [NotNullWhen(true)] out object? item);
 }

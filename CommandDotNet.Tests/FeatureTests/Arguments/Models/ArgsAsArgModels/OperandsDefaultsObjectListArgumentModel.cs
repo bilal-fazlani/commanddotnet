@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels
+namespace CommandDotNet.Tests.FeatureTests.Arguments.Models.ArgsAsArgModels;
+
+public class OperandsDefaultsObjectListArgumentModel : IObjectListArgumentModel
 {
-    public class OperandsDefaultsObjectListArgumentModel : IObjectListArgumentModel
-    {
-        [Operand]
-        public List<Uri>? ObjectListArg { get; set; } = new()
-        {
-            new Uri("http://google.com"),
-            new Uri("http://github.com")
-        };
-    }
+    [Operand]
+    public List<Uri>? ObjectListArg { get; set; } =
+    [
+        new Uri("http://google.com"),
+        new Uri("http://github.com")
+    ];
 }

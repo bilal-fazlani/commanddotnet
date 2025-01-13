@@ -1,25 +1,20 @@
 ﻿using System.IO;
 using System.Text;
+using JetBrains.Annotations;
 
-namespace CommandDotNet.Rendering
+namespace CommandDotNet.Rendering;
+
+[PublicAPI]
+public class DuplexTextWriter(TextWriter original, TextWriter listener) : TextWriter
 {
-    public class DuplexTextWriter : TextWriter
+    public TextWriter Original { get; } = original;
+    public TextWriter Listener { get; } = listener;
+
+    public override Encoding Encoding => Original.Encoding;
+
+    public override void Write(char value)
     {
-        public TextWriter Original { get; }
-        public TextWriter Listener { get; }
-
-        public DuplexTextWriter(TextWriter original, TextWriter listener)
-        {
-            Original = original;
-            Listener = listener;
-        }
-
-        public override Encoding Encoding => Original.Encoding;
-
-        public override void Write(char value)
-        {
-            Original.Write(value);
-            Listener.Write(value);
-        }
+        Original.Write(value);
+        Listener.Write(value);
     }
 }

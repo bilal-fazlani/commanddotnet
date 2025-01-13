@@ -2,137 +2,136 @@ using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests
+namespace CommandDotNet.Tests.FeatureTests;
+
+public class VersionOptionTests
 {
-    public class VersionOptionTests
+    public VersionOptionTests(ITestOutputHelper output)
     {
-        public VersionOptionTests(ITestOutputHelper output)
-        {
-            Ambient.Output = output;
-        }
+        Ambient.Output = output;
+    }
 
-        [Fact]
-        public void WhenVersionEnabled_BasicHelp_IncludesVersionOption()
+    [Fact]
+    public void WhenVersionEnabled_BasicHelp_IncludesVersionOption()
+    {
+        var scenario = new Scenario
         {
-            var scenario = new Scenario
-            {
-                When = {Args = "-h"},
-                Then = {OutputContainsTexts = {"-v | --version  Show version information"}}
-            };
+            When = {Args = "-h"},
+            Then = {OutputContainsTexts = {"-v | --version  Show version information"}}
+        };
 
-            new AppRunner<App>(TestAppSettings.BasicHelp)
-                .UseVersionMiddleware()
-                .Verify(scenario);
-        }
+        new AppRunner<App>(TestAppSettings.BasicHelp)
+            .UseVersionMiddleware()
+            .Verify(scenario);
+    }
 
-        [Fact]
-        public void WhenVersionEnabled_DetailedHelp_IncludesVersionOption()
+    [Fact]
+    public void WhenVersionEnabled_DetailedHelp_IncludesVersionOption()
+    {
+        var scenario = new Scenario
         {
-            var scenario = new Scenario
-            {
-                When = {Args = "-h"},
-                Then = {
-                    OutputContainsTexts = { @"  -v | --version
+            When = {Args = "-h"},
+            Then = {
+                OutputContainsTexts = { @"  -v | --version
   Show version information" }
-                }
-            };
+            }
+        };
 
-            new AppRunner<App>(TestAppSettings.DetailedHelp)
-                .UseVersionMiddleware()
-                .Verify(scenario);
-        }
+        new AppRunner<App>(TestAppSettings.DetailedHelp)
+            .UseVersionMiddleware()
+            .Verify(scenario);
+    }
 
-        [Fact]
-        public void WhenVersionDisabled_BasicHelp_DoesNotIncludeVersionOption()
+    [Fact]
+    public void WhenVersionDisabled_BasicHelp_DoesNotIncludeVersionOption()
+    {
+        new AppRunner<App>(TestAppSettings.BasicHelp)
+            .Verify(new Scenario
+            {
+                When = {Args = "-h"},
+                Then = { OutputNotContainsTexts = { "-v | --version" } }
+            });
+    }
+
+    [Fact]
+    public void WhenVersionDisabled_DetailedHelp_DoesNotIncludeVersionOption()
+    {
+        new AppRunner<App>(TestAppSettings.DetailedHelp)
+            .Verify(new Scenario
+            {
+                When = {Args = "-h"},
+                Then = {OutputNotContainsTexts = {"-v | --version"}}
+            });
+    }
+
+    [Fact]
+    public void WhenVersionEnabled_Version_LongName_OutputsVersion()
+    {
+        var scenario = new Scenario
         {
-            new AppRunner<App>(TestAppSettings.BasicHelp)
-                .Verify(new Scenario
-                {
-                    When = {Args = "-h"},
-                    Then = { OutputNotContainsTexts = { "-v | --version" } }
-                });
-        }
+            When = {Args = "--version"},
+            Then =
+            {
+                Output = @"testhost.dll
+1.1.1.1"
+            }
+        };
 
-        [Fact]
-        public void WhenVersionDisabled_DetailedHelp_DoesNotIncludeVersionOption()
-        {
-            new AppRunner<App>(TestAppSettings.DetailedHelp)
-                .Verify(new Scenario
-                {
-                    When = {Args = "-h"},
-                    Then = {OutputNotContainsTexts = {"-v | --version"}}
-                });
-        }
+        new AppRunner<App>()
+            .UseVersionMiddleware()
+            .Verify(scenario);
+    }
 
-        [Fact]
-        public void WhenVersionEnabled_Version_LongName_OutputsVersion()
+    [Fact]
+    public void WhenVersionEnabled_Version_ShortName_OutputsVersion()
+    {
+        var scenario = new Scenario
         {
-            var scenario = new Scenario
+            When = {Args = "-v"},
+            Then =
+            {
+                Output = @"testhost.dll
+1.1.1.1"
+            }
+        };
+            
+        new AppRunner<App>()
+            .UseVersionMiddleware()
+            .Verify(scenario);
+    }
+
+    [Fact]
+    public void WhenVersionDisabled_Version_LongName_NotRecognized()
+    {
+        new AppRunner<App>()
+            .Verify(new Scenario
             {
                 When = {Args = "--version"},
                 Then =
                 {
-                    Output = @"testhost.dll
-1.1.1.1"
+                    ExitCode = 1,
+                    OutputContainsTexts = { "Unrecognized option '--version'" }
                 }
-            };
+            });
+    }
 
-            new AppRunner<App>()
-                .UseVersionMiddleware()
-                .Verify(scenario);
-        }
-
-        [Fact]
-        public void WhenVersionEnabled_Version_ShortName_OutputsVersion()
-        {
-            var scenario = new Scenario
+    [Fact]
+    public void WhenVersionDisabled_Version_ShortName_NotRecognized()
+    {
+        new AppRunner<App>()
+            .Verify(new Scenario
             {
                 When = {Args = "-v"},
                 Then =
                 {
-                    Output = @"testhost.dll
-1.1.1.1"
+                    ExitCode = 1,
+                    OutputContainsTexts = { "Unrecognized command or argument '-v'" }
                 }
-            };
-            
-            new AppRunner<App>()
-                .UseVersionMiddleware()
-                .Verify(scenario);
-        }
+            });
+    }
 
-        [Fact]
-        public void WhenVersionDisabled_Version_LongName_NotRecognized()
-        {
-            new AppRunner<App>()
-                .Verify(new Scenario
-                {
-                    When = {Args = "--version"},
-                    Then =
-                    {
-                        ExitCode = 1,
-                        OutputContainsTexts = { "Unrecognized option '--version'" }
-                    }
-                });
-        }
+    private class App
+    {
 
-        [Fact]
-        public void WhenVersionDisabled_Version_ShortName_NotRecognized()
-        {
-            new AppRunner<App>()
-                .Verify(new Scenario
-                {
-                    When = {Args = "-v"},
-                    Then =
-                    {
-                        ExitCode = 1,
-                        OutputContainsTexts = { "Unrecognized command or argument '-v'" }
-                    }
-                });
-        }
-
-        private class App
-        {
-
-        }
     }
 }

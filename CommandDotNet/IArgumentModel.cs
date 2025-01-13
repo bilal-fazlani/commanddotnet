@@ -1,7 +1,6 @@
-﻿namespace CommandDotNet
+﻿namespace CommandDotNet;
+
+public interface IArgumentModel
 {
-    public interface IArgumentModel
-    {
         
-    }
 }

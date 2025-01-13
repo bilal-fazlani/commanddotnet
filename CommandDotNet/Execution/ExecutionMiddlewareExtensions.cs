@@ -3,34 +3,33 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Logging;
 
-namespace CommandDotNet.Execution
+namespace CommandDotNet.Execution;
+
+internal static class ExecutionMiddlewareExtensions
 {
-    internal static class ExecutionMiddlewareExtensions
+    private static readonly ILog Log = LogProvider.GetLogger(typeof(ExecutionMiddlewareExtensions));
+
+    internal static Task<int> InvokePipeline(this IEnumerable<ExecutionMiddleware> pipeline, CommandContext commandContext)
     {
-        private static readonly ILog Log = LogProvider.GetLogger(typeof(ExecutionMiddlewareExtensions));
-
-        internal static Task<int> InvokePipeline(this IEnumerable<ExecutionMiddleware> pipeline, CommandContext commandContext)
-        {
-            var middlewareChain = pipeline.Aggregate(
-                (first, second) =>
-                    (ctx, next) =>
-                        first(ctx, c =>
+        var middlewareChain = pipeline.Aggregate(
+            (first, second) =>
+                (ctx, next) =>
+                    first(ctx, c =>
+                    {
+                        if (c.CancellationToken.IsCancellationRequested)
                         {
-                            if (c.CancellationToken.IsCancellationRequested)
-                            {
-                                Log.Info("Cancellation requested. Aborting execution pipeline");
-                                return ExitCodes.SuccessAsync;
-                            }
-                            else
-                            {
-                                Log.Info($"begin: invoke middleware: {second.Method.Name}");
-                                var task = second(c, next);
-                                Log.Info($"end: invoke middleware: {second.Method.Name}");
-                                return task;
-                            }
-                        }));
+                            Log.Info("Cancellation requested. Aborting execution pipeline");
+                            return ExitCodes.SuccessAsync;
+                        }
+                        else
+                        {
+                            Log.Info($"begin: invoke middleware: {second.Method.Name}");
+                            var task = second(c, next);
+                            Log.Info($"end: invoke middleware: {second.Method.Name}");
+                            return task;
+                        }
+                    }));
 
-            return middlewareChain(commandContext, _ => ExitCodes.SuccessAsync);
-        }
+        return middlewareChain(commandContext, _ => ExitCodes.SuccessAsync);
     }
 }

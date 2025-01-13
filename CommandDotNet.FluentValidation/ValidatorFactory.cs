@@ -4,66 +4,60 @@ using System.Linq;
 using System.Reflection;
 using FluentValidation;
 
-namespace CommandDotNet.FluentValidation
+namespace CommandDotNet.FluentValidation;
+
+internal class ValidatorFactory(CommandContext ctx)
 {
-    internal class ValidatorFactory
+    // caching to avoid multiple assembly scanning and improved perf for REPL sessions.
+    // this could be skipped when SourceGenerators are used.
+    private static readonly HashSet<Assembly> ScannedAssemblies = new();
+    private static readonly Dictionary<Type, Type> ValidatorTypesByModel = new();
+
+    public IValidator? Resolve(IArgumentModel model)
     {
-        // caching to avoid multiple assembly scanning and improved perf for REPL sessions.
-        // this could be skipped when SourceGenerators are used.
-        private static readonly HashSet<Assembly> ScannedAssemblies = new();
-        private static readonly Dictionary<Type, Type> ValidatorTypesByModel = new();
+        var (validator, validatorType) = LoadValidatorType(model.GetType());
 
-        private readonly CommandContext _ctx;
+        if (validator is not null) return validator;
+        if (validatorType is null) return null;
 
-        public ValidatorFactory(CommandContext ctx)
+        try
         {
-            _ctx = ctx;
+            return Activator.CreateInstance(validatorType) as IValidator;
+        }
+        catch (Exception e)
+        {
+            var msg = Resources.A.Error_Could_not_create_instance_of(validatorType.Name);
+            throw new InvalidValidatorException(msg, e);
+        }
+    }
+
+    private (IValidator? validator, Type? validatorType) LoadValidatorType(Type modelType)
+    {
+        if (ValidatorTypesByModel.TryGetValue(modelType, out var validatorType)) return (null, validatorType);
+        
+        var genericType = typeof(IValidator<>).MakeGenericType(modelType);
+        
+        if (ctx.DependencyResolver?.TryResolve(genericType, out var validator) == true)
+        {
+            return (validator as IValidator, null);
         }
 
-        public IValidator? Resolve(IArgumentModel model)
-        {
-            var modelType = model.GetType();
-
-            if (!ValidatorTypesByModel.TryGetValue(modelType, out var validatorType))
+        if (ScannedAssemblies.Contains(modelType.Assembly)) return (null, validatorType);
+        
+        AssemblyScanner
+            .FindValidatorsInAssembly(modelType.Assembly)
+            .ForEach(r =>
             {
-                var genericType = typeof(IValidator<>).MakeGenericType(modelType);
-                if (_ctx.DependencyResolver is not null && _ctx.DependencyResolver.TryResolve(genericType, out var validator))
+                var validatorModelType = r.InterfaceType.GenericTypeArguments.First();
+                ValidatorTypesByModel.Add(validatorModelType, r.ValidatorType);
+                if (validatorModelType == modelType)
                 {
-                    return validator as IValidator;
+                    validatorType = r.ValidatorType;
                 }
+            });
 
-                if (!ScannedAssemblies.Contains(modelType.Assembly))
-                {
-                    AssemblyScanner
-                        .FindValidatorsInAssembly(modelType.Assembly)
-                        .ForEach(r =>
-                        {
-                            var validatorModelType = r.InterfaceType.GenericTypeArguments.First();
-                            ValidatorTypesByModel.Add(validatorModelType, r.ValidatorType);
-                            if (validatorModelType == modelType)
-                            {
-                                validatorType = r.ValidatorType;
-                            }
-                        });
+        ScannedAssemblies.Add(modelType.Assembly);
+        return (null, validatorType);
 
-                    ScannedAssemblies.Add(modelType.Assembly);
-                }
-            }
-
-            if (validatorType is null)
-            {
-                return null;
-            }
-
-            try
-            {
-                return Activator.CreateInstance(validatorType) as IValidator;
-            }
-            catch (Exception e)
-            {
-                var msg = Resources.A.Error_Could_not_create_instance_of(validatorType.Name);
-                throw new InvalidValidatorException(msg, e);
-            }
-        }
     }
 }

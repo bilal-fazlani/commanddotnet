@@ -5,33 +5,32 @@ using Spectre.Console;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.CommandDotNet.Spectre
+namespace CommandDotNet.Tests.CommandDotNet.Spectre;
+
+public class AnsiTestConsoleTests
 {
-    public class AnsiTestConsoleTests
+    public AnsiTestConsoleTests(ITestOutputHelper output)
     {
-        public AnsiTestConsoleTests(ITestOutputHelper output)
-        {
-            Ambient.Output = output;
-        }
+        Ambient.Output = output;
+    }
 
-        [Fact]
-        public void AnsiTestConsole_works_with_TestTools()
-        {
-            var result = new AppRunner<App>()
-                .UseSpectreAnsiConsole(new AnsiTestConsole())
-                .RunInMem("Ansi lala");
+    [Fact]
+    public void AnsiTestConsole_works_with_TestTools()
+    {
+        var result = new AppRunner<App>()
+            .UseSpectreAnsiConsole(new AnsiTestConsole())
+            .RunInMem("Ansi lala");
 
-            result.ExitCode.Should().Be(0);
-            result.Console.AllText().Should().Be(@"lala
+        result.ExitCode.Should().Be(0);
+        result.Console.AllText().Should().Be(@"lala
 ");
-        }
+    }
 
-        private class App
+    private class App
+    {
+        public void Ansi(IAnsiConsole ansiConsole, string text)
         {
-            public void Ansi(IAnsiConsole ansiConsole, string text)
-            {
-                ansiConsole.WriteLine(text);
-            }
+            ansiConsole.WriteLine(text);
         }
     }
 }

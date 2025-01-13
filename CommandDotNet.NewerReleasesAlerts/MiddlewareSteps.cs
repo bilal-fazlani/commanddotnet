@@ -1,9 +1,8 @@
 ﻿using CommandDotNet.Execution;
 
-namespace CommandDotNet.NewerReleasesAlerts
+namespace CommandDotNet.NewerReleasesAlerts;
+
+public static class MiddlewareSteps
 {
-    public static class MiddlewareSteps
-    {
-        public static MiddlewareStep NewerReleaseAlerts { get; set; } = new(MiddlewareStages.PostParseInputPreBindValues);
-    }
+    public static MiddlewareStep NewerReleaseAlerts { get; set; } = new(MiddlewareStages.PostParseInputPreBindValues);
 }

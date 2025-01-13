@@ -1,9 +1,8 @@
 ﻿using CommandDotNet.Execution;
 
-namespace CommandDotNet.DataAnnotations
+namespace CommandDotNet.DataAnnotations;
+
+public static class MiddlewareSteps
 {
-    public static class MiddlewareSteps
-    {
-        public static MiddlewareStep DataAnnotations { get; set; } = Execution.MiddlewareSteps.ValidateArity - 1100;
-    }
+    public static MiddlewareStep DataAnnotations { get; set; } = Execution.MiddlewareSteps.ValidateArity - 1100;
 }

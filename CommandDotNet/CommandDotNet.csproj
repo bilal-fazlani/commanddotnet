@@ -5,6 +5,7 @@
     <ReleaseNotes>https://commanddotnet.bilal-fazlani.com/releasenotes/commanddotnet/</ReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" />
     <PackageReference Include="LibLog">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -4,163 +4,162 @@ using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests.Arguments
+namespace CommandDotNet.Tests.FeatureTests.Arguments;
+
+public class ArgumentModeTests
 {
-    public class ArgumentModeTests
+    private static readonly AppSettings OperandMode = TestAppSettings.BasicHelp.Clone(a => a.Arguments.DefaultArgumentMode = ArgumentMode.Operand);
+    private static readonly AppSettings OptionMode = TestAppSettings.BasicHelp.Clone(a => a.Arguments.DefaultArgumentMode = ArgumentMode.Option);
+
+    public ArgumentModeTests(ITestOutputHelper output)
     {
-        private static readonly AppSettings OperandMode = TestAppSettings.BasicHelp.Clone(a => a.Arguments.DefaultArgumentMode = ArgumentMode.Operand);
-        private static readonly AppSettings OptionMode = TestAppSettings.BasicHelp.Clone(a => a.Arguments.DefaultArgumentMode = ArgumentMode.Option);
+        Ambient.Output = output;
+    }
 
-        public ArgumentModeTests(ITestOutputHelper output)
+    [Fact]
+    public void GivenOperandMode_InInterceptor_NonAttributedParamsDefaultTo_Operand()
+    {
+        new AppRunner<App>(OperandMode).Verify(new Scenario
         {
-            Ambient.Output = output;
-        }
-
-        [Fact]
-        public void GivenOperandMode_InInterceptor_NonAttributedParamsDefaultTo_Operand()
-        {
-            new AppRunner<App>(OperandMode).Verify(new Scenario
+            When = {Args = "-h"},
+            Then =
             {
-                When = {Args = "-h"},
-                Then =
+                OutputNotContainsTexts = { "Arguments" },
+                OutputContainsTexts =
                 {
-                    OutputNotContainsTexts = { "Arguments" },
-                    OutputContainsTexts =
-                    {
-                        @"Options:
+                    @"Options:
   --ctorDefault
   --ctorOption"
-                    }
                 }
-            });
-        }
+            }
+        });
+    }
 
-        [Fact]
-        public void GivenOperandMode_InMethod_NonAttributedParamsDefaultTo_Operand()
+    [Fact]
+    public void GivenOperandMode_InMethod_NonAttributedParamsDefaultTo_Operand()
+    {
+        new AppRunner<App>(OperandMode).Verify(new Scenario
         {
-            new AppRunner<App>(OperandMode).Verify(new Scenario
+            When = {Args = "Method -h"},
+            Then =
             {
-                When = {Args = "Method -h"},
-                Then =
+                OutputContainsTexts =
                 {
-                    OutputContainsTexts =
-                    {
-                        @"Arguments:
+                    @"Arguments:
   default
   operand",
-                        @"Options:
+                    @"Options:
   --option"
-                    }
                 }
-            });
-        }
+            }
+        });
+    }
 
-        [Fact]
-        public void GivenOperandMode_InModel_NonAttributedParamsDefaultTo_Operand()
+    [Fact]
+    public void GivenOperandMode_InModel_NonAttributedParamsDefaultTo_Operand()
+    {
+        new AppRunner<App>(OperandMode).Verify(new Scenario
         {
-            new AppRunner<App>(OperandMode).Verify(new Scenario
+            When = {Args = "Model -h"},
+            Then =
             {
-                When = {Args = "Model -h"},
-                Then =
+                OutputContainsTexts =
                 {
-                    OutputContainsTexts =
-                    {
-                        @"Arguments:
+                    @"Arguments:
   Default
   Operand",
-                        @"Options:
+                    @"Options:
   --Option"
-                    }
                 }
-            });
-        }
+            }
+        });
+    }
 
-        [Fact]
-        public void GivenOptionMode_InInterceptor_NonAttributedParamsDefaultTo_Option()
+    [Fact]
+    public void GivenOptionMode_InInterceptor_NonAttributedParamsDefaultTo_Option()
+    {
+        new AppRunner<App>(OptionMode).Verify(new Scenario
         {
-            new AppRunner<App>(OptionMode).Verify(new Scenario
+            When = {Args = "-h"},
+            Then =
             {
-                When = {Args = "-h"},
-                Then =
+                OutputNotContainsTexts = { "Arguments" },
+                OutputContainsTexts =
                 {
-                    OutputNotContainsTexts = { "Arguments" },
-                    OutputContainsTexts =
-                    {
-                        @"Options:
+                    @"Options:
   --ctorDefault
   --ctorOption"
-                    }
                 }
-            });
-        }
+            }
+        });
+    }
 
-        [Fact]
-        public void GivenOptionMode_InMethod_NonAttributedParamsDefaultTo_Option()
+    [Fact]
+    public void GivenOptionMode_InMethod_NonAttributedParamsDefaultTo_Option()
+    {
+        new AppRunner<App>(OptionMode).Verify(new Scenario
         {
-            new AppRunner<App>(OptionMode).Verify(new Scenario
+            When = {Args = "Method -h"},
+            Then =
             {
-                When = {Args = "Method -h"},
-                Then =
+                OutputContainsTexts =
                 {
-                    OutputContainsTexts =
-                    {
-                        @"Arguments:
+                    @"Arguments:
   operand",
-                        @"Options:
+                    @"Options:
   --default
   --option"
-                    }
                 }
-            });
-        }
+            }
+        });
+    }
 
-        [Fact]
-        public void GivenOptionMode_InModel_NonAttributedParamsDefaultTo_Option()
+    [Fact]
+    public void GivenOptionMode_InModel_NonAttributedParamsDefaultTo_Option()
+    {
+        new AppRunner<App>(OptionMode).Verify(new Scenario
         {
-            new AppRunner<App>(OptionMode).Verify(new Scenario
+            When = {Args = "Model -h"},
+            Then =
             {
-                When = {Args = "Model -h"},
-                Then =
+                OutputContainsTexts =
                 {
-                    OutputContainsTexts =
-                    {
-                        @"Arguments:
+                    @"Arguments:
   Operand",
-                        @"Options:
+                    @"Options:
   --Default
   --Option"
-                    }
                 }
-            });
-        }
+            }
+        });
+    }
 
-        private class App
+    private class App
+    {
+        public Task<int> Middleware(CommandContext context, ExecutionDelegate next, string ctorDefault, [Option] string ctorOption)
         {
-            public Task<int> Middleware(CommandContext context, ExecutionDelegate next, string ctorDefault, [Option] string ctorOption)
-            {
-                return next(context);
-            }
-
-            public void Model(Model model)
-            {
-            }
-
-            public void Method(string @default, [Operand] string operand, [Option] string option)
-            {
-            }
+            return next(context);
         }
 
-        private class Model : IArgumentModel
+        public void Model(Model model)
         {
-            // using OrderByPositionInClass allows this to be either option or operand based on default mode
-            // it's unlikely this will every be used like this since it doesn't seem to make sense to define an 
-            // argument as option or operand depending on the setting.
-            [OrderByPositionInClass]
-            public string Default { get; set; } = null!;
-            [Operand]
-            public string Operand { get; set; } = null!;
-            [Option]
-            public string Option { get; set; } = null!;
         }
+
+        public void Method(string @default, [Operand] string operand, [Option] string option)
+        {
+        }
+    }
+
+    private class Model : IArgumentModel
+    {
+        // using OrderByPositionInClass allows this to be either option or operand based on default mode
+        // it's unlikely this will every be used like this since it doesn't seem to make sense to define an 
+        // argument as option or operand depending on the setting.
+        [OrderByPositionInClass]
+        public string Default { get; set; } = null!;
+        [Operand]
+        public string Operand { get; set; } = null!;
+        [Option]
+        public string Option { get; set; } = null!;
     }
 }

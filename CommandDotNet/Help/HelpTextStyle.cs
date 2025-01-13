@@ -1,8 +1,7 @@
-﻿namespace CommandDotNet.Help
+﻿namespace CommandDotNet.Help;
+
+public enum HelpTextStyle
 {
-    public enum HelpTextStyle
-    {
-        Basic = 0,
-        Detailed = 1
-    }
+    Basic = 0,
+    Detailed = 1
 }

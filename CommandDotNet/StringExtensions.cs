@@ -2,26 +2,25 @@
 using System.Linq;
 using CommandDotNet.Extensions;
 
-namespace CommandDotNet
+namespace CommandDotNet;
+
+internal static class StringExtensions
 {
-    internal static class StringExtensions
-    {
-        internal static bool IsNullOrEmpty(this string? value) => 
-            string.IsNullOrEmpty(value);
+    internal static bool IsNullOrEmpty(this string? value) => 
+        string.IsNullOrEmpty(value);
 
-        internal static bool IsNullOrWhitespace(this string? value) => 
-            string.IsNullOrWhiteSpace(value);
+    internal static bool IsNullOrWhitespace(this string? value) => 
+        string.IsNullOrWhiteSpace(value);
 
-        internal static string? UnlessNullOrWhitespace(this string? value, Func<string, string?>? map = null) =>
-            value.IsNullOrWhitespace()
-                ? null
-                : map == null
-                    ? value
-                    : map(value!);
+    internal static string? UnlessNullOrWhitespace(this string? value, Func<string, string?>? map = null) =>
+        value.IsNullOrWhitespace()
+            ? null
+            : map == null
+                ? value
+                : map(value!);
 
-        internal static string[] SplitIntoLines(this string text, StringSplitOptions stringSplitOptions = StringSplitOptions.None) =>
-            text.Split(new[] { "\r\n", "\r", "\n" }, stringSplitOptions);
+    internal static string[] SplitIntoLines(this string text, StringSplitOptions stringSplitOptions = StringSplitOptions.None) =>
+        text.Split(["\r\n", "\r", "\n"], stringSplitOptions);
 
-        internal static string Repeat(this string value, int count) => Enumerable.Repeat(value, count).ToCsv("");
-    }
+    internal static string Repeat(this string value, int count) => Enumerable.Repeat(value, count).ToCsv("");
 }

@@ -1,8 +1,10 @@
 using System;
 using CommandDotNet.Extensions;
+using JetBrains.Annotations;
 
 namespace CommandDotNet;
 
+[PublicAPI]
 public class LocalizationAppSettings : IIndentableToString
 {
     /// <summary>When specified, this function will be used to localize user output from the framework</summary>
@@ -18,13 +20,7 @@ public class LocalizationAppSettings : IIndentableToString
     /// </summary>
     public bool UseMemberNamesAsKeys { get; set; }
     
-    public override string ToString()
-    {
-        return ToString(new Indent());
-    }
+    public override string ToString() => ToString(new Indent());
 
-    public string ToString(Indent indent)
-    {
-        return this.ToStringFromPublicProperties(indent);
-    }
+    public string ToString(Indent indent) => this.ToStringFromPublicProperties(indent);
 }

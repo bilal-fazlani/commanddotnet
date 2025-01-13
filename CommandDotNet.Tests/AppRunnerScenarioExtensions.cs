@@ -4,38 +4,37 @@ using CommandDotNet.Execution;
 using CommandDotNet.TestTools;
 using CommandDotNet.TestTools.Scenarios;
 
-namespace CommandDotNet.Tests
+namespace CommandDotNet.Tests;
+
+public static class AppRunnerScenarioExtensions
 {
-    public static class AppRunnerScenarioExtensions
+    public static AppRunner StopAfter(this AppRunner runner, MiddlewareStep step)
+        => runner.Configure(cfg => cfg.UseMiddleware((_, _) => ExitCodes.SuccessAsync, step+1));
+
+    public static AppRunner StopAfter(this AppRunner runner, MiddlewareStages stage)
+        => runner.StopAfter(new MiddlewareStep(stage));
+
+    public static AppRunnerResult RunInMem(
+        this AppRunner runner,
+        string args,
+        Func<ITestConsole, string>? onReadLine = null,
+        IEnumerable<string>? pipedInput = null)
     {
-        public static AppRunner StopAfter(this AppRunner runner, MiddlewareStep step)
-            => runner.Configure(cfg => cfg.UseMiddleware((_, _) => ExitCodes.SuccessAsync, step+1));
+        return runner.RunInMem(args, Ambient.WriteLine, onReadLine, pipedInput);
+    }
 
-        public static AppRunner StopAfter(this AppRunner runner, MiddlewareStages stage)
-            => runner.StopAfter(new MiddlewareStep(stage));
+    public static AppRunnerResult RunInMem(
+        this AppRunner runner,
+        string[] args,
+        Func<ITestConsole, string>? onReadLine = null,
+        IEnumerable<string>? pipedInput = null)
+    {
+        return runner.RunInMem(args, Ambient.WriteLine, onReadLine, pipedInput);
+    }
 
-        public static AppRunnerResult RunInMem(
-            this AppRunner runner,
-            string args,
-            Func<ITestConsole, string>? onReadLine = null,
-            IEnumerable<string>? pipedInput = null)
-        {
-            return runner.RunInMem(args, Ambient.WriteLine, onReadLine, pipedInput);
-        }
-
-        public static AppRunnerResult RunInMem(
-            this AppRunner runner,
-            string[] args,
-            Func<ITestConsole, string>? onReadLine = null,
-            IEnumerable<string>? pipedInput = null)
-        {
-            return runner.RunInMem(args, Ambient.WriteLine, onReadLine, pipedInput);
-        }
-
-        public static AppRunnerResult Verify(this AppRunner appRunner, IScenario scenario)
-        {
-            // use Test.Default to force testing of TestConfig.GetDefaultFromSubClass()
-            return appRunner.Verify(Ambient.WriteLine, TestConfig.Default, scenario);
-        }
+    public static AppRunnerResult Verify(this AppRunner appRunner, IScenario scenario)
+    {
+        // use Test.Default to force testing of TestConfig.GetDefaultFromSubClass()
+        return appRunner.Verify(Ambient.WriteLine, TestConfig.Default, scenario);
     }
 }

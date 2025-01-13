@@ -1,30 +1,22 @@
-﻿using System;
+﻿using CommandDotNet.Extensions;
+using JetBrains.Annotations;
 
-namespace CommandDotNet
+namespace CommandDotNet;
+
+/// <summary>The values provided as the default for an argument</summary>
+[PublicAPI]
+public class ArgumentDefault(string source, string key, object value)
 {
-    /// <summary>The values provided as the default for an argument</summary>
-    public class ArgumentDefault
-    {
-        /// <summary>The source of the default value</summary>
-        public string Source { get; }
+    /// <summary>The source of the default value</summary>
+    public string Source { get; } = source.ThrowIfNull();
 
-        /// <summary>The key of the default value</summary>
-        public string Key { get; }
+    /// <summary>The key of the default value</summary>
+    public string Key { get; } = key.ThrowIfNull();
 
-        /// <summary>The text values</summary>
-        public object Value { get; }
+    /// <summary>The text values</summary>
+    public object Value { get; } = value.ThrowIfNull();
 
-        public ArgumentDefault(string source, string key, object value)
-        {
-            Source = source ?? throw new ArgumentNullException(nameof(source));
-            Key = key ?? throw new ArgumentNullException(nameof(key));
-            Value = value ?? throw new ArgumentNullException(nameof(value));
-        }
-
-        public override string ToString()
-        {
-            // do not include value in case it's a password
-            return $"{nameof(ArgumentDefault)}: {Source}.{Key}";
-        }
-    }
+    public override string ToString() =>
+        // do not include value in case it's a password
+        $"{nameof(ArgumentDefault)}: {Source}.{Key}";
 }

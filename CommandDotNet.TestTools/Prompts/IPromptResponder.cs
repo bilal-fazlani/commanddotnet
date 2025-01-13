@@ -1,9 +1,8 @@
 using System;
 
-namespace CommandDotNet.TestTools.Prompts
+namespace CommandDotNet.TestTools.Prompts;
+
+public interface IPromptResponder
 {
-    public interface IPromptResponder
-    {
-        ConsoleKeyInfo OnReadKey(ITestConsole testConsole);
-    }
+    ConsoleKeyInfo OnReadKey(ITestConsole testConsole);
 }

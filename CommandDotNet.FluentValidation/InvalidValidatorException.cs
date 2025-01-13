@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace CommandDotNet.FluentValidation
+namespace CommandDotNet.FluentValidation;
+
+internal class InvalidValidatorException : Exception
 {
-    internal class InvalidValidatorException : Exception
-    {
-        public InvalidValidatorException(string message, Exception exception) : base(message, exception)
-        { }
-    }
+    public InvalidValidatorException(string message, Exception exception) : base(message, exception)
+    { }
 }

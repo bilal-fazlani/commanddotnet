@@ -1,25 +1,25 @@
 using CommandDotNet.TestTools.Scenarios;
 using NUnit.Framework;
 
-namespace CommandDotNet.Example.Tests
+namespace CommandDotNet.Example.Tests;
+
+[TestFixture]
+public class ExampleCommandTests
 {
-    [TestFixture]
-    public class ExampleCommandTests
+    [Test]
+    public void Help_Should_Include_ExtendedHelpText()
     {
-        [Test]
-        public void Help_Should_Include_ExtendedHelpText()
-        {
-            // Must convert NewLine to what was given
-            // to the ExtendedHelpText property
-            Program.GetAppRunner()
-                .Verify(new Scenario
+        // Must convert NewLine to what was given
+        // to the ExtendedHelpText property
+        Program.GetAppRunner()
+            .Verify(new Scenario
+            {
+                When = {Args = null},
+                Then =
                 {
-                    When = {Args = null},
-                    Then =
+                    OutputContainsTexts =
                     {
-                        OutputContainsTexts =
-                        {
-                            @"
+                        @"
 Directives:
   [debug] to attach a debugger to the app
   [parse] to output how the inputs were tokenized
@@ -29,28 +29,27 @@ Directives:
 directives must be specified before any commands and arguments.
 
 Example: example_app [debug] [parse] [log:info] math".Replace("\r\n", "\n")
-                        }
                     }
-                });
-        }
+                }
+            });
+    }
 
-        [Test]
-        public void Should_Include_Version_Option()
-        {
-            // The directives section from the command must match
-            Program.GetAppRunner()
-                .Verify(new Scenario
+    [Test]
+    public void Should_Include_Version_Option()
+    {
+        // The directives section from the command must match
+        Program.GetAppRunner()
+            .Verify(new Scenario
+            {
+                When = { Args = null },
+                Then =
                 {
-                    When = { Args = null },
-                    Then =
+                    OutputContainsTexts =
                     {
-                        OutputContainsTexts =
-                        {
-                            @"-v | --version
+                        @"-v | --version
   Show version information",
-                        }
                     }
-                });
-        }
+                }
+            });
     }
 }

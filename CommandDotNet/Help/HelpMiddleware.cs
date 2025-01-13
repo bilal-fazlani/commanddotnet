@@ -2,85 +2,84 @@
 using CommandDotNet.Builders;
 using CommandDotNet.Execution;
 
-namespace CommandDotNet.Help
+namespace CommandDotNet.Help;
+
+internal static class HelpMiddleware
 {
-    internal static class HelpMiddleware
+    internal static AppRunner UseHelpMiddleware(this AppRunner appRunner)
     {
-        internal static AppRunner UseHelpMiddleware(this AppRunner appRunner)
+        return appRunner.Configure(c =>
         {
-            return appRunner.Configure(c =>
-            {
-                c.UseMiddleware(CheckIfShouldShowHelp, MiddlewareSteps.Help.CheckIfShouldShowHelp);
-                c.UseMiddleware(PrintHelp, MiddlewareSteps.Help.PrintHelpOnExit);
-                c.BuildEvents.OnCommandCreated += AddHelpOption;
-            });
+            c.UseMiddleware(CheckIfShouldShowHelp, MiddlewareSteps.Help.CheckIfShouldShowHelp);
+            c.UseMiddleware(PrintHelp, MiddlewareSteps.Help.PrintHelpOnExit);
+            c.BuildEvents.OnCommandCreated += AddHelpOption;
+        });
+    }
+
+    private static void AddHelpOption(BuildEvents.CommandCreatedEventArgs args)
+    {
+        var helpOptionName = Resources.A.Command_help;
+        if (args.CommandBuilder.Command.ContainsArgumentNode(helpOptionName))
+        {
+            return;
         }
 
-        private static void AddHelpOption(BuildEvents.CommandCreatedEventArgs args)
+        var appSettingsHelp = args.CommandContext.AppConfig.AppSettings.Help;
+
+        var option = new Option(helpOptionName, 'h',
+            TypeInfo.Flag, ArgumentArity.Zero, BooleanMode.Implicit,
+            aliases: ["?"],
+            definitionSource: typeof(HelpMiddleware).FullName)
         {
-            var helpOptionName = Resources.A.Command_help;
-            if (args.CommandBuilder.Command.ContainsArgumentNode(helpOptionName))
-            {
-                return;
-            }
+            Description = Resources.A.Command_help_description,
+            IsMiddlewareOption = true,
+            Hidden = !appSettingsHelp.PrintHelpOption
+        };
 
-            var appSettingsHelp = args.CommandContext.AppConfig.AppSettings.Help;
+        args.CommandBuilder.AddArgument(option);
+    }
 
-            var option = new Option(helpOptionName, 'h',
-                TypeInfo.Flag, ArgumentArity.Zero, BooleanMode.Implicit,
-                aliases: new[] { "?" },
-                definitionSource: typeof(HelpMiddleware).FullName)
-            {
-                Description = Resources.A.Command_help_description,
-                IsMiddlewareOption = true,
-                Hidden = !appSettingsHelp.PrintHelpOption
-            };
+    private static Task<int> CheckIfShouldShowHelp(CommandContext ctx, ExecutionDelegate next)
+    {
+        var parseResult = ctx.ParseResult!;
+        var targetCommand = parseResult.TargetCommand;
 
-            args.CommandBuilder.AddArgument(option);
+        if (parseResult.ParseError is not null)
+        {
+            var console = ctx.Console;
+            console.Error.WriteLine(parseResult.ParseError.Message);
+            console.Error.WriteLine();
+            ctx.ShowHelpOnExit = true;
+            return ExitCodes.ErrorAsync;
         }
 
-        private static Task<int> CheckIfShouldShowHelp(CommandContext ctx, ExecutionDelegate next)
+        if (parseResult.HelpWasRequested())
         {
-            var parseResult = ctx.ParseResult!;
-            var targetCommand = parseResult.TargetCommand;
-
-            if (parseResult.ParseError is { })
-            {
-                var console = ctx.Console;
-                console.Error.WriteLine(parseResult.ParseError.Message);
-                console.Error.WriteLine();
-                ctx.ShowHelpOnExit = true;
-                return ExitCodes.ErrorAsync;
-            }
-
-            if (parseResult.HelpWasRequested())
-            {
-                ctx.ShowHelpOnExit = true;
-                return ExitCodes.SuccessAsync;
-            }
-
-            if (!targetCommand.IsExecutable)
-            {
-                var console = ctx.Console;
-                console.Error.WriteLine(Resources.A.Parse_Required_command_was_not_provided);
-                console.Error.WriteLine();
-                ctx.ShowHelpOnExit = true;
-                return ExitCodes.ErrorAsync;
-            }
-
-            return next(ctx);
+            ctx.ShowHelpOnExit = true;
+            return ExitCodes.SuccessAsync;
         }
 
-        private static Task<int> PrintHelp(CommandContext ctx, ExecutionDelegate next)
+        if (!targetCommand.IsExecutable)
         {
-            var result = next(ctx);
-
-            if (ctx.ShowHelpOnExit)
-            {
-                ctx.PrintHelp();
-            }
-
-            return result;
+            var console = ctx.Console;
+            console.Error.WriteLine(Resources.A.Parse_Required_command_was_not_provided);
+            console.Error.WriteLine();
+            ctx.ShowHelpOnExit = true;
+            return ExitCodes.ErrorAsync;
         }
+
+        return next(ctx);
+    }
+
+    private static Task<int> PrintHelp(CommandContext ctx, ExecutionDelegate next)
+    {
+        var result = next(ctx);
+
+        if (ctx.ShowHelpOnExit)
+        {
+            ctx.PrintHelp();
+        }
+
+        return result;
     }
 }

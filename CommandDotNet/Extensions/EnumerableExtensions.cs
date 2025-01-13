@@ -3,107 +3,89 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CommandDotNet.Extensions
+namespace CommandDotNet.Extensions;
+
+internal static class EnumerableExtensions
 {
-    internal static class EnumerableExtensions
+    internal static bool IsNullOrEmpty<T>(this IEnumerable<T>? items) => items == null || !items.Any();
+
+    internal static bool IsEmpty<T>(this IEnumerable<T> items) => !items.Any();
+
+    internal static IEnumerable<T> ToEnumerable<T>(this T instance)
     {
-        internal static bool IsNullOrEmpty<T>(this IEnumerable<T>? items) => items == null || !items.Any();
+        yield return instance;
+    }
 
-        internal static bool IsEmpty<T>(this IEnumerable<T> items) => !items.Any();
+    public static ICollection<T> ToCollection<T>(this IEnumerable<T> items) =>
+        items as ICollection<T> ?? items.ToList();
 
-        internal static IEnumerable<T> ToEnumerable<T>(this T instance)
+    public static IReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> items) => 
+        items as IReadOnlyCollection<T> ?? items.ToList().AsReadOnly();
+
+    public static string ToCsv(this IEnumerable<string?> items, string separator = ",") => 
+        string.Join(separator, items);
+
+    public static string ToCsv<T>(this IEnumerable<T> items, string separator = ",") => 
+        items.Select(i => i?.ToString()).ToCsv(separator);
+
+    internal static string ToCsv(this IEnumerable items, string separator = ",") => 
+        items.Cast<object>().ToCsv(separator);
+
+    /// <summary>Joins the string into a sorted delimited string. Useful for logging.</summary>
+    public static string ToOrderedCsv(this IEnumerable<string?> items, string separator = ",") => 
+        items.OrderBy(i => i).ToCsv(separator);
+
+    /// <summary>Joins the object.ToString() into a sorted delimited string. Useful for logging.</summary>
+    public static string ToOrderedCsv<T>(this IEnumerable<T> items, string separator = ",") => 
+        items.Select(i => i?.ToString()).ToOrderedCsv(separator);
+
+    internal static string ToOrderedCsv(this IEnumerable items, string separator = ",") => 
+        items.Cast<object>().ToOrderedCsv(separator);
+
+    internal static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
+    {
+        foreach (var item in items)
         {
-            yield return instance;
+            action(item);
         }
+    }
 
-        public static ICollection<T> ToCollection<T>(this IEnumerable<T> items) => items as ICollection<T> ?? items.ToList();
-
-        public static IReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> items) => items as IReadOnlyCollection<T> ?? items.ToList().AsReadOnly();
-
-        public static string ToCsv(this IEnumerable<string?> items, string separator = ",")
+    internal static IEnumerable<string> EnumeratePipedInput(this Func<string?> readLine)
+    {
+        while (true)
         {
-            return string.Join(separator, items);
-        }
-
-        public static string ToCsv<T>(this IEnumerable<T> items, string separator = ",")
-        {
-            return items.Select(i => i?.ToString()).ToCsv(separator);
-        }
-
-        internal static string ToCsv(this IEnumerable items, string separator = ",")
-        {
-            return items.Cast<object>().ToCsv(separator);
-        }
-
-        /// <summary>Joins the string into a sorted delimited string. Useful for logging.</summary>
-        public static string ToOrderedCsv(this IEnumerable<string?> items, string separator = ",")
-        {
-            return items.OrderBy(i => i).ToCsv(separator);
-        }
-
-        /// <summary>Joins the object.ToString() into a sorted delimited string. Useful for logging.</summary>
-        public static string ToOrderedCsv<T>(this IEnumerable<T> items, string separator = ",")
-        {
-            return items.Select(i => i?.ToString()).ToOrderedCsv(separator);
-        }
-
-        internal static string ToOrderedCsv(this IEnumerable items, string separator = ",")
-        {
-            return items.Cast<object>().ToOrderedCsv(separator);
-        }
-
-        internal static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
-        {
-            foreach (var item in items)
+            var line = readLine();
+            if (line == null)
             {
-                action(item);
+                yield break;
             }
-        }
 
-        internal static IEnumerable<string> EnumeratePipedInput(this Func<string?> readLine)
-        {
-            while (true)
-            {
-                var line = readLine();
-                if (line == null)
-                {
-                    yield break;
-                }
-
-                yield return line;
-            }
+            yield return line;
         }
+    }
         
-        internal static T? SingleOrDefaultOrThrow<T>(this IEnumerable<T?> source, Action throwEx) where T: class?
+    internal static T? SingleOrDefaultOrThrow<T>(this IEnumerable<T?> source, Action throwEx) where T: class?
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(throwEx);
+
+        if (source is ICollection<T> list)
         {
-            if (source == null)
+            switch (list.Count)
             {
-                throw new ArgumentNullException(nameof(source));
+                case 0: return null;
+                case 1: return list.First();
             }
-
-            if (throwEx == null)
-            {
-                throw new ArgumentNullException(nameof(throwEx));
-            }
-
-            if (source is ICollection<T> list)
-            {
-                switch (list.Count)
-                {
-                    case 0: return null;
-                    case 1: return list.First();
-                }
-            }
-            else
-            {
-                using var e = source.GetEnumerator();
-                if (!e.MoveNext()) return null;
-                var result = e.Current;
-                if (!e.MoveNext()) return result;
-            }
-
-            throwEx();
-            return null;
         }
+        else
+        {
+            using var e = source.GetEnumerator();
+            if (!e.MoveNext()) return null;
+            var result = e.Current;
+            if (!e.MoveNext()) return result;
+        }
+
+        throwEx();
+        return null;
     }
 }

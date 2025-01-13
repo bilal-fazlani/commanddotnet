@@ -1,14 +1,8 @@
 ﻿using System;
 
-namespace CommandDotNet.Execution
-{
-    public class OnRunCompletedEventArgs : EventArgs
-    {
-        public CommandContext CommandContext { get; }
+namespace CommandDotNet.Execution;
 
-        public OnRunCompletedEventArgs(CommandContext commandContext)
-        {
-            CommandContext = commandContext ?? throw new ArgumentNullException(nameof(commandContext));
-        }
-    }
+public class OnRunCompletedEventArgs(CommandContext commandContext) : EventArgs
+{
+    public CommandContext CommandContext { get; } = commandContext ?? throw new ArgumentNullException(nameof(commandContext));
 }

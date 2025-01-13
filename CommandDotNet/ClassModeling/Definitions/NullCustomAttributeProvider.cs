@@ -1,29 +1,19 @@
 ﻿using System;
 using System.Reflection;
 
-namespace CommandDotNet.ClassModeling.Definitions
+namespace CommandDotNet.ClassModeling.Definitions;
+
+internal class NullCustomAttributeProvider : ICustomAttributeProvider
 {
-    public class NullCustomAttributeProvider : ICustomAttributeProvider
+    internal static readonly NullCustomAttributeProvider Instance = new();
+
+    private NullCustomAttributeProvider()
     {
-        internal static readonly NullCustomAttributeProvider Instance = new();
-
-        private NullCustomAttributeProvider()
-        {
-        }
-
-        public object[] GetCustomAttributes(bool inherit)
-        {
-            return Array.Empty<object>();
-        }
-
-        public object[] GetCustomAttributes(Type attributeType, bool inherit)
-        {
-            return Array.Empty<object>();
-        }
-
-        public bool IsDefined(Type attributeType, bool inherit)
-        {
-            return false;
-        }
     }
+
+    public object[] GetCustomAttributes(bool inherit) => [];
+
+    public object[] GetCustomAttributes(Type attributeType, bool inherit) => [];
+
+    public bool IsDefined(Type attributeType, bool inherit) => false;
 }

@@ -1,135 +1,139 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using JetBrains.Annotations;
 
-namespace CommandDotNet.Tokens
+namespace CommandDotNet.Tokens;
+
+[PublicAPI]
+public class CommandLineStringSplitter : ICommandLineStringSplitter
 {
-    public class CommandLineStringSplitter : ICommandLineStringSplitter
+    // copied from System.CommandLine
+    // https://github.com/dotnet/command-line-api/blob/master/src/System.CommandLine/Parsing/CommandLineStringSplitter.cs
+    // now at https://github.com/dotnet/command-line-api/blob/main/src/System.CommandLine/Parsing/CliParser.cs
+
+    internal static readonly ICommandLineStringSplitter Instance = new CommandLineStringSplitter();
+
+    private enum Boundary
     {
-        // copied from System.CommandLine
-        // https://github.com/dotnet/command-line-api/blob/master/src/System.CommandLine/Parsing/CommandLineStringSplitter.cs
+        TokenStart,
+        WordEnd,
+        QuoteEnd
+    }
 
-        internal static readonly ICommandLineStringSplitter Instance = new CommandLineStringSplitter();
+    public string[] SplitToArray(string commandLine) => Split(commandLine).ToArray();
 
-        private enum Boundary
+    [SuppressMessage("ReSharper", "CognitiveComplexity", Justification = "Keeping somewhat inline with source")]
+    public IEnumerable<string> Split(string commandLine)
+    {
+        if (commandLine.IsNullOrEmpty())
         {
-            TokenStart,
-            WordEnd,
-            QuoteEnd
+            yield break;
         }
 
-        public string[] SplitToArray(string commandLine) => Split(commandLine).ToArray();
+        var memory = commandLine.ToCharArray();
 
-        public IEnumerable<string> Split(string commandLine)
+        var startTokenIndex = 0;
+
+        var pos = 0;
+
+        var seeking = Boundary.TokenStart;
+        int? skipQuoteAtIndex = null;
+
+        while (pos < memory.Length)
         {
-            if (commandLine.IsNullOrEmpty())
+            var c = memory[pos];
+
+            if (char.IsWhiteSpace(c))
             {
-                yield break;
-            }
-
-            var memory = commandLine.ToCharArray();
-
-            var startTokenIndex = 0;
-
-            var pos = 0;
-
-            var seeking = Boundary.TokenStart;
-            int? skipQuoteAtIndex = null;
-
-            while (pos < memory.Length)
-            {
-                var c = memory[pos];
-
-                if (char.IsWhiteSpace(c))
+                switch (seeking)
                 {
-                    switch (seeking)
-                    {
-                        case Boundary.WordEnd:
-                            yield return CurrentToken();
-                            startTokenIndex = pos;
-                            seeking = Boundary.TokenStart;
-                            break;
+                    case Boundary.WordEnd:
+                        yield return CurrentToken();
+                        startTokenIndex = pos;
+                        seeking = Boundary.TokenStart;
+                        break;
 
-                        case Boundary.TokenStart:
-                            startTokenIndex = pos;
-                            break;
+                    case Boundary.TokenStart:
+                        startTokenIndex = pos;
+                        break;
 
-                        case Boundary.QuoteEnd:
-                            break;
-                    }
-                }
-                else if (c == '\"')
-                {
-                    switch (seeking)
-                    {
-                        case Boundary.QuoteEnd:
-                            yield return CurrentToken();
-                            startTokenIndex = pos;
-                            seeking = Boundary.TokenStart;
-                            break;
-
-                        case Boundary.TokenStart:
-                            startTokenIndex = pos + 1;
-                            seeking = Boundary.QuoteEnd;
-                            break;
-
-                        case Boundary.WordEnd:
-                            seeking = Boundary.QuoteEnd;
-                            skipQuoteAtIndex = pos;
-                            break;
-                    }
-                }
-                else if (seeking == Boundary.TokenStart)
-                {
-                    seeking = Boundary.WordEnd;
-                    startTokenIndex = pos;
-                }
-
-                Advance();
-
-                if (IsAtEndOfInput())
-                {
-                    switch (seeking)
-                    {
-                        case Boundary.TokenStart:
-                            break;
-                        default:
-                            yield return CurrentToken();
-                            break;
-                    }
+                    case Boundary.QuoteEnd:
+                        break;
                 }
             }
-
-            void Advance() => pos++;
-
-            string CurrentToken()
+            else if (c == '\"')
             {
-                if (skipQuoteAtIndex == null)
+                switch (seeking)
                 {
-                    return commandLine.Substring(
-                        startTokenIndex,
-                        IndexOfEndOfToken());
-                }
-                else
-                {
-                    var beforeQuote = commandLine.Substring(
-                        startTokenIndex,
-                        skipQuoteAtIndex.Value - startTokenIndex);
+                    case Boundary.QuoteEnd:
+                        yield return CurrentToken();
+                        startTokenIndex = pos;
+                        seeking = Boundary.TokenStart;
+                        break;
 
-                    var indexOfCharAfterQuote = skipQuoteAtIndex.Value + 1;
+                    case Boundary.TokenStart:
+                        startTokenIndex = pos + 1;
+                        seeking = Boundary.QuoteEnd;
+                        break;
 
-                    var afterQuote = commandLine.Substring(
-                        indexOfCharAfterQuote,
-                        pos - skipQuoteAtIndex.Value - 1);
-
-                    skipQuoteAtIndex = null;
-
-                    return $"{beforeQuote}{afterQuote}";
+                    case Boundary.WordEnd:
+                        seeking = Boundary.QuoteEnd;
+                        skipQuoteAtIndex = pos;
+                        break;
                 }
             }
+            else if (seeking == Boundary.TokenStart)
+            {
+                seeking = Boundary.WordEnd;
+                startTokenIndex = pos;
+            }
 
-            int IndexOfEndOfToken() => pos - startTokenIndex;
+            Advance();
 
-            bool IsAtEndOfInput() => pos == memory.Length;
+            if (IsAtEndOfInput())
+            {
+                switch (seeking)
+                {
+                    case Boundary.TokenStart:
+                        break;
+                    default:
+                        yield return CurrentToken();
+                        break;
+                }
+            }
         }
+
+        void Advance() => pos++;
+
+        string CurrentToken()
+        {
+            if (skipQuoteAtIndex == null)
+            {
+                return commandLine.Substring(
+                    startTokenIndex,
+                    IndexOfEndOfToken());
+            }
+            else
+            {
+                var beforeQuote = commandLine.Substring(
+                    startTokenIndex,
+                    skipQuoteAtIndex.Value - startTokenIndex);
+
+                var indexOfCharAfterQuote = skipQuoteAtIndex.Value + 1;
+
+                var afterQuote = commandLine.Substring(
+                    indexOfCharAfterQuote,
+                    pos - skipQuoteAtIndex.Value - 1);
+
+                skipQuoteAtIndex = null;
+
+                return $"{beforeQuote}{afterQuote}";
+            }
+        }
+
+        int IndexOfEndOfToken() => pos - startTokenIndex;
+
+        bool IsAtEndOfInput() => pos == memory.Length;
     }
 }

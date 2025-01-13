@@ -5,27 +5,27 @@ using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests.Arguments
+namespace CommandDotNet.Tests.FeatureTests.Arguments;
+
+public class MixedDefinedAs_MethodParamsAndArgModel_Tests
 {
-    public class MixedDefinedAs_MethodParamsAndArgModel_Tests
+    private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
+    private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
+
+    public MixedDefinedAs_MethodParamsAndArgModel_Tests(ITestOutputHelper output)
     {
-        private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
-        private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
+        Ambient.Output = output;
+    }
 
-        public MixedDefinedAs_MethodParamsAndArgModel_Tests(ITestOutputHelper output)
+    [Fact]
+    public void BasicHelp_IncludesModelAndParamDefinedArgs()
+    {
+        new AppRunner<App>(BasicHelp).Verify(new Scenario
         {
-            Ambient.Output = output;
-        }
-
-        [Fact]
-        public void BasicHelp_IncludesModelAndParamDefinedArgs()
-        {
-            new AppRunner<App>(BasicHelp).Verify(new Scenario
+            When = {Args = "Do -h"},
+            Then =
             {
-                When = {Args = "Do -h"},
-                Then =
-                {
-                    Output = @"Usage: testhost.dll Do [options] <ModelArg> <paramArg> <paramArgList>
+                Output = @"Usage: testhost.dll Do [options] <ModelArg> <paramArg> <paramArgList>
 
 Arguments:
   ModelArg
@@ -37,17 +37,17 @@ Options:
   --ModelOptionList
   --paramOption
   --paramOptionList"
-                }
-            });
-        }
+            }
+        });
+    }
 
-        [Fact]
-        public void DetailedHelp_IncludesModelAndParamDefinedArgs()
+    [Fact]
+    public void DetailedHelp_IncludesModelAndParamDefinedArgs()
+    {
+        new AppRunner<App>(DetailedHelp).Verify(new Scenario
         {
-            new AppRunner<App>(DetailedHelp).Verify(new Scenario
-            {
-                When = {Args = "Do -h"},
-                Then = { Output = @"Usage: testhost.dll Do [options] <ModelArg> <paramArg> <paramArgList>
+            When = {Args = "Do -h"},
+            Then = { Output = @"Usage: testhost.dll Do [options] <ModelArg> <paramArg> <paramArgList>
 
 Arguments:
 
@@ -66,77 +66,76 @@ Options:
   --paramOption                 <TEXT>
 
   --paramOptionList (Multiple)  <TEXT>" }
-            });
-        }
+        });
+    }
 
-        [Fact]
-        public void Exec_MapsToAllArgs()
+    [Fact]
+    public void Exec_MapsToAllArgs()
+    {
+        new AppRunner<App>(BasicHelp).Verify(new Scenario
         {
-            new AppRunner<App>(BasicHelp).Verify(new Scenario
-            {
-                When = {Args = "Do --ModelOption moA --ModelOptionList moB --ModelOptionList moC " +
+            When = {Args = "Do --ModelOption moA --ModelOptionList moB --ModelOptionList moC " +
                            "--paramOption poA --paramOptionList poB --paramOptionList poC " +
                            "red green blue orange"},
-                Then =
-                {
-                    AssertContext = ctx => ctx.ParamValuesShouldBe(
-                        new Model
-                        {
-                            ModelOption = "moA",
-                            ModelOptionList = new List<string>{"moB", "moC"},
-                            ModelArg = "red"
-                        },
-                        "green",
-                        "poA",
-                        new List<string>{"poB", "poC"},
-                        new List<string>{"blue", "orange"})
-                }
-            });
-        }
-
-        [Fact]
-        public void Exec_OptionsCanBeIncludedAfterArguments()
-        {
-            new AppRunner<App>(BasicHelp).Verify(new Scenario
+            Then =
             {
-                When = {Args = "Do --paramOptionList poB --paramOptionList poC " +
+                AssertContext = ctx => ctx.ParamValuesShouldBe(
+                    new Model
+                    {
+                        ModelOption = "moA",
+                        ModelOptionList = ["moB", "moC"],
+                        ModelArg = "red"
+                    },
+                    "green",
+                    "poA",
+                    new List<string>{"poB", "poC"},
+                    new List<string>{"blue", "orange"})
+            }
+        });
+    }
+
+    [Fact]
+    public void Exec_OptionsCanBeIncludedAfterArguments()
+    {
+        new AppRunner<App>(BasicHelp).Verify(new Scenario
+        {
+            When = {Args = "Do --paramOptionList poB --paramOptionList poC " +
                            "red --paramOptionList poD green --paramOptionList poE " +
                            "blue --paramOptionList poF orange --paramOptionList poG"},
-                Then =
-                {
-                    AssertContext = ctx => ctx.ParamValuesShouldBe(
-                        new Model {ModelArg = "red"},
-                        "green",
-                        null,
-                        new List<string>{"poB", "poC", "poD", "poE", "poF", "poG"},
-                        new List<string>{"blue", "orange"})
-                }
-            });
-        }
-
-        private class App
-        {
-            public void Do(
-                Model model,
-                [Operand] string? paramArg,
-                [Option] string? paramOption,
-                [Option] List<string> paramOptionList,
-                [Operand] List<string> paramArgList)
+            Then =
             {
+                AssertContext = ctx => ctx.ParamValuesShouldBe(
+                    new Model {ModelArg = "red"},
+                    "green",
+                    null,
+                    new List<string>{"poB", "poC", "poD", "poE", "poF", "poG"},
+                    new List<string>{"blue", "orange"})
             }
-        }
+        });
+    }
 
-        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
-        private class Model : IArgumentModel
+    private class App
+    {
+        public void Do(
+            Model model,
+            [Operand] string? paramArg,
+            [Option] string? paramOption,
+            [Option] List<string> paramOptionList,
+            [Operand] List<string> paramArgList)
         {
-            [Operand]
-            public string? ModelArg { get; set; } = null!;
-
-            [Option]
-            public string? ModelOption { get; set; } = null!;
-
-            [Option]
-            public List<string>? ModelOptionList { get; set; } = null!;
         }
+    }
+
+    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
+    private class Model : IArgumentModel
+    {
+        [Operand]
+        public string? ModelArg { get; set; }
+
+        [Option]
+        public string? ModelOption { get; set; }
+
+        [Option]
+        public List<string>? ModelOptionList { get; set; }
     }
 }

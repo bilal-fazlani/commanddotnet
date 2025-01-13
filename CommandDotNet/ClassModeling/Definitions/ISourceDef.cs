@@ -1,10 +1,9 @@
 ﻿using CommandDotNet.Builders;
 
-namespace CommandDotNet.ClassModeling.Definitions
+namespace CommandDotNet.ClassModeling.Definitions;
+
+internal interface ISourceDef : ICustomAttributesContainer
 {
-    internal interface ISourceDef : ICustomAttributesContainer
-    {
-        string Name { get; }
-        string SourcePath { get; }
-    }
+    string Name { get; }
+    string SourcePath { get; }
 }

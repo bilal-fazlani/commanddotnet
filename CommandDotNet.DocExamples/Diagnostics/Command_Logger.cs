@@ -1,47 +1,47 @@
 using System;
 using System.Threading.Tasks;
-using NUnit.Framework;
 using CommandDotNet.Diagnostics;
 using CommandDotNet.Extensions;
 using CommandDotNet.TestTools;
 using FluentAssertions;
+using NUnit.Framework;
 
-namespace CommandDotNet.DocExamples.Diagnostics
+namespace CommandDotNet.DocExamples.Diagnostics;
+
+public class Command_Logger
 {
-    public class Command_Logger
+    public class Program_Default
     {
-        public class Program_Default
+        // begin-snippet: command_logger
+        public class Program
         {
-            // begin-snippet: command_logger
-            public class Program
-            {
-                static int Main(string[] args) => AppRunner.Run(args);
+            static int Main(string[] args) => AppRunner.Run(args);
 
-                public static AppRunner AppRunner =>
-                    new AppRunner<Program>().UseCommandLogger();
+            public static AppRunner AppRunner =>
+                new AppRunner<Program>().UseCommandLogger();
 
-                public void Add(IConsole console, int x, int y) => console.WriteLine(x + y);
-            }
-            // end-snippet
+            public void Add(IConsole console, int x, int y) => console.WriteLine(x + y);
         }
+        // end-snippet
+    }
 
-        private static readonly TestEnvironment TestEnvironment = new()
-        {
-            FrameworkDescription = ".NET 5.0.13",
-            OSDescription = "Microsoft Windows 10.0.12345",
-            MachineName = "my-machine",
-            UserName = "my-machine\\username"
-        };
+    private static readonly TestEnvironment TestEnvironment = new()
+    {
+        FrameworkDescription = ".NET 5.0.13",
+        OSDescription = "Microsoft Windows 10.0.12345",
+        MachineName = "my-machine",
+        UserName = "my-machine\\username"
+    };
 
-        public static BashSnippet Default = new ("command_logger_default_no_directive", 
-            Program_Default.Program.AppRunner.UseTestEnv(TestEnvironment), 
-            "example.exe", "Add 1 1", 0,
-            @"2");
+    public static BashSnippet Default = new ("command_logger_default_no_directive", 
+        Program_Default.Program.AppRunner.UseTestEnv(TestEnvironment), 
+        "example.exe", "Add 1 1", 0,
+        @"2");
 
-        public static BashSnippet Default_Directive = new("command_logger_default_directive",
-            Program_Default.Program.AppRunner.UseTestEnv(TestEnvironment),
-            "example.exe", "[cmdlog] Add 1 1", 0,
-            @"
+    public static BashSnippet Default_Directive = new("command_logger_default_directive",
+        Program_Default.Program.AppRunner.UseTestEnv(TestEnvironment),
+        "example.exe", "[cmdlog] Add 1 1", 0,
+        @"
 ***************************************
 Original input:
   [cmdlog] Add 1 1
@@ -66,27 +66,27 @@ OS version    = Microsoft Windows 10.0.12345
 ***************************************
 2");
 
-        public class Program_Include_MachineAndUser
+    public class Program_Include_MachineAndUser
+    {
+        public class Program
         {
-            public class Program
-            {
-                static int Main(string[] args) => AppRunner.Run(args);
+            static int Main(string[] args) => AppRunner.Run(args);
 
-                public static AppRunner AppRunner => new AppRunner<Program>()
-                    // begin-snippet: command_logger_include_machine_and_user
-                    .UseCommandLogger(
-                        excludeSystemInfo: true,
-                        includeMachineAndUser: true);
-                // end-snippet
+            public static AppRunner AppRunner => new AppRunner<Program>()
+                // begin-snippet: command_logger_include_machine_and_user
+                .UseCommandLogger(
+                    excludeSystemInfo: true,
+                    includeMachineAndUser: true);
+            // end-snippet
 
-                public void Add(IConsole console, int x, int y) => console.WriteLine(x + y);
-            }
+            public void Add(IConsole console, int x, int y) => console.WriteLine(x + y);
         }
+    }
 
-        public static BashSnippet Include_MachineAndUser = new("command_logger_include_machine_and_user_exe",
-            Program_Include_MachineAndUser.Program.AppRunner.UseTestEnv(TestEnvironment),
-            "example.exe", "[cmdlog] Add 1 1", 0,
-            @"
+    public static BashSnippet Include_MachineAndUser = new("command_logger_include_machine_and_user_exe",
+        Program_Include_MachineAndUser.Program.AppRunner.UseTestEnv(TestEnvironment),
+        "example.exe", "[cmdlog] Add 1 1", 0,
+        @"
 ***************************************
 Original input:
   [cmdlog] Add 1 1
@@ -110,25 +110,25 @@ Username  = \my-machine\username
 ***************************************
 2");
 
-        public class Program_Include_AppConfig
+    public class Program_Include_AppConfig
+    {
+        public class Program
         {
-            public class Program
-            {
-                static int Main(string[] args) => AppRunner.Run(args);
+            static int Main(string[] args) => AppRunner.Run(args);
 
-                public static AppRunner AppRunner => new AppRunner<Program>()
-                    // begin-snippet: command_logger_appconfig
-                    .UseCommandLogger(includeAppConfig: true);
-                // end-snippet
+            public static AppRunner AppRunner => new AppRunner<Program>()
+                // begin-snippet: command_logger_appconfig
+                .UseCommandLogger(includeAppConfig: true);
+            // end-snippet
 
-                public void Add(IConsole console, int x, int y) => console.WriteLine(x + y);
-            }
+            public void Add(IConsole console, int x, int y) => console.WriteLine(x + y);
         }
+    }
 
-        public static BashSnippet Include_AppConfig = new("command_logger_appconfig_exe",
-            Program_Include_AppConfig.Program.AppRunner.UseTestEnv(TestEnvironment),
-            "example.exe", "[cmdlog] Add 1 1", 0,
-            @"
+    public static BashSnippet Include_AppConfig = new("command_logger_appconfig_exe",
+        Program_Include_AppConfig.Program.AppRunner.UseTestEnv(TestEnvironment),
+        "example.exe", "[cmdlog] Add 1 1", 0,
+        @"
 ***************************************
 Original input:
   [cmdlog] Add 1 1
@@ -220,33 +220,33 @@ AppConfig:
 ***************************************
 2");
 
-        public class Program_Custom_Attribute
+    public class Program_Custom_Attribute
+    {
+        // begin-snippet: command_logger_custom_attribute
+        public class Program
         {
-            // begin-snippet: command_logger_custom_attribute
-            public class Program
-            {
-                static int Main(string[] args) => AppRunner.Run(args);
+            static int Main(string[] args) => AppRunner.Run(args);
 
-                public static AppRunner AppRunner => new AppRunner<Program>()
-                    .UseCommandLogger(ctx =>
-                        ctx.ParseResult!.TargetCommand.HasAttribute<LogCommandAttribute>()
-                            ? ctx.Console.Out.Write
-                            : null);
+            public static AppRunner AppRunner => new AppRunner<Program>()
+                .UseCommandLogger(ctx =>
+                    ctx.ParseResult!.TargetCommand.HasAttribute<LogCommandAttribute>()
+                        ? ctx.Console.Out.Write
+                        : null);
 
-                [LogCommand]
-                public void Add(IConsole console, int x, int y) => console.WriteLine(x + y);
+            [LogCommand]
+            public void Add(IConsole console, int x, int y) => console.WriteLine(x + y);
 
-                public void Subtract(IConsole console, int x, int y) => console.WriteLine(x - y);
-            }
-
-            public class LogCommandAttribute : Attribute { }
-            // end-snippet
+            public void Subtract(IConsole console, int x, int y) => console.WriteLine(x - y);
         }
 
-        public static BashSnippet CustomAttribute_Enabled = new("command_logger_custom_attribute_enabled",
-            Program_Custom_Attribute.Program.AppRunner.UseTestEnv(TestEnvironment),
-            "example.exe", "Add 1 1", 0,
-            @"
+        public class LogCommandAttribute : Attribute { }
+        // end-snippet
+    }
+
+    public static BashSnippet CustomAttribute_Enabled = new("command_logger_custom_attribute_enabled",
+        Program_Custom_Attribute.Program.AppRunner.UseTestEnv(TestEnvironment),
+        "example.exe", "Add 1 1", 0,
+        @"
 ***************************************
 Original input:
   Add 1 1
@@ -271,43 +271,43 @@ OS version    = Microsoft Windows 10.0.12345
 ***************************************
 2");
 
-        public static BashSnippet CustomAttribute_Disabled = new("command_logger_custom_attribute_disabled",
-            Program_Custom_Attribute.Program.AppRunner.UseTestEnv(TestEnvironment),
-            "example.exe", "Subtract 1 1", 0,
-            @"0");
+    public static BashSnippet CustomAttribute_Disabled = new("command_logger_custom_attribute_disabled",
+        Program_Custom_Attribute.Program.AppRunner.UseTestEnv(TestEnvironment),
+        "example.exe", "Subtract 1 1", 0,
+        @"0");
 
-        public class Program_Root_Option
+    public class Program_Root_Option
+    {
+        // begin-snippet: command_logger_root_option
+        public class Program
         {
-            // begin-snippet: command_logger_root_option
-            public class Program
+            static int Main(string[] args) => AppRunner.Run(args);
+
+            public static AppRunner AppRunner => new AppRunner<Program>();
+
+            public Task<int> Interceptor(InterceptorExecutionDelegate next, CommandContext ctx,
+                [Option(
+                    Description = "Output the command with arguments and system info", 
+                    BooleanMode = BooleanMode.Implicit)] bool logcmd)
             {
-                static int Main(string[] args) => AppRunner.Run(args);
-
-                public static AppRunner AppRunner => new AppRunner<Program>();
-
-                public Task<int> Interceptor(InterceptorExecutionDelegate next, CommandContext ctx,
-                    [Option(
-                        Description = "Output the command with arguments and system info", 
-                        BooleanMode = BooleanMode.Implicit)] bool logcmd)
+                if (logcmd)
                 {
-                    if (logcmd)
-                    {
-                        CommandLogger.Log(ctx);
-                    }
-                    return next();
+                    CommandLogger.Log(ctx);
                 }
-                
-                public void Add(IConsole console, int x, int y) => console.WriteLine(x + y);
-
-                public void Subtract(IConsole console, int x, int y) => console.WriteLine(x - y);
+                return next();
             }
-            // end-snippet
-        }
+                
+            public void Add(IConsole console, int x, int y) => console.WriteLine(x + y);
 
-        public static BashSnippet RootOption = new("command_logger_root_option_exe",
-            Program_Root_Option.Program.AppRunner.UseTestEnv(TestEnvironment),
-            "example.exe", "--logcmd Add 1 1", 0,
-            @"
+            public void Subtract(IConsole console, int x, int y) => console.WriteLine(x - y);
+        }
+        // end-snippet
+    }
+
+    public static BashSnippet RootOption = new("command_logger_root_option_exe",
+        Program_Root_Option.Program.AppRunner.UseTestEnv(TestEnvironment),
+        "example.exe", "--logcmd Add 1 1", 0,
+        @"
 ***************************************
 Original input:
   --logcmd Add 1 1
@@ -339,6 +339,5 @@ OS version    = Microsoft Windows 10.0.12345
 ***************************************
 2");
 
-        [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
-    }
+    [Test] public void Obligatory_test_since_snippets_cover_all_cases() => true.Should().BeTrue();
 }

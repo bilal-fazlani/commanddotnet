@@ -1,26 +1,18 @@
 ﻿using CommandDotNet.Tokens;
+using JetBrains.Annotations;
 
-namespace CommandDotNet
+namespace CommandDotNet;
+
+[PublicAPI]
+public class ValueFromToken(string value, Token? valueToken, Token? optionToken)
 {
-    public class ValueFromToken
-    {
-        public string Value { get; }
-        public Token? ValueToken { get; }
-        public Token? OptionToken { get; }
+    public string Value { get; } = value;
+    public Token? ValueToken { get; } = valueToken;
+    public Token? OptionToken { get; } = optionToken;
 
-        public string? TokenSourceName => ValueToken?.SourceName ?? OptionToken?.SourceName;
-        public Token? TokensSourceToken => ValueToken?.SourceToken ?? OptionToken?.SourceToken;
-        
-        public ValueFromToken(string value, Token? valueToken, Token? optionToken)
-        {
-            Value = value;
-            ValueToken = valueToken;
-            OptionToken = optionToken;
-        }
+    public string? TokenSourceName => ValueToken?.SourceName ?? OptionToken?.SourceName;
+    public Token? TokensSourceToken => ValueToken?.SourceToken ?? OptionToken?.SourceToken;
 
-        public override string ToString()
-        {
-            return $"{nameof(ValueFromToken)}={Value} {nameof(ValueToken)}:{ValueToken} {nameof(OptionToken)}:{OptionToken}";
-        }
-    }
+    public override string ToString() => 
+        $"{nameof(ValueFromToken)}={Value} {nameof(ValueToken)}:{ValueToken} {nameof(OptionToken)}:{OptionToken}";
 }

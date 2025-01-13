@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 
-namespace CommandDotNet
-{
-    public delegate Task<int> InterceptorExecutionDelegate();
-}
+namespace CommandDotNet;
+
+public delegate Task<int> InterceptorExecutionDelegate();

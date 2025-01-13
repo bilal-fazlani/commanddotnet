@@ -1,18 +1,12 @@
-﻿namespace CommandDotNet.Help
+﻿namespace CommandDotNet.Help;
+
+internal static class HelpTextProviderFactory
 {
-    internal static class HelpTextProviderFactory
-    {
-        internal static IHelpProvider Create(AppSettings appSettings)
+    internal static IHelpProvider Create(AppSettings appSettings) =>
+        appSettings.Help.TextStyle switch
         {
-            switch (appSettings.Help.TextStyle)
-            {
-                case HelpTextStyle.Basic:
-                    return new BasicHelpTextProvider(appSettings);
-                case HelpTextStyle.Detailed:
-                    return new HelpTextProvider(appSettings);
-                default:
-                    return new HelpTextProvider(appSettings);
-            }
-        }
-    }
+            HelpTextStyle.Basic => new BasicHelpTextProvider(appSettings),
+            HelpTextStyle.Detailed => new HelpTextProvider(appSettings),
+            _ => new HelpTextProvider(appSettings)
+        };
 }

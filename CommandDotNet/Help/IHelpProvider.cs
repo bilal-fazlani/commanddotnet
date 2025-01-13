@@ -1,7 +1,6 @@
-﻿namespace CommandDotNet.Help
+﻿namespace CommandDotNet.Help;
+
+public interface IHelpProvider
 {
-    public interface IHelpProvider
-    {
-        string GetHelpText(Command command);
-    }
+    string GetHelpText(Command command);
 }

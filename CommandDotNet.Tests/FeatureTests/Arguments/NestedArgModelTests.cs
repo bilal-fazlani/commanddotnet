@@ -4,25 +4,25 @@ using CommandDotNet.TestTools.Scenarios;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace CommandDotNet.Tests.FeatureTests.Arguments
+namespace CommandDotNet.Tests.FeatureTests.Arguments;
+
+public class NestedArgModelTests
 {
-    public class NestedArgModelTests
+    private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
+    private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
+
+    public NestedArgModelTests(ITestOutputHelper output)
     {
-        private static readonly AppSettings BasicHelp = TestAppSettings.BasicHelp;
-        private static readonly AppSettings DetailedHelp = TestAppSettings.DetailedHelp;
+        Ambient.Output = output;
+    }
 
-        public NestedArgModelTests(ITestOutputHelper output)
+    [Fact]
+    public void NestedModel_BasicHelp_IncludesNestedOperandsAndOptions()
+    {
+        new AppRunner<NestedModelApp>(BasicHelp).Verify(new Scenario
         {
-            Ambient.Output = output;
-        }
-
-        [Fact]
-        public void NestedModel_BasicHelp_IncludesNestedOperandsAndOptions()
-        {
-            new AppRunner<NestedModelApp>(BasicHelp).Verify(new Scenario
-            {
-                When = {Args = "Do -h"},
-                Then = { Output = @"Usage: testhost.dll Do [options] <Operand1> <Operand2>
+            When = {Args = "Do -h"},
+            Then = { Output = @"Usage: testhost.dll Do [options] <Operand1> <Operand2>
 
 Arguments:
   Operand1
@@ -31,16 +31,16 @@ Arguments:
 Options:
   --Option1
   --Option2" }
-            });
-        }
+        });
+    }
 
-        [Fact]
-        public void NestedModel_DetailedHelp_IncludesNestedOperandsAndOptions()
+    [Fact]
+    public void NestedModel_DetailedHelp_IncludesNestedOperandsAndOptions()
+    {
+        new AppRunner<NestedModelApp>(DetailedHelp).Verify(new Scenario
         {
-            new AppRunner<NestedModelApp>(DetailedHelp).Verify(new Scenario
-            {
-                When = {Args = "Do -h"},
-                Then = { Output = @"Usage: testhost.dll Do [options] <Operand1> <Operand2>
+            When = {Args = "Do -h"},
+            Then = { Output = @"Usage: testhost.dll Do [options] <Operand1> <Operand2>
 
 Arguments:
 
@@ -53,55 +53,54 @@ Options:
   --Option1  <TEXT>
 
   --Option2  <TEXT>" }
-            });
-        }
+        });
+    }
 
-        [Fact]
-        public void NestedModel_Exec_MapsNestedOperandsAndOptions()
+    [Fact]
+    public void NestedModel_Exec_MapsNestedOperandsAndOptions()
+    {
+        new AppRunner<NestedModelApp>(BasicHelp).Verify(new Scenario
         {
-            new AppRunner<NestedModelApp>(BasicHelp).Verify(new Scenario
+            When = {Args = "Do --Option1 aaa --Option2 bbb ccc ddd"},
+            Then =
             {
-                When = {Args = "Do --Option1 aaa --Option2 bbb ccc ddd"},
-                Then =
-                {
-                    AssertContext = ctx => ctx.ParamValuesShouldBe(
-                        new ParentModel
-                        {
-                            Option1 = "aaa", Operand1 = "ccc",
-                            NestedModel = new NestedModel {Option2 = "bbb", Operand2 = "ddd"}
-                        })
-                }
-            });
-        }
-
-        private class NestedModelApp
-        {
-            public void Do(ParentModel parameterModel)
-            {
+                AssertContext = ctx => ctx.ParamValuesShouldBe(
+                    new ParentModel
+                    {
+                        Option1 = "aaa", Operand1 = "ccc",
+                        NestedModel = new NestedModel {Option2 = "bbb", Operand2 = "ddd"}
+                    })
             }
-        }
+        });
+    }
 
-        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
-        private class ParentModel: IArgumentModel
+    private class NestedModelApp
+    {
+        public void Do(ParentModel parameterModel)
         {
-            [Option]
-            public string Option1 { get; set; } = null!;
-
-            [Operand]
-            public string Operand1 { get; set; } = null!;
-
-            [OrderByPositionInClass]
-            public NestedModel NestedModel { get; set; } = null!;
         }
+    }
 
-        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
-        private class NestedModel : IArgumentModel
-        {
-            [Option]
-            public string Option2 { get; set; } = null!;
+    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
+    private class ParentModel: IArgumentModel
+    {
+        [Option]
+        public string Option1 { get; set; } = null!;
 
-            [Operand]
-            public string Operand2 { get; set; } = null!;
-        }
+        [Operand]
+        public string Operand1 { get; set; } = null!;
+
+        [OrderByPositionInClass]
+        public NestedModel NestedModel { get; set; } = null!;
+    }
+
+    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
+    private class NestedModel : IArgumentModel
+    {
+        [Option]
+        public string Option2 { get; set; } = null!;
+
+        [Operand]
+        public string Operand2 { get; set; } = null!;
     }
 }

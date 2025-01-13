@@ -1,36 +1,28 @@
-﻿namespace CommandDotNet.Tokens
+﻿using JetBrains.Annotations;
+
+namespace CommandDotNet.Tokens;
+
+[PublicAPI]
+public class Token(
+    string rawValue,
+    string value,
+    TokenType tokenType)
 {
-    public class Token
-    {
-        /// <summary>
-        /// The raw value from the user input.
-        /// This will contain the punctuation used to denote option and argument names.
-        /// </summary>
-        public string RawValue { get; }
+    /// <summary>
+    /// The raw value from the user input.
+    /// This will contain the punctuation used to denote option and argument names.
+    /// </summary>
+    public string RawValue { get; } = rawValue;
 
-        /// <summary>Can be an Option name or an argument value</summary>
-        public string Value { get; }
+    /// <summary>Can be an Option name or an argument value</summary>
+    public string Value { get; } = value;
 
-        /// <summary>The <see cref="Tokens.TokenType"/></summary>
-        public TokenType TokenType { get; }
+    /// <summary>The <see cref="Tokens.TokenType"/></summary>
+    public TokenType TokenType { get; } = tokenType;
 
-        public string? SourceName { get; internal set; }
+    public string? SourceName { get; internal set; }
 
-        public Token? SourceToken { get; internal set; }
+    public Token? SourceToken { get; internal set; }
 
-        public Token(
-            string rawValue,
-            string value, 
-            TokenType tokenType)
-        {
-            RawValue = rawValue;
-            Value = value;
-            TokenType = tokenType;
-        }
-
-        public override string ToString()
-        {
-            return $"{nameof(Token)}:{TokenType}>{RawValue}";
-        }
-    }
+    public override string ToString() => $"{nameof(Token)}:{TokenType}>{RawValue}";
 }
