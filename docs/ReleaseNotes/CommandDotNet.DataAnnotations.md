@@ -1,5 +1,9 @@
 # CommandDotNet.DataAnnotations
 
+## 4.1.0
+
+* Accidental increment. No features or fixes. Apologies for the noise.
+
 ## 4.0.0
 
 * add support for net9
