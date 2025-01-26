@@ -1,5 +1,9 @@
 # CommandDotNet.FluentValidation
 
+## 7.1.0
+
+* Accidental increment. No features or fixes. Apologies for the noise.
+
 ## 7.0.0
 
 * add support for net9

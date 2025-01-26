@@ -1,8 +1,13 @@
 # CommandDotNet
 
-## 8.0.1
+## 8.1.1
 
 * [#509](https://github.com/bilal-fazlani/commanddotnet/issues/509) calling operand as option returns `Unrecognized option '-x'` instead of throwing exception.  Thanks to [lxy-iUnknown](https://github.com/lxy-iUnknown) for reporting this.
+
+## 8.1.0
+
+* Accidental increment. No features or fixes. Apologies for the noise.
+
 
 ## 8.0.0
 
