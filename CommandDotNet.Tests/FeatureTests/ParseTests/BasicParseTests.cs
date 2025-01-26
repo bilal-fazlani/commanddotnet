@@ -1,5 +1,6 @@
 using CommandDotNet.Tests.Utils;
 using CommandDotNet.TestTools.Scenarios;
+using JetBrains.Annotations;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -103,6 +104,20 @@ public class BasicParseTests
     }
 
     [Fact]
+    public void ErrorWhenOperandCalledAsOption()
+    {
+        new AppRunner<App>().Verify(new Scenario
+        {
+            When = {Args = "Add -x 2 -y 3"},
+            Then =
+            {
+                ExitCode = 1,
+                OutputContainsTexts = {"Unrecognized option '-x'"}
+            }
+        });
+    }
+
+    [Fact]
     public void NegativeNumbersCanBeUsedForArgumentValues()
     {
         new AppRunner<App>().Verify(new Scenario
@@ -154,6 +169,7 @@ public class BasicParseTests
         });
     }
 
+    [UsedImplicitly]
     private class App
     {
         public void Add(int x, int y, 

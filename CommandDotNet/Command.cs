@@ -120,8 +120,8 @@ public sealed class Command : IArgumentNode
         _argumentsByAlias.GetValueOrDefault(alias ?? throw new ArgumentNullException(nameof(alias)));
 
     public TArgumentNode? Find<TArgumentNode>(string alias)
-        where TArgumentNode : class, IArgumentNode => 
-        (TArgumentNode?) FindArgumentNode(alias);
+        where TArgumentNode : class, IArgumentNode =>
+        FindArgumentNode(alias) as TArgumentNode;
 
     internal void AddArgumentNode(IArgumentNode argumentNode)
     {

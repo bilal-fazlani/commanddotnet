@@ -1,5 +1,9 @@
 # CommandDotNet
 
+## 8.0.1
+
+* [#509](https://github.com/bilal-fazlani/commanddotnet/issues/509) calling operand as option returns `Unrecognized option '-x'` instead of throwing exception.  Thanks to [lxy-iUnknown](https://github.com/lxy-iUnknown) for reporting this.
+
 ## 8.0.0
 
 * add support for net9
