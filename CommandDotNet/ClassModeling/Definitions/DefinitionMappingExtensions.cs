@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using CommandDotNet.Builders;
@@ -96,7 +97,7 @@ internal static class DefinitionMappingExtensions
                 customAttributes: argumentDef.CustomAttributes,
                 argumentDef.ValueProxy)
             {
-                Description = JoinFromAttribute(argumentDef, nameof(operandAttr.Description), operandAttr?.Description, operandAttr?.DescriptionLines),
+                Description = JoinFromAttributeWithMethod(argumentDef, nameof(operandAttr.Description), operandAttr?.Description, operandAttr?.DescriptionLines),
                 Default = argumentDefault
             };
         }
@@ -119,7 +120,7 @@ internal static class DefinitionMappingExtensions
                 assignToExecutableSubcommands: assignOnlyToExecutableSubcommands,
                 valueProxy: argumentDef.ValueProxy)
             {
-                Description = JoinFromAttribute(argumentDef, nameof(optionAttr.Description), optionAttr?.Description, optionAttr?.DescriptionLines),
+                Description = JoinFromAttributeWithMethod(argumentDef, nameof(optionAttr.Description), optionAttr?.Description, optionAttr?.DescriptionLines),
                 Split = argumentDef.Split,
                 Default = argumentDefault
             };
@@ -134,6 +135,39 @@ internal static class DefinitionMappingExtensions
         {
             throw new InvalidConfigurationException(
                 $"Both {propertyName} and {propertyName}Lines were set for {sourceDef.SourcePath}. Only one can be set.");
+        }
+
+        return singleline ?? multiline?.ToCsv(Environment.NewLine);
+    }
+
+    /// <summary>
+    /// Combines description sources from attributes and ensures only one is set:
+    /// a single-line description, a multi-line description, or a <see cref="DescriptionMethodAttribute"/>.
+    /// Returns a placeholder for <see cref="DescriptionMethodAttribute"/> to be resolved later by the help provider.
+    /// </summary>
+    private static string? JoinFromAttributeWithMethod(
+        IArgumentDef argumentDef,
+        string propertyName,
+        string? singleline,
+        string[]? multiline)
+    {
+        var descriptionMethodAttr = argumentDef.GetCustomAttribute<DescriptionMethodAttribute>();
+
+        var setProperties = new List<string>();
+        if (singleline is not null) setProperties.Add(propertyName);
+        if (multiline is not null) setProperties.Add($"{propertyName}Lines");
+        if (descriptionMethodAttr is not null) setProperties.Add(nameof(DescriptionMethodAttribute));
+
+        if (setProperties.Count > 1)
+        {
+            throw new InvalidConfigurationException(
+                $"Multiple description properties were set for {argumentDef.SourcePath}: {string.Join(", ", setProperties)}. Only one can be set.");
+        }
+
+        if (descriptionMethodAttr is not null)
+        {
+            // Return a placeholder that the help provider will resolve at runtime.
+            return $"__DESCRIPTION_METHOD__{descriptionMethodAttr.MethodName}__";
         }
 
         return singleline ?? multiline?.ToCsv(Environment.NewLine);
