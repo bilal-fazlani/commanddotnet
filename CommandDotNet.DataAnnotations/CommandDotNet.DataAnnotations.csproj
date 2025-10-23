@@ -20,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="JetBrains.Annotations" />
       <ProjectReference Include="..\CommandDotNet\CommandDotNet.csproj" />
     </ItemGroup>
 
