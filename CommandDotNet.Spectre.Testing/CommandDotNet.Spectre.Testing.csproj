@@ -28,7 +28,6 @@
     <ItemGroup>
       <PackageReference Include="Spectre.Console" />
       <PackageReference Include="Spectre.Console.Testing" />
-      <PackageReference Include="System.ComponentModel.Annotations" />
     </ItemGroup>
 
 </Project>
