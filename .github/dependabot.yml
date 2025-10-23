@@ -1,17 +1,25 @@
 version: 2
 updates:
   # Enable version updates for NuGet packages
+  # Only notify for security updates - manual updates preferred for features
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
       interval: "weekly"
       day: "monday"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 5
     labels:
       - "dependencies"
       - "nuget"
+    # Only create PRs for security updates and version-update:semver-major
+    # This prevents noise from minor/patch updates
+    # Update manually when needed for new features
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-minor", "version-update:semver-patch"]
     
   # Enable version updates for GitHub Actions
+  # Always update GitHub Actions (they're workflow dependencies, not library dependencies)
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
