@@ -26,5 +26,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="CommandDotNet.csproj.DotSettings" />
+    <None Include="..\images\nuget-icon.png" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>

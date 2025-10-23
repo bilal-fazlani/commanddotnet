@@ -9,7 +9,7 @@
     <PackageTags>dotnet core; console; argument parse;</PackageTags>
     <PackageProjectUrl>https://github.com/bilal-fazlani/CommandDotNet</PackageProjectUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageIconUrl>https://raw.githubusercontent.com/bilal-fazlani/CommandDotNet/master/images/nuget-icon.png</PackageIconUrl>
+    <PackageIcon>nuget-icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/bilal-fazlani/CommandDotNet</RepositoryUrl>
     <Version>1.0.0</Version>
     <NeutralLanguage>en-US</NeutralLanguage>

@@ -14,3 +14,4 @@ Pipfile.lock
 DevDefaultTestConfig.cs
 .DS_Store
 Pipfile
+TestResults/

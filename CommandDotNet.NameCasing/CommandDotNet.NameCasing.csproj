@@ -15,6 +15,9 @@
     <None Remove="output\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\images\nuget-icon.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Humanizer.Core" />
   </ItemGroup>
   <ItemGroup>
