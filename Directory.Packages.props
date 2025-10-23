@@ -23,7 +23,7 @@
     <PackageVersion Include="JsonDiffPatch.Net" Version="2.3.0" />
     <PackageVersion Include="LibLog" Version="5.0.8" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageVersion Include="Namotion.Reflection" Version="3.4.3" />
     <PackageVersion Include="Nullability.Source" Version="2.3.0">
