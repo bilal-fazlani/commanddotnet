@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: ❓ Question / Discussion
+    url: https://github.com/bilal-fazlani/commanddotnet/discussions
+    about: Ask questions and discuss ideas with the community
+  - name: 💬 Discord Chat
+    url: https://discord.gg/QFxKSeG
+    about: Chat with the community and maintainers
+  - name: 📚 Documentation
+    url: https://commanddotnet.bilal-fazlani.com
+    about: Read the comprehensive documentation

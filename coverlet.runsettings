@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat Code Coverage">
+        <Configuration>
+          <Format>cobertura</Format>
+          <Exclude>[*.Tests]*,[*.DocExamples]*,[*.Example]*,[CommandDotNet]CommandDotNet.Logging.LogProviders.*</Exclude>
+          <ExcludeByFile>**/*Designer.cs,**/*.g.cs,**/*.g.i.cs</ExcludeByFile>
+          <ExcludeByAttribute>GeneratedCode,CompilerGenerated,ExcludeFromCodeCoverage</ExcludeByAttribute>
+          <IncludeTestAssembly>false</IncludeTestAssembly>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>
