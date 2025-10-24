@@ -1,4 +1,4 @@
-﻿// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -19,6 +19,8 @@ public sealed class Option : IArgument
     private object? _value;
     private readonly ValueProxy _valueProxy;
     private readonly HashSet<string> _aliases;
+    private string? _description;
+    private Func<string?>? _descriptionMethod;
 
     public Option(
         string? longName,
@@ -102,7 +104,21 @@ public sealed class Option : IArgument
     public string? DefinitionSource { get; }
 
     /// <summary>Describes the option</summary>
-    public string? Description { get; set; }
+    public string? Description
+    {
+        get => _descriptionMethod?.Invoke() ?? _description;
+        set => _description = value;
+    }
+
+    /// <summary>
+    /// A method to be called for generating the description dynamically.
+    /// When set, the method will be invoked each time Description is accessed.
+    /// </summary>
+    public Func<string?>? DescriptionMethod
+    {
+        get => _descriptionMethod;
+        set => _descriptionMethod = value;
+    }
 
     /// <summary>The <see cref="ITypeInfo"/> for this argument</summary>
     public ITypeInfo TypeInfo { get; set; }

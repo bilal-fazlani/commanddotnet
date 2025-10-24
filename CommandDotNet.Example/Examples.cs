@@ -1,4 +1,5 @@
-﻿using CommandDotNet.Example.Commands;
+using System;
+using CommandDotNet.Example.Commands;
 using Git = CommandDotNet.Example.Commands.Git;
 
 namespace CommandDotNet.Example;
@@ -42,7 +43,7 @@ internal class Examples
     public Git Git { get; set; } = null!;
 
     [Subcommand]
-    public Math Math { get; set; } = null!;
+    public Commands.Math Math { get; set; } = null!;
 
     [Subcommand]
     public Models Models { get; set; } = null!;
@@ -55,4 +56,34 @@ internal class Examples
 
     [Subcommand]
     public Commands.Prompts Prompts { get; set; } = null!;
+
+    /// <summary>Example demonstrating the DescriptionMethod feature for dynamic help text</summary>
+    // begin-snippet: description_method_example
+    [Command(Description = "Deploy services with dynamic target discovery")]
+    public void Deploy(
+        [Option('t', "targets")]
+        [DescriptionMethod(nameof(GetAvailableTargets))]
+        string[] targets,
+        
+        [Option('e', "environment")]
+        [DescriptionMethod(nameof(GetAvailableEnvironments))]
+        string environment = "dev")
+    {
+        Console.WriteLine($"Deploying targets: {string.Join(", ", targets)} to {environment}");
+    }
+
+    private static string GetAvailableTargets()
+    {
+        // Dynamic discovery of available targets
+        var availableTargets = new[] { "app", "database", "cache", "notifications" };
+        return $"Available targets: {string.Join(", ", availableTargets)}";
+    }
+
+    private static string GetAvailableEnvironments()
+    {
+        // Dynamic environment discovery - could read from config, environment variables, etc.
+        var environments = new[] { "dev", "staging", "prod" };
+        return $"Available environments: {string.Join(", ", environments)}. Current time: {DateTime.Now:HH:mm:ss}";
+    }
+    // end-snippet
 }

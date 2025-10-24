@@ -74,7 +74,7 @@ static int Main(string[] args)
 CommandDotnet has the following pre-defined exit codes
 
 <!-- snippet: ExitCodes_class -->
-<a id='snippet-exitcodes_class'></a>
+<a id='snippet-ExitCodes_class'></a>
 ```cs
 public static class ExitCodes
 {
@@ -87,7 +87,7 @@ public static class ExitCodes
     public static Task<int> ValidationErrorAsync => Task.FromResult(ValidationError);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/ExitCodes.cs#L5-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-exitcodes_class' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/ExitCodes.cs#L5-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-ExitCodes_class' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 CommandDotNet internal errors are generally captured and return `ExitCodes.Error` (1).

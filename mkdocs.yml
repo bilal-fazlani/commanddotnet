@@ -28,6 +28,7 @@ nav:
           - Commands/command-attribute.md
       - Arguments:
           - Arguments/arguments.md
+          - Arguments/description-method.md
           - Arguments/argument-collections.md
           - Arguments/argument-types.md
           - Arguments/passwords.md
