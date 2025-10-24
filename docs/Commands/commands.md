@@ -103,7 +103,7 @@ ExtendedHelpText = "Directives:\n" +
                    "\n" +
                    "Example: %AppName% [debug] [parse] [log:info] math")]
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/Examples.cs#L7-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-extended_help_text' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/Examples.cs#L8-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-extended_help_text' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 !!! Note

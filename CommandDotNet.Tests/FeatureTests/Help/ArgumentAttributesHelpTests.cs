@@ -116,8 +116,8 @@ x_descr2"
             Then =
             {
                 ExitCode = 1,
-                Output = "CommandDotNet.InvalidConfigurationException: Both Description and DescriptionLines were set for " +
-                         "CommandDotNet.Tests.FeatureTests.Help.ArgumentAttributesHelpTests+OptionDupeDescriptions.Do.my_option. Only one can be set."
+                Output = "CommandDotNet.InvalidConfigurationException: Multiple description properties were set for " +
+                         "CommandDotNet.Tests.FeatureTests.Help.ArgumentAttributesHelpTests+OptionDupeDescriptions.Do.my_option: Description, DescriptionLines. Only one can be set."
             }
         });
     }
@@ -131,8 +131,8 @@ x_descr2"
             Then =
             {
                 ExitCode = 1,
-                Output = "CommandDotNet.InvalidConfigurationException: Both Description and DescriptionLines were set for " +
-                         "CommandDotNet.Tests.FeatureTests.Help.ArgumentAttributesHelpTests+OperandDupeDescriptions.Do.my_operand. Only one can be set."
+                Output = "CommandDotNet.InvalidConfigurationException: Multiple description properties were set for " +
+                         "CommandDotNet.Tests.FeatureTests.Help.ArgumentAttributesHelpTests+OperandDupeDescriptions.Do.my_operand: Description, DescriptionLines. Only one can be set."
             }
         });
     }

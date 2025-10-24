@@ -24,6 +24,8 @@ If preferred, you can use `[Named]` instead of `[Operand]` with the same propert
 
 * __Name__: Used in help documentation only. Defaults to the parameter or property name.
 * __Description__: Used in help documentation.
+* __DescriptionLines__: Used in help documentation, and honors the host systems newline characters.
+* __DescriptionMethod__: Used in help documentation. See [description-method](description-method.md) for dynamic descriptions.
 
 ## Option Attribute
 
@@ -46,6 +48,7 @@ The OptionAttribute has the following properties:
 
 * __Description__: Used in help documentation.
 * __DescriptionLines__: Used in help documentation, and honors the host systems newline characters.
+* __DescriptionMethod__: Used in help documentation. See [description-method](description-method.md) for dynamic descriptions.
 * __BooleanMode__: When the option is a `bool`, this determines if the presence of the option 
   indicates `true` (_Implicit_) or if the user must specify `true` or `false` (_Explicit_). 
     * The default is _Implicit_ and can be changed with `#!c# AppSettings.Arguments.BooleanMode = BooleanMode.Explicit`
@@ -181,11 +184,11 @@ Support for the Windows and Powershell conventions is intented to provide backwa
 How to enable and use with Windows
 
 <!-- snippet: AppSettings_for_windows -->
-<a id='snippet-appsettings_for_windows'></a>
+<a id='snippet-AppSettings_for_windows'></a>
 ```cs
 new AppSettings { Parser = { AllowBackslashOptionPrefix = true } };
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L62-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-appsettings_for_windows' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L62-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-AppSettings_for_windows' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: arguments_attributes_windows_exe -->
@@ -200,11 +203,11 @@ planet=mars turbo=True abort=True
 How to enable and use with Powershell
 
 <!-- snippet: AppSettings_for_powershell -->
-<a id='snippet-appsettings_for_powershell'></a>
+<a id='snippet-AppSettings_for_powershell'></a>
 ```cs
 new AppSettings { Parser = { AllowSingleHyphenForLongNames = true } };
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L77-L79' title='Snippet source file'>snippet source</a> | <a href='#snippet-appsettings_for_powershell' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Arguments/Arguments/Arguments_Attributes.cs#L77-L79' title='Snippet source file'>snippet source</a> | <a href='#snippet-AppSettings_for_powershell' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: arguments_attributes_powershell_exe -->

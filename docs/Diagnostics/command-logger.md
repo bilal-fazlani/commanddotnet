@@ -73,7 +73,7 @@ OS version    = Microsoft Windows 10.0.12345
 Here are the available parameters for configuration:
 
 <!-- snippet: UseCommandLogger-parameters -->
-<a id='snippet-usecommandlogger-parameters'></a>
+<a id='snippet-UseCommandLogger-parameters'></a>
 ```cs
 /// <summary>Enable the command logger middleware</summary>
 /// <param name="appRunner">The <see cref="AppRunner"/></param>
@@ -95,7 +95,7 @@ public static AppRunner UseCommandLogger(this AppRunner appRunner,
         bool includeMachineAndUser = false,
         Func<CommandContext, IEnumerable<(string key, string value)>?>? additionalInfoCallback = null)
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/AppRunnerConfigExtensions.cs#L236-L256' title='Snippet source file'>snippet source</a> | <a href='#snippet-usecommandlogger-parameters' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/AppRunnerConfigExtensions.cs#L236-L256' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseCommandLogger-parameters' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## Include Machine and User

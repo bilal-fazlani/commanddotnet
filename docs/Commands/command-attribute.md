@@ -5,7 +5,7 @@ The command attribute can be used to provide additional help text and to overrid
 Here are the constructors and properties you can use:
 
 <!-- snippet: CommandAttribute-properties -->
-<a id='snippet-commandattribute-properties'></a>
+<a id='snippet-CommandAttribute-properties'></a>
 ```cs
 /// <summary>The description to show in the help</summary>
 public string? Description { get; set; }
@@ -55,7 +55,7 @@ public CommandAttribute() {}
 /// </summary>
 public CommandAttribute(string? name) => Name = name;
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/CommandAttribute.cs#L16-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-commandattribute-properties' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/CommandAttribute.cs#L16-L64' title='Snippet source file'>snippet source</a> | <a href='#snippet-CommandAttribute-properties' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 `IgnoreUnexpectedOperands` and `ArgumentSeparatorStrategy` delegate to another member. C# does not support nullable property types so this is how CommandDotNet knows the value was explicitly set by the developer.
