@@ -28,7 +28,7 @@ jobs:
     - name: Test with Coverage
       run: dotnet test --no-build --verbosity normal --settings coverlet.runsettings --collect:"XPlat Code Coverage"
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       with:
         files: '**/coverage.cobertura.xml'
         fail_ci_if_error: false
