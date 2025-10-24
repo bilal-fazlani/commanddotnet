@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using CommandDotNet.Extensions;
 using JetBrains.Annotations;
@@ -207,77 +206,8 @@ public class HelpTextProvider : IHelpProvider
     protected virtual string? ArgumentTypeName<T>(T argument) where T : IArgument => 
         argument.TypeInfo.DisplayName.UnlessNullOrWhitespace(n => $"<{n.ToUpperInvariant()}>");
 
-    protected virtual string? ArgumentDescription<T>(T argument) where T : IArgument
-    {
-        var description = argument.Description;
-        
-        // Check if this is a method-based description
-        if (description != null && description.StartsWith("__DESCRIPTION_METHOD__") && description.EndsWith("__"))
-        {
-            var methodName = description.Substring("__DESCRIPTION_METHOD__".Length, 
-                description.Length - "__DESCRIPTION_METHOD__".Length - 2);
-            description = ResolveDescriptionMethod(argument, methodName);
-        }
-        
-        return description.UnlessNullOrWhitespace(_localize);
-    }
-    
-    /// <summary>
-    /// Resolves a description method by calling the specified static method.
-    /// </summary>
-    /// <param name="argument">The argument that has the description method attribute</param>
-    /// <param name="methodName">The name of the method to call</param>
-    /// <returns>The description returned by the method, or null if the method cannot be resolved</returns>
-    protected virtual string? ResolveDescriptionMethod<T>(T argument, string methodName) where T : IArgument
-    {
-        try
-        {
-            // Get the declaring type from the argument's custom attributes
-            Type? declaringType = null;
-            
-            if (argument.CustomAttributes is ParameterInfo paramInfo)
-            {
-                declaringType = paramInfo.Member.DeclaringType;
-            }
-            else if (argument.CustomAttributes is PropertyInfo propInfo)
-            {
-                declaringType = propInfo.DeclaringType;
-            }
-            
-            if (declaringType == null)
-            {
-                return $"Error: Could not determine declaring type for method '{methodName}'";
-            }
-            
-            // Find the method
-            var method = declaringType.GetMethod(methodName, 
-                BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
-                null, Type.EmptyTypes, null);
-                
-            if (method == null)
-            {
-                return $"Error: Method '{methodName}' not found in type '{declaringType.Name}'";
-            }
-            
-            if (!method.IsStatic)
-            {
-                return $"Error: Method '{methodName}' must be static";
-            }
-            
-            if (method.ReturnType != typeof(string))
-            {
-                return $"Error: Method '{methodName}' must return string";
-            }
-            
-            // Invoke the method
-            var result = method.Invoke(null, null) as string;
-            return result;
-        }
-        catch (Exception ex)
-        {
-            return $"Error calling method '{methodName}': {ex.Message}";
-        }
-    }
+    protected virtual string? ArgumentDescription<T>(T argument) where T : IArgument => 
+        argument.Description.UnlessNullOrWhitespace(_localize);
 
     protected virtual string ArgumentArity<T>(T argument) where T : IArgument => 
         argument.Arity.AllowsMany() ? $" ({Resources.A.Help_Multiple})" : "";

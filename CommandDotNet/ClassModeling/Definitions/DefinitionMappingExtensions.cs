@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -88,7 +88,7 @@ internal static class DefinitionMappingExtensions
         if (argumentDef.CommandNodeType == CommandNodeType.Operand)
         {
             var operandAttr = argumentDef.GetCustomAttribute<OperandAttribute>();
-            return new Operand(
+            var operand = new Operand(
                 argumentDef.Name,
                 typeInfo,
                 argumentDef.Arity,
@@ -97,9 +97,11 @@ internal static class DefinitionMappingExtensions
                 customAttributes: argumentDef.CustomAttributes,
                 argumentDef.ValueProxy)
             {
-                Description = JoinFromAttributeWithMethod(argumentDef, nameof(operandAttr.Description), operandAttr?.Description, operandAttr?.DescriptionLines),
                 Default = argumentDefault
             };
+            
+            SetDescription(operand, argumentDef, nameof(operandAttr.Description), operandAttr?.Description, operandAttr?.DescriptionLines);
+            return operand;
         }
             
         if (argumentDef.CommandNodeType == CommandNodeType.Option)
@@ -108,7 +110,7 @@ internal static class DefinitionMappingExtensions
             var assignOnlyToExecutableSubcommands = optionAttr?.AssignToExecutableSubcommands ?? false;
             isInterceptorOption = isInterceptorOption && !assignOnlyToExecutableSubcommands;
                 
-            return new Option(
+            var option = new Option(
                 ParseLongName(argumentDef, optionAttr),
                 optionAttr?.ShortName,
                 typeInfo,
@@ -120,10 +122,12 @@ internal static class DefinitionMappingExtensions
                 assignToExecutableSubcommands: assignOnlyToExecutableSubcommands,
                 valueProxy: argumentDef.ValueProxy)
             {
-                Description = JoinFromAttributeWithMethod(argumentDef, nameof(optionAttr.Description), optionAttr?.Description, optionAttr?.DescriptionLines),
                 Split = argumentDef.Split,
                 Default = argumentDefault
             };
+            
+            SetDescription(option, argumentDef, nameof(optionAttr.Description), optionAttr?.Description, optionAttr?.DescriptionLines);
+            return option;
         }
 
         throw new ArgumentOutOfRangeException($"Unknown argument type: {argumentDef.CommandNodeType}");
@@ -141,11 +145,12 @@ internal static class DefinitionMappingExtensions
     }
 
     /// <summary>
-    /// Combines description sources from attributes and ensures only one is set:
-    /// a single-line description, a multi-line description, or a <see cref="DescriptionMethodAttribute"/>.
-    /// Returns a placeholder for <see cref="DescriptionMethodAttribute"/> to be resolved later by the help provider.
+    /// Sets the description on an argument from attribute sources.
+    /// Ensures only one is set: a single-line description, a multi-line description, or a <see cref="DescriptionMethodAttribute"/>.
+    /// If a <see cref="DescriptionMethodAttribute"/> is used, resolves the method early and validates it.
     /// </summary>
-    private static string? JoinFromAttributeWithMethod(
+    private static void SetDescription(
+        IArgument argument,
         IArgumentDef argumentDef,
         string propertyName,
         string? singleline,
@@ -166,11 +171,70 @@ internal static class DefinitionMappingExtensions
 
         if (descriptionMethodAttr is not null)
         {
-            // Return a placeholder that the help provider will resolve at runtime.
-            return $"__DESCRIPTION_METHOD__{descriptionMethodAttr.MethodName}__";
+            // Resolve the method early to catch configuration errors
+            var methodName = descriptionMethodAttr.MethodName;
+            
+            // Get the declaring type from the argument's custom attributes
+            Type? declaringType = null;
+            
+            if (argumentDef.CustomAttributes is ParameterInfo paramInfo)
+            {
+                declaringType = paramInfo.Member.DeclaringType;
+            }
+            else if (argumentDef.CustomAttributes is PropertyInfo propInfo)
+            {
+                declaringType = propInfo.DeclaringType;
+            }
+            
+            if (declaringType == null)
+            {
+                throw new InvalidConfigurationException(
+                    $"Could not determine declaring type for DescriptionMethod '{methodName}' on {argumentDef.SourcePath}");
+            }
+            
+            // Find the method
+            var method = declaringType.GetMethod(methodName, 
+                BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
+                null, Type.EmptyTypes, null);
+                
+            if (method == null)
+            {
+                throw new InvalidConfigurationException(
+                    $"DescriptionMethod '{methodName}' not found in type '{declaringType.Name}'. " +
+                    $"Method must be static with no parameters and return string. " +
+                    $"Defined on {argumentDef.SourcePath}");
+            }
+            
+            if (method.ReturnType != typeof(string))
+            {
+                throw new InvalidConfigurationException(
+                    $"DescriptionMethod '{methodName}' in type '{declaringType.Name}' must return string but returns {method.ReturnType.Name}. " +
+                    $"Defined on {argumentDef.SourcePath}");
+            }
+            
+            // Set the method as a lambda that invokes it
+            if (argument is Option option)
+            {
+                option.DescriptionMethod = () => (string?)method.Invoke(null, null);
+            }
+            else if (argument is Operand operand)
+            {
+                operand.DescriptionMethod = () => (string?)method.Invoke(null, null);
+            }
         }
-
-        return singleline ?? multiline?.ToCsv(Environment.NewLine);
+        else
+        {
+            // Set static description
+            var description = singleline ?? multiline?.ToCsv(Environment.NewLine);
+            if (argument is Option option)
+            {
+                option.Description = description;
+            }
+            else if (argument is Operand operand)
+            {
+                operand.Description = description;
+            }
+        }
     }
 
     private static string? ParseLongName(IArgumentDef argumentDef, OptionAttribute? optionAttr)
