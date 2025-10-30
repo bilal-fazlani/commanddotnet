@@ -1,4 +1,4 @@
-﻿using System.Collections.Specialized;
+using System.Collections.Specialized;
 using CommandDotNet.Diagnostics;
 using CommandDotNet.FluentValidation;
 using CommandDotNet.NameCasing;
@@ -29,6 +29,7 @@ public class Program
             .UseSpectreAnsiConsole()
             .UseSpectreArgumentPrompter()
             .UseLocalizeDirective()
+            .UseSuggestDirective()
             .UseLog2ConsoleDirective()
             .UseFluentValidation()
             .UseInteractiveMode("Example")

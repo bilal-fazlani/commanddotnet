@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -119,6 +119,16 @@ public static class AppRunnerConfigExtensions
     {
         AssertDirectivesAreEnabled(appRunner);
         return CultureDirective.UseCultureDirective(appRunner);
+    }
+
+    /// <summary>
+    /// When the first argument is [suggest], the framework will provide shell completion suggestions
+    /// based on the parsed command context. This is used by shell completion scripts.
+    /// </summary>
+    public static AppRunner UseSuggestDirective(this AppRunner appRunner)
+    {
+        AssertDirectivesAreEnabled(appRunner);
+        return Completions.SuggestDirectiveMiddleware.UseSuggestDirective(appRunner);
     }
 
     /// <summary>Use the <see cref="IDependencyResolver"/> to create the command classes.</summary>

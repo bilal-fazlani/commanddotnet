@@ -72,6 +72,7 @@ nav:
               - TestTools/Tools/testing-prompts.md
               - TestTools/Tools/deterministic-appinfo.md
       - Other Features:
+          - OtherFeatures/suggest.md
           - OtherFeatures/iconsole.md
           - OtherFeatures/default-middleware.md
           - Ctrl+C and<br/>CancellationToken: OtherFeatures/cancellation.md

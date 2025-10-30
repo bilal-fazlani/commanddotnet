@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 
 namespace CommandDotNet.Execution;
 
@@ -52,6 +52,9 @@ public static class MiddlewareSteps
 
     /// <summary>Runs before <see cref="Help"/> to ensure default values are included in the help output</summary>
     public static MiddlewareStep SetArgumentDefaults { get; } = Help.CheckIfShouldShowHelp - 1000;
+
+    /// <summary>Runs in the <see cref="MiddlewareStages.ParseInput"/> stage before <see cref="Help.CheckIfShouldShowHelp"/> to handle [suggest] directive</summary>
+    public static MiddlewareStep Suggest { get; } = Help.CheckIfShouldShowHelp - 500;
 
     /// <summary>Runs at the end of the <see cref="MiddlewareStages.ParseInput"/> stage</summary>
     public static class Help

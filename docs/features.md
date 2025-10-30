@@ -129,6 +129,9 @@ hide:
 
 ## Other
 
+- [x] Shell Completions ([docs](OtherFeatures/suggest.md))
+> `[suggest]` directive for intelligent tab completion in bash, zsh, fish, and PowerShell
+
 - [x] ++ctrl+c++ ([docs](OtherFeatures/cancellation.md))
 
 - [x] Name casing ([docs](OtherFeatures/name-casing.md))
