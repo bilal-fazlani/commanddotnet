@@ -29,7 +29,6 @@ public class Program
             .UseSpectreAnsiConsole()
             .UseSpectreArgumentPrompter()
             .UseLocalizeDirective()
-            .UseSuggestDirective()
             .UseLog2ConsoleDirective()
             .UseFluentValidation()
             .UseInteractiveMode("Example")

@@ -95,7 +95,7 @@ public static AppRunner UseCommandLogger(this AppRunner appRunner,
         bool includeMachineAndUser = false,
         Func<CommandContext, IEnumerable<(string key, string value)>?>? additionalInfoCallback = null)
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/AppRunnerConfigExtensions.cs#L246-L266' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseCommandLogger-parameters' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/AppRunnerConfigExtensions.cs#L251-L271' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseCommandLogger-parameters' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## Include Machine and User

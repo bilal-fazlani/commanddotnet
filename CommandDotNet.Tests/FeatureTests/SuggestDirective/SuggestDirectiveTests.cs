@@ -32,7 +32,6 @@ public class SuggestDirectiveTests
     {
         new AppRunner<App>()
             .UseDefaultMiddleware()
-            .UseSuggestDirective()
             .Verify(new Scenario
             {
                 When = { Args = "[suggest]" },
@@ -49,7 +48,6 @@ public class SuggestDirectiveTests
     {
         new AppRunner<App>()
             .UseDefaultMiddleware()
-            .UseSuggestDirective()
             .Verify(new Scenario
             {
                 When = { Args = "[suggest] Add" },
@@ -66,7 +64,6 @@ public class SuggestDirectiveTests
     {
         new AppRunner<App>()
             .UseDefaultMiddleware()
-            .UseSuggestDirective()
             .Verify(new Scenario
             {
                 When = { Args = "[suggest] Process" },
@@ -133,7 +130,6 @@ public class SuggestDirectiveTests
     {
         new AppRunner<App>()
             .UseDefaultMiddleware()
-            .UseSuggestDirective()
             .Verify(new Scenario
             {
                 When = { Args = "[suggest] Add Item" },
@@ -177,7 +173,6 @@ public class SuggestDirectiveTests
     {
         new AppRunner<App>()
             .UseDefaultMiddleware()
-            .UseSuggestDirective()
             .Verify(new Scenario
             {
                 When = { Args = "[suggest] Add" },

@@ -28,7 +28,7 @@ class Program
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Completions/Shell_Completions.cs#L9-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-shell_completions_quick_start' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Completions/Shell_Completions.cs#L11-L30' title='Snippet source file'>snippet source</a> | <a href='#snippet-shell_completions_quick_start' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 That's it! Your app now has a `completion` command that generates shell-specific completion scripts.
@@ -168,7 +168,7 @@ class ProgramWithCustomName
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Completions/Shell_Completions.cs#L30-L43' title='Snippet source file'>snippet source</a> | <a href='#snippet-shell_completions_custom_app_name' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Completions/Shell_Completions.cs#L32-L45' title='Snippet source file'>snippet source</a> | <a href='#snippet-shell_completions_custom_app_name' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 The completion scripts will use the configured app name.
@@ -192,7 +192,7 @@ public class MyAppWithConditionalCompletion
     public void Deploy(string environment) { }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Completions/Shell_Completions.cs#L45-L57' title='Snippet source file'>snippet source</a> | <a href='#snippet-shell_completions_conditional' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Completions/Shell_Completions.cs#L47-L59' title='Snippet source file'>snippet source</a> | <a href='#snippet-shell_completions_conditional' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## Testing Completions
@@ -288,7 +288,7 @@ class CalculatorProgram
             .Run(args);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Completions/Shell_Completions.cs#L59-L76' title='Snippet source file'>snippet source</a> | <a href='#snippet-shell_completions_calculator' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Completions/Shell_Completions.cs#L61-L78' title='Snippet source file'>snippet source</a> | <a href='#snippet-shell_completions_calculator' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Users get completions for commands:
@@ -317,7 +317,7 @@ public class DeployApp
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Completions/Shell_Completions.cs#L78-L93' title='Snippet source file'>snippet source</a> | <a href='#snippet-shell_completions_with_enums' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Completions/Shell_Completions.cs#L80-L95' title='Snippet source file'>snippet source</a> | <a href='#snippet-shell_completions_with_enums' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Users get enum completions:
