@@ -14,7 +14,7 @@ public class Program
 
         var appConfigSettings = new NameValueCollection {{"notify.--retry-count", "2"}};
 
-        return GetAppRunner(appConfigSettings, null, args).Run(args);
+        return GetAppRunner(appConfigSettings, "example-app", args).Run(args);
     }
 
     public static AppRunner GetAppRunner(NameValueCollection? appConfigSettings = null, string? appNameForTests = "example_app", string[]? args = null)
