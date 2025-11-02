@@ -95,7 +95,7 @@ public static AppRunner UseCommandLogger(this AppRunner appRunner,
         bool includeMachineAndUser = false,
         Func<CommandContext, IEnumerable<(string key, string value)>?>? additionalInfoCallback = null)
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/AppRunnerConfigExtensions.cs#L236-L256' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseCommandLogger-parameters' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet/AppRunnerConfigExtensions.cs#L246-L266' title='Snippet source file'>snippet source</a> | <a href='#snippet-UseCommandLogger-parameters' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## Include Machine and User
@@ -209,12 +209,13 @@ AppConfig:
       Commands:         CommandAppSettings:
         InheritCommandsFromBaseClasses: False
       DisableDirectives: False
+      Execution:         ExecutionAppSettings:
+        UsageAppName: example.exe
+        UsageAppNameStyle: Adaptive
       Help:         AppHelpSettings:
         ExpandArgumentsInUsage: True
         PrintHelpOption: False
         TextStyle: Detailed
-        UsageAppName: example.exe
-        UsageAppNameStyle: Adaptive
       Localization:         LocalizationAppSettings:
         Localize: 
         UseMemberNamesAsKeys: False
@@ -250,7 +251,7 @@ AppConfig:
 ***************************************
 2
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/command_logger_appconfig_exe.bash#L1-L94' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_appconfig_exe' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/command_logger_appconfig_exe.bash#L1-L95' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_appconfig_exe' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## Recipes for writerFactory
@@ -293,7 +294,7 @@ public class Program
 
 public class LogCommandAttribute : Attribute { }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L225-L243' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_custom_attribute' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L226-L244' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_custom_attribute' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 Notice Add will always log for the command and Subtract never will. 
@@ -388,7 +389,7 @@ public class Program
     public void Subtract(IConsole console, int x, int y) => console.WriteLine(x - y);
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L281-L304' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_root_option' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Command_Logger.cs#L282-L305' title='Snippet source file'>snippet source</a> | <a href='#snippet-command_logger_root_option' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 <!-- snippet: command_logger_root_option_exe -->

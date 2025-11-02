@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
+using CommandDotNet.Help;
 using CommandDotNet.Logging;
 using JetBrains.Annotations;
 
@@ -69,6 +71,36 @@ public class AppInfo(
     public string FileName { get; } = fileName;
 
     public string? Version => _version ??= GetVersion(Instance.EntryAssembly);
+
+    /// <summary>
+    /// Gets the application executable name to use in usage examples and generated scripts.
+    /// Uses <see cref="ExecutionAppSettings.UsageAppName"/> if explicitly set,
+    /// otherwise determines the name based on <see cref="ExecutionAppSettings.UsageAppNameStyle"/>.
+    /// The result may include "dotnet" prefix depending on the style (e.g., "dotnet myapp.dll" or "myapp").
+    /// </summary>
+    public static string GetExecutableAppName(ExecutionAppSettings executionSettings)
+    {
+        if (!executionSettings.UsageAppName.IsNullOrEmpty())
+        {
+            return executionSettings.UsageAppName!;
+        }
+
+        switch (executionSettings.UsageAppNameStyle)
+        {
+            case UsageAppNameStyle.Adaptive:
+                var appInfo = Instance;
+                return appInfo.IsRunViaDotNetExe
+                    ? $"dotnet {appInfo.FileName}"
+                    : appInfo.FileName;
+            case UsageAppNameStyle.DotNet:
+                return $"dotnet {Instance.FileName}";
+            case UsageAppNameStyle.Executable:
+                return Instance.FileName;
+            default:
+                // ReSharper disable once LocalizableElement - will be discovered in development
+                throw new ArgumentOutOfRangeException(nameof(UsageAppNameStyle), $"unknown style: {executionSettings.UsageAppNameStyle}");
+        }
+    }
 
     private static AppInfo BuildAppInfo()
     {

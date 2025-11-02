@@ -33,7 +33,8 @@ public static class AppRunnerConfigExtensions
         bool excludeTimeDirective = false,
         bool excludeResponseFiles = false,
         bool excludeVersionMiddleware = false,
-        bool excludeTypoSuggestions = false)
+        bool excludeTypoSuggestions = false,
+        bool excludeSuggestDirective = false)
     {
         Register(
             excludeCancellationHandlers, 
@@ -63,6 +64,10 @@ public static class AppRunnerConfigExtensions
             excludeTypoSuggestions, 
             nameof(excludeTypoSuggestions),
             ()=> appRunner.UseTypoSuggestions());
+        Register(
+            excludeSuggestDirective,
+            nameof(excludeSuggestDirective),
+            () => appRunner.UseSuggestDirective());
         return appRunner;
 
         static void Register(bool exclude, string paramName, Action register)

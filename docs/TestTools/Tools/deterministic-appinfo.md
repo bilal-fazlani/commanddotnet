@@ -2,7 +2,7 @@
 
 CommandDotNet uses `Assembly.GetEntryAssembly()` and `Process.GetCurrentProcess().MainModule` to generate the AppInfo and AppName used in the auto-generated help.
 
-Unless specified in `AppSettings.Help.UsageAppName`, the AppName is derived from the either the entry assembly or the main module, depending on whether it's a self contained executable.
+Unless specified in `AppSettings.Execution.UsageAppName`, the AppName is derived from the either the entry assembly or the main module, depending on whether it's a self contained executable.
 
 When running tests, the entry assembly may be null and the main module may be the test runner. 
 When null, an exception will be thrown. 
@@ -16,7 +16,7 @@ For example,
 
 There are a few ways around this...
 
-## AppSettings.Help.UsageAppName
+## AppSettings.Execution.UsageAppName
 
 The simplest approach is to override the UsageAppName in the AppSettings.
 
@@ -37,7 +37,7 @@ public class Program
     // set appName default to prevent the need to specify it in all tests
     public static AppRunner GetAppRunner(string? appName = "MyAppName")
     {
-        return new AppRunner<MyCommands>(new AppSettings { Help { UsageAppName = appName } });
+        return new AppRunner<MyCommands>(new AppSettings { Execution { UsageAppName = appName } });
     }
 }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using CommandDotNet.Extensions;
 using CommandDotNet.Help;
 using FluentAssertions;
@@ -39,8 +39,6 @@ Text: ");
       ExpandArgumentsInUsage: True
       PrintHelpOption: False
       TextStyle: Detailed
-      UsageAppName: 
-      UsageAppNameStyle: Adaptive
     Text: ");
         }
 

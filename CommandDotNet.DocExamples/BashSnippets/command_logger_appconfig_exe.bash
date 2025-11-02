@@ -51,12 +51,13 @@ AppConfig:
       Commands:         CommandAppSettings:
         InheritCommandsFromBaseClasses: False
       DisableDirectives: False
+      Execution:         ExecutionAppSettings:
+        UsageAppName: example.exe
+        UsageAppNameStyle: Adaptive
       Help:         AppHelpSettings:
         ExpandArgumentsInUsage: True
         PrintHelpOption: False
         TextStyle: Detailed
-        UsageAppName: example.exe
-        UsageAppNameStyle: Adaptive
       Localization:         LocalizationAppSettings:
         Localize: 
         UseMemberNamesAsKeys: False

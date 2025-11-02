@@ -4,6 +4,14 @@ The `[suggest]` directive provides intelligent shell completion suggestions base
 
 ## Enabling the Directive
 
+The suggest directive is included when using `UseDefaultMiddleware()`:
+
+```c#
+appRunner.UseDefaultMiddleware();
+```
+
+Or enable it explicitly:
+
 ```c#
 appRunner.UseSuggestDirective();
 ```
@@ -130,7 +138,10 @@ $ myapp [suggest] Git Commit
 
 ## Integration with Shell Completion
 
-The suggest directive is designed to be called by shell completion scripts:
+!!! tip "Easy Setup with CompletionCommand"
+    CommandDotNet provides a built-in `CompletionCommand` class that generates completion scripts for you. See [Shell Completions](shell-completions.md) for the recommended approach.
+
+The suggest directive is designed to be called by shell completion scripts. If you need to write custom completion scripts, here are examples:
 
 ### Bash Example
 ```bash
@@ -167,7 +178,7 @@ The directive provides intelligent suggestions even when there are parse errors:
 
 ## Best Practices
 
-1. **Always enable with directives**: `appRunner.UseDefaultMiddleware()` includes directive support
+1. **Use default middleware**: `appRunner.UseDefaultMiddleware()` includes the suggest directive
 2. **Use with other middleware**: Suggest directive works alongside all other middleware
 3. **Test completion scenarios**: Verify suggestions work for your command structure
 4. **Consider AllowedValues**: Define allowed values for common parameters
@@ -180,6 +191,6 @@ The directive provides intelligent suggestions even when there are parse errors:
 
 ## See Also
 
-- [Directives Overview](../directives.md)
-- [Middleware](../middleware.md)
-- [Shell Completion (Advanced)](../shell-completions.md)
+- [Shell Completions](shell-completions.md) - Generate completion scripts with `CompletionCommand`
+- [Directives](../Extensibility/directives.md) - Understanding directives
+- [Middleware](../Extensibility/middleware.md) - Extensibility pipeline

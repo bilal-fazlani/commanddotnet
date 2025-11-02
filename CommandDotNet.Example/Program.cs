@@ -21,7 +21,7 @@ public class Program
     {
 
         appConfigSettings ??= new NameValueCollection();
-        return new AppRunner<Examples>(appNameForTests is null ? null : new AppSettings{Help = {UsageAppName = appNameForTests}})
+        return new AppRunner<Examples>(appNameForTests is null ? null : new AppSettings{Execution = {UsageAppName = appNameForTests}})
             .UseDefaultMiddleware()
             .UseCommandLogger()
             .UseNameCasing(Case.KebabCase)

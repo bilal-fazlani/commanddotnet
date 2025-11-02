@@ -72,6 +72,7 @@ nav:
               - TestTools/Tools/testing-prompts.md
               - TestTools/Tools/deterministic-appinfo.md
       - Other Features:
+          - Shell Completions: OtherFeatures/shell-completions.md
           - OtherFeatures/suggest.md
           - OtherFeatures/iconsole.md
           - OtherFeatures/default-middleware.md

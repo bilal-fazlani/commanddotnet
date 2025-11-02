@@ -129,8 +129,8 @@ hide:
 
 ## Other
 
-- [x] Shell Completions ([docs](OtherFeatures/suggest.md))
-> `[suggest]` directive for intelligent tab completion in bash, zsh, fish, and PowerShell
+- [x] Shell Completions ([docs](OtherFeatures/shell-completions.md))
+> Built-in `CompletionCommand` generates completion scripts for bash, zsh, fish, and PowerShell. Powered by the `[suggest]` directive for intelligent, context-aware completions.
 
 - [x] ++ctrl+c++ ([docs](OtherFeatures/cancellation.md))
 

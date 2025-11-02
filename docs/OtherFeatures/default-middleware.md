@@ -13,10 +13,11 @@ static int Main(string[] args)
         .UseCancellationHandlers()
         .UseDebugDirective()
         .UseParseDirective()
+        .UseTimeDirective()
         .UseResponseFiles()
         .UseVersionMiddleware()
-        .AppendPipedInputToOperandList()
         .UseTypoSuggestions()
+        .UseSuggestDirective()
         .Run(args);
 }
 ```
@@ -92,18 +93,20 @@ public static AppRunner UseDefaultMiddleware(this AppRunner appRunner,
     bool excludeCancellationHandlers = false,
     bool excludeDebugDirective = false,
     bool excludeParseDirective = false,
+    bool excludeTimeDirective = false,
     bool excludeResponseFiles = false,
     bool excludeVersionMiddleware = false,
-    bool excludeAppendPipedInputToOperandList = false,
-    bool excludeTypoSuggestions = false)
+    bool excludeTypoSuggestions = false,
+    bool excludeSuggestDirective = false)
 {
     if (!excludeCancellationHandlers) appRunner.UseCancellationHandlers();
     if (!excludeDebugDirective) appRunner.UseDebugDirective();
     if (!excludeParseDirective) appRunner.UseParseDirective();
+    if (!excludeTimeDirective) appRunner.UseTimeDirective();
     if (!excludeResponseFiles) appRunner.UseResponseFiles();
     if (!excludeVersionMiddleware) appRunner.UseVersionMiddleware();
-    if (!excludeAppendPipedInputToOperandList) appRunner.AppendPipedInputToOperandList();
     if (!excludeTypoSuggestions) appRunner.UseTypoSuggestions();
+    if (!excludeSuggestDirective) appRunner.UseSuggestDirective();
 
     return appRunner;
 }

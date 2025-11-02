@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Help;
 using CommandDotNet.Tokens;
@@ -10,17 +11,27 @@ namespace CommandDotNet;
 [PublicAPI]
 public class AppSettings : IIndentableToString
 {
+    private ExecutionAppSettings _execution = new();
+    private AppHelpSettings _help;
+
+    public AppSettings()
+    {
+        // Wire up backwards compatibility for Help settings moved to Execution
+        _help = new AppHelpSettings();
+        _help.SetExecutionSettings(_execution);
+    }
+    
     [Obsolete("Use Arguments.BooleanMode")]
     public BooleanMode BooleanMode
     {
-        get => Arguments.BooleanMode; 
+        get => Arguments.BooleanMode;
         set => Arguments.BooleanMode = value;
     }
 
     [Obsolete("Use Parser.IgnoreUnexpectedOperands")]
     public bool IgnoreUnexpectedOperands
     {
-        get => Parser.IgnoreUnexpectedOperands; 
+        get => Parser.IgnoreUnexpectedOperands;
         set => Parser.IgnoreUnexpectedOperands = value;
     }
 
@@ -55,8 +66,27 @@ public class AppSettings : IIndentableToString
     /// <summary>Settings specific to the command parsing</summary>
     public ParseAppSettings Parser { get; set; } = new();
 
+    /// <summary>Settings specific to application execution and invocation</summary>
+    public ExecutionAppSettings Execution
+    {
+        get => _execution;
+        set
+        {
+            _execution = value;
+            _help.SetExecutionSettings(_execution);
+        }
+    }
+
     /// <summary>Settings specific to built-in help providers</summary>
-    public AppHelpSettings Help { get; set; } = new();
+    public AppHelpSettings Help
+    {
+        get => _help;
+        set
+        {
+            _help = value;
+            _help.SetExecutionSettings(_execution);
+        }
+    }
 
     /// <summary>When specified, this function will be used to localize user output from the framework</summary>
     [Obsolete("Use Localization.Localize")]

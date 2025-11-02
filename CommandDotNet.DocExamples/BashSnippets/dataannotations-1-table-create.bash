@@ -1,4 +1,4 @@
-// begin-snippet: DataAnnotations-1-table-create
+// begin-snippet: dataannotations-1-table-create
 $ dotnet hr.dll create TooLongTableName --server bossman --owner abc -sv
 silent and verbose are mutually exclusive. There can be only one!
 'server' is not a valid fully-qualified http, https, or ftp URL.

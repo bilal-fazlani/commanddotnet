@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -24,7 +24,7 @@ public static class SnippetExtensions
     public static void VerifySnippet(this BashSnippet snippet)
     {
         var result = snippet.Runner
-            .Configure(c => c.AppSettings.Help.UsageAppName = snippet.AppName)
+            .Configure(c => c.AppSettings.Execution.UsageAppName = snippet.AppName)
             .Verify(new Scenario
             {
                 When =
