@@ -118,7 +118,7 @@ internal static class TypoSuggestionsMiddleware
 
         if (suggestions.Count == 0) return false;
 
-        var usage = ctx.AppConfig.AppSettings.Help.GetAppName() + " " + command.GetPath();
+        var usage = Builders.AppInfo.GetExecutableAppName(ctx.AppConfig.AppSettings.Execution) + " " + command.GetPath();
 
         var @out = ctx.Console.Out;
         @out.WriteLine($"'{typo}' {message}");

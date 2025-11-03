@@ -98,7 +98,7 @@ Options:
 
   -v | --verbose
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/DataAnnotations-1-table-create-help.bash#L1-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-dataannotations-1-table-create-help' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/dataannotations-1-table-create-help.bash#L1-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-dataannotations-1-table-create-help' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 When the command is run with invalid arguments, you get the resulting error messages. Notice we were able to club (aka bundle) the `Silent` and `Verbose` shortnames `-sv`. 
@@ -112,5 +112,5 @@ silent and verbose are mutually exclusive. There can be only one!
 'name' must be a string or array type with a maximum length of '10'.
 'owner' is not a valid e-mail address.
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/DataAnnotations-1-table-create.bash#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-dataannotations-1-table-create' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/dataannotations-1-table-create.bash#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-dataannotations-1-table-create' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->

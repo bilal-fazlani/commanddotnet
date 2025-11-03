@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using CommandDotNet.DataAnnotations;
@@ -60,7 +60,7 @@ public class DataAnnotations_1_Table
     }
     // end-snippet
 
-    public static BashSnippet Help = new("DataAnnotations-1-table-create-help",
+    public static BashSnippet Help = new("dataannotations-1-table-create-help",
         Program.AppRunner,
         "dotnet table.dll", "create --help", 0,
         @"Usage: {0} create [options] <name>
@@ -79,7 +79,7 @@ Options:
 
   -v | --verbose");
 
-    public static BashSnippet Hire = new("DataAnnotations-1-table-create",
+    public static BashSnippet Hire = new("dataannotations-1-table-create",
         Program.AppRunner,
         "dotnet hr.dll", "create TooLongTableName --server bossman --owner abc -sv", 2,
         @"silent and verbose are mutually exclusive. There can be only one!

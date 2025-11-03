@@ -15,7 +15,7 @@ public class UsageAppNameStylesTests
     [Fact]
     public void DotNetStyleUsesDotNetStyle()
     {
-        var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.DotNet } };
+        var appSettings = new AppSettings { Execution = { UsageAppNameStyle = UsageAppNameStyle.DotNet } };
         new AppRunner<WithoutAppMetadatName>(appSettings).Verify(new Scenario
         {
             When = {Args = "-h"},
@@ -26,7 +26,7 @@ public class UsageAppNameStylesTests
     [Fact]
     public void ExecutableStyleUsesExecutableStyle()
     {
-        var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.Executable } };
+        var appSettings = new AppSettings { Execution = { UsageAppNameStyle = UsageAppNameStyle.Executable } };
         new AppRunner<WithAppMetadataName>(appSettings).Verify(new Scenario
         {
             When = {Args = "-h"},
@@ -37,7 +37,7 @@ public class UsageAppNameStylesTests
     [Fact]
     public void AdaptiveStyleFallsBackToDotNetStyle()
     {
-        var appSettings = new AppSettings { Help = { UsageAppNameStyle = UsageAppNameStyle.Adaptive } };
+        var appSettings = new AppSettings { Execution = { UsageAppNameStyle = UsageAppNameStyle.Adaptive } };
         new AppRunner<WithoutAppMetadatName>(appSettings).Verify(new Scenario
         {
             When = {Args = "-h"},
@@ -48,7 +48,7 @@ public class UsageAppNameStylesTests
     [Fact]
     public void UsageAppNameSettingUsedWhenProvided()
     {
-        var appSettings = new AppSettings { Help = { UsageAppName = "WhatATool" } };
+        var appSettings = new AppSettings { Execution = { UsageAppName = "WhatATool" } };
         new AppRunner<WithAppMetadataName>(appSettings).Verify(new Scenario
         {
             When = {Args = "-h"},

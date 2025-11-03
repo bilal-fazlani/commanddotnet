@@ -1,7 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using CommandDotNet.Builders;
+using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using JetBrains.Annotations;
 using static System.Environment;
@@ -12,6 +14,7 @@ namespace CommandDotNet.Help;
 public class HelpTextProvider : IHelpProvider
 {
     private readonly AppHelpSettings _appHelpSettings;
+    private readonly ExecutionAppSettings _executionSettings;
     private string? _appName;
     private readonly Func<string, string?> _localize;
 
@@ -19,6 +22,7 @@ public class HelpTextProvider : IHelpProvider
     {
         _appName = appName;
         _appHelpSettings = appSettings.Help;
+        _executionSettings = appSettings.Execution;
         _localize = appSettings.Localization.Localize ?? (s => s);
     }
         
@@ -43,7 +47,7 @@ public class HelpTextProvider : IHelpProvider
     }
 
     protected virtual string AppName(Command command) =>
-        _appName ??= _appHelpSettings.GetAppName();
+        _appName ??= AppInfo.GetExecutableAppName(_executionSettings);
 
     /// <summary>The current command and it's parents.  aka bread crumbs</summary>
     protected virtual string CommandPath(Command command) => command.GetPath();

@@ -1,4 +1,5 @@
 using System;
+using CommandDotNet.Completions;
 using CommandDotNet.Example.Commands;
 using Git = CommandDotNet.Example.Commands.Git;
 
@@ -56,6 +57,9 @@ internal class Examples
 
     [Subcommand]
     public Commands.Prompts Prompts { get; set; } = null!;
+
+    [Subcommand]
+    public CompletionCommand Completion { get; set; } = new();
 
     /// <summary>Example demonstrating the DescriptionMethod feature for dynamic help text</summary>
     // begin-snippet: description_method_example

@@ -107,7 +107,7 @@ ExtendedHelpText = "Directives:\n" +
 <!-- endSnippet -->
 
 !!! Note
-    If you're looking to change the app name, set `AppSettings.Help.UsageAppName` and use the `%AppName%` template variable mentioned below. Learn more in [Help](../Help/help.md#usageappnamestyle)
+    If you're looking to change the app name, set `AppSettings.Execution.UsageAppName` and use the `%AppName%` template variable mentioned below. Learn more in [Help](../Help/help.md#usageappnamestyle)
 
 ### Template variables
 
@@ -144,7 +144,7 @@ This is useful when you want to override the Usage example and still want to inc
 
 #### AppName
 
-Use `%AppName%` to include the name as calculated by CommandDotNet. This will use `AppSettings.Help.UsageAppName` if it's set. 
+Use `%AppName%` to include the name as calculated by CommandDotNet. This will use `AppSettings.Execution.UsageAppName` if it's set. 
 
 #### CmdPath
 

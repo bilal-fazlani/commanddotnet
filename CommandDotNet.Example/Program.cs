@@ -1,4 +1,4 @@
-﻿using System.Collections.Specialized;
+using System.Collections.Specialized;
 using CommandDotNet.Diagnostics;
 using CommandDotNet.FluentValidation;
 using CommandDotNet.NameCasing;
@@ -14,14 +14,14 @@ public class Program
 
         var appConfigSettings = new NameValueCollection {{"notify.--retry-count", "2"}};
 
-        return GetAppRunner(appConfigSettings, null, args).Run(args);
+        return GetAppRunner(appConfigSettings, "example-app", args).Run(args);
     }
 
     public static AppRunner GetAppRunner(NameValueCollection? appConfigSettings = null, string? appNameForTests = "example_app", string[]? args = null)
     {
 
         appConfigSettings ??= new NameValueCollection();
-        return new AppRunner<Examples>(appNameForTests is null ? null : new AppSettings{Help = {UsageAppName = appNameForTests}})
+        return new AppRunner<Examples>(appNameForTests is null ? null : new AppSettings{Execution = {UsageAppName = appNameForTests}})
             .UseDefaultMiddleware()
             .UseCommandLogger()
             .UseNameCasing(Case.KebabCase)
