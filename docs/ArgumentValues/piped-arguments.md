@@ -75,7 +75,7 @@ c3
 <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/piped_arguments_list_ids_only.bash#L1-L6' title='Snippet source file'>snippet source</a> | <a href='#snippet-piped_arguments_list_ids_only' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-This disabled commands takes a collection of ids and they can be piped to the disable command like this...
+This disable command takes a collection of ids and they can be piped to the disable command like this...
 
 <!-- snippet: piped_arguments_disable -->
 <a id='snippet-piped_arguments_disable'></a>
@@ -88,9 +88,9 @@ disabled b1 Beatrix (inactive)
 <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/piped_arguments_disable.bash#L1-L6' title='Snippet source file'>snippet source</a> | <a href='#snippet-piped_arguments_disable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-What's happening here? The shell will start two processes, the first for List and the second for Disable. As the first process writes ids to the output stream, the id is "piped" to the second process. The Disable command will process the ids submitted in in the command (`c3`) and then will process the piped inputs as they are received. When List completes, the first process will shutdown and the pipe will be closed. The Disable command will complete any remaining ids and then shutdown.
+What's happening here? The shell will start two processes, the first for List and the second for Disable. As the first process writes ids to the output stream, the id is "piped" to the second process. The Disable command will process the ids submitted in the command (`c3`) and then will process the piped inputs as they are received. When List completes, the first process will shutdown and the pipe will be closed. The Disable command will complete any remaining ids and then shutdown.
 
-Disable could define the ids parameter as a type of `List<string>` or `string[]`, but could not process any ids until the List command completed. By using `IEnumerable<string>`, the Disbabled command can process the ids as soon as the List command outputs them.
+Disable could define the ids parameter as a type of `List<string>` or `string[]`, but could not process any ids until the List command completed. By using `IEnumerable<string>`, the Disable command can process the ids as soon as the List command outputs them.
 
 ### Piping output to option collections
 

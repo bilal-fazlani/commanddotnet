@@ -5,7 +5,7 @@ Arguments can be defined with any type that...
 * is a primitive type: 
 * has a [TypeConverter](https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.typeconverter)
 * contains a string constructor
-* has a `public static Parse(string)` method or `public static Parse(string, {optional paremeters})`
+* has a `public static Parse(string)` method or `public static Parse(string, {optional parameters})`
   
 The constructor and static Parse method may contain additional optional parameters but must contain only a single required string parameter.
 

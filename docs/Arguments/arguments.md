@@ -9,7 +9,7 @@ As discussed in [Terminology](../argument-terminology.md), Option and Operand ar
 
 By default, arguments are operands. Change the default by assigning `#!c# AppSettings.DefaultArgumentMode = ArgumentMode.Option`
 
-Use the `[Operand]` (or `[Positional]`) and `[Option]` (or `[Named]`) attributes to explicity denote which argument type and to configure the arguments.
+Use the `[Operand]` (or `[Positional]`) and `[Option]` (or `[Named]`) attributes to explicitly denote which argument type and to configure the arguments.
 
 The Positional and Named attributes are provided for those who prefer that terminology for defining commands. The terms operand and option are still used for these arguments elsewhere in the framework.
 
@@ -18,7 +18,7 @@ The Positional and Named attributes are provided for those who prefer that termi
 
 ## Operand Attribute
 
-If preferred, you can use `[Named]` instead of `[Operand]` with the same properties
+If preferred, you can use `[Positional]` instead of `[Operand]` with the same properties
 
 ### Properties
 
@@ -35,7 +35,7 @@ If preferred, you can use `[Positional]` instead of `[Option]` with the same pro
 The option long name is defaulted from the property or parameter name that defines them. 
 The case can be changed using the [name-casing](../OtherFeatures/name-casing.md) middleware.
 
-The long name can be overridden using the attribut constructor `[Option("new-name")]`
+The long name can be overridden using the attribute constructor `[Option("new-name")]`
 
 A short name can be added using the attribute constructor `[Option('a')]`
 
@@ -139,7 +139,7 @@ Options are not positional so they can appear in any order within the command.
 
 ## Flags
 
-Flags are boolean options with a default value of false. The presence of the flag indicates true. This simplifies the user experience by allowing them to specifiy `-b` instead of `-b true`.  This also enables clubbing.
+Flags are boolean options with a default value of false. The presence of the flag indicates true. This simplifies the user experience by allowing them to specify `-b` instead of `-b true`.  This also enables clubbing.
 
 Define them as Options with BooleanMode = BooleanMode.Implicit. Implicit is the default defined for `AppSettings.Arguments.DefaultBooleanMode` or `OptionAttribute.BooleanMode`.
 
@@ -171,7 +171,7 @@ The split character can also be set per option using `[Option(Split=',')]`. The 
 
 By default CommandDotNet follows POSIX conventions and uses `-` to indicate an option short name and `--` to indicate an option long name.
 
-While this convention has been adopted by many programs that run in Windows, the legacy convention is to use only `\` for both short and long names.
+While this convention has been adopted by many programs that run in Windows, the legacy convention is to use only `/` for both short and long names.
 
 The Powershell convention is to use `-` for both short and long names.
 
@@ -179,7 +179,7 @@ With version 5, CommandDotNet supports both conventions.
 
 The existing POSIX conventions are still the default and what appear in help. 
 
-Support for the Windows and Powershell conventions is intented to provide backwards compatibility for existing applications being ported to CommandDotNet where scripts and tooling expects the other conventions.
+Support for the Windows and Powershell conventions is intended to provide backwards compatibility for existing applications being ported to CommandDotNet where scripts and tooling expects the other conventions.
 
 How to enable and use with Windows
 

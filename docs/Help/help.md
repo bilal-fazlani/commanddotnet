@@ -43,7 +43,7 @@ Use "{application} [command] --help" for more information about a command.
 
 Segments that do not apply for a command are not included.  
 
-For example, the last line are only included when a command has subcommands
+For example, the last line is only included when a command has subcommands
 and "Options also available for subcommands:" is only included when options 
 defined in parent commands can be provided in subcommands.
 
@@ -125,7 +125,7 @@ There are two ways to print help, and both require an instance of `CommandContex
 
 Set `CommandContext.ShowHelpOnExit = true` to let the middleware print the help. This will be the last output for the context. 
 
-Help will not print if an exceptions the middleware.
+Help will not print if an exception occurs in the middleware.
 
 ### PrintHelp()
 

@@ -13,7 +13,7 @@ TLDR: The terminology of this framework.
 * Application: the deployed program being executed. Could be a dll or exe
 * Command: the action to be executed
 * Subcommand: a command accessed within another command
-* Operand: a positional argument. The posiition of the value indicates which argument it is.
+* Operand: a positional argument. The position of the value indicates which argument it is.
 * Option: a named argument. The value must be proceeded by the name. The position does not matter.
 * Flag: a boolean option, true when specified, otherwise false
 
@@ -57,9 +57,9 @@ The developer of middleware components: often need to operate across all command
 
 * For users of the console app
     * help documentation is the interface. 
-    * terminoloy displayed: `command`, `option` and `argument`.
+    * terminology displayed: `command`, `option` and `argument`.
 * For developers
-    * terminoloy used in API: `command`, `subcommand`, `argument`, `option` and `operand`
+    * terminology used in API: `command`, `subcommand`, `argument`, `option` and `operand`
     * types: `Command`, `IArgumentNode`, `IArgument`, `Option` and `Operand`.
     * Option and Operand are the two concrete types of IArgument
         * Option: named argument
