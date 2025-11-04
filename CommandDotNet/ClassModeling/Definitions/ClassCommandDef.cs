@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -37,11 +37,45 @@ internal class ClassCommandDef : ICommandDef
     public static Command CreateRootCommand(Type rootAppType, CommandContext commandContext)
     {
         Log.Debug("begin {0}: rootAppType={1}", nameof(CreateRootCommand), rootAppType);
-        var rootCommand = new ClassCommandDef(rootAppType, commandContext)
-            .ToCommand(null, commandContext)
-            .Command;
-        Log.Debug("end {0}");
+        
+        // Try to use source-generated builder first, fall back to reflection
+        var commandDef = TryCreateFromGeneratedBuilder(rootAppType, commandContext)
+                         ?? new ClassCommandDef(rootAppType, commandContext);
+        
+        var rootCommand = commandDef.ToCommand(null, commandContext).Command;
+        Log.Debug("end {0}: usedGenerated={1}", nameof(CreateRootCommand), 
+            commandDef is GeneratedClassCommandDef);
         return rootCommand;
+    }
+
+    /// <summary>
+    /// Attempts to create a command definition using a source-generated builder.
+    /// Returns null if no builder exists.
+    /// No reflection used - builders are registered via module initializers.
+    /// </summary>
+    private static ICommandDef? TryCreateFromGeneratedBuilder(Type commandType, CommandContext commandContext)
+    {
+        // Look up pre-registered builder - no reflection!
+        var builderFunc = CommandDefRegistry.TryGetBuilder(commandType);
+
+        if (builderFunc == null)
+        {
+            Log.Debug("No generated builder registered for {0}", commandType);
+            return null;
+        }
+
+        try
+        {
+            var commandDef = builderFunc(commandContext);
+            Log.Info("Using source-generated builder for {0} (zero reflection)", commandType.Name);
+            return commandDef;
+        }
+        catch (Exception ex)
+        {
+            // Log but don't fail - we can fall back to reflection
+            Log.Warn(ex, "Generated builder failed for {0}, using reflection", commandType.Name);
+            return null;
+        }
     }
 
     public static IEnumerable<(Type type, SubcommandAttribute? subcommandAttr)> GetAllCommandClassTypes(

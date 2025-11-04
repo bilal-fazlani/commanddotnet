@@ -28,4 +28,11 @@
     <None Remove="CommandDotNet.csproj.DotSettings" />
     <None Include="..\images\nuget-icon.png" Pack="true" PackagePath="" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- Include source generator in the package -->
+    <ProjectReference Include="..\CommandDotNet.SourceGen\CommandDotNet.SourceGen.csproj" 
+                      PrivateAssets="all" 
+                      ReferenceOutputAssembly="false" 
+                      OutputItemType="Analyzer" />
+  </ItemGroup>
 </Project>

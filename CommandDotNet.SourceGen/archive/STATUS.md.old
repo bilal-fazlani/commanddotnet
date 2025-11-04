@@ -1,0 +1,127 @@
+# Source Generator Implementation Status
+
+> 🗺️ **See [ROADMAP.md](ROADMAP.md) for detailed future plans, effort estimates, and priorities.**
+
+## ✅ Completed
+
+### 1. Source Generator Project Created
+- **Location**: `CommandDotNet.SourceGen/`
+- **Type**: netstandard2.0 Roslyn source generator
+- **Build**: ✅ Successfully compiles and packages
+
+### 2. Core Generator Implementation
+- **File**: `CommandClassGenerator.cs`
+- **Features**:
+  - Incremental generator pattern
+  - Detects command classes with public methods
+  - Generates `__CommandClassBuilder` static classes
+  - Handles interceptor methods, default commands, and local commands
+  - Unique hint names for generated files
+
+### 3. Generated Code Runtime Support
+- **File**: `CommandDotNet/ClassModeling/Definitions/GeneratedClassCommandDef.cs`
+- **Purpose**: ICommandDef implementation that uses generated builders
+- **Features**:
+  - Accepts generated builder delegates
+  - Falls back to reflection for nested/property subcommands
+  - Compatible with existing middleware pipeline
+
+### 4. Package Integration
+- Generator bundled into CommandDotNet.csproj as analyzer
+- Automatically runs for consumers who reference CommandDotNet
+- No separate package installation required
+
+### 5. Documentation
+- README.md with usage guidelines
+- Architecture explanation
+- Troubleshooting guide
+
+## 🔄 Current State
+
+The generator is **fully functional** but not yet **integrated into the runtime** because:
+
+1. **No command classes in core library** - CommandDotNet is a framework, not an app
+2. **Runtime integration needed** - Need to wire generated builders into `ClassModelingMiddleware`
+3. **Opt-in vs automatic** - Design decision on how to enable
+
+## 🎯 Next Steps
+
+### Option A: Opt-In via Attribute
+```csharp
+[UseGeneratedBuilder]
+public class MyCommand
+{
+    public void Do() { }
+}
+```
+
+### Option B: Automatic with Fallback
+Automatically use generated builder if it exists, otherwise use reflection:
+
+```csharp
+private static ICommandDef CreateCommandDef(Type type, CommandContext ctx)
+{
+    // Try to find generated builder first
+    var builderType = type.Assembly.GetType($"{type.FullName}__CommandClassBuilder");
+    if (builderType != null)
+    {
+        var method = builderType.GetMethod("CreateCommandDef");
+        if (method != null)
+        {
+            return (ICommandDef)method.Invoke(null, new object[] { ctx });
+        }
+    }
+    
+    // Fallback to reflection
+    return new ClassCommandDef(type, ctx);
+}
+```
+
+### Option C: Explicit API
+```csharp
+new AppRunner<MyCommand>()
+    .UseGeneratedBuilders() // Enable source-generated code
+    .Run(args);
+```
+
+## 🧪 Testing
+
+### Verification Steps
+
+1. **Create a test application** that references CommandDotNet
+2. **Add a command class**:
+   ```csharp
+   public class Calculator
+   {
+       public void Add(int x, int y) => Console.WriteLine(x + y);
+   }
+   ```
+3. **Build and check** for generated file:
+   ```bash
+   find obj -name "*Calculator__CommandClassBuilder.g.cs"
+   ```
+4. **Verify generated code** contains expected methods
+
+### Integration Test
+Create example app in `CommandDotNet.Example` to demonstrate:
+- Generator runs at compile time
+- Generated code is created
+- Can be invoked instead of reflection
+
+## 📋 Recommended Approach
+
+**I recommend Option B (Automatic with Fallback)**:
+
+**Pros**:
+- Zero configuration for users
+- Gradual adoption possible
+- Falls back gracefully
+- Best performance when generators work
+- No breaking changes
+
+**Implementation**:
+1. Modify `ClassModelingMiddleware.CreateRootCommand`
+2. Check for generated builder before using reflection
+3. Add diagnostic logging to show which path is used
+
+Would you like me to implement Option B next?
