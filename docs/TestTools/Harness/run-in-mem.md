@@ -2,19 +2,29 @@
 
 The `RunInMem` extension method takes a fully configured AppRunner instance and runs it in memory.
 
-```c#
+<!-- snippet: testtools_runinmem_error_example -->
+<a id='snippet-testtools_runinmem_error_example'></a>
+```cs
+public class Git
+{
+    public void Checkout(string branch)
+    {
+        System.Console.Error.WriteLine($"error: pathspec '{branch}' did not match any file(s) known to git");
+    }
+}
 
-[Test]
-public void Checkout_NewBranch_WithoutBranchFlag_Fails()
+public static void RunInMem_Error_Example()
 {
     var result = new AppRunner<Git>()
         .UseDefaultMiddleware()
         .RunInMem("checkout lala");
 
-    result.ExitCode.Should().Be(1);
-    result.Console.Error.Should().Be("error: pathspec 'lala' did not match any file(s) known to git" );
+    // result.ExitCode.Should().Be(1);
+    // result.Console.Error.Should().Contain("error: pathspec 'lala' did not match any file(s) known to git");
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/TestTools/TestTools_Examples.cs#L47-L65' title='Snippet source file'>snippet source</a> | <a href='#snippet-testtools_runinmem_error_example' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 ## What it does
 
@@ -44,7 +54,7 @@ Log output based on `TestConfig.OnSuccess.Print` or `TestConfig.OnError.Print` s
 
 ### Return AppRunnerResult
 
-```c#
+```cs
 
 public class AppRunnerResult
 {

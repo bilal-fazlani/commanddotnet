@@ -1,4 +1,4 @@
-﻿using CommandDotNet.Extensions;
+using CommandDotNet.Extensions;
 using CommandDotNet.Parsing;
 using JetBrains.Annotations;
 
@@ -7,6 +7,7 @@ namespace CommandDotNet;
 [PublicAPI]
 public class ParseAppSettings : IIndentableToString
 {
+    // begin-snippet: ParseAppSettings
     /// <summary>
     /// The default <see cref="ArgumentSeparatorStrategy"/>.
     /// This can be overridden for a <see cref="Command"/> using the <see cref="CommandAttribute"/>
@@ -22,6 +23,7 @@ public class ParseAppSettings : IIndentableToString
     public bool AllowBackslashOptionPrefix { get; set; }
 
     public bool AllowSingleHyphenForLongNames { get; set; }
+    // end-snippet
 
     public override string ToString() => ToString(new Indent());
 

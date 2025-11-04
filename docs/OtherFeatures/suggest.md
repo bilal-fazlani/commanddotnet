@@ -6,13 +6,13 @@ The `[suggest]` directive provides intelligent shell completion suggestions base
 
 The suggest directive is included when using `UseDefaultMiddleware()`:
 
-```c#
+```cs
 appRunner.UseDefaultMiddleware();
 ```
 
 Or enable it explicitly:
 
-```c#
+```cs
 appRunner.UseSuggestDirective();
 ```
 
@@ -58,16 +58,23 @@ myapp [suggest] command --opt par  # Filters suggestions starting with 'par'
 
 ### Basic Command Suggestions
 
-```c#
+<!-- snippet: suggest_basic_commands -->
+<a id='snippet-suggest_basic_commands'></a>
+```cs
 public class GitApp
 {
     [Command]
-    public void Commit([Option] string message) { }
+    public void Commit(string message) { }
     
     [Command]
-    public void Push([Option] bool force) { }
+    public void Push() { }
+    
+    [Command]
+    public void Pull() { }
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/OtherFeatures/Suggest_Examples.cs#L5-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-suggest_basic_commands' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 ```bash
 $ myapp [suggest]
@@ -83,15 +90,21 @@ Commit
 
 ### Enum Value Completion
 
-```c#
+<!-- snippet: suggest_enum_values -->
+<a id='snippet-suggest_enum_values'></a>
+```cs
 public enum LogLevel { Debug, Info, Warning, Error }
 
 public class App
 {
-    [Command]
-    public void Log([Option] LogLevel level = LogLevel.Info) { }
+    public void SetLogLevel(LogLevel level)
+    {
+        System.Console.WriteLine($"Log level set to {level}");
+    }
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/OtherFeatures/Suggest_Examples.cs#L19-L29' title='Snippet source file'>snippet source</a> | <a href='#snippet-suggest_enum_values' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 ```bash
 $ myapp [suggest] Log --level
@@ -108,20 +121,21 @@ Warning
 
 ### Nested Subcommands
 
-```c#
-public class App
+<!-- snippet: suggest_nested_subcommands -->
+<a id='snippet-suggest_nested_subcommands'></a>
+```cs
+public class App2
 {
     [Subcommand]
-    public class Git
+    public class Remote
     {
-        [Command]
-        public void Commit([Option] string message) { }
-        
-        [Command]
-        public void Push() { }
+        public void Add(string name, string url) { }
+        public void Remove(string name) { }
     }
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/OtherFeatures/Suggest_Examples.cs#L31-L41' title='Snippet source file'>snippet source</a> | <a href='#snippet-suggest_nested_subcommands' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 ```bash
 $ myapp [suggest] Git

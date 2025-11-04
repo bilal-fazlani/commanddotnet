@@ -11,25 +11,21 @@ Collections can be delimited with a comma. eg. `apple,banana,orange`
 ### Example App
 
 We'll use the following app for examples below.
-```c#
+<!-- snippet: config_defaults_model -->
+<a id='snippet-config_defaults_model'></a>
+```cs
 public class Creds
 {
-    [Option(LongName = "User", ShortName = "u")]
-    public string Username{ get;set; }
-    
-    [Option(LongName = "Password", ShortName = "p")]
-    public Password Password{ get;set; }
+    [Option('u', "User")]
+    public string? Username { get; set; }
 
-    [Option(LongName = "token", ShortName = "t")]
-    public Password AccessToken{ get;set; }
-}
-
-public class Api
-{
-    public void Download(Creds creds, string url, FileInfo file) { ... }
-    public void Upload(Creds creds, FileInfo file, string url){...}
+    [EnvVar("ExampleAppAccessToken")]
+    [Option('t', "token")]
+    public Password? AccessToken { get; set; }
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/ArgumentValues/ConfigDefaults_Examples.cs#L5-L15' title='Snippet source file'>snippet source</a> | <a href='#snippet-config_defaults_model' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 In this app, the upload and download commands can authenticate with username/password or with an access token.
 
@@ -49,11 +45,21 @@ Use the `[EnvVar("key")]` to assign the environment variable as the default for 
 
 With our example, if we wanted to load the access token from an environment variable, decorate the argument as
 
-```c#
+<!-- snippet: config_defaults_envvar -->
+<a id='snippet-config_defaults_envvar'></a>
+```cs
+public class CredsWithEnvVar
+{
+    [Option('u', "User")]
+    public string? Username { get; set; }
+
     [EnvVar("ExampleAppAccessToken")]
-    [Option(LongName = "token", ShortName = "t")]
-    public Password AccessToken{ get;set; }
+    [Option('t', "token")]
+    public Password? AccessToken { get; set; }
+}
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/ArgumentValues/ConfigDefaults_Examples.cs#L17-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-config_defaults_envvar' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 When the _ExampleAppAccessToken_ environment variable exists, the default will be that value.
 
@@ -62,11 +68,21 @@ Enable the feature with `appRunner.UseDefaultsFromAppSetting(appSettings)`
 
 Use the `[AppSetting("key")]` to assign the app setting as the default for the argument.
 
-```c#
+<!-- snippet: config_defaults_appsetting -->
+<a id='snippet-config_defaults_appsetting'></a>
+```cs
+public class CredsWithAppSetting
+{
+    [Option('u', "User")]
+    public string? Username { get; set; }
+
     [AppSetting("AccessToken")]
-    [Option(LongName = "token", ShortName = "t")]
-    public Password AccessToken{ get;set; }
+    [Option('t', "token")]
+    public Password? AccessToken { get; set; }
+}
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/ArgumentValues/ConfigDefaults_Examples.cs#L29-L39' title='Snippet source file'>snippet source</a> | <a href='#snippet-config_defaults_appsetting' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 When the _ExampleAppAccessToken_ app setting exists, the default will be that value.
 
@@ -97,7 +113,7 @@ To specify defaults for a specific command, prefix the key with the command name
 ## .Net Core Config
 Enable the feature with `appRunner.UseDefaultsFromConfig(...)` and use the pattern below
 
-```c#
+```cs
 var appConfig = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", true, true)
     .Build();
@@ -126,7 +142,7 @@ Example: Say we need git .config settings and have a `GitConfigService` to read 
 
 Given an app like this
 
-```c#
+```cs
 [AttributeUsage(AttributeTargets.Property|AttributeTargets.Parameter)]
 public class GitConfigAttribute : Attribute
 {
@@ -153,7 +169,7 @@ public class MyApp
 
 Use the defaults from `GitConfigService` like this
 
-```c#
+```cs
 new AppRunner<MyApp>
     .UseDefaultsFromConfig(arg => 
     {

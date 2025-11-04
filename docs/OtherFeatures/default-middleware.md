@@ -6,7 +6,7 @@ Core middleware is the minimum set of middleware required to process arguments. 
 
 Optional middleware can be injected into the middleware pipeline before arguments are processed.
 
-```c#
+```cs
 static int Main(string[] args)
 {
     return new AppRunner<ValidationApp>()
@@ -29,20 +29,24 @@ CommandDotNet will release new features as new middleware. To take advantage of 
 
 Some developers very much prefer this approach and it will always be available to them.
 
-For other developers, this creates configuration fatigue. The fatigue of remembering which middleware to add for new apps, scanning the configuration everytime they're in the Main method, tracking new features to enable with updates to the package. Some apps and development styles do not benefit from additional work. `UseDefaultMiddleware` is the answer.
+For other developers, this creates configuration fatigue. The fatigue of remembering which middleware to add for new apps, scanning the configuration every time they're in the Main method, tracking new features to enable with updates to the package. Some apps and development styles do not benefit from additional work. `UseDefaultMiddleware` is the answer.
 
 ## Default middleware
 
 To avoid the clutter and fatigue of enabling built-in middleware one-by-one, we've provided the `UseDefaultMiddleware` extension.
 
-```c#
-static int Main(string[] args)
+<!-- snippet: default_middleware_basic -->
+<a id='snippet-default_middleware_basic'></a>
+```cs
+public static int BasicExample(string[] args)
 {
     return new AppRunner<ValidationApp>()
         .UseDefaultMiddleware()
         .Run(args);
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/OtherFeatures/DefaultMiddleware_Examples.cs#L10-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-default_middleware_basic' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 `UseDefaultMiddleware` will register all non-core middleware that does not require an external dependency and can be run with sensible defaults configurations.
 
 This is how CommandDotNet releases new features. With `UseDefaultMiddleware`, developers are opting into new features by default.
@@ -59,20 +63,24 @@ There will be times when you need to exclude a single middleware but want to kee
 
 Each middleware has a corresponding `exclude...` parameter, as shown in the `UseDefaultMiddleware` method at the bottom of the page.
 
-```c#
-static int Main(string[] args)
+<!-- snippet: default_middleware_exclude_debug -->
+<a id='snippet-default_middleware_exclude_debug'></a>
+```cs
+public static int ExcludeDebugDirective(string[] args)
 {
     return new AppRunner<ValidationApp>()
-        .UseDefaultMiddleware(excludeVersionMiddleware: true)
+        .UseDefaultMiddleware(excludeDebugDirective: true)
         .Run(args);
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/OtherFeatures/DefaultMiddleware_Examples.cs#L19-L26' title='Snippet source file'>snippet source</a> | <a href='#snippet-default_middleware_exclude_debug' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 ## Overriding default middleware settings
 
 Some middleware accept options to modify behavior. To provide options, first exclude the middleware from the default and then call the middleware's extension method.
 
-```c#
+```cs
 static int Main(string[] args)
 {
     return new AppRunner<ValidationApp>()
@@ -88,7 +96,7 @@ see [the source](https://github.com/bilal-fazlani/commanddotnet/blob/master/Comm
 
 ... at the time of this writing
 
-```c#
+```cs
 public static AppRunner UseDefaultMiddleware(this AppRunner appRunner,
     bool excludeCancellationHandlers = false,
     bool excludeDebugDirective = false,

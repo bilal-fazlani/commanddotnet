@@ -37,9 +37,9 @@ public class Calculator
     }
 
     [Command(Description = "Subtracts the second number from the first")]
-    public void Subtract(int x, int x)
+    public void Subtract(int x, int y)
     {
-        _console.WriteLine(_calculator.Subtract(y, y));
+        _console.WriteLine(_calculator.Subtract(x, y));
     }
 }
 ```

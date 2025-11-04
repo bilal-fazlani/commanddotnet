@@ -8,6 +8,7 @@ namespace CommandDotNet.Execution;
 [PublicAPI]
 public class ExecutionAppSettings : IIndentableToString
 {
+    // begin-snippet: ExecutionAppSettings
     /// <summary>Specify what AppName to use in usage examples, help text, and generated scripts</summary>
     public UsageAppNameStyle UsageAppNameStyle { get; set; } = UsageAppNameStyle.Adaptive;
 
@@ -16,6 +17,7 @@ public class ExecutionAppSettings : IIndentableToString
     /// When specified, <see cref="UsageAppNameStyle"/> is ignored.
     /// </summary>
     public string? UsageAppName { get; set; }
+    // end-snippet
 
     public override string ToString() => ToString(new Indent());
 

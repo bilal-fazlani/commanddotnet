@@ -3,7 +3,7 @@
 The BDD style uses the `Verify` extension method which wraps [RunInMem](run-in-mem.md) with assertions defined in a BDD manner using [object initializers](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/object-and-collection-initializers) for some syntactic goodness.
 
 
-```c#
+```cs
 [Test]
 public void Checkout_NewBranch_WithoutBranchFlag_Fails()
 {
@@ -45,7 +45,7 @@ Verify uses the Scenario to follow the Given-When-Then BDD syntax.
 ### When
 **When** is the action, which is the user input. It always starts with Args, or an ArgsArray if you're testing a scenario the CommandLineStringSplitter doesn't split as expected.  In addtiion to args, users can provide piped input and answer prompts
 
-```c#
+```cs
 When = 
 {
     Args = $"Knock knock",
@@ -61,7 +61,7 @@ See [Testing Piped Input](../Tools/testing-piped-input.md) and [Testing Propmts]
 ### Then
 **Then** is the assertion, which is generally the console output.
 
-```c#
+```cs
 Then =
 {
     ExitCode = 1,

@@ -75,7 +75,9 @@ nav:
           - Shell Completions: OtherFeatures/shell-completions.md
           - OtherFeatures/suggest.md
           - OtherFeatures/iconsole.md
+          - OtherFeatures/ienvironment.md
           - OtherFeatures/default-middleware.md
+          - OtherFeatures/appsettings.md
           - Ctrl+C and<br/>CancellationToken: OtherFeatures/cancellation.md
           - OtherFeatures/dependency-injection.md
           - OtherFeatures/name-casing.md

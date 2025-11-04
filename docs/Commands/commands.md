@@ -103,7 +103,7 @@ ExtendedHelpText = "Directives:\n" +
                    "\n" +
                    "Example: %AppName% [debug] [parse] [log:info] math")]
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/Examples.cs#L8-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-extended_help_text' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/Examples.cs#L9-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-extended_help_text' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 !!! Note
@@ -172,13 +172,13 @@ public class Program
 <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Commands/Commands/Commands_DefaultCommand.cs#L5-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-commands_default_command' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-Because the Program is considered the RootCommand, you'll need to explicitely call the Process command. eg.
+Because the Program is considered the RootCommand, you'll need to explicitly call the Process command. eg.
 
 ```bash
 dotnet myapp.dll Process
 ```
 
-If the root command has only one command, you may want to exectute it by default without specifying any commands names. 
+If the root command has only one command, you may want to execute it by default without specifying any commands names. 
 We can do this with the `[DefaultCommand]` attribute.
 
 Now executed as

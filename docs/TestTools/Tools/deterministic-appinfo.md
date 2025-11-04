@@ -23,7 +23,7 @@ The simplest approach is to override the UsageAppName in the AppSettings.
 If your app is configuration the AppRunner and you want to ensure you're using the same configuration in tests,
 consider using a static AppRunner factory to use in both your Program and tests. 
 
-```c#
+```cs
 public class Program
 {
     static int Main(string[] args)

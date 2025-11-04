@@ -23,22 +23,31 @@ Examples can be found in the [prompts](https://github.com/bilal-fazlani/commandd
 When using `appRunner.UsePrompter()`, a [parameter resolver](../Extensibility/parameter-resolvers.md) will be registered for `IPrompter`.
 The IPrompter can prompt for a single value or a list.
 
-```c#
-[Command(Description = "knock-knock joke, demonstrating use of IPrompter")]
-public void Knock(IConsole console, IPrompter prompter)
+<!-- snippet: prompting_knock_knock -->
+<a id='snippet-prompting_knock_knock'></a>
+```cs
+public class JokeApp
 {
-    if (prompter.TryPromptForValue("who's there?", out var answer1, out _))
+    [Command(Description = "knock-knock joke, demonstrating use of IPrompter")]
+    public void Knock(IConsole console, IPrompter prompter)
     {
-        var answer2 = prompter.PromptForValue(
-                $"{answer1} who?", out isCancellationRequested);
-        if(!isCancellationRequested)
+        console.Out.WriteLine("Knock knock");
+        
+        if (prompter.TryPromptForValue("who's there?", out var answer1, out _))
         {
-            console.Out.WriteLine($"{answer2}");
-            console.Out.WriteLine("lulz");
+            console.Out.WriteLine($"{answer1} who?");
+            
+            var answer2 = prompter.PromptForValue("punchline", out bool isCancelled);
+            if (!isCancelled)
+            {
+                console.Out.WriteLine(answer2);
+            }
         }
     }
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/ArgumentValues/Prompting_Examples.cs#L9-L29' title='Snippet source file'>snippet source</a> | <a href='#snippet-prompting_knock_knock' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 When prompting for a list, each entry is on a new line. Entering two empty lines will stop prompting for that value.
 
@@ -84,6 +93,17 @@ argumentFilter: argument =>
 
 Use the [Password](../Arguments/passwords.md) type to hide all characters for an argument.
 
-```c#
-public void Login(string username, Password password){...}
+<!-- snippet: prompting_password_type -->
+<a id='snippet-prompting_password_type'></a>
+```cs
+public class LoginApp
+{
+    public void Login(string username, Password password)
+    {
+        // Password characters are hidden during input
+        System.Console.WriteLine($"Logging in as {username}");
+    }
+}
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/ArgumentValues/Prompting_Examples.cs#L31-L40' title='Snippet source file'>snippet source</a> | <a href='#snippet-prompting_password_type' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->

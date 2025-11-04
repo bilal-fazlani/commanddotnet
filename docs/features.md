@@ -50,7 +50,7 @@ hide:
 
 - [x] Primitives, Enums, Nullable&lt;T&gt; & [Nullable Reference Types](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/nullable-reference-types)
 
-- [x] Lists, Arrays and IEnumberable&lt;T&gt; for streaming
+- [x] Lists, Arrays and IEnumerable&lt;T&gt; for streaming
 
 - [x] Password: mask value in logs and output with `*****` ([docs](Arguments/passwords.md))
 
@@ -60,7 +60,7 @@ hide:
     - [x] TypeConverter
 
 - [x] Custom Type Descriptors
-> Customize parsing and the type name shown in help and
+> Customize how strings are converted to types and the type names displayed in help
 
 - [x] Define allowed values by type
 > Allowed values are shown in help and typo suggestions

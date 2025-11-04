@@ -249,6 +249,20 @@ This is not reliability issue with `Option` because options are named, not posit
 
 As of version 4, CommandDotNet can guarantee all arguments will maintain their position as defined within a class as long as the properties are decorated with `OperandAttribute`, `OptionAtribute` or `OrderByPositionInClassAttribute`.
 
+!!! Info "What is OrderByPositionInClassAttribute?"
+    `[OrderByPositionInClass]` is used to decorate properties in argument models that contain nested **operands**. It tells CommandDotNet to preserve the order of the properties as they appear in the class definition. Since operands are positional, their order matters for correct parsing.
+    
+    **When to use it:**
+    
+    - When a property of type `IArgumentModel` contains operands AND the property is not decorated with `[Operand]` or `[Positional]`
+    
+    **Not needed for:**
+    
+    - Properties already decorated with `[Operand]` or `[Positional]` (these already capture line numbers for ordering)
+    - Nested models containing only options (options are named, so order doesn't affect parsing)
+    
+    **Example**: `public NotificationArgs NotificationArgs { get; set; }` where `NotificationArgs` is an `IArgumentModel` containing operands needs `[OrderByPositionInClass]` to maintain order. However, `[Operand] public NotificationArgs NotificationArgs { get; set; }` does NOT need it because `[Operand]` already handles ordering.
+
 ### How to use
 
 The `OperandAttribute` and `OptionAtribute` define an optional constructor parameter called `__callerLineNumber`. This uses the [CallerLineNumberAttribute](https://docs.microsoft.com/en-us/dotnet/api/system.runtime.compilerservices.callerlinenumberattribute?view=netframework-4.8) to auto-assign the line number in the class. **Do Not** provide a value for this parameter.

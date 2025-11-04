@@ -16,7 +16,7 @@ This function will transform a `TokenTransformation` into a new `TokenTransforma
 
 Next, register the transformation with 
 
-```c#
+```cs
 appRunner.Configure(c => c.UseTokenTransformation(
     name: "my-transformation", 
     order: 1, 

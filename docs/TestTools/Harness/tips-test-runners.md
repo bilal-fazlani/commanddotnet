@@ -32,7 +32,7 @@ To log results to the test output, you'll need to use their [ITestOutputHelper](
 
 Set `logLine` = `_testOutputHelper.WriteLine`.
 
-```c#
+```cs
 new AppRunner<Git>().RunInMem(args, _testOutputHelper.WriteLine)
 ```
 
@@ -40,7 +40,7 @@ new AppRunner<Git>().RunInMem(args, _testOutputHelper.WriteLine)
 
 The CommandDotNet tests use the following extension methods and ambient ITextOutputHelper class to simplify our tests. This gives us a similar experience to NUnit except we still need a constructor for every test class.
 
-```c#
+```cs
 public static class Ambient
 {
     private static readonly AsyncLocal<ITestOutputHelper> TestOutputHelper = new AsyncLocal<ITestOutputHelper>();
@@ -95,7 +95,7 @@ public static class AppRunnerScenarioExtensions
 ```
 and we can use it in our tests like this
 
-```c#
+```cs
 public class GitTests
 {
     public GitTests(ITestOutputHelper output)
@@ -123,7 +123,7 @@ public class GitTests
 
 instead of 
 
-```c#
+```cs
 public class GitTests
 {
     private readonly ITestOutputHelper _output;

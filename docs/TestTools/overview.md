@@ -34,67 +34,48 @@ The tool provides two extension methods to execute an AppRunner in memory and co
 
 === "RunInMem"
 
-    ```c#
-    public class PipedInputTests
+    <!-- snippet: testtools_runinmem_example -->
+    ```cs
+    public static void RunInMem_Example()
     {
-        [Test]
-        public void PipedInput_Should_UnionWithUserSuppliedValues()
-        {
-            var result = new AppRunner<App>()
-                .AppendPipedInputToOperandList()
-                .RunInMem("List aaa bbb", pipedInput: new[] { "ccc", "ddd" });
+        var result = new AppRunner<App>()
+            .RunInMem("Add 2 3");
 
-            result.ExitCode.Should().Be(0);
-            result.Console.Out.Should().Be(@"aaa
-    bbb
-    ccc
-    ddd
-    ");
-        }
+        // result.ExitCode.Should().Be(0);
+        // result.Console.Out.Should().Contain("5");
+    }
 
-        private class App
-        {
-            public void List(IConsole console, List<string> args) =>
-                console.WriteLine(string.Join(Environment.NewLine, args));
-        }
+    private class App
+    {
+        public void Add(IConsole console, int x, int y) =>
+            console.WriteLine(x + y);
     }
     ```
+    <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/TestTools/TestTools_Examples.cs#L12-L27' title='Snippet source file'>snippet source</a></sup>
+    <!-- endSnippet -->
 
 === "BDD Verify"
 
-    ```c#
-    public class PipedInputTests
+    <!-- snippet: testtools_bdd_verify_example -->
+    ```cs
+    public static void BDD_Verify_Example()
     {
-        [Test]
-        public void PipedInput_Should_UnionWithUserSuppliedValues()
-        {
-            new AppRunner<App>()
-                .AppendPipedInputToOperandList()
-                .Verify(new Scenario
+        new AppRunner<App>()
+            .Verify(new Scenario
+            {
+                When = 
                 {
-                    When = 
-                    {
-                        Args = "List aaa bbb",
-                        PipedInput = new[] { "ccc", "ddd" } 
-                    },
-                    Then =
-                    {
-                        Output = @"aaa
-    bbb
-    ccc
-    ddd
-    "
-                    }
-                });
-        }
-
-        private class App
-        {
-            public void List(IConsole console, List<string> args) =>
-                console.WriteLine(string.Join(Environment.NewLine, args));
-        }
+                    Args = "Add 2 3"
+                },
+                Then =
+                {
+                    Output = "5"
+                }
+            });
     }
     ```
+    <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/TestTools/TestTools_Examples.cs#L29-L45' title='Snippet source file'>snippet source</a></sup>
+    <!-- endSnippet -->
 
 [RunInMem](Harness/run-in-mem.md) will run the runner and collect results. Assertions will need to be executed after.
 
@@ -110,7 +91,7 @@ The tool provides two extension methods to execute an AppRunner in memory and co
 When testing an application, use the same method to generate and configure the AppRunner for the console and tests. In this example, the `Program.GetAppRunner()` method is introduced and made public 
 so tests get an AppRunner configured exactly as it will be when run from the console. If you have additional configuration, such as an IoC container, be sure it's included in this method.
 
-```c#
+```cs
 public class Program
 {
         static int Main(string[] args)
@@ -130,7 +111,7 @@ public class Program
 }
 ```
 
-```c#
+```cs
 [TestFixture]
 public class ProgramTests
 {
@@ -186,7 +167,7 @@ The framework includes the following tools that can be used independently of the
 
 ### [TestDependencyResolver](https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.TestTools/TestDependencyResolver.cs) 
 
-```c#
+```cs
 new AppRunner<App>()
     .UseDependencyResolver(new TestDependencyResolver { dbSvc, httpSvc })
     .VerifyScenario(scenario);

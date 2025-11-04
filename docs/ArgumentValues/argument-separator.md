@@ -180,9 +180,15 @@ remaining:
 
 Explicit support for both concepts is complicated to provide generically because the framework cannot know
 
-* if a operands for a given command can be formatted like options or directives
+* if operands for a given command can be formatted like options or directives
 * if a command can expect pass-thru arguments 
 * if a user entered `--` to indicate end-of-options or pass-thru arguments
+
+**Decision Guide**:
+
+* Use **EndOfOptions** (default): When your commands need to accept values that start with `-` or `--` (e.g., negative numbers, file names like `--my-file.txt`)
+* Use **PassThru**: When your command launches another process and needs to forward arguments to it (e.g., `dotnet run`, `docker exec`)
+* **Both needed?**: Use EndOfOptions as default, then override specific commands with `[Command(ArgumentSeparatorStrategy=ArgumentSeparatorStrategy.PassThru)]`
 
 Due to this complexity, we'll give you the data and let you determine the best approach based on the requirements of the command.
 
