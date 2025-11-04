@@ -14,7 +14,7 @@ When your commands directly use `System.Environment`, they're tightly coupled to
 
 `IEnvironment` provides access to commonly used members of `System.Environment`:
 
-```c#
+```cs
 public interface IEnvironment
 {
     string CommandLine { get; }
@@ -36,27 +36,39 @@ public interface IEnvironment
 
 Inject `IEnvironment` as a parameter in your command methods, just like `IConsole`:
 
-```c#
+<!-- snippet: ienvironment_inject_example -->
+<a id='snippet-ienvironment_inject_example'></a>
+```cs
 public class DeployCommand
 {
     public void Deploy(
-        IEnvironment environment,
         IConsole console,
+        IEnvironment environment,
         string target)
     {
-        var env = environment.GetEnvironmentVariable("DEPLOY_ENV") ?? "dev";
-        console.WriteLine($"Deploying {target} to {env} environment");
-        console.WriteLine($"User: {environment.UserName}");
-        console.WriteLine($"Machine: {environment.MachineName}");
+        console.Out.WriteLine($"Deploying to {target}");
+        console.Out.WriteLine($"Current user: {environment.UserName}");
+        console.Out.WriteLine($"Machine: {environment.MachineName}");
+        
+        var apiKey = environment.GetEnvironmentVariable("DEPLOY_API_KEY");
+        if (string.IsNullOrEmpty(apiKey))
+        {
+            console.Error.WriteLine("DEPLOY_API_KEY environment variable not set");
+            return;
+        }
+        
+        // Use apiKey for deployment
     }
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/OtherFeatures/IEnvironment_Examples.cs#L5-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-ienvironment_inject_example' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 ## Testing with TestEnvironment
 
 The `CommandDotNet.TestTools` package provides `TestEnvironment` for use in tests:
 
-```c#
+```cs
 [Test]
 public void Deploy_UsesEnvironmentVariable()
 {
@@ -77,7 +89,7 @@ public void Deploy_UsesEnvironmentVariable()
 
 The `.UseTestEnv()` extension method configures the AppRunner to use your test environment:
 
-```c#
+```cs
 appRunner.UseTestEnv(testEnvironment);
 ```
 

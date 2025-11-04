@@ -6,7 +6,7 @@ Testing middleware and the extensibility points generally requires access to the
 
 === "RunInMem"
 
-    ```c#
+    ```cs
     [Test]
     public void SomeTest()
     {
@@ -17,7 +17,7 @@ Testing middleware and the extensibility points generally requires access to the
 
 === "BDD Verify"
 
-    ```c#
+    ```cs
     public void SomeTest()
     {
         var result = new AppRunner<App>()
@@ -61,7 +61,7 @@ The `InvocationInfo` includes a `WasInvoked` property. To use this, configure th
 
 We'll start with the following WebClient with a single *Download* command and an [interceptor method](../../Extensibility/interceptors.md) to authenticate commands.  You can imagine there would be other commands like Upload, Post, Get, etc.
 
-```c#
+```cs
 public class WebClient
 {
     public void Authenticate(InterceptorExecutionDelegate next, 
@@ -82,7 +82,7 @@ And then we can assert some values passed to the methods like this.
 
 === "RunInMem"
 
-    ```c#
+    ```cs
     public class PipedInputTests
     {
         [Test]
@@ -109,7 +109,7 @@ And then we can assert some values passed to the methods like this.
 
 === "BDD Verify"
 
-    ```c#
+    ```cs
     public void SomeTest()
     {
         new AppRunner<WebClient>()

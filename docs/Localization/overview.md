@@ -11,44 +11,79 @@ We will also need help with translations and will accept PRs for those translati
 Enable the feature by setting `appSettings.Localize` to a `Func<string,string?>` such as `text => stringLocalizer[text]`.
 Every package that supports localization will detect this during registration.
 
-```c#
-static int Main(string[] args)
+<!-- snippet: localization_basic_setup -->
+<a id='snippet-localization_basic_setup'></a>
+```cs
+public static int BasicLocalizationSetup(string[] args)
 {
-    IStringLocalizer localizer = ConfigureLocalizer();
-    var settings = new AppSettings{Localization = {Localize = t => localizer[t]}};
+    // Simple localization function - in real apps, this would call IStringLocalizer
+    Func<string, string?> localizer = text => 
+    {
+        // Your localization logic here
+        // e.g., stringLocalizer[text]
+        return text; // Fallback to original text
+    };
+    
+    var settings = new AppSettings
+    {
+        Localization = { Localize = localizer }
+    };
+    
     return new AppRunner<ValidationApp>(settings).Run(args);
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Localization/Localization_Examples.cs#L13-L31' title='Snippet source file'>snippet source</a> | <a href='#snippet-localization_basic_setup' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 ### Advanced cases
 
 To use a different `Func<string,string?>` per package, supply the appropriate `ResourcesProxy` in the `AppRunner` constructor and in the registration for each package.
 
-```c#
-static int Main(string[] args)
+<!-- snippet: localization_resources_proxy -->
+<a id='snippet-localization_resources_proxy'></a>
+```cs
+public static int UsingResourcesProxy(string[] args)
 {
-    IDictionary<string,IStringLocalizer> localizers = ConfigureLocalizers();
-    return new AppRunner<ValidationApp>(settings, 
-            new ResourcesProxy{ Localization = t => localizers["core"][t] })
-        .UseDataAnnotationValidations(args, 
-            new DataAnnotations.ResourcesProxy{ Localization = t => localizers["validation"][t] })
+    // Different localizers for different packages
+    Func<string, string?> coreLocalizer = text => text;      // Core framework
+    Func<string, string?> validationLocalizer = text => text; // Validation messages
+    
+    return new AppRunner<ValidationApp>(
+            new AppSettings(), 
+            new ResourcesProxy(coreLocalizer))
+        // .UseDataAnnotationValidations(
+        //     new DataAnnotations.ResourcesProxy(validationLocalizer))
         .Run(args);
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Localization/Localization_Examples.cs#L33-L47' title='Snippet source file'>snippet source</a> | <a href='#snippet-localization_resources_proxy' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 To use a more custom approach, override the appropriate `Resources` class in each package and supply them during registration.
-```c#
-class MyResources : Resources
+
+<!-- snippet: localization_custom_resources -->
+<a id='snippet-localization_custom_resources'></a>
+```cs
+// Custom Resources class to override specific messages
+public class MyResources : Resources
 {
-    public override string Error_File_not_found(string fullPath) => $"missing file: {fullPath}";
-    ...
+    public override string Error_File_not_found(string fullPath) => 
+        $"Archivo no encontrado: {fullPath}"; // Spanish: "File not found"
+    
+    public override string Command_help => "ayuda"; // Spanish: "help"
+    
+    public override string Help_Usage => "Uso"; // Spanish: "Usage"
 }
 
-static int Main(string[] args)
+public static int UsingCustomResources(string[] args)
 {
-    return new AppRunner<ValidationApp>(settings, new MyResources()).Run(args);
+    return new AppRunner<ValidationApp>(
+        new AppSettings(), 
+        new MyResources()).Run(args);
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Localization/Localization_Examples.cs#L49-L67' title='Snippet source file'>snippet source</a> | <a href='#snippet-localization_custom_resources' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 ### Resx files & UseMemberNamesAsKeys
 
 By default, the keys passed to the `AppSettings.Localization.Localize` delegate

@@ -11,7 +11,7 @@ Notice `Respond.WithText` in the examples below.
 
 === "RunInMem"
 
-    ```c#
+    ```cs
     public class PipedInputTests
     {
         [Test]
@@ -40,7 +40,7 @@ Notice `Respond.WithText` in the examples below.
 
 === "BDD Verify"
 
-    ```c#
+    ```cs
     public void InjectedPrompterCanPromptForValues()
     {
         new AppRunner<App>()
@@ -73,7 +73,7 @@ Notice `Respond.WithText` in the examples below.
 
 === "TestConsole"
 
-    ```c#
+    ```cs
     public class PipedInputTests
     {
         [Test]
@@ -116,7 +116,7 @@ Optional paramaters: `promptFilter` and `reuse`
 
 `Respond.WithList` converts a collection of text strings to a collection of `ConsoleKeyInfos`
 
-```c#
+```cs
 OnPrompt = Respond.WithList(new []{"a","b","c"});
 ```
 
@@ -126,7 +126,7 @@ Optional paramaters: `promptFilter` and `reuse`
 
 `Respond.With` is used when more than one prompt answer is required.
 
-```c#
+```cs
 OnPrompt = Respond.With(
     new TextAnswer("groceries", 
         prompt => prompt == "enter list name:"),

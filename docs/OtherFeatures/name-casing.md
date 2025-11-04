@@ -19,12 +19,21 @@ Enable the feature with `appRunner.UseNameCasing(...)`
 
 ## Case options
 
-```c#
+<!-- snippet: name_casing_kebab_case -->
+<a id='snippet-name_casing_kebab_case'></a>
+```cs
 public class App
 {
-    public void MigrateUser([Option]bool dryRun){...}
+    public void MigrateUser([Option]bool dryRun)
+    {
+        // With kebab-case transformation:
+        // command: migrate-user
+        // option: --dry-run
+    }
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/OtherFeatures/NameCasing_Examples.cs#L7-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-name_casing_kebab_case' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 With `Case.DontChange`, the command is executed as `MigrateUser --dryRun`
 
@@ -42,13 +51,21 @@ With `Case.SnakeCase`, the command is executed as `migrate_user --dry_run`
 
 By default, the case is only applied where the name has not been overridden in an attribute.
 
-```c#
-public class App
+<!-- snippet: name_casing_override_attribute -->
+<a id='snippet-name_casing_override_attribute'></a>
+```cs
+public class App2
 {
     [Command("migrateUser")]
-    public void MigrateUser([Option("DryRun")]bool dryRun){...}
+    public void MigrateUser([Option]bool dryRun)
+    {
+        // Command name is "migrateUser" (not transformed)
+        // Option is still "--dry-run" (transformed)
+    }
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/OtherFeatures/NameCasing_Examples.cs#L19-L29' title='Snippet source file'>snippet source</a> | <a href='#snippet-name_casing_override_attribute' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 the command is executed as `migrateUser --DryRun`.
 

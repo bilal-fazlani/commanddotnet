@@ -35,15 +35,20 @@ Makes `IAnsiConsole` available as a paramter for the commands. When used with Co
 
 IAnsiConsole only outputs to the Console.Out stream. Continue to use `IConsole.Error` to output to the Console.Error stream.
 
-```c#
+<!-- snippet: spectre_ansi_console_usage -->
+<a id='snippet-spectre_ansi_console_usage'></a>
+```cs
 public class Calculator
 {
     public void Sum(IAnsiConsole console, int x, int y)
     {
-        console.Markup($"The sum of [bold yellow]x[/] and [bold yellow]y[/] is [red]{x + y}[/]");
+        var result = x + y;
+        console.MarkupLine($"[green]{x}[/] + [green]{y}[/] = [bold yellow]{result}[/]");
     }
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/OtherFeatures/Spectre_Examples.cs#L7-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-spectre_ansi_console_usage' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 To capture IAnsiConsole specific outputs in tests or to set prompt expectations, you'll need to override the default console.
 

@@ -6,7 +6,7 @@ Simply supply an IEnumerable<string> to the optional PipedInput parameter or pro
 
 === "RunInMem"
 
-    ```c#
+    ```cs
     public class PipedInputTests
     {
         [Test]
@@ -28,7 +28,7 @@ Simply supply an IEnumerable<string> to the optional PipedInput parameter or pro
 
 === "BDD Verify"
 
-    ```c#
+    ```cs
     public class PipedInputTests
     {
         [Test]
@@ -58,7 +58,7 @@ Simply supply an IEnumerable<string> to the optional PipedInput parameter or pro
 
 === "TestConsole"
 
-    ```c#
+    ```cs
     public class PipedInputTests
     {
         [Test]

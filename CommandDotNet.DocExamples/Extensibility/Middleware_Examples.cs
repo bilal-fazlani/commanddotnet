@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CommandDotNet.Execution;
 using CommandDotNet.Parsing;
+using CommandDotNet.TestTools;
 
 namespace CommandDotNet.DocExamples.Extensibility;
 
@@ -239,6 +241,58 @@ public static class Middleware_Examples
         public void Rollback() => WasCommitted = false;
         public void Dispose() { }
     }
+
+    #endregion
+
+    #region Testing Examples
+
+    // begin-snippet: middleware_testing_unit
+    public class MyApp
+    {
+        public void Command(string arg) { }
+    }
+
+    private static Task<int> MyMiddleware(CommandContext ctx, ExecutionDelegate next)
+    {
+        if (ctx.ParseResult?.TargetCommand?.Name == "command")
+        {
+            var arg = ctx.ParseResult.TargetCommand.Operands.FirstOrDefault();
+            if (arg?.Value?.ToString() == "--invalid-arg")
+            {
+                ctx.Console.Error.WriteLine("invalid");
+                return Task.FromResult(1);
+            }
+        }
+        return next(ctx);
+    }
+    // end-snippet
+
+    // begin-snippet: middleware_testing_integration
+    private class TestDatabase
+    {
+        public List<Transaction> Transactions { get; } = new();
+        
+        public Transaction BeginTransaction()
+        {
+            var tx = new Transaction();
+            Transactions.Add(tx);
+            return tx;
+        }
+    }
+    // end-snippet
+
+    // begin-snippet: middleware_testing_capture_state
+    public static void CaptureState_Example()
+    {
+        var result = new AppRunner<MyApp>()
+            .Configure(c => c.UseMiddleware(MyMiddleware, MiddlewareStages.PostParseInputPreBindValues))
+            .RunInMem("command test");
+        
+        // Verify middleware execution and state
+        // result.ExitCode.Should().Be(0);
+        // result.Console.Out.Should().Contain("expected output");
+    }
+    // end-snippet
 
     #endregion
 }

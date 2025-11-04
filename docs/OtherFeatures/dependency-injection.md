@@ -68,7 +68,7 @@ the instance using `System.Activator`.
 
 `UseDependencyResolver` contains the following configuration parameters:
 
-```c#
+```cs
 public static AppRunner UseDependencyResolver(
     ...
     Func<CommandContext, IDisposable> runInScope = null,
@@ -100,7 +100,7 @@ This provided several benefits over assembly scanning
 * There's no need to determine which assemblies to scan, in cases where commands are included from multiple assemblies
 * Ignores command classes that are in dev or are temporarily excluded by removing them as subcommands.
 
-```c#
+```cs
 private static void RegisterSimpleInjector(this AppRunner appRunner)
 {
     var container = new SimpleInjector.Container();

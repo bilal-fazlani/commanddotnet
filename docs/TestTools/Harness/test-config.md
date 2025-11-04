@@ -21,7 +21,7 @@ You may want it to be the appname that will appear when the user runs the tests,
 
 ### The TestConfig class
 
-```c#
+```cs
 public class TestConfig
 {
         /// <summary>
@@ -142,7 +142,7 @@ Implement an `IDefaultTestConfig` when you need the config to be auto-discovered
 `TestConfig.Default` will lazy load a default if one is not provided. The lazy load will scan all loaded assemblies for implementations of `IDefaultTestConfig`. The resulting TestConfigs will be loaded and the one
 with the lowest priority will be selected.
 
-```c#
+```cs
 /// <summary>Implement this to provide a TestConfig for tests</summary>
 public interface IDefaultTestConfig
 {
@@ -153,7 +153,7 @@ public interface IDefaultTestConfig
 
 This supports the scenario where a dev keeps a `DevDefaultTestConfig` in the local directory to log All on an error and ConsoleOutput on success. The file can be added to .gitignore, just like an appSettings.env.local file. This is possible with the new project files that only require the file to be present.
 
-```c#
+```cs
 public class DevDefaultTestConfig : IDefaultTestConfig
 {
     public TestConfig Default => new TestConfig
@@ -168,7 +168,7 @@ public class DevDefaultTestConfig : IDefaultTestConfig
 
 This approach was chosen because it was simple to implement, required no additional json parsing libraries and works well with the maintainers work flow. If you need json support, start with this config and the serializer of your choice. We may add another package with this eventually.
 
-```c#
+```cs
 public class JsonDefaultTestConfig : IDefaultTestConfig
 {
     const string JsonFile = "CommandDotNet.TestConfig.json";

@@ -9,7 +9,7 @@ If you've enabled Nullable Reference Type checks in your solution, you'll start 
 This same problem occurs for DTOs populated by serializers and ORMs. 
 We can follow the same recommendation by [EF Core](https://docs.microsoft.com/en-us/ef/core/miscellaneous/nullable-reference-types#dbcontext-and-dbset).
 
-```c#
+```cs
 public void MyCommmandClass
 {
     [SubCommand]

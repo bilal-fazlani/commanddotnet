@@ -20,17 +20,17 @@ The debugger is attached early in the middleware pipeline, after the args have b
 Any logic before appRunner.Run will occur before stepping into the debugger.
 To attach immediately in the Main method, use `Debugger.AttachIfDebugDirective(args)`.
 
-```c#
-
-    class Program
+<!-- snippet: diagnostics_debug_directive -->
+<a id='snippet-diagnostics_debug_directive'></a>
+```cs
+class Program
+{
+    static int Main(string[] args)
     {
-        static int Main(string[] args)
-        {
-            Debugger.AttachIfDebugDirective(args);
-            
-            // configuraation code here
-
-            new AppRunner<MyApp>().Run(args);
-        }
+        Debugger.AttachIfDebugDirective(args);
+        return new AppRunner<App>().Run(args);
     }
+}
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Diagnostics/Diagnostics_Examples.cs#L12-L21' title='Snippet source file'>snippet source</a> | <a href='#snippet-diagnostics_debug_directive' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->

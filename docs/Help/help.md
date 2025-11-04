@@ -51,7 +51,7 @@ defined in parent commands can be provided in subcommands.
 
 There are a few settings to alter the default behavior, accessed via `AppSettings.Help`
 
-```c#
+```cs
 new AppSettings
 {
     Help

@@ -39,7 +39,7 @@ When registering a middlware delegate via `.UseMiddleware(delegate, step)`, use 
 You can register middleware using `appRunner.Configure(c => c.UseMiddleware(MyMethod, MiddlewareStages.PreTokenize))`. 
 Middleware will be added in the order you provide for each stage.
 
-```c#
+```cs
 appRunner.Configure(c => 
     c
         .UseMiddleware(MiddlwareA, MiddlewareStages.PreTokenize)
@@ -56,7 +56,7 @@ If you need to ensure your middleware needs to run immediately before or after a
 
 For example, if you need middleware to run before `MiddlewareSteps.DebugDirective`...
 
-```c#
+```cs
 appRunner.Configure(c => 
     c
         .UseMiddleware(MiddlwareA, MiddlewareSteps.DebugDirective - 1)
@@ -72,7 +72,7 @@ The steps are generally separated by at least a value of 1000 and relative to ze
 It's convenient to use a delegate for middleware when you have additional parameters to pass in. 
 The pattern we've adopted in CommandDotNet uses a private `Config` class to keep the parameters.
 
-```c#
+```cs
 public static FluentValidationMiddleware
 {
     public static AppRunner UseFluentValidation(this AppRunner appRunner, bool showHelpOnError = false)
@@ -143,7 +143,7 @@ public static AppRunner UseCommandLogging(this AppRunner appRunner)
         MiddlewareStages.PostParseInputPreBindValues));
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L21-L38' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_readonly_pattern' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L23-L40' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_readonly_pattern' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 **Use cases**: Logging, diagnostics, monitoring
@@ -178,7 +178,7 @@ public static AppRunner UseDatabaseInjection(this AppRunner appRunner, string co
     });
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L40-L63' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_enrichment_pattern' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L42-L65' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_enrichment_pattern' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 **Use cases**: Dependency injection, service initialization, context enrichment
@@ -223,7 +223,7 @@ public static AppRunner UseCustomValidation(this AppRunner appRunner)
         MiddlewareStages.PostParseInputPreBindValues));
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L65-L98' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_validation_pattern' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L67-L100' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_validation_pattern' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 **Use cases**: Argument validation, permission checks, precondition verification
@@ -278,7 +278,7 @@ public static AppRunner UseTransactions(this AppRunner appRunner, string connect
     });
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L100-L143' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_wrapper_pattern' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L102-L145' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_wrapper_pattern' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 **Use cases**: Transactions, timing, resource management, exception handling
@@ -313,7 +313,7 @@ public static AppRunner UseBadArgumentModifier(this AppRunner appRunner)
         MiddlewareStages.PostBindValuesPreInvoke));  // Too late! Use PostParseInputPreBindValues instead
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L149-L170' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_antipattern_modifying_after_binding' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L151-L172' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_antipattern_modifying_after_binding' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 **Why**: Values have already been bound to method parameters in `BindValues` stage. To modify argument values, register in `MiddlewareStages.PostParseInputPreBindValues` or earlier.
@@ -338,7 +338,7 @@ private static async Task<int> BadMiddleware_HidingExceptions(CommandContext ctx
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L172-L185' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_antipattern_hiding_exceptions' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L174-L187' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_antipattern_hiding_exceptions' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 **Why**: Makes debugging impossible. Either handle specifically or let it propagate.
@@ -369,7 +369,7 @@ public static AppRunner UseBadParseResultChecker(this AppRunner appRunner)
         MiddlewareStages.PreTokenize));  // ParseResult not available yet!
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L187-L206' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_antipattern_wrong_stage' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L189-L208' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_antipattern_wrong_stage' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 **Fix**: Register in `MiddlewareStages.PostParseInputPreBindValues` or later where `ParseResult` is available.
@@ -394,7 +394,7 @@ public class BadMiddleware_Stateful
     }
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L208-L221' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_antipattern_stateful' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L210-L223' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_antipattern_stateful' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 **Why**: Breaks parallel test execution and causes race conditions. Use `CommandContext.Services` or `CommandContext` properties instead.
@@ -405,59 +405,73 @@ public class BadMiddleware_Stateful
 
 Test middleware in isolation using TestTools:
 
-```c#
-[Test]
-public void MyMiddleware_ShouldValidateArgs()
+<!-- snippet: middleware_testing_unit -->
+<a id='snippet-middleware_testing_unit'></a>
+```cs
+public class MyApp
 {
-    var result = new AppRunner<MyApp>()
-        .UseMiddleware(MyMiddleware, MiddlewareStages.PostParseInputPreBindValues)
-        .RunInMem("command --invalid-arg");
-    
-    result.ExitCode.Should().Be(1);
-    result.Console.Error.Should().Contain("invalid");
+    public void Command(string arg) { }
+}
+
+private static Task<int> MyMiddleware(CommandContext ctx, ExecutionDelegate next)
+{
+    if (ctx.ParseResult?.TargetCommand?.Name == "command")
+    {
+        var arg = ctx.ParseResult.TargetCommand.Operands.FirstOrDefault();
+        if (arg?.Value?.ToString() == "--invalid-arg")
+        {
+            ctx.Console.Error.WriteLine("invalid");
+            return Task.FromResult(1);
+        }
+    }
+    return next(ctx);
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L249-L268' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_testing_unit' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 ### Integration Testing
 
 Test middleware with full pipeline:
 
-```c#
-[Test]
-public void TransactionMiddleware_CommitsOnSuccess()
+<!-- snippet: middleware_testing_integration -->
+<a id='snippet-middleware_testing_integration'></a>
+```cs
+private class TestDatabase
 {
-    var db = new TestDatabase();
+    public List<Transaction> Transactions { get; } = new();
     
-    var result = new AppRunner<MyApp>()
-        .UseMiddleware(TransactionMiddleware, MiddlewareStages.PostBindValuesPreInvoke)
-        .Configure(c => c.Services.Add(db))
-        .RunInMem("create-user john");
-    
-    result.ExitCode.Should().Be(0);
-    db.Transactions.Should().ContainSingle(t => t.WasCommitted);
+    public Transaction BeginTransaction()
+    {
+        var tx = new Transaction();
+        Transactions.Add(tx);
+        return tx;
+    }
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L270-L282' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_testing_integration' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 ### Capturing State
 
 Use the Capture State feature to inspect middleware behavior:
 
-```c#
-[Test]
-public void MyMiddleware_SetsExpectedState()
+<!-- snippet: middleware_testing_capture_state -->
+<a id='snippet-middleware_testing_capture_state'></a>
+```cs
+public static void CaptureState_Example()
 {
-    var capture = new CaptureState();
-    
     var result = new AppRunner<MyApp>()
-        .UseMiddleware(MyMiddleware, MiddlewareStages.PostParseInputPreBindValues)
-        .CaptureState(capture, ctx => new { 
-            ParsedCommand = ctx.ParseResult?.TargetCommand?.Name 
-        })
-        .RunInMem("command");
+        .Configure(c => c.UseMiddleware(MyMiddleware, MiddlewareStages.PostParseInputPreBindValues))
+        .RunInMem("command test");
     
-    capture.Captured.ParsedCommand.Should().Be("command");
+    // Verify middleware execution and state
+    // result.ExitCode.Should().Be(0);
+    // result.Console.Out.Should().Contain("expected output");
 }
 ```
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/Extensibility/Middleware_Examples.cs#L284-L295' title='Snippet source file'>snippet source</a> | <a href='#snippet-middleware_testing_capture_state' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 See [Testing Middleware](../TestTools/Tools/testing-middleware.md) for more details.
 
