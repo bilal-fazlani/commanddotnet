@@ -7,6 +7,7 @@ namespace CommandDotNet;
 [PublicAPI]
 public class LocalizationAppSettings : IIndentableToString
 {
+    // begin-snippet: LocalizationAppSettings
     /// <summary>When specified, this function will be used to localize user output from the framework</summary>
     public Func<string,string?>? Localize { get; set; }
     
@@ -19,6 +20,7 @@ public class LocalizationAppSettings : IIndentableToString
     /// When <see cref="UseMemberNamesAsKeys"/> is set to true, "Common_argument_lc" is the key.
     /// </summary>
     public bool UseMemberNamesAsKeys { get; set; }
+    // end-snippet
     
     public override string ToString() => ToString(new Indent());
 

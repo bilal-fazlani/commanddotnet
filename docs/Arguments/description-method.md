@@ -41,7 +41,7 @@ private static string GetAvailableEnvironments()
     return $"Available environments: {string.Join(", ", environments)}. Current time: {DateTime.Now:HH:mm:ss}";
 }
 ```
-<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/Examples.cs#L61-L88' title='Snippet source file'>snippet source</a> | <a href='#snippet-description_method_example' title='Start of snippet'>anchor</a></sup>
+<sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.Example/Examples.cs#L65-L92' title='Snippet source file'>snippet source</a> | <a href='#snippet-description_method_example' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 The help output will show the dynamically generated descriptions:

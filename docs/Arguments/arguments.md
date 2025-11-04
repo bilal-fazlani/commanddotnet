@@ -29,7 +29,7 @@ If preferred, you can use `[Positional]` instead of `[Operand]` with the same pr
 
 ## Option Attribute
 
-If preferred, you can use `[Positional]` instead of `[Option]` with the same properties
+If preferred, you can use `[Named]` instead of `[Option]` with the same properties
 
 ### Names
 The option long name is defaulted from the property or parameter name that defines them. 
@@ -159,7 +159,7 @@ When assigning option values, the following are the same
 * `--time=tomorrow`
 * `--time:tomorrow`
 
-When assigning multiple values, by default each value will need to be proceeded by the option name
+When assigning multiple values, by default each value will need to be preceded by the option name
 
 `--days Monday --days Tuesday`
 

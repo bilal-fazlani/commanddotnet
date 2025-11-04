@@ -58,11 +58,23 @@ Also supports `Nullable<T>` and `IEnumerable<T>` (`T[]`, `List<T>`, etc.) where 
 
 ## Adding support for other types
 
-Options for supporting other types
+**Decision guide for supporting custom types:**
 
-* If you control the type, consider adding a constructor with a single string parameter.
-* Create a [TypeConverter](https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.typeconverter) for your type
-* Create a [type descriptor](#type-descriptors)
+1. **You control the type?** 
+
+   → Add a `public` constructor with a single `string` parameter or a `public static Parse(string)` method
+   
+2. **Need the converter for your business logic too?**
+
+   → Create a [TypeConverter](https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.typeconverter)
+   
+3. **Need to override existing conversion or add CLI-specific behavior?**
+   
+   → Create a [type descriptor](#type-descriptors)
+
+4. **Only for CLI parsing and you don't control the type?**
+
+   → Create a [type descriptor](#type-descriptors)
 
 ### Type Descriptors
 

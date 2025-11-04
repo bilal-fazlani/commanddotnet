@@ -14,7 +14,7 @@ TLDR: The terminology of this framework.
 * Command: the action to be executed
 * Subcommand: a command accessed within another command
 * Operand: a positional argument. The position of the value indicates which argument it is.
-* Option: a named argument. The value must be proceeded by the name. The position does not matter.
+* Option: a named argument. The value must be preceded by the name. The position does not matter.
 * Flag: a boolean option, true when specified, otherwise false
 
 ## Perspective matters
@@ -42,7 +42,7 @@ From the human perspective of...
 
 ### Console app user
 
-The user needs to understand how to provide values and so they need to know when arguments are named are which are positional
+The user needs to understand how to provide values and so they need to know which arguments are named and which are positional
 
 ### Console app developer
 The developer of the console app needs to define arguments that are named vs positional, which arguments are required for the operation and which change how it runs. 

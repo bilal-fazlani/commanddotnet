@@ -22,14 +22,22 @@ When...
 |single value|0..0        |0..1    |1..1         |
 |list values |--          |0..N(>0)|M(>0)..N(>=M)|
 
-* arity for single value can be
-     * 0..0 `Zero`
-     * 0..1 `ZeroOrOne` (optional)
-     * 1..1 `ExactlyOne` (required)
-* arity for list values can be
-    * 0..N(>0) `ZeroOrMore` (optional) N must be greater than 0
-    * M(>0)..N(>=M) `OneOrMore` (required) N must be greater than or equal to M. 
-        * If N equal M, the list must have exactly M values.
+**For single values:**
+
+* `0..0` - `Zero` - No value accepted (flags only)
+* `0..1` - `ZeroOrOne` - Value is optional
+* `1..1` - `ExactlyOne` - Value is required
+
+**For list values:**
+
+* `0..N` - `ZeroOrMore` - Optional list where N > 0 (e.g., `0..5` means 0 to 5 values)
+* `M..N` - Custom range where M > 0 and N ≥ M (e.g., `2..4` means 2 to 4 values required)
+* `1..∞` - `OneOrMore` - At least one value required, unlimited maximum
+
+**Examples:**
+* `int[]? values` → `0..∞` (optional, unlimited)
+* `int[] values` → `1..∞` (required, at least one, unlimited)
+* Custom arity like `2..5` requires setting via middleware/interceptor
 
 Currently, the only way to set the arity for an argument to something other than one of the above is to get the instance of the argument from the `CommandContext` and assign a new `ArgumentArity` to the `IArgument.Arity`. This can be done via [middleware](../Extensibility/middleware.md) or [interceptor methods](../Extensibility/interceptors.md). We've captured [the work here](https://github.com/bilal-fazlani/commanddotnet/issues/409) but it hasn't been a priority for us. This would be an easy feature to contribute to.
 
@@ -119,8 +127,12 @@ requiredRefType is required
 <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/arguments_arity_missing_args.bash#L1-L7' title='Snippet source file'>snippet source</a> | <a href='#snippet-arguments_arity_missing_args' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-!!! Notice 
-    there are only 4 operands listed as missing but there are 6 operands listed as required in the usage section. This is because operands are positional so even though the DefaultBool and DafaultRefType are not required based on property definition, they are effectively required because values must be provided for them before the required operands positioned after them. Keep this in mind when designing your commands.  Always position optional operands after required operands. 
+!!! Warning "Positional Operand Gotcha"
+    There are only 4 operands listed as missing but 6 are shown in the usage section. **Why?**
+    
+    Operands are positional, so even though `DefaultBool` and `DefaultRefType` have default values (making them optional by definition), they appear **before** required operands in the parameter order. Since you must provide values in position order, you cannot skip them to reach the required operands after them.
+    
+    **Best Practice**: Always position optional operands **after** required operands to avoid forcing users to provide values for "optional" arguments. 
 
 #### Collection types
 

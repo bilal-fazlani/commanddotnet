@@ -11,13 +11,13 @@ In this case, `history` will output the last N bash commands and `grep git` will
 Piping is a great way to decompose commands into smaller, single-responsibility commands.
 
 !!!tip
-    When you find commands repeating the same options to determine what items to operate on, consider extracting the options into search command that returns ids and then update the other commands take the list of ids. 
+    When you find commands repeating the same options to determine what items to operate on, consider extracting the options into a search command that returns ids and then update the other commands to take the list of ids. 
 
     `app.exe get-customer-ids --only-active | app.exe migrate-customers`
 
 In .net console apps, you can check piped input using `Console.IsInputRedirected` and `Console.In.Read___()`. 
 
-With CommandDotNet, it's as simple as defining an operand as an enumerable type, or an option as an enumerable type and use use option targetting.
+With CommandDotNet, it's as simple as defining an operand as an enumerable type, or an option as an enumerable type and using option targeting.
 
 ## How to capture piped input
 
@@ -120,7 +120,7 @@ And let's welcome Cris and send a notification to the other users
 <!-- snippet: piped_arguments_options_notify -->
 <a id='snippet-piped_arguments_options_notify'></a>
 ```bash
-$ users.exe list -i | users.exe Welcome c3 --notify ^
+$ users.exe list -i | users.exe Welcome c3 --notify $*
 welcome Cris
 notify: a1 Avery (active)
 notify: b1 Beatrix (active)
@@ -128,7 +128,7 @@ notify: b1 Beatrix (active)
 <sup><a href='https://github.com/bilal-fazlani/commanddotnet/blob/master/CommandDotNet.DocExamples/BashSnippets/piped_arguments_options_notify.bash#L1-L6' title='Snippet source file'>snippet source</a> | <a href='#snippet-piped_arguments_options_notify' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-Notice we used `$*` pipe the users ids to the --notify option.
+Notice we used `$*` to pipe the user ids to the --notify option.
 
 You can choose a different symbol using `AppSettings.Arguments.DefaultPipeTargetSymbol`. The default is `$*`. Set to null to prevent users from directing to options.
 
@@ -159,4 +159,4 @@ Some points to remember for CommandDotNet
 Points to remember for piping in general
 
 * All output to the console is piped to the next command. Be sure the command generating the piped output does not include additional logging information.
-* Consider how much time is spent initialing the app and querying the data. While breaking the app into smaller pieces improves maintenance, testing and reusability, the performance impact may be prohibitive in some cases.
+* Consider how much time is spent initializing the app and querying the data. While breaking the app into smaller pieces improves maintenance, testing and reusability, the performance impact may be prohibitive in some cases.

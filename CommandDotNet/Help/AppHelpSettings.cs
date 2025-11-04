@@ -10,6 +10,7 @@ public class AppHelpSettings : IIndentableToString
 {
     private ExecutionAppSettings? _executionSettings;
 
+    // begin-snippet: AppHelpSettings
     /// <summary>When true, the help option will be included in the help for every command</summary>
     public bool PrintHelpOption { get; set; }
 
@@ -41,6 +42,7 @@ public class AppHelpSettings : IIndentableToString
     /// When true, the usage section will expand arguments so the names of all arguments are shown.
     /// </summary>
     public bool ExpandArgumentsInUsage { get; set; } = true;
+    // end-snippet
 
     public override string ToString() => ToString(new Indent());
 

@@ -29,7 +29,7 @@ CommandDotNet will release new features as new middleware. To take advantage of 
 
 Some developers very much prefer this approach and it will always be available to them.
 
-For other developers, this creates configuration fatigue. The fatigue of remembering which middleware to add for new apps, scanning the configuration everytime they're in the Main method, tracking new features to enable with updates to the package. Some apps and development styles do not benefit from additional work. `UseDefaultMiddleware` is the answer.
+For other developers, this creates configuration fatigue. The fatigue of remembering which middleware to add for new apps, scanning the configuration every time they're in the Main method, tracking new features to enable with updates to the package. Some apps and development styles do not benefit from additional work. `UseDefaultMiddleware` is the answer.
 
 ## Default middleware
 

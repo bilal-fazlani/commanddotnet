@@ -1,4 +1,4 @@
-﻿using CommandDotNet.Extensions;
+using CommandDotNet.Extensions;
 using JetBrains.Annotations;
 
 namespace CommandDotNet;
@@ -6,6 +6,7 @@ namespace CommandDotNet;
 [PublicAPI]
 public class ArgumentAppSettings : IIndentableToString
 {
+    // begin-snippet: ArgumentAppSettings
     /// <summary>
     /// When Explicit, boolean options require a 'true' or 'false' value be specified.<br/>
     /// When Implicit, boolean options are treated as Flags, considered false unless it's specified
@@ -41,6 +42,7 @@ public class ArgumentAppSettings : IIndentableToString
     /// <see href="https://docs.microsoft.com/en-us/dotnet/csharp/nullable-references">NRTs</see>.
     /// </summary>
     public bool SkipArityValidation { get; set; }
+    // end-snippet
 
     public override string ToString() => ToString(new Indent());
 
