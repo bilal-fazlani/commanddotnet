@@ -155,7 +155,7 @@ public static class Middleware_Examples
         // This happens too late - values are already bound to method parameters
         // This middleware is registered in PostBindValuesPreInvoke but tries to modify argument values
         var arg = ctx.ParseResult?.TargetCommand?.Operands.FirstOrDefault();
-        if (arg != null)
+        if (arg is not null)
         {
             arg.Value = "modified";  // Too late! Already bound to parameters
         }
@@ -191,7 +191,7 @@ public static class Middleware_Examples
     private static Task<int> BadMiddleware_WrongStage(CommandContext ctx, ExecutionDelegate next)
     {
         var result = ctx.ParseResult;  // null in PreTokenize!
-        if (result?.TargetCommand == null)
+        if (result?.TargetCommand is null)
         {
             return Task.FromResult(ExitCodes.Error);
         }

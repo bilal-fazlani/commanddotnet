@@ -3,6 +3,7 @@
     <LangVersion>latest</LangVersion>
     <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
  </PropertyGroup>
  <PropertyGroup>
     <Authors>Bilal Fazlani, Drew Burlingame</Authors>
