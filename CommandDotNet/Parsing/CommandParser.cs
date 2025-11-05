@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -328,20 +328,16 @@ internal static partial class CommandParser
 
     private static bool HasOptionPrefix(ParseContext parseContext, string arg, out string optionPrefix)
     {
-        // TODO: validate name is alphanumeric plus _ & - (where name is done)
-        // TODO: return false if remaining is resulting name is not valid?
-        //       - would force value to be treated as operand instead of throwing not-found option.
-
         if (arg.StartsWith("--") && !arg.StartsWith("---"))
         {
             optionPrefix = "--";
-            return true;
+            return IsValidOptionName(arg, 2);
         }
             
         if (arg.StartsWith("-"))
         {
             optionPrefix = "-";
-            return true;
+            return IsValidOptionName(arg, 1);
         }
 
         // Decision: add AppHelpSettings{LongNamePrefix,ShortNamePrefix}?
@@ -351,11 +347,42 @@ internal static partial class CommandParser
         if (parseContext.ParseSettings.AllowBackslashOptionPrefix && arg.StartsWith("/"))
         {
             optionPrefix = "/";
-            return true;
+            return IsValidOptionName(arg, 1);
         }
 
         optionPrefix = "";
         return false;
+    }
+
+    private static bool IsValidOptionName(string arg, int prefixLength)
+    {
+        // Extract option name (without prefix and without value assignment)
+        // Value assignments use ':' or '=' separators (e.g., --option=value or --option:value)
+        var nameStart = prefixLength;
+        if (nameStart >= arg.Length)
+        {
+            return false; // Empty name after prefix
+        }
+
+        var nameEnd = arg.IndexOfAny([':', '='], nameStart);
+        var name = nameEnd > 0 ? arg.Substring(nameStart, nameEnd - nameStart) : arg.Substring(nameStart);
+
+        if (string.IsNullOrEmpty(name))
+        {
+            return false;
+        }
+
+        // Option names must contain only alphanumeric characters, underscore, and hyphen
+        // Invalid names are treated as operands instead of throwing not-found option errors
+        foreach (char c in name)
+        {
+            if (!char.IsLetterOrDigit(c) && c != '_' && c != '-')
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private static void AddOptionValue(ParseContext parseContext, Option option,
