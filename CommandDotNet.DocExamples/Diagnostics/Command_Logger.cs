@@ -180,6 +180,7 @@ AppConfig:
         InheritCommandsFromBaseClasses: False
       DisableDirectives: False
       Execution:         ExecutionAppSettings:
+        EnableStageValidation: False
         UsageAppName: example.exe
         UsageAppNameStyle: Adaptive
       Help:         AppHelpSettings:

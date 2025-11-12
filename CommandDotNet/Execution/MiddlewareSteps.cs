@@ -26,6 +26,14 @@ public static class MiddlewareSteps
         public static MiddlewareStep BeginScope { get; } = OnRunCompleted + 1000;
     }
 
+    /// <summary>
+    /// Validates that <see cref="CommandContext.Original"/>, <see cref="CommandContext.Tokens"/>,
+    /// <see cref="CommandContext.AppConfig"/>, and <see cref="CommandContext.Console"/> 
+    /// are populated after <see cref="MiddlewareStages.PreTokenize"/> stage
+    /// </summary>
+    public static MiddlewareStep ValidatePreTokenize { get; } =
+        new(MiddlewareStages.PreTokenize, short.MaxValue);
+
     public static MiddlewareStep ParseDirective { get; } = Help.PrintHelpOnExit + 1000;
 
     public static MiddlewareStep Tokenize { get; } =
@@ -36,6 +44,12 @@ public static class MiddlewareSteps
     /// </summary>
     public static MiddlewareStep CreateRootCommand { get; } =
         new(MiddlewareStages.Tokenize, short.MaxValue - 1000);
+
+    /// <summary>
+    /// Validates that <see cref="CommandContext.RootCommand"/> is populated after <see cref="MiddlewareStages.Tokenize"/> stage
+    /// </summary>
+    public static MiddlewareStep ValidatePostTokenize { get; } =
+        new(MiddlewareStages.PostTokenizePreParseInput, 0);
 
     public static MiddlewareStep ParseInput { get; } =
         new(MiddlewareStages.ParseInput, 0);
@@ -64,8 +78,15 @@ public static class MiddlewareSteps
         public static MiddlewareStep PrintHelpOnExit { get; } = DependencyResolver.BeginScope + 1000;
     }
 
-    public static MiddlewareStep PipedInput { get; } =
+    /// <summary>
+    /// Validates that <see cref="CommandContext.ParseResult"/> and <see cref="InvocationPipeline"/> 
+    /// are populated after <see cref="MiddlewareStages.ParseInput"/> stage
+    /// </summary>
+    public static MiddlewareStep ValidatePostParseInput { get; } =
         new(MiddlewareStages.PostParseInputPreBindValues, 0);
+
+    public static MiddlewareStep PipedInput { get; } =
+        ValidatePostParseInput + 100;
 
     /// <summary>
     /// Runs late in the <see cref="MiddlewareStages.PostParseInputPreBindValues"/>
@@ -80,8 +101,15 @@ public static class MiddlewareSteps
     /// <summary>Runs after the <see cref="BindValues"/> step</summary>
     public static MiddlewareStep ResolveCommandClasses { get; } = BindValues + 1000;
 
-    public static MiddlewareStep ValidateArity { get; } =
+    /// <summary>
+    /// Validates that <see cref="InvocationStep.Instance"/> and <see cref="IInvocation.ParameterValues"/> 
+    /// are populated after <see cref="MiddlewareStages.BindValues"/> stage
+    /// </summary>
+    public static MiddlewareStep ValidatePostBindValues { get; } =
         new(MiddlewareStages.PostBindValuesPreInvoke, 0);
+
+    public static MiddlewareStep ValidateArity { get; } =
+        ValidatePostBindValues + 100;
 
     public static MiddlewareStep CommandLogger { get; } = new(MiddlewareStages.Invoke, 0);
 

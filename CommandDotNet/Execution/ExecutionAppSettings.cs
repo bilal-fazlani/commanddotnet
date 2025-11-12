@@ -17,6 +17,12 @@ public class ExecutionAppSettings : IIndentableToString
     /// When specified, <see cref="UsageAppNameStyle"/> is ignored.
     /// </summary>
     public string? UsageAppName { get; set; }
+
+    /// <summary>
+    /// When true, validates that <see cref="CommandContext"/> state is correctly populated
+    /// as it exits each middleware stage. Useful during middleware development and testing.
+    /// </summary>
+    public bool EnableStageValidation { get; set; }
     // end-snippet
 
     public override string ToString() => ToString(new Indent());

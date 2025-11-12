@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
@@ -151,10 +151,16 @@ public class AppRunner : IIndentableToString
             .UseArityValidation()
             .AppendPipedInput();
 
-        // TODO: add middleware between stages to validate CommandContext is exiting a stage with required data populated
-        //       i.e. ParseResult should be fully populated after Parse stage
-        //            Invocation contexts should be fully populated after BindValues stage
-        //            (when ctor options are moved to a middleware method, invocation context should be populated in Parse stage)
+        // Add validation middleware between stages to validate CommandContext state
+        // Only enabled when configured, typically during middleware development/testing
+        if (AppSettings.Execution.EnableStageValidation)
+        {
+            _appConfigBuilder
+                .UseMiddleware(StageValidationMiddleware.ValidatePostPreTokenize, MiddlewareSteps.ValidatePreTokenize)
+                .UseMiddleware(StageValidationMiddleware.ValidatePostTokenize, MiddlewareSteps.ValidatePostTokenize)
+                .UseMiddleware(StageValidationMiddleware.ValidatePostParseInput, MiddlewareSteps.ValidatePostParseInput)
+                .UseMiddleware(StageValidationMiddleware.ValidatePostBindValues, MiddlewareSteps.ValidatePostBindValues);
+        }
     }
 
     private async Task<int> OnRunCompleted(CommandContext context, ExecutionDelegate next)
