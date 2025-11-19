@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using CommandDotNet.TestTools;
@@ -10,6 +10,30 @@ using TestConsole = CommandDotNet.TestTools.TestConsole;
 
 namespace CommandDotNet.Spectre.Testing;
 
+/// <summary>
+/// A test console that combines CommandDotNet's <see cref="TestConsole"/> with Spectre.Console's IAnsiConsole
+/// for testing applications that use Spectre.Console features.
+/// </summary>
+/// <remarks>
+/// <para><strong>Output Capture Architecture:</strong></para>
+/// <list type="bullet">
+/// <item>
+/// <description><strong>Console.Out (stdout):</strong> Captured by Spectre's TestConsole.Output via DuplexTextWriter.
+/// Accessible via <see cref="OutText()"/> or <see cref="AllText()"/>.</description>
+/// </item>
+/// <item>
+/// <description><strong>Console.Error (stderr):</strong> Captured by base TestConsole.Error (Spectre's TestConsole 
+/// doesn't support stderr capture - see https://github.com/spectreconsole/spectre.console/issues/1732).
+/// Accessible via <see cref="ErrorText()"/> or <see cref="AllText()"/>.</description>
+/// </item>
+/// <item>
+/// <description><strong>IAnsiConsole API calls:</strong> Rendered through Spectre's TestConsole and captured 
+/// in TestConsole.Output.</description>
+/// </item>
+/// </list>
+/// <para><strong>Usage:</strong> Use <see cref="AllText()"/> for combined stdout+stderr output (as it would appear 
+/// in a terminal), or use <see cref="OutText()"/> and <see cref="ErrorText()"/> to assert on streams separately.</para>
+/// </remarks>
 public class AnsiTestConsole : TestConsole, IAnsiConsole
 {
     internal SpectreTestConsole SpectreTestConsole { get; }
@@ -25,25 +49,34 @@ public class AnsiTestConsole : TestConsole, IAnsiConsole
 
     #region Implementation of ITestConsole
 
-    // the SpectreTestConsole converts line endings to \n which can break assertions against literal strings in tests.
-    // convert them back to Environment.NewLine
+    // NOTE: Spectre's TestConsole only captures stdout (Console.Out), NOT stderr (Console.Error)
+    // See: https://github.com/spectreconsole/spectre.console/issues/1732
+    // Therefore:
+    // - Console.Out writes go through DuplexTextWriter to BOTH SpectreTestConsole.Output AND base.Out
+    // - Console.Error writes only go to base.Error (not captured by Spectre)
+    //
+    // The SpectreTestConsole converts line endings to \n which can break assertions against literal strings in tests.
+    // We convert them back to Environment.NewLine for consistency.
 
     public override string AllText()
     {
+        // Returns combined stdout + stderr. The error text will appear after output, even when error text was written first
+        // - stdout: from SpectreTestConsole.Output (captures Console.Out via DuplexTextWriter)
+        // - stderr: from base.ErrorText() (Console.Error not supported by Spectre's TestConsole)
+        // Note: We use base.ErrorText() instead of base.AllText() to avoid Console.Out duplication
         var spectre = SpectreTestConsole.Output.Replace("\n", Environment.NewLine);
-        var nonSpectre = base.AllText();
-        return string.IsNullOrEmpty(nonSpectre)
+        var error = base.ErrorText();
+        return string.IsNullOrEmpty(error)
             ? spectre 
-            : spectre + nonSpectre;
+            : spectre + error;
     }
 
     public override string OutText()
     {
-        var spectre = SpectreTestConsole.Output.Replace("\n", Environment.NewLine);
-        var nonSpectre = base.OutText();
-        return string.IsNullOrEmpty(nonSpectre)
-            ? spectre
-            : spectre + nonSpectre;
+        // Returns only stdout (Console.Out)
+        // All Console.Out writes go through DuplexTextWriter to both Spectre and base.Out,
+        // so we only return SpectreTestConsole.Output to avoid duplication.
+        return SpectreTestConsole.Output.Replace("\n", Environment.NewLine);
     }
         
     public override ITestConsole Mock(Func<ITestConsole, ConsoleKeyInfo>? onReadKey, bool overwrite = false)
