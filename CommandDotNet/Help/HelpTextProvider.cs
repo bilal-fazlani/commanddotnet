@@ -26,8 +26,30 @@ public class HelpTextProvider : IHelpProvider
         _localize = appSettings.Localization.Localize ?? (s => s);
     }
         
-    public virtual string GetHelpText(Command command) =>
-        JoinSections(
+    public virtual string GetHelpText(Command command)
+    {
+        // Check if all options are grouped (special case for rendering)
+        var regularOptions = command.Options
+            .Where(o => !o.Hidden && (!command.IsExecutable || !o.IsInterceptorOption))
+            .ToList();
+        
+        var allOptionsAreGrouped = regularOptions.Any() && 
+                                   regularOptions.All(o => !string.IsNullOrWhiteSpace(o.Group));
+
+        if (allOptionsAreGrouped)
+        {
+            // When all options are grouped, render groups as top-level sections (no "Options:" header)
+            return JoinSections(
+                (null, CommandDescription(command)),
+                (Resources.A.Help_Usage, SectionUsage(command)),
+                (Resources.A.Help_Arguments, SectionOperands(command)),
+                (null, SectionOptions(command, false)), // No header - groups will have their own
+                (Resources.A.Help_Options_also_available_for_subcommands, SectionOptions(command, true)),
+                (Resources.A.Help_Commands, SectionSubcommands(command)),
+                (null, ExtendedHelpText(command)));
+        }
+
+        return JoinSections(
             (null, CommandDescription(command)),
             (Resources.A.Help_Usage, SectionUsage(command)),
             (Resources.A.Help_Arguments, SectionOperands(command)),
@@ -35,6 +57,7 @@ public class HelpTextProvider : IHelpProvider
             (Resources.A.Help_Options_also_available_for_subcommands, SectionOptions(command, true)),
             (Resources.A.Help_Commands, SectionSubcommands(command)),
             (null, ExtendedHelpText(command)));
+    }
 
     /// <summary>returns the body of the usage section</summary>
     protected virtual string? SectionUsage(Command command)
@@ -134,6 +157,14 @@ public class HelpTextProvider : IHelpProvider
             return null;
         }
 
+        // Check if we're dealing with options (which support grouping)
+        var options = arguments.OfType<Option>().ToList();
+        if (options.Count == arguments.Count)
+        {
+            return SectionGroupedOptions(options);
+        }
+
+        // For operands or mixed types, use the original behavior
         var helpValues = BuildArgumentHelpValues(arguments);
         var templateMaxLength = helpValues.Max(a => a.Template.Length);
         var displayNameMaxLength = helpValues.Max(a => a.TypeName?.Length) ?? 0;
@@ -161,6 +192,90 @@ public class HelpTextProvider : IHelpProvider
 
         return sb.ToString();
     }
+
+    /// <summary>returns the body of the options section with grouping support</summary>
+    protected virtual string? SectionGroupedOptions(ICollection<Option> options)
+    {
+        if (!options.Any())
+        {
+            return null;
+        }
+
+        // Group options by their Group property
+        var ungrouped = options.Where(o => string.IsNullOrWhiteSpace(o.Group)).ToList();
+        var grouped = options.Where(o => !string.IsNullOrWhiteSpace(o.Group))
+            .GroupBy(o => o.Group!)
+            .OrderBy(g => g.Key)
+            .ToList();
+
+        var sb = new StringBuilder();
+        var isFirst = true;
+
+        // Display ungrouped options first
+        if (ungrouped.Any())
+        {
+            AppendOptionsGroup(sb, ungrouped, null, ref isFirst);
+        }
+
+        // Display grouped options alphabetically by group name
+        foreach (var group in grouped)
+        {
+            AppendOptionsGroup(sb, group.ToList(), group.Key, ref isFirst);
+        }
+
+        return sb.ToString();
+    }
+
+    /// <summary>Appends a group of options to the string builder</summary>
+    protected virtual void AppendOptionsGroup(StringBuilder sb, ICollection<Option> options, string? groupName, ref bool isFirst)
+    {
+        if (!options.Any())
+        {
+            return;
+        }
+
+        // Add group header if there's a group name
+        if (!string.IsNullOrWhiteSpace(groupName))
+        {
+            if (!isFirst)
+            {
+                sb.AppendLine();
+            }
+            sb.AppendLine(GroupHeader(groupName!));
+            sb.AppendLine();
+        }
+
+        var helpValues = BuildArgumentHelpValues(options);
+        var templateMaxLength = helpValues.Max(a => a.Template.Length);
+        var displayNameMaxLength = helpValues.Max(a => a.TypeName?.Length) ?? 0;
+
+        var firstInGroup = true;
+        foreach (var helpValue in helpValues)
+        {
+            if (sb.Length > 0 && !isFirst && !firstInGroup)
+            {
+                sb.AppendLine();
+            }
+            isFirst = false;
+            firstInGroup = false;
+
+            new[]
+                {
+                    Row(
+                        (templateMaxLength, helpValue.Template),
+                        (displayNameMaxLength, helpValue.TypeName),
+                        (-1, helpValue.DefaultValue)),
+                    Row(helpValue.Description),
+                    Row(helpValue.AllowedValues)
+                }
+                .Where(r => !r.IsNullOrWhitespace())
+                .ForEach(r => sb.AppendLine(r));
+        }
+    }
+
+    /// <summary>Formats a group header</summary>
+    protected virtual string GroupHeader(string groupName) => $"{groupName}:";
+
 
     /// <summary>returns the body of the subcommands section</summary>
     protected virtual string? SectionSubcommands(Command command)
