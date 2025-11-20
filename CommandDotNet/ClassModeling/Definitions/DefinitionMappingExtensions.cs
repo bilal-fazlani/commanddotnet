@@ -123,7 +123,8 @@ internal static class DefinitionMappingExtensions
                 valueProxy: argumentDef.ValueProxy)
             {
                 Split = argumentDef.Split,
-                Default = argumentDefault
+                Default = argumentDefault,
+                Group = argumentDef.Group
             };
             
             SetDescription(option, argumentDef, optionAttr);
@@ -291,5 +292,19 @@ internal static class DefinitionMappingExtensions
             ? optionAttr.BooleanMode
             : throw new InvalidConfigurationException(
                 $"BooleanMode is set to `{optionAttr.BooleanMode}` for a non boolean type. {argumentDef}");
+    }
+
+    internal static string? GetGroup(this IArgumentDef argumentDef, string? inheritedGroup = null)
+    {
+        // Only options can have groups
+        if (argumentDef.CommandNodeType != CommandNodeType.Option)
+        {
+            return null;
+        }
+
+        OptionAttribute? optionAttr = argumentDef.GetCustomAttribute<OptionAttribute>();
+        
+        // Property-level group takes precedence over inherited group
+        return optionAttr?.Group ?? inheritedGroup;
     }
 }

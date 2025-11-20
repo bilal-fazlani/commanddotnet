@@ -7,7 +7,6 @@ using CommandDotNet.Diagnostics;
 using CommandDotNet.Execution;
 using CommandDotNet.Extensions;
 using CommandDotNet.Help;
-using CommandDotNet.Logging;
 using CommandDotNet.Parsing;
 using CommandDotNet.Rendering;
 using CommandDotNet.Tokens;
@@ -48,14 +47,10 @@ public class AppRunner : IIndentableToString
     public AppSettings AppSettings { get; }
     public Type RootCommandType { get; }
 
-    static AppRunner() => LogProvider.IsDisabled = true;
-
     public AppRunner(Type rootCommandType, 
         AppSettings? settings = null, 
         Resources? resourcesOverride = null)
     {
-        LogProvider.IsDisabled = true;
-
         RootCommandType = rootCommandType ?? throw new ArgumentNullException(nameof(rootCommandType));
         AppSettings = settings ?? new AppSettings();
             

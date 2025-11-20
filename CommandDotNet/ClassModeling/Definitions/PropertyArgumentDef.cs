@@ -31,12 +31,14 @@ internal class PropertyArgumentDef : IArgumentDef
     public BooleanMode? BooleanMode { get; }
     public IArgumentArity Arity { get; }
     public char? Split { get; set; }
+    public string? Group { get; set; }
 
     public PropertyArgumentDef(
         PropertyInfo propertyInfo,
         CommandNodeType commandNodeType,
         AppConfig appConfig,
-        object modelInstance)
+        object modelInstance,
+        string? inheritedGroup = null)
     {
         if (modelInstance == null)
         {
@@ -51,6 +53,7 @@ internal class PropertyArgumentDef : IArgumentDef
 
         BooleanMode = this.GetBooleanMode(appConfig.AppSettings.Arguments.BooleanMode);
         Split = this.GetSplitChar();
+        Group = this.GetGroup(inheritedGroup);
 
         ValueProxy = new ValueProxy(
             () => _propertyInfo.GetValue(modelInstance),

@@ -150,7 +150,7 @@ internal class MethodDef(MethodInfo method, AppConfig appConfig, bool isIntercep
                 .ToEnumerable();
         }
 
-        private IEnumerable<IArgumentDef> GetArgsFromProperty(PropertyData propertyData, object modelInstance, ArgumentMode argumentMode)
+        private IEnumerable<IArgumentDef> GetArgsFromProperty(PropertyData propertyData, object modelInstance, ArgumentMode argumentMode, string? inheritedGroup = null)
         {
             var propertyInfo = propertyData.PropertyInfo;
             return propertyData.IsArgModel
@@ -158,17 +158,18 @@ internal class MethodDef(MethodInfo method, AppConfig appConfig, bool isIntercep
                     propertyInfo.PropertyType,
                     argumentMode,
                     propertyInfo.GetValue(modelInstance),
-                    value => propertyInfo.SetValue(modelInstance, value), propertyData)
+                    value => propertyInfo.SetValue(modelInstance, value), propertyData, inheritedGroup)
                 : new PropertyArgumentDef(
                         propertyInfo,
                         GetArgumentType(propertyInfo, argumentMode),
                         _appConfig,
-                        modelInstance)
+                        modelInstance,
+                        inheritedGroup)
                     .ToEnumerable();
         }
 
         private IEnumerable<IArgumentDef> GetArgumentsFromModel(Type modelType, ArgumentMode argumentMode,
-            object? existingDefault, Action<object> instanceCreated, PropertyData? parentProperty = null)
+            object? existingDefault, Action<object> instanceCreated, PropertyData? parentProperty = null, string? inheritedGroup = null)
         {
             var instance = existingDefault ?? _appConfig.ResolverService.ResolveArgumentModel(modelType);
 
@@ -181,6 +182,10 @@ internal class MethodDef(MethodInfo method, AppConfig appConfig, bool isIntercep
             // which would appear as already created.
             ArgumentModels.Add((IArgumentModel)instance);
 
+            // Check if this model defines a group - it overrides inherited group
+            var groupAttr = modelType.GetCustomAttribute<ArgumentGroupAttribute>();
+            var groupForProperties = groupAttr?.GroupName ?? inheritedGroup;
+
             return modelType
                 .GetDeclaredProperties()
                 .Select((p, i) => new PropertyData(
@@ -189,7 +194,7 @@ internal class MethodDef(MethodInfo method, AppConfig appConfig, bool isIntercep
                     GetArgumentType(p, argumentMode)))
                 .OrderBy(pd => pd.LineNumber.GetValueOrDefault(int.MaxValue))
                 .ThenBy(pd => pd.PropertyIndex) //use reflected order for options since order can be inconsistent
-                .SelectMany(pd => GetArgsFromProperty(pd, instance, argumentMode));
+                .SelectMany(pd => GetArgsFromProperty(pd, instance, argumentMode, groupForProperties));
         }
 
         private static CommandNodeType GetArgumentType(ICustomAttributeProvider info, ArgumentMode argumentMode)

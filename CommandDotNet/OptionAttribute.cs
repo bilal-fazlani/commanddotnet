@@ -75,6 +75,12 @@ public class OptionAttribute : Attribute, INameAndDescription
     internal char? SplitAsNullable { get; private set; }
 
     /// <summary>
+    /// The group name for this option. Options with the same group name will be displayed together
+    /// in the help output under a group header.
+    /// </summary>
+    public string? Group { get; set; }
+
+    /// <summary>
     /// Identifies a property or parameter as an <see cref="Option"/>, aka named argument.
     /// </summary>
     /// <param name="__callerLineNumber">

@@ -14,4 +14,5 @@ internal interface IArgumentDef: ISourceDef
     BooleanMode? BooleanMode { get; }
     IArgumentArity Arity { get; }
     char? Split { get; set; }
+    string? Group { get; set; }
 }

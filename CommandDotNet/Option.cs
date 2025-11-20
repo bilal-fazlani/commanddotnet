@@ -135,6 +135,12 @@ public sealed class Option : IArgument
     public char? Split { get; set; }
 
     /// <summary>
+    /// The group name for this option. Options with the same group name will be displayed together
+    /// in the help output under a group header.
+    /// </summary>
+    public string? Group { get; set; }
+
+    /// <summary>
     /// The allowed values for this argument, as defined by an <see cref="IAllowedValuesTypeDescriptor"/> for this type.
     /// i.e. enum arguments will list all values in the enum.
     /// </summary>

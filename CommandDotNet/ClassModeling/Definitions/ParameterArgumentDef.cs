@@ -30,6 +30,7 @@ internal class ParameterArgumentDef : IArgumentDef
     public BooleanMode? BooleanMode { get; }
     public IArgumentArity Arity { get; }
     public char? Split { get; set; }
+    public string? Group { get; set; }
 
     public ParameterArgumentDef(
         ParameterInfo parameterInfo,
@@ -47,6 +48,7 @@ internal class ParameterArgumentDef : IArgumentDef
 
         BooleanMode = this.GetBooleanMode(appConfig.AppSettings.Arguments.BooleanMode);
         Split = this.GetSplitChar();
+        Group = this.GetGroup();
 
         ValueProxy = new ValueProxy(
             () => parameterValues[parameterInfo.Position],
